@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Block browser startup in template vms</title>
+    <link>http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71</link>
+    <description>https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233
+
+Can this be done to firefox as well? Just firefox and chromium I have in mind.
+
+Ideally I think this should be implemented upstream by qubes, but they don&#39;t modify DomU applications, sometimes only add some patches to work with Qubes, but nothing to block an application.
+
+The [update proxy](https://www.qubes-os.org/doc/how-to-install-software/#updates-proxy) is a minimal mitigation that requires applications to be configured to use the proxy but it is very easy to circumvent that. It is the bare minimal to avoid using a browser on the template as stated in that page.
+
+What I am thinking is that if this is done in Kicksecure then later moved to qubes package to templates, `qubes-template-browser-block`, they can remove the _update proxy_ that does not guard much against anything besides the browser, the templates will be networked again, the template updates will be stream isolated.</description>
+    
+    <lastBuildDate>Sat, 09 Jul 2022 14:15:05 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Block browser startup in template vms</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Should be reported at and implemented in upstream, in Qubes.</p>
+          <p><a href="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/3">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/3</link>
+        <pubDate>Sat, 09 Jul 2022 14:15:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-71-3</guid>
+        <source url="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71.rss">Block browser startup in template vms</source>
+      </item>
+      <item>
+        <title>Block browser startup in template vms</title>
+        <dc:creator><![CDATA[nyxnor]]></dc:creator>
+        <description><![CDATA[
+            <p>I mean, probably kicksecure is the wrong forum, this is an upstream issue. I just opened here because for torbrowser it is in the kicksecure repo, and with kicksecure being the base layer for whonix but without tor, then why not do it for firefox and chromium…</p>
+          <p><a href="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/2">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/2</link>
+        <pubDate>Fri, 08 Jul 2022 14:19:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-71-2</guid>
+        <source url="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71.rss">Block browser startup in template vms</source>
+      </item>
+      <item>
+        <title>Block browser startup in template vms</title>
+        <dc:creator><![CDATA[nyxnor]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233" target="_blank" rel="noopener nofollow ugc">Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233</a></h4>
+
+
+
+    <pre class="onebox">      <code class="lang-">
+        <ol class="start lines" start="223" style="counter-reset: li-counter 222 ;">
+            <li>      true "Not running in TemplateVM."</li>
+            <li>      return 0</li>
+            <li>   fi</li>
+            <li>
+            </li><li>   if [ "$tb_allow_start_in_templatevm" = "true" ]; then</li>
+            <li>      true "tb_allow_start_in_templatevm is true."</li>
+            <li>      return 0</li>
+            <li>   fi</li>
+            <li>
+            </li><li>   tb_qubes_wiki="in_qubes-whonix"</li>
+            <li class="selected">   local MSG="&lt;p&gt;Do not run $tb_title in Template.&lt;br&gt;&lt;/br&gt;</li>
+            <li>&lt;br&gt;&lt;/br&gt;</li>
+            <li>More info: &lt;a href=https://www.whonix.org/wiki/$tb_wiki#$tb_qubes_wiki&gt;https://www.whonix.org/wiki/$tb_wiki#$tb_qubes_wiki&lt;/a&gt;&lt;/p&gt;"</li>
+            <li>   $output ${output_opts[@]} --messagex --typex "error" --titlex "$TITLE" --message "$MSG" --done</li>
+            <li>   $output ${output_opts[@]} --messagecli --typecli "error" --titlecli "$TITLE" --message "$MSG" --done</li>
+            <li>
+            </li><li>   exit 3</li>
+            <li>}</li>
+            <li>
+            </li><li>tb_qubes_dvm_template() {</li>
+            <li>   ## Avoid running in Qubes DVM Template.</li>
+        </ol>
+      </code>
+    </pre>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Can this be done to firefox as well? Just firefox and chromium I have in mind.</p>
+<p>Ideally I think this should be implemented upstream by qubes, but they don’t modify DomU applications, sometimes only add some patches to work with Qubes, but nothing to block an application.</p>
+<p>The <a href="https://www.qubes-os.org/doc/how-to-install-software/#updates-proxy" rel="noopener nofollow ugc">update proxy</a> is a minimal mitigation that requires applications to be configured to use the proxy but it is very easy to circumvent that. It is the bare minimal to avoid using a browser on the template as stated in that page.</p>
+<p>What I am thinking is that if this is done in Kicksecure then later moved to qubes package to templates, <code>qubes-template-browser-block</code>, they can remove the <em>update proxy</em> that does not guard much against anything besides the browser, the templates will be networked again, the template updates will be stream isolated.</p>
+          <p><a href="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/1">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71/1</link>
+        <pubDate>Fri, 08 Jul 2022 14:14:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-71-1</guid>
+        <source url="http://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71.rss">Block browser startup in template vms</source>
+      </item>
+  </channel>
+</rss>

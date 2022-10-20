@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Trying to morph Kicksecure on Debian Bullseye</title>
+    <link>http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17</link>
+    <description>Hello,
+
+I have a barebones Debian Bullseye install (no graphical desktop) and get the following error when trying to install kicksecure-xfce:
+
+    Preparing to unpack …/651-kicksecure-xfce_3%3a23.7-1_all.deb …
+    Unpacking kicksecure-xfce (3:23.7-1) …
+    Errors were encountered while processing:
+    /tmp/apt-dpkg-install-vvzm66/504-security-misc_3%3a22.9-1_all.deb
+    E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+In the docs for chroot installation of kicksecure, the option &quot;SECURITY_MISC_INSTALL=force&quot; is mentioned. 
+
+Is that something that needs to be implemented here?</description>
+    
+    <lastBuildDate>Fri, 17 Dec 2021 20:48:19 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Trying to morph Kicksecure on Debian Bullseye</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you for your interest!</p>
+<p>That won’t be simple at all. There’s no shortcut to a proper ISO build process. Won’t be live-build based.</p>
+<p>It was previously contributed for Whonix:</p>
+<aside class="onebox githubblob">
+  <header class="source">
+
+      <a href="https://github.com/Whonix/Whonix/blob/master/build-steps.d/2550_convert-raw-to-iso" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Whonix/Whonix/blob/master/build-steps.d/2550_convert-raw-to-iso" target="_blank" rel="noopener">Whonix/Whonix/blob/master/build-steps.d/2550_convert-raw-to-iso</a></h4>
+
+
+    <pre><code class="lang-d/2550_convert-raw-to-iso">#!/bin/bash
+
+## Copyright (C) 2019 - 2021 ENCRYPTED SUPPORT LP &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+
+set -x
+set -e
+
+true "INFO: Currently running script: $BASH_SOURCE $@"
+
+MYDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &amp;&amp; pwd )"
+
+cd "$MYDIR"
+cd ..
+cd help-steps
+
+source pre
+source colors
+source variables
+
+</code></pre>
+
+
+  This file has been truncated. <a href="https://github.com/Whonix/Whonix/blob/master/build-steps.d/2550_convert-raw-to-iso" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>But it’s unfinished. Previously that code managed to create a Whonix-Host ISO. Adjustments are probably needed to make it build a Kicksecure ISO. Help is welcome but it requires development skills.</p>
+<p>Will be live + calamares installer. (calamares integration source code already included in the project source code.)</p>
+          <p><a href="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/5">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/5</link>
+        <pubDate>Fri, 17 Dec 2021 20:48:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-17-5</guid>
+        <source url="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17.rss">Trying to morph Kicksecure on Debian Bullseye</source>
+      </item>
+      <item>
+        <title>Trying to morph Kicksecure on Debian Bullseye</title>
+        <dc:creator><![CDATA[whowasi]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello Patrick, thank you for taking time!</p>
+<p>We use Whonix and just want to help the community by making the Kicksecure ISO with live-build on debian.</p>
+<p>So there are many errors…</p>
+<p>This happens in chroot stage of live-build.</p>
+<p>Simple config:</p>
+<blockquote>
+<p>#!/bin/sh</p>
+<p>set -e</p>
+<p>lb config noauto <br>
+–distribution bullseye <br>
+–architectures amd64 <br>
+–debian-installer live <br>
+–debootstrap-options “–include=apt-transport-https,apt-transport-tor,openssl” <br>
+–archive-areas “main contrib non-free” <br>
+–apt-recommends true <br>
+“${@}”</p>
+</blockquote>
+<p>I tried 2 ways.</p>
+<p>1.) adding kicksecure repository + key in config/archives and kicksecure-xfce package in config/package-lists.</p>
+<p>2.) adding repository via echo and installing kicksecure-xfce as chroot.hook</p>
+<p>Both have the same errors unfortunately.</p>
+<blockquote>
+<p>/var/lib/dpkg/info/tzdata.postinst: 32: cannot create /dev/null: Permission denied</p>
+<p>Preconfiguring packages …<br>
+/tmp/keyboard-configuration.config.DESJTU: 38010: cannot create /dev/null: Permission denied<br>
+/tmp/keyboard-configuration.config.DESJTU: 38050: cannot create /dev/null: Permission denied<br>
+/tmp/keyboard-configuration.config.DESJTU: 37946: cannot create /dev/null: Permission denied<br>
+/tmp/keyboard-configuration.config.DESJTU: 38775: cannot create /dev/null: Permission denied<br>
+/tmp/keyboard-configuration.config.DESJTU: 38781: cannot create /dev/null: Permission denied<br>
+/tmp/keyboard-configuration.config.DESJTU: 37879: cannot create /dev/null: Permission denied<br>
+/tmp/locales.config.uHpoca: 547: cannot create /dev/null: Permission denied<br>
+/tmp/locales.config.uHpoca: 566: cannot create /dev/null: Permission denied<br>
+/tmp/locales.config.uHpoca: 570: cannot create /dev/null: Permission denied</p>
+</blockquote>
+<blockquote>
+<p>/var/lib/dpkg/info/python3.9-minimal.postinst: 20: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 21: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 22: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 26: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 27: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 28: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 31: cannot create /dev/null: Permission denied<br>
+/var/lib/dpkg/info/python3.9-minimal.postinst: 43: cannot create /dev/null: Permission denied</p>
+</blockquote>
+<p>The above errors I am not sure about. The install script probably pipes something to /dev/null, but the permission denied makes no sense to me.</p>
+<blockquote>
+<p>Preparing to unpack …/0250-sgml-base_1.30_all.deb …<br>
+/var/lib/dpkg/tmp.ci/preinst: 17: cannot create /dev/null: Permission denied<br>
+dpkg: error processing archive /tmp/apt-dpkg-install-GrKGGP/0250-sgml-base_1.30_all.deb (–unpack):<br>
+new sgml-base package pre-installation script subprocess returned error exit status 2<br>
+Selecting previously unselected package libsysfs2:amd64.</p>
+<p>Adding group <code>sysfs' (GID 110) ... Done. Adding group </code>cpuinfo’ (GID 111) …<br>
+Done.<br>
+Adding user <code>root' to group </code>sudo’ …<br>
+Adding user root to group sudo<br>
+Done.<br>
+Adding group <code>console' (GID 112) ... Done. Adding group </code>console-unrestricted’ (GID 113) …<br>
+Done.<br>
+Adding user <code>root' to group </code>console’ …<br>
+Adding user root to group console<br>
+Done.<br>
+/var/lib/dpkg/tmp.ci/preinst: line 200: /dev/null: Permission denied<br>
+/var/lib/dpkg/tmp.ci/preinst: line 211: /dev/null: Permission denied<br>
+/var/lib/dpkg/tmp.ci/preinst: line 59: /dev/null: Permission denied<br>
+/var/lib/dpkg/tmp.ci/preinst: ERROR: No user is a member of group ‘sudo’. Installation aborted.<br>
+/var/lib/dpkg/tmp.ci/preinst: ERROR: You probably want to run:</p>
+<p>sudo adduser user sudo<br>
+sudo adduser user console</p>
+</blockquote>
+<p>This I understand. Because their is no user account during chroot stage it cannot be added to the groups so root is used instead. I could get around this by adding random user with “adduser username1” and then later using --bootappend-live “…user=username1”</p>
+<blockquote>
+<p>Errors were encountered while processing:<br>
+/tmp/apt-dpkg-install-GrKGGP/0250-sgml-base_1.30_all.deb<br>
+/tmp/apt-dpkg-install-GrKGGP/0895-security-misc_3%3a22.9-1_all.deb<br>
+E: Sub-process /usr/bin/dpkg returned an error code (1)</p>
+</blockquote>
+          <p><a href="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/4">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/4</link>
+        <pubDate>Thu, 16 Dec 2021 15:44:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-17-4</guid>
+        <source url="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17.rss">Trying to morph Kicksecure on Debian Bullseye</source>
+      </item>
+      <item>
+        <title>Trying to morph Kicksecure on Debian Bullseye</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>For example:</p>
+<pre><code>sudo DEBDEUG=1 apt install --no-install-recommends kicksecure-cli
+</code></pre>
+<p>Instead of the “normal” installation command. This is to gather debug output.</p>
+<p>It shows the bash xtrace (each and every command executed) during package installation.</p>
+          <p><a href="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/3">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/3</link>
+        <pubDate>Mon, 13 Dec 2021 19:37:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-17-3</guid>
+        <source url="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17.rss">Trying to morph Kicksecure on Debian Bullseye</source>
+      </item>
+      <item>
+        <title>Trying to morph Kicksecure on Debian Bullseye</title>
+        <dc:creator><![CDATA[whowasi]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello,</p>
+<p>I have a barebones Debian Bullseye install (no graphical desktop) and get the following error when trying to install kicksecure-xfce:</p>
+<pre><code>Preparing to unpack …/651-kicksecure-xfce_3%3a23.7-1_all.deb …
+Unpacking kicksecure-xfce (3:23.7-1) …
+Errors were encountered while processing:
+/tmp/apt-dpkg-install-vvzm66/504-security-misc_3%3a22.9-1_all.deb
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+</code></pre>
+<p>In the docs for chroot installation of kicksecure, the option “SECURITY_MISC_INSTALL=force” is mentioned.</p>
+<p>Is that something that needs to be implemented here?</p>
+          <p><a href="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/1">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17/1</link>
+        <pubDate>Sun, 12 Dec 2021 11:55:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-17-1</guid>
+        <source url="http://forums.kicksecure.com/t/trying-to-morph-kicksecure-on-debian-bullseye/17.rss">Trying to morph Kicksecure on Debian Bullseye</source>
+      </item>
+  </channel>
+</rss>

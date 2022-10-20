@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+    <link>http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100</link>
+    <description>`security-misc`&#39;s policy of disabling SMT may actually make security worse on POWER9 systems that use [paired cores](https://wiki.raptorcs.com/wiki/Speculative_Execution_Vulnerabilities_of_2018#Attack_surface_reduction) (e.g. the 18-core and 22-core CPU&#39;s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don&#39;t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented attacks on SMT only work with 2 threads per cache).  Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?  I don&#39;t know whether it&#39;s possible to disable paired cores in software, but if so, that would also be worth considering.</description>
+    
+    <lastBuildDate>Thu, 29 Sep 2022 04:34:22 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+        <dc:creator><![CDATA[JeremyRand]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>That’s currently far to deep down the rabbit hole than I am ready to research. There are far more fundamental tasks to get the Kicksecure project fully bootstrapped, that is ISO and then BIOS booting, EFI booting and the generally messy situation of Linux versus <s>SecureBoot</s> RestrictedBoot.</p>
+</blockquote>
+</aside>
+<p>Agree that this is not a high priority.  I shared it here because it came up on the Talos IRC channel (and it was immediately relevant to me in determining what CPU I should buy when upgrading my machine), and I figured getting more eyes on it was better than not doing so.  Given that experimentally it looks like mitigations are possible, I figure Kicksecure users who care about it can do the mitigations manually, so including a mitigation in Kicksecure by default is definitely not something that should steal your attention from the other things you mentioned.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Could you please consider asking these general security questions in general Linux computer security related places and/or directing at security researchers/experts that we could ask for what’s best here?</p>
+</blockquote>
+</aside>
+<p>Happy to do so, though it’s not an urgent priority for me either, so I am likely to take a while to do this.  Not totally sure whom I would ask, but I have some contacts who might be able to direct me to appropriate experts.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>As for performance versus security, Kicksecure should prefer security over performance as long as that’s reasonable.</p>
+</blockquote>
+</aside>
+<p>Yeah, that seems reasonable; I guess the calculus here substantially depends on whether L2/L3 cache sharing is actually a meaningful risk, since I <em>think</em> the existing Spectre-class attacks used L1 only (citation needed, alas – maybe I’m wrong).</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Not sure it can be used but might help to understand which extend of settings change is currently required.</p>
+</blockquote>
+</aside>
+<p><a href="https://github.com/JeremyRand/MLFY" rel="noopener nofollow ugc">I’ve published the code.</a>  It’s pretty simple conceptually.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>For a clean implementation, a declarative expression (static config files) should be preferred over a functional (scripted) approach.</p>
+</blockquote>
+</aside>
+<p>If there’s a way to do this with current Linux versions, I haven’t found one.  I think you can disable certain logical CPU’s with a Linux cmdline arg, but I don’t think there’s any way to tie that to cache sharing.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Or perhaps just user documentation as a first step?</p>
+</blockquote>
+</aside>
+<p>Yeah, so I’ve documented it on the Raptor wiki, which is probably good enough for the moment.  Once I get more information from asking experts, I’ll add that info to the Raptor wiki, and maybe add something to the Kicksecure wiki if desired.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Perhaps worth a bug report / feature request against the Linux kernel?</p>
+</blockquote>
+</aside>
+<p>Assuming that expert opinion is that this is useful, yes, seems like a Linux patch would be desirable.  I’m not likely to have time to work on that kind of thing anytime soon though.</p>
+          <p><a href="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/4">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/4</link>
+        <pubDate>Thu, 29 Sep 2022 04:34:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-100-4</guid>
+        <source url="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss">Disabling SMT in security-misc may make security worse on some POWER9 systems</source>
+      </item>
+      <item>
+        <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you for bringing this up!</p>
+<p>That’s currently far to deep down the rabbit hole than I am ready to research. There are far more fundamental tasks to get the Kicksecure project fully bootstrapped, that is ISO and then BIOS booting, EFI booting and the generally messy situation of Linux versus <s>SecureBoot</s> RestrictedBoot.</p>
+<p>Could you please consider asking these general security questions in general Linux computer security related places and/or directing at security researchers/experts that we could ask for what’s best here?</p>
+<p>Related to:<br>
+“Decades of research by the security community lead to many best practices. Kicksecure implements the consensus of these reasonable security measures.”</p>
+<p>Serious support for platforms other than Intel/AMD64 is difficult and might be impossible without dedicated maintainer.</p>
+<p>As for performance versus security, Kicksecure should prefer security over performance as long as that’s reasonable.</p>
+<p>(The line here might be blurry. For a clear case, I mean, if in theory there was a security setting that for example makes using any use of a graphical user interface totally unusable, then we of course shouldn’t do it.)</p>
+<aside class="quote no-group" data-username="JeremyRand" data-post="2" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/f475e1/40.png" class="avatar"> JeremyRand:</div>
+<blockquote>
+<p>I have a Bash+Python script that works for disabling cache-sharing cores on my Intel x86 machine.</p>
+</blockquote>
+</aside>
+<p>Not sure it can be used but might help to understand which extend of settings change is currently required.</p>
+<p>For a clean implementation, a declarative expression (static config files) should be preferred over a functional (scripted) approach.</p>
+<aside class="quote no-group" data-username="JeremyRand" data-post="1" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/f475e1/40.png" class="avatar"> JeremyRand:</div>
+<blockquote>
+<p>Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?</p>
+</blockquote>
+</aside>
+<p>Or perhaps just user documentation as a first step?</p>
+<p>It seems that this would require some functional (scripted) approach anyhow. First, determine the state of the CPU (paired vs unpaired) and then set some different settings based on that? That seems kinda awful, complex. Perhaps worth a bug report / feature request against the Linux kernel?</p>
+          <p><a href="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/3">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/3</link>
+        <pubDate>Sat, 24 Sep 2022 11:03:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-100-3</guid>
+        <source url="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss">Disabling SMT in security-misc may make security worse on some POWER9 systems</source>
+      </item>
+      <item>
+        <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+        <dc:creator><![CDATA[JeremyRand]]></dc:creator>
+        <description><![CDATA[
+            <p>OK, so this is a little more complex than I thought.</p>
+<ul>
+<li>On both Intel/AMD x86 and POWER9, L1 cache is per-core.</li>
+<li>On Intel/AMD x86, L2 cache is per-core, while on POWER9, it is per-chiplet (a chiplet is 2 cores).</li>
+<li>On Intel x86, L3 is shared between all cores; apparently some newer AMD x86 CPU’s have two L3 caches, each of which is shared between 4 cores; on POWER9, it is per-chiplet.</li>
+<li>This information is available to both the kernel and userspace; the <code>lstopo</code> utility will show it on GNU/Linux.</li>
+<li>It is possible to disable arbitrary logical CPU’s from userspace if you have root privileges (I tested this on Intel x86 and POWER9, not sure if it’s supported on all Linux architectures); you can combine this information with <code>lstopo</code>'s output to make sure that caches are not shared between logical CPU’s.</li>
+</ul>
+<p>So, here are some questions to ponder:</p>
+<ol>
+<li>Is L2 sharing between threads a security risk that Kicksecure wants to prevent, even if it damages performance?  If so, Intel/AMD x86 is already fine, as are POWER9 CPU’s with unpaired cores, but we will want to add a mitigation for POWER9 CPU’s with paired cores.  The POWER9 paired core mitigation will impact performance by a factor of 2.  Disabling SMT, as Kicksecure currently does, probably magnifies the risk without an additional mitigation.</li>
+<li>Is L3 sharing between threads a security risk that Kicksecure wants to prevent, even if it damages performance?  If so, POWER9 CPU’s with unpaired cores are already fine, but both Intel/AMD x86 and POWER9 CPU’s with paired cores will need mitigations.  The L2 POWER9 paired core mitigation will also cover L3.  Intel x86 mitigation will cut performance down to 1 thread; AMD x86 mitigation will cut to either 1 or 2 threads.  Disabling SMT, as Kicksecure currently does, probably magnifies the risk without an additional mitigation.</li>
+</ol>
+<p>I’m not totally clear on how risky L2 and L3 (or whatever other state that is correlated with them) are.  Maybe madaidan would be able to comment?</p>
+<p>I have a Bash+Python script that works for disabling cache-sharing cores on my Intel x86 machine.  If Kicksecure is interested in mitigating L2/L3 sharing vulnerabilities, I’m happy to post the code as GPLv3+ and contribute it to Kicksecure.</p>
+          <p><a href="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/2">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/2</link>
+        <pubDate>Thu, 08 Sep 2022 15:41:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-100-2</guid>
+        <source url="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss">Disabling SMT in security-misc may make security worse on some POWER9 systems</source>
+      </item>
+      <item>
+        <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+        <dc:creator><![CDATA[JeremyRand]]></dc:creator>
+        <description><![CDATA[
+            <p><code>security-misc</code>'s policy of disabling SMT may actually make security worse on POWER9 systems that use <a href="https://wiki.raptorcs.com/wiki/Speculative_Execution_Vulnerabilities_of_2018#Attack_surface_reduction" rel="noopener nofollow ugc">paired cores</a> (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don’t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented attacks on SMT only work with 2 threads per cache).  Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?  I don’t know whether it’s possible to disable paired cores in software, but if so, that would also be worth considering.</p>
+          <p><a href="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/1">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100/1</link>
+        <pubDate>Mon, 05 Sep 2022 08:48:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-100-1</guid>
+        <source url="http://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss">Disabling SMT in security-misc may make security worse on some POWER9 systems</source>
+      </item>
+  </channel>
+</rss>
