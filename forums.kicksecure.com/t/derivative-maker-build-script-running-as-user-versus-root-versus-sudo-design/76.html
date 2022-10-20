@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Derivative-maker build script running as user versus root versus sudo design - Development - Kicksecure Forums</title>
+    <meta name="description" content="The build script needs to have root because many actions such as mounting a raw image require root.
+At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the&amp;hellip;">
+    <meta name="generator" content="Discourse 2.8.9 - https://github.com/discourse/discourse version 1503ec07c57898a507395552b765b6808b4e1db9">
+<link rel="icon" type="image/png" href="../../../external.html?link=https://forums.kicksecure.com/uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../../external.html?link=https://forums.kicksecure.com/uploads/default/optimized/1X/a630bee107b3968e092ffc2c4429ddad46791578_2_180x180.png">
+<meta name="theme-color" content="#eef4f7">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<link rel="canonical" href="76.html" />
+<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"https://forums.kicksecure.com","potentialAction":{"@type":"SearchAction","target":"https://forums.kicksecure.com/search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<link rel="search" type="application/opensearchdescription+xml" href="../../../external.html?link=https://forums.kicksecure.com/opensearch.xml" title="Kicksecure Forums Search">
+
+      <link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_6f0a16f96709d7742cf2c70dd70c39bc185f99be.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop"  />
+      <link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_theme_2_471eb897b8e0d2c42f132ded46c3875ec79f02eb.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="2" data-theme-name="header"/>
+<link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_theme_1_230c7c6fb52b1dcecd39b8bcaaa9b8572dee61a4.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="1" data-theme-name="default"/>
+    <center>
+[<a href="../../../external.html?link=https://www.kicksecure.com/">HOME</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">DOWNLOAD</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">DOCS</a>]
+[<a href="../../c/news/5.html">NEWS</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">SUPPORT</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">TIPS</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">ISSUES</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">CONTRIBUTE</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>]
+</center>
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of &#39;Derivative-maker build script running as user versus root versus sudo design&#39;" href="76.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/a630bee107b3968e092ffc2c4429ddad46791578.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/a630bee107b3968e092ffc2c4429ddad46791578.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76" />
+<meta property="og:title" content="Derivative-maker build script running as user versus root versus sudo design" />
+<meta name="twitter:title" content="Derivative-maker build script running as user versus root versus sudo design" />
+<meta property="og:description" content="The build script needs to have root because many actions such as mounting a raw image require root. At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times. Therefore currently, the build script is expected to be run under user (&quot;user&quot;) and with sudo. Whenever an action should be performed as user instead of root, it uses $SUDO_TO_USER which results in:  sudo --non-interactive -u user Wh..." />
+<meta name="twitter:description" content="The build script needs to have root because many actions such as mounting a raw image require root. At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times. Therefore currently, the build script is expected to be run under user (&quot;user&quot;) and with sudo. Whenever an action should be performed as user instead of root, it uses $SUDO_TO_USER which results in:  sudo --non-interactive -u user Wh..." />
+<meta property="article:published_time" content="2022-07-10T10:53:22+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler">
+    
+    <header>
+      <a href="../../index.html">
+          <img src="../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg" alt="Kicksecure Forums" id="site-logo" style="max-width: 150px;">
+      </a>
+    </header>
+    <div id="main-outlet" class="wrap">
+        <div id="topic-title">
+    <h1>
+      <a href="76.html">Derivative-maker build script running as user versus root versus sudo design</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="../../../external.html?link=http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="../../../external.html?link=http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+
+      <div itemscope itemtype='http://schema.org/DiscussionForumPosting' class='topic-body crawler-post'>
+        <div class='crawler-post-meta'>
+          <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+            <meta itemprop='name' content='Kicksecure Forums'>
+              <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+                <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg'>
+              </div>
+          </div>
+          <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+            <a itemprop="url" href='../../u/Patrick.html'><span itemprop='name'>Patrick</span></a>
+            
+          </span>
+
+          <link itemprop="mainEntityOfPage" href="76.html">
+
+
+          <span class="crawler-post-infos">
+              <time itemprop='datePublished' datetime='2022-07-10T10:53:22Z' class='post-time'>
+                July 10, 2022, 10:53am
+              </time>
+              <meta itemprop='dateModified' content='2022-07-10T10:53:22Z'>
+          <span itemprop='position'>#1</span>
+          </span>
+        </div>
+        <div class='post' itemprop='articleBody'>
+          <ul>
+<li>The build script needs to have root because many actions such as mounting a raw image require root.</li>
+<li>At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times.</li>
+<li>Therefore currently, the build script is expected to be run under user ("<code>user</code>") and with sudo.</li>
+<li>Whenever an action should be performed as user instead of root, it uses <code>$SUDO_TO_USER</code> which results in:
+<ul>
+<li><code>sudo --non-interactive -u user</code></li>
+<li>Why not run all under root? Because some build dependency tools (such as <code>dpkg-buildpackage</code>, <code>lintian</code>?) would complain about this.</li>
+</ul>
+</li>
+</ul>
+<p>This is problematic because:</p>
+<ul>
+<li>it raises the question when to use <code>sudo --non-interactive -u user</code> with <code>--preserve-env</code> and when not,</li>
+<li>environment variables should or must passed or better (must) not,</li>
+<li>home folder root versus user.</li>
+</ul>
+<p>For a cleaner implementation, the build script should probably run as user without <code>sudo</code> and then internally use <code>sudo --non-interactive</code> (to root) when required. To prevent the build stalling and asking the the sudo password every few minutes, build documentation would recommend to</p>
+<ul>
+<li>either set up passwordless sudo or,</li>
+<li>use a longer sudo password timeout
+<ul>
+<li>Probably sudo configuration file option <code>timestamp_timeout</code>, unfortunately unavailable as an environment variable.</li>
+</ul>
+</li>
+</ul>
+<p>Then after the build script started, it would use <code>sudo</code> to test if it is available and to cache password entry (using sudo’s built-in <code>timestamp_timeout</code> feature).</p>
+        </div>
+
+        <meta itemprop='headline' content='Derivative-maker build script running as user versus root versus sudo design'>
+          <meta itemprop='keywords' content=''>
+
+        <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+           <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+           <meta itemprop="userInteractionCount" content="0" />
+           <span class='post-likes'></span>
+         </div>
+
+         <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+            <meta itemprop="userInteractionCount" content="0" />
+          </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+    <footer class="container wrap">
+      <nav class='crawler-nav'>
+        <ul>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../index.html' itemprop="url">Home </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../categories.html' itemprop="url">Categories </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../guidelines.html' itemprop="url">FAQ/Guidelines </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+        </ul>
+      </nav>
+      <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+    </footer>
+    <center>
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy">Privacy Policy</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy">Cookie Policy</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Use">Terms of Use</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent">E-Sign Consent</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contributors">Contributors</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Investors">Investors</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Priority_Support">Priority Support</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Professional_Support">Professional Support</a>]
+</center>
+    
+  </body>
+  
+</html>

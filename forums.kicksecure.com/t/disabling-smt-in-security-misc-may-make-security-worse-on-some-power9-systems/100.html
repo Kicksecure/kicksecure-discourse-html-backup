@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Disabling SMT in security-misc may make security worse on some POWER9 systems - Development - Kicksecure Forums</title>
+    <meta name="description" content="security-misc&amp;#39;s policy of disabling SMT may actually make security worse on POWER9 systems that use paired cores (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to d&amp;hellip;">
+    <meta name="generator" content="Discourse 2.8.9 - https://github.com/discourse/discourse version 1503ec07c57898a507395552b765b6808b4e1db9">
+<link rel="icon" type="image/png" href="../../../external.html?link=https://forums.kicksecure.com/uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../../external.html?link=https://forums.kicksecure.com/uploads/default/optimized/1X/a630bee107b3968e092ffc2c4429ddad46791578_2_180x180.png">
+<meta name="theme-color" content="#eef4f7">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+<link rel="canonical" href="100.html" />
+<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"https://forums.kicksecure.com","potentialAction":{"@type":"SearchAction","target":"https://forums.kicksecure.com/search?q={search_term_string}","query-input":"required name=search_term_string"}}</script>
+<link rel="search" type="application/opensearchdescription+xml" href="../../../external.html?link=https://forums.kicksecure.com/opensearch.xml" title="Kicksecure Forums Search">
+
+      <link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_6f0a16f96709d7742cf2c70dd70c39bc185f99be.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop"  />
+      <link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_theme_2_471eb897b8e0d2c42f132ded46c3875ec79f02eb.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="2" data-theme-name="header"/>
+<link href="../../../external.html?link=https://forums.kicksecure.com/stylesheets/desktop_theme_1_230c7c6fb52b1dcecd39b8bcaaa9b8572dee61a4.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="1" data-theme-name="default"/>
+    <center>
+[<a href="../../../external.html?link=https://www.kicksecure.com/">HOME</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">DOWNLOAD</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">DOCS</a>]
+[<a href="../../c/news/5.html">NEWS</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">SUPPORT</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">TIPS</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">ISSUES</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">CONTRIBUTE</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>]
+</center>
+    
+        <link rel="alternate" type="application/rss+xml" title="RSS feed of &#39;Disabling SMT in security-misc may make security worse on some POWER9 systems&#39;" href="100.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/a630bee107b3968e092ffc2c4429ddad46791578.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/a630bee107b3968e092ffc2c4429ddad46791578.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100" />
+<meta property="og:title" content="Disabling SMT in security-misc may make security worse on some POWER9 systems" />
+<meta name="twitter:title" content="Disabling SMT in security-misc may make security worse on some POWER9 systems" />
+<meta property="og:description" content="security-misc&#39;s policy of disabling SMT may actually make security worse on POWER9 systems that use paired cores (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don’t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented at..." />
+<meta name="twitter:description" content="security-misc&#39;s policy of disabling SMT may actually make security worse on POWER9 systems that use paired cores (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don’t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented at..." />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="2 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="1 ❤" />
+<meta property="article:published_time" content="2022-09-05T08:48:22+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler">
+    
+    <header>
+      <a href="../../index.html">
+          <img src="../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg" alt="Kicksecure Forums" id="site-logo" style="max-width: 150px;">
+      </a>
+    </header>
+    <div id="main-outlet" class="wrap">
+        <div id="topic-title">
+    <h1>
+      <a href="100.html">Disabling SMT in security-misc may make security worse on some POWER9 systems</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="../../../external.html?link=http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="../../../external.html?link=http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+
+      <div itemscope itemtype='http://schema.org/DiscussionForumPosting' class='topic-body crawler-post'>
+        <div class='crawler-post-meta'>
+          <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+            <meta itemprop='name' content='Kicksecure Forums'>
+              <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+                <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg'>
+              </div>
+          </div>
+          <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+            <a itemprop="url" href='../../login.html'><span itemprop='name'>JeremyRand</span></a>
+            
+          </span>
+
+          <link itemprop="mainEntityOfPage" href="100.html">
+
+
+          <span class="crawler-post-infos">
+              <time itemprop='datePublished' datetime='2022-09-05T08:48:22Z' class='post-time'>
+                September 5, 2022,  8:48am
+              </time>
+              <meta itemprop='dateModified' content='2022-09-05T08:48:22Z'>
+          <span itemprop='position'>#1</span>
+          </span>
+        </div>
+        <div class='post' itemprop='articleBody'>
+          <p><code>security-misc</code>'s policy of disabling SMT may actually make security worse on POWER9 systems that use <a href="../../../external.html?link=https://wiki.raptorcs.com/wiki/Speculative_Execution_Vulnerabilities_of_2018#Attack_surface_reduction" rel="noopener nofollow ugc">paired cores</a> (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don’t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented attacks on SMT only work with 2 threads per cache).  Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?  I don’t know whether it’s possible to disable paired cores in software, but if so, that would also be worth considering.</p>
+        </div>
+
+        <meta itemprop='headline' content='Disabling SMT in security-misc may make security worse on some POWER9 systems'>
+          <meta itemprop='keywords' content=''>
+
+        <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+           <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+           <meta itemprop="userInteractionCount" content="0" />
+           <span class='post-likes'></span>
+         </div>
+
+         <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+            <meta itemprop="userInteractionCount" content="1" />
+          </div>
+
+      </div>
+      <div itemscope itemtype='http://schema.org/DiscussionForumPosting' class='topic-body crawler-post'>
+        <div class='crawler-post-meta'>
+          <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+            <meta itemprop='name' content='Kicksecure Forums'>
+              <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+                <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg'>
+              </div>
+          </div>
+          <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+            <a itemprop="url" href='../../login.html'><span itemprop='name'>JeremyRand</span></a>
+            
+          </span>
+
+          <link itemprop="mainEntityOfPage" href="100.html">
+
+
+          <span class="crawler-post-infos">
+              <time itemprop='datePublished' datetime='2022-09-08T15:41:50Z' class='post-time'>
+                September 8, 2022,  3:41pm
+              </time>
+              <meta itemprop='dateModified' content='2022-09-09T04:15:41Z'>
+          <span itemprop='position'>#2</span>
+          </span>
+        </div>
+        <div class='post' itemprop='articleBody'>
+          <p>OK, so this is a little more complex than I thought.</p>
+<ul>
+<li>On both Intel/AMD x86 and POWER9, L1 cache is per-core.</li>
+<li>On Intel/AMD x86, L2 cache is per-core, while on POWER9, it is per-chiplet (a chiplet is 2 cores).</li>
+<li>On Intel x86, L3 is shared between all cores; apparently some newer AMD x86 CPU’s have two L3 caches, each of which is shared between 4 cores; on POWER9, it is per-chiplet.</li>
+<li>This information is available to both the kernel and userspace; the <code>lstopo</code> utility will show it on GNU/Linux.</li>
+<li>It is possible to disable arbitrary logical CPU’s from userspace if you have root privileges (I tested this on Intel x86 and POWER9, not sure if it’s supported on all Linux architectures); you can combine this information with <code>lstopo</code>'s output to make sure that caches are not shared between logical CPU’s.</li>
+</ul>
+<p>So, here are some questions to ponder:</p>
+<ol>
+<li>Is L2 sharing between threads a security risk that Kicksecure wants to prevent, even if it damages performance?  If so, Intel/AMD x86 is already fine, as are POWER9 CPU’s with unpaired cores, but we will want to add a mitigation for POWER9 CPU’s with paired cores.  The POWER9 paired core mitigation will impact performance by a factor of 2.  Disabling SMT, as Kicksecure currently does, probably magnifies the risk without an additional mitigation.</li>
+<li>Is L3 sharing between threads a security risk that Kicksecure wants to prevent, even if it damages performance?  If so, POWER9 CPU’s with unpaired cores are already fine, but both Intel/AMD x86 and POWER9 CPU’s with paired cores will need mitigations.  The L2 POWER9 paired core mitigation will also cover L3.  Intel x86 mitigation will cut performance down to 1 thread; AMD x86 mitigation will cut to either 1 or 2 threads.  Disabling SMT, as Kicksecure currently does, probably magnifies the risk without an additional mitigation.</li>
+</ol>
+<p>I’m not totally clear on how risky L2 and L3 (or whatever other state that is correlated with them) are.  Maybe madaidan would be able to comment?</p>
+<p>I have a Bash+Python script that works for disabling cache-sharing cores on my Intel x86 machine.  If Kicksecure is interested in mitigating L2/L3 sharing vulnerabilities, I’m happy to post the code as GPLv3+ and contribute it to Kicksecure.</p>
+        </div>
+
+        <meta itemprop='headline' content='Disabling SMT in security-misc may make security worse on some POWER9 systems'>
+
+        <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+           <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+           <meta itemprop="userInteractionCount" content="0" />
+           <span class='post-likes'></span>
+         </div>
+
+         <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+            <meta itemprop="userInteractionCount" content="1" />
+          </div>
+
+      </div>
+      <div itemscope itemtype='http://schema.org/DiscussionForumPosting' class='topic-body crawler-post'>
+        <div class='crawler-post-meta'>
+          <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+            <meta itemprop='name' content='Kicksecure Forums'>
+              <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+                <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg'>
+              </div>
+          </div>
+          <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+            <a itemprop="url" href='../../u/Patrick.html'><span itemprop='name'>Patrick</span></a>
+            
+          </span>
+
+          <link itemprop="mainEntityOfPage" href="100.html">
+
+
+          <span class="crawler-post-infos">
+              <time itemprop='datePublished' datetime='2022-09-24T11:03:39Z' class='post-time'>
+                September 24, 2022, 11:03am
+              </time>
+              <meta itemprop='dateModified' content='2022-09-24T11:03:39Z'>
+          <span itemprop='position'>#3</span>
+          </span>
+        </div>
+        <div class='post' itemprop='articleBody'>
+          <p>Thank you for bringing this up!</p>
+<p>That’s currently far to deep down the rabbit hole than I am ready to research. There are far more fundamental tasks to get the Kicksecure project fully bootstrapped, that is ISO and then BIOS booting, EFI booting and the generally messy situation of Linux versus <s>SecureBoot</s> RestrictedBoot.</p>
+<p>Could you please consider asking these general security questions in general Linux computer security related places and/or directing at security researchers/experts that we could ask for what’s best here?</p>
+<p>Related to:<br>
+“Decades of research by the security community lead to many best practices. Kicksecure implements the consensus of these reasonable security measures.”</p>
+<p>Serious support for platforms other than Intel/AMD64 is difficult and might be impossible without dedicated maintainer.</p>
+<p>As for performance versus security, Kicksecure should prefer security over performance as long as that’s reasonable.</p>
+<p>(The line here might be blurry. For a clear case, I mean, if in theory there was a security setting that for example makes using any use of a graphical user interface totally unusable, then we of course shouldn’t do it.)</p>
+<aside class="quote no-group" data-username="JeremyRand" data-post="2" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/f475e1/40.png" class="avatar"> JeremyRand:</div>
+<blockquote>
+<p>I have a Bash+Python script that works for disabling cache-sharing cores on my Intel x86 machine.</p>
+</blockquote>
+</aside>
+<p>Not sure it can be used but might help to understand which extend of settings change is currently required.</p>
+<p>For a clean implementation, a declarative expression (static config files) should be preferred over a functional (scripted) approach.</p>
+<aside class="quote no-group" data-username="JeremyRand" data-post="1" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/f475e1/40.png" class="avatar"> JeremyRand:</div>
+<blockquote>
+<p>Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?</p>
+</blockquote>
+</aside>
+<p>Or perhaps just user documentation as a first step?</p>
+<p>It seems that this would require some functional (scripted) approach anyhow. First, determine the state of the CPU (paired vs unpaired) and then set some different settings based on that? That seems kinda awful, complex. Perhaps worth a bug report / feature request against the Linux kernel?</p>
+        </div>
+
+        <meta itemprop='headline' content='Disabling SMT in security-misc may make security worse on some POWER9 systems'>
+
+        <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+           <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+           <meta itemprop="userInteractionCount" content="0" />
+           <span class='post-likes'></span>
+         </div>
+
+         <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+            <meta itemprop="userInteractionCount" content="1" />
+          </div>
+
+      </div>
+      <div itemscope itemtype='http://schema.org/DiscussionForumPosting' class='topic-body crawler-post'>
+        <div class='crawler-post-meta'>
+          <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+            <meta itemprop='name' content='Kicksecure Forums'>
+              <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+                <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/uploads/default/original/1X/5667b439b037afb9b0a1e6472421025ff9ca03ed.jpeg'>
+              </div>
+          </div>
+          <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+            <a itemprop="url" href='../../login.html'><span itemprop='name'>JeremyRand</span></a>
+            
+          </span>
+
+          <link itemprop="mainEntityOfPage" href="100.html">
+
+
+          <span class="crawler-post-infos">
+              <time itemprop='datePublished' datetime='2022-09-29T04:34:22Z' class='post-time'>
+                September 29, 2022,  4:34am
+              </time>
+              <meta itemprop='dateModified' content='2022-09-29T04:34:22Z'>
+          <span itemprop='position'>#4</span>
+          </span>
+        </div>
+        <div class='post' itemprop='articleBody'>
+          <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>That’s currently far to deep down the rabbit hole than I am ready to research. There are far more fundamental tasks to get the Kicksecure project fully bootstrapped, that is ISO and then BIOS booting, EFI booting and the generally messy situation of Linux versus <s>SecureBoot</s> RestrictedBoot.</p>
+</blockquote>
+</aside>
+<p>Agree that this is not a high priority.  I shared it here because it came up on the Talos IRC channel (and it was immediately relevant to me in determining what CPU I should buy when upgrading my machine), and I figured getting more eyes on it was better than not doing so.  Given that experimentally it looks like mitigations are possible, I figure Kicksecure users who care about it can do the mitigations manually, so including a mitigation in Kicksecure by default is definitely not something that should steal your attention from the other things you mentioned.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Could you please consider asking these general security questions in general Linux computer security related places and/or directing at security researchers/experts that we could ask for what’s best here?</p>
+</blockquote>
+</aside>
+<p>Happy to do so, though it’s not an urgent priority for me either, so I am likely to take a while to do this.  Not totally sure whom I would ask, but I have some contacts who might be able to direct me to appropriate experts.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>As for performance versus security, Kicksecure should prefer security over performance as long as that’s reasonable.</p>
+</blockquote>
+</aside>
+<p>Yeah, that seems reasonable; I guess the calculus here substantially depends on whether L2/L3 cache sharing is actually a meaningful risk, since I <em>think</em> the existing Spectre-class attacks used L1 only (citation needed, alas – maybe I’m wrong).</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Not sure it can be used but might help to understand which extend of settings change is currently required.</p>
+</blockquote>
+</aside>
+<p><a href="../../../external.html?link=https://github.com/JeremyRand/MLFY" rel="noopener nofollow ugc">I’ve published the code.</a>  It’s pretty simple conceptually.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>For a clean implementation, a declarative expression (static config files) should be preferred over a functional (scripted) approach.</p>
+</blockquote>
+</aside>
+<p>If there’s a way to do this with current Linux versions, I haven’t found one.  I think you can disable certain logical CPU’s with a Linux cmdline arg, but I don’t think there’s any way to tie that to cache sharing.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Or perhaps just user documentation as a first step?</p>
+</blockquote>
+</aside>
+<p>Yeah, so I’ve documented it on the Raptor wiki, which is probably good enough for the moment.  Once I get more information from asking experts, I’ll add that info to the Raptor wiki, and maybe add something to the Kicksecure wiki if desired.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="100">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="../../../external.html?link=http://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Perhaps worth a bug report / feature request against the Linux kernel?</p>
+</blockquote>
+</aside>
+<p>Assuming that expert opinion is that this is useful, yes, seems like a Linux patch would be desirable.  I’m not likely to have time to work on that kind of thing anytime soon though.</p>
+        </div>
+
+        <meta itemprop='headline' content='Disabling SMT in security-misc may make security worse on some POWER9 systems'>
+
+        <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+           <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+           <meta itemprop="userInteractionCount" content="1" />
+           <span class='post-likes'>1 Like</span>
+         </div>
+
+         <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+            <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+            <meta itemprop="userInteractionCount" content="0" />
+          </div>
+
+      </div>
+
+
+
+
+
+
+    </div>
+    <footer class="container wrap">
+      <nav class='crawler-nav'>
+        <ul>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../index.html' itemprop="url">Home </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../categories.html' itemprop="url">Categories </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../guidelines.html' itemprop="url">FAQ/Guidelines </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+        </ul>
+      </nav>
+      <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+    </footer>
+    <center>
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy">Privacy Policy</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy">Cookie Policy</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Use">Terms of Use</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent">E-Sign Consent</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contributors">Contributors</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Investors">Investors</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Priority_Support">Priority Support</a>]
+[<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Professional_Support">Professional Support</a>]
+</center>
+    
+  </body>
+  
+</html>
