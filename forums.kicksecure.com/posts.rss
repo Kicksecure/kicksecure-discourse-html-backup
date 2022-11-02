@@ -6,6 +6,126 @@
     <description>Latest posts</description>
       <item>
         <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[@ike]]></dc:creator>
+        <description><![CDATA[ <p>Oh - kicksecure already has that SYSTEMD_SULOGIN_FORCE dropin file (named override.conf - but the name doesn’t matter).  As long as that is put in place first and tested, is there a remaining fear of admin lockout?</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/13</link>
+        <pubDate>Tue, 01 Nov 2022 23:52:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-312</guid>
+      </item>
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[@ike]]></dc:creator>
+        <description><![CDATA[ <p>I did the grep through the sources.<br>
+It points primarily to:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc" title="03:20PM - 16 October 2019">Whonix Forum – 16 Oct 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<h3><a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc">Is security-misc suitable for hardening bridges and relays?</a></h3>
+
+  <p>Hello both and thanks for your kind replies. Apologies for the late answer but I have been kind of busy today.  Well, I tried to install security-misc on a private relay I am running for testing purposes. After the reboot when I tried to become root...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+<p>
+which implies that sudo is there as a way to make sure that the installation of kicksecure doesn’t result in admin lockout.  That’s a good reason.  However, it implies that maybe sudo isn’t needed after installation.<br>
+Unfortunately, there are many other uses of sudo in the sources.  It isn’t clear to me whether they are for convenience purposes or required.</p>
+<p>As for requiring sudo to prevent admin lockout during install: another way would be to make sure that root logins in rescue mode always happen, even if root is otherwise locked.  This can be done with a single dropin file:</p>
+<pre><code class="lang-auto">mkdir -p /etc/systemd/system/rescue.service.d
+cat &gt;/etc/systemd/system/rescue.service.d/force-root.conf &lt;&lt;EOF
+[Service]
+Environment=SYSTEMD_SULOGIN_FORCE=yes
+EOF
+</code></pre>
+<p>Then require that the rest of the install of kicksecure be done in rescue mode (probably safer anyway).</p>
+<p>Also, on the topic of sudo: has anyone doing kicksecure devo thought about a lighter weight and potentially more secure alternative, like siduction’s doas command?  Personally, I’d like to do away with any way to change from one user to another (or root), but I understand that’s not a universal taste.</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/12</link>
+        <pubDate>Tue, 01 Nov 2022 20:51:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-311</guid>
+      </item>
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>See this link… It explains how to get all source code and how to search for some string such as “sudo”:</p>
+<p><a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a></p>
+<p>(This forum theme does not show links very well which will be fixed soonish.)</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/11</link>
+        <pubDate>Tue, 01 Nov 2022 19:02:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-310</guid>
+      </item>
+      <item>
+        <title>Enabling open-link-confirmation</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Btw as for the packages… As long as Kicksecure doesn’t have something like <a href="https://forums.whonix.org/t/packages-debian-org-apt-package-repository-web-interface-for-deb-whonix-org/10937" class="inline-onebox">packages.debian.org APT package repository web interface for deb.whonix.org - Development - Whonix Forum</a> to auto document the packages better… You might be interested to look into this source file. It has all the meta packages.</p>
+<p><a href="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control" class="inline-onebox">kicksecure-meta-packages/control at master · Kicksecure/kicksecure-meta-packages · GitHub</a></p> ]]></description>
+        <link>http://forums.kicksecure.com/t/enabling-open-link-confirmation/111/5</link>
+        <pubDate>Tue, 01 Nov 2022 14:32:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-308</guid>
+      </item>
+      <item>
+        <title>Enabling open-link-confirmation</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This one (which was posted later) could be a duplicate:</p><aside class="quote quote-modified" data-post="1" data-topic="128">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Not having a default browser and pressing on "Web Browser" icon in xfce will give annoying bug</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
+  </div>
+  <blockquote>
+    Since we dont have a default browser by default so any user who is morphing debian fresh install he will not have a browser as well (specially debian minimal version like netinst or CD…etc). 
+This will give annoying show annoying bug: 
+[havingnobrowser1] 
+Will show a  bug window which you need to press on OK multiple times to disappear: 
+1 
+[havingnobrowser2] 
+2 
+[havingnobrowser3] 
+3 
+[havingnobrowser4] 
+4 
+[havingnobrowser5] 
+5 
+[havingnobrowser6]
+  </blockquote>
+</aside>
+
+<p>For solution, could you please have a look here?</p><aside class="quote quote-modified" data-post="2" data-topic="129">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129/2">Add pyqt5-dev-tool dependency to kicksecure dependencies</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
+  </div>
+  <blockquote>
+    Root cause is that meta package kicksecure-desktop-applications-recommended isn’t installed. 
+That package would ensure that the dependency package repository-dist-wizard gets installed. 
+I’ve updated the installation instructions just now: 
+
+
+Here’s the change: 
+<a href="https://www.kicksecure.com/w/index.php?title=Debian&amp;type=revision&amp;diff=64364&amp;oldid=61274" class="inline-onebox">Debian: Difference between revisions - Kicksecure</a>
+  </blockquote>
+</aside>
+
+<p>In short: the documentation on which meta package to install has been updated.</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/enabling-open-link-confirmation/111/4</link>
+        <pubDate>Tue, 01 Nov 2022 14:29:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-307</guid>
+      </item>
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p><a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a></p> ]]></description>
         <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/10</link>
@@ -258,122 +378,6 @@ Here’s the change:
         <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/8</link>
         <pubDate>Fri, 28 Oct 2022 15:22:46 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-263</guid>
-      </item>
-      <item>
-        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
-        <dc:creator><![CDATA[@ike]]></dc:creator>
-        <description><![CDATA[ <p>Is there no way to ditch sudo completely?  I have a setup where root can only login via recovery boot, and non-root users cannot get privileges.  No sudo, no su.  ‘passwd -l root’.  Can I use this setup with kicksecure?</p> ]]></description>
-        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/7</link>
-        <pubDate>Fri, 28 Oct 2022 14:26:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-261</guid>
-      </item>
-      <item>
-        <title>Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Also solved by this?</p>
-<aside class="quote quote-modified" data-post="2" data-topic="129">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129/2">Add pyqt5-dev-tool dependency to kicksecure dependencies</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
-  </div>
-  <blockquote>
-    Root cause is that meta package kicksecure-desktop-applications-recommended isn’t installed. 
-That package would ensure that the dependency package repository-dist-wizard gets installed. 
-I’ve updated the installation instructions just now: 
-
-
-Here’s the change: 
-<a href="https://www.kicksecure.com/w/index.php?title=Debian&amp;type=revision&amp;diff=64364&amp;oldid=61274" class="inline-onebox">Debian: Difference between revisions - Kicksecure</a>
-  </blockquote>
-</aside>
- ]]></description>
-        <link>http://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128/2</link>
-        <pubDate>Fri, 28 Oct 2022 13:52:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-260</guid>
-      </item>
-      <item>
-        <title>Add pyqt5-dev-tool dependency to kicksecure dependencies</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Root cause is that meta package <code>kicksecure-desktop-applications-recommended</code> isn’t installed.</p>
-<p>That package would ensure that the dependency package <code>repository-dist-wizard</code> gets installed.</p>
-<p>I’ve updated the installation instructions just now:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian">
-  <header class="source">
-      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener" title="01:50PM - 28 October 2022">Kicksecure – 28 Oct 22</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/388;"><img src="https://www.kicksecure.com/w/images/d/d1/Download-debian.jpg?version=0f5a9307bc5f0ca052752efec6830baf" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener">Install Kicksecure ™ inside Debian</a></h3>
-
-  <p>Kicksecure ™ can be installed on top of an existing Debian installation.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Here’s the change:</p>
-<p><a href="https://www.kicksecure.com/w/index.php?title=Debian&amp;type=revision&amp;diff=64364&amp;oldid=61274" class="inline-onebox">Debian: Difference between revisions - Kicksecure</a></p> ]]></description>
-        <link>http://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129/2</link>
-        <pubDate>Fri, 28 Oct 2022 13:51:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-259</guid>
-      </item>
-      <item>
-        <title>Changing kicksecure repository to tester will add tor+ by default to the repo</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Added a note in the wiki to document this:</p>
-<p><a href="https://www.kicksecure.com/w/index.php?title=Template%3AProject-APT-Repository-Add&amp;type=revision&amp;diff=64361&amp;oldid=63967" class="inline-onebox">Template:Project-APT-Repository-Add: Difference between revisions - Kicksecure</a></p> ]]></description>
-        <link>http://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127/2</link>
-        <pubDate>Fri, 28 Oct 2022 13:38:41 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-258</guid>
-      </item>
-      <item>
-        <title>Disable unnecessary startup processes e.g evolution calendar</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>One option to solve this could be by moving away from <code>gdm</code>. Related discussion:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://forums.whonix.org/t/display-manager-lightdm-gdm3-sddm-or-no-display-manager-startx/12457">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/display-manager-lightdm-gdm3-sddm-or-no-display-manager-startx/12457" target="_blank" rel="noopener" title="01:31PM - 27 September 2021">Whonix Forum – 27 Sep 21</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<h3><a href="https://forums.whonix.org/t/display-manager-lightdm-gdm3-sddm-or-no-display-manager-startx/12457" target="_blank" rel="noopener">display manager - lightdm, gdm3, sddm or no display manager (startx)</a></h3>
-
-  <p>Whonix 15 was using lightdm. It was removed due to autologin heisenbug. [1] [2] [3]  Therefore Whonix 16 is using gdm3. It is also a good choice because it supports wayland (and fits with Gnome, which Whonix might be ported to, depending on many...</p>
-
-  <p>
-    <span class="label1">Reading time: 1 mins 🕑</span>
-      <span class="label2">Likes: 8 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>http://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126/2</link>
-        <pubDate>Fri, 28 Oct 2022 13:28:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-257</guid>
       </item>
   </channel>
 </rss>

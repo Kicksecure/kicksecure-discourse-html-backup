@@ -9,9 +9,83 @@ I followed the guidance for not making user sudo due to a preference to keep roo
 
 Is it possible to use the xfce installer without having user in sudo?</description>
     
-    <lastBuildDate>Mon, 31 Oct 2022 08:36:06 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Nov 2022 23:52:21 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[ike]]></dc:creator>
+        <description><![CDATA[
+            <p>Oh - kicksecure already has that SYSTEMD_SULOGIN_FORCE dropin file (named override.conf - but the name doesn’t matter).  As long as that is put in place first and tested, is there a remaining fear of admin lockout?</p>
+          <p><a href="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/13">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/13</link>
+        <pubDate>Tue, 01 Nov 2022 23:52:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-124-13</guid>
+        <source url="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124.rss">Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</source>
+      </item>
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[ike]]></dc:creator>
+        <description><![CDATA[
+            <p>I did the grep through the sources.<br>
+It points primarily to:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc" title="03:20PM - 16 October 2019">Whonix Forum – 16 Oct 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<h3><a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc">Is security-misc suitable for hardening bridges and relays?</a></h3>
+
+  <p>Hello both and thanks for your kind replies. Apologies for the late answer but I have been kind of busy today.  Well, I tried to install security-misc on a private relay I am running for testing purposes. After the reboot when I tried to become root...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+<p>
+which implies that sudo is there as a way to make sure that the installation of kicksecure doesn’t result in admin lockout.  That’s a good reason.  However, it implies that maybe sudo isn’t needed after installation.<br>
+Unfortunately, there are many other uses of sudo in the sources.  It isn’t clear to me whether they are for convenience purposes or required.</p>
+<p>As for requiring sudo to prevent admin lockout during install: another way would be to make sure that root logins in rescue mode always happen, even if root is otherwise locked.  This can be done with a single dropin file:</p>
+<pre><code class="lang-auto">mkdir -p /etc/systemd/system/rescue.service.d
+cat &gt;/etc/systemd/system/rescue.service.d/force-root.conf &lt;&lt;EOF
+[Service]
+Environment=SYSTEMD_SULOGIN_FORCE=yes
+EOF
+</code></pre>
+<p>Then require that the rest of the install of kicksecure be done in rescue mode (probably safer anyway).</p>
+<p>Also, on the topic of sudo: has anyone doing kicksecure devo thought about a lighter weight and potentially more secure alternative, like siduction’s doas command?  Personally, I’d like to do away with any way to change from one user to another (or root), but I understand that’s not a universal taste.</p>
+          <p><a href="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/12">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/12</link>
+        <pubDate>Tue, 01 Nov 2022 20:51:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-124-12</guid>
+        <source url="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124.rss">Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</source>
+      </item>
+      <item>
+        <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>See this link… It explains how to get all source code and how to search for some string such as “sudo”:</p>
+<p><a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a></p>
+<p>(This forum theme does not show links very well which will be fixed soonish.)</p>
+          <p><a href="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/11">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124/11</link>
+        <pubDate>Tue, 01 Nov 2022 19:02:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-124-11</guid>
+        <source url="http://forums.kicksecure.com/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124.rss">Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</source>
+      </item>
       <item>
         <title>Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
