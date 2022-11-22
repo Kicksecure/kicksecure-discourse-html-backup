@@ -5,9 +5,60 @@
     <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139</link>
     <description>Can you point out the reasons sudo is currently needed?  For instance, links to kicksecure github sources that depend on it?  I am interested in sudoless (and completely passwordless, except for encryption) for single-user workstations, but need to have some idea what I&#39;d be up against if I tried to get that with kicksecure.</description>
     
-    <lastBuildDate>Sun, 06 Nov 2022 09:34:29 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 21 Nov 2022 19:10:14 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[ike]]></dc:creator>
+        <description><![CDATA[
+            <p>Back on topic: Sudoless Kicksecure.  Addressing the issue about how robust the rescue boot forcing root logins is by having an alternative way to get to root that is just as secure as a rescue boot, and more secure than sudo, su, polkit, etc. as those are all susceptible to programmatic attacks by malicious software, and to misconfiguration errors.<br>
+Below is a very small C program for a suid exe that will open a root console and switch back when the console exits.  This is a secure way to get to root during a normally booted (non-rescue) X or console session, and works even if the root account is locked.  I have tested that it works, and it seems secure on my own judgement, but would appreciate other opinions.  Obviously, if on a multi-user system use file permissions to only allow execution by users who can be trusted with root capabilities.</p>
+<pre><code class="lang-auto">#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+
+#define OPENVT "/usr/bin/openvt"
+
+/* Establish a very basic and safe environment for the VT session.  Note:
+ * if we don't set SHELL, then a very simple attack would be to set SHELL
+ * to a malicious exe and run this suid, with the result that the malicious
+ * exe would get root privileges. */
+char *vtenv[] = {
+	"PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin",
+	"SHELL=/usr/bin/bash",
+	"TERM=linux",
+	"LOGNAME=root",
+	"HOME=/root",
+	"USER=root",
+	NULL};
+
+int main() {
+	/* really become root: */
+	setreuid(0, 0);
+	setregid(0, 0);
+	/* null-out stdin,stdout,stderr to prevent redirect-IO attacks: */
+	int nullfp = open("/dev/null", O_RDWR);
+	dup2(nullfp, 0);
+	dup2(nullfp, 1);
+	dup2(nullfp, 2);
+	/* openvt options used:
+	 * -l makes it a login session by prefixing the shell with '-'
+	 * -s switches to the VT
+	 * -w waits for exit from the VT and switches back
+	 * The problem with using -e /usr/bin/bash instead of setting SHELL to /usr/bin/bash
+	 * is that -e interferes with -w.
+	 * */
+	execle(OPENVT,OPENVT,"-lsw",NULL,vtenv);
+	return 0;
+}
+</code></pre>
+          <p><a href="http://forums.kicksecure.com/t/sudoless-kicksecure/139/9">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/9</link>
+        <pubDate>Mon, 21 Nov 2022 19:10:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-139-9</guid>
+        <source url="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss">Sudoless Kicksecure</source>
+      </item>
       <item>
         <title>Sudoless Kicksecure</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

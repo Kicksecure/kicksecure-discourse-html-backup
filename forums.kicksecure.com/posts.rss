@@ -5,6 +5,53 @@
     <link>http://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[@ike]]></dc:creator>
+        <description><![CDATA[ <p>Back on topic: Sudoless Kicksecure.  Addressing the issue about how robust the rescue boot forcing root logins is by having an alternative way to get to root that is just as secure as a rescue boot, and more secure than sudo, su, polkit, etc. as those are all susceptible to programmatic attacks by malicious software, and to misconfiguration errors.<br>
+Below is a very small C program for a suid exe that will open a root console and switch back when the console exits.  This is a secure way to get to root during a normally booted (non-rescue) X or console session, and works even if the root account is locked.  I have tested that it works, and it seems secure on my own judgement, but would appreciate other opinions.  Obviously, if on a multi-user system use file permissions to only allow execution by users who can be trusted with root capabilities.</p>
+<pre><code class="lang-auto">#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+
+#define OPENVT "/usr/bin/openvt"
+
+/* Establish a very basic and safe environment for the VT session.  Note:
+ * if we don't set SHELL, then a very simple attack would be to set SHELL
+ * to a malicious exe and run this suid, with the result that the malicious
+ * exe would get root privileges. */
+char *vtenv[] = {
+	"PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin",
+	"SHELL=/usr/bin/bash",
+	"TERM=linux",
+	"LOGNAME=root",
+	"HOME=/root",
+	"USER=root",
+	NULL};
+
+int main() {
+	/* really become root: */
+	setreuid(0, 0);
+	setregid(0, 0);
+	/* null-out stdin,stdout,stderr to prevent redirect-IO attacks: */
+	int nullfp = open("/dev/null", O_RDWR);
+	dup2(nullfp, 0);
+	dup2(nullfp, 1);
+	dup2(nullfp, 2);
+	/* openvt options used:
+	 * -l makes it a login session by prefixing the shell with '-'
+	 * -s switches to the VT
+	 * -w waits for exit from the VT and switches back
+	 * The problem with using -e /usr/bin/bash instead of setting SHELL to /usr/bin/bash
+	 * is that -e interferes with -w.
+	 * */
+	execle(OPENVT,OPENVT,"-lsw",NULL,vtenv);
+	return 0;
+}
+</code></pre> ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/9</link>
+        <pubDate>Mon, 21 Nov 2022 19:10:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-357</guid>
+      </item>
+      <item>
         <title>Kicksecure-xfce-host not installable in debian 12 (removed dependency)</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/501">
@@ -1008,55 +1055,6 @@ EOF
         <link>http://forums.kicksecure.com/t/enabling-open-link-confirmation/111/5</link>
         <pubDate>Tue, 01 Nov 2022 14:32:01 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-308</guid>
-      </item>
-      <item>
-        <title>Enabling open-link-confirmation</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This one (which was posted later) could be a duplicate:</p><aside class="quote quote-modified" data-post="1" data-topic="128">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Not having a default browser and pressing on "Web Browser" icon in xfce will give annoying bug</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
-  </div>
-  <blockquote>
-    Since we dont have a default browser by default so any user who is morphing debian fresh install he will not have a browser as well (specially debian minimal version like netinst or CD…etc). 
-This will give annoying show annoying bug: 
-[havingnobrowser1] 
-Will show a  bug window which you need to press on OK multiple times to disappear: 
-1 
-[havingnobrowser2] 
-2 
-[havingnobrowser3] 
-3 
-[havingnobrowser4] 
-4 
-[havingnobrowser5] 
-5 
-[havingnobrowser6]
-  </blockquote>
-</aside>
-
-<p>For solution, could you please have a look here?</p><aside class="quote quote-modified" data-post="2" data-topic="129">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129/2">Add pyqt5-dev-tool dependency to kicksecure dependencies</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
-  </div>
-  <blockquote>
-    Root cause is that meta package kicksecure-desktop-applications-recommended isn’t installed. 
-That package would ensure that the dependency package repository-dist-wizard gets installed. 
-I’ve updated the installation instructions just now: 
-
-
-Here’s the change: 
-<a href="https://www.kicksecure.com/w/index.php?title=Debian&amp;type=revision&amp;diff=64364&amp;oldid=61274" class="inline-onebox">Debian: Difference between revisions - Kicksecure</a>
-  </blockquote>
-</aside>
-
-<p>In short: the documentation on which meta package to install has been updated.</p> ]]></description>
-        <link>http://forums.kicksecure.com/t/enabling-open-link-confirmation/111/4</link>
-        <pubDate>Tue, 01 Nov 2022 14:29:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-307</guid>
       </item>
   </channel>
 </rss>
