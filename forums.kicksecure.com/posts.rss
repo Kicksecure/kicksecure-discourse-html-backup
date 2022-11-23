@@ -7,6 +7,79 @@
       <item>
         <title>Sudoless Kicksecure</title>
         <dc:creator><![CDATA[@ike]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="ike" data-post="12" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/df705f/40.png" class="avatar"> ike:</div>
+<blockquote>
+<p>That is a very easy systemd setting. Also, I think in recent Debian, including bullseye, it is the default, so no research is needed.</p>
+</blockquote>
+</aside>
+<p>Is it possible that installing Kicksecure disables this?  I have 3 Debian bullseye VMs, and the 2 that don’t (yet) have Kicksecure have networking in recovery mode - specifically, the ifup@ens3.service is active.  And apt update works.  But the VM with Kicksecure does not have networking by default in recovery mode.  Was that done intentionally or by accident?</p>
+<p>The easy way to fix it is to add a networking service wants link for the rescue target:</p>
+<pre><code class="lang-auto">mkdir -p /etc/systemd/system/rescue.target.wants
+ln -s /lib/systemd/system/networking.service /etc/systemd/system/rescue.target.wants/
+</code></pre> ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/13</link>
+        <pubDate>Tue, 22 Nov 2022 19:27:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-361</guid>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[@ike]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p><a href="https://forums.kicksecure.com/u/Patrick">Patrick</a></p>
+<p>Interesting!<br>
+This is giving a root shell but not requiring any authentication?<br>
+So you’re working on a sudo alternative?<br>
+I am not sure how that fits in here.</p>
+</blockquote>
+<p>I am considering going sudo-less with root account locked, and I don’t know how much of kicksecure I can incorporate into that.  This openvt suid code is probably how I will proceed, as I now consider it a better alternative than rescue mode, as I can use it during normal operation without rebooting.  My point to posting it is to show that rescue mode does not need to be the only way to do root tasks when going sudo-less with root locked.  If relying on an unproven rescue mode was the original reason for the reluctance to do a sudo-less Kicksecure.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>How do enable networking functional from rescue mode? It’s likely possible but I think it’s undocumented and non-trivial to research.</p>
+</blockquote>
+</aside>
+<p>That is a very easy systemd setting.  Also, I think in recent Debian, including bullseye, it is the default, so no research is needed.</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/12</link>
+        <pubDate>Tue, 22 Nov 2022 14:54:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-360</guid>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="ike" data-post="4" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/df705f/40.png" class="avatar"> ike:</div>
+<blockquote>
+<p>Then require that the rest of the install of kicksecure be done in rescue mode (probably safer anyway).</p>
+</blockquote>
+</aside>
+<p>How do enable networking functional from rescue mode? It’s likely possible but I think it’s undocumented and non-trivial to research.</p>
+<p>The next planned evolution of Kicksecure is however proving an ISO installation method (easier).<br>
+I won’t be working on installation distribution morphing during Debian recovery mode.</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/11</link>
+        <pubDate>Tue, 22 Nov 2022 08:13:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-359</guid>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Interesting!<br>
+This is giving a root shell but not requiring any authentication?<br>
+So you’re working on a sudo alternative?<br>
+I am not sure how that fits in here.</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/10</link>
+        <pubDate>Tue, 22 Nov 2022 08:13:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-358</guid>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[@ike]]></dc:creator>
         <description><![CDATA[ <p>Back on topic: Sudoless Kicksecure.  Addressing the issue about how robust the rescue boot forcing root logins is by having an alternative way to get to root that is just as secure as a rescue boot, and more secure than sudo, su, polkit, etc. as those are all susceptible to programmatic attacks by malicious software, and to misconfiguration errors.<br>
 Below is a very small C program for a suid exe that will open a root console and switch back when the console exits.  This is a secure way to get to root during a normally booted (non-rescue) X or console session, and works even if the root account is locked.  I have tested that it works, and it seems secure on my own judgement, but would appreciate other opinions.  Obviously, if on a multi-user system use file permissions to only allow execution by users who can be trusted with root capabilities.</p>
 <pre><code class="lang-auto">#include &lt;fcntl.h&gt;
@@ -992,69 +1065,6 @@ https://forums.kicksecure.com/t/add-remove-extra-packages/135/4</span></p>
         <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/5</link>
         <pubDate>Tue, 01 Nov 2022 23:52:21 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-312</guid>
-      </item>
-      <item>
-        <title>Sudoless Kicksecure</title>
-        <dc:creator><![CDATA[@ike]]></dc:creator>
-        <description><![CDATA[ <p>I did the grep through the sources.<br>
-It points primarily to:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc" title="03:20PM - 16 October 2019">Whonix Forum – 16 Oct 19</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<h3><a href="https://forums.whonix.org/t/is-security-misc-suitable-for-hardening-bridges-and-relays/8299/4" target="_blank" rel="noopener nofollow ugc">Is security-misc suitable for hardening bridges and relays?</a></h3>
-
-  <p>Hello both and thanks for your kind replies. Apologies for the late answer but I have been kind of busy today.  Well, I tried to install security-misc on a private relay I am running for testing purposes. After the reboot when I tried to become root...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-<p>
-which implies that sudo is there as a way to make sure that the installation of kicksecure doesn’t result in admin lockout.  That’s a good reason.  However, it implies that maybe sudo isn’t needed after installation.<br>
-Unfortunately, there are many other uses of sudo in the sources.  It isn’t clear to me whether they are for convenience purposes or required.</p>
-<p>As for requiring sudo to prevent admin lockout during install: another way would be to make sure that root logins in rescue mode always happen, even if root is otherwise locked.  This can be done with a single dropin file:</p>
-<pre><code class="lang-auto">mkdir -p /etc/systemd/system/rescue.service.d
-cat &gt;/etc/systemd/system/rescue.service.d/force-root.conf &lt;&lt;EOF
-[Service]
-Environment=SYSTEMD_SULOGIN_FORCE=yes
-EOF
-</code></pre>
-<p>Then require that the rest of the install of kicksecure be done in rescue mode (probably safer anyway).</p>
-<p>Also, on the topic of sudo: has anyone doing kicksecure devo thought about a lighter weight and potentially more secure alternative, like siduction’s doas command?  Personally, I’d like to do away with any way to change from one user to another (or root), but I understand that’s not a universal taste.</p> ]]></description>
-        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/4</link>
-        <pubDate>Tue, 01 Nov 2022 20:51:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-311</guid>
-      </item>
-      <item>
-        <title>Sudoless Kicksecure</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>See this link… It explains how to get all source code and how to search for some string such as “sudo”:</p>
-<p><a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a></p>
-<p>(This forum theme does not show links very well which will be fixed soonish.)</p> ]]></description>
-        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/3</link>
-        <pubDate>Tue, 01 Nov 2022 19:02:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-310</guid>
-      </item>
-      <item>
-        <title>Enabling open-link-confirmation</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Btw as for the packages… As long as Kicksecure doesn’t have something like <a href="https://forums.whonix.org/t/packages-debian-org-apt-package-repository-web-interface-for-deb-whonix-org/10937" class="inline-onebox">packages.debian.org APT package repository web interface for deb.whonix.org - Development - Whonix Forum</a> to auto document the packages better… You might be interested to look into this source file. It has all the meta packages.</p>
-<p><a href="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control" class="inline-onebox">kicksecure-meta-packages/control at master · Kicksecure/kicksecure-meta-packages · GitHub</a></p> ]]></description>
-        <link>http://forums.kicksecure.com/t/enabling-open-link-confirmation/111/5</link>
-        <pubDate>Tue, 01 Nov 2022 14:32:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-308</guid>
       </item>
   </channel>
 </rss>

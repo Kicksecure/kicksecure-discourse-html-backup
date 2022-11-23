@@ -5,9 +5,98 @@
     <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139</link>
     <description>Can you point out the reasons sudo is currently needed?  For instance, links to kicksecure github sources that depend on it?  I am interested in sudoless (and completely passwordless, except for encryption) for single-user workstations, but need to have some idea what I&#39;d be up against if I tried to get that with kicksecure.</description>
     
-    <lastBuildDate>Mon, 21 Nov 2022 19:10:14 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 22 Nov 2022 19:27:10 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[ike]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="ike" data-post="12" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/df705f/40.png" class="avatar"> ike:</div>
+<blockquote>
+<p>That is a very easy systemd setting. Also, I think in recent Debian, including bullseye, it is the default, so no research is needed.</p>
+</blockquote>
+</aside>
+<p>Is it possible that installing Kicksecure disables this?  I have 3 Debian bullseye VMs, and the 2 that don’t (yet) have Kicksecure have networking in recovery mode - specifically, the ifup@ens3.service is active.  And apt update works.  But the VM with Kicksecure does not have networking by default in recovery mode.  Was that done intentionally or by accident?</p>
+<p>The easy way to fix it is to add a networking service wants link for the rescue target:</p>
+<pre><code class="lang-auto">mkdir -p /etc/systemd/system/rescue.target.wants
+ln -s /lib/systemd/system/networking.service /etc/systemd/system/rescue.target.wants/
+</code></pre>
+          <p><a href="http://forums.kicksecure.com/t/sudoless-kicksecure/139/13">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/13</link>
+        <pubDate>Tue, 22 Nov 2022 19:27:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-139-13</guid>
+        <source url="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss">Sudoless Kicksecure</source>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[ike]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p><a href="https://forums.kicksecure.com/u/Patrick">Patrick</a></p>
+<p>Interesting!<br>
+This is giving a root shell but not requiring any authentication?<br>
+So you’re working on a sudo alternative?<br>
+I am not sure how that fits in here.</p>
+</blockquote>
+<p>I am considering going sudo-less with root account locked, and I don’t know how much of kicksecure I can incorporate into that.  This openvt suid code is probably how I will proceed, as I now consider it a better alternative than rescue mode, as I can use it during normal operation without rebooting.  My point to posting it is to show that rescue mode does not need to be the only way to do root tasks when going sudo-less with root locked.  If relying on an unproven rescue mode was the original reason for the reluctance to do a sudo-less Kicksecure.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/40.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>How do enable networking functional from rescue mode? It’s likely possible but I think it’s undocumented and non-trivial to research.</p>
+</blockquote>
+</aside>
+<p>That is a very easy systemd setting.  Also, I think in recent Debian, including bullseye, it is the default, so no research is needed.</p>
+          <p><a href="http://forums.kicksecure.com/t/sudoless-kicksecure/139/12">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/12</link>
+        <pubDate>Tue, 22 Nov 2022 14:54:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-139-12</guid>
+        <source url="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss">Sudoless Kicksecure</source>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="ike" data-post="4" data-topic="139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/df705f/40.png" class="avatar"> ike:</div>
+<blockquote>
+<p>Then require that the rest of the install of kicksecure be done in rescue mode (probably safer anyway).</p>
+</blockquote>
+</aside>
+<p>How do enable networking functional from rescue mode? It’s likely possible but I think it’s undocumented and non-trivial to research.</p>
+<p>The next planned evolution of Kicksecure is however proving an ISO installation method (easier).<br>
+I won’t be working on installation distribution morphing during Debian recovery mode.</p>
+          <p><a href="http://forums.kicksecure.com/t/sudoless-kicksecure/139/11">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/11</link>
+        <pubDate>Tue, 22 Nov 2022 08:13:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-139-11</guid>
+        <source url="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss">Sudoless Kicksecure</source>
+      </item>
+      <item>
+        <title>Sudoless Kicksecure</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Interesting!<br>
+This is giving a root shell but not requiring any authentication?<br>
+So you’re working on a sudo alternative?<br>
+I am not sure how that fits in here.</p>
+          <p><a href="http://forums.kicksecure.com/t/sudoless-kicksecure/139/10">Read full topic</a></p>
+        ]]></description>
+        <link>http://forums.kicksecure.com/t/sudoless-kicksecure/139/10</link>
+        <pubDate>Tue, 22 Nov 2022 08:13:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-139-10</guid>
+        <source url="http://forums.kicksecure.com/t/sudoless-kicksecure/139.rss">Sudoless Kicksecure</source>
+      </item>
       <item>
         <title>Sudoless Kicksecure</title>
         <dc:creator><![CDATA[ike]]></dc:creator>
