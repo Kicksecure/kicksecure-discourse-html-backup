@@ -5,8 +5,53 @@
     <link>http://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Sat, 05 Nov 2022 10:22:22 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 23 Nov 2022 18:46:33 +0000</lastBuildDate>
       <atom:link href="http://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Adding new packages will be installed with its recommends</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>While its good to apply new packages with:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="135">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar">
+    <a href="//forums.kicksecure.com/t/add-remove-extra-packages/135">Add/Remove Extra Packages</a> <a class="badge-wrapper  bullet" href="http://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
+  </div>
+  <blockquote>
+    This post for: 
+
+Removing Unnecessary packages (specially if they are not default in upstream and/or has issues like stopped development, less secure or producing too many issues).
+Adding necessary packages for better security or usability (as long as they are not harmful).
+
+
+Removing packages: 
+
+Remove wget since its not upstream default and less secure than curl (kicksecure support scurl), OR replace it with the successor wget2.
+
+Can been seen added as extra package for debian stable: 
+ <a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/8bd6a7e34899560f8b345ac955a539f67b834090.png" data-download-href="//forums.kicksecure.com/uploads/default/8bd6a7e34899560f8b345ac955a539f67b834090" title="wgetnotdefault">[wgetn…</a>
+  </blockquote>
+</aside>
+
+<p>But current issue is that the newly installed packages for already kicksecure users will receive an upgrade with the new packages + recommended packages (not with --no-recommends as kicksecure installed) meaning it might pull unwanted extra packages like avahi or samba or…etc</p>
+<p>Current example is <a href="https://packages.debian.org/bullseye/vlc" rel="noopener nofollow ugc">VLC</a> which is installed with its recommended package (not depends) <a href="https://packages.debian.org/bullseye/vlc-plugin-samba" rel="noopener nofollow ugc"><code>vlc-plugin-samba</code></a> which install samba and smbclient libraries as a result (even if they are safe still considered extra for kicksecure installation).</p>
+<p>good thing its removable without extra issues:</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/29d74d037a03e62396e2dc36e92729fc56c13814.png" data-download-href="//forums.kicksecure.com/uploads/default/29d74d037a03e62396e2dc36e92729fc56c13814" title="sambarecpackage"><img src="//forums.kicksecure.com/uploads/default/original/1X/29d74d037a03e62396e2dc36e92729fc56c13814.png" alt="sambarecpackage" data-base62-sha1="5Y8R5e4FA2fSsRSf3MicaCgWoQI" width="690" height="137" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/29d74d037a03e62396e2dc36e92729fc56c13814_2_10x10.png"></a></div><p></p>
+<p>Either something by kicksecure can be done forcing packages to not pull recommends if added newly or by the end user with apt.</p>
+<p>Note: This is only effecting newly added packages with previous kicksecure users, new kicksecure users will install kicksecure with --no-install-recommends as mentioned in the wiki.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="http://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156">Read full topic</a></p>
+          ]]></description>
+          <link>http://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156</link>
+          <pubDate>Wed, 23 Nov 2022 18:46:33 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-156</guid>
+          <source url="http://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156.rss">Adding new packages will be installed with its recommends</source>
+        </item>
         <item>
           <title>Kicksecure-xfce-host not installable in debian 12 (removed dependency)</title>
           <dc:creator><![CDATA[nurmagoz]]></dc:creator>
@@ -1130,40 +1175,6 @@ ff02::2         ip6-allrouters
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-97</guid>
           <source url="http://forums.kicksecure.com/t/hostname-incorrect/97.rss">Hostname incorrect?</source>
-        </item>
-        <item>
-          <title>Everything works, just one question about networking</title>
-          <dc:creator><![CDATA[alexa_tanner]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi! Using Kicksecure for KVM, version 16.0.5.3. Thank you btw, this is insanely awesome.</p>
-<p>I noticed that Kicksecure is using dhcp to dymanically assign an IP address to its eth0 interface. This requires that ports 67,68,53 are open on the virtual network device, which I’m trying to avoid.</p>
-<p>I would instead like a static IP address to be assigned. In my case something in the 10.0.2.0/24 range, because my virtual network IP is 10.0.2.2</p>
-<p>Would assigning an IP in /etc/network/interfaces and adding a route to the gateway break anything?</p>
-<p>Here is my network xml for Kicksecure.</p>
-<pre><code class="lang-auto">&lt;network&gt;
-  &lt;name&gt;kick_net&lt;/name&gt;
-  &lt;forward dev='eth2' mode='nat'&gt;
-    &lt;interface dev='eth2'/&gt;
-  &lt;/forward&gt;
-  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
-  &lt;ip address='10.0.2.2' netmask='255.255.255.0'&gt;
-      &lt;dhcp&gt;
-         &lt;range start='10.0.2.5' end='10.0.2.254''&gt;
-     &lt;/dhcp&gt;
-  &lt;/ip&gt;
-&lt;/network&gt;
-</code></pre>
-            <p><small>7 posts - 3 participants</small></p>
-            <p><a href="http://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96">Read full topic</a></p>
-          ]]></description>
-          <link>http://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96</link>
-          <pubDate>Fri, 12 Aug 2022 09:42:55 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-96</guid>
-          <source url="http://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
         </item>
   </channel>
 </rss>

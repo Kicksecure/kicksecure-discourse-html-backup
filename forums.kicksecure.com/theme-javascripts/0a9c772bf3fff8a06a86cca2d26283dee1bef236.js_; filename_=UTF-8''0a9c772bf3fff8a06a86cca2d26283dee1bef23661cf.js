@@ -1,67 +1,119 @@
+<div class="page-not-found">
+  <h1 class="title">Oops! That page doesn’t exist or is private.</h1>
 
-  
-  let contentForSlides = `
-    <h1>We want to <b>grow and improve</b> - please help Kicksecure!</h1>
-    
-    <div data-crypto-addresses='{
-      "payBitcoin": "3DaJWfHyLv4RVnvMD7K2Mz2AX2r3fwiQwV",
-      "payMonero": "84ozcSohQfoV6nRgGfaQ8uBvWphXAH8zDTTuotVnJWF1JMNQfvgNFdbEo4ZnJ9hxPMeYfJuUoWGH3MRaXCfbYk8sFFgm4XL",
-      "payEthereum": "0xf27EAe399f186600Dc6e5A418793C4A3D58a74e7"
-    }'>
+    <a href="/login" class='btn btn-primary'><svg class="fa d-icon svg-icon svg-node" aria-hidden="true"><svg id="user" viewBox="0 0 448 512">
+    <path d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"/>
+  </svg></svg>
+Log In</a>
+
+</div>
+
+
+
+<div class="row page-not-found-topics">
+    <div class="popular-topics">
+      <h2 class="popular-topics-title">Popular</h2>
+        <div class='not-found-topic'>
+          <a href="/t/sudoless-kicksecure/139">Sudoless Kicksecure</a><a class='badge-wrapper  bullet' href='/c/support/6'><span class='badge-category-bg' style='background-color: #0088CC;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='User support for the Kicksecure operating system.'>Support</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/remove-replace-broken-links-at-kicksecure-com/150">Remove/Replace broken links at kicksecure.com</a><a class='badge-wrapper  bullet' href='/c/website/2'><span class='badge-category-bg' style='background-color: #808281;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Issues and improvements with the Kicksecure website.'>Website</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127">Changing kicksecure repository to tester will add tor+ by default to the repo</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126">Disable unnecessary startup processes e.g evolution calendar</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/clean-installing-ks-on-debian-11-cli-hit-security-misc-error/124">Clean Installing KS On Debian 11 CLI, Hit Security Misc Error</a><a class='badge-wrapper  bullet' href='/c/support/6'><span class='badge-category-bg' style='background-color: #0088CC;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='User support for the Kicksecure operating system.'>Support</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152">Kicksecure-xfce-host not installable in debian 12 (removed dependency)</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/systemcheck-wont-load-work-on-debian-12-next-release/130">Systemcheck wont load/work on debian 12 (next release)</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Not having a default browser and pressing on &ldquo;Web Browser&rdquo; icon in xfce will give annoying bug</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/add-remove-extra-packages/135">Add/Remove Extra Packages</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/installing-openvpn-client-permission-denied/125">Installing OpenVPN Client: Permission Denied</a><a class='badge-wrapper  bullet' href='/c/support/6'><span class='badge-category-bg' style='background-color: #0088CC;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='User support for the Kicksecure operating system.'>Support</span></a>
+        </div>
+      <a href="/top" class="btn btn-default">More&hellip;</a>
     </div>
-    
-    <div>
-      <img src="end-of-year-banner/img/green.jpg" />
-      Kicksecure is an Open Source security power house and the basis for <a target="_blank" href="https://www.whonix.org">Whonix</a> - <b>providing great value to thousands of users</b>! 
-      But only those who move forward continue to thrive. Would you support our next big leap? 
+    <div class="recent-topics">
+      <h2 class="recent-topics-title">Recent</h2>
+        <div class='not-found-topic'>
+          <a href="/t/adding-new-packages-will-be-installed-with-its-recommends/156">Adding new packages will be installed with its recommends</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152">Kicksecure-xfce-host not installable in debian 12 (removed dependency)</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/remove-replace-broken-links-at-kicksecure-com/150">Remove/Replace broken links at kicksecure.com</a><a class='badge-wrapper  bullet' href='/c/website/2'><span class='badge-category-bg' style='background-color: #808281;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Issues and improvements with the Kicksecure website.'>Website</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/add-remove-extra-packages/135">Add/Remove Extra Packages</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134">Sdwdate failed to start in debian 12 bookworm (next release)</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/sudoless-kicksecure/139">Sudoless Kicksecure</a><a class='badge-wrapper  bullet' href='/c/support/6'><span class='badge-category-bg' style='background-color: #0088CC;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='User support for the Kicksecure operating system.'>Support</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/systemcheck-wont-load-work-on-debian-12-next-release/130">Systemcheck wont load/work on debian 12 (next release)</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129">Add pyqt5-dev-tool dependency to kicksecure dependencies</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+        <div class='not-found-topic'>
+          <a href="/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127">Changing kicksecure repository to tester will add tor+ by default to the repo</a><a class='badge-wrapper  bullet' href='/c/development/7'><span class='badge-category-bg' style='background-color: #25AAE2;'></span><span style='' data-drop-close='true' class='badge-category clear-badge'
+                 title='Development of Kicksecure software and source code.'>Development</span></a>
+        </div>
+      <a href="/latest" class="btn btn-default">More&hellip;</a>
     </div>
-    
-    <div>
-      <img src="end-of-year-banner/img/blue.jpg" />
-      For 2023 we're <b>improving the usability and enhancing the user experience</b>. We're also hardening the kernel against attacks, improving access control, adding a sandbox and many more features.
+</div>
+
+
+  <div class="row">
+    <div class="page-not-found-search">
+      <h2>Search this site</h2>
+      <p>
+        <form action='/search' id='discourse-search'>
+          <input type="text" name="q" value="">
+          <button class="btn btn-primary">Search</button>
+        </form>
+      </p>
     </div>
-    
-    <div>
-      <img src="end-of-year-banner/img/yellow.jpg" />
-      We aim to create a high impact outreach with articles and videos to attract more users, get more feedback and in turn improve security for YOU!
-      <b>Would you consider a donation to keep Kicksecure independent</b> and help reach these new goals? Thank you.
-    </div>
-  `;
-      
-  $(document).ready( () => {
-    return;
-    
-    // Will not be executed after 2022-31-12 23:59
-    if( Date.now() > 1672527599000 ) {
-      return; 
-    }
-  
-      // If the user has the dismissed less than a week ago, it will not be executed
-      if( localStorage.getItem('dismiss-end-of-year-sitenotice') > Date.now() ) {
-	      $('#siteNotice').addClass('hide-notice');
-	      return;
-      }
-      // Else remove item (because it's not valid) if it exists
-      localStorage.removeItem('dismiss-end-of-year-sitenotice');
+  </div>
 
-    $('body').append( '<div class="mini-modal" id="end-of-year-banner-modal"></div>');
-    $('#end-of-year-banner-modal').miniModal('init');
-
-    initEndOfYearSitenotice( $('#end-of-year-banner-modal .content'), 'https://www.kicksecure.com', contentForSlides );
-
-    let eoy = $('#donate-end-of-year');
-    eoy.find('.btc .cbutton').attr('src','https://www.kicksecure.com/w/images/thumb/2/29/BC_Logo_.png/40px-BC_Logo_.png')
-    eoy.find('.xmr .cbutton').attr('src','https://www.kicksecure.com/w/images/thumb/0/05/Monero-symbol-1280.png/40px-Monero-symbol-1280.png')
-    eoy.find('.eth .cbutton').attr('src','https://www.kicksecure.com/w/images/thumb/2/2c/Ethereumlogo.png/40px-Ethereumlogo.png')
-
-    $('#end-of-year-banner-modal').css('opacity',0).miniModal('show');
-    setTimeout( () => $('#end-of-year-banner-modal').animate( { opacity: 1 }, 1000 ), 1000 );
-
-    $('#end-of-year-banner-modal .mm-close').on('click', function() {
-      $(this).miniModal('hide');
-      localStorage.setItem('dismiss-end-of-year-sitenotice', Date.now() + 7 * 24 * 3600 * 1000 );
-    });
-
-  });
-
+  <link rel="preload" href="/assets/onpopstate-handler-417528e7d5f1058afdf6002e7606a3f51c2abc04573b72c85a24374a343448f2.js" as="script">
+<script src="/assets/onpopstate-handler-417528e7d5f1058afdf6002e7606a3f51c2abc04573b72c85a24374a343448f2.js"></script>
 
