@@ -1,9 +1,12 @@
-function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', contentForSlides = '' ) {
+function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', contentForSlides ) {
+
+	// Basic error checks
+	if( ! contentForSlides ) console.error('Dev: contentForSlides is missing but needed. Please check for errors');
+	if( ! domElementToPrependTo ) console.error('Dev: domElementToPrependTo is missing but needed. Please check for errors');
+	if( ! contentForSlides || ! domElementToPrependTo ) return;
 
 	// Will not be executed after 2022-31-12 23:59:59
-	if( Date.now() > 1672527599000 ) {
-		return;
-	}
+	if( Date.now() > 1672527599000 ) return;
 
 	// If the user has the dismissed less than a week ago, it will not be executed
 	if( localStorage.getItem('dismiss-end-of-year-sitenotice') > Date.now() ) {
@@ -12,6 +15,9 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 	}
 	// Else remove item (because it's not valid) if it exists
 	localStorage.removeItem('dismiss-end-of-year-sitenotice');
+
+	// --------------------
+	// Settings and Globals
 
 	let settings = {
 		durationSlide: 10000, // Milliseconds
@@ -28,12 +34,7 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 		slideIndex: null,
 		slideCount: 0,
 		isPlay: null,
-		content: {
-			slides: '',
-			payBitcoin: '',
-			payMonero: '',
-			payEthereum: '',
-		},
+		crypto: { payBitcoin: '', payMonero: '', payEthereum: '', },
 	};
 
 	// ---
@@ -77,18 +78,6 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 
 	let hiddenHelperContainer = $('<div style="position: fixed; opacity: 0;"></div>');
 
-	// -----
-	// Setup
-
-	$('body').append(hiddenHelperContainer);
-	hiddenHelperContainer.append( endOfYear );
-
-	// Other
-
-	endOfYear.find('.pay-via-paypal-module').payViaPaypal('init');
-
-	endOfYear.find('.payment .crypto-container .code-select').codeSelect('init');
-
 	// ---
 	// FNs
 
@@ -127,10 +116,20 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 		refs.playNextTimeout = setTimeout( () => playNext( 'auto' ), settings.durationSlide );
 	}
 
-	states.content.slides = contentForSlides;
+	// -----
+	// Setup
 
-	let slides = $(states.content.slides);
-	endOfYear.find('.content').html( states.content.slides );
+	$('body').append(hiddenHelperContainer);
+	hiddenHelperContainer.append( endOfYear );
+
+	// Imported Initializations
+
+	endOfYear.find('.pay-via-paypal-module').payViaPaypal('init');
+	endOfYear.find('.payment .crypto-container .code-select').codeSelect('init');
+
+	// Content
+
+	endOfYear.find('.content').html( contentForSlides );
 
 	if( endOfYear.find('.content h1').length > 0 ) {
 		endOfYear.find( '.h1 span' ).html( endOfYear.find('.content h1').html() );
@@ -140,17 +139,16 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 	if( endOfYear.find('.content [data-crypto-addresses]').length > 0 ) {
 		let crypto = JSON.parse( endOfYear.find('.content [data-crypto-addresses]').attr('data-crypto-addresses') );
 		endOfYear.find('.content [data-crypto-addresses]').remove();
-		states.content = { ...crypto };
+		states.crypto = { ...crypto };
 	}
 
-	if( ! states.content.slides ) console.warn('Dev: contentForSlides is missing. Please check for errors');
-	if( ! states.content.payBitcoin ) console.warn('Dev: payBitcoin is missing. Please check for errors');
-	if( ! states.content.payMonero ) console.warn('Dev: payMonero is missing. Please check for errors');
-	if( ! states.content.payEthereum ) console.warn('Dev: payEthereum is missing. Please check for errors');
+	if( ! states.crypto.payBitcoin ) console.warn('Dev: payBitcoin is missing. Please check for errors');
+	if( ! states.crypto.payMonero ) console.warn('Dev: payMonero is missing. Please check for errors');
+	if( ! states.crypto.payEthereum ) console.warn('Dev: payEthereum is missing. Please check for errors');
 
-	endOfYear.find('.payment .btc .code').text( states.content.payBitcoin );
-	endOfYear.find('.payment .xmr .code').text( states.content.payMonero );
-	endOfYear.find('.payment .eth .code').text( states.content.payEthereum );
+	endOfYear.find('.payment .btc .code').text( states.crypto.payBitcoin );
+	endOfYear.find('.payment .xmr .code').text( states.crypto.payMonero );
+	endOfYear.find('.payment .eth .code').text( states.crypto.payEthereum );
 
 	// Add Mobile donate link button
 
