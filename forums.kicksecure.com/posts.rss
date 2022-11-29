@@ -5,6 +5,234 @@
     <link>http://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Systemcheck hangs up on Time Synchronization</title>
+        <dc:creator><![CDATA[@KiloBone]]></dc:creator>
+        <description><![CDATA[ <p>I recently updated Gateway and Workstation to 16.0.4 running out of Virtual Box. I had some connectivity issues and had to update usr/local/etc/torrc.d/50_user.conf</p>
+<p>Now everything seems to work fine but I still can’t connect to Tor due to a Time Synchronization error. When I run systemcheck I get the following message:</p>
+<blockquote>
+<p>[ERROR] [systemcheck] Time Synchronization Result:<br>
+systemcheck gave up waiting.</p>
+<p>Time synchronization status: fail<br>
+sdwdate reports: Maximum allowed number of failures. Giving up.</p>
+</blockquote>
+<p>Checking the sdwdate logs gives me some more info:</p>
+<blockquote>
+<h3>START: ### /usr/libexec/helper-scripts/onion-time-pre-script</h3>
+<p>__ Status: Subsequent run after boot.<br>
+__ Static Time Sanity Check: Within minimum time ‘Fri Feb 18 00:00:00 UTC 2022’ and expiration timestamp ‘Tue May 17 10:00:00 UTC 2033’, ok.<br>
+__ Tor reports: NOTICE BOOTSTRAP PROGRESS=100 TAG=done SUMMARY=“Done”<br>
+__ Tor circuit: established<br>
+__ Tor Consensus Time Sanity Check: Clock within consensus parameters consensus/valid-after 2022-11-28 14:00:00 and consensus/valid-until 2022-11-28 17:00:00.<br>
+__ Conclusion: Tor already reports circuit established.<br>
+__ ### END: ### Exiting with exit_code ‘0’ indicating ‘success’.<br>
+2022-11-28 14:59:21 - sdwdate - INFO - PREPARATION RESULT: SUCCESS.</p>
+</blockquote>
+<p>But when the Onions are pulled in to establish the time, all URLs produce the same error message:</p>
+<blockquote>
+<p>Failed to establish a new connection: [Errno 111] Connection refused</p>
+</blockquote>
+<p>Ultimately ending with the summary:</p>
+<blockquote>
+<p>2022-11-28 14:59:22 - sdwdate - INFO - failed_urls: 9 allowed_failures: 7<br>
+2022-11-28 14:59:22 - sdwdate - ERROR - Maximum allowed number of failures. Giving up.<br>
+2022-11-28 14:59:22 - sdwdate - INFO - Sleeping for 90 minutes, ok.</p>
+</blockquote>
+<p>I’ve tried restarting sdwdate, restarting network and restarting Tor via Gateway and Workstation. I’ve also tried setting the time/date manually but this didn’t fix anything. Can someone tell me where I’m going wrong?</p> ]]></description>
+        <link>http://forums.kicksecure.com/t/systemcheck-hangs-up-on-time-synchronization/162/1</link>
+        <pubDate>Mon, 28 Nov 2022 15:09:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-389</guid>
+      </item>
+      <item>
+        <title>Kicksecure 16.0.9.0 - for VirtualBox - Point Release!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <h1>
+<a name="kicksecure-for-virtualbox-1" class="anchor" href="http://forums.kicksecure.com#kicksecure-for-virtualbox-1"></a>Kicksecure for VirtualBox</h1>
+<p>Download Kicksecure for VirtualBox:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/VirtualBox">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/VirtualBox" target="_blank" rel="noopener" title="11:12AM - 01 November 2022">Kicksecure – 1 Nov 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <img src="https://www.kicksecure.com/w/images/d/d5/Virtualbox_logo.png?version=14daeaa753e3a6f05cb2ff44d068dac8" class="thumbnail onebox-avatar" width="500" height="500">
+
+<h3><a href="https://www.kicksecure.com/wiki/VirtualBox" target="_blank" rel="noopener">Kicksecure ™ for Windows, MacOS, Linux inside VirtualBox</a></h3>
+
+  <p>Kicksecure ™ for VirtualBox - Stable Version</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>This is a point release.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Point_Release">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener" title="07:41PM - 13 August 2022">Kicksecure – 13 Aug 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:332/500;"><img src="https://www.kicksecure.com/w/images/7/73/Pointrelease213123.jpg?version=b20065b9417eb9cb83a80ae275b46dbc" class="thumbnail" width="332" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener">Point Release</a></h3>
+
+  <p>What is a Point Release?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1>
+<a name="major-changes-2" class="anchor" href="http://forums.kicksecure.com#major-changes-2"></a>Major Changes</h1>
+<ul>
+<li>default package changes (Thanks to <a class="mention" href="http://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a>!)
+<ul>
+<li>install more packages by default
+<ul>
+<li>hunspell-en-us</li>
+<li>gpa</li>
+<li>ffmpeg</li>
+<li>pinentry-qt (or pinentry-x11)</li>
+<li>pdf</li>
+<li>youtube-dl</li>
+<li>install vlc media player by default</li>
+</ul>
+</li>
+<li>no longer install wget by default</li>
+<li>(<a href="https://forums.kicksecure.com/t/add-remove-extra-packages/135/4" class="inline-onebox">Add/Remove Extra Packages - #4 by nurmagoz</a> )</li>
+</ul>
+</li>
+<li>added kicksecure-welcome-page (Thanks to Hans!)</li>
+<li>kicksecure-welcome-page: add 2022 end of year donation campaign banner</li>
+<li>
+<code>repository-dist</code> man page: document <code>--transport</code> <code>plain-tls</code>, <code>plain-tls-tor</code>, <code>onion</code> or <code>onion-tls</code>
+</li>
+<li>fixed Debian installation instructions</li>
+<li>updated sdwdate onion sources (Thanks to <span class="mention">@TNT_BOM_BOM</span>!)</li>
+<li>Work towards <a href="https://forums.whonix.org/t/change-default-shell-from-bash-to-zsh-by-default/14792" class="inline-onebox">Change default shell from bash to zsh by default? - Development - Whonix Forum</a> (Thanks to <a class="mention" href="http://forums.kicksecure.com/u/nyxnor">@nyxnor</a>!)</li>
+<li>improved build script <code>--connection onion</code> support</li>
+<li>KVM: remove dependency on xserver-xorg-video-qxl <a href="https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/501" class="inline-onebox">[Help Welcome] KVM Development - staying the course - #501 by HulaHoop - KVM - Whonix Forum</a>
+</li>
+<li>fixed rare minor issue <a href="https://forums.whonix.org/t/security-misc-pam-info-broken-pipe-bug/15951" class="inline-onebox">security-misc pam-info broken pipe bug - Support - Whonix Forum</a>
+</li>
+<li>pam-info (notify about how many remaining login attempts): now also working in xscreensaver</li>
+</ul>
+<hr>
+<h1>
+<a name="upgrade-3" class="anchor" href="http://forums.kicksecure.com#upgrade-3"></a>Upgrade</h1>
+<p>Alternatively, in-place release upgrade is possible upgrade using <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="03:09PM - 24 November 2022">Kicksecure – 24 Nov 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=d0accc70f03c32dbc33869704c9ce381" class="thumbnail" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure ™</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="10:46AM - 15 November 2022">Kicksecure – 15 Nov 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Ways To Contribute</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1>
+<a name="changelog-4" class="anchor" href="http://forums.kicksecure.com#changelog-4"></a>Changelog</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stable_Release">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/Stable_Release" target="_blank" rel="noopener" title="12:43PM - 28 November 2022">Kicksecure – 28 Nov 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/452;"><img src="https://www.kicksecure.com/w/images/b/b5/Releasenots.png" class="thumbnail" width="640" height="452"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Stable_Release" target="_blank" rel="noopener">Stable Release</a></h3>
+
+  <p>Kicksecure ™ Release Notes, Changelog, Kicksecure ™ 16 Stable Release</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1>
+<a name="full-difference-of-all-changes-5" class="anchor" href="http://forums.kicksecure.com#full-difference-of-all-changes-5"></a>Full difference of all changes</h1>
+<p><a href="https://github.com/Kicksecure/Kicksecure/compare/16.0.8.2-developers-only...16.0.9.0-developers-only">https://github.com/Kicksecure/Kicksecure/compare/16.0.8.2-developers-only...16.0.9.0-developers-only</a></p> ]]></description>
+        <link>http://forums.kicksecure.com/t/kicksecure-16-0-9-0-for-virtualbox-point-release/160/1</link>
+        <pubDate>Mon, 28 Nov 2022 13:56:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-370</guid>
+      </item>
+      <item>
         <title>Degree of anonymity Kicksecure vs Whonix on Qubes-OS</title>
         <dc:creator><![CDATA[@iymsp]]></dc:creator>
         <description><![CDATA[ <p>Hi. I am using Qubes 4.1.1 together with Kicksecure and Whonix.</p>
@@ -727,376 +955,6 @@ https://forums.kicksecure.com/t/add-remove-extra-packages/135/4</span></p>
         <link>http://forums.kicksecure.com/t/remove-replace-broken-links-at-kicksecure-com/150/2</link>
         <pubDate>Fri, 04 Nov 2022 16:20:44 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-340</guid>
-      </item>
-      <item>
-        <title>Remove/Replace broken links at kicksecure.com</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>If we view the source code of <a href="https://www.kicksecure.com/" rel="noopener nofollow ugc">https://www.kicksecure.com/</a> page there are:</p>
-<p>1- Search for <code>forums.kicksecure.org</code></p>
-<pre><code class="lang-auto">&lt;a href="https://forums.kicksecure.org" data-modal="modal-explain-community" target="_blank"&gt;
-</code></pre>
-<p>there is no <code>kicksecure.org</code>, it should be .com</p>
-<p>2- Search for <code>https://dl.acm.org/citation.cfm?id=1180410</code></p>
-<pre><code class="lang-auto">&lt;a target="_blank" class="external text" href="https://dl.acm.org/citation.cfm?id=1180410"&gt;
-  de-anonymization of Tor onion services
-</code></pre>
-<p>URL broken/changed, check if it can be replaced entirely or with archive one.</p>
-<p>3- There is no anbox homepage for anbox-kicksecure feature</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Anbox">
-  <header class="source">
-      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc" title="04:18PM - 04 November 2022">Kicksecure – 4 Nov 22</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/388;"><img src="https://www.kicksecure.com/w/images/f/fc/Kicksecure-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc">Anbox</a></h3>
-
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>4- /wiki/Verify_the_Whonix_images → <code>https://www.kicksecure.com/wiki/Verify_the_Whonix_images</code> → Doesnt exist</p>
-<pre><code class="lang-auto">  &lt;p&gt;
-    Downloads are
-    &lt;a href="/wiki/Verifying_Software_Signatures"&gt;signed&lt;/a&gt;
-    so genuine Whonix releases can be
-    &lt;a href="/wiki/Verify_the_Whonix_images"&gt;verified&lt;/a&gt;.
-  &lt;/p&gt;
-</code></pre> ]]></description>
-        <link>http://forums.kicksecure.com/t/remove-replace-broken-links-at-kicksecure-com/150/1</link>
-        <pubDate>Fri, 04 Nov 2022 10:24:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-337</guid>
-      </item>
-      <item>
-        <title>About the Recycle Bin category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-recycle-bin-category/148/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-336</guid>
-      </item>
-      <item>
-        <title>About the Organization category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-organization-category/145/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-334</guid>
-      </item>
-      <item>
-        <title>About the AppArmor category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-apparmor-category/144/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-333</guid>
-      </item>
-      <item>
-        <title>About the Unsupported Platforms category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-unsupported-platforms-category/143/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-332</guid>
-      </item>
-      <item>
-        <title>About the KVM category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-kvm-category/142/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-331</guid>
-      </item>
-      <item>
-        <title>About the Virtualbox category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-virtualbox-category/141/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-330</guid>
-      </item>
-      <item>
-        <title>About the Qubes category</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[  ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-qubes-category/140/2</link>
-        <pubDate>Fri, 04 Nov 2022 04:49:11 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-329</guid>
-      </item>
-      <item>
-        <title>Add/Remove Extra Packages</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/5804a773bb8076050876c3dede21465a9de83a36">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/5804a773bb8076050876c3dede21465a9de83a36" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/5804a773bb8076050876c3dede21465a9de83a36" target="_blank" rel="noopener">no longer install wget by default</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2022-11-03" data-time="17:26:45" data-timezone="UTC">05:26PM - 03 Nov 22 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/5804a773bb8076050876c3dede21465a9de83a36" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-1</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">https://forums.kicksecure.com/t/add-remove-extra-packages/135</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/e3e4a9ab8e5b90d99d6e039f618cf98e5cd0d21b">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/e3e4a9ab8e5b90d99d6e039f618cf98e5cd0d21b" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/e3e4a9ab8e5b90d99d6e039f618cf98e5cd0d21b" target="_blank" rel="noopener">install vlc media player by default</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2022-11-03" data-time="17:28:36" data-timezone="UTC">05:28PM - 03 Nov 22 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 1 additions and 0 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/e3e4a9ab8e5b90d99d6e039f618cf98e5cd0d21b" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">https://forums.kicksecure.com/t/add-remove-extra-packages/135</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>http://forums.kicksecure.com/t/add-remove-extra-packages/135/3</link>
-        <pubDate>Thu, 03 Nov 2022 17:33:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-327</guid>
-      </item>
-      <item>
-        <title>Add/Remove Extra Packages</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="135">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>Remove wget since its not upstream default and less secure than curl (kicksecure support scurl),</p>
-</blockquote>
-</aside>
-<p>Done.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="135">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>VLC media player.</p>
-</blockquote>
-</aside>
-<p>Done.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="135">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>Thunderbird.</p>
-</blockquote>
-</aside>
-<p>Not sure. <a href="https://www.whonix.org/wiki/Encrypted_Email_with_Thunderbird" class="inline-onebox">Encrypted Email with Thunderbird</a> is complete but no documentation exists for Thunderbird in Kicksecure at time of writing.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/E-Mail">
-  <header class="source">
-      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://www.kicksecure.com/wiki/E-Mail" target="_blank" rel="noopener" title="10:26PM - 24 July 2022">Kicksecure – 24 Jul 22</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:486/500;"><img src="https://www.kicksecure.com/w/images/d/d7/Enigmailsecuresettings.png" class="thumbnail" width="486" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/E-Mail" target="_blank" rel="noopener">Email Overview</a></h3>
-
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Waiting if there will be high demand for this one which I doubt.</p> ]]></description>
-        <link>http://forums.kicksecure.com/t/add-remove-extra-packages/135/2</link>
-        <pubDate>Thu, 03 Nov 2022 17:32:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-326</guid>
-      </item>
-      <item>
-        <title>About the Recycle Bin category</title>
-        <dc:creator><![CDATA[@Hans]]></dc:creator>
-        <description><![CDATA[ <p>(Replace this first paragraph with a brief description of your new category. This guidance will appear in the category selection area, so try to keep it below 200 characters.)</p>
-<p>Use the following paragraphs for a longer description, or to establish category guidelines or rules:</p>
-<ul>
-<li>
-<p>Why should people use this category? What is it for?</p>
-</li>
-<li>
-<p>How exactly is this different than the other categories we already have?</p>
-</li>
-<li>
-<p>What should topics in this category generally contain?</p>
-</li>
-<li>
-<p>Do we need this category? Can we merge with another category, or subcategory?</p>
-</li>
-</ul> ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-recycle-bin-category/148/1</link>
-        <pubDate>Thu, 03 Nov 2022 12:11:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-325</guid>
-      </item>
-      <item>
-        <title>About the Organization category</title>
-        <dc:creator><![CDATA[@Hans]]></dc:creator>
-        <description><![CDATA[ <p>(Replace this first paragraph with a brief description of your new category. This guidance will appear in the category selection area, so try to keep it below 200 characters.)</p>
-<p>Use the following paragraphs for a longer description, or to establish category guidelines or rules:</p>
-<ul>
-<li>
-<p>Why should people use this category? What is it for?</p>
-</li>
-<li>
-<p>How exactly is this different than the other categories we already have?</p>
-</li>
-<li>
-<p>What should topics in this category generally contain?</p>
-</li>
-<li>
-<p>Do we need this category? Can we merge with another category, or subcategory?</p>
-</li>
-</ul> ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-organization-category/145/1</link>
-        <pubDate>Thu, 03 Nov 2022 12:09:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-322</guid>
-      </item>
-      <item>
-        <title>About the AppArmor category</title>
-        <dc:creator><![CDATA[@Hans]]></dc:creator>
-        <description><![CDATA[ <p>(Replace this first paragraph with a brief description of your new category. This guidance will appear in the category selection area, so try to keep it below 200 characters.)</p>
-<p>Use the following paragraphs for a longer description, or to establish category guidelines or rules:</p>
-<ul>
-<li>
-<p>Why should people use this category? What is it for?</p>
-</li>
-<li>
-<p>How exactly is this different than the other categories we already have?</p>
-</li>
-<li>
-<p>What should topics in this category generally contain?</p>
-</li>
-<li>
-<p>Do we need this category? Can we merge with another category, or subcategory?</p>
-</li>
-</ul> ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-apparmor-category/144/1</link>
-        <pubDate>Thu, 03 Nov 2022 12:08:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-321</guid>
-      </item>
-      <item>
-        <title>About the Unsupported Platforms category</title>
-        <dc:creator><![CDATA[@Hans]]></dc:creator>
-        <description><![CDATA[ <p>(Replace this first paragraph with a brief description of your new category. This guidance will appear in the category selection area, so try to keep it below 200 characters.)</p>
-<p>Use the following paragraphs for a longer description, or to establish category guidelines or rules:</p>
-<ul>
-<li>
-<p>Why should people use this category? What is it for?</p>
-</li>
-<li>
-<p>How exactly is this different than the other categories we already have?</p>
-</li>
-<li>
-<p>What should topics in this category generally contain?</p>
-</li>
-<li>
-<p>Do we need this category? Can we merge with another category, or subcategory?</p>
-</li>
-</ul> ]]></description>
-        <link>http://forums.kicksecure.com/t/about-the-unsupported-platforms-category/143/1</link>
-        <pubDate>Thu, 03 Nov 2022 12:07:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-320</guid>
       </item>
   </channel>
 </rss>
