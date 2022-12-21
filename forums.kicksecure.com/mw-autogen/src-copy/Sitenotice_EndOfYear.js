@@ -42,37 +42,40 @@ function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', cont
 
 	$('#siteNotice').addClass('show-notice');
 
-	let endOfYear = $(''
-		+ '<div id="donate-end-of-year">'
-			+ '<div class="h1">'
-				+ '<i class="fas fa-times dismiss"></i>'
-				+ '<span>Please support us!</span>'
-			+ '</div>'
-			+ '<div class="slideshow">'
-				+ '<div class="content"></div>'
-				+ '<div class="control">'
-					+ '<div class="progress"></div>'
-					+ '<div class="slide-buttons"></div>'
-					+ '<div class="flow">'
-						+ '<i class="fas fa-pause is-play"></i>'
-						+ '<i class="fas fa-play is-pause"></i>'
-					+ '</div>'
-				+ '</div>'
-			+ '</div>'
-			+ '<div class="payment">'
-				+ '<div class="h2">PayPal</div>'
-					+ '<div class="pay-via-paypal-module"></div>'
-					+ '<div class="h2 crypto">Or Crypto<br>Addresses</div>'
-					+ '<div class="crypto-container">'
-						+ '<div class="code-select btc" data-button-image-src="/w/images/thumb/2/29/BC_Logo_.png/40px-BC_Logo_.png"></div>'
-						+ '<div class="code-select xmr" data-button-image-src="/w/images/thumb/0/05/Monero-symbol-1280.png/40px-Monero-symbol-1280.png"></div>'
-						+ '<div class="code-select eth" data-button-image-src="/w/images/thumb/2/2c/Ethereumlogo.png/40px-Ethereumlogo.png"></div>'
-					+ '</div>'
-					+ `<a href="${assetWikiUrl}/wiki/Donate" target="_blank">Or Other Payment Options</div>`
-				+ '</div>'
-			+ '</div>'
-		+ '</div>'
-	);
+	let endOfYear = $(`
+		<div id="donate-end-of-year" class="robots-nocontent">
+			<!--googleoff: index-->
+				<!--noindex-->
+					<div class="h1">
+						<i class="fas fa-times dismiss"></i>
+						<span>Please support us!</span>
+					</div>
+					<div class="slideshow">
+						<div class="content"></div>
+						<div class="control">
+							<div class="progress"></div>
+							<div class="slide-buttons"></div>
+							<div class="flow">
+								<i class="fas fa-pause is-play"></i>
+								<i class="fas fa-play is-pause"></i>
+							</div>
+						</div>
+					</div>
+					<div class="payment">
+						<div class="h2">PayPal</div>
+						<div class="pay-via-paypal-module"></div>
+						<div class="h2 crypto">Or Crypto<br>Addresses</div>
+						<div class="crypto-container">
+							<div class="code-select btc" data-button-image-src="/w/images/thumb/2/29/BC_Logo_.png/40px-BC_Logo_.png"></div>
+							<div class="code-select xmr" data-button-image-src="/w/images/thumb/0/05/Monero-symbol-1280.png/40px-Monero-symbol-1280.png"></div>
+							<div class="code-select eth" data-button-image-src="/w/images/thumb/2/2c/Ethereumlogo.png/40px-Ethereumlogo.png"></div>
+						</div>
+						<a href="${assetWikiUrl}/wiki/Donate" target="_blank">Or Other Payment Options</a>
+					</div>
+				<!--/noindex-->
+			<!--googleon: index-->
+		</div>
+	`);
 
 	let mobileDonateButtonTemplate = $('<span class="mobile-donate-button">Donate</span>');
 
