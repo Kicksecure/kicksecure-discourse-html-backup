@@ -10,7 +10,9 @@
 				$this.addClass('init-complete');
 			}
 
-			let content = $this.children();
+			let temp = $(`<div style="display: none;" id="mini-modal-temp-container-${Math.random().toString().substr(2)}"></div>`);
+			$('body').append(temp);
+			temp.append($this.children());
 
 			$this.empty().append(''
 				+ '<div class="underlay"></div>'
@@ -18,7 +20,8 @@
 				+ '<div class="content"></div>'
 			);
 
-			$this.children('.content').append( content );
+			$this.children('.content').append(temp.children());
+			temp.remove();
 
 			// Events
 
