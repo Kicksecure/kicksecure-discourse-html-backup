@@ -1,8 +1,9 @@
+/*
+CodeSelect Gadget - JS Initialisation, Setup, Events. Activates all .code-select fields on the site. By clicking the icon the code is copied to clipboard and tooltip is changed
+See detailed documentation in Dev/mediawiki
+*/
+
 (function () {
-	/* For documentation see Dev/mediawiki
-	Activates all .code-select fields on the site
-	By clicking the icon the code is copied to clipboard and tooltip is changed
-	*/
 
 	// Global
 

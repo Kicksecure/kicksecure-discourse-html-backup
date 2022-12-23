@@ -1,3 +1,8 @@
+/*
+MiniModal Gadget - JS Initialisation, Setup, Events. A fully functional but minimal modal
+See detailed documentation in Dev/mediawiki
+*/
+
 (function() {
 
 	// Functions

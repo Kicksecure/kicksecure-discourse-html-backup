@@ -1,4 +1,7 @@
-/* Documentation see: Dev/mediawiki */
+/*
+Adds a PayPal payment module to the given DOM elements
+See detailed documentation in Dev/mediawiki
+*/
 
 (function () {
 

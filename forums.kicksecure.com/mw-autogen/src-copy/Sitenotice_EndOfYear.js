@@ -1,3 +1,8 @@
+/*
+Fully JS EndofYear Sitenotice, init events etc
+See detailed documentation in Dev/mediawiki
+*/
+
 function initEndOfYearSitenotice( domElementToPrependTo, assetWikiUrl = '', contentForSlides ) {
 
 	// Basic error checks
