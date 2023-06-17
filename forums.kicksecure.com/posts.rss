@@ -5,6 +5,49 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>APT sources.list One-Line Format versus DEB822-Style Format</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#ONE-LINE-STYLE_FORMAT">ONE-LINE-STYLE FORMAT</a></p>
+</blockquote>
+<blockquote>
+<p>deb [signed-by=/usr/share/keyrings/derivative.asc] <a href="https://deb.kicksecure.com">https://deb.kicksecure.com</a> bookworm main contrib non-free</p>
+</blockquote>
+<p>shell command:</p>
+<pre><code>echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<hr>
+<blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#DEB822-STYLE_FORMAT">DEB822-STYLE FORMAT</a></p>
+</blockquote>
+<pre><code class="lang-auto">Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bullseye
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+</code></pre>
+<p>shell command:</p>
+<pre><code class="lang-auto">echo "\
+Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bookworm
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<p>DEB822 format is</p>
+<ul>
+<li>supported since Debian bookworm,</li>
+<li>used by <code>extrepo</code>.</li>
+</ul>
+<hr>
+<p>In my opinion, the resulting configuration files <code>/etc/apt/sources.list.d</code> look nicer in DEB822 format. Seems easier to modify.</p>
+<p>However, in manual repository adding instructions, one-line style format seems easier for copy and paste.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267#post_1</link>
+        <pubDate>Fri, 16 Jun 2023 08:46:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-568</guid>
+      </item>
+      <item>
         <title>Tor reports: WARN BOOTSTRAP PROGRESS=5 TAG=conn SUMMARY=“Connecting to a relay”</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>See:</p>
@@ -1193,14 +1236,6 @@ is non-trivial.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/is-kicksecure-systemd-agnostic/245#post_2</link>
         <pubDate>Fri, 28 Apr 2023 21:37:58 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-519</guid>
-      </item>
-      <item>
-        <title>Kicksecure-xfce-host not installable in debian 12 (removed dependency)</title>
-        <dc:creator><![CDATA[@HulaHoop]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the heads up.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152#post_12</link>
-        <pubDate>Fri, 28 Apr 2023 21:35:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-518</guid>
       </item>
   </channel>
 </rss>

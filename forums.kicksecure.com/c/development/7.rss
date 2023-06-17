@@ -5,8 +5,60 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Sun, 04 Jun 2023 10:39:00 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 16 Jun 2023 08:46:30 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>APT sources.list One-Line Format versus DEB822-Style Format</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#ONE-LINE-STYLE_FORMAT">ONE-LINE-STYLE FORMAT</a></p>
+</blockquote>
+<blockquote>
+<p>deb [signed-by=/usr/share/keyrings/derivative.asc] <a href="https://deb.kicksecure.com">https://deb.kicksecure.com</a> bookworm main contrib non-free</p>
+</blockquote>
+<p>shell command:</p>
+<pre><code>echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<hr>
+<blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#DEB822-STYLE_FORMAT">DEB822-STYLE FORMAT</a></p>
+</blockquote>
+<pre><code class="lang-auto">Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bullseye
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+</code></pre>
+<p>shell command:</p>
+<pre><code class="lang-auto">echo "\
+Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bookworm
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<p>DEB822 format is</p>
+<ul>
+<li>supported since Debian bookworm,</li>
+<li>used by <code>extrepo</code>.</li>
+</ul>
+<hr>
+<p>In my opinion, the resulting configuration files <code>/etc/apt/sources.list.d</code> look nicer in DEB822 format. Seems easier to modify.</p>
+<p>However, in manual repository adding instructions, one-line style format seems easier for copy and paste.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267</link>
+          <pubDate>Fri, 16 Jun 2023 08:46:30 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-267</guid>
+          <source url="https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267.rss">APT sources.list One-Line Format versus DEB822-Style Format</source>
+        </item>
         <item>
           <title>Sequoia-PGP (gpg replacement) - OpenPGP</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
