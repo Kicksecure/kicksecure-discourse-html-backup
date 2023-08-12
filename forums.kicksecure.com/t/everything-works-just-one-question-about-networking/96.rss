@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Everything works, just one question about networking</title>
+    <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96</link>
+    <description>Hi! Using Kicksecure for KVM, version 16.0.5.3. Thank you btw, this is insanely awesome.
+
+I noticed that Kicksecure is using dhcp to dymanically assign an IP address to its eth0 interface. This requires that ports 67,68,53 are open on the virtual network device, which I&#39;m trying to avoid.
+
+I would instead like a static IP address to be assigned. In my case something in the 10.0.2.0/24 range, because my virtual network IP is 10.0.2.2 
+
+Would assigning an IP in /etc/network/interfaces and adding a route to the gateway break anything?
+
+Here is my network xml for Kicksecure. 
+```
+&lt;network&gt;
+  &lt;name&gt;kick_net&lt;/name&gt;
+  &lt;forward dev=&#39;eth2&#39; mode=&#39;nat&#39;&gt;
+    &lt;interface dev=&#39;eth2&#39;/&gt;
+  &lt;/forward&gt;
+  &lt;bridge name=&#39;virbr1&#39; stp=&#39;on&#39; delay=&#39;0&#39;/&gt;
+  &lt;ip address=&#39;10.0.2.2&#39; netmask=&#39;255.255.255.0&#39;&gt;
+      &lt;dhcp&gt;
+         &lt;range start=&#39;10.0.2.5&#39; end=&#39;10.0.2.254&#39;&#39;&gt;
+     &lt;/dhcp&gt;
+  &lt;/ip&gt;
+&lt;/network&gt;
+```</description>
+    
+    <lastBuildDate>Wed, 17 Aug 2022 17:57:13 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[alexa_tanner]]></dc:creator>
+        <description><![CDATA[
+            <p>OK guys, I went on a deep dive and figured it out. Here a small guide for anyone else who might be interested.</p>
+<p>In order to achieve a static IP in Kicksecure, 3 conditions must be met.<br>
+Note that you can’t remove or disable DHCP, the IP is only “static” in effect, meaning you can control which address is assigned by DHCP, but you must still leave it intact. I’ve tried removing it, but it’s not possible in Kicksecure.</p>
+<p>1.)<br>
+Add a host option in the dhcp section of your network.xml<br>
+It consists of mac (the mac address of Kicksecure’s virtual network card), name and ip.<br>
+This ip will be the one that is assigned by DHCP at every boot.</p>
+<pre><code class="lang-auto">&lt;network&gt;
+  &lt;name&gt;kick_net&lt;/name&gt;
+  &lt;forward dev='eth2' mode='nat'&gt;
+    &lt;interface dev='eth2'/&gt;
+  &lt;/forward&gt;
+  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
+  &lt;ip address='10.0.2.2' netmask='255.255.255.0'&gt;
+      &lt;dhcp&gt;
+         &lt;range start='10.0.2.5' end='10.0.2.254''&gt;
+         &lt;host mac='52:54:00:c6:f6:27' name=Kicksecure ip='10.0.2.150'&gt;
+     &lt;/dhcp&gt;
+  &lt;/ip&gt;
+&lt;/network&gt;
+</code></pre>
+<p>2.) Inside Kicksecure you must modify the hostname, because for some reason it is incorrect.<br>
+The proper hostname is <strong>localhost.localdomain</strong>, not localhost, which is the original entry. This will also solve the “unable to resolve host” error. You can check your hostname by running <code>hostname</code>.<br>
+<code>sudo mousepad /etc/hosts</code><br>
+<code>127.0.0.1        localhost.localdomain</code></p>
+<p>3.) When using a static ip via host config, as shown above, you must stop DHCP and NetworkManager from interfering with /etc/resolv.conf and break all symllinks.<br>
+Execute the following:</p>
+<pre><code class="lang-auto">echo 'make_resolv_conf() { :; }' &gt; /etc/dhcp/dhclient-enter-hooks.d/resolv_free
+chmod 755 /etc/dhcp/dhclient-enter-hooks.d/resolv_free
+rm -rf /etc/resolv.conf
+touch /etc/resolv.conf 
+</code></pre>
+<p>Then you can enter your nameservers in resolv.conf.</p>
+<p>Finally edit /etc/NetworkManager/NetworkManager.conf<br>
+add the following under the [main]</p>
+<p><code>dns=default</code></p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/7</link>
+        <pubDate>Wed, 17 Aug 2022 17:57:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-7</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[alexa_tanner]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>Static network configuration can only be set up as per <a href="https://www.kicksecure.com/wiki/Free_Support_Principle" rel="noopener nofollow ugc">https://www.kicksecure.com/wiki/Free_Support_Principle </a></p>
+</blockquote>
+<p>My apologies for occupying resources, I’m definitely gonna support this project.</p>
+<p>I read the documentation, and two methods are outlined to assign a static IP via  XML.</p>
+<p>1.) Adding an ip section to the VM xml  - here the network portion of the Kicksecure.xml</p>
+<pre><code class="lang-auto">    &lt;interface type='network'&gt;
+      &lt;mac address='52:54:00:c6:f6:27'/&gt;
+      &lt;source network='super' portid='e3de0cc2-97f4-4e4a-a16b-24bd5ec6de21' bridge='virbr1'/&gt;
+      &lt;target dev='vnet2'/&gt;
+      &lt;model type='virtio'/&gt;
+      &lt;driver name='qemu'/&gt;
+      &lt;alias name='net0'/&gt;
+      &lt;address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/&gt;
+      &lt;ip address='10.0.2.150' netmask='255.255.254.0' gateway='10.0.2.2'&gt;
+      &lt;/ip&gt;
+    &lt;/interface&gt;
+</code></pre>
+<p>2.) Adding the mac address of the Kicksecure network adapter and static ip to the virtual network xml</p>
+<pre><code class="lang-auto">&lt;network&gt;
+  &lt;name&gt;kick_net&lt;/name&gt;
+  &lt;forward dev='eth2' mode='nat'&gt;
+    &lt;interface dev='eth2'/&gt;
+  &lt;/forward&gt;
+  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
+  &lt;ip address='10.0.2.2' netmask='255.255.255.0'&gt;
+      &lt;dhcp&gt;
+         &lt;range start='10.0.2.5' end='10.0.2.254''&gt;
+         &lt;host mac='52:54:00:c6:f6:27' name=Kicksecure ip='10.0.2.150'&gt;
+     &lt;/dhcp&gt;
+  &lt;/ip&gt;
+&lt;/network&gt;
+</code></pre>
+<p>I restarted the virtual network devices and libvirtd daemon as instructed, but both solutions failed.</p>
+<p>Am I missing anything here?</p>
+<blockquote>
+<p>I don’t think Kicksecure for KVM opens any ports that are reachable from the host? Kicksecure should come without any open ports by default anyhow.</p>
+</blockquote>
+<p>My apologies, I should have clarified.</p>
+<p>KVM Kicksecure does not have any open ports, both INPUT and FORWARD are dropping by default.</p>
+<p>What I was referring to is the virtual network device virbr1, which needs to have ports 68,67,53 open in order for DHCP to be able to assign an ip address to Kicksecure’s eth0 interface. Libvirt creates these iptables automatically.</p>
+<pre><code class="lang-auto">-A LIBVIRT_INP -i virbr1 -p udp -m udp --dport 53 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_INP -i virbr1 -p tcp -m tcp --dport 53 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_INP -i virbr1 -p udp -m udp --dport 67 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_INP -i virbr1 -p tcp -m tcp --dport 67 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_OUT -o virbr1 -p udp -m udp --dport 53 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_OUT -o virbr1 -p tcp -m tcp --dport 53 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_OUT -o virbr1 -p udp -m udp --dport 68 -j ACCEPT                                                                                                                                        
+-A LIBVIRT_OUT -o virbr1 -p tcp -m tcp --dport 68 -j ACCEPT
+</code></pre>
+<p>HulaHoop pointed out that the VM sits behind the NAT, thus open ports on virbr1 would not pose a security risk.</p>
+<p>I am deeply researching this at the moment, because I’ve found conflicting opinions on the subject.</p>
+<p>Thanks again to both of you for the time and information.</p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/6</link>
+        <pubDate>Fri, 12 Aug 2022 18:15:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-6</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Package <a href="https://github.com/Kicksecure/kicksecure-network-conf">https://github.com/Kicksecure/kicksecure-network-conf</a> currently does at time of writing very little. See package description.</p>
+<p>At time of writing, Kicksecure does not modify file /etc/network/interfaces or place files in /etc/network/interfaces.d/ folder.</p>
+<p>Networking related packages, see:</p>
+<pre><code>apt-cache show kicksecure-network-conf
+</code></pre>
+<p>Static network configuration can only be set up as per <a href="https://www.kicksecure.com/wiki/Free_Support_Principle">https://www.kicksecure.com/wiki/Free_Support_Principle</a></p>
+<aside class="quote no-group" data-username="alexa_tanner" data-post="4" data-topic="96">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/96bed5/40.png" class="avatar"> alexa_tanner:</div>
+<blockquote>
+<p>I see, you’re saying that there wouldn’t bea any risk with these ports open because it’s invisible to the guest anyway?</p>
+</blockquote>
+</aside>
+<p>I don’t think Kicksecure for KVM opens any ports that are reachable from the host? Kicksecure should come without any open ports by default anyhow. And even if a server (such as nginx) gets installed inside the VM that opens a server port is is actually non-trivial to make such ports accessible on the host, something not happening by accident?</p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/5</link>
+        <pubDate>Fri, 12 Aug 2022 15:32:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-5</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[alexa_tanner]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>No, assuming that you don’t have another VM on the same LAN with an identical IP. You can set a static IP either via the VM XML or by editing the network config files inside it.</p>
+</blockquote>
+<p>Hello HulaHoop and Patrick, thanks for the reply!</p>
+<p>I couldn’t find the network config files inside, unfortunately.</p>
+<p>There is no /etc/network/interfaces or /etc/network/interfaces.d/ 30_kicksecure. I tried creating it, or even mess with kicksecure-network-conf, but not luck.</p>
+<p>I found my own “ghetto” solution so far.</p>
+<p>1.) editing /etc/hosts and adding <code>127.0.0.1    localhost.localdomain</code><br>
+because without dhcp the hostname isn’t localhost, but localhost.localdomain<br>
+2.) <code>ifconfig eth0 10.0.2.150 netmask 255.255.255.0</code><br>
+3.)<code> ip route add default via 10.0.2.2</code></p>
+<p>This gets everything working, but it’s not persistent, so I put a script executing it in autostart.</p>
+<p>If you could point me to the config files or possibly a better solution that would be awesome. Thanks again man! <img src="//forums.kicksecure.com/images/emoji/twitter/grinning.png?v=12" title=":grinning:" class="emoji" alt=":grinning:"></p>
+<blockquote>
+<p>FYI there’s no security problem because the KS VM is behind an NAT on its own dedicated IP range, but it is indeed possible to configure it as you like.</p>
+</blockquote>
+<p>I see, you’re saying that there wouldn’t be any risk with these ports open because it’s invisible to the guest anyway?</p>
+<p>I went through a bunch of KVM documentation and forums. Some people are suggesting that the virtual network device shouldn’t have open ports because it would make it easier for an attacker to “break out of the vm”. I’m not gonna pretend to understand that, but it’s why I opted for a static IP.</p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/4</link>
+        <pubDate>Fri, 12 Aug 2022 14:50:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-4</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[HulaHoop]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="alexa_tanner" data-post="1" data-topic="96">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/96bed5/40.png" class="avatar"> alexa_tanner:</div>
+<blockquote>
+<p>I noticed that Kicksecure is using dhcp to dymanically assign an IP address to its eth0 interface. This requires that ports 67,68,53 are open on the virtual network device, which I’m trying to avoid.</p>
+</blockquote>
+</aside>
+<p>FYI there’s no security problem because the KS VM is behind an NAT on its own dedicated IP range, but it is indeed possible to configure it as you like.</p>
+<aside class="quote no-group" data-username="alexa_tanner" data-post="1" data-topic="96">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/96bed5/40.png" class="avatar"> alexa_tanner:</div>
+<blockquote>
+<p>Would assigning an IP in /etc/network/interfaces and adding a route to the gateway break anything?</p>
+</blockquote>
+</aside>
+<p>No, assuming that you don’t have another VM on the same LAN with an identical IP. You can set a static IP either via the VM XML or by editing the network config files inside it.</p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/3</link>
+        <pubDate>Fri, 12 Aug 2022 11:57:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-3</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you!</p>
+<p>For Kicksecure, any network configuration as per user customization should be fine. Disabling DHCP and using static networking, yes, why not, as long as it works…</p>
+<p>//cc <a class="mention" href="https://forums.kicksecure.com/u/hulahoop">@HulaHoop</a> Kicksecure KVM maintainer</p>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/2</link>
+        <pubDate>Fri, 12 Aug 2022 10:50:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-2</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+      <item>
+        <title>Everything works, just one question about networking</title>
+        <dc:creator><![CDATA[alexa_tanner]]></dc:creator>
+        <description><![CDATA[
+            <p>Hi! Using Kicksecure for KVM, version 16.0.5.3. Thank you btw, this is insanely awesome.</p>
+<p>I noticed that Kicksecure is using dhcp to dymanically assign an IP address to its eth0 interface. This requires that ports 67,68,53 are open on the virtual network device, which I’m trying to avoid.</p>
+<p>I would instead like a static IP address to be assigned. In my case something in the 10.0.2.0/24 range, because my virtual network IP is 10.0.2.2</p>
+<p>Would assigning an IP in /etc/network/interfaces and adding a route to the gateway break anything?</p>
+<p>Here is my network xml for Kicksecure.</p>
+<pre><code class="lang-auto">&lt;network&gt;
+  &lt;name&gt;kick_net&lt;/name&gt;
+  &lt;forward dev='eth2' mode='nat'&gt;
+    &lt;interface dev='eth2'/&gt;
+  &lt;/forward&gt;
+  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
+  &lt;ip address='10.0.2.2' netmask='255.255.255.0'&gt;
+      &lt;dhcp&gt;
+         &lt;range start='10.0.2.5' end='10.0.2.254''&gt;
+     &lt;/dhcp&gt;
+  &lt;/ip&gt;
+&lt;/network&gt;
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96/1</link>
+        <pubDate>Fri, 12 Aug 2022 09:42:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-96-1</guid>
+        <source url="https://forums.kicksecure.com/t/everything-works-just-one-question-about-networking/96.rss">Everything works, just one question about networking</source>
+      </item>
+  </channel>
+</rss>

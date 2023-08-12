@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Development - Kicksecure Forums</title>
+    <link>https://forums.kicksecure.com/c/development/7</link>
+    <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
+    
+      <lastBuildDate>Mon, 31 Jul 2023 14:19:41 +0000</lastBuildDate>
+      <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Running Android Apps inside Kicksecure - Waydroid</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>From my testing, Waydroid appears to be very buggy and not fully compatible with the default Kicksecure at the moment. For example:</p>
+<ul>
+<li>
+<p>Kicksecure uses xfce 4.18, which still doesn’t support Wayland by default.</p>
+</li>
+<li>
+<p>Installing KDE, which supports Wayland, will cause the sdwdate-gui systray not to appear because it doesn’t support Wayland (there’s a <a href="https://forums.whonix.org/t/make-sure-whonix-tools-support-wayland/12324">ticket already open for this</a>).</p>
+</li>
+<li>
+<p>Waydroid has blocking issues when running on Debian, even if iptables is installed:</p>
+<ul>
+<li><a href="https://github.com/waydroid/waydroid/issues/903">Issue 903</a></li>
+<li><a href="https://github.com/waydroid/waydroid/issues/900">Issue 900</a></li>
+</ul>
+</li>
+</ul>
+<p>Installing waydroid inside kicksecure stopped here.</p>
+<hr>
+<p>Reversing the ways:</p>
+<p>Install Kicksecure inside <a href="https://waydro.id/#wdlinux">Waydroid-Linux</a> customized Debian version:</p>
+<ul>
+<li>
+<p>They say it’s based on Debian bookworm, which is stable, but actually, if you install the OS, the repos are sid, not bookworm. A ticket has been created:</p>
+<p><a href="https://github.com/waydroid/waydroid/issues/1027" class="inline-onebox">Waydroid-Linux say its based on debian bookworm but using sid repos? · Issue #1027 · waydroid/waydroid · GitHub</a></p>
+</li>
+<li>
+<p>Blocker: Kicksecure doesn’t support the unstable Debian version.</p>
+</li>
+</ul>
+<p>Installing Kicksecure inside waydroid stopped here.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304</link>
+          <pubDate>Mon, 31 Jul 2023 14:19:41 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-304</guid>
+          <source url="https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304.rss">Running Android Apps inside Kicksecure - Waydroid</source>
+        </item>
+        <item>
+          <title>ISO milestones?</title>
+          <dc:creator><![CDATA[storms]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Are there milestones on github to work towards releasing Kicksecure as an ISO? I know several developers who may be interested in helping to move this along, and would like to know where to point them.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-milestones/280">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-milestones/280</link>
+          <pubDate>Thu, 13 Jul 2023 14:34:40 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-280</guid>
+          <source url="https://forums.kicksecure.com/t/iso-milestones/280.rss">ISO milestones?</source>
+        </item>
+        <item>
+          <title>APT sources.list One-Line Format versus DEB822-Style Format</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#ONE-LINE-STYLE_FORMAT">ONE-LINE-STYLE FORMAT</a></p>
+</blockquote>
+<blockquote>
+<p>deb [signed-by=/usr/share/keyrings/derivative.asc] <a href="https://deb.kicksecure.com">https://deb.kicksecure.com</a> bookworm main contrib non-free</p>
+</blockquote>
+<p>shell command:</p>
+<pre><code>echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<hr>
+<blockquote>
+<p><a href="https://manpages.debian.org/testing/apt/sources.list.5.en.html#DEB822-STYLE_FORMAT">DEB822-STYLE FORMAT</a></p>
+</blockquote>
+<pre><code class="lang-auto">Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bullseye
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+</code></pre>
+<p>shell command:</p>
+<pre><code class="lang-auto">echo "\
+Uris: https://deb.kicksecure.com
+Types: deb deb-src
+Suites: bookworm
+Components: main contrib non-free
+Signed-By: /usr/share/keyrings/derivative.asc
+" | sudo tee /etc/apt/sources.list.d/derivative.list
+</code></pre>
+<p>DEB822 format is</p>
+<ul>
+<li>supported since Debian bookworm,</li>
+<li>used by <code>extrepo</code>.</li>
+</ul>
+<hr>
+<p>In my opinion, the resulting configuration files <code>/etc/apt/sources.list.d</code> look nicer in DEB822 format. Seems easier to modify.</p>
+<p>However, in manual repository adding instructions, one-line style format seems easier for copy and paste.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267</link>
+          <pubDate>Fri, 16 Jun 2023 08:46:30 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-267</guid>
+          <source url="https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267.rss">APT sources.list One-Line Format versus DEB822-Style Format</source>
+        </item>
+        <item>
+          <title>Sequoia-PGP (gpg replacement) - OpenPGP</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <aside class="onebox allowlistedgeneric" data-onebox-src="https://sequoia-pgp.org/">
+  <header class="source">
+      <img src="https://sequoia-pgp.org/img/favicon.png" class="site-icon" width="67" height="64">
+
+      <a href="https://sequoia-pgp.org/" target="_blank" rel="noopener">sequoia-pgp.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://sequoia-pgp.org/" target="_blank" rel="noopener">Sequoia-PGP</a></h3>
+
+  <p>Sequoia is a modular OpenPGP implementation in Rust.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>4 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sequoia-pgp-gpg-replacement-openpgp/260">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sequoia-pgp-gpg-replacement-openpgp/260</link>
+          <pubDate>Sun, 04 Jun 2023 10:39:00 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-260</guid>
+          <source url="https://forums.kicksecure.com/t/sequoia-pgp-gpg-replacement-openpgp/260.rss">Sequoia-PGP (gpg replacement) - OpenPGP</source>
+        </item>
+        <item>
+          <title>Feature Request: Integrate vramfs or similar</title>
+          <dc:creator><![CDATA[gkytrash]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Any chance we can get kicksecure/whonix live run to use a gpu vram ramdisk? Currently, I use whonix vms running on a windows host with virtualbox running from a gpuramdisk. It’s fast and saves me a ton of system ram. Swapping windows for a lightweight live run linux would be nice. Haven’t found too much on people booting initrd to gpu ram though.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/feature-request-integrate-vramfs-or-similar/259">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/feature-request-integrate-vramfs-or-similar/259</link>
+          <pubDate>Fri, 26 May 2023 08:48:13 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-259</guid>
+          <source url="https://forums.kicksecure.com/t/feature-request-integrate-vramfs-or-similar/259.rss">Feature Request: Integrate vramfs or similar</source>
+        </item>
+        <item>
+          <title>Can blockchain be used to improve the security of an operating system?</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <ul>
+<li>writing software package signatures and/or package repository signatures on the blockchain so history of who signed what cannot be completely rewritten
+<ul>
+<li>related: <a href="https://forums.whonix.org/t/end-to-end-signed-debs-debsign-debsig-and-dpkg-sig/3446" class="inline-onebox">end-to-end signed debs. debsign, debsig and dpkg-sig - Development - Whonix Forum</a>
+</li>
+</ul>
+</li>
+<li>login manager login using access controls written on a blockchain (which might be more of a corporate feature)</li>
+<li>more secure DNS
+<ul>
+<li>related: <a href="https://forums.whonix.org/t/namecoin-integration-in-whonix-technical-discussion/11499" class="inline-onebox">Namecoin Integration in Whonix -- Technical Discussion - Development - Whonix Forum</a>
+</li>
+</ul>
+</li>
+<li>Other ideas?</li>
+</ul>
+<hr>
+<p>//cc <a class="mention" href="https://forums.kicksecure.com/u/jeremyrand">@JeremyRand</a></p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/can-blockchain-be-used-to-improve-the-security-of-an-operating-system/230">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/can-blockchain-be-used-to-improve-the-security-of-an-operating-system/230</link>
+          <pubDate>Fri, 31 Mar 2023 09:14:34 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-230</guid>
+          <source url="https://forums.kicksecure.com/t/can-blockchain-be-used-to-improve-the-security-of-an-operating-system/230.rss">Can blockchain be used to improve the security of an operating system?</source>
+        </item>
+        <item>
+          <title>Consider installing systemd-oomd by default</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://packages.debian.org/search?keywords=systemd-oomd" class="onebox" target="_blank" rel="noopener">https://packages.debian.org/search?keywords=systemd-oomd</a></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/consider-installing-systemd-oomd-by-default/223">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/consider-installing-systemd-oomd-by-default/223</link>
+          <pubDate>Sat, 18 Mar 2023 12:13:24 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-223</guid>
+          <source url="https://forums.kicksecure.com/t/consider-installing-systemd-oomd-by-default/223.rss">Consider installing systemd-oomd by default</source>
+        </item>
+        <item>
+          <title>Adding new packages will be installed with its recommends</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>While its good to apply new packages with:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="135">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar">
+    <a href="//forums.kicksecure.com/t/add-remove-extra-packages/135">Add/Remove Extra Packages</a> <a class="badge-wrapper  bullet" href="https://forums.kicksecure.com/c/development/7"><span class="badge-category-bg" style="background-color: #25AAE2;"></span><span style="" data-drop-close="true" class="badge-category clear-badge" title="Development of Kicksecure software and source code.">Development</span></a>
+  </div>
+  <blockquote>
+    This post for: 
+
+Removing Unnecessary packages (specially if they are not default in upstream and/or has issues like stopped development, less secure or producing too many issues).
+Adding necessary packages for better security or usability (as long as they are not harmful).
+
+
+Removing packages: 
+
+Remove wget since its not upstream default and less secure than curl (kicksecure support scurl), OR replace it with the successor wget2.
+
+Can been seen added as extra package for debian stable: 
+ <a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/8bd6a7e34899560f8b345ac955a539f67b834090.png" data-download-href="//forums.kicksecure.com/uploads/default/8bd6a7e34899560f8b345ac955a539f67b834090" title="wgetnotdefault">[wgetn…</a>
+  </blockquote>
+</aside>
+
+<p>But current issue is that the newly installed packages for already kicksecure users will receive an upgrade with the new packages + recommended packages (not with --no-recommends as kicksecure installed) meaning it might pull unwanted extra packages like avahi or samba or…etc</p>
+<p>Current example is <a href="https://packages.debian.org/bullseye/vlc" rel="noopener nofollow ugc">VLC</a> which is installed with its recommended package (not depends) <a href="https://packages.debian.org/bullseye/vlc-plugin-samba" rel="noopener nofollow ugc"><code>vlc-plugin-samba</code></a> which install samba and smbclient libraries as a result (even if they are safe still considered extra for kicksecure installation).</p>
+<p>good thing its removable without extra issues:</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/29d74d037a03e62396e2dc36e92729fc56c13814.png" data-download-href="//forums.kicksecure.com/uploads/default/29d74d037a03e62396e2dc36e92729fc56c13814" title="sambarecpackage"><img src="//forums.kicksecure.com/uploads/default/original/1X/29d74d037a03e62396e2dc36e92729fc56c13814.png" alt="sambarecpackage" data-base62-sha1="5Y8R5e4FA2fSsRSf3MicaCgWoQI" width="690" height="137" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/29d74d037a03e62396e2dc36e92729fc56c13814_2_10x10.png"></a></div><p></p>
+<p>Either something by kicksecure can be done forcing packages to not pull recommends if added newly or by the end user with apt.</p>
+<p>Note: This is only effecting newly added packages with previous kicksecure users, new kicksecure users will install kicksecure with --no-install-recommends as mentioned in the wiki.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156</link>
+          <pubDate>Wed, 23 Nov 2022 18:46:33 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-156</guid>
+          <source url="https://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156.rss">Adding new packages will be installed with its recommends</source>
+        </item>
+        <item>
+          <title>Kicksecure-xfce-host not installable in debian 12 (removed dependency)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png" data-download-href="//forums.kicksecure.com/uploads/default/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87" title="kicksecurehostbookwormissue"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_690x304.png" alt="kicksecurehostbookwormissue" data-base62-sha1="i9AY6cNRo8jooSvNEVTRgJ91DiD" width="690" height="304" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_690x304.png, //forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_10x10.png"></a></div><p></p>
+<p><a href="https://packages.debian.org/search?suite=default&amp;section=all&amp;arch=any&amp;searchon=names&amp;keywords=xserver-xorg-video-qxl" class="onebox" target="_blank" rel="noopener nofollow ugc">https://packages.debian.org/search?suite=default&amp;section=all&amp;arch=any&amp;searchon=names&amp;keywords=xserver-xorg-video-qxl</a></p>
+<p>Removed from bookworm.</p>
+            <p><small>13 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152</link>
+          <pubDate>Sat, 05 Nov 2022 10:22:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-152</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152.rss">Kicksecure-xfce-host not installable in debian 12 (removed dependency)</source>
+        </item>
+        <item>
+          <title>Add/Remove Extra Packages</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>This post for:</p>
+<ul>
+<li>Removing Unnecessary packages (specially if they are not default in upstream and/or has issues like stopped development, less secure or producing too many issues).</li>
+<li>Adding necessary packages for better security or usability (as long as they are not harmful).</li>
+</ul>
+<hr>
+<p>Removing packages:</p>
+<ul>
+<li>Remove wget since its not upstream default and less secure than curl (kicksecure support scurl), OR replace it with the successor wget2.</li>
+</ul>
+<p>Can been seen added as extra package for debian stable:</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/8bd6a7e34899560f8b345ac955a539f67b834090.png" data-download-href="//forums.kicksecure.com/uploads/default/8bd6a7e34899560f8b345ac955a539f67b834090" title="wgetnotdefault"><img src="//forums.kicksecure.com/uploads/default/original/1X/8bd6a7e34899560f8b345ac955a539f67b834090.png" alt="wgetnotdefault" data-base62-sha1="jX4gvQeO7vr2SfcvZs0w90TtIgU" width="690" height="105" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/8bd6a7e34899560f8b345ac955a539f67b834090_2_10x10.png"></a></div><p></p>
+<p>Nothing depend on it from debian packages:</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad.png" data-download-href="//forums.kicksecure.com/uploads/default/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad" title="wgetdepend2"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad_2_690x326.png" alt="wgetdepend2" data-base62-sha1="8XLtUaiPK6rrYEc653D3xZZFAHb" width="690" height="326" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad_2_690x326.png, //forums.kicksecure.com/uploads/default/original/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/3ed2e9bf7a2b2e36fecd8dd2191c4feb9915c4ad_2_10x10.png"></a></div><p></p>
+<p>Adding packages:</p>
+<ul>
+<li>VLC media player.</li>
+<li>Thunderbird.</li>
+</ul>
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-remove-extra-packages/135">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-remove-extra-packages/135</link>
+          <pubDate>Sat, 29 Oct 2022 20:52:37 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-135</guid>
+          <source url="https://forums.kicksecure.com/t/add-remove-extra-packages/135.rss">Add/Remove Extra Packages</source>
+        </item>
+        <item>
+          <title>Sdwdate failed to start in debian 12 bookworm (next release)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>sdwdate log:</p>
+<pre><code class="lang-auto">+ set -e
++ true 'INFO /usr/bin/sdwdate-log-viewer: START'
++ /bin/journalctl --boot --output cat -n 10000 -f _SYSTEMD_UNIT=qubes-sync-time.service + _SYSTEMD_UNIT=qubes-sync-time.timer + _SYSTEMD_UNIT=timesanitycheck.service + _SYSTEMD_UNIT=bootclockrandomization.service + _SYSTEMD_UNIT=sdwdate.service + _SYSTEMD_UNIT=whonix-firewall.service + SYSLOG_IDENTIFIER=suspend-pre + SYSLOG_IDENTIFIER=suspend-post + SYSLOG_IDENTIFIER=anondate + _AUDIT_TYPE_NAME=SECCOMP
+Within minimum time 'Fri Feb 18 00:00:00 UTC 2022' and expiration timestamp 'Tue May 17 10:00:00 UTC 2033', ok.
+Boot Clock Randomization
+https://www.kicksecure.com/wiki/Boot_Clock_Randomization
+- 58 314072601
+Changed time from Fri Oct 28 10:18:50 PM EDT 2022 (1667009930.522251493)
+               to Fri Oct 28 10:17:52 PM EDT 2022 (1667009872.327542096).
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=692 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x780839d88bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=1541 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7de3739e0bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2117 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74c0d6763bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2890 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x6ffcaa2cfbca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2898 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7dbc8d788bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2970 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7423fdacebca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3009 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x78cee88c8bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3020 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7cfa6e377bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3034 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74a6071eebca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3436 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7941c7566bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3468 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7fbb97e37bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3487 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x78edb1e46bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3497 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x749bfe4a6bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3518 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7fa119ca1bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3544 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x728b82ceabca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3550 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7d7fda3babca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3570 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x712153c0bbca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3574 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7922dde05bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3585 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x748e3f8f0bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3591 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74b1af4d4bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3631 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x79219c660bca code=0x80000000
+SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3635 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x75e9d79d0bca code=0x80000000
+
+</code></pre>
+            <p><small>9 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134</link>
+          <pubDate>Sat, 29 Oct 2022 20:32:35 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-134</guid>
+          <source url="https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134.rss">Sdwdate failed to start in debian 12 bookworm (next release)</source>
+        </item>
+        <item>
+          <title>Systemcheck wont load/work on debian 12 (next release)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Tested installing kicksecure-gui in debian stable 11 then upgraded to 12 then check systemcheck if it will run i got this message:</p>
+<p><code>sudo: error while loading shared libraries: libsudo_util.so.0: cannot open shared object file: No such file or directory</code></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/368efed5cb24a70450bc44ebb909d8497aaf9576.png" data-download-href="//forums.kicksecure.com/uploads/default/368efed5cb24a70450bc44ebb909d8497aaf9576" title="systemcheck12"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/368efed5cb24a70450bc44ebb909d8497aaf9576_2_690x132.png" alt="systemcheck12" data-base62-sha1="7ME9hBNgVQHvp111CXjvrHzV7W6" width="690" height="132" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/368efed5cb24a70450bc44ebb909d8497aaf9576_2_690x132.png, //forums.kicksecure.com/uploads/default/original/1X/368efed5cb24a70450bc44ebb909d8497aaf9576.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/368efed5cb24a70450bc44ebb909d8497aaf9576.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/368efed5cb24a70450bc44ebb909d8497aaf9576_2_10x10.png"></a></div><p></p>
+            <p><small>6 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/systemcheck-wont-load-work-on-debian-12-next-release/130">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/systemcheck-wont-load-work-on-debian-12-next-release/130</link>
+          <pubDate>Thu, 27 Oct 2022 16:56:01 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-130</guid>
+          <source url="https://forums.kicksecure.com/t/systemcheck-wont-load-work-on-debian-12-next-release/130.rss">Systemcheck wont load/work on debian 12 (next release)</source>
+        </item>
+        <item>
+          <title>Add pyqt5-dev-tool dependency to kicksecure dependencies</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Installing kicksecure-gui on debian fresh .iso will render repository-dist-wizard dysfunctional due to missing dependency <code>pyqt5-dev-tool</code></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png" data-download-href="//forums.kicksecure.com/uploads/default/387b94105789f23978aadb4e696a09e2588212d9" title="repokicksecuredependency"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_690x211.png" alt="repokicksecuredependency" data-base62-sha1="83FvezwVHE630BcqLXuy2ogFkKJ" width="690" height="211" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_690x211.png, //forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_10x10.png"></a></div><p></p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129</link>
+          <pubDate>Thu, 27 Oct 2022 16:43:25 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-129</guid>
+          <source url="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129.rss">Add pyqt5-dev-tool dependency to kicksecure dependencies</source>
+        </item>
+        <item>
+          <title>Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Since we dont have a default browser by default so any user who is morphing debian fresh install he will not have a browser as well (specially debian minimal version like netinst or CD…etc).</p>
+<p>This will give annoying show annoying bug:</p>
+<p><img src="//forums.kicksecure.com/uploads/default/original/1X/74d4bfcfc915acc911377e36e36dae76e00a229a.png" alt="havingnobrowser1" data-base62-sha1="gFxcnUt4rokXKf3uWEgeOTvY5Au" width="609" height="295"></p>
+<p>Will show a  bug window which you need to press on OK multiple times to disappear:</p>
+<p>1<br>
+<img src="//forums.kicksecure.com/uploads/default/original/1X/76cf61f256cba44a24f35aa0a986ebcdb0d81203.png" alt="havingnobrowser2" data-base62-sha1="gX2EIkkvPcBMC759OjAQD2M5JsL" width="620" height="153"><br>
+2<br>
+<img src="//forums.kicksecure.com/uploads/default/original/1X/8c60e92383b258ad87e6f30e5fe5a8479e47a308.png" alt="havingnobrowser3" data-base62-sha1="k1Qtw2gfTFjltczWnhg31T0taAM" width="625" height="149"><br>
+3<br>
+<img src="//forums.kicksecure.com/uploads/default/original/1X/28b9553e85619590d4d7f87cf717e8f34bc2e6a5.png" alt="havingnobrowser4" data-base62-sha1="5OgaIEIfVayVmT8oXEVYar6D3dH" width="624" height="149"><br>
+4<br>
+<img src="//forums.kicksecure.com/uploads/default/original/1X/ff0a1ddbaf133d6b4a25e3f48ef3e402f00a3569.png" alt="havingnobrowser5" data-base62-sha1="AobqDXOQyV4RHZDnJWvPY3V5v5L" width="625" height="156"><br>
+5<br>
+<img src="//forums.kicksecure.com/uploads/default/original/1X/fb33970ca379b3ca7588cf084b2aa221ed784189.png" alt="havingnobrowser6" data-base62-sha1="zQenkdh8HXOqpHCHQurcR6F18ql" width="623" height="149"></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128</link>
+          <pubDate>Thu, 27 Oct 2022 16:29:45 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-128</guid>
+          <source url="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128.rss">Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</source>
+        </item>
+        <item>
+          <title>Changing kicksecure repository to tester will add tor+ by default to the repo</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>If i have set kicksecure repo to be over clearnet using only <code>https</code> and then i switched the repository to tester using repository-dist-wizard it will add <code>tor+</code> to the repository which is disrespecting user preferences if he choose <a href="https://www.kicksecure.com/wiki/Debian#Add_the_Kicksecure_%E2%84%A2_Repository" rel="noopener nofollow ugc">C: Clearnet Rep</a>.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127</link>
+          <pubDate>Thu, 27 Oct 2022 16:14:45 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-127</guid>
+          <source url="https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127.rss">Changing kicksecure repository to tester will add tor+ by default to the repo</source>
+        </item>
+        <item>
+          <title>Disable unnecessary startup processes e.g evolution calendar</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Due to gdm dependencies it come with too wide gnome tools which arent useful to have as a default, but if there is no way around except if we have them then its better to have them disabled by default as this will drain extra resources for nothing e.g Evolution Alarm Notify: (there is even no evolution by default)</p>
+<p><img src="//forums.kicksecure.com/uploads/default/original/1X/80c1c1fcefb4687435dfc7b90ed3d2723a99b85e.png" alt="disableunnecessaryprocess" data-base62-sha1="in2eTM313ZYVSpFffZFJ4PIPsrs" width="600" height="345"></p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126</link>
+          <pubDate>Thu, 27 Oct 2022 16:05:57 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-126</guid>
+          <source url="https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126.rss">Disable unnecessary startup processes e.g evolution calendar</source>
+        </item>
+        <item>
+          <title>Propose building off Alpine Linux</title>
+          <dc:creator><![CDATA[Quill]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Hello, I was reading the <a href="http://Whonix.org" rel="noopener nofollow ugc">Whonix.org</a> page where it details pros/cons of building off different operating systems, but the Alpine Linux section seems to be from 2015. I think Kicksecure’s goal of providing a secure OS by default would work really well off Alpine Linux, particularly considering the progress Alpine has made in the past few years. The list on the dev site says that an OS for Whonix needs:</p>
+<ul>
+<li>Acceptable usability (they have functional builds off the latest gnome and kde desktops as described <a href="https://9to5linux.com/alpine-linux-3-16-improves-nvme-support-adds-gnome-42-and-kde-plasma-5-24-lts" rel="noopener nofollow ugc">here</a> as well as their own wiki)</li>
+<li>Must be somewhat popular (they are rated <span class="hashtag">#30</span> on distrowatch, and their use has grown in recent years as they moved from mostly servers to default on many Docker builds. Recently they have also become more popular after being one of the main OS options for pinephones via pmOS and expanding to desktops. They have been featured on lists describing the best Linux distros for privacy-focused users, see <a href="https://www.makeuseof.com/best-linux-distros-for-privacy-security/" rel="noopener nofollow ugc">here</a> for an example)</li>
+<li>No legal/trademark issues (good)</li>
+<li>Must have a secure package manager (I won’t pretend to be an expert on this or the next few points, but it’s worth checking)</li>
+</ul>
+<p>Alpine Linux is fast, slim, and dedicated to security (detailed <a href="https://alpinelinux.org/about" rel="noopener nofollow ugc">here</a> and in more detail <a href="https://wiki.alpinelinux.org/wiki/Alpine_Linux:Overview" rel="noopener nofollow ugc">here</a>). It seems that basing Kicksecure off Alpine Linux would be much smaller and simpler than using Debian, which is huge and does not place a priority on security. For these reasons I believe it would be worth considering using Alpine Linux instead of Debian. Thanks for your time</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107</link>
+          <pubDate>Sun, 09 Oct 2022 13:51:19 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-107</guid>
+          <source url="https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107.rss">Propose building off Alpine Linux</source>
+        </item>
+        <item>
+          <title>Tor Project is resurrecting SecBrowser as Mullvad Browser</title>
+          <dc:creator><![CDATA[JeremyRand]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Tor Project recently received funding to factor out the security and privacy enhancements of Tor Browser from the Tor-specific enhancements (similar to how Kicksecure factors out security features from Whonix).  The factored-out browser is called Base Browser [1].  This is basically the same concept as <a href="http://forums.dds6qkxpwdeubwucdiaord2xgbbeyds25rbsgr73tbfpqpt4a6vjwsyd.onion/t/secbrowser-a-security-hardened-non-anonymous-browser-deprecated/3822" rel="noopener nofollow ugc">SecBrowser</a>, which was deprecated by Kicksecure due to insufficient support from upstream Tor Project.  There aren’t yet any Nightly builds of Base Browser, but code is already being committed to Git; I’m not sure what the expected release timeline is.</p>
+<p>It might be useful for Kicksecure to consider including Base Browser once it’s released (at least as Nightly).  I’m guessing the Tor Browser Downloader in Whonix could be trivially adapted for Base Browser.</p>
+<p>[1] I was initially not very fond of this name, but it’s grown on me, especially once I realized that it opens the door to entertaining memes such as “In Soviet Russia, all your tracker are belong to Base Browser.”</p>
+            <p><small>10 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101</link>
+          <pubDate>Mon, 05 Sep 2022 09:08:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-101</guid>
+          <source url="https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101.rss">Tor Project is resurrecting SecBrowser as Mullvad Browser</source>
+        </item>
+        <item>
+          <title>Disabling SMT in security-misc may make security worse on some POWER9 systems</title>
+          <dc:creator><![CDATA[JeremyRand]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><code>security-misc</code>'s policy of disabling SMT may actually make security worse on POWER9 systems that use <a href="https://wiki.raptorcs.com/wiki/Speculative_Execution_Vulnerabilities_of_2018#Attack_surface_reduction" rel="noopener nofollow ugc">paired cores</a> (e.g. the 18-core and 22-core CPU’s sold by Raptor).  It would be useful to figure out whether we want to disable that Kicksecure feature on POWER9 systems with paired cores only (I don’t know how to detect this programatically), or perhaps disable that feature completely on POWER9 (given that with SMT enabled on POWER9, there are either 4 or 8 threads per cache, and the documented attacks on SMT only work with 2 threads per cache).  Maybe factor out that specific policy into a separate optional package, and advise that POWER9 users should only install it if they have a CPU with unpaired cores?  I don’t know whether it’s possible to disable paired cores in software, but if so, that would also be worth considering.</p>
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100</link>
+          <pubDate>Mon, 05 Sep 2022 08:48:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-100</guid>
+          <source url="https://forums.kicksecure.com/t/disabling-smt-in-security-misc-may-make-security-worse-on-some-power9-systems/100.rss">Disabling SMT in security-misc may make security worse on some POWER9 systems</source>
+        </item>
+        <item>
+          <title>Derivative-maker build script running as user versus root versus sudo design</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <ul>
+<li>The build script needs to have root because many actions such as mounting a raw image require root.</li>
+<li>At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times.</li>
+<li>Therefore currently, the build script is expected to be run under user ("<code>user</code>") and with sudo.</li>
+<li>Whenever an action should be performed as user instead of root, it uses <code>$SUDO_TO_USER</code> which results in:
+<ul>
+<li><code>sudo --non-interactive -u user</code></li>
+<li>Why not run all under root? Because some build dependency tools (such as <code>dpkg-buildpackage</code>, <code>lintian</code>?) would complain about this.</li>
+</ul>
+</li>
+</ul>
+<p>This is problematic because:</p>
+<ul>
+<li>it raises the question when to use <code>sudo --non-interactive -u user</code> with <code>--preserve-env</code> and when not,</li>
+<li>environment variables should or must passed or better (must) not,</li>
+<li>home folder root versus user.</li>
+</ul>
+<p>For a cleaner implementation, the build script should probably run as user without <code>sudo</code> and then internally use <code>sudo --non-interactive</code> (to root) when required. To prevent the build stalling and asking the the sudo password every few minutes, build documentation would recommend to</p>
+<ul>
+<li>either set up passwordless sudo or,</li>
+<li>use a longer sudo password timeout
+<ul>
+<li>Probably sudo configuration file option <code>timestamp_timeout</code>, unfortunately unavailable as an environment variable.</li>
+</ul>
+</li>
+</ul>
+<p>Then after the build script started, it would use <code>sudo</code> to test if it is available and to cache password entry (using sudo’s built-in <code>timestamp_timeout</code> feature).</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76</link>
+          <pubDate>Sun, 10 Jul 2022 10:53:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-76</guid>
+          <source url="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76.rss">Derivative-maker build script running as user versus root versus sudo design</source>
+        </item>
+        <item>
+          <title>Block browser startup in template vms</title>
+          <dc:creator><![CDATA[nyxnor]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233" target="_blank" rel="noopener nofollow ugc">Kicksecure/tb-starter/blob/329daee153a86798eec6380d010d1a23ac186cc8/usr/bin/torbrowser#L233</a></h4>
+
+
+
+    <pre class="onebox">      <code class="lang-">
+        <ol class="start lines" start="223" style="counter-reset: li-counter 222 ;">
+            <li>      true "Not running in TemplateVM."</li>
+            <li>      return 0</li>
+            <li>   fi</li>
+            <li>
+            </li><li>   if [ "$tb_allow_start_in_templatevm" = "true" ]; then</li>
+            <li>      true "tb_allow_start_in_templatevm is true."</li>
+            <li>      return 0</li>
+            <li>   fi</li>
+            <li>
+            </li><li>   tb_qubes_wiki="in_qubes-whonix"</li>
+            <li class="selected">   local MSG="&lt;p&gt;Do not run $tb_title in Template.&lt;br&gt;&lt;/br&gt;</li>
+            <li>&lt;br&gt;&lt;/br&gt;</li>
+            <li>More info: &lt;a href=https://www.whonix.org/wiki/$tb_wiki#$tb_qubes_wiki&gt;https://www.whonix.org/wiki/$tb_wiki#$tb_qubes_wiki&lt;/a&gt;&lt;/p&gt;"</li>
+            <li>   $output ${output_opts[@]} --messagex --typex "error" --titlex "$TITLE" --message "$MSG" --done</li>
+            <li>   $output ${output_opts[@]} --messagecli --typecli "error" --titlecli "$TITLE" --message "$MSG" --done</li>
+            <li>
+            </li><li>   exit 3</li>
+            <li>}</li>
+            <li>
+            </li><li>tb_qubes_dvm_template() {</li>
+            <li>   ## Avoid running in Qubes DVM Template.</li>
+        </ol>
+      </code>
+    </pre>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Can this be done to firefox as well? Just firefox and chromium I have in mind.</p>
+<p>Ideally I think this should be implemented upstream by qubes, but they don’t modify DomU applications, sometimes only add some patches to work with Qubes, but nothing to block an application.</p>
+<p>The <a href="https://www.qubes-os.org/doc/how-to-install-software/#updates-proxy" rel="noopener nofollow ugc">update proxy</a> is a minimal mitigation that requires applications to be configured to use the proxy but it is very easy to circumvent that. It is the bare minimal to avoid using a browser on the template as stated in that page.</p>
+<p>What I am thinking is that if this is done in Kicksecure then later moved to qubes package to templates, <code>qubes-template-browser-block</code>, they can remove the <em>update proxy</em> that does not guard much against anything besides the browser, the templates will be networked again, the template updates will be stream isolated.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71</link>
+          <pubDate>Fri, 08 Jul 2022 14:14:32 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-71</guid>
+          <source url="https://forums.kicksecure.com/t/block-browser-startup-in-template-vms/71.rss">Block browser startup in template vms</source>
+        </item>
+        <item>
+          <title>Make systemcheck-gui give better message when no Tor connection detected</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Make systemcheck-gui (run from the icon) report a better message when no Tor connection presented: (the test is made in debian morphed into kicksecure (installing kicksecure-cli package) with gnome DE</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a.png" data-download-href="//forums.kicksecure.com/uploads/default/4436e4c66eb4b895474a46e5905f7f5808fea79a" title="4436e4c66eb4b895474a46e5905f7f5808fea79a"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a_2_690x327.png" alt="4436e4c66eb4b895474a46e5905f7f5808fea79a" data-base62-sha1="9Js4MmVGt8OjcCrSyCPnfKdSt6i" width="690" height="327" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a_2_690x327.png, //forums.kicksecure.com/uploads/default/original/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/4436e4c66eb4b895474a46e5905f7f5808fea79a_2_10x10.png"></a></div><p></p>
+<hr>
+<p>Kicksecure 16.0.5.0 vbox:</p>
+<p>When first time starting without Tor connection the systemcheck will give false message that there are upgrades, This false message can be produced as well if you use<code> sudo apt update</code> or similar in terminal and then run systemcheck (it wont be able to run sudo apt update or any sudo apt because you (the user) still using sudo which result into blocking systemcheck sudo apt usage result in false message)</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/make-systemcheck-gui-give-better-message-when-no-tor-connection-detected/61">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/make-systemcheck-gui-give-better-message-when-no-tor-connection-detected/61</link>
+          <pubDate>Tue, 31 May 2022 18:05:11 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-61</guid>
+          <source url="https://forums.kicksecure.com/t/make-systemcheck-gui-give-better-message-when-no-tor-connection-detected/61.rss">Make systemcheck-gui give better message when no Tor connection detected</source>
+        </item>
+        <item>
+          <title>Consider Firewall by Default</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Debian now recommend to use nftables instead of the legacy iptables.</p>
+<p>nftables best to be played with through firewalld, As gufw/ufw only for iptables.</p>
+<p>Note: gufw can be used with nftables through backward compatibility iptables-nft but its recommended against and its not good way for the forward future.</p>
+<p>Suggestion (1):</p>
+<p>have nftables and firewalld installed and enabled by default (cause nothing, no extra security by doing that but good packages to have by default).</p>
+<p>Suggestion (2):</p>
+<p>Drop all incoming connections by default (good security practice).</p>
+<p>Since kicksecure is for VMs or Bare metal usage closing all ports isnt bad practice. Only it will effect users who distromorphing a debian installed on server via remote tool like SSH.</p>
+<p>Solutions to this issue:</p>
+<ul>
+<li>
+<p>Kicksecure is not meant for distro-morphing debian on server via remote tool ← thats not the goal of the project, Hence this is not an issue to solve to begin with. (one can use proxmox or VNC to Hypervisor or similar ideas to have kicksecure on outside servers)</p>
+</li>
+<li>
+<p>Open only port 22 which is the default port of SSH and generally no body changing it. (Its debatable to whether its really useful to change it or not let alone its changed by many users)</p>
+</li>
+</ul>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/consider-firewall-by-default/57">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/consider-firewall-by-default/57</link>
+          <pubDate>Wed, 18 May 2022 19:38:43 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-57</guid>
+          <source url="https://forums.kicksecure.com/t/consider-firewall-by-default/57.rss">Consider Firewall by Default</source>
+        </item>
+  </channel>
+</rss>
