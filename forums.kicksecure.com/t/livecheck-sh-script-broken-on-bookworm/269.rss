@@ -9,9 +9,83 @@ I was not able to understand why these loop devices are present in bookworm.
 
 This all occurs with the system correctly being mounted in read-only and started with grub-live, therefore confusing users.</description>
     
-    <lastBuildDate>Wed, 23 Aug 2023 23:11:02 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Aug 2023 16:26:12 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Livecheck.sh script broken on bookworm</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Reply received.</p>
+<hr>
+<p>Quote <a href="https://manpages.debian.org/bookworm/util-linux/lsblk.8.en.html" class="inline-onebox">lsblk(8) — util-linux — Debian bookworm — Debian Manpages</a></p>
+<blockquote>
+<p><code>--all</code><br>
+Disable all built-in filters and list all empty devices and RAM disk devices too.</p>
+</blockquote>
+<hr>
+<p>So it seems safe to drop <code>--all</code>.</p>
+          <p><a href="https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269/13</link>
+        <pubDate>Thu, 24 Aug 2023 16:26:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-269-13</guid>
+        <source url="https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269.rss">Livecheck.sh script broken on bookworm</source>
+      </item>
+      <item>
+        <title>Livecheck.sh script broken on bookworm</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p><code>--output SIZE,RO,TYPE</code> is a nice idea!</p>
+<p>Yes, these are 0B loop devices but these are still read-write and not read-only. So as long we don’t really know their purpose, we don’t really know what we’re doing here. Just hiding a potential issue.</p>
+<p>Thease are 0B at time of check as suggested by your pull request but there’s no guarantee that these stay 0B.</p>
+<p>Asked just now:</p>
+<aside class="onebox stackexchange" data-onebox-src="https://unix.stackexchange.com/questions/754830/what-are-these-empty-0b-size-read-write-loop-devices">
+  <header class="source">
+
+      <a href="https://unix.stackexchange.com/questions/754830/what-are-these-empty-0b-size-read-write-loop-devices" target="_blank" rel="noopener">unix.stackexchange.com</a>
+  </header>
+
+  <article class="onebox-body">
+      <a href="https://unix.stackexchange.com/users/49297/adrelanos" target="_blank" rel="noopener">
+    <img alt="adrelanos" src="https://www.gravatar.com/avatar/83f6805262f0dcc117814487c5b2d1c4?s=256&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="256" height="256">
+  </a>
+
+<h4>
+  <a href="https://unix.stackexchange.com/questions/754830/what-are-these-empty-0b-size-read-write-loop-devices" target="_blank" rel="noopener">What are these empty 0B SIZE read-write loop devices?</a>
+</h4>
+
+<div class="tags">
+  <strong>loop-device, lsblk</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://unix.stackexchange.com/users/49297/adrelanos" target="_blank" rel="noopener">
+    adrelanos
+  </a>
+  on <a href="https://unix.stackexchange.com/questions/754830/what-are-these-empty-0b-size-read-write-loop-devices" target="_blank" rel="noopener">01:38PM - 24 Aug 23 UTC</a>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>And livecheck.sh currently doesn’t continuously re-check. Not sure it should. But when it detects a 0B read-write device being larger than 0B then the write action was already done and then what we attempted to protect from / inform about is already too late.</p>
+          <p><a href="https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269/12</link>
+        <pubDate>Thu, 24 Aug 2023 13:42:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-269-12</guid>
+        <source url="https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269.rss">Livecheck.sh script broken on bookworm</source>
+      </item>
       <item>
         <title>Livecheck.sh script broken on bookworm</title>
         <dc:creator><![CDATA[pxlkng]]></dc:creator>
