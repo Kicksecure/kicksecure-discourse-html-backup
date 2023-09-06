@@ -12,6 +12,102 @@
 <div class="quote-controls"></div>
 <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
 <blockquote>
+<p>You’re using a kernel module 8188eu. Probably a proprietary wifi driver. As long that is installed, you cannot remove packages such as module-assistant or kbuild I would assume.</p>
+</blockquote>
+</aside>
+<p>Ahhhhh yes, only just remembered I tried to install the drivers for a TPLink USB wifi stick - which failed - and I had forgotten all about it among a hundred other things. USB tethering my phone’s wifi connection worked straight out of the box.</p>
+<p>My apologies for taking up your valuable time,<br>
+and many thanks for all the tips.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/lost-operability-after-update/318#post_6</link>
+        <pubDate>Wed, 06 Sep 2023 01:00:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-680</guid>
+      </item>
+      <item>
+        <title>Lost operability after update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="notaninja" data-post="4" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/ba8739/48.png" class="avatar"> notaninja:</div>
+<blockquote>
+<p>dpkg-query: no path found matching pattern /var/lib/dkms/8188eu/1.2/source/dkms.conf</p>
+</blockquote>
+</aside>
+<p>Actually expected. Seems to be auto generated files. Even files happening for files related to proper Debian packages. Another idea to identify the package it’s coming from:</p>
+<pre><code>dpkg -l | grep 8188
+</code></pre>
+<p>Did you install something aircrack-ng related? Most hints are pointing at it. And that thing is my top suspect which has broken the package management.</p>
+<aside class="quote no-group" data-username="notaninja" data-post="2" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/ba8739/48.png" class="avatar"> notaninja:</div>
+<blockquote>
+<p>/usr/bin/deborphan: The status file is in an improper state.</p>
+</blockquote>
+</aside>
+<p>Just a follow up issue.</p>
+<aside class="quote no-group" data-username="notaninja" data-post="2" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/ba8739/48.png" class="avatar"> notaninja:</div>
+<blockquote>
+<p>Note: dpkg --audit may be used to find such packages.</p>
+</blockquote>
+</aside>
+<p>Running</p>
+<pre><code>sudo dpkg --audit
+</code></pre>
+<p>is a good idea anyhow.</p>
+<aside class="quote no-group" data-username="notaninja" data-post="4" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/ba8739/48.png" class="avatar"> notaninja:</div>
+<blockquote>
+<p>Stackexchange has no entries for Kicksecure</p>
+</blockquote>
+</aside>
+<p>A since Kicksecure specific issues are rare by comparison, there’s no need for it.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="3" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<blockquote>
+<p>[user ~]% sudo apt autoremove</p>
+</blockquote>
+<blockquote>
+<p>kbuild libgsoap-2.8.124 liblzf1 libtpms0 libvncserver1 module-assistant</p>
+</blockquote>
+<p>I don’t think you can do this.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>You’re using a kernel module 8188eu. Probably a proprietary wifi driver. As long that is installed, you cannot remove packages such as module-assistant or kbuild I would assume.</p>
+</blockquote>
+</aside>
+<p>I still don’t know where this 8188eu is coming from. That package could have a bug. And by looking at how long <a href="https://github.com/aircrack-ng/rtl8188eus/issues/224" class="inline-onebox">Build error for 6.1 kernel version · Issue #224 · aircrack-ng/rtl8188eus · GitHub</a> stays unfixed, I’d not use that software either.</p>
+<p>So to able to run autoremove while keeping that package, you’d need to mark module-assistant kbuild as manually installed.</p>
+<pre><code>sudo apt install module-assistant kbuild
+</code></pre>
+<p>That is probably a packaging bug of above package.</p>
+<p>But since that package fails to compile the kernel module and isn’t easy to fix (unless you follow that bug discussion) I recommend to get rid of it. That should then also fix apt autoremove.</p>
+<p>“Debian issues” if installing broken software from third-party repositories.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/lost-operability-after-update/318#post_5</link>
+        <pubDate>Tue, 05 Sep 2023 11:49:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-679</guid>
+      </item>
+      <item>
+        <title>Lost operability after update</title>
+        <dc:creator><![CDATA[@notaninja]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="318">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
 <p>Which package owns file <code>/var/lib/dkms/8188eu/1.2/source/dkms.conf</code>? Please check and enlighten me. To check:</p>
 <pre><code class="lang-auto">dpkg -S /var/lib/dkms/8188eu/1.2/source/dkms.conf
 
@@ -1121,48 +1217,6 @@ Firstly I thought of <code>snapd</code> but it’s not installed.</p> ]]></descr
         <link>https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269#post_6</link>
         <pubDate>Mon, 24 Jul 2023 21:34:28 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-632</guid>
-      </item>
-      <item>
-        <title>Vm morph Debian to kicksecure no preinstall tools</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener" title="01:18PM - 20 July 2023">Kicksecure – 20 Jul 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/388;"><img src="https://www.kicksecure.com/w/images/d/d1/Download-debian.jpg?version=0f5a9307bc5f0ca052752efec6830baf" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener">Install Kicksecure ™ inside Debian</a></h3>
-
-  <p>Kicksecure ™ can be installed on top of an existing Debian installation.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vm-morph-debian-to-kicksecure-no-preinstall-tools/291#post_4</link>
-        <pubDate>Mon, 24 Jul 2023 21:22:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-630</guid>
-      </item>
-      <item>
-        <title>Livecheck.sh script broken on bookworm</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I don’t have a solution for this.</p>
-<p>Help is needed and welcome.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/livecheck-sh-script-broken-on-bookworm/269#post_5</link>
-        <pubDate>Mon, 24 Jul 2023 21:21:11 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-629</guid>
       </item>
   </channel>
 </rss>
