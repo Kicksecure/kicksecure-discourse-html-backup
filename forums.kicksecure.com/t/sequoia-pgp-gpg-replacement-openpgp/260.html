@@ -539,6 +539,125 @@ Increased security and perhaps even increased reliability, code simplification.<
               </div>
 
           </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+              <link itemprop="mainEntityOfPage" href="260.html">
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2023-10-05T03:38:15Z' class='post-time'>
+                    October 5, 2023,  3:38am
+                  </time>
+                  <meta itemprop='dateModified' content='2023-10-05T03:38:15Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p><code>dpkg-source</code> internally uses <code>sq</code>. I figured that out because of a signature verification error trying to build a Kicksecure package. It failed because <code>sq</code> keystore is different from <code>gpg</code> keystore.</p>
+<pre><code class="lang-auto">+ dpkg-source --require-strong-checksums --require-valid-signature -x /home/user/derivative-binary/genmkfile-packages-result/genmkfile_13.0-1.dsc /tmp/tmp.ImjZq87mKV/
+No key to check checksum from 6E979B28A6F37C43BE30AFA1CB8D50BB77BB3C48
+1 unknown checksum.
+Error: Verification failed
+dpkg-source: error: cannot verify inline signature for /home/user/derivative-binary/genmkfile-packages-result/genmkfile_13.0-1.dsc: no acceptable signature found
+</code></pre>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+                <meta itemprop="userInteractionCount" content="0" />
+              </div>
+
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+              <link itemprop="mainEntityOfPage" href="260.html">
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2023-10-05T04:16:21Z' class='post-time'>
+                    October 5, 2023,  4:16am
+                  </time>
+                  <meta itemprop='dateModified' content='2023-10-05T04:16:21Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>The <code>dpkg-source</code> issue hard to debug… What’s the file to add my sq public key? As per dpkg source code <code>scripts/Dpkg/Vendor/Debian.pm</code></p>
+<pre><code class="lang-auto">    if ($hook eq 'package-keyrings') {
+        return ('/usr/share/keyrings/debian-keyring.gpg',
+</code></pre>
+<p>with <code>/etc/dpkg/origins/default</code> pointing to <code>/etc/dpkg/origins/debian</code>. Otherwise, dpkg might use different vendor (distribution) specific <code>package-keyrings</code>.</p>
+<p>Importing my key to <code>/usr/share/keyrings/debian-maintainers.gpg</code> helped.</p>
+<pre><code>sudo gpg --no-default-keyring --keyring /usr/share/keyrings/debian-maintainers.gpg --import /usr/share/keyrings/derivative.asc
+</code></pre>
+<p>I locally added some debug output to /usr/share/perl5/Dpkg/OpenPGP/Backend/Sequoia.pm</p>
+<p>This is what dpkg-source is actually executing:</p>
+<pre><code>sq verify --signer-cert /usr/share/keyrings/debian-keyring.gpg --signer-cert /usr/share/keyrings/debian-nonupload.gpg --signer-cert /usr/share/keyrings/debian-maintainers.gpg /home/user/derivative-binary/genmkfile-packages-result/genmkfile_13.0-1.dsc
+</code></pre>
+<p>Command</p>
+<pre><code>sq keyring list /usr/share/keyrings/debian-keyring.gpg | grep adrelanos
+</code></pre>
+<p>showed that</p>
+<pre><code class="lang-auto">0. 916B8D99C38EAF5E8ADC7A2A8D66066A2EEACCDA Patrick Schleizer &lt;adrelanos@kicksecure.com&gt;
+</code></pre>
+<p>Not the cleanest solution.</p>
+<p>Debian’s version of sq might not have the new sq feature of a local keystore:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="../../../external.html?link=https://sequoia-pgp.org/blog/2023/04/08/sequoia-sq/">
+  <header class="source">
+      <img src="../../../external.html?link=https://sequoia-pgp.org/img/favicon.png" class="site-icon" width="67" height="64">
+
+      <a href="../../../external.html?link=https://sequoia-pgp.org/blog/2023/04/08/sequoia-sq/" target="_blank" rel="noopener">sequoia-pgp.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="../../../external.html?link=https://sequoia-pgp.org/blog/2023/04/08/sequoia-sq/" target="_blank" rel="noopener">Branching Out: `sq` Grows a Certificate Store, and More Convenient Trust...</a></h3>
+
+  <p>Sequoia is a modular OpenPGP implementation in Rust.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>That would have probably made this a lot easier.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/CommentAction"/>
+                <meta itemprop="userInteractionCount" content="0" />
+              </div>
+
+          </div>
     </div>
 
 
