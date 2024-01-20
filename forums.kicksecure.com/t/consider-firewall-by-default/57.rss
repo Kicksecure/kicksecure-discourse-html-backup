@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Consider Firewall by Default</title>
+    <link>https://forums.kicksecure.com/t/consider-firewall-by-default/57</link>
+    <description>Debian now recommend to use nftables instead of the legacy iptables.
+
+nftables best to be played with through firewalld, As gufw/ufw only for iptables.
+
+Note: gufw can be used with nftables through backward compatibility iptables-nft but its recommended against and its not good way for the forward future. 
+
+Suggestion (1):
+
+have nftables and firewalld installed and enabled by default (cause nothing, no extra security by doing that but good packages to have by default).
+
+Suggestion (2):
+
+Drop all incoming connections by default (good security practice).
+
+Since kicksecure is for VMs or Bare metal usage closing all ports isnt bad practice. Only it will effect users who distromorphing a debian installed on server via remote tool like SSH.
+
+Solutions to this issue:
+
+- Kicksecure is not meant for distro-morphing debian on server via remote tool &lt;- thats not the goal of the project, Hence this is not an issue to solve to begin with. (one can use proxmox or VNC to Hypervisor or similar ideas to have kicksecure on outside servers)
+
+- Open only port 22 which is the default port of SSH and generally no body changing it. (Its debatable to whether its really useful to change it or not let alone its changed by many users)</description>
+    
+    <lastBuildDate>Thu, 19 May 2022 10:12:49 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/consider-firewall-by-default/57.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Consider Firewall by Default</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure doesn’t open any ports by default. So by default there is nothing to be firewalled. But there may be cases where custom installed software opens server ports which shouldn’t be reachable from the outside by default. So a default installed firewall might make sense.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="57">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Kicksecure is not meant for distro-morphing debian on server via remote tool ← thats not the goal of the project,</p>
+</blockquote>
+</aside>
+<p>Actually server support is one of my main development goals.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="57">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Only it will effect users who distromorphing a debian installed on server via remote tool like SSH.</p>
+</blockquote>
+</aside>
+<p>Yes, and I wouldn’t an unannounced breaking change locking users out from their server’s SSH. As per:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stable_Version_User_Experience">
+  <header class="source">
+      <img src="https://www.kicksecure.com/w/images/4/45/Kicksecure-home-favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener" title="10:41AM - 01 December 2021">Kicksecure – 1 Dec 21</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0f/Stability-23423542354.jpg" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener">Kicksecure ™ Stable Version User Experience</a></h3>
+
+  <p>User Experience Goals for the Stable Version of Kicksecure ™</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="57">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="20" height="20" src="//forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/40.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>nftables best to be played with through firewalld,</p>
+</blockquote>
+</aside>
+<p>Not sure yet. It looks rather complex and might be prone to bugs.</p>
+<p><a href="https://bugzilla.redhat.com/show_bug.cgi?id=1836571" class="onebox" target="_blank" rel="noopener">https://bugzilla.redhat.com/show_bug.cgi?id=1836571</a></p>
+<p><a href="https://bugzilla.redhat.com/show_bug.cgi?id=1739415" class="onebox" target="_blank" rel="noopener">https://bugzilla.redhat.com/show_bug.cgi?id=1739415</a></p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://bugs.launchpad.net/ubuntu/+source/firewalld/+bug/1826187">
+  <header class="source">
+      <img src="https://bugs.launchpad.net/@@/launchpad.png" class="site-icon" width="14" height="14">
+
+      <a href="https://bugs.launchpad.net/ubuntu/+source/firewalld/+bug/1826187" target="_blank" rel="noopener">Launchpad</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://bugs.launchpad.net/ubuntu/+source/firewalld/+bug/1826187" target="_blank" rel="noopener">Bug #1826187 “firewalld fails to start: FATAL ERROR: No IPv4 and...” : Bugs :...</a></h3>
+
+  <p>In a clean Ubuntu 19.04 (disco) VM installation, firewalld fails to start:
+
+* firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/lib/systemd/system/firewalld.service; enabled; vendor preset: enabled)
+   Active: inactive...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I am not sure we’d need a complex firewall management tool by default to implement relatively simple.</p>
+<p>Maybe netfilter-persitent would be a simpler alternative.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://packages.debian.org/bullseye/netfilter-persistent">
+  <header class="source">
+
+      <a href="https://packages.debian.org/bullseye/netfilter-persistent" target="_blank" rel="noopener">packages.debian.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://packages.debian.org/bullseye/netfilter-persistent" target="_blank" rel="noopener">Debian -- Details of package netfilter-persistent in bullseye</a></h3>
+
+  <p>boot-time loader for netfilter configuration</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Maybe firewalld is simpler to use than I anticipate.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7">
+  <header class="source">
+      <img src="https://www.digitalocean.com/_next/static/media/android-chrome-192x192.f09059d8.png" class="site-icon" width="192" height="192">
+
+      <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7" target="_blank" rel="noopener">digitalocean.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/345;"><img src="https://www.digitalocean.com/_next/static/media/social-share-default.e8530e9e.jpeg" class="thumbnail" width="690" height="345"></div>
+
+<h3><a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-using-firewalld-on-centos-7" target="_blank" rel="noopener">How To Set Up a Firewall Using FirewallD on CentOS 7  | DigitalOcean</a></h3>
+
+  <p>Firewalld is a complete firewall solution available by default on CentOS and Fedora servers. In this guide, we will cover how to set up a basic firewall for …</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(For CentOS but commands will be similar on Debian.)</p>
+<hr>
+<p>Probably once Kicksecure ISO installer is available implementing enabling a firewall by default for desktop users will be easier. That way, servers already using Kicksecure now wouldn’t loose their SSH connection.</p>
+          <p><a href="https://forums.kicksecure.com/t/consider-firewall-by-default/57/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/consider-firewall-by-default/57/2</link>
+        <pubDate>Thu, 19 May 2022 10:12:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-57-2</guid>
+        <source url="https://forums.kicksecure.com/t/consider-firewall-by-default/57.rss">Consider Firewall by Default</source>
+      </item>
+      <item>
+        <title>Consider Firewall by Default</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Debian now recommend to use nftables instead of the legacy iptables.</p>
+<p>nftables best to be played with through firewalld, As gufw/ufw only for iptables.</p>
+<p>Note: gufw can be used with nftables through backward compatibility iptables-nft but its recommended against and its not good way for the forward future.</p>
+<p>Suggestion (1):</p>
+<p>have nftables and firewalld installed and enabled by default (cause nothing, no extra security by doing that but good packages to have by default).</p>
+<p>Suggestion (2):</p>
+<p>Drop all incoming connections by default (good security practice).</p>
+<p>Since kicksecure is for VMs or Bare metal usage closing all ports isnt bad practice. Only it will effect users who distromorphing a debian installed on server via remote tool like SSH.</p>
+<p>Solutions to this issue:</p>
+<ul>
+<li>
+<p>Kicksecure is not meant for distro-morphing debian on server via remote tool ← thats not the goal of the project, Hence this is not an issue to solve to begin with. (one can use proxmox or VNC to Hypervisor or similar ideas to have kicksecure on outside servers)</p>
+</li>
+<li>
+<p>Open only port 22 which is the default port of SSH and generally no body changing it. (Its debatable to whether its really useful to change it or not let alone its changed by many users)</p>
+</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/consider-firewall-by-default/57/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/consider-firewall-by-default/57/1</link>
+        <pubDate>Wed, 18 May 2022 19:38:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-57-1</guid>
+        <source url="https://forums.kicksecure.com/t/consider-firewall-by-default/57.rss">Consider Firewall by Default</source>
+      </item>
+  </channel>
+</rss>
