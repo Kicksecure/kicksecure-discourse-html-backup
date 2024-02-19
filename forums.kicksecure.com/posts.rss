@@ -5,6 +5,48 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Security-misc breaks LKRG</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>bad news:</p><aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/linux-kernel-runtime-guard-lkrg-linux-kernel-runtime-integrity-checking-and-exploit-detection/8477/67">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/linux-kernel-runtime-guard-lkrg-linux-kernel-runtime-integrity-checking-and-exploit-detection/8477/67" target="_blank" rel="noopener" title="10:19AM - 18 February 2024">Whonix Forum – 18 Feb 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/linux-kernel-runtime-guard-lkrg-linux-kernel-runtime-integrity-checking-and-exploit-detection/8477/67" target="_blank" rel="noopener">Linux Kernel Runtime Guard (LKRG) - Linux Kernel Runtime Integrity Checking...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>news, see this link for more information:  LKRG Deprecation in Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/security-misc-breaks-lkrg/379#post_2</link>
+        <pubDate>Sun, 18 Feb 2024 10:27:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-806</guid>
+      </item>
+      <item>
         <title>Security-misc breaks network connectivity</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>DHCP client = What software does the DHCP request? Network Manager (NM), ifupdown, dhclient, etc.?</p> ]]></description>
@@ -1084,96 +1126,6 @@ Thanks to kivk for the bug report!</span></p>
         <link>https://forums.kicksecure.com/t/updating-kicksecure-to-17-1-1-5-breaks-grub-live/358#post_6</link>
         <pubDate>Fri, 12 Jan 2024 15:19:43 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-759</guid>
-      </item>
-      <item>
-        <title>Updating Kicksecure to 17.1.1.5 breaks grub-live</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>If installing, use:</p>
-<pre><code>sudo apt install --no-install-recommends dracut
-</code></pre>
-<p>This is to avoid installation of a lot superfluous packages. (exim, …)</p>
-<p>Note that dracut installation is a bit risky. There are cases where boot can break.<br>
-(<a href="https://github.com/dracutdevs/dracut/issues/2437" class="inline-onebox">Generic initrd does not work with encrypted root FS without further configuration · Issue #2437 · dracutdevs/dracut · GitHub</a>)<br>
-But this is not likely an issue in a Kicksecure or Whonix VM. Should be fine but better to have a backup beforehand.</p>
-<p>This issue is happening because you upgraded an older build version (which is supposed to be fine, not user error) still based on initramfs-tools, not dracut. Migration to dracut is not “mandatory” at this point.</p>
-<p>So this is a bug which I’ll fix in near future.</p>
-<hr>
-<p>Developer information:</p>
-<p>It’s using a code path which should not be used.<br>
-I added the wrong test:</p>
-<blockquote>
-<p>if dpkg-query --show dracut 1&gt;/dev/null 2&gt;/dev/null ; then</p>
-</blockquote>
-<p>This is “true” even if dracut isn’t installed. Needs to be replaced with a test which checks actual package installation status.</p>
-<p>related source code:<br>
-<a href="https://github.com/Kicksecure/grub-live/blob/master/etc/grub.d/11_linux_live" class="inline-onebox">grub-live/etc/grub.d/11_linux_live at master · Kicksecure/grub-live · GitHub</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/updating-kicksecure-to-17-1-1-5-breaks-grub-live/358#post_5</link>
-        <pubDate>Fri, 12 Jan 2024 11:15:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-758</guid>
-      </item>
-      <item>
-        <title>Updating Kicksecure to 17.1.1.5 breaks grub-live</title>
-        <dc:creator><![CDATA[@kivk]]></dc:creator>
-        <description><![CDATA[ <p>As an experience I tried to install dracut manually on another Kicksecure VM which is yet to be updated, and got the output below:</p>
-<pre><code class="lang-bash">user@localhost ~ [SIGINT]&gt; sudo apt install dracut
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-The following packages were automatically installed and are no longer required:
-  busybox-static initramfs-tools-core klibc-utils libklibc rsync
-Use 'sudo apt autoremove' to remove them.
-The following additional packages will be installed:
-  bsd-mailx dmraid dracut-core exim4-base exim4-config exim4-daemon-light
-  grub-live-dracut kpartx libdmraid1.0.0.rc16 libgnutls-dane0 liblockfile-bin
-  liblockfile1 libpkgconf3 libunbound8 mdadm pigz pkg-config pkgconf
-  pkgconf-bin
-Suggested packages:
-  dracut-network exim4-doc-html | exim4-doc-info eximon4 spf-tools-perl swaks
-The following packages will be REMOVED:
-  grub-live grub-live-initramfs-tools initramfs-tools live-boot
-  live-boot-initramfs-tools live-tools
-The following NEW packages will be installed:
-  bsd-mailx dmraid dracut dracut-core exim4-base exim4-config
-  exim4-daemon-light grub-live-dracut kpartx libdmraid1.0.0.rc16
-  libgnutls-dane0 liblockfile-bin liblockfile1 libpkgconf3 libunbound8 mdadm
-  pigz pkg-config pkgconf pkgconf-bin
-0 upgraded, 20 newly installed, 6 to remove and 0 not upgraded.
-Need to get 4190 kB of archives.
-After this operation, 9427 kB of additional disk space will be used.
-Do you want to continue? [Y/n] 
-</code></pre>
-<p>Since it says it is going to remove <code>grub-live</code> package to install <code>grub-live-dracut</code>, I suspect the updating process did not configure dracut properly somehow.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/updating-kicksecure-to-17-1-1-5-breaks-grub-live/358#post_4</link>
-        <pubDate>Fri, 12 Jan 2024 06:33:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-757</guid>
-      </item>
-      <item>
-        <title>Updating Kicksecure to 17.1.1.5 breaks grub-live</title>
-        <dc:creator><![CDATA[@kivk]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="358">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>This is real Kicksecure, not grub-live on Ubuntu, Debian trixie or something?</p>
-</blockquote>
-</aside>
-<p>Yes, it is grub-live on Kicksecure. Please note the issue is reproduced on Whonix as well.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="358">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Please check you have dracut installed:</p>
-<pre><code class="lang-auto">dpkg -l | grep dracut
-</code></pre>
-</blockquote>
-</aside>
-<p>Interestingly, it was not found to have been installed. Installing it manually fixed the issue.</p>
-<p>On the previous versions I have never manually deinstalled it, so I am not sure how it went wrong.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/updating-kicksecure-to-17-1-1-5-breaks-grub-live/358#post_3</link>
-        <pubDate>Fri, 12 Jan 2024 06:25:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-756</guid>
       </item>
   </channel>
 </rss>
