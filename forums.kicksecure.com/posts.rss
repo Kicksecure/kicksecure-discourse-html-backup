@@ -5,6 +5,171 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.</p>
+<ul>
+<li>GRUB2 needs a very long time to decrypt the root disk.</li>
+<li>Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.</li>
+<li>And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivative and also break SecureBoot.)</li>
+</ul>
+<p>This should be no security issue. This is what most distributions are using. The kernel image is not secret. Unencrypted /boot that Debian (CLI looking) installer (“DI”) is using that too. Encrypted /boot is simply not ready due to these upstream bugs which will very most likely not be resolved anytime soon.</p>
+<ul>
+<li><a href="https://github.com/calamares/calamares/issues/1203" class="inline-onebox">Encryption does not work well with non-QWERTY keyboards · Issue #1203 · calamares/calamares · GitHub</a></li>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817</a></li>
+<li><a href="https://savannah.gnu.org/bugs/index.php?65113" class="inline-onebox">GNU GRUB - Bugs: bug #65113, Add All Keyboard Layouts and... [Savannah]</a></li>
+</ul>
+<p>TODO:</p>
+<ul>
+<li>Find a distribution that uses Calamares and implemented unencrypted /boot.
+<ul>
+<li>Maybe Ubuntu? Check
+<ul>
+<li>
+<pre><code>git clone https://git.launchpad.net/~ubuntu-qt-code/+git/calamares-settings-ubuntu
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Linux Mint?</li>
+<li>Elementary OS?</li>
+</ul>
+</li>
+<li>Copy over the Calamares config files to Kicksecure (if permissible by the license, which is probably the case).</li>
+<li>Change Kicksecure Calamares Installer to the usual unencrypted /boot partition.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 14:05:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-890</guid>
+      </item>
+      <item>
+        <title>Install to system desktop icon: maximize window</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>The window should be maximized after starting.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 13:52:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-889</guid>
+      </item>
+      <item>
+        <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Does not have any known bad effects but is an optical issue that many users will report, therefore needs to be fixed.</p>
+<pre><code class="lang-auto">Mar 12 12:51:24 localhost systemd[1]: run-initramfs-squashfs.mount: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Mounting sysroot.mount - /sysroot...
+Mar 12 12:51:24 localhost mount[545]: mount: /sysroot: special device LiveOS_rootfs does not exist.
+Mar 12 12:51:24 localhost mount[545]:        dmesg(1) may have more information after failed mount system call.
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Mount process exited, code=exited, status=32/n/a
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Failed with result 'exit-code'.
+Mar 12 12:51:24 localhost systemd[1]: Failed to mount sysroot.mount - /sysroot.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-root-fs.target - Initrd Root File System.
+Mar 12 12:51:24 localhost systemd[1]: Starting initrd-parse-etc.service - Mountpoints Configured in the Real Root...
+Mar 12 12:51:24 localhost kernel: overlayfs: failed to resolve '/run/overlayfs': -2
+Mar 12 12:51:24 localhost systemd[1]: initrd-parse-etc.service: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Finished initrd-parse-etc.service - Mountpoints Configured in the Real Root.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-fs.target - Initrd File Systems.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd.target - Initrd Default Target.
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 13:50:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888</guid>
+      </item>
+      <item>
+        <title>Add ISO and version number to boot menu of ISO</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p><a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/default/grub.d/40_live-config-dist-cfg" class="inline-onebox">live-config-dist/etc/default/grub.d/40_live-config-dist-cfg at master · Kicksecure/live-config-dist · GitHub</a> should do that but that does not work.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 13:48:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-887</guid>
+      </item>
+      <item>
+        <title>Calamares Installer created /etc/fstab</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This is the what is shown if the Kicksecure ISO installer was used to install Kicksecure on an internal harddrive.</p>
+<pre><code>cat /etc/fstab
+</code></pre>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=4B6E-AD38                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-c17a9191-d3e5-45c6-b14a-7b3acfce8d3b /              ext4    defaults,noatime 0 1
+/dev/mapper/luks-693dceb4-323e-474e-955b-b51d2e1772a7 swap           swap    defaults,noatime 0 0
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 13:45:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-886</guid>
+      </item>
+      <item>
+        <title>Meta Packages: Kicksecure Desktop versus Kicksecure Server</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p><a href="https://github.com/Kicksecure/kicksecure-meta-packages" class="inline-onebox">GitHub - Kicksecure/kicksecure-meta-packages</a> needs improvements:</p>
+<ul>
+<li><code>kicksecure-cli</code> - keep existing package as is</li>
+<li><code>kicksecure-cli-server</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code>
+<ul>
+<li>includes firewall that by default opens port 22 (SSH’s default port)</li>
+</ul>
+</li>
+<li>security-misc-server [no MAC address randomization]</li>
+</ul>
+</li>
+<li><code>kicksecure-cli-desktop</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code> - new package to be created
+<ul>
+<li>Comes with all ports closed by default.</li>
+</ul>
+</li>
+<li><code>Depends: security-misc-desktop</code> - new package to be created
+<ul>
+<li>Might come with MAC address randomization. → <a href="https://github.com/Kicksecure/security-misc/issues/184">ticket</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kicksecure-xfce</code> - keep existing package as is</li>
+<li><code>kicksecure-xfce-server</code> [Will not be created.]</li>
+<li><code>kicksecure-xfce-desktop</code> - new package to be created
+<ul>
+<li><code>Depends: kicksecure-cli-desktop</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Debian_Packages" class="inline-onebox">Debian Packages - Kicksecure</a></li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a></li>
+<li><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415#post_1</link>
+        <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-885</guid>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>While Kicksecure comes with no open ports by default, a firewall would be useful to protect the user from unwanted, unexpected ports opened by third-party software.</p>
+<p>How this could be structured:</p>
+<ul>
+<li>kicksecure-shared-firewall</li>
+<li>kicksecure-desktop-firewall [block all ports by default]</li>
+<li>kicksecure-server-firewall [open port 22, which is SSH’s default port by default]
+<ul>
+<li>Maybe the server firewall should come last. If ever. Much later. Maybe not at all. Maybe server operators should take care of a firewall themselves.</li>
+</ul>
+</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_4</link>
+        <pubDate>Mon, 18 Mar 2024 13:21:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-884</guid>
+      </item>
+      <item>
         <title>How to enable RDMA?</title>
         <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
         <description><![CDATA[ <p>Hi,<br>
@@ -867,143 +1032,6 @@ nfs ports 2049 TCP versions 3 &amp; 4, and a nfs_acl on 2049 for version 3</p>
         <link>https://forums.kicksecure.com/t/live-mode-menu-does-not-appear-after-clean-install/389#post_7</link>
         <pubDate>Mon, 04 Mar 2024 17:08:01 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-841</guid>
-      </item>
-      <item>
-        <title>Live mode menu does not appear after clean install</title>
-        <dc:creator><![CDATA[@discuspi]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>sudo apt install --no-install-recommends dracut<br>
-[sudo] password for user:<br>
-Sorry, try again.<br>
-/usr/libexec/security-misc/pam-info: WARNING: 1 failed login attempts for user_name ‘user’.<br>
-Login will be blocked after 50 attempts.<br>
-You have 49 more attempts before unlock procedure is required.</p>
-<p>[sudo] password for user:<br>
-Reading package lists… Done<br>
-Building dependency tree… Done<br>
-Reading state information… Done<br>
-The following packages were automatically installed and are no longer required:<br>
-initramfs-tools-core klibc-utils libklibc<br>
-Use ‘sudo apt autoremove’ to remove them.<br>
-The following additional packages will be installed:<br>
-dracut-core kpartx<br>
-Suggested packages:<br>
-dracut-network<br>
-Recommended packages:<br>
-dmraid pigz pkg-config<br>
-The following packages will be REMOVED:<br>
-grub-live grub-live-initramfs-tools initramfs-tools kicksecure-shared-host-xfce kicksecure-xfce-host live-boot live-boot-initramfs-tools live-tools<br>
-The following NEW packages will be installed:<br>
-dracut dracut-core kpartx<br>
-0 upgraded, 3 newly installed, 8 to remove and 0 not upgraded.<br>
-Need to get 357 kB of archives.<br>
-After this operation, 891 kB of additional disk space will be used.<br>
-Do you want to continue? [Y/n] sudo apt install --no-install-recommends dracut</p>
-</blockquote>
-<p>should I use this as in the branch you specified?</p>
-<blockquote>
-<p>sudo apt install --no-install-recommends dracut</p>
-</blockquote>
-<p>I am confused by this:</p>
-<blockquote>
-<p>The following packages will be REMOVED:<br>
-grub-lilo grub-live-initramfs-tools initramfs-tools kicksecure-shared-host-xfce kicksecure-xfce-host live-boot live-boot-initramfs-tools live-tools</p>
-</blockquote>
-<p>should I run this command?</p>
-<p>or would it be better to install dracut<br>
-first and then do debian morphing in kicksecure?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-menu-does-not-appear-after-clean-install/389#post_6</link>
-        <pubDate>Mon, 04 Mar 2024 16:46:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-840</guid>
-      </item>
-      <item>
-        <title>Live mode menu does not appear after clean install</title>
-        <dc:creator><![CDATA[@discuspi]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>dpkg -l | grep dracut</p>
-<p>zsh: done       dpkg -l |<br>
-zsh: exit 1     grep --color=auto dracut</p>
-<p>ls -la /usr/lib/dracut/modules.d/90overlay-root/overlay-mount.sh</p>
-<p>ls: cannot access ‘/usr/lib/dracut/modules.d/90overlay-root/overlay-mount.sh’: No such file or directory<br>
-zsh: exit 2     ls -hN --color=auto --group-directories-first -la</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-menu-does-not-appear-after-clean-install/389#post_5</link>
-        <pubDate>Mon, 04 Mar 2024 16:39:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-839</guid>
-      </item>
-      <item>
-        <title>Can we keep packaging LKRG?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>That was done before but it’s too maintenance intensive, hence given up on it and deprecated.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-we-keep-packaging-lkrg/385#post_6</link>
-        <pubDate>Mon, 04 Mar 2024 14:37:37 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-836</guid>
-      </item>
-      <item>
-        <title>Hardened kernel update inquiry</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>There are volunteers, contributors. See:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contributors">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Contributors" target="_blank" rel="noopener" title="08:33AM - 04 October 2023">Kicksecure – 4 Oct 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/7/7d/Tester234234.jpg?version=6926217badacc076df92e3e2d5823102" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Contributors" target="_blank" rel="noopener">Contributors and Authorship</a></h3>
-
-  <p>Kicksecure Authorship. Code Contributors, Artistic Contributors, Other Contributors</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>But nobody is working on that.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/hardened-kernel-update-inquiry/387#post_4</link>
-        <pubDate>Mon, 04 Mar 2024 14:35:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-837</guid>
-      </item>
-      <item>
-        <title>Hardened kernel update inquiry</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="387">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>No maintainer</p>
-</blockquote>
-</aside>
-<p>Are you the only one developer of this project?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/hardened-kernel-update-inquiry/387#post_3</link>
-        <pubDate>Mon, 04 Mar 2024 13:50:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-835</guid>
-      </item>
-      <item>
-        <title>Can we keep packaging LKRG?</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="385">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>That was the case for a long time already. But git isn’t signed:</p>
-</blockquote>
-</aside>
-<p>Can we just forget about their git and just pack their tar package from offical website? At least they sign their latest v0.9.8 in tar package on official website.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-we-keep-packaging-lkrg/385#post_5</link>
-        <pubDate>Mon, 04 Mar 2024 13:50:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-834</guid>
       </item>
   </channel>
 </rss>

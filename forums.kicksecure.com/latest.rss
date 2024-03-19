@@ -5,8 +5,209 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Thu, 14 Mar 2024 18:00:34 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 18 Mar 2024 14:05:24 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.</p>
+<ul>
+<li>GRUB2 needs a very long time to decrypt the root disk.</li>
+<li>Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.</li>
+<li>And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivative and also break SecureBoot.)</li>
+</ul>
+<p>This should be no security issue. This is what most distributions are using. The kernel image is not secret. Unencrypted /boot that Debian (CLI looking) installer (“DI”) is using that too. Encrypted /boot is simply not ready due to these upstream bugs which will very most likely not be resolved anytime soon.</p>
+<ul>
+<li><a href="https://github.com/calamares/calamares/issues/1203" class="inline-onebox">Encryption does not work well with non-QWERTY keyboards · Issue #1203 · calamares/calamares · GitHub</a></li>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817</a></li>
+<li><a href="https://savannah.gnu.org/bugs/index.php?65113" class="inline-onebox">GNU GRUB - Bugs: bug #65113, Add All Keyboard Layouts and... [Savannah]</a></li>
+</ul>
+<p>TODO:</p>
+<ul>
+<li>Find a distribution that uses Calamares and implemented unencrypted /boot.
+<ul>
+<li>Maybe Ubuntu? Check
+<ul>
+<li>
+<pre><code>git clone https://git.launchpad.net/~ubuntu-qt-code/+git/calamares-settings-ubuntu
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Linux Mint?</li>
+<li>Elementary OS?</li>
+</ul>
+</li>
+<li>Copy over the Calamares config files to Kicksecure (if permissible by the license, which is probably the case).</li>
+<li>Change Kicksecure Calamares Installer to the usual unencrypted /boot partition.</li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420</link>
+          <pubDate>Mon, 18 Mar 2024 14:05:24 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-420</guid>
+          <source url="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420.rss">ISO: Change to unencrypted /boot if using Full Disk Encryption</source>
+        </item>
+        <item>
+          <title>Install to system desktop icon: maximize window</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>The window should be maximized after starting.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419</link>
+          <pubDate>Mon, 18 Mar 2024 13:52:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-419</guid>
+          <source url="https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419.rss">Install to system desktop icon: maximize window</source>
+        </item>
+        <item>
+          <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Does not have any known bad effects but is an optical issue that many users will report, therefore needs to be fixed.</p>
+<pre><code class="lang-auto">Mar 12 12:51:24 localhost systemd[1]: run-initramfs-squashfs.mount: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Mounting sysroot.mount - /sysroot...
+Mar 12 12:51:24 localhost mount[545]: mount: /sysroot: special device LiveOS_rootfs does not exist.
+Mar 12 12:51:24 localhost mount[545]:        dmesg(1) may have more information after failed mount system call.
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Mount process exited, code=exited, status=32/n/a
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Failed with result 'exit-code'.
+Mar 12 12:51:24 localhost systemd[1]: Failed to mount sysroot.mount - /sysroot.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-root-fs.target - Initrd Root File System.
+Mar 12 12:51:24 localhost systemd[1]: Starting initrd-parse-etc.service - Mountpoints Configured in the Real Root...
+Mar 12 12:51:24 localhost kernel: overlayfs: failed to resolve '/run/overlayfs': -2
+Mar 12 12:51:24 localhost systemd[1]: initrd-parse-etc.service: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Finished initrd-parse-etc.service - Mountpoints Configured in the Real Root.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-fs.target - Initrd File Systems.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd.target - Initrd Default Target.
+</code></pre>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418</link>
+          <pubDate>Mon, 18 Mar 2024 13:50:50 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-418</guid>
+          <source url="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418.rss">ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</source>
+        </item>
+        <item>
+          <title>Add ISO and version number to boot menu of ISO</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/default/grub.d/40_live-config-dist-cfg" class="inline-onebox">live-config-dist/etc/default/grub.d/40_live-config-dist-cfg at master · Kicksecure/live-config-dist · GitHub</a> should do that but that does not work.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417</link>
+          <pubDate>Mon, 18 Mar 2024 13:48:42 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-417</guid>
+          <source url="https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417.rss">Add ISO and version number to boot menu of ISO</source>
+        </item>
+        <item>
+          <title>Calamares Installer created /etc/fstab</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>This is the what is shown if the Kicksecure ISO installer was used to install Kicksecure on an internal harddrive.</p>
+<pre><code>cat /etc/fstab
+</code></pre>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=4B6E-AD38                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-c17a9191-d3e5-45c6-b14a-7b3acfce8d3b /              ext4    defaults,noatime 0 1
+/dev/mapper/luks-693dceb4-323e-474e-955b-b51d2e1772a7 swap           swap    defaults,noatime 0 0
+</code></pre>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416</link>
+          <pubDate>Mon, 18 Mar 2024 13:45:20 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-416</guid>
+          <source url="https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416.rss">Calamares Installer created /etc/fstab</source>
+        </item>
+        <item>
+          <title>Meta Packages: Kicksecure Desktop versus Kicksecure Server</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://github.com/Kicksecure/kicksecure-meta-packages" class="inline-onebox">GitHub - Kicksecure/kicksecure-meta-packages</a> needs improvements:</p>
+<ul>
+<li><code>kicksecure-cli</code> - keep existing package as is</li>
+<li><code>kicksecure-cli-server</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code>
+<ul>
+<li>includes firewall that by default opens port 22 (SSH’s default port)</li>
+</ul>
+</li>
+<li>security-misc-server [no MAC address randomization]</li>
+</ul>
+</li>
+<li><code>kicksecure-cli-desktop</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code> - new package to be created
+<ul>
+<li>Comes with all ports closed by default.</li>
+</ul>
+</li>
+<li><code>Depends: security-misc-desktop</code> - new package to be created
+<ul>
+<li>Might come with MAC address randomization. → <a href="https://github.com/Kicksecure/security-misc/issues/184">ticket</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kicksecure-xfce</code> - keep existing package as is</li>
+<li><code>kicksecure-xfce-server</code> [Will not be created.]</li>
+<li><code>kicksecure-xfce-desktop</code> - new package to be created
+<ul>
+<li><code>Depends: kicksecure-cli-desktop</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Debian_Packages" class="inline-onebox">Debian Packages - Kicksecure</a></li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a></li>
+<li><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415</link>
+          <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-415</guid>
+          <source url="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415.rss">Meta Packages: Kicksecure Desktop versus Kicksecure Server</source>
+        </item>
         <item>
           <title>How to enable RDMA?</title>
           <dc:creator><![CDATA[SteveK1978]]></dc:creator>
@@ -507,7 +708,7 @@ How do I fix it?</p>
           <category>Development</category>
           <description><![CDATA[
             <p>What is the Firewall comes with Kicksecure on CLI? <code>ufw</code> was not included anywhere in any metapackage.</p>
-            <p><small>3 posts - 2 participants</small></p>
+            <p><small>4 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/kicksecure-firewall/378</link>
@@ -997,323 +1198,6 @@ I’d like to eventually resume getting the kicksecure updates. Any advice?</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-350</guid>
           <source url="https://forums.kicksecure.com/t/openvpn-cant-connect-after-the-recent-kicksecure-updates/350.rss">OpenVPN can&#39;t connect after the recent Kicksecure updates</source>
-        </item>
-        <item>
-          <title>Logical CPU cores in virt-manager halved after installing kicksecure on host</title>
-          <dc:creator><![CDATA[whkicks]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>I have many VM’s but the amount of logical CPU cores decreased after installing Kicksecure on host. Now I can give my VM’s less CPU. After reversing the boot parameters in grub, the cores are back. But I don’t want all boot parameters disabled. Which exact boot parameter is decreasing the logical CPU cores in virt-manager?</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/logical-cpu-cores-in-virt-manager-halved-after-installing-kicksecure-on-host/348">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/logical-cpu-cores-in-virt-manager-halved-after-installing-kicksecure-on-host/348</link>
-          <pubDate>Thu, 28 Dec 2023 18:15:44 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-348</guid>
-          <source url="https://forums.kicksecure.com/t/logical-cpu-cores-in-virt-manager-halved-after-installing-kicksecure-on-host/348.rss">Logical CPU cores in virt-manager halved after installing kicksecure on host</source>
-        </item>
-        <item>
-          <title>Passwd don&#39;t work anymore after the latest kicksecure update</title>
-          <dc:creator><![CDATA[whkicks]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Changing passwd with the command ‘passwd’ as user doesn’t work after updating to the latest Kicksecure. Maybe because of the permission hardening? Not sure. I didn’t look into it yet. Not here for help. Reporting the issue.</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/passwd-dont-work-anymore-after-the-latest-kicksecure-update/347">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/passwd-dont-work-anymore-after-the-latest-kicksecure-update/347</link>
-          <pubDate>Mon, 25 Dec 2023 22:14:51 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-347</guid>
-          <source url="https://forums.kicksecure.com/t/passwd-dont-work-anymore-after-the-latest-kicksecure-update/347.rss">Passwd don&#39;t work anymore after the latest kicksecure update</source>
-        </item>
-        <item>
-          <title>Kicksecure 17.1.0.2 - for VirtualBox - Point Release!</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>News</category>
-          <description><![CDATA[
-            <p>Download Kicksecure for VirtualBox:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/VirtualBox">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=1" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/VirtualBox" target="_blank" rel="noopener" title="07:45PM - 01 October 2023">Kicksecure – 1 Oct 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <img src="https://www.kicksecure.com/w/images/d/d5/Virtualbox_logo.png?version=14daeaa753e3a6f05cb2ff44d068dac8" class="thumbnail onebox-avatar" width="500" height="500">
-
-<h3><a href="https://www.kicksecure.com/wiki/VirtualBox" target="_blank" rel="noopener">Kicksecure for Windows, macOS, Linux inside VirtualBox</a></h3>
-
-  <p>Getting started with Kicksecure in 4 simple steps.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<p>This is a point release.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Point_Release">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=1" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener" title="07:41PM - 01 October 2023">Kicksecure – 1 Oct 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:332/500;"><img src="https://www.kicksecure.com/w/images/7/73/Pointrelease213123.jpg?version=b20065b9417eb9cb83a80ae275b46dbc" class="thumbnail" width="332" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener">Point Release</a></h3>
-
-  <p>What is a Point Release?</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<h1><a name="upgrade-1" class="anchor" href="https://forums.kicksecure.com#upgrade-1"></a>Upgrade</h1>
-<p>Alternatively, in-place release upgrade is possible upgrade using <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
-<hr>
-<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
-<hr>
-<p>Please Donate!</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=1" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="12:29PM - 25 March 2023">Kicksecure – 25 Mar 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" width="640" height="432"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
-
-  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<p>Please Contribute!</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=1" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="08:33AM - 04 October 2023">Kicksecure – 4 Oct 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" width="483" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
-
-  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<h1><a name="major-changes-2" class="anchor" href="https://forums.kicksecure.com#major-changes-2"></a>Major Changes</h1>
-<ul>
-<li>improved and enable <a href="https://www.kicksecure.com/wiki/SUID_Disabler_and_Permission_Hardener" class="inline-onebox">SUID Disabler and Permission Hardener</a> by default</li>
-<li>improved security of temporary files by <a href="https://github.com/Kicksecure/security-misc/pull/147">libpam-tmpdir</a> integration</li>
-<li>fixed <a href="https://forums.whonix.org/t/apparmor-profile-torbrowser-allows-access-to-user-home-folder/16866" class="inline-onebox">apparmor-profile-torbrowser allows access to user home folder - AppArmor - Whonix Forum</a></li>
-<li>Wayland
-<ul>
-<li><a href="https://forums.whonix.org/t/make-sure-whonix-tools-support-wayland/12324/13">Wayland compatibility</a> of project’s tools (but not port to wayland yet)</li>
-<li>towards <a href="https://forums.whonix.org/t/port-to-wayland/17380">port to Wayland</a></li>
-</ul>
-</li>
-<li><a href="https://forums.whonix.org/t/sysrq-magic-sysrq-key/8079">disable sysreq</a> by default</li>
-<li><a href="https://forums.whonix.org/t/port-from-pulseaudio-to-pipewire-for-audio-support/16879">port from pulseaudio to pipewire</a></li>
-<li>refactoring environment variables loading mechanism</li>
-<li>updated sdwdate onion time sources  (Thanks to TNT BOM BOM!)</li>
-<li>research towards secure mount options by default (Thanks to monsieuremre!)</li>
-<li>harden-module-loading.service (experimental, only usable by servers) (Thanks to monsieuremre!)</li>
-<li>systemcheck: add check to see if qubes-updates-proxy.service is running in sys-whonix</li>
-<li>permission hardening:
-<ul>
-<li>set default umask to 027 (using pam-umask) which mechanism
-<ul>
-<li><code>owner</code> + <code>group</code> are allowed reading and writing by default (but not <code>others</code>)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>disable sysrq (Thanks to monsieuremre!)</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/146">Thunderbird hardening</a> (Thanks to monsieuremre!)</li>
-<li>re-enable bluetooth by default, <a href="https://github.com/Kicksecure/security-misc/pull/145">bluetooth hardening</a>, time-out bluetooth discoverability after 30 seconds after boot (Thanks to monsieuremre!)</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/145">enable Network Manager’s MAC address anonymization</a> (Thanks to monsieuremre!)</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/145">enable Network Manager’s IPv6 privacy extensions</a> (Thanks to monsieuremre!)</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/135" class="inline-onebox">Kernel hardening fix by monsieuremre · Pull Request #135 · Kicksecure/security-misc · GitHub</a> <code>fs.protected_fifos=2</code> (Thanks to monsieuremre!)</li>
-<li>grml-debootstrap (build tool used by derivative-maker) contributions
-<ul>
-<li>strict error handling</li>
-<li>ARM64 support (can greatly simplify ports to ARM64)</li>
-<li>VM EFI support</li>
-</ul>
-</li>
-<li>remove apparmor-profile-everything (development stalled), towards its replacement <a href="https://forums.whonix.org/t/apparmor-d-full-set-of-apparmor-profiles-1500-profiles/17389"><code>apparmor.d</code> - Full set of AppArmor profiles (~ 1500 profiles)</a> (<a href="https://github.com/roddhjav/apparmor.d/issues/252" class="inline-onebox">Full system policy · Issue #252 · roddhjav/apparmor.d · GitHub</a>) (Thanks to <a href="https://github.com/monsieuremre">monsieuremre</a> and <a href="https://github.com/roddhjav">roddhjav</a>!)</li>
-<li>enabled CodeQL for all project repositories with non-trivial C code</li>
-<li><a href="https://forums.whonix.org/t/license-change-to-agplv3/17455">license change to AGPLv3+</a></li>
-<li>refactoring environment variables loading mechanism</li>
-<li>correct signal handling in python based applications (allow termination through ctrl + c (signal sigterm))</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/176">add <code>amd_iommu=force_enable</code></a> (Thanks  to monsieuremre!)</li>
-<li><a href="https://github.com/Kicksecure/security-misc/pull/167">add banner with legal keywords recommended by lynis</a> to <code>/etc/issue.d</code> folder (Thanks  to monsieuremre!)</li>
-<li><a href="https://phabricator.whonix.org/T927">port to /etc/apparmor.d/abstractions/base.d</a></li>
-<li>CI improvements</li>
-</ul>
-<hr>
-<h1><a name="full-difference-of-all-changes-3" class="anchor" href="https://forums.kicksecure.com#full-difference-of-all-changes-3"></a>Full difference of all changes</h1>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/Whonix/derivative-maker/compare/17.0.4.5-developers-only...17.1.0.2-developers-only">
-  <header class="source">
-      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
-
-      <a href="https://github.com/Whonix/derivative-maker/compare/17.0.4.5-developers-only...17.1.0.2-developers-only" target="_blank" rel="noopener">GitHub</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/345;"><img src="https://opengraph.githubassets.com/9615b34b5f72fb900b555ed6388550f6fffa9f877c4ba2eb1ad653408283487b/Whonix/derivative-maker" class="thumbnail" width="690" height="345"></div>
-
-<h3><a href="https://github.com/Whonix/derivative-maker/compare/17.0.4.5-developers-only...17.1.0.2-developers-only" target="_blank" rel="noopener">Comparing 17.0.4.5-developers-only...17.1.0.2-developers-only ·...</a></h3>
-
-  <p>https://www.whonix.org/wiki/Imprint. Contribute to Whonix/derivative-maker development by creating an account on GitHub.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/kicksecure-17-1-0-2-for-virtualbox-point-release/340">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/kicksecure-17-1-0-2-for-virtualbox-point-release/340</link>
-          <pubDate>Fri, 22 Dec 2023 17:34:07 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-340</guid>
-          <source url="https://forums.kicksecure.com/t/kicksecure-17-1-0-2-for-virtualbox-point-release/340.rss">Kicksecure 17.1.0.2 - for VirtualBox - Point Release!</source>
-        </item>
-        <item>
-          <title>NetworkManager hardening configs of SecurityMisc are missing on Kicksecure qcow2 image?</title>
-          <dc:creator><![CDATA[whkicks]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>I downloaded the latest KickSecure <code>/libvirt/17.0.3.0/Kicksecure-Xfce-17.0.3.0.Intel_AMD64.qcow2.libvirt.xz</code> and did a full upgrade. The files below are missing while I got the newest SecurityMisc installed.</p>
-<p>/usr/lib/NetworkManager/conf.d/80_ipv6-privacy.conf<br>
-/usr/lib/NetworkManager/conf.d/80_randomize-mac.conf<br>
-/usr/lib/systemd/networkd.conf.d/80_ipv6-privacy-extensions.conf</p>
-<p>Are these files supposed to be missing when Kicksecure is installed in a VM?</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/networkmanager-hardening-configs-of-securitymisc-are-missing-on-kicksecure-qcow2-image/343">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/networkmanager-hardening-configs-of-securitymisc-are-missing-on-kicksecure-qcow2-image/343</link>
-          <pubDate>Wed, 20 Dec 2023 16:44:53 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-343</guid>
-          <source url="https://forums.kicksecure.com/t/networkmanager-hardening-configs-of-securitymisc-are-missing-on-kicksecure-qcow2-image/343.rss">NetworkManager hardening configs of SecurityMisc are missing on Kicksecure qcow2 image?</source>
-        </item>
-        <item>
-          <title>Error at dkms status for tirdad and lkrg - WARNING! Diff between built and installed module!</title>
-          <dc:creator><![CDATA[whkicks]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p><code>https://www.kicksecure.com/wiki/Linux_Kernel_Runtime_Guard_LKRG#dkms_status</code></p>
-<p><code>sudo dkms status</code> should include<br>
-<code>lkrg, 0.7, 4.19.0-6-amd64, x86_64: installed</code></p>
-<p>But it gives me</p>
-<pre><code class="lang-auto">$ sudo dkms status
-Deprecated feature: REMAKE_INITRD (/var/lib/dkms/lkrg/0.9.6.1/source/dkms.conf)
-lkrg/0.9.6.1, 6.1.0-16-amd64, x86_64: installed (WARNING! Diff between built and installed module!)
-tirdad/0.1, 6.1.0-16-amd64, x86_64: installed (WARNING! Diff between built and installed module!)
-</code></pre>
-<p>Is this ok? Modules are installed from the repo</p>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/error-at-dkms-status-for-tirdad-and-lkrg-warning-diff-between-built-and-installed-module/342">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/error-at-dkms-status-for-tirdad-and-lkrg-warning-diff-between-built-and-installed-module/342</link>
-          <pubDate>Sat, 16 Dec 2023 00:51:23 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-342</guid>
-          <source url="https://forums.kicksecure.com/t/error-at-dkms-status-for-tirdad-and-lkrg-warning-diff-between-built-and-installed-module/342.rss">Error at dkms status for tirdad and lkrg - WARNING! Diff between built and installed module!</source>
-        </item>
-        <item>
-          <title>Live mode VM Virtualbox</title>
-          <dc:creator><![CDATA[johndoeF6nlb7oq89900]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hello Kicksecure team,</p>
-<p>I noticed that live-mode in a VM virtualbox is not functionning as intented from my personnal setup. I’m using Ubuntu as Host and Kicksecure is installed in a VM (2 cases: VM import from Kicksecure + Debian cli minimal install with Kicksecure installed manually on it).</p>
-<p>*Here is the issue (for both cases)<br>
-1/ Boot in live mode<br>
-2/ Create a folder + texte file in /home/user and save it.<br>
-3/ Shutdown the VM<br>
-4/ Reboot in live mode<br>
-5/ The folder &amp; files are still there.</p>
-<p>*Some other infos:<br>
-1/ I did this multiple times with the same result<br>
-2/ I also completely shutdown my ubuntu host.<br>
-3/ Synaptic and ClamAV packages installed.</p>
-<p>*Is it then an issue from me or are you able to replicate this?</p>
-<p>Thanks</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/live-mode-vm-virtualbox/339">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/live-mode-vm-virtualbox/339</link>
-          <pubDate>Wed, 29 Nov 2023 15:13:31 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-339</guid>
-          <source url="https://forums.kicksecure.com/t/live-mode-vm-virtualbox/339.rss">Live mode VM Virtualbox</source>
         </item>
   </channel>
 </rss>

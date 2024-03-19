@@ -5,8 +5,209 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Wed, 28 Feb 2024 17:58:55 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 18 Mar 2024 14:05:24 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.</p>
+<ul>
+<li>GRUB2 needs a very long time to decrypt the root disk.</li>
+<li>Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.</li>
+<li>And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivative and also break SecureBoot.)</li>
+</ul>
+<p>This should be no security issue. This is what most distributions are using. The kernel image is not secret. Unencrypted /boot that Debian (CLI looking) installer (“DI”) is using that too. Encrypted /boot is simply not ready due to these upstream bugs which will very most likely not be resolved anytime soon.</p>
+<ul>
+<li><a href="https://github.com/calamares/calamares/issues/1203" class="inline-onebox">Encryption does not work well with non-QWERTY keyboards · Issue #1203 · calamares/calamares · GitHub</a></li>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817</a></li>
+<li><a href="https://savannah.gnu.org/bugs/index.php?65113" class="inline-onebox">GNU GRUB - Bugs: bug #65113, Add All Keyboard Layouts and... [Savannah]</a></li>
+</ul>
+<p>TODO:</p>
+<ul>
+<li>Find a distribution that uses Calamares and implemented unencrypted /boot.
+<ul>
+<li>Maybe Ubuntu? Check
+<ul>
+<li>
+<pre><code>git clone https://git.launchpad.net/~ubuntu-qt-code/+git/calamares-settings-ubuntu
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Linux Mint?</li>
+<li>Elementary OS?</li>
+</ul>
+</li>
+<li>Copy over the Calamares config files to Kicksecure (if permissible by the license, which is probably the case).</li>
+<li>Change Kicksecure Calamares Installer to the usual unencrypted /boot partition.</li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420</link>
+          <pubDate>Mon, 18 Mar 2024 14:05:24 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-420</guid>
+          <source url="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420.rss">ISO: Change to unencrypted /boot if using Full Disk Encryption</source>
+        </item>
+        <item>
+          <title>Install to system desktop icon: maximize window</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>The window should be maximized after starting.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419</link>
+          <pubDate>Mon, 18 Mar 2024 13:52:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-419</guid>
+          <source url="https://forums.kicksecure.com/t/install-to-system-desktop-icon-maximize-window/419.rss">Install to system desktop icon: maximize window</source>
+        </item>
+        <item>
+          <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Does not have any known bad effects but is an optical issue that many users will report, therefore needs to be fixed.</p>
+<pre><code class="lang-auto">Mar 12 12:51:24 localhost systemd[1]: run-initramfs-squashfs.mount: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Mounting sysroot.mount - /sysroot...
+Mar 12 12:51:24 localhost mount[545]: mount: /sysroot: special device LiveOS_rootfs does not exist.
+Mar 12 12:51:24 localhost mount[545]:        dmesg(1) may have more information after failed mount system call.
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Mount process exited, code=exited, status=32/n/a
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Failed with result 'exit-code'.
+Mar 12 12:51:24 localhost systemd[1]: Failed to mount sysroot.mount - /sysroot.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-root-fs.target - Initrd Root File System.
+Mar 12 12:51:24 localhost systemd[1]: Starting initrd-parse-etc.service - Mountpoints Configured in the Real Root...
+Mar 12 12:51:24 localhost kernel: overlayfs: failed to resolve '/run/overlayfs': -2
+Mar 12 12:51:24 localhost systemd[1]: initrd-parse-etc.service: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Finished initrd-parse-etc.service - Mountpoints Configured in the Real Root.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-fs.target - Initrd File Systems.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd.target - Initrd Default Target.
+</code></pre>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418</link>
+          <pubDate>Mon, 18 Mar 2024 13:50:50 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-418</guid>
+          <source url="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418.rss">ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</source>
+        </item>
+        <item>
+          <title>Add ISO and version number to boot menu of ISO</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/default/grub.d/40_live-config-dist-cfg" class="inline-onebox">live-config-dist/etc/default/grub.d/40_live-config-dist-cfg at master · Kicksecure/live-config-dist · GitHub</a> should do that but that does not work.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417</link>
+          <pubDate>Mon, 18 Mar 2024 13:48:42 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-417</guid>
+          <source url="https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417.rss">Add ISO and version number to boot menu of ISO</source>
+        </item>
+        <item>
+          <title>Calamares Installer created /etc/fstab</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>This is the what is shown if the Kicksecure ISO installer was used to install Kicksecure on an internal harddrive.</p>
+<pre><code>cat /etc/fstab
+</code></pre>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=4B6E-AD38                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-c17a9191-d3e5-45c6-b14a-7b3acfce8d3b /              ext4    defaults,noatime 0 1
+/dev/mapper/luks-693dceb4-323e-474e-955b-b51d2e1772a7 swap           swap    defaults,noatime 0 0
+</code></pre>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416</link>
+          <pubDate>Mon, 18 Mar 2024 13:45:20 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-416</guid>
+          <source url="https://forums.kicksecure.com/t/calamares-installer-created-etc-fstab/416.rss">Calamares Installer created /etc/fstab</source>
+        </item>
+        <item>
+          <title>Meta Packages: Kicksecure Desktop versus Kicksecure Server</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://github.com/Kicksecure/kicksecure-meta-packages" class="inline-onebox">GitHub - Kicksecure/kicksecure-meta-packages</a> needs improvements:</p>
+<ul>
+<li><code>kicksecure-cli</code> - keep existing package as is</li>
+<li><code>kicksecure-cli-server</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code>
+<ul>
+<li>includes firewall that by default opens port 22 (SSH’s default port)</li>
+</ul>
+</li>
+<li>security-misc-server [no MAC address randomization]</li>
+</ul>
+</li>
+<li><code>kicksecure-cli-desktop</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code> - new package to be created
+<ul>
+<li>Comes with all ports closed by default.</li>
+</ul>
+</li>
+<li><code>Depends: security-misc-desktop</code> - new package to be created
+<ul>
+<li>Might come with MAC address randomization. → <a href="https://github.com/Kicksecure/security-misc/issues/184">ticket</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kicksecure-xfce</code> - keep existing package as is</li>
+<li><code>kicksecure-xfce-server</code> [Will not be created.]</li>
+<li><code>kicksecure-xfce-desktop</code> - new package to be created
+<ul>
+<li><code>Depends: kicksecure-cli-desktop</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Debian_Packages" class="inline-onebox">Debian Packages - Kicksecure</a></li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a></li>
+<li><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415</link>
+          <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-415</guid>
+          <source url="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415.rss">Meta Packages: Kicksecure Desktop versus Kicksecure Server</source>
+        </item>
         <item>
           <title>Hardened kernel update inquiry</title>
           <dc:creator><![CDATA[SteveK1978]]></dc:creator>
@@ -65,7 +266,7 @@ I think LKRG is signing their <code>tar</code> package now. Can we leave LKRG th
           <category>Development</category>
           <description><![CDATA[
             <p>What is the Firewall comes with Kicksecure on CLI? <code>ufw</code> was not included anywhere in any metapackage.</p>
-            <p><small>3 posts - 2 participants</small></p>
+            <p><small>4 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/kicksecure-firewall/378</link>
@@ -611,132 +812,6 @@ SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3635 
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-130</guid>
           <source url="https://forums.kicksecure.com/t/systemcheck-wont-load-work-on-debian-12-next-release/130.rss">Systemcheck wont load/work on debian 12 (next release)</source>
-        </item>
-        <item>
-          <title>Add pyqt5-dev-tool dependency to kicksecure dependencies</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Installing kicksecure-gui on debian fresh .iso will render repository-dist-wizard dysfunctional due to missing dependency <code>pyqt5-dev-tool</code></p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png" data-download-href="//forums.kicksecure.com/uploads/default/387b94105789f23978aadb4e696a09e2588212d9" title="repokicksecuredependency"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_690x211.png" alt="repokicksecuredependency" data-base62-sha1="83FvezwVHE630BcqLXuy2ogFkKJ" width="690" height="211" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_690x211.png, //forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/387b94105789f23978aadb4e696a09e2588212d9.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/387b94105789f23978aadb4e696a09e2588212d9_2_10x10.png"></a></div><p></p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129</link>
-          <pubDate>Thu, 27 Oct 2022 16:43:25 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-129</guid>
-          <source url="https://forums.kicksecure.com/t/add-pyqt5-dev-tool-dependency-to-kicksecure-dependencies/129.rss">Add pyqt5-dev-tool dependency to kicksecure dependencies</source>
-        </item>
-        <item>
-          <title>Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Since we dont have a default browser by default so any user who is morphing debian fresh install he will not have a browser as well (specially debian minimal version like netinst or CD…etc).</p>
-<p>This will give annoying show annoying bug:</p>
-<p><img src="//forums.kicksecure.com/uploads/default/original/1X/74d4bfcfc915acc911377e36e36dae76e00a229a.png" alt="havingnobrowser1" data-base62-sha1="gFxcnUt4rokXKf3uWEgeOTvY5Au" width="609" height="295"></p>
-<p>Will show a  bug window which you need to press on OK multiple times to disappear:</p>
-<p>1<br>
-<img src="//forums.kicksecure.com/uploads/default/original/1X/76cf61f256cba44a24f35aa0a986ebcdb0d81203.png" alt="havingnobrowser2" data-base62-sha1="gX2EIkkvPcBMC759OjAQD2M5JsL" width="620" height="153"><br>
-2<br>
-<img src="//forums.kicksecure.com/uploads/default/original/1X/8c60e92383b258ad87e6f30e5fe5a8479e47a308.png" alt="havingnobrowser3" data-base62-sha1="k1Qtw2gfTFjltczWnhg31T0taAM" width="625" height="149"><br>
-3<br>
-<img src="//forums.kicksecure.com/uploads/default/original/1X/28b9553e85619590d4d7f87cf717e8f34bc2e6a5.png" alt="havingnobrowser4" data-base62-sha1="5OgaIEIfVayVmT8oXEVYar6D3dH" width="624" height="149"><br>
-4<br>
-<img src="//forums.kicksecure.com/uploads/default/original/1X/ff0a1ddbaf133d6b4a25e3f48ef3e402f00a3569.png" alt="havingnobrowser5" data-base62-sha1="AobqDXOQyV4RHZDnJWvPY3V5v5L" width="625" height="156"><br>
-5<br>
-<img src="//forums.kicksecure.com/uploads/default/original/1X/fb33970ca379b3ca7588cf084b2aa221ed784189.png" alt="havingnobrowser6" data-base62-sha1="zQenkdh8HXOqpHCHQurcR6F18ql" width="623" height="149"></p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128</link>
-          <pubDate>Thu, 27 Oct 2022 16:29:45 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-128</guid>
-          <source url="https://forums.kicksecure.com/t/not-having-a-default-browser-and-pressing-on-web-browser-icon-in-xfce-will-give-annoying-bug/128.rss">Not having a default browser and pressing on &quot;Web Browser&quot; icon in xfce will give annoying bug</source>
-        </item>
-        <item>
-          <title>Changing kicksecure repository to tester will add tor+ by default to the repo</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>If i have set kicksecure repo to be over clearnet using only <code>https</code> and then i switched the repository to tester using repository-dist-wizard it will add <code>tor+</code> to the repository which is disrespecting user preferences if he choose <a href="https://www.kicksecure.com/wiki/Debian#Add_the_Kicksecure_%E2%84%A2_Repository" rel="noopener nofollow ugc">C: Clearnet Rep</a>.</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127</link>
-          <pubDate>Thu, 27 Oct 2022 16:14:45 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-127</guid>
-          <source url="https://forums.kicksecure.com/t/changing-kicksecure-repository-to-tester-will-add-tor-by-default-to-the-repo/127.rss">Changing kicksecure repository to tester will add tor+ by default to the repo</source>
-        </item>
-        <item>
-          <title>Disable unnecessary startup processes e.g evolution calendar</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Due to gdm dependencies it come with too wide gnome tools which arent useful to have as a default, but if there is no way around except if we have them then its better to have them disabled by default as this will drain extra resources for nothing e.g Evolution Alarm Notify: (there is even no evolution by default)</p>
-<p><img src="//forums.kicksecure.com/uploads/default/original/1X/80c1c1fcefb4687435dfc7b90ed3d2723a99b85e.png" alt="disableunnecessaryprocess" data-base62-sha1="in2eTM313ZYVSpFffZFJ4PIPsrs" width="600" height="345"></p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126</link>
-          <pubDate>Thu, 27 Oct 2022 16:05:57 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-126</guid>
-          <source url="https://forums.kicksecure.com/t/disable-unnecessary-startup-processes-e-g-evolution-calendar/126.rss">Disable unnecessary startup processes e.g evolution calendar</source>
-        </item>
-        <item>
-          <title>Propose building off Alpine Linux</title>
-          <dc:creator><![CDATA[Quill]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Hello, I was reading the <a href="http://Whonix.org" rel="noopener nofollow ugc">Whonix.org</a> page where it details pros/cons of building off different operating systems, but the Alpine Linux section seems to be from 2015. I think Kicksecure’s goal of providing a secure OS by default would work really well off Alpine Linux, particularly considering the progress Alpine has made in the past few years. The list on the dev site says that an OS for Whonix needs:</p>
-<ul>
-<li>Acceptable usability (they have functional builds off the latest gnome and kde desktops as described <a href="https://9to5linux.com/alpine-linux-3-16-improves-nvme-support-adds-gnome-42-and-kde-plasma-5-24-lts" rel="noopener nofollow ugc">here</a> as well as their own wiki)</li>
-<li>Must be somewhat popular (they are rated <span class="hashtag">#30</span> on distrowatch, and their use has grown in recent years as they moved from mostly servers to default on many Docker builds. Recently they have also become more popular after being one of the main OS options for pinephones via pmOS and expanding to desktops. They have been featured on lists describing the best Linux distros for privacy-focused users, see <a href="https://www.makeuseof.com/best-linux-distros-for-privacy-security/" rel="noopener nofollow ugc">here</a> for an example)</li>
-<li>No legal/trademark issues (good)</li>
-<li>Must have a secure package manager (I won’t pretend to be an expert on this or the next few points, but it’s worth checking)</li>
-</ul>
-<p>Alpine Linux is fast, slim, and dedicated to security (detailed <a href="https://alpinelinux.org/about" rel="noopener nofollow ugc">here</a> and in more detail <a href="https://wiki.alpinelinux.org/wiki/Alpine_Linux:Overview" rel="noopener nofollow ugc">here</a>). It seems that basing Kicksecure off Alpine Linux would be much smaller and simpler than using Debian, which is huge and does not place a priority on security. For these reasons I believe it would be worth considering using Alpine Linux instead of Debian. Thanks for your time</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107</link>
-          <pubDate>Sun, 09 Oct 2022 13:51:19 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-107</guid>
-          <source url="https://forums.kicksecure.com/t/propose-building-off-alpine-linux/107.rss">Propose building off Alpine Linux</source>
-        </item>
-        <item>
-          <title>Tor Project is resurrecting SecBrowser as Mullvad Browser</title>
-          <dc:creator><![CDATA[JeremyRand]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Tor Project recently received funding to factor out the security and privacy enhancements of Tor Browser from the Tor-specific enhancements (similar to how Kicksecure factors out security features from Whonix).  The factored-out browser is called Base Browser [1].  This is basically the same concept as <a href="http://forums.dds6qkxpwdeubwucdiaord2xgbbeyds25rbsgr73tbfpqpt4a6vjwsyd.onion/t/secbrowser-a-security-hardened-non-anonymous-browser-deprecated/3822" rel="noopener nofollow ugc">SecBrowser</a>, which was deprecated by Kicksecure due to insufficient support from upstream Tor Project.  There aren’t yet any Nightly builds of Base Browser, but code is already being committed to Git; I’m not sure what the expected release timeline is.</p>
-<p>It might be useful for Kicksecure to consider including Base Browser once it’s released (at least as Nightly).  I’m guessing the Tor Browser Downloader in Whonix could be trivially adapted for Base Browser.</p>
-<p>[1] I was initially not very fond of this name, but it’s grown on me, especially once I realized that it opens the door to entertaining memes such as “In Soviet Russia, all your tracker are belong to Base Browser.”</p>
-            <p><small>17 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101</link>
-          <pubDate>Mon, 05 Sep 2022 09:08:16 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-101</guid>
-          <source url="https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101.rss">Tor Project is resurrecting SecBrowser as Mullvad Browser</source>
         </item>
   </channel>
 </rss>
