@@ -5,6 +5,179 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/dracutdevs/dracut/issues/1820">
+  <header class="source">
+
+      <a href="https://github.com/dracutdevs/dracut/issues/1820" target="_blank" rel="noopener">github.com/dracutdevs/dracut</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/dracutdevs/dracut/issues/1820" target="_blank" rel="noopener">rd.live.overlay.overlayfs doesn't seem to work when $DRACUT_SYSTEMD=1</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2022-05-12" data-time="14:24:06" data-timezone="UTC">02:24PM - 12 May 22 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/jdharms" target="_blank" rel="noopener">
+          <img alt="jdharms" src="https://avatars.githubusercontent.com/u/1041958?v=4" class="onebox-avatar-inline" width="20" height="20">
+          jdharms
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          bug
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          dmsquash-live
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Describe the bug**
+I'm attempting to boot into a squashfs image with an overl<span class="show-more-container"><a href="https://forums.kicksecure.com" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ayfs overlay.  The switch root fails, here are some relevant lines from my rdsosreport.txt:
+
+```[   36.385861] localhost systemd[1]: Sent message type=error sender=org.freedesktop.systemd1 destination=n/a path=n/a interface=n/a member=n/a cookie=1 reply_cookie=1 signature=s error-name=org.freedesktop.DBus.Error.InvalidArgs error-message=Specified switch root path '/sysroot' does not seem to be an OS tree. os-release file is missing.
+
+[   36.385975] localhost systemctl[782]: Got message type=error sender=org.freedesktop.systemd1 destination=n/a path=n/a interface=n/a member=n/a cookie=1 reply_cookie=1 signature=s error-name=org.freedesktop.DBus.Error.InvalidArgs error-message=Specified switch root path '/sysroot' does not seem to be an OS tree. os-release file is missing.
+
+[   36.385975] localhost systemctl[782]: Failed to switch root: Specified switch root path '/sysroot' does not seem to be an OS tree. os-release file is missing.
+
+[   36.385975] localhost systemctl[782]: Bus n/a: changing state RUNNING → CLOSED
+
+[   36.386080] localhost systemd[1]: Failed to process message type=method_call sender=n/a destination=org.freedesktop.systemd1 path=/org/freedesktop/systemd1 interface=org.freedesktop.systemd1.Manager member=SwitchRoot cookie=1 reply_cookie=0 signature=ss error-name=n/a error-message=n/a: Specified switch root path '/sysroot' does not seem to be an OS tree. os-release file is missing.
+```
+
+If I remove or alter the line here: https://github.com/dracutdevs/dracut/blob/master/modules.d/90dmsquash-live/dmsquash-live-root.sh#L394 to add the overlayfs even with DRACUT_SYSTEMD is not zero then my system boots exactly how I would expect it to.
+
+Is this conditional necessary?  Is systemd not doing something that dracut assumes it should do?
+
+**Distribution used**
+Ubuntu 22.04
+
+**Dracut version**
+`dracut --version` reports only `dracut`.  `apt info dracut` reports version 051-1.  Was installed via apt.
+
+**Init system**
+systemd
+
+**To Reproduce**
+My dracut.conf:
+
+```
+hostonly=no
+hostonly_cmdline="root=live:UUID=xxxxxxx-xxxx debug mitigations=auto rd.live.debug=1 rd.live.overlay.overlayfs=1 rd.shell"
+compress=xz
+uefi=yes
+uefi_stub=/usr/lib/...........
+add_dracutmodules+=" dmsquash-live "
+```
+
+/LiveOS/squashfs.img is a squashfs image containing a flat ubuntu root fs.
+
+
+
+**Expected behavior**
+Should set up an overlayfs fs over the squashfs image</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/dracut-ng/dracut-ng/issues/231">
+  <header class="source">
+
+      <a href="https://github.com/dracut-ng/dracut-ng/issues/231" target="_blank" rel="noopener">github.com/dracut-ng/dracut-ng</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/dracut-ng/dracut-ng/issues/231" target="_blank" rel="noopener">rd.live.overlay.overlayfs doesn't seem to work when $DRACUT_SYSTEMD=1</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-04-23" data-time="12:25:40" data-timezone="UTC">12:25PM - 23 Apr 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/LaszloGombos" target="_blank" rel="noopener">
+          <img alt="LaszloGombos" src="https://avatars.githubusercontent.com/u/1522773?v=4" class="onebox-avatar-inline" width="20" height="20">
+          LaszloGombos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          bug
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">https://github.com/dracutdevs/dracut/issues/1820
+
+Issue can be reproduced by r<span class="show-more-container"><a href="https://forums.kicksecure.com" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">unning test-16 with the following change in the source tree
+
+```
+--- a/test/TEST-16-DMSQUASH/test.sh
++++ b/test/TEST-16-DMSQUASH/test.sh
+@@ -136,8 +136,8 @@ SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ntfs", ENV{ID_FS_TYPE}="ntfs3"
+ EOF
+ 
+     "$basedir"/dracut.sh -l -i "$TESTDIR"/overlay / \
+-        --modules "test dash dmsquash-live qemu" \
++        --modules "test dash dmsquash-live qemu dracut-systemd" \
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_2</link>
+        <pubDate>Tue, 23 Apr 2024 12:45:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-934</guid>
+      </item>
+      <item>
         <title>Account removal/ anonymise my data request</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>Done. <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
@@ -973,24 +1146,6 @@ UUID=4B6E-AD38                            /boot/efi      vfat    defaults,noatim
         <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415#post_1</link>
         <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-885</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>While Kicksecure comes with no open ports by default, a firewall would be useful to protect the user from unwanted, unexpected ports opened by third-party software.</p>
-<p>How this could be structured:</p>
-<ul>
-<li>kicksecure-shared-firewall</li>
-<li>kicksecure-desktop-firewall [block all ports by default]</li>
-<li>kicksecure-server-firewall [open port 22, which is SSH’s default port by default]
-<ul>
-<li>Maybe the server firewall should come last. If ever. Much later. Maybe not at all. Maybe server operators should take care of a firewall themselves.</li>
-</ul>
-</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_4</link>
-        <pubDate>Mon, 18 Mar 2024 13:21:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-884</guid>
       </item>
   </channel>
 </rss>
