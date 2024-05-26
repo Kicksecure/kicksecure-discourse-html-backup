@@ -5,6 +5,135 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Ansible task for Kicksecure increasing attack surface?</title>
+        <dc:creator><![CDATA[@Harisfromcyber]]></dc:creator>
+        <description><![CDATA[ <p>Hi all,</p>
+<p>I recently took an interest in moving to a hardened debian-based distro and Kicksecure felt like the best option for me. I wanted to automate the installation of it by creating an Ansible task for it that can make it easy to install, as I have a playbook for Debian. Here are the bash commands I use around the playbook:</p>
+<pre data-code-wrap="bash"><code class="lang-bash"># Add /sbin to path to for user include its binaries in command line
+export PATH=/sbin:$PATH
+# User does not have sudo access, so switch to root
+su root #`su` could be used, as it assumes root by default
+# Adduser to sudo group
+adduser user sudo
+# Manually add user to sudo group (sudoers) by adding them under root and copying the same permissions as root
+## Required since just adding user to sudo group doesn't seem to give user sudo command access
+sudo visudo 
+# Exit from root
+exit
+# Install git and Ansible
+sudo apt install git ansible -y
+# Download the repository
+git clone [repo_here]
+# Change Directory into the repo
+cd ansible
+# Install Roles from Ansible Galaxy
+ansible-galaxy install -r requirements.yml
+# Run the playbook
+ansible-playbook -i inventory.ini Debian.yml -K 
+#Reboot to finalize changes
+reboot
+</code></pre>
+<p>By doing the setup with the commands above, am I increasing the attack surface since I am not doing it exactly how it is written on the Debian+Kicksecure steps? After install, other than being asked to remove “gnome-calculator”, I seem to be passing the systemcheck. I do understand that Debian-morphed-to-Kicksecure steps are there for a reason, and this is a niche support request. However, if there is no issue doing it this way, I would like to either submit this to documentation and/or just make it public for anyone to use.</p>
+<p>P.S. Ansible task for context:</p>
+<pre data-code-wrap="YAML"><code class="lang-YAML">---
+# Prerequisites
+- name: Apt Update
+  ansible.builtin.apt:
+    update_cache: yes
+  become: true
+
+- name: Apt Full-Upgrade
+  ansible.builtin.apt: upgrade=full
+  become: true
+
+# Didn't include the --no-install-recommends here - couldn't find option for it other than ansible.builtin.shell module
+## apt install --no-install-recommends sudo adduser
+- name: Install sudo and adduser
+  ansible.builtin.apt:
+    pkg:
+    - sudo
+    - adduser
+    state: present
+  become: true
+
+- name: Export /sbin to $PATH
+  ansible.builtin.shell: export PATH=/sbin:$PATH
+
+- name: Ensure group "console" exists
+  ansible.builtin.group:
+    name: console
+    state: present
+    system: true
+  become: true
+
+# Two steps more: adding user and then adding them to groups sudo and admin
+- name: Add the user to sudo and console groups
+  ansible.builtin.user:
+    name: "{{ username }}"
+    groups: sudo,console
+    append: yes
+  become: true
+
+## Steps mention to reboot, I reboot manually at the end
+
+# Installation
+- name: Install extrepo
+  ansible.builtin.apt:
+    name: extrepo
+    state: present
+  become: true
+
+- name: Enable kicksecure repo
+  ansible.builtin.shell: extrepo enable kicksecure
+  become: true
+
+- name: Apt Update
+  ansible.builtin.apt:
+    update_cache: yes
+  become: true
+
+- name: Apt Full-Upgrade
+  ansible.builtin.apt: upgrade=full
+  become: true
+
+- name: Install kicksecure-cli-host
+  ansible.builtin.apt:
+    name: kicksecure-cli-host
+    state: present
+  become: true
+
+# Post-Installation
+- name: Enable the /etc/apt/sources.list.d/derivative.list Kicksecure APT repository
+  ansible.builtin.shell: repository-dist --enable --repository stable
+  become: true
+
+- name: Disable the extrepo kicksecure APT repository
+  ansible.builtin.shell: extrepo disable kicksecure
+  become: true
+
+- name: Copy sources.list 
+  ansible.builtin.copy:
+    src: /etc/apt/sources.list
+    dest: "/home/{{ username }}/sources.list.bak"
+  become: true
+
+- name: Remove sources.list
+  ansible.builtin.file:
+    path: /etc/apt/sources.list
+    state: absent
+  become: true
+
+- name: Touch sources.list 
+  ansible.builtin.file:
+    path: /etc/apt/sources.list
+    state: touch
+  become: true
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/ansible-task-for-kicksecure-increasing-attack-surface/468#post_1</link>
+        <pubDate>Sat, 25 May 2024 17:14:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-991</guid>
+      </item>
+      <item>
         <title>Can you take advantage of the security benefits of Boot Clock Randomization even when sdwdate is disabled?</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>Not sure what you definition of “normal” is. <img src="https://forums.kicksecure.com/images/emoji/twitter/wink.png?v=12" title=":wink:" class="emoji" alt=":wink:" loading="lazy" width="20" height="20"></p>
@@ -853,84 +982,6 @@ I guess the intention is to check if the mounting of the `LiveOS/squashfs.img` h
         <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_4</link>
         <pubDate>Thu, 25 Apr 2024 20:08:18 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-943</guid>
-      </item>
-      <item>
-        <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Maybe related:</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/grml/grml-debootstrap/issues/276">
-  <header class="source">
-
-      <a href="https://github.com/grml/grml-debootstrap/issues/276" target="_blank" rel="noopener">github.com/grml/grml-debootstrap</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/grml/grml-debootstrap/issues/276" target="_blank" rel="noopener">image should not contain folders /run /sys /proc /dev</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-04-25" data-time="18:42:45" data-timezone="UTC">06:42PM - 25 Apr 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Image should not contain folders /run /sys /proc /dev. These should be deleted a<span class="show-more-container"><a href="https://forums.kicksecure.com" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t the end of the build process.
-
-Rationale:
-
-* These don't belong there. Serve no purpose. Are instantiated during the boot process.
-* Are confusing dracut. Relevant code excerpt:
-
-https://github.com/dracutdevs/dracut/blob/master/modules.d/90dmsquash-live/dmsquash-live-root.sh
-
-```
-    elif [ -d /run/initramfs/squashfs/proc ]; then
-        FSIMG=$SQUASHED
-        if [ -z "$overlayfs" ] &amp;&amp; [ -n "$DRACUT_SYSTEMD" ]; then
-            reloadsysrootmountunit=":&gt;/xor_overlayfs;"
-        fi
-        overlayfs="required"
-```
-
-(Some dracut internals: Folder `/run/initramfs/squashfs/proc` is inside the `LiveOS/squashfs.img`, which can be based on grml-debootstrap (and created by mksquashfs). An image containing an already existing `/proc` folder can be useful for I don't know what. But either the `/proc` folder should be complete. This is probably for a complex use case we don't know about. Absent of this, best if the `/proc` folder doesn't exist. There should not be an empty folder `/proc` inside the image.)
-
-Would a PR deleting these folders be welcome?</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_3</link>
-        <pubDate>Thu, 25 Apr 2024 18:43:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-941</guid>
       </item>
   </channel>
 </rss>
