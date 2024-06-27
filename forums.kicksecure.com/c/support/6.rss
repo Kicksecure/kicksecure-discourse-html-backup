@@ -5,8 +5,86 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Sun, 16 Jun 2024 17:14:03 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 26 Jun 2024 20:38:22 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Ethernet Network Wired connection not working after fresh install</title>
+          <dc:creator><![CDATA[elnino]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi. Sorry, I am very beginner to Linux OS, but I have spent 6 hours today and was not able to figure this out.</p>
+<p><strong>Some INFO:</strong></p>
+<ul>
+<li>So, I installed Kicksecure from Kicksecure ISO following this guide kicksecure . com/wiki/ISO and pressed “Install to hardrive” and installed it to my SSD. During installation my internet cable from my home router was plugged in (dunno if that matters)</li>
+</ul>
+<p><strong>What is the problem?</strong></p>
+<ul>
+<li>After installation finished, I booted the Kicksecure OS and everything seem to work, except my internet from my Ethernet cable.<br>
+Note: I tried plugging a wireless card and the internet would instantly work via WIFI (after plugging i did apt-get update &amp;&amp; upgrade). Also, on other OS on same PC, my internet through cable would work instantly. I guess that it is something with Kicksecure settings that is not working for me.</li>
+</ul>
+<p><strong>What did I do?</strong><br>
+Well since I am a noob I was searching and trying different suggested ideas, mainly from Debian 12 (bookworm).</p>
+<ul>
+<li>First thing i noticed I did not have /etc/network/interfaces so I tried creating that with different settings like:</li>
+</ul>
+<pre><code class="lang-auto">auto lo
+iface lo inet loopback
+
+auto eth0
+allow-hotplug eth0
+iface eth0 inet dhcp
+</code></pre>
+<p>that only made my “Ethernet: wired connection 1” disappear in my nm-connection-editor. So, I removed that and started searching again.Then I read all of this forums.whonix . org/t/kicksecure-network-configuration/8985/52 and my head started to hurt. But what i understood (and maybe that is wrong) that network on Kicksecure is configured in their own unique way, not like Debian 12 /etc/network/interfaces. That realization did not help me much tho. I then noticed my connection did not have any IPv4, only IPv6. So I tried manually imagining what my IP could look like if it was static, since usually everything is DHCP. So I tried adding in my NetworkManager Applet</p>
+<pre><code class="lang-auto">IP Address: 192.168.1.15
+Netmask: 255.255.255.0
+Gateway: 192.168.1.254
+DNS servers: 192.168.1.254 (also tried 8.8.8.8)
+</code></pre>
+<p>All that did was - that instead of <code>ping 8.8.8.8 Network unreachable </code> I started getting</p>
+<pre><code class="lang-auto">PING 8.8.8.8 (8.8.8.8) 58 (84) bytes of data.
+From 192.168.1.15 icmp_seq=1 Destination Host Unreachable
+</code></pre>
+<p>Which as you can probably now tell was a progress for me. Anyway, but I am kinda stuck here and don’t know what to do. Here is how my ifconfig -a  looks like:</p>
+<pre><code class="lang-auto">[user ~]% ifconfig -a 
+eth0: flags=4163&lt;UP,BROADCAST,RUNNING,MULTICAST&gt;  mtu 1500
+        inet 192.168.1.15  netmask 255.255.255.0  broadcast 192.168.1.255
+        inet6 fe80::de2e:a11c:5001:d8b5  prefixlen 64  scopeid 0x20&lt;link&gt;
+        ether ac:22:0b:cc:b3:3e  txqueuelen 1000  (Ethernet)
+        RX packets 71  bytes 5186 (5.0 KiB)
+        RX errors 0  dropped 1  overruns 0  frame 0
+        TX packets 4962  bytes 323368 (315.7 KiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+        device interrupt 20  memory 0xf7300000-f7320000  
+
+lo: flags=73&lt;UP,LOOPBACK,RUNNING&gt;  mtu 65536
+        inet 127.0.0.1  netmask 255.0.0.0
+        inet6 ::1  prefixlen 128  scopeid 0x10&lt;host&gt;
+        loop  txqueuelen 1000  (Local Loopback)
+        RX packets 256733  bytes 553743564 (528.0 MiB)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 256733  bytes 553743564 (528.0 MiB)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+</code></pre>
+<p>Also I dont understand how to restart my network in Kicksecure, I tried:</p>
+<pre><code class="lang-auto">sudo systemctl restart networking
+sudo /etc/init.d/networking restart
+/usr/bin/systemctl restart networking
+sudo service networking restart
+</code></pre>
+<p>but nothing seems to worked, so I had to reboot my OS after yet another “new brilliant idea” that i had <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> that what hell looks like xD especially with Luks encryption -.-</p>
+<p>Please excuse me for all this emotional spam, I am tired, frustrated, I don’t know what I am doing, but I am trying… well any tips where to keep digging would be much appreciated.</p>
+<p>P.S <span class="mention">@Patric</span>, I am very sorry that you have to deal with dumb users like me <img src="https://forums.kicksecure.com/images/emoji/twitter/frowning.png?v=12" title=":frowning:" class="emoji" alt=":frowning:" loading="lazy" width="20" height="20"></p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ethernet-network-wired-connection-not-working-after-fresh-install/479">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ethernet-network-wired-connection-not-working-after-fresh-install/479</link>
+          <pubDate>Wed, 26 Jun 2024 20:38:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-479</guid>
+          <source url="https://forums.kicksecure.com/t/ethernet-network-wired-connection-not-working-after-fresh-install/479.rss">Ethernet Network Wired connection not working after fresh install</source>
+        </item>
         <item>
           <title>Debian -&gt; Kicksecure morphing fails for Qubes OS</title>
           <dc:creator><![CDATA[vrl]]></dc:creator>
@@ -750,24 +828,6 @@ How do I fix it?</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-379</guid>
           <source url="https://forums.kicksecure.com/t/security-misc-breaks-lkrg/379.rss">Security-misc breaks LKRG</source>
-        </item>
-        <item>
-          <title>How to install minimal Kicksecure</title>
-          <dc:creator><![CDATA[SteveK1978]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>How do I install a minimal Kicksecure environment? I don’t need Tor, fonts or xserver but <code>kicksecure-cli</code> force me to install a lot of unnecessary packages. Is there anyway that allows me to install a minimal Kicksecure environment? I also don’t need swap at all, why it creates a swap partition for me?<br>
-I think we need a <code>kicksecure-minimum</code> metapackage without Tor, fonts or any thing like <code>p7zip</code> or <code>libgtk</code>.</p>
-            <p><small>4 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/how-to-install-minimal-kicksecure/377">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/how-to-install-minimal-kicksecure/377</link>
-          <pubDate>Thu, 15 Feb 2024 19:28:43 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-377</guid>
-          <source url="https://forums.kicksecure.com/t/how-to-install-minimal-kicksecure/377.rss">How to install minimal Kicksecure</source>
         </item>
   </channel>
 </rss>
