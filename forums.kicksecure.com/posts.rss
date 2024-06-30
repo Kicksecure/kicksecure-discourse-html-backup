@@ -5,6 +5,217 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Ethernet Network Wired connection not working after fresh install</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>I don’t know why this does not work out of the box for you but I can clear up some things.</p>
+<p>There are various distinct software packages to configure networking on Linux. Some examples are ifupdown, Network Manager and systemd-networkd. “Usually” only 1 is installed by default and in use.</p>
+<p>In case of Kicksecure, att time of writing, Kicksecure uses Network Manager by default.</p>
+<p><a href="https://wiki.debian.org/NetworkManager" class="onebox" target="_blank" rel="noopener">https://wiki.debian.org/NetworkManager</a></p>
+<p>The networking related default installed packages are defined in this file: <a href="https://github.com/Kicksecure/kicksecure-network-conf/blob/master/debian/control" class="inline-onebox">kicksecure-network-conf/debian/control at master · Kicksecure/kicksecure-network-conf · GitHub</a></p>
+<p>Package <code>kicksecure-network-conf</code> contains Kicksecure’s network related configurations.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/Kicksecure/kicksecure-network-conf">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
+
+      <a href="https://github.com/Kicksecure/kicksecure-network-conf" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/9c0c5931576ba2cf46f05b8a976ca240315e7a916760b27ee63ad1af95fbffe1/Kicksecure/kicksecure-network-conf" class="thumbnail" width="690" height="345"></div>
+
+<h3><a href="https://github.com/Kicksecure/kicksecure-network-conf" target="_blank" rel="noopener">GitHub - Kicksecure/kicksecure-network-conf</a></h3>
+
+  <p>Contribute to Kicksecure/kicksecure-network-conf development by creating an account on GitHub.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="elnino" data-post="1" data-topic="479">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/3ab097/48.png" class="avatar"> elnino:</div>
+<blockquote>
+<p>First thing i noticed I did not have /etc/network/interfaces</p>
+</blockquote>
+</aside>
+<p>Kicksecure at the time of writing does not install ifupdown by default. Therefore that files does not exist and creating it does nothing.</p>
+<aside class="quote no-group" data-username="elnino" data-post="1" data-topic="479">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/3ab097/48.png" class="avatar"> elnino:</div>
+<blockquote>
+<p><code>sudo systemctl restart networking</code></p>
+</blockquote>
+</aside>
+<p>This would be if using ifupdown with systemd.</p>
+<aside class="quote no-group" data-username="elnino" data-post="1" data-topic="479">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/3ab097/48.png" class="avatar"> elnino:</div>
+<blockquote>
+<p><code>sudo /etc/init.d/networking restart</code></p>
+</blockquote>
+</aside>
+<p>This would be if using ifupdown with sysvinit.</p>
+<aside class="quote no-group" data-username="elnino" data-post="1" data-topic="479">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/3ab097/48.png" class="avatar"> elnino:</div>
+<blockquote>
+<p><code>sudo service networking restart</code></p>
+</blockquote>
+</aside>
+<p>A Debian specific (?) wrapper that works for both, sysvinit and systemd.</p>
+<p>However, since Kicksecure at time of writing uses Network Manager the command would be:</p>
+<pre><code>sudo service NetworkManager restart
+</code></pre>
+<p>Also using the Network Manager systray apples and/or using <code>nmcli</code> on the command line might be helpful.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ethernet-network-wired-connection-not-working-after-fresh-install/479#post_2</link>
+        <pubDate>Sat, 29 Jun 2024 12:51:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1018</guid>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Of course.</p>
+<p>iptables is deprecated. iptables → nftables.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_10</link>
+        <pubDate>Sat, 29 Jun 2024 12:37:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1017</guid>
+      </item>
+      <item>
+        <title>No Live Mode Grub entry included in ISO?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Because an ISO is always in Iso Live Mode therefore always live by default anyhow.</p>
+<p>Documented here. Quote <a href="https://www.kicksecure.com/wiki/Live_Mode" class="inline-onebox">Live Mode for Kicksecure</a></p>
+<blockquote>
+<p>Live mode is accomplished by use of either,</p>
+<ul>
+<li><strong>A)</strong> <strong><a href="https://www.kicksecure.com/wiki/ISO">ISO</a> Live Mode</strong> (see <a href="https://www.kicksecure.com/wiki/USB_Installation">USB Installation</a>); <strong>or</strong></li>
+</ul>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/no-live-mode-grub-entry-included-in-iso/480#post_2</link>
+        <pubDate>Sat, 29 Jun 2024 12:34:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1016</guid>
+      </item>
+      <item>
+        <title>Include whonix installer with Kicksecure Live ISO?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>That would not be hosted on <a href="http://kicksecure.com">kicksecure.com</a>. The temporary name for that project is “Whonix-Host” and documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/Whonix-Host">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion=2" class="site-icon" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener" title="02:23PM - 24 May 2024">Whonix – 24 May 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="480" height="480" src="https://www.whonix.org/w/images/a/a5/Cd-rom-icon.png?version=7a6cdf63778a836bb7a4bf631442e0bc" class="thumbnail onebox-avatar">
+
+<h3><a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener">Whonix-Host Operating System Live ISO, Whonix-Host Installer</a></h3>
+
+  <p>Upcoming Host Operating System  - In Development - Help wanted! - Please contribute!</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>related:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Whonix">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Whonix" target="_blank" rel="noopener" title="12:56PM - 11 May 2024">Kicksecure – 11 May 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:512/121;"><img src="https://www.kicksecure.com/w/images/c/c1/Whonix-logo-text.svg?version=91b5ee7c47d8fb68f110ec65191f25db" class="thumbnail" width="690" height="162"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Whonix" target="_blank" rel="noopener">Whonix</a></h3>
+
+  <p>Whonix is an Anonymous Operating System based on Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/include-whonix-installer-with-kicksecure-live-iso/481#post_2</link>
+        <pubDate>Sat, 29 Jun 2024 12:33:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1015</guid>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="378">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>While Kicksecure comes with no open ports by default,</p>
+</blockquote>
+</aside>
+<p>How about coming with a firewall that blocks all incoming by default?</p>
+<pre><code class="lang-auto"># Set default chain policies
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+# Accept on localhost
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Allow established sessions to receive traffic
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_9</link>
+        <pubDate>Sat, 29 Jun 2024 05:47:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1014</guid>
+      </item>
+      <item>
+        <title>Include whonix installer with Kicksecure Live ISO?</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <p>Would it be possible to include the Whonix gateway and workstation with the Live ISO?<br>
+Currently the Live ISO size is only 1.3 GB and is pretty bare and leaves alot of room for much more.</p>
+<p>Most USB’s are 16GB and up and most physical CD/DVD’s are 4.5 or 8.5GB.<br>
+The sad thing there is no Live distros that come with Virtual Machine software that you can use live or are not maintained anymore.</p>
+<p>It would be great if the Live ISO came with whonix gateway &amp; workstation and VM’s software. So not only would Kicksecure ISO have an installer it would also serve utility of being a Live USB that has whonix and virtualization software included.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/include-whonix-installer-with-kicksecure-live-iso/481#post_1</link>
+        <pubDate>Sat, 29 Jun 2024 05:44:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1013</guid>
+      </item>
+      <item>
+        <title>No Live Mode Grub entry included in ISO?</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <p>So I downloaded the Kicksecure Xfce ISO, verified it and verified it after flashing to USB.<br>
+When booting up the USB there is no <em>“LIVE mode USER (for daily activies.)”</em> option in GRUB.</p>
+<p>Why is there not Live Mode included in the Kicksecure Live ISO and Installer?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/no-live-mode-grub-entry-included-in-iso/480#post_1</link>
+        <pubDate>Sat, 29 Jun 2024 05:43:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1012</guid>
+      </item>
+      <item>
         <title>Kicksecure Firewall</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>Based on web search, seems newer ufw versions support also nftables.</p> ]]></description>
@@ -788,38 +999,6 @@ Why this would be an issue since 30 seconds is still 30 seconds regardless of if
         <link>https://forums.kicksecure.com/t/can-you-take-advantage-of-the-security-benefits-of-boot-clock-randomization-even-when-sdwdate-is-disabled/457#post_2</link>
         <pubDate>Sat, 18 May 2024 21:33:00 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-969</guid>
-      </item>
-      <item>
-        <title>Can you take advantage of the security benefits of Boot Clock Randomization even when sdwdate is disabled?</title>
-        <dc:creator><![CDATA[@rocker642]]></dc:creator>
-        <description><![CDATA[ <p>Hello,</p>
-<p>Can you take advantage of the security benefits of Boot Clock Randomization even when sdwdate is disabled?</p>
-<p>Any Help would be appreciated.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-you-take-advantage-of-the-security-benefits-of-boot-clock-randomization-even-when-sdwdate-is-disabled/457#post_1</link>
-        <pubDate>Sat, 18 May 2024 20:54:14 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-968</guid>
-      </item>
-      <item>
-        <title>Followed wiki but get error for Whonix install</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>There will be more output than just this. Please read it.</p>
-<p>If still not clear, please post the log here.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/followed-wiki-but-get-error-for-whonix-install/454#post_2</link>
-        <pubDate>Sat, 18 May 2024 17:26:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-967</guid>
-      </item>
-      <item>
-        <title>Followed wiki but get error for Whonix install</title>
-        <dc:creator><![CDATA[@anon1]]></dc:creator>
-        <description><![CDATA[ <p>Followed wiki and setup kicksecure correctly, on the last leg to install whonix I followed the only command per the wiki (kicksecure/wiki/Whonix) being: whonix-xfce-installer-cli</p>
-<p>I get this error:<br>
-whonix-xfce-installer-cli: [ERROR]: Installer exited with code: ‘1’<br>
-zsh: exit 1     whonix-xfce-installer-cli</p>
-<p>Any Help would be appreciated.</p>
-<p>Thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/followed-wiki-but-get-error-for-whonix-install/454#post_1</link>
-        <pubDate>Fri, 17 May 2024 20:38:04 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-962</guid>
       </item>
   </channel>
 </rss>

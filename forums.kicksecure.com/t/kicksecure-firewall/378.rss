@@ -5,9 +5,54 @@
     <link>https://forums.kicksecure.com/t/kicksecure-firewall/378</link>
     <description>What is the Firewall comes with Kicksecure on CLI? `ufw` was not included anywhere in any metapackage.</description>
     
-    <lastBuildDate>Fri, 28 Jun 2024 11:10:22 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 29 Jun 2024 12:37:06 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Of course.</p>
+<p>iptables is deprecated. iptables → nftables.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/10</link>
+        <pubDate>Sat, 29 Jun 2024 12:37:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-10</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Crawfish]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="378">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>While Kicksecure comes with no open ports by default,</p>
+</blockquote>
+</aside>
+<p>How about coming with a firewall that blocks all incoming by default?</p>
+<pre><code class="lang-auto"># Set default chain policies
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+# Accept on localhost
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Allow established sessions to receive traffic
+iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/9</link>
+        <pubDate>Sat, 29 Jun 2024 05:47:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-9</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
       <item>
         <title>Kicksecure Firewall</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
