@@ -9,9 +9,58 @@ how can i boot manually with grubs and or fix it?
 i can cryptomount (hd0,gpt2)  and (hd0,gpt3)
 and when i look at them with ls (crypto0) they look fine</description>
     
-    <lastBuildDate>Sun, 30 Jun 2024 12:10:32 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 01 Jul 2024 20:27:22 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-no-password-prompt-on-gnu-grub/483.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure no password prompt on gnu grub</title>
+        <dc:creator><![CDATA[coke]]></dc:creator>
+        <description><![CDATA[
+            <p>I figured it out, it wasnt because i did an update but beause i put it on a removeable drive and when i booted without it pluged in, my motherboard deleted the nvram entry (telling it what .efi file to boot from) and the default boot folder has a grub.cfg file that is setup as if you didnt encrypt your harddrive so it doesnt run cryptomount and the other required things to boot a encrypted drive causing to fail and just fall out to grub command line.</p>
+<p>so heres how to fix it for anyone with the same problem (my install is in efi mode and not bios so if yours is bios then idk how to help you)</p>
+<p>first to boot from grub manually:<br>
+you need to find your boot partition mine was (hd0,gpt2)<br>
+to find it do type: ls<br>
+this will list all your partitions and you will have to check each one by typing ls followed by their name<br>
+example: ls (hd0,gpt2)<br>
+since your boot should be encrypted your boot drive is gonna say No Known filesystem deteced and the size should be about 4gb mine says (4194304KiB)<br>
+cool now we gotta unencrypt it so type: cryptomount (hd0,gtp2)<br>
+replace (hd0,gpt2) with what ever is your boot partition<br>
+put in your password and if you type it correct it should say Slot 0 opened<br>
+now confirm its your boot partition by typing: ls (crypto0)<br>
+it should be labeled ‘boot’<br>
+if this isnt it then cryptomount the next drive and that drive will be (crypto1) and so on</p>
+<p>now that you have the boot drive and its unencrypted and mounted to (crypto0)<br>
+we can boot manualy, here are the commands</p>
+<pre><code class="lang-auto">set boot=(crypto0)
+set prefix=(crypto0)/grub
+insmod normal
+normal
+</code></pre>
+<p>and now you have manually booted!</p>
+<p>ok now to fix the problem at hand<br>
+since kicksecure is goofy and doesnt have a working grub.cfg in the default boot folder we are gonna have to replace it.</p>
+<p>so open a terminal and type: sudo thunar<br>
+then navigate to /boot/efi/EFI<br>
+their should be 2 folder in there BOOT and Kicksecure</p>
+<p>go into Kicksecure and copy grub.cfg<br>
+then go into the BOOT folder and replace the grub.cfg with the one from the Kicksecure folder</p>
+<p>and now when you reboot, grub will prompt you for your password!<br>
+if you update, it might change the bootloader and you might have to repeat all this</p>
+<p>if you are using secure boot or want to then heres a bonus step<br>
+go into the Kicksecure folder and copy shimx64.efi<br>
+and put it in the BOOT folder then delete BOOTX64.EFI and rename shimx64.efi to BOOTX64.EFI</p>
+<p>a little info on what this does  by default if your computer doesnt have a nvram entry to know what efi file to try then it will default to /EFI/BOOT/BOOTX64.EFI<br>
+in this case BOOTX64.EFI is just grubx64.efi renamed and will try to run the grub.cfg in its folder<br>
+thats why we changed it to the one from the kicksecure folder<br>
+and since grubx64.efi isnt signed it wont boot in secure boot but shimx64.efi is singed and will run in secure boot then shimx64.efi will just run grubx64.efi automaticaly</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-no-password-prompt-on-gnu-grub/483/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-no-password-prompt-on-gnu-grub/483/3</link>
+        <pubDate>Mon, 01 Jul 2024 20:18:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-483-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-no-password-prompt-on-gnu-grub/483.rss">Kicksecure no password prompt on gnu grub</source>
+      </item>
       <item>
         <title>Kicksecure no password prompt on gnu grub</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
