@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure 17.2.0.1 - All Platforms - Point Release!</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-17-2-0-1-all-platforms-point-release/492</link>
+    <description>## Download
+
+https://www.kicksecure.com/wiki/Download
+
+([What is a point release?](https://www.kicksecure.com/wiki/Point_Release
+))
+
+----
+
+# Upgrade
+
+Alternatively, in-place release upgrade is possible upgrade using [Kicksecure repository](https://www.kicksecure.com/wiki/Project-APT-Repository).
+
+----
+
+This release would not have been possible without the numerous supporters of Kicksecure!
+
+----
+
+Please Donate!
+
+https://www.kicksecure.com/wiki/Donate
+
+----
+
+Please Contribute!
+
+https://www.kicksecure.com/wiki/Contribute
+
+----
+
+# Major Changes
+
+* https://www.kicksecure.com/wiki/ISO available for testers.
+* grub-live:
+  * fix detection of initramfs-tools versus dracut
+* vm-config-dist:
+  * `/etc/profile.d/20_power_savings_disable_in_vms.sh`: hide output in SSH login shell by no longer using subshell
+* desktop-config-dist:
+  * improve livecheck symbols and output
+    * Keep showing info symbol when using persistent mode.
+    * Show green filled circle symbol and text &quot;live&quot; in grub-live mode but without read-only. No longer showing a scary warning symbol.
+    * Show CD symbol and text &quot;ISO&quot; when using ISO but without read-only mode.
+    * Show green checkmark symbol and text &quot;read-only&quot; if using read-only mode.
+    * Fix icon resolution. (Thanks to Ben Grande!)
+* helper-scripts:
+  * added new script `append-once`:
+    * &gt; Usage: `/usr/bin/append-once &#39;line to append&#39; /path/to/file`
+* kicksecure-meta-packages:
+  * add to `kicksecure-recommended-cli`: `pcmciautils`, `usbutils`, `eject`
+  * add to `kicksecure-shared-host-xfce`: `laptop-detect`, `discover`
+  * Revert &quot;install auditd by default&quot; because it adds too many messages to systemd journal
+  * add msgcollector-gui, icon-pack-dist to kicksecure-shared-host-xfce
+* kicksecure-network-conf:
+  * install `wireless-tools` by default
+* KVM
+  * `/dev/urandom` -&gt; `/dev/random` (as per https://www.kicksecure.com/wiki/Dev/Entropy)
+  * Upgraded XML Files machine to q35 chipset (Thanks to @HulaHoop!)
+  * [KVM image building and signing is now done by Patrick.](https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/561)
+* live-config-dist:
+  * change grub boot menu text &quot;ISO&quot; -&gt; &quot;Live ISO&quot;
+  * remove `sources-media` module because this runs `apt-get update` which times out after 500 seconds if there is no network connection during the installer This is to speed up installation when no network has been set up.
+  * added a configuration file comparison helper (diff-helper)
+  * fix, no longer set efiBootloaderId: &quot;debian&quot; to avoid conflict with Debian installations on internal hard drive when installing Kicksecure to an external hard drive
+  * add firmware menu entry to grub ISO boot menu on EFI systems
+  * change Live ISO background image
+  * Fix icon path not being recognized (Thanks to grass!)
+  * Use lock icon for Calamares installer (Thanks to grass!)
+  * https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417
+  * allow running the Calamares Installer without password
+* ram-wipe:
+  * fixed additional kexec based ram-wipe when Secure Boot is enabled
+* repository-dist:
+  * improve error message in case of missing dependencies
+* sdwdate:
+  * Update onion sources (Thanks to TNT BOM BOM!)
+* security-misc:
+  * fix(etc): delete typo in /etc/apparmor.d tunables /etc/pam.d was present twice in a row (&quot;/etc/pam.d//etc/pam.d&quot;) in this file: /etc/apparmor.d/tunables/home.d/security-misc. (Thanks to Ashlen!)
+  * https://github.com/Kicksecure/security-misc/issues/225
+  * Update README.md (Thanks to raja-grewal!)
+  * Update Copyright (C) to 2024 (Thanks to Raja Grewal!)
+  * Disable `firewire-net` module (Thanks to raja-grewal!)
+  * Disable GPS modules like GNSS (Thanks to raja-grewal!)
+  * Revert logging of martians (Thanks to raja-grewal!)
+  * RFDS mitigation on Intel Atom CPUs (including E-cores) (Thanks to raja-grewal!)
+  * GDS mitigation for CPUs (Thanks to raja-grewal!)
+  * Clarify use of `mitigations=auto` (Thanks to raja-grewal!)
+  * Add reference for RETBleed (Thanks to raja-grewal!)
+  * Add reference for SSB (Thanks to raja-grewal!)
+  * Merge spectre mitigations (Thanks to raja-grewal!)
+  * Update BHI mitigation reference (Thanks to raja-grewal!)
+  * BHI mitigation on Intel CPUs (Thanks to raja-grewal!)
+  * no longer disable MSR by default fixes https://github.com/Kicksecure/security-misc/issues/215
+* setup-wizard-dist:
+  * change label from &quot;Finish&quot; got &quot;OK&quot;
+  * do not run systemcheck if cancel button has been pressed
+  * improve finish page to add default credentials
+* swap-file-creator:
+  * skip output if live mode is detected and not creating a swap file
+* usability-misc:
+  * Kicksecure VirtualBox Installer for Linux
+    * fixed Debian sid support (Thanks to grass!)
+    * fixed Kali support (Thanks to nyxnor!)
+    * script improvements (Thanks to grass!)
+    * add support for non-US system languages (Thanks to grass!)
+    * improve Secure Boot enabled test
+    * check if VMs exist before and after condition based VM deletion decision
+    * Run CI with non-English locale (Thanks to grass!)
+* derivative-maker:
+  * separate deletion step no longer needed by making derivative-maker build process idempotent
+  * started use of `safe-rm`
+  * build VirtualBox VMs under dedicated dm-vbox-temp user to avoid the user needing to delete VirtualBox VMs before building for simplification
+  * introduce `dist_build_redistributable=true` (set by `help-steps/dm-build-official`)
+    * Enable binary derivative repository by default for official builds. Same as: &#39;--repo true&#39;
+  * add `--target source` to support creation of a xz source archive
+  * `--target windows`: download VirtualBox Windows installer exe from virtualbox.org
+  * create local `/etc/hostname` on build host if it does not exist because `mmdebstrap` file `/etc/hostname` to exist
+  * remove version number from libvirt xml files for code simplification
+  * remove no longer needed options `--flavor kicksecure-xfce-host` and `--flavor kicksecure-cli-host` selecting `--flavor kicksecure-xfce` and `--flavor kicksecure-cli` will suffice to choose the correct `flavor_meta_packages_to_install` based on the `--target` option
+  * fix `--target raw --flavor kicksecure-xfce-host`
+  * CI improvements (Thanks to Rob Stringer!)
+  * install the `firmware-nonfree` (from `kicksecure-meta-packages`) by default
+    * for host builds assume `--freedom false` by default
+    * by using `--freedom true` the user can opt-out from installing `firmware-nonfree`
+    * see also:
+      * https://www.kicksecure.com/wiki/Dev/nonfree
+      * https://forums.whonix.org/t/whonix-host-nonfree-blobs-firmware-linux-nonfree/7251
+  * automate installation dependencies required for derivative-maker
+  * add content files for apt-file
+
+----
+
+# Full difference of all changes
+
+[https://github.com/Kicksecure/derivative-maker/compare/17.1.3.1-developers-only...17.2.0.1-developers-only](https://github.com/Kicksecure/derivative-maker/compare/17.1.3.1-developers-only...17.2.0.1-developers-only)</description>
+    
+    <lastBuildDate>Sat, 13 Jul 2024 22:25:20 +0000</lastBuildDate>
+    <category>News</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-17-2-0-1-all-platforms-point-release/492.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure 17.2.0.1 - All Platforms - Point Release!</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <h2><a name="download-1" class="anchor" href="https://forums.kicksecure.com#download-1"></a>Download</h2>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="10:43AM - 06 May 2024">Kicksecure – 6 May 24</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
+
+  <p>FREE Download Kicksecure. Kicksecure can be installed on a physical machine as a host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
+<hr>
+<h1><a name="upgrade-2" class="anchor" href="https://forums.kicksecure.com#upgrade-2"></a>Upgrade</h1>
+<p>Alternatively, in-place release upgrade is possible upgrade using <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="12:22PM - 31 January 2024">Kicksecure – 31 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="08:33AM - 04 October 2023">Kicksecure – 4 Oct 23</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="major-changes-3" class="anchor" href="https://forums.kicksecure.com#major-changes-3"></a>Major Changes</h1>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/ISO" class="inline-onebox">Kicksecure Live ISO and Installer</a> available for testers.</li>
+<li>grub-live:
+<ul>
+<li>fix detection of initramfs-tools versus dracut</li>
+</ul>
+</li>
+<li>vm-config-dist:
+<ul>
+<li><code>/etc/profile.d/20_power_savings_disable_in_vms.sh</code>: hide output in SSH login shell by no longer using subshell</li>
+</ul>
+</li>
+<li>desktop-config-dist:
+<ul>
+<li>improve livecheck symbols and output
+<ul>
+<li>Keep showing info symbol when using persistent mode.</li>
+<li>Show green filled circle symbol and text “live” in grub-live mode but without read-only. No longer showing a scary warning symbol.</li>
+<li>Show CD symbol and text “ISO” when using ISO but without read-only mode.</li>
+<li>Show green checkmark symbol and text “read-only” if using read-only mode.</li>
+<li>Fix icon resolution. (Thanks to Ben Grande!)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>helper-scripts:
+<ul>
+<li>added new script <code>append-once</code>:
+<ul>
+<li>
+<blockquote>
+<p>Usage: <code>/usr/bin/append-once 'line to append' /path/to/file</code></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>kicksecure-meta-packages:
+<ul>
+<li>add to <code>kicksecure-recommended-cli</code>: <code>pcmciautils</code>, <code>usbutils</code>, <code>eject</code></li>
+<li>add to <code>kicksecure-shared-host-xfce</code>: <code>laptop-detect</code>, <code>discover</code></li>
+<li>Revert “install auditd by default” because it adds too many messages to systemd journal</li>
+<li>add msgcollector-gui, icon-pack-dist to kicksecure-shared-host-xfce</li>
+</ul>
+</li>
+<li>kicksecure-network-conf:
+<ul>
+<li>install <code>wireless-tools</code> by default</li>
+</ul>
+</li>
+<li>KVM
+<ul>
+<li><code>/dev/urandom</code> → <code>/dev/random</code> (as per <a href="https://www.kicksecure.com/wiki/Dev/Entropy" class="inline-onebox">Entropy, Randomness, /dev/random vs /dev/urandom, Entropy Sources, Entropy Gathering Daemons, RDRAND</a>)</li>
+<li>Upgraded XML Files machine to q35 chipset (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/hulahoop">@HulaHoop</a>!)</li>
+<li><a href="https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/561">KVM image building and signing is now done by Patrick.</a></li>
+</ul>
+</li>
+<li>live-config-dist:
+<ul>
+<li>change grub boot menu text “ISO” → “Live ISO”</li>
+<li>remove <code>sources-media</code> module because this runs <code>apt-get update</code> which times out after 500 seconds if there is no network connection during the installer This is to speed up installation when no network has been set up.</li>
+<li>added a configuration file comparison helper (diff-helper)</li>
+<li>fix, no longer set efiBootloaderId: “debian” to avoid conflict with Debian installations on internal hard drive when installing Kicksecure to an external hard drive</li>
+<li>add firmware menu entry to grub ISO boot menu on EFI systems</li>
+<li>change Live ISO background image</li>
+<li>Fix icon path not being recognized (Thanks to grass!)</li>
+<li>Use lock icon for Calamares installer (Thanks to grass!)</li>
+<li><a href="https://forums.kicksecure.com/t/add-iso-and-version-number-to-boot-menu-of-iso/417" class="inline-onebox">Add ISO and version number to boot menu of ISO</a></li>
+<li>allow running the Calamares Installer without password</li>
+</ul>
+</li>
+<li>ram-wipe:
+<ul>
+<li>fixed additional kexec based ram-wipe when Secure Boot is enabled</li>
+</ul>
+</li>
+<li>repository-dist:
+<ul>
+<li>improve error message in case of missing dependencies</li>
+</ul>
+</li>
+<li>sdwdate:
+<ul>
+<li>Update onion sources (Thanks to TNT BOM BOM!)</li>
+</ul>
+</li>
+<li>security-misc:
+<ul>
+<li>fix(etc): delete typo in /etc/apparmor.d tunables /etc/pam.d was present twice in a row (“/etc/pam.d//etc/pam.d”) in this file: /etc/apparmor.d/tunables/home.d/security-misc. (Thanks to Ashlen!)</li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/225" class="inline-onebox">add `/etc/gitconfig` for better git security · Issue #225 · Kicksecure/security-misc · GitHub</a></li>
+<li>Update README.md (Thanks to raja-grewal!)</li>
+<li>Update Copyright (C) to 2024 (Thanks to Raja Grewal!)</li>
+<li>Disable <code>firewire-net</code> module (Thanks to raja-grewal!)</li>
+<li>Disable GPS modules like GNSS (Thanks to raja-grewal!)</li>
+<li>Revert logging of martians (Thanks to raja-grewal!)</li>
+<li>RFDS mitigation on Intel Atom CPUs (including E-cores) (Thanks to raja-grewal!)</li>
+<li>GDS mitigation for CPUs (Thanks to raja-grewal!)</li>
+<li>Clarify use of <code>mitigations=auto</code> (Thanks to raja-grewal!)</li>
+<li>Add reference for RETBleed (Thanks to raja-grewal!)</li>
+<li>Add reference for SSB (Thanks to raja-grewal!)</li>
+<li>Merge spectre mitigations (Thanks to raja-grewal!)</li>
+<li>Update BHI mitigation reference (Thanks to raja-grewal!)</li>
+<li>BHI mitigation on Intel CPUs (Thanks to raja-grewal!)</li>
+<li>no longer disable MSR by default fixes <a href="https://github.com/Kicksecure/security-misc/issues/215" class="inline-onebox">allow MSR kernel module being load / move from security-misc to vm-config-dist · Issue #215 · Kicksecure/security-misc · GitHub</a></li>
+</ul>
+</li>
+<li>setup-wizard-dist:
+<ul>
+<li>change label from “Finish” got “OK”</li>
+<li>do not run systemcheck if cancel button has been pressed</li>
+<li>improve finish page to add default credentials</li>
+</ul>
+</li>
+<li>swap-file-creator:
+<ul>
+<li>skip output if live mode is detected and not creating a swap file</li>
+</ul>
+</li>
+<li>usability-misc:
+<ul>
+<li>Kicksecure VirtualBox Installer for Linux
+<ul>
+<li>fixed Debian sid support (Thanks to grass!)</li>
+<li>fixed Kali support (Thanks to nyxnor!)</li>
+<li>script improvements (Thanks to grass!)</li>
+<li>add support for non-US system languages (Thanks to grass!)</li>
+<li>improve Secure Boot enabled test</li>
+<li>check if VMs exist before and after condition based VM deletion decision</li>
+<li>Run CI with non-English locale (Thanks to grass!)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>derivative-maker:
+<ul>
+<li>separate deletion step no longer needed by making derivative-maker build process idempotent</li>
+<li>started use of <code>safe-rm</code></li>
+<li>build VirtualBox VMs under dedicated dm-vbox-temp user to avoid the user needing to delete VirtualBox VMs before building for simplification</li>
+<li>introduce <code>dist_build_redistributable=true</code> (set by <code>help-steps/dm-build-official</code>)
+<ul>
+<li>Enable binary derivative repository by default for official builds. Same as: ‘–repo true’</li>
+</ul>
+</li>
+<li>add <code>--target source</code> to support creation of a xz source archive</li>
+<li><code>--target windows</code>: download VirtualBox Windows installer exe from <a href="http://virtualbox.org">virtualbox.org</a></li>
+<li>create local <code>/etc/hostname</code> on build host if it does not exist because <code>mmdebstrap</code> file <code>/etc/hostname</code> to exist</li>
+<li>remove version number from libvirt xml files for code simplification</li>
+<li>remove no longer needed options <code>--flavor kicksecure-xfce-host</code> and <code>--flavor kicksecure-cli-host</code> selecting <code>--flavor kicksecure-xfce</code> and <code>--flavor kicksecure-cli</code> will suffice to choose the correct <code>flavor_meta_packages_to_install</code> based on the <code>--target</code> option</li>
+<li>fix <code>--target raw --flavor kicksecure-xfce-host</code></li>
+<li>CI improvements (Thanks to Rob Stringer!)</li>
+<li>install the <code>firmware-nonfree</code> (from <code>kicksecure-meta-packages</code>) by default
+<ul>
+<li>for host builds assume <code>--freedom false</code> by default</li>
+<li>by using <code>--freedom true</code> the user can opt-out from installing <code>firmware-nonfree</code></li>
+<li>see also:
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Dev/nonfree" class="inline-onebox">Non-Freedom Firmware and Drivers</a></li>
+<li><a href="https://forums.whonix.org/t/whonix-host-nonfree-blobs-firmware-linux-nonfree/7251" class="inline-onebox">Whonix host - nonfree blobs - firmware-linux-nonfree - Development - Whonix Forum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>automate installation dependencies required for derivative-maker</li>
+<li>add content files for apt-file</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="full-difference-of-all-changes-4" class="anchor" href="https://forums.kicksecure.com#full-difference-of-all-changes-4"></a>Full difference of all changes</h1>
+<p><a href="https://github.com/Kicksecure/derivative-maker/compare/17.1.3.1-developers-only...17.2.0.1-developers-only">https://github.com/Kicksecure/derivative-maker/compare/17.1.3.1-developers-only…17.2.0.1-developers-only</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-17-2-0-1-all-platforms-point-release/492/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-17-2-0-1-all-platforms-point-release/492/1</link>
+        <pubDate>Sat, 13 Jul 2024 22:25:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-492-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-17-2-0-1-all-platforms-point-release/492.rss">Kicksecure 17.2.0.1 - All Platforms - Point Release!</source>
+      </item>
+  </channel>
+</rss>
