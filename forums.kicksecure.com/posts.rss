@@ -5,6 +5,169 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>General questions when installing Kicksecure inside Debian for Qubes</title>
+        <dc:creator><![CDATA[@duck]]></dc:creator>
+        <description><![CDATA[ <p>Hello, I am following the <code>Install Kicksecure inside Debian</code> documenation and had a few questions. I am aiming to install the <code>Kicksecure CLI package</code> on a <code>Debian-12-minimal</code> template for reference.</p>
+<ul>
+<li>
+<p>Which installation method would be considered generally safer, <code>Using extrepo</code> or <code>Manually</code>?</p>
+</li>
+<li>
+<p>Why is <code>--no-install-recommends</code> not used when installing <code>extrepo</code>? It also is not used when installing <code>apt-transport-tor</code> when using the manual method. Why is this the case?</p>
+</li>
+<li>
+<p>Are these following steps necessary when installing on Qubes? If so, why?</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>5.</strong> Create group <code>console</code>.</p>
+<p><code>/usr/sbin/addgroup --system console</code></p>
+<p><strong>6.</strong> Add your Linux account user name to group <code>console</code>.</p>
+<p>Note: Replace user <code>user</code> with your actual user name.</p>
+<p><code>/usr/sbin/adduser user console</code></p>
+</blockquote>
+<ul>
+<li>What is the difference between <code>/usr/sbin/adduser user sudo</code> and installing <code>qubes-core-agent-passwordless-root</code>? Do they achieve the exact same result?</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/general-questions-when-installing-kicksecure-inside-debian-for-qubes/501#post_1</link>
+        <pubDate>Fri, 26 Jul 2024 23:44:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1055</guid>
+      </item>
+      <item>
+        <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubpullrequest" data-onebox-src="https://github.com/Kicksecure/live-config-dist/pull/5">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener">github.com/Kicksecure/live-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+
+
+
+    <div class="github-icon-container" title="Pull Request">
+      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
+    </div>
+
+  <div class="github-info-container">
+
+
+
+      <h4>
+        <a href="https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener">[WIP] Improve localization and disk encryption</a>
+      </h4>
+
+    <div class="branches">
+      <code>Kicksecure:master</code> ← <code>ArrayBolt3:master</code>
+    </div>
+
+      <div class="github-info">
+        <div class="date">
+          opened <span class="discourse-local-date" data-format="ll" data-date="2024-07-24" data-time="01:15:29" data-timezone="UTC">01:15AM - 24 Jul 24 UTC</span>
+        </div>
+
+        <div class="user">
+          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+            ArrayBolt3
+          </a>
+        </div>
+
+        <div class="lines" title="1 commits changed 9 files with 80 additions and 42 deletions">
+          <a href="https://github.com/Kicksecure/live-config-dist/pull/5/files" target="_blank" rel="noopener">
+            <span class="added">+80</span>
+            <span class="removed">-42</span>
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container"># WARNING - WORK IN PROGRESS
+
+This pull request improves localization and full<span class="show-more-container"><a href="https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> disk encryption for Kicksecure 17. **This PR is not suitable for merge yet - several prerequisites in Kicksecure are missing and there are several bits that need cleaned up.** This is pretty close to being done though.
+
+## Changes
+
+* `debian/changelog`:
+  * Bump version number. The Debian revision number is higher than necessary because I kept rebuilding things and incrementing the number for testing purposes - that will need reset to 1 before merging.
+* `etc/calamares/branding/Kicksecure/*`:
+  * Updated capitalization of style fields - this is necessary for Calamares 3.3.8 to parse them properly, failing to do so results in a solid black left sidebar.
+  * Fixed the absence of a Kicksecure logo in the upper-left corner of the installer. This is generally where distros put their logos and it seemed appropriate to me. The logo component was taken from the larger, complete Kicksecure logo in the same directory.
+  * Renamed logo.png to icon.png to fit with the terminology used by Calamares. This made room for a new logo.png to be created, which contains the logo which now appears in the upper-left corner of the installer.
+* `etc/calamares/modules/partition.conf`:
+  * Removed some obsolete fields that already have replacements integrated into the config file.
+* `etc/calamares/modules/users.conf.dist`:
+  * The changes here are vestigial and should be removed before merging this PR. I originally had attempted to add the ability for the end user to customize their user password and autologin status within Calamares, but as it turns out this results in Calamares trying to create a user account with a name that already exists (`user`), crashing the install. Ubuntu works around this by not having any user defined in the ISO itself, and dynamically creates a user account with casper upon ISO bootup. Kicksecure does not do this and thus this technique fails since the installed system has a user account before the users module ever runs, due to that user being hardcoded into the ISO. I considered some workarounds for this issue but ultimately decided that this was too much trouble for now and could be pursued at a later date.
+* `etc/calamares/settings.conf.dist`:
+    * Moved some fields down to the bottom of the file for readability. Not strictly necessary, but made working on the project easier.
+    * Added the `locale` and `keyboard` modules to the `show` component of the `sequence` section. This allows the user to customize their localization, timezone, and keyboard layout information at installation time.
+    * Added several modules to the `exec` component of the `sequence` section:
+      * `locale` - allows setting locale to work. The absence of this module results in language settings not carrying over into the installed system.
+      * `keyboard` - allows setting the keyboard layout to work.  The absence of this module results in keyboard layout settings not carrying over into the installed system.
+      * `localecfg` - not entirely sure if this is needed, but it appeared important and so I added it. This was when I was first trying to get localization working right. This might be able to be dropped.
+      * `displaymanager` - Vestigial, part of trying to get autologin working earlier. Should be dropped.
+      * `shellprocess@fixconkeys_part1` and `shellprocess@fixconkeys_part2` - Vital for disk encryption, explained later.
+    * Added two shellprocesses to the `instances` section. These are vital for disk encryption and are explained below.
+* `etc/calamares/modules/shellprocess_fixconkeys_part1.conf` and `etc/calamares/modules/shellprocess_fixconkeys_part2.conf`:
+  * Vital for disk encryption, explained below.
+
+## Disk Encryption Fixes
+
+In order for FDE to work ideally on Kicksecure, a newer version of Calamares than the one present in Bookworm is needed. I locally compiled Calamares 3.3.8 from Trixie for Bookworm and installed it into the live session for testing. This version of Calamares properly processes the `noEncrypt` parameter in `partitions.conf` and thus the `/boot` partition is excluded from encryption.
+
+However, **this did not entirely solve disk encryption issues** - when installing Kicksecure using a language with a keyboard layout different from `us` (I used German in my testing), the keyboard layout used by cryptsetup for decrypting the disk is different than the one used by Calamares for setting the encryption passphrase. This is a situation that I previously dealt with in Lubuntu, and is a result of the console keymap not being set correctly within the system's initramfs.
+
+Solving this issue requires changing the console keyboard layout within the initramfs at install time to match the keyboard layout chosen by the user. This is non-trivial and requires a pair of scripts (embedded into the `shellprocess_fixconkeys_part*.conf` configuration files) to accomplish.
+
+* The first script runs within the live system itself, NOT in the installed system chroot that Calamares creates. This script determines the keyboard layout in use by the user using `setxkbmap -query`, processes the output so as to extract the two-character keyboard layout code, and saves it to `/dev/shm/fixconkeys-layout`. (The reason for choosing `/dev/shm` is because it is a tmpfs that can be shared between the live and installed systems at installation time.) After doing this, the script bind-mounts `/dev/shm` from the live system into the installed system so that the second script can access the `fixconkeys-layout` file from within the installed system chroot.
+* The second script operates within the installed system via a chroot. It loads the keyboard layout from the `fixconkeys-layout` into the current console session, then saves the loaded settings into a system-wide location using `setupcon`. With this complete, it then regenerates all initramfs'es on the installed system using `dracut`, ensuring this configuration is installed into the initramfs. This ensures that when `cryptsetup` runs from within the initramfs to unlock the disk, the console keyboard layout is set properly, thus allowing the user to decrypt the disk using the same keyboard layout they used to encrypt it.
+
+This solution works well in my testing, however Kicksecure is currently missing critical packages necessary for this to work. The following packages will have to be installed into the Kicksecure ISO at ISO build time for this solution to work properly:
+
+* `console-common`
+* `console-data`
+* `console-setup-linux`
+* `console-setup`
+* `kbd`
+
+I used workarounds to locally install these packages into the live environment and into the installed system for testing purposes, and can confirm that these five packages are sufficient to allow the keyboard layout fix described above to function properly.
+
+Last but not least, the `calamares` and `calamares-settings-debian` packages from Trixie will need to be published in Debian's `bookworm-backports` repository before they are available for general use within Kicksecure. I filed a bug report for this in Debian to bring this to the `calamares` package maintainer's attention (and emailed him directly a day before), but have not heard back from him yet. Therefore I intend to attempt creating and maintaining the backport myself. The bug report is here: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1076740
+
+## Mandatory Checklist
+
+- [x] Legal agreements accepted. By contributing to this organisation, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+
+[Terms of Service](https://www.kicksecure.com/wiki/Terms_of_Service), [Privacy Policy](https://www.kicksecure.com/wiki/Privacy_Policy), [Cookie Policy](https://www.kicksecure.com/wiki/Cookie_Policy), [E-Sign Consent](https://www.kicksecure.com/wiki/E-Sign_Consent), [DMCA](https://www.kicksecure.com/wiki/DMCA), [Imprint](https://www.kicksecure.com/wiki/Imprint)
+
+## Optional Checklist
+The following items are optional but might be requested in certain cases.
+
+- [x] I have tested it locally
+- [x] I have reviewed and updated any documentation if relevant
+- [x] I am providing new code and test(s) for it
+  * Technically there aren't tests for this code other than manual checking, so while I am providing new code, I am not providing tests for it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420#post_6</link>
+        <pubDate>Fri, 26 Jul 2024 18:53:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1053</guid>
+      </item>
+      <item>
         <title>Permission-hardener broken</title>
         <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
         <description><![CDATA[ <p>Maybe. But commenting out those lines is the only thing I changed.</p> ]]></description>
@@ -991,15 +1154,6 @@ sudo service networking restart
         <link>https://forums.kicksecure.com/t/ethernet-network-wired-connection-not-working-after-fresh-install/479#post_1</link>
         <pubDate>Wed, 26 Jun 2024 20:38:22 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1009</guid>
-      </item>
-      <item>
-        <title>Running Android Apps inside Kicksecure - Waydroid</title>
-        <dc:creator><![CDATA[@Nagi]]></dc:creator>
-        <description><![CDATA[ <p>We recommend trying Genymotion!</p>
-<p>It worked.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304#post_2</link>
-        <pubDate>Sun, 23 Jun 2024 05:53:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1005</guid>
       </item>
   </channel>
 </rss>
