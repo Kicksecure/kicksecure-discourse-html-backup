@@ -5,6 +5,15 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>After morphing kicksesure on top of debian, on login password not required anymore</title>
+        <dc:creator><![CDATA[@Corridor]]></dc:creator>
+        <description><![CDATA[ <p>I decided to morph kicksecure on top of debian, straight forward process.<br>
+After restarting pc, my account does not ask for password anymore before I log in into my account, how can I enable password prompt?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/after-morphing-kicksesure-on-top-of-debian-on-login-password-not-required-anymore/514#post_1</link>
+        <pubDate>Thu, 01 Aug 2024 09:47:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1078</guid>
+      </item>
+      <item>
         <title>Kicksecure 17.2.0.7 - Point Release!</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <h1><a name="download-1" class="anchor" href="https://forums.kicksecure.com#download-1"></a>Download</h1>
@@ -1021,133 +1030,6 @@ Please fix!</p> ]]></description>
         <link>https://forums.kicksecure.com/t/apt-files-not-working-after-kicksecure-installed-on-debian/486#post_3</link>
         <pubDate>Tue, 09 Jul 2024 15:19:40 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1031</guid>
-      </item>
-      <item>
-        <title>Permission-hardener broken</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the bug report!</p>
-<hr>
-<p>Temporary workaround:</p>
-<p>Open file <code>/usr/bin/permission-hardener</code> with root rights.</p>
-<pre><code>sudoedit /usr/bin/permission-hardener
-</code></pre>
-<p>Look for line</p>
-<pre><code>if test ! "${should_be_counter}" = "${counter_actual}"; then
-</code></pre>
-<p>Comment out or delete this while code block.</p>
-<pre><code class="lang-auto">  if test ! "${should_be_counter}" = "${counter_actual}"; then
-    echo "INFO: fso_to_process: '${fso_to_process}' | counter_actual   : '${counter_actual}'"
-    echo "INFO: fso_to_process: '${fso_to_process}' | should_be_counter: '${should_be_counter}'"
-    exit_code=202
-    echo "ERROR: counter does not check out." &gt;&amp;2
-  fi
-</code></pre>
-<p>Save.  That should workaround this bug for now.</p>
-<hr>
-<p>This issue will be fixed in the near future through an upgrade.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/permission-hardener-broken/487#post_2</link>
-        <pubDate>Tue, 09 Jul 2024 12:16:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1030</guid>
-      </item>
-      <item>
-        <title>Apt-files not working after Kicksecure installed on Debian</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Please follow documentation:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Apt-file">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Apt-file" target="_blank" rel="noopener" title="08:22PM - 17 March 2023">Kicksecure – 17 Mar 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/500;"><img src="https://www.kicksecure.com/w/images/8/87/Aptfiles1614223640.jpg?version=e16a031f18abed6239d42ceca0880c42" class="thumbnail" width="640" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Apt-file" target="_blank" rel="noopener">apt-file</a></h3>
-
-  <p>HowTo: install apt-file. It an be used to show which files are being included by a package.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/apt-files-not-working-after-kicksecure-installed-on-debian/486#post_2</link>
-        <pubDate>Tue, 09 Jul 2024 11:51:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1029</guid>
-      </item>
-      <item>
-        <title>Permission-hardener broken</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>Hi,<br>
-My permission hardener is broken. Whatever package I install it tells me these info when I reinstall a package:</p>
-<pre><code class="lang-auto">Processing triggers for security-misc (3:37.5-1) ...
-INFO: triggered security-misc: 'security-misc' security-misc DPKG_MAINTSCRIPT_NAME: 'postinst' $\@: 'triggered /usr' 2: '/usr'
-/usr/libexec/security-misc/mmap-rnd-bits: INFO: Successfully written ASLR map config file:
-/etc/sysctl.d/30_security-misc_aslr-mmap.conf
-Running SUID Disabler and Permission Hardener... See also:
-https://www.kicksecure.com/wiki/SUID_Disabler_and_Permission_Hardener
-/var/lib/dpkg/info/security-misc.postinst: INFO: running: permission-hardener enable
-
-INFO: fso_to_process: '/opt/' | counter_actual   : '1'
-INFO: fso_to_process: '/opt/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/bin/' | counter_actual   : '4'
-INFO: fso_to_process: '/usr/bin/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/lib64/' | counter_actual   : '0'
-INFO: fso_to_process: '/usr/lib64/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/lib/' | counter_actual   : '4'
-INFO: fso_to_process: '/usr/lib/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/local/bin/' | counter_actual   : '0'
-INFO: fso_to_process: '/usr/local/bin/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/local/lib/' | counter_actual   : '0'
-INFO: fso_to_process: '/usr/local/lib/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/local/sbin/' | counter_actual   : '0'
-INFO: fso_to_process: '/usr/local/sbin/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: fso_to_process: '/usr/sbin/' | counter_actual   : '1'
-INFO: fso_to_process: '/usr/sbin/' | should_be_counter: ''
-ERROR: counter does not check out.
-INFO: To compare the current and previous permission modes:
-  Install 'meld' (or preferred diff tool) for comparison of file mode changes:
-    sudo apt install --no-install-recommends meld
-
-  Use 'meld' or another diff tool to view the differences:
-    meld /var/lib/permission-hardener/existing_mode/statoverride /var/lib/permission-hardener/new_mode/statoverride
-ERROR: Exiting with non-zero exit code: '202'
-/var/lib/dpkg/info/security-misc.postinst: ERROR: Permission hardening failed.
-Processing triggers for man-db (2.11.2-2) ...
-Reading package lists... Done
-Building dependency tree... Done
-Reading state information... Done
-0 upgraded, 0 newly installed, 1 reinstalled, 0 to remove and 0 not upgraded.
-</code></pre>
-<p>Please help me to fix! Thanks!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/permission-hardener-broken/487#post_1</link>
-        <pubDate>Mon, 08 Jul 2024 15:42:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1028</guid>
-      </item>
-      <item>
-        <title>Apt-files not working after Kicksecure installed on Debian</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>Hi,<br>
-After install Kicksecure related packages on Debian 12, <code>apt-files search</code> always tells me “cache is empty” even I execute “apt-files update”.<br>
-I installed <code>apt install security-misc usability-misc apparmor-profiles-kicksecure sandbox-app-launcher kicksecure-base-files dist-base-files</code><br>
-Please help me to fix this!<br>
-Thanks in advance</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/apt-files-not-working-after-kicksecure-installed-on-debian/486#post_1</link>
-        <pubDate>Mon, 08 Jul 2024 14:35:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1027</guid>
       </item>
   </channel>
 </rss>
