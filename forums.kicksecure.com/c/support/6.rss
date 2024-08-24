@@ -5,8 +5,25 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Thu, 22 Aug 2024 13:10:54 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 23 Aug 2024 17:54:13 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>I am stuck in grub rescue after using Kicksecure on USB</title>
+          <dc:creator><![CDATA[techqs]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Host is also Kicksecure. I used and then stopped using a usb to run Kicksecure persistently and now I am stuck in grub rescue because my desktop is searching for the usb instead of loading into the desktop ssd. I tried booting to the correct ssd in bios, but it still took me to grub rescue after and I was having a hard time getting it to choose the right boot device.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/i-am-stuck-in-grub-rescue-after-using-kicksecure-on-usb/544">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/i-am-stuck-in-grub-rescue-after-using-kicksecure-on-usb/544</link>
+          <pubDate>Fri, 23 Aug 2024 17:54:13 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-544</guid>
+          <source url="https://forums.kicksecure.com/t/i-am-stuck-in-grub-rescue-after-using-kicksecure-on-usb/544.rss">I am stuck in grub rescue after using Kicksecure on USB</source>
+        </item>
         <item>
           <title>Building Kickesecure for Mac Silicon bootable USB?</title>
           <dc:creator><![CDATA[moosetits]]></dc:creator>
@@ -33,7 +50,7 @@ as a bootable USB?</p>
           <category>Support</category>
           <description><![CDATA[
             <p>How can I increase size of live-disk partition? It is always 4 gigs. I cannot run VMs in live mode due to a lack of space on live disk. I have tried various methods, but nothing has worked. Please help</p>
-            <p><small>2 posts - 2 participants</small></p>
+            <p><small>3 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/how-can-i-increase-size-of-live-disk-partition/539">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/how-can-i-increase-size-of-live-disk-partition/539</link>
@@ -164,7 +181,7 @@ Furthermore, after boot and automatic connection without login, I opened a brows
 I don’t understand what’s happened and despite my research I haven’t found how to restore the profile choice window after boot, nor how to have the Live Mode choice at boot.<br>
 Your advice is most welcome!<br>
 JND</p>
-            <p><small>5 posts - 3 participants</small></p>
+            <p><small>6 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/no-profile-choice-nor-password-use-after-update-no-live-mode-choice-at-boot/522">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/no-profile-choice-nor-password-use-after-update-no-live-mode-choice-at-boot/522</link>
@@ -696,144 +713,6 @@ done.</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-469</guid>
           <source url="https://forums.kicksecure.com/t/configuring-default-umask/469.rss">Configuring default umask?</source>
-        </item>
-        <item>
-          <title>Ansible task for Kicksecure increasing attack surface?</title>
-          <dc:creator><![CDATA[Harisfromcyber]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi all,</p>
-<p>I recently took an interest in moving to a hardened debian-based distro and Kicksecure felt like the best option for me. I wanted to automate the installation of it by creating an Ansible task for it that can make it easy to install, as I have a playbook for Debian. Here are the bash commands I use around the playbook:</p>
-<pre data-code-wrap="bash"><code class="lang-bash"># Add /sbin to path to for user include its binaries in command line
-export PATH=/sbin:$PATH
-# User does not have sudo access, so switch to root
-su root #`su` could be used, as it assumes root by default
-# Adduser to sudo group
-adduser user sudo
-# Manually add user to sudo group (sudoers) by adding them under root and copying the same permissions as root
-## Required since just adding user to sudo group doesn't seem to give user sudo command access
-sudo visudo 
-# Exit from root
-exit
-# Install git and Ansible
-sudo apt install git ansible -y
-# Download the repository
-git clone [repo_here]
-# Change Directory into the repo
-cd ansible
-# Install Roles from Ansible Galaxy
-ansible-galaxy install -r requirements.yml
-# Run the playbook
-ansible-playbook -i inventory.ini Debian.yml -K 
-#Reboot to finalize changes
-reboot
-</code></pre>
-<p>By doing the setup with the commands above, am I increasing the attack surface since I am not doing it exactly how it is written on the Debian+Kicksecure steps? After install, other than being asked to remove “gnome-calculator”, I seem to be passing the systemcheck. I do understand that Debian-morphed-to-Kicksecure steps are there for a reason, and this is a niche support request. However, if there is no issue doing it this way, I would like to either submit this to documentation and/or just make it public for anyone to use.</p>
-<p>P.S. Ansible task for context:</p>
-<pre data-code-wrap="YAML"><code class="lang-YAML">---
-# Prerequisites
-- name: Apt Update
-  ansible.builtin.apt:
-    update_cache: yes
-  become: true
-
-- name: Apt Full-Upgrade
-  ansible.builtin.apt: upgrade=full
-  become: true
-
-# Didn't include the --no-install-recommends here - couldn't find option for it other than ansible.builtin.shell module
-## apt install --no-install-recommends sudo adduser
-- name: Install sudo and adduser
-  ansible.builtin.apt:
-    pkg:
-    - sudo
-    - adduser
-    state: present
-  become: true
-
-- name: Export /sbin to $PATH
-  ansible.builtin.shell: export PATH=/sbin:$PATH
-
-- name: Ensure group "console" exists
-  ansible.builtin.group:
-    name: console
-    state: present
-    system: true
-  become: true
-
-# Two steps more: adding user and then adding them to groups sudo and admin
-- name: Add the user to sudo and console groups
-  ansible.builtin.user:
-    name: "{{ username }}"
-    groups: sudo,console
-    append: yes
-  become: true
-
-## Steps mention to reboot, I reboot manually at the end
-
-# Installation
-- name: Install extrepo
-  ansible.builtin.apt:
-    name: extrepo
-    state: present
-  become: true
-
-- name: Enable kicksecure repo
-  ansible.builtin.shell: extrepo enable kicksecure
-  become: true
-
-- name: Apt Update
-  ansible.builtin.apt:
-    update_cache: yes
-  become: true
-
-- name: Apt Full-Upgrade
-  ansible.builtin.apt: upgrade=full
-  become: true
-
-- name: Install kicksecure-cli-host
-  ansible.builtin.apt:
-    name: kicksecure-cli-host
-    state: present
-  become: true
-
-# Post-Installation
-- name: Enable the /etc/apt/sources.list.d/derivative.list Kicksecure APT repository
-  ansible.builtin.shell: repository-dist --enable --repository stable
-  become: true
-
-- name: Disable the extrepo kicksecure APT repository
-  ansible.builtin.shell: extrepo disable kicksecure
-  become: true
-
-- name: Copy sources.list 
-  ansible.builtin.copy:
-    src: /etc/apt/sources.list
-    dest: "/home/{{ username }}/sources.list.bak"
-  become: true
-
-- name: Remove sources.list
-  ansible.builtin.file:
-    path: /etc/apt/sources.list
-    state: absent
-  become: true
-
-- name: Touch sources.list 
-  ansible.builtin.file:
-    path: /etc/apt/sources.list
-    state: touch
-  become: true
-</code></pre>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/ansible-task-for-kicksecure-increasing-attack-surface/468">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/ansible-task-for-kicksecure-increasing-attack-surface/468</link>
-          <pubDate>Sat, 25 May 2024 17:14:05 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-468</guid>
-          <source url="https://forums.kicksecure.com/t/ansible-task-for-kicksecure-increasing-attack-surface/468.rss">Ansible task for Kicksecure increasing attack surface?</source>
         </item>
   </channel>
 </rss>
