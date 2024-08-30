@@ -5,8 +5,164 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Mon, 20 May 2024 14:17:56 +0000</lastBuildDate>
+      <lastBuildDate>Thu, 29 Aug 2024 03:46:10 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Grub live ideas and suggestions</title>
+          <dc:creator><![CDATA[Yatogami]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Dear Kicksecure Development Team,</p>
+<p>I would like to suggest some enhancements to the GRUB Live environment. Specifically, it would be beneficial to include additional features or options that could improve user experience and functionality. Here are two ideas to include with the grub-live package:</p>
+<ul>
+<li>
+<p><strong>Grub live entry for offline mode</strong>:  another grub live entry for booting into Live mode USER with all networking disabled</p>
+</li>
+<li>
+<p><strong>Grub live entry that boots with Tor only firewall rules</strong>:  another grub live entry for booting into Live mode USER with Tor only firewall with tor transparent proxy for users that are on lower RAM systems that don’t want to install whonix with the installer in usability misc but already have tb-launcher installed. Tor daemon already comes installed with Kicksecure so additionally maybe load some torsocks wrappers for certain commands like curl, wget, git, whois, etc. if possible.</p>
+</li>
+</ul>
+<p>Here are some drafts that I havent tried yet but will put them here for a starting point, reference, and ideas.</p>
+<p><strong>offline mode</strong><br>
+<code>/etc/grub.d/40_offline_mode</code></p>
+<pre><code class="lang-auto"># GRUB Live entry to disable networking (offline mode)
+menuentry "LIVE mode USER (Offline Mode)" {
+    # Run the disable networking script that blacklists all wireless drivers and firewall to block all traffic
+    /usr/local/bin/disable_networking
+    set root=(hd0,1)  # Adjust this to your root partition
+    # mask network target
+    linux /vmlinuz-linux root=/dev/sda1 quiet splash systemd.mask=network.target
+    initrd /initramfs-linux.img
+}
+</code></pre>
+<p><code>/usr/local/bin/disable_networking</code></p>
+<pre><code class="lang-auto">#!/bin/bash
+### Grub disable networking script called by 
+## Blacklist all wifi drivers
+## Blacklist bluetooth driver (commented out)
+
+# Create blacklist file
+
+touch /etc/modprobe.d/disable_networking.conf 2&gt;/dev/null
+
+# Define the blacklist file path
+BLACKLIST_FILE="/etc/modprobe.d/disable_networking.conf"
+
+# Create or clear the blacklist file
+echo "# Custom blacklist for wireless drivers" | tee $BLACKLIST_FILE &gt; /dev/null
+
+# Get the list of wireless drivers
+WIRELESS_DRIVERS=$(ls /lib/modules/$(uname -r)/kernel/drivers/net/wireless/)
+
+# Check if there are any wireless drivers
+if [ -z "$WIRELESS_DRIVERS" ]; then
+    echo "No wireless drivers found in /lib/modules/$(uname -r)/kernel/drivers/net/wireless/"
+else
+    # Loop through each driver and add it to the blacklist
+    for DRIVER in $WIRELESS_DRIVERS; do
+        DRIVER_NAME=$(basename "$DRIVER" | sed 's/\.[^.]*$//')  # Remove file extension
+        echo "blacklist $DRIVER_NAME" | tee -a $BLACKLIST_FILE &gt; /dev/null
+        echo "Blacklisted driver: $DRIVER_NAME"
+        
+        # Remove the driver if it is currently loaded
+        if lsmod | grep -q "$DRIVER_NAME"; then
+            echo "Removing loaded driver: $DRIVER_NAME"
+            modprobe -r "$DRIVER_NAME"
+        fi
+    done
+fi
+
+## Blacklist bluetooth
+# List of Bluetooth drivers to blacklist
+#BT_DRIVERS=(
+#    "btusb"
+#    "bluetooth"
+#    "btintel"
+#)
+#
+# Loop through the drivers and add them to the blacklist
+#for DRIVER in "${BT_DRIVERS[@]}"; do
+#    echo "blacklist $DRIVER" &gt;&gt; "BLACKLIST_FILE"
+#    modprobe -r "$DRIVER"
+#done
+
+
+### Firewall
+# Set up nftables to disable all incoming, forwarding, and outgoing traffic
+echo "Setting up nftables to disable all network traffic..."
+
+# Flush existing rules
+nft flush ruleset
+
+# Create a new ruleset
+nft add table inet filter
+nft add chain inet filter input { type filter hook input priority 0; }
+nft add chain inet filter forward { type filter hook forward priority 0; }
+nft add chain inet filter output { type filter hook output priority 0; }
+
+# Set default policies to drop all traffic
+nft add rule inet filter input drop
+nft add rule inet filter forward drop
+nft add rule inet filter output drop
+
+echo -e " All wireless drivers have been blacklisted in $BLACKLIST_FILE.\n All network traffic has been disabled.\n Offline mode enabled"
+</code></pre>
+<p><strong>Tor only</strong><br>
+<code>/etc/grub.d/40_tor_only_firewall</code></p>
+<pre><code class="lang-auto">menuentry "LIVE mode USER (Tor Only)" {
+    # Run the Tor firewall script
+    /usr/local/bin/Tor_only_firewall
+    # Boot into the default kernel
+    linux /vmlinuz-&lt;your-kernel-version&gt; root=/dev/sda1 ro
+    initrd /initrd.img-&lt;your-kernel-version&gt;
+}
+</code></pre>
+<p><code>/usr/local/bin/Tor_only_firewall</code></p>
+<pre><code class="lang-auto">#!/bin/bash
+### Tor only firewall for GRUB Live (Tor Only)
+# Flush existing rules
+nft flush ruleset
+
+# Create a new ruleset
+nft add table inet filter
+nft add chain inet filter input { type filter hook input priority 0; }
+nft add chain inet filter forward { type filter hook forward priority 0; }
+nft add chain inet filter output { type filter hook output priority 0; }
+
+# Allow loopback traffic
+nft add rule inet filter input iif "lo" accept
+nft add rule inet filter output oif "lo" accept
+
+# Allow established and related connections
+nft add rule inet filter input ct state established,related accept
+nft add rule inet filter output ct state established,related accept
+
+# Allow Tor traffic (default Tor port is 9050)
+nft add rule inet filter input tcp dport 9050 accept
+nft add rule inet filter output tcp sport 9050 accept
+
+# Allow DNS traffic (UDP port 53)
+nft add rule inet filter input udp dport 53 accept
+nft add rule inet filter output udp sport 53 accept
+
+# Drop all other traffic
+nft add rule inet filter input drop
+nft add rule inet filter forward drop
+nft add rule inet filter output drop
+
+echo "Tor only firewall rules applied."
+</code></pre>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions/553">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions/553</link>
+          <pubDate>Thu, 29 Aug 2024 03:46:10 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-553</guid>
+          <source url="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions/553.rss">Grub live ideas and suggestions</source>
+        </item>
         <item>
           <title>Auditd removal due to journalctl spam</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -1055,56 +1211,6 @@ Can been seen added as extra package for debian stable:
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-135</guid>
           <source url="https://forums.kicksecure.com/t/add-remove-extra-packages/135.rss">Add/Remove Extra Packages</source>
-        </item>
-        <item>
-          <title>Sdwdate failed to start in debian 12 bookworm (next release)</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>sdwdate log:</p>
-<pre><code class="lang-auto">+ set -e
-+ true 'INFO /usr/bin/sdwdate-log-viewer: START'
-+ /bin/journalctl --boot --output cat -n 10000 -f _SYSTEMD_UNIT=qubes-sync-time.service + _SYSTEMD_UNIT=qubes-sync-time.timer + _SYSTEMD_UNIT=timesanitycheck.service + _SYSTEMD_UNIT=bootclockrandomization.service + _SYSTEMD_UNIT=sdwdate.service + _SYSTEMD_UNIT=whonix-firewall.service + SYSLOG_IDENTIFIER=suspend-pre + SYSLOG_IDENTIFIER=suspend-post + SYSLOG_IDENTIFIER=anondate + _AUDIT_TYPE_NAME=SECCOMP
-Within minimum time 'Fri Feb 18 00:00:00 UTC 2022' and expiration timestamp 'Tue May 17 10:00:00 UTC 2033', ok.
-Boot Clock Randomization
-https://www.kicksecure.com/wiki/Boot_Clock_Randomization
-- 58 314072601
-Changed time from Fri Oct 28 10:18:50 PM EDT 2022 (1667009930.522251493)
-               to Fri Oct 28 10:17:52 PM EDT 2022 (1667009872.327542096).
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=692 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x780839d88bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=1541 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7de3739e0bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2117 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74c0d6763bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2890 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x6ffcaa2cfbca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2898 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7dbc8d788bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=2970 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7423fdacebca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3009 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x78cee88c8bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3020 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7cfa6e377bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3034 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74a6071eebca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3436 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7941c7566bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3468 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7fbb97e37bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3487 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x78edb1e46bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3497 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x749bfe4a6bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3518 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7fa119ca1bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3544 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x728b82ceabca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3550 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7d7fda3babca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3570 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x712153c0bbca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3574 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x7922dde05bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3585 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x748e3f8f0bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3591 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x74b1af4d4bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3631 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x79219c660bca code=0x80000000
-SECCOMP auid=4294967295 uid=107 gid=118 ses=4294967295 subj=unconfined pid=3635 comm="sdwdate" exe="/usr/bin/python3.10" sig=31 arch=c000003e syscall=262 compat=0 ip=0x75e9d79d0bca code=0x80000000
-
-</code></pre>
-            <p><small>9 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134</link>
-          <pubDate>Sat, 29 Oct 2022 20:32:35 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-134</guid>
-          <source url="https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134.rss">Sdwdate failed to start in debian 12 bookworm (next release)</source>
         </item>
   </channel>
 </rss>
