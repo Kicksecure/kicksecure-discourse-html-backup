@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>How to change swap-file-creator settings?</title>
+    <link>https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559</link>
+    <description>Hello everybody,
+Since my last update of Kicksecure (Morphing on Debian), I have a boot error:
+Failed to start swap-file-creator.service.
+
+I&#39;ve looked in the documentation and it seems to me that this is due to the fact that I don&#39;t have enough free space on the part of my hard disk where the programs are installed. I think this swap would like to be created on JNDebian-vg-root.
+
+1K block file system Used Available Uti% Mounted on
+udev 3862196 0 3862196 0% /dev
+tmpfs 778292 1764 776528 1% /run
+/dev/mapper/JNDebian--vg-root 28658596 21430388 5747096 79% /
+tmpfs 3891440 226012 3665428 6% /dev/shm
+tmpfs 5120 8 5112 1% /run/lock
+/dev/nvme0n1p1 465124 70189 370001 16% /boot
+/dev/mapper/JNDebian--vg-home 214662440 166803556 36881812 82% /home
+none 10240 4 10236 1% /run/msgcollector
+tmpfs 778288 84 778204 1% /run/user/1000
+
+Is there a solution either to change the default swap size or to create it on JNDebian-vg-home, which has more free disk space?
+Thanks for your help!
+Jeronath</description>
+    
+    <lastBuildDate>Mon, 02 Sep 2024 21:55:44 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>How to change swap-file-creator settings?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Documented just now:<br>
+<a href="https://www.kicksecure.com/wiki/Swap-file-creator#Configuration">swap-file-creator, Configuration</a></p>
+<ul>
+<li>manual size configuration</li>
+<li>swap file storage path</li>
+</ul>
+<p>/dev/mapper/JNDebian–vg-home most likely isn’t a writeable folder.</p>
+<p>Probably a bad idea to try <code>SWAPFILE=/dev/mapper/JNDebian–vg-home/swapfile</code> as setting.</p>
+<p><code>SWAPFILE=/home/swapfile</code> might work.</p>
+<p>I am not sure complex storage path configurations will be possible. The device needs to be available before swap-file-creator runs. Or swap-file-creator systemd unit file needs to be adjusted. Best to look at the source code and see if it can be modified for your use case.</p>
+<p>Should that seem to complicated I recommend to not use swap-file-creator, disable swap-file-creator (documented on the same wiki page). swap-file-creator isn’t designed to handle very complex swap setups. In that case it’s better to set up swap manually.</p>
+          <p><a href="https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559/2</link>
+        <pubDate>Mon, 02 Sep 2024 21:55:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-559-2</guid>
+        <source url="https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559.rss">How to change swap-file-creator settings?</source>
+      </item>
+      <item>
+        <title>How to change swap-file-creator settings?</title>
+        <dc:creator><![CDATA[jnd]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello everybody,<br>
+Since my last update of Kicksecure (Morphing on Debian), I have a boot error:<br>
+Failed to start swap-file-creator.service.</p>
+<p>I’ve looked in the documentation and it seems to me that this is due to the fact that I don’t have enough free space on the part of my hard disk where the programs are installed. I think this swap would like to be created on JNDebian-vg-root.</p>
+<p>1K block file system Used Available Uti% Mounted on<br>
+udev 3862196 0 3862196 0% /dev<br>
+tmpfs 778292 1764 776528 1% /run<br>
+/dev/mapper/JNDebian–vg-root 28658596 21430388 5747096 79% /<br>
+tmpfs 3891440 226012 3665428 6% /dev/shm<br>
+tmpfs 5120 8 5112 1% /run/lock<br>
+/dev/nvme0n1p1 465124 70189 370001 16% /boot<br>
+/dev/mapper/JNDebian–vg-home 214662440 166803556 36881812 82% /home<br>
+none 10240 4 10236 1% /run/msgcollector<br>
+tmpfs 778288 84 778204 1% /run/user/1000</p>
+<p>Is there a solution either to change the default swap size or to create it on JNDebian-vg-home, which has more free disk space?<br>
+Thanks for your help!<br>
+Jeronath</p>
+          <p><a href="https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559/1</link>
+        <pubDate>Mon, 02 Sep 2024 15:18:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-559-1</guid>
+        <source url="https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559.rss">How to change swap-file-creator settings?</source>
+      </item>
+  </channel>
+</rss>

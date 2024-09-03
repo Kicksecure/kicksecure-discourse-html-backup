@@ -5,6 +5,123 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>How to change swap-file-creator settings?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Documented just now:<br>
+<a href="https://www.kicksecure.com/wiki/Swap-file-creator#Configuration">swap-file-creator, Configuration</a></p>
+<ul>
+<li>manual size configuration</li>
+<li>swap file storage path</li>
+</ul>
+<p>/dev/mapper/JNDebian–vg-home most likely isn’t a writeable folder.</p>
+<p>Probably a bad idea to try <code>SWAPFILE=/dev/mapper/JNDebian–vg-home/swapfile</code> as setting.</p>
+<p><code>SWAPFILE=/home/swapfile</code> might work.</p>
+<p>I am not sure complex storage path configurations will be possible. The device needs to be available before swap-file-creator runs. Or swap-file-creator systemd unit file needs to be adjusted. Best to look at the source code and see if it can be modified for your use case.</p>
+<p>Should that seem to complicated I recommend to not use swap-file-creator, disable swap-file-creator (documented on the same wiki page). swap-file-creator isn’t designed to handle very complex swap setups. In that case it’s better to set up swap manually.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559#post_2</link>
+        <pubDate>Mon, 02 Sep 2024 21:55:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1207</guid>
+      </item>
+      <item>
+        <title>How to change swap-file-creator settings?</title>
+        <dc:creator><![CDATA[@jnd]]></dc:creator>
+        <description><![CDATA[ <p>Hello everybody,<br>
+Since my last update of Kicksecure (Morphing on Debian), I have a boot error:<br>
+Failed to start swap-file-creator.service.</p>
+<p>I’ve looked in the documentation and it seems to me that this is due to the fact that I don’t have enough free space on the part of my hard disk where the programs are installed. I think this swap would like to be created on JNDebian-vg-root.</p>
+<p>1K block file system Used Available Uti% Mounted on<br>
+udev 3862196 0 3862196 0% /dev<br>
+tmpfs 778292 1764 776528 1% /run<br>
+/dev/mapper/JNDebian–vg-root 28658596 21430388 5747096 79% /<br>
+tmpfs 3891440 226012 3665428 6% /dev/shm<br>
+tmpfs 5120 8 5112 1% /run/lock<br>
+/dev/nvme0n1p1 465124 70189 370001 16% /boot<br>
+/dev/mapper/JNDebian–vg-home 214662440 166803556 36881812 82% /home<br>
+none 10240 4 10236 1% /run/msgcollector<br>
+tmpfs 778288 84 778204 1% /run/user/1000</p>
+<p>Is there a solution either to change the default swap size or to create it on JNDebian-vg-home, which has more free disk space?<br>
+Thanks for your help!<br>
+Jeronath</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-swap-file-creator-settings/559#post_1</link>
+        <pubDate>Mon, 02 Sep 2024 15:18:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1206</guid>
+      </item>
+      <item>
+        <title>Illegal instruction (core dumped)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p><code>update-ca-certificates</code> is provided by upstream, Debian.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://packages.debian.org/bookworm/ca-certificates">
+  <header class="source">
+
+      <a href="https://packages.debian.org/bookworm/ca-certificates" target="_blank" rel="noopener">packages.debian.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://packages.debian.org/bookworm/ca-certificates" target="_blank" rel="noopener">Debian -- Details of package ca-certificates in bookworm</a></h3>
+
+  <p>Common CA certificates</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>So report also a bug there.</p>
+<p>update-ca-certificates is a shell script. So running it with xtrace enabled we can see more closely what exact command is failing.</p>
+<pre><code>sudo sh -x /usr/sbin/update-ca-certificates
+</code></pre>
+<p>The output of that might help to isolate the cause.</p>
+<hr>
+<p>Wild guess: <a href="https://www.kicksecure.com/wiki/Kernel#Kernel_Issues">Kernel Issues</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556#post_2</link>
+        <pubDate>Mon, 02 Sep 2024 08:40:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1205</guid>
+      </item>
+      <item>
+        <title>Kicksecure breaks Firefox and KeepassXC</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="PrivacyTux" data-post="4" data-topic="489">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/ea5d25/48.png" class="avatar"> PrivacyTux:</div>
+<blockquote>
+<p>Can you help with this?</p>
+</blockquote>
+</aside>
+<p>No, because I cannot reproduce this.</p>
+<p>Try reporting a bug against KeepassXC and please share the link to the report here.</p>
+<hr>
+<p>Wild guess: <a href="https://www.kicksecure.com/wiki/Kernel#Kernel_Issues">Kernel Issues</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-breaks-firefox-and-keepassxc/489#post_5</link>
+        <pubDate>Mon, 02 Sep 2024 08:34:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1204</guid>
+      </item>
+      <item>
+        <title>Systemcheck Error Kicksecure on Debian Bookworm</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p><a href="https://www.kicksecure.com/wiki/Forum_Best_Practices#Posting_Links_for_New_Users">Posting Links for New Users</a></p>
+<aside class="quote no-group quote-modified" data-username="sarrox" data-post="1" data-topic="557">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ea666f/48.png" class="avatar"> sarrox:</div>
+<blockquote>
+<p>–verbose</p>
+</blockquote>
+</aside>
+<p>Please check if it is an out-of-scope issue as per <a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Support_Request_Policy">Support Request Policy</a>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-error-kicksecure-on-debian-bookworm/557#post_2</link>
+        <pubDate>Mon, 02 Sep 2024 08:31:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1203</guid>
+      </item>
+      <item>
         <title>Kicksecure breaks Firefox and KeepassXC</title>
         <dc:creator><![CDATA[@PrivacyTux]]></dc:creator>
         <description><![CDATA[ <p>Hello,</p>
@@ -1316,130 +1433,6 @@ NS_ERROR_FAILURE (0X80004005)</p>
         <link>https://forums.kicksecure.com/t/vm-in-live-mode/530#post_4</link>
         <pubDate>Thu, 15 Aug 2024 18:57:43 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1127</guid>
-      </item>
-      <item>
-        <title>VM in live-mode</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Holy shit! It works! Unbelievable. Fix user’s rights in live mode and it will be the perfect OS. Guys, I will make you a donation from next salary and tell all my friends about Kicksecure. You are the best!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vm-in-live-mode/530#post_3</link>
-        <pubDate>Thu, 15 Aug 2024 18:55:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1126</guid>
-      </item>
-      <item>
-        <title>VM in live-mode</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Packages_for_Debian_Hosts">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Packages_for_Debian_Hosts" target="_blank" rel="noopener" title="04:31PM - 20 February 2024">Kicksecure – 20 Feb 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/412;"><img src="https://www.kicksecure.com/w/images/0/04/Packages-1865510640.jpg?version=ea6334e5a53b2bb24c604373dbbb1223" class="thumbnail" width="640" height="412"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Packages_for_Debian_Hosts" target="_blank" rel="noopener">Kicksecure Packages for Debian Hosts and Kicksecure Host Enhancements</a></h3>
-
-  <p>How to install packages developed by Kicksecure in other Linux distributions such as your host operating system.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grub-live">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Grub-live" target="_blank" rel="noopener" title="01:34PM - 06 August 2024">Kicksecure – 6 Aug 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" width="690" height="431"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Grub-live" target="_blank" rel="noopener">grub-live - boot an existing Host OS or VM into Live Mode</a></h3>
-
-  <p>Add a Live Mode entry to the grub boot menu on your existing Debian host platform. Stop Persistent Malware. Read-only mode. Make all writes go to non-persistent storage (RAM) instead of the hard disk.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>It’s untested. Hence unsupported.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Untested">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Untested" target="_blank" rel="noopener" title="10:18AM - 15 December 2023">Kicksecure – 15 Dec 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Untested" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
-
-  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Premium Support.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Try your luck.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vm-in-live-mode/530#post_2</link>
-        <pubDate>Thu, 15 Aug 2024 16:53:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1124</guid>
-      </item>
-      <item>
-        <title>VM in live-mode</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Can I install Kali in KVM and run this VM in Kicksecure live-mode? Or live-mode can’t start my VMs from persistent-mode</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vm-in-live-mode/530#post_1</link>
-        <pubDate>Thu, 15 Aug 2024 15:56:14 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1122</guid>
-      </item>
-      <item>
-        <title>Sudo password for user</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>This is only a user’s problem in live mode. I created a new profile without sudo - it works perfectly in live mode, all restrictions are preserved.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/sudo-password-for-user/523#post_21</link>
-        <pubDate>Thu, 15 Aug 2024 12:17:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1121</guid>
-      </item>
-      <item>
-        <title>Sudo password for user</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="19" data-topic="523">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p><code>/etc/sudoers.d</code></p>
-</blockquote>
-</aside>
-<p>I did not find any differences. I tried changing user permissions in /etc/sudoers.d but it didnt work. I think you’d better check it. Perhaps you should call user an admin in next update or add 2 profiles with different rights. User’s problem in live mode is the only one in kicksecure</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/sudo-password-for-user/523#post_20</link>
-        <pubDate>Wed, 14 Aug 2024 18:15:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1120</guid>
       </item>
   </channel>
 </rss>
