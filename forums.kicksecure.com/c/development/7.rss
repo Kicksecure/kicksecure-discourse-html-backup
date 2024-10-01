@@ -5,8 +5,149 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Sun, 29 Sep 2024 09:49:49 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 30 Sep 2024 08:45:33 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>ISO - cryptsetup Full Disk Encryption (FDE) - set more secure default encryption settings</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>cryptsetup defaults:</p>
+<pre><code>cryptsetup --help
+</code></pre>
+<blockquote>
+<pre><code class="lang-auto">Default compiled-in device cipher parameters:
+        loop-AES: aes, Key 256 bits
+        plain: aes-cbc-essiv:sha256, Key: 256 bits, Password hashing: ripemd160
+        LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom
+        LUKS: Default keysize with XTS mode (two internal keys) will be doubled.
+</code></pre>
+</blockquote>
+<hr>
+<p>More secure command currently documented on <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption:">https://www.kicksecure.com/wiki/Full_Disk_Encryption:</a></p>
+<blockquote>
+<p>sudo cryptsetup --verbose --use-random --cipher aes-xts-plain64 --key-size 512 --hash sha512 --use-random luksFormat </p>
+</blockquote>
+<hr>
+<p>Differences - cryptsetup default versus hardened cryptsetup command line options:</p>
+<p>TODO</p>
+<hr>
+<p>Calamare (ISO installer used by Kicksecure) uses cryptsetup default settings.</p>
+<p>Upstream issue, discussion:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/1452">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/1452" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/1452" target="_blank" rel="noopener">What algorithm the "Encrypt system" is using, and where are the configuration options?</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2020-07-03" data-time="09:46:56" data-timezone="UTC">09:46AM - 03 Jul 20 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2022-09-13" data-time="17:47:57" data-timezone="UTC">05:47PM - 13 Sep 22 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/informer2016" target="_blank" rel="noopener">
+          <img alt="informer2016" src="https://avatars.githubusercontent.com/u/26509528?v=4" class="onebox-avatar-inline" width="20" height="20">
+          informer2016
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Is there any possibility to choose the custom LUKS cryptsetup strong encryption <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">flags in a Calamares installer, like ```--verbose --type luks1 --cipher serpent-xts-plain64 --key-size 512 --hash whirlpool --iter-time 10000 --use-random --verify-passphrase luksFormat /dev/sdX2``` mentioned in this thread? [**Artix Linux** _(great Arch with OpenRC or runit/s6 instead of SystemD)_ - **Full Disk Encryption for a new install**](https://forum.artixlinux.org/index.php/topic,1541.0.html)
+Because, going through these lengthy manuals is time consuming and a bit intimidating for the new users, who would like a **much stronger encryption at cost of some performance.**
+
+Right now, Calamares just gives a **[ ] Encrypt system**, without any custom options or even a description of used encryption method!
+
+Would be nice if there'd be some button which **gives you a list of available encryption methods &amp; options** : i.e. I had to figure out why a usual "serpent-xts" cryptsetup option didn't work in this time - now it seems to require something like -plain64 at the end</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764">
+  <header class="source">
+      <img src="https://discuss-cdn.kde.org/uploads/default/optimized/1X/599b31392e96cf986f7dfc9140ad79978ad02f01_2_32x32.png" class="site-icon" width="32" height="32">
+
+      <a href="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764" target="_blank" rel="noopener" title="01:03AM - 26 September 2024">KDE Discuss – 26 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/391;"><img src="https://discuss-cdn.kde.org/uploads/default/original/1X/a25519d8b97012edf525491aaa53b6cd59c4fc09.png" class="thumbnail" width="690" height="391"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764" target="_blank" rel="noopener">Making libkpmcore's LUKS2 settings more secure</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #652D90;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">partitionmanager</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>libkpmcore is capable of making LUKS2 encrypted volumes. This is done ultimately by calling cryptsetup with some hardcoded arguments that should provide reasonably secure disk encryption settings.  There are a few things that are non-ideal here:  ...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Dev todo:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/todo#ISO_-_calamares_encryption_settings">ISO - calamares encryption settings</a></p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588</link>
+          <pubDate>Mon, 30 Sep 2024 08:45:33 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-588</guid>
+          <source url="https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588.rss">ISO - cryptsetup Full Disk Encryption (FDE) - set more secure default encryption settings</source>
+        </item>
         <item>
           <title>Ubiquity / LVM / TPM</title>
           <dc:creator><![CDATA[nurmagoz]]></dc:creator>
@@ -20,7 +161,7 @@
 <li><a href="https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html#supported-layouts">Support LVM</a> which <a href="https://github.com/calamares/calamares/issues/2343">calamares lack</a>.</li>
 <li><a href="https://discourse.ubuntu.com/t/subiquity-23-10-1-has-been-released-to-the-stable-channel/39344">Support TPM-fde</a> installation which <a href="https://github.com/calamares/calamares/issues/2355">calamares lack</a>.</li>
 </ul>
-            <p><small>2 posts - 2 participants</small></p>
+            <p><small>10 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585</link>
@@ -1333,25 +1474,6 @@ Can been seen added as extra package for debian stable:
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-156</guid>
           <source url="https://forums.kicksecure.com/t/adding-new-packages-will-be-installed-with-its-recommends/156.rss">Adding new packages will be installed with its recommends</source>
-        </item>
-        <item>
-          <title>Kicksecure-xfce-host not installable in debian 12 (removed dependency)</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p></p><div class="lightbox-wrapper"><a class="lightbox" href="//forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png" data-download-href="//forums.kicksecure.com/uploads/default/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87" title="kicksecurehostbookwormissue"><img src="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_690x304.png" alt="kicksecurehostbookwormissue" data-base62-sha1="i9AY6cNRo8jooSvNEVTRgJ91DiD" width="690" height="304" srcset="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_690x304.png, //forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png 1.5x, //forums.kicksecure.com/uploads/default/original/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87.png 2x" data-small-upload="//forums.kicksecure.com/uploads/default/optimized/1X/7f3cd4d4acdf3cc5766f4f3154328001f0c30e87_2_10x10.png"></a></div><p></p>
-<p><a href="https://packages.debian.org/search?suite=default&amp;section=all&amp;arch=any&amp;searchon=names&amp;keywords=xserver-xorg-video-qxl" class="onebox" target="_blank" rel="noopener nofollow ugc">https://packages.debian.org/search?suite=default&amp;section=all&amp;arch=any&amp;searchon=names&amp;keywords=xserver-xorg-video-qxl</a></p>
-<p>Removed from bookworm.</p>
-            <p><small>13 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152</link>
-          <pubDate>Sat, 05 Nov 2022 10:22:22 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-152</guid>
-          <source url="https://forums.kicksecure.com/t/kicksecure-xfce-host-not-installable-in-debian-12-removed-dependency/152.rss">Kicksecure-xfce-host not installable in debian 12 (removed dependency)</source>
         </item>
   </channel>
 </rss>

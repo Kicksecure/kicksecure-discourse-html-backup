@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure 17.2.3.7 - Point Release!</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-17-2-3-7-point-release/587</link>
+    <description># Download
+
+https://www.kicksecure.com/wiki/Download
+
+([What is a point release?](https://www.kicksecure.com/wiki/Point_Release))
+
+----
+
+# Upgrade
+
+Alternatively, in-place release upgrade is possible upgrade using [Kicksecure repository](https://www.kicksecure.com/wiki/Project-APT-Repository).
+
+----
+
+This release would not have been possible without the numerous supporters of Kicksecure!
+
+----
+
+Please Donate!
+
+https://www.kicksecure.com/wiki/Donate
+
+----
+
+Please Contribute!
+
+https://www.kicksecure.com/wiki/Contribute
+
+----
+
+# Major Changes
+
+* ISO (`live-config-dist`) improvements (Thanks to @ArrayBolt3!):
+  * Port from LUKS1 to LUKS2 for encryption.
+  * https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420 to fix non-English keyboard layouts during full disk encryption pre-boot authentication.
+  * https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567
+  * Remove productUrl, supportUrl, releaseNotesUrl because Calamares runs as root, and executing a browser from Calamares as a user is too error-prone.
+  * Remove swapfile options from Calamares (because swap file creation is already handled by https://www.kicksecure.com/wiki/Swap-file-creator in Kicksecure).
+  * Enable localization (region and keyboard layout) in Calamares.
+  * https://forums.kicksecure.com/t/iso-install-to-system-desktop-icon-maximize-window/419
+  * Backport calamares-settings-debian to Debian Bookworm and use it because it is required for many of the above features.
+  * Improved visual branding.
+
+* VirtualBox:
+  * Revert VirtualBox virtual audio controller back to AC97 due to Intel HD broken sound issues (https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211)
+
+* KVM (libvirt-dist):
+  * Added 3D acceleration and OpenGL (but disabled by default to simplify users opting in).
+  * Added human-readable comments (Thanks to @nurmagoz!).
+  * Switch memory to GB (instead of KiB) (Thanks to @nurmagoz!).
+  * [Rate limit RNG /dev/random `&lt;rate bytes=&#39;1024&#39; period=&#39;1000&#39;/&gt;`](https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/566) to avoid DOS of RNG /dev/random by VM.
+
+* desktop-config-dist:
+  * Improved the livecheck systray (converted tooltips to dialog) (Thanks to Ben Grande!).
+
+* dist-base-files:
+  * Only perform the following actions when run by derivative-maker:
+    * Creation of user `user`.
+    * Set empty password (passwordless) for user `user`.
+    * Adding default groups to user `user`.
+    * Enable console-lockdown.
+    * Locking of root account fix.
+    * Skip creation of user `user`.
+      * These actions are skipped when using distribution morphing.
+
+* grub-live:
+  * Researched, commented on port to overlayfs in time for Debian Trixie (Thanks to @ArrayBolt3).
+
+* kicksecure-meta-packages:
+  * Add xdg-desktop-portal(-gtk) (Thanks to @ArrayBolt3!).
+  * [No longer install `alsa-utils` by default](https://forums.whonix.org/t/port-from-pulseaudio-to-pipewire-for-audio-support/16879/45).
+  * Add `accountservice` to `kicksecure-desktop-environment-essential-xfce` (package `lightdm` `Suggests:` `accountservice`), which fixes error message:
+    * &gt; localhost lightdm[911]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files
+  * Allow installation of `pipewire-media-session-pulseaudio` as an alternative to `wireplumber`.
+  * Fix user&#39;s ability to easily go back to installing pulseaudio.
+  * Add `dbus-user-session` to `kicksecure-recommended-cli` as required by PipeWire.
+  * Add `rtkit` to `non-qubes-audio` to prevent rtkit-related errors in PipeWire journal log.
+  * Add `debian-keyring` to `kicksecure-recommended-cli`, useful to verify a Debian ISO.
+  * Add `gawk` to `kicksecure-dependencies-cli` (missing dependency by Debian&#39;s dracut-core) https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1081005.
+  * Add `mesa-vulkan-drivers` to `kicksecure-desktop-environment-essential-gui`.
+  * Add `mesa-utils` to `kicksecure-recommended-cli`.
+
+* kicksecure-welcome-page:
+  * Added documentation search boxes (Thanks to Hans!).
+  * Removed metager (at time of writing, login-only) (Thanks to Hans!).
+  * Improved style.
+  * Point out that the kicksecure-welcome-page is a local homepage.
+
+* msgcollector:
+  * Add command line parser and explanatory comments.
+  * Refactoring.
+  * Point out if icon does not exist on stderr.
+  * `Depends`: `gnome-colors-common`.
+  * Change icon directories (Thanks to Ben Grande!).
+
+* ram-wipe:
+  * Always run ram-wipe if installed, even inside VMs, to simplify testing inside VMs (deprecate `wiperam=force` kernel parameter).
+
+* root check:
+  * GUI (graphical user interface) applications developed by the Kicksecure project (setup-dist, setup-wizard-dist, repository-dist, sdwdate-gui, anon-connection-wizard, tor-control-panel) can no longer be started as root, show an error message otherwise.
+
+* security-misc:
+  * Comment on Flatpak requiring unprivileged user namespaces (Thanks to @raja-grewal!)
+  * Update mmap ASLR docs (Thanks to @raja-grewal!)
+  * Fix VirtualBox audio device ICH AC97. no longer `blacklist snd_intel8x0`, because this breaks VirtualBox audio device ICH AC97, which is unfortunately still required by some users.
+    * Fixes https://github.com/Kicksecure/security-misc/issues/271
+    * https://www.kicksecure.com/wiki/Dev/audio
+  * add KSPP compliance status to readme based on comment by @raja-grewal https://github.com/Kicksecure/security-misc/issues/256#issuecomment-2330376651
+  * Enable `panic_on_warn=1` (Thanks to @raja-grewal!)
+  * [no longer set sysctl `fs.binfmt_misc.status=0` / no longer disallow registering interpreters for miscellaneous binary formats causing file/folder permissions issue](https://github.com/Kicksecure/security-misc/issues/267)
+    * &gt; `d????????? ? ? ? ?            ? .`
+    * Firefox no longer starting (probably not not a Firefox issue but general issue caused by `fs.binfmt_misc.status=0`)
+  * Add details on BPF hardening and split the `sysctl`s (Thanks to @raja-grewal!)
+  * Add KSPP notice definitions (Thanks to @raja-grewal!)
+  * Add detail on disabling user namespaces breaking UPower (Thanks to @raja-grewal!)
+  * README.md: Organise `sysctl`s and kernel boot parameters (Thanks to @raja-grewal!)
+  * Add details on oopses and warnings (Thanks to @raja-grewal!)
+  * Add details on kernel panics (Thanks to @raja-grewal!)
+  * Refactor modprobe.d to minimise potential future merge conflicts (Thanks to @raja-grewal!)
+  * Set `sysctl vm.mmap_min_addr=65536` (Thanks to @raja-grewal!)
+  * Partial compliance with the KSPP on kernel panics (Thanks to @raja-grewal!)
+  * Add details on user namespaces (Thanks to @raja-grewal!)
+  * Include KSPP compliance notices (Thanks to @raja-grewal!)
+  * Provide option to disable user namespaces (Thanks to @raja-grewal!)
+  * Patch bug in existing `rp_filter` `sysctl` (Thanks to @raja-grewal!)
+  * Consistent formatting (Thanks to @raja-grewal!)
+  * Add details on ASLR and move to user space section (Thanks to @raja-grewal!)
+  * Update README.md (Thanks to @raja-grewal!)
+  * Typos (Thanks to @raja-grewal!)
+  * Simplify syntax of some network-related `sysctl`&#39;s (Thanks to @raja-grewal!)
+  * Clarify DMA hardening (Thanks to @raja-grewal!)
+  * Add references on `fs.binfmt_misc.status` (Thanks to @raja-grewal!)
+  * Revert &quot;Provide optional `sysctl fs.binfmt_misc.status=0`&quot; This reverts commit debd7a7b7ae8b03e04d2c8597bcccf2c79000570. (Thanks to @raja-grewal!)
+  * Add details on KFENCE (Thanks to @raja-grewal!)
+  * Add details on `tcp_timestamps` (Thanks to @raja-grewal!)
+  * Add reference on RDRAND (Thanks to @raja-grewal!)
+  * Add reference on `rp_filter` (Thanks to @raja-grewal!)
+  * Add some notices for future Debian 13 rebase (Thanks to @raja-grewal!)
+  * Consistent line length formatting (Thanks to @raja-grewal!)
+  * Details on disabled `fbdev` kernel modules (Thanks to @raja-grewal!)
+  * Update notifications for disabled kernel modules (Thanks to @raja-grewal!)
+  * Update docs regarding Intel module disabling (Thanks to @raja-grewal!)
+  * Clarify `secure_redirects` (Thanks to @raja-grewal!)
+  * Provide optional `sysctl fs.binfmt_misc.status=0` (Thanks to @raja-grewal!)
+  * Enable `vdso32=0` (Thanks to @raja-grewal!)
+  * Enable `kfence.sample_interval=100` (Thanks to @raja-grewal!)
+  * Enable `dev.tty.legacy_tiocsti=0` (Thanks to @raja-grewal!)
+  * Enable `slab_debug=FZ` (Thanks to @raja-grewal!)
+  * Add reference (Thanks to @raja-grewal!)
+  * Update legacy name `slub_debug` -&gt; `slab_debug` (Thanks to @raja-grewal!)
+  * Add details about `slub_debug` (Thanks to @raja-grewal!)
+  * Provide the option to disable legacy TIOCSTI operation (Thanks to @raja-grewal!)
+  * Provide option to disable 32 bit vDSO mappings (Thanks to @raja-grewal!)
+  * Provide option to enable the kernel Electric-Fence (Thanks to @raja-grewal!)
+  * Add references to KSPP (Thanks to @raja-grewal!)
+  * Add missing GRUB command lines for disabled boot parameters (Thanks to @raja-grewal!)
+  * Show details regarding `secure_redirects` (again) (Thanks to @raja-grewal!)
+  * Partial inclusion of GrapheneOS infrastructure blacklist (Thanks to @raja-grewal!)
+  * Set `sysctl fs.binfmt_misc.status=0` (Thanks to @raja-grewal!)
+  * Re-enable (default) `secure_redirects` for ICMP redirect messages (Thanks to @raja-grewal!)
+  * Disable some legacy framebuffer drivers and legacy drivers. These were all previously blacklisted for over 2 years. (Thanks to @raja-grewal!)
+  * Restrict unprivileged user namespaces (Thanks to @raja-grewal!)
+
+* setup-dist (CLI):
+  * Add missing dependency.
+  * Show error message legal notice instead of poweroff if disclaimer is rejected.
+
+* setup-wizard-dist:
+  * Fix detection of Whonix-Workstation, thus fixing autostart of setup-wizard-dist inside Whonix-Workstation.
+  * No longer autostart setup-wizard-dist on Kicksecure.
+  * Skip setup-wizard-dist (systemcheck autostart at first boot) in Kicksecure-Qubes by default (this would lead to too many systemcheck runs at Qubes VM first starts).
+  * Fix auto starting systemcheck at first boot inside Whonix-Gateway.
+
+* swap-file-creator:
+  * Skip swap-file-creator if xen was detected (likely a Qubes HVM, which has dynamic RAM assignment).
+
+* systemcheck:
+  * No longer check if setup-dist (or setup-wizard-dist) has been completed, as this is no longer required due to auto-connecting to the public Tor network https://forums.whonix.org/t/connect-to-public-tor-network-by-default-avoid-anon-connection-wizard-acw-popup-at-first-boot/17848.
+  * [Systemcheck warning against GeoClue privacy concerns associated with GeoClue](https://github.com/Kicksecure/developer-meta-files/issues/3
+)
+* timesanitycheck:
+  * Updated minimum_unixtime.
+
+* usability-misc:
+  * Set `thunar` as default file manager for `xdg-mime`, to fix issue:
+    * https://forums.whonix.org/t/is-catfish-the-new-default-in-the-qubes-domain-open-file-manager-quick-widget-for-whonix/20233
+  * Fix shellcheck warnings (Thanks to nyxnor!).
+  * Kicksecure / Whonix VM installer for Linux: fix `kali_domain_debsource: unbound variable` https://forums.kicksecure.com/t/followed-wiki-but-get-error-for-whonix-install/454/4.
+
+* derivative-maker:
+  * Remove superfluous comment: `live-config-dist` already `Depends:` on `rsync`.
+  * help-steps/dm-build-official: fix: `--target iso` is required to download Calamares from backports.
+  * VirtualBox 7.1.0.
+  * Fix multiple repository creation.
+  * Move bind-dirs configuration from qubes-whonix package to individual packages.
+  * Add explanatory comment for bookworm-backports entries in `debian_stable_current_clearnet.list` (Thanks to @ArrayBolt3!).
+  * Download Calamares from bookworm-backports (Thanks to @ArrayBolt3!).
+  * Fix installation of `efi_weak_recommended_packages_list`.
+  * Create signing keys also if CI detected.
+  * Do not create signing key when building redistributable builds. There is no risk of overwriting signing keys because `signing-key-create` checks if signing keys already exist and never overwrites. However, if signing keys are missing for redistributable builds, then the keys should be manually put in place to avoid signing redistributable builds using auto-generated keys.
+  * Install `cryptsetup-initramfs` by default during ISO build process because `/usr/sbin/bootloader-config` by Calamares-settings-Debian might install it, which might be slow.
+
+* debug-misc:
+  * Update README.md (Thanks to @raja-grewal!).
+  * Allow infinite &quot;oopses&quot; (Thanks to @raja-grewal!).
+  * Do not force eventual reboot upon kernel panic (Thanks to @raja-grewal!).
+  * Update debugging relevant to kernel panics https://github.com/Kicksecure/security-misc/pull/268#issuecomment-2317112703 (Thanks to @raja-grewal!).
+
+* genmkfile:
+  * `reprepro deleteunreferenced`.
+  * Fix multiple repository usage.
+  * Fix: `make_reprepro_codename` is not a local variable, can be a global variable.
+  * Fix: Allow &quot;downgrades&quot; by using `--allow-downgrades` if installing using genmkfile. This is because if the same version was already installed from the repository, APT will consider it a &quot;downgrade&quot; if re-installing locally.
+
+----
+
+# Full difference of all changes
+
+[https://github.com/Kicksecure/derivative-maker/compare/17.2.0.7-developers-only...17.2.3.7-developers-only](https://github.com/Kicksecure/derivative-maker/compare/17.2.0.7-developers-only...17.2.3.7-developers-only)</description>
+    
+    <lastBuildDate>Mon, 30 Sep 2024 08:47:16 +0000</lastBuildDate>
+    <category>News</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-17-2-3-7-point-release/587.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure 17.2.3.7 - Point Release!</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <h1><a name="p-1296-download-1" class="anchor" href="https://forums.kicksecure.com#p-1296-download-1"></a>Download</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="07:09AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/6/63/Download-kicksecure.jpg?version=9adcc5bcba92e65719a7341228d32e1c" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
+
+  <p>FREE Download Kicksecure. Kicksecure can be installed on a physical machine as a host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
+<hr>
+<h1><a name="p-1296-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-1296-upgrade-2"></a>Upgrade</h1>
+<p>Alternatively, in-place release upgrade is possible upgrade using <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="12:22PM - 31 January 2024">Kicksecure – 31 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="10:02AM - 15 August 2024">Kicksecure – 15 Aug 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="p-1296-major-changes-3" class="anchor" href="https://forums.kicksecure.com#p-1296-major-changes-3"></a>Major Changes</h1>
+<ul>
+<li>
+<p>ISO (<code>live-config-dist</code>) improvements (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!):</p>
+<ul>
+<li>Port from LUKS1 to LUKS2 for encryption.</li>
+<li><a href="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420" class="inline-onebox">ISO: Change to unencrypted /boot if using Full Disk Encryption</a> to fix non-English keyboard layouts during full disk encryption pre-boot authentication.</li>
+<li><a href="https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567" class="inline-onebox">ISO - no default for encryption on/off - user should choose explicitly</a></li>
+<li>Remove productUrl, supportUrl, releaseNotesUrl because Calamares runs as root, and executing a browser from Calamares as a user is too error-prone.</li>
+<li>Remove swapfile options from Calamares (because swap file creation is already handled by <a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a> in Kicksecure).</li>
+<li>Enable localization (region and keyboard layout) in Calamares.</li>
+<li><a href="https://forums.kicksecure.com/t/iso-install-to-system-desktop-icon-maximize-window/419" class="inline-onebox">ISO - Install to system desktop icon: maximize window</a></li>
+<li>Backport calamares-settings-debian to Debian Bookworm and use it because it is required for many of the above features.</li>
+<li>Improved visual branding.</li>
+</ul>
+</li>
+<li>
+<p>VirtualBox:</p>
+<ul>
+<li>Revert VirtualBox virtual audio controller back to AC97 due to Intel HD broken sound issues (<a href="https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211" class="inline-onebox">VirtualBox Intel HD Audio and PipeWire Incompatibility / Audio broken after increasing ram to 5 GB / No sound after latest updates - PipeWire Bug? - VirtualBox - Whonix Forum</a>)</li>
+</ul>
+</li>
+<li>
+<p>KVM (libvirt-dist):</p>
+<ul>
+<li>Added 3D acceleration and OpenGL (but disabled by default to simplify users opting in).</li>
+<li>Added human-readable comments (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a>!).</li>
+<li>Switch memory to GB (instead of KiB) (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a>!).</li>
+<li><a href="https://forums.whonix.org/t/help-welcome-kvm-development-staying-the-course/166/566">Rate limit RNG /dev/random <code>&lt;rate bytes='1024' period='1000'/&gt;</code></a> to avoid DOS of RNG /dev/random by VM.</li>
+</ul>
+</li>
+<li>
+<p>desktop-config-dist:</p>
+<ul>
+<li>Improved the livecheck systray (converted tooltips to dialog) (Thanks to Ben Grande!).</li>
+</ul>
+</li>
+<li>
+<p>dist-base-files:</p>
+<ul>
+<li>Only perform the following actions when run by derivative-maker:
+<ul>
+<li>Creation of user <code>user</code>.</li>
+<li>Set empty password (passwordless) for user <code>user</code>.</li>
+<li>Adding default groups to user <code>user</code>.</li>
+<li>Enable console-lockdown.</li>
+<li>Locking of root account fix.</li>
+<li>Skip creation of user <code>user</code>.
+<ul>
+<li>These actions are skipped when using distribution morphing.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>grub-live:</p>
+<ul>
+<li>Researched, commented on port to overlayfs in time for Debian Trixie (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>).</li>
+</ul>
+</li>
+<li>
+<p>kicksecure-meta-packages:</p>
+<ul>
+<li>Add xdg-desktop-portal(-gtk) (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!).</li>
+<li><a href="https://forums.whonix.org/t/port-from-pulseaudio-to-pipewire-for-audio-support/16879/45">No longer install <code>alsa-utils</code> by default</a>.</li>
+<li>Add <code>accountservice</code> to <code>kicksecure-desktop-environment-essential-xfce</code> (package <code>lightdm</code> <code>Suggests:</code> <code>accountservice</code>), which fixes error message:
+<ul>
+<li>
+<blockquote>
+<p>localhost lightdm[911]: Error getting user list from org.freedesktop.Accounts: GDBus.Error:org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.Accounts was not provided by any .service files</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>Allow installation of <code>pipewire-media-session-pulseaudio</code> as an alternative to <code>wireplumber</code>.</li>
+<li>Fix user’s ability to easily go back to installing pulseaudio.</li>
+<li>Add <code>dbus-user-session</code> to <code>kicksecure-recommended-cli</code> as required by PipeWire.</li>
+<li>Add <code>rtkit</code> to <code>non-qubes-audio</code> to prevent rtkit-related errors in PipeWire journal log.</li>
+<li>Add <code>debian-keyring</code> to <code>kicksecure-recommended-cli</code>, useful to verify a Debian ISO.</li>
+<li>Add <code>gawk</code> to <code>kicksecure-dependencies-cli</code> (missing dependency by Debian’s dracut-core) <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1081005">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1081005</a>.</li>
+<li>Add <code>mesa-vulkan-drivers</code> to <code>kicksecure-desktop-environment-essential-gui</code>.</li>
+<li>Add <code>mesa-utils</code> to <code>kicksecure-recommended-cli</code>.</li>
+</ul>
+</li>
+<li>
+<p>kicksecure-welcome-page:</p>
+<ul>
+<li>Added documentation search boxes (Thanks to Hans!).</li>
+<li>Removed metager (at time of writing, login-only) (Thanks to Hans!).</li>
+<li>Improved style.</li>
+<li>Point out that the kicksecure-welcome-page is a local homepage.</li>
+</ul>
+</li>
+<li>
+<p>msgcollector:</p>
+<ul>
+<li>Add command line parser and explanatory comments.</li>
+<li>Refactoring.</li>
+<li>Point out if icon does not exist on stderr.</li>
+<li><code>Depends</code>: <code>gnome-colors-common</code>.</li>
+<li>Change icon directories (Thanks to Ben Grande!).</li>
+</ul>
+</li>
+<li>
+<p>ram-wipe:</p>
+<ul>
+<li>Always run ram-wipe if installed, even inside VMs, to simplify testing inside VMs (deprecate <code>wiperam=force</code> kernel parameter).</li>
+</ul>
+</li>
+<li>
+<p>root check:</p>
+<ul>
+<li>GUI (graphical user interface) applications developed by the Kicksecure project (setup-dist, setup-wizard-dist, repository-dist, sdwdate-gui, anon-connection-wizard, tor-control-panel) can no longer be started as root, show an error message otherwise.</li>
+</ul>
+</li>
+<li>
+<p>security-misc:</p>
+<ul>
+<li>Comment on Flatpak requiring unprivileged user namespaces (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Update mmap ASLR docs (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Fix VirtualBox audio device ICH AC97. no longer <code>blacklist snd_intel8x0</code>, because this breaks VirtualBox audio device ICH AC97, which is unfortunately still required by some users.
+<ul>
+<li>Fixes <a href="https://github.com/Kicksecure/security-misc/issues/271" class="inline-onebox">kernel module blacklist breaks VirtualBox audio devices ICH AC97 and maybe Intel HD · Issue #271 · Kicksecure/security-misc · GitHub</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Dev/audio" class="inline-onebox">Dev/audio - Kicksecure</a></li>
+</ul>
+</li>
+<li>add KSPP compliance status to readme based on comment by <span class="mention">@raja-grewal</span> <a href="https://github.com/Kicksecure/security-misc/issues/256#issuecomment-2330376651" class="inline-onebox">document sysctl settings / kernel parameters using KSPP=yes / KSPP=no · Issue #256 · Kicksecure/security-misc · GitHub</a></li>
+<li>Enable <code>panic_on_warn=1</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/267">no longer set sysctl <code>fs.binfmt_misc.status=0</code> / no longer disallow registering interpreters for miscellaneous binary formats causing file/folder permissions issue</a>
+<ul>
+<li>
+<blockquote>
+<p><code>d????????? ? ? ? ?            ? .</code></p>
+</blockquote>
+</li>
+<li>Firefox no longer starting (probably not not a Firefox issue but general issue caused by <code>fs.binfmt_misc.status=0</code>)</li>
+</ul>
+</li>
+<li>Add details on BPF hardening and split the <code>sysctl</code>s (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add KSPP notice definitions (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add detail on disabling user namespaces breaking UPower (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>README.md: Organise <code>sysctl</code>s and kernel boot parameters (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on oopses and warnings (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on kernel panics (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Refactor modprobe.d to minimise potential future merge conflicts (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Set <code>sysctl vm.mmap_min_addr=65536</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Partial compliance with the KSPP on kernel panics (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on user namespaces (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Include KSPP compliance notices (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Provide option to disable user namespaces (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Patch bug in existing <code>rp_filter</code> <code>sysctl</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Consistent formatting (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on ASLR and move to user space section (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Update README.md (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Typos (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Simplify syntax of some network-related <code>sysctl</code>’s (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Clarify DMA hardening (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add references on <code>fs.binfmt_misc.status</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Revert “Provide optional <code>sysctl fs.binfmt_misc.status=0</code>” This reverts commit debd7a7b7ae8b03e04d2c8597bcccf2c79000570. (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on KFENCE (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details on <code>tcp_timestamps</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add reference on RDRAND (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add reference on <code>rp_filter</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add some notices for future Debian 13 rebase (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Consistent line length formatting (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Details on disabled <code>fbdev</code> kernel modules (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Update notifications for disabled kernel modules (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Update docs regarding Intel module disabling (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Clarify <code>secure_redirects</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Provide optional <code>sysctl fs.binfmt_misc.status=0</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Enable <code>vdso32=0</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Enable <code>kfence.sample_interval=100</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Enable <code>dev.tty.legacy_tiocsti=0</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Enable <code>slab_debug=FZ</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add reference (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Update legacy name <code>slub_debug</code> → <code>slab_debug</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add details about <code>slub_debug</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Provide the option to disable legacy TIOCSTI operation (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Provide option to disable 32 bit vDSO mappings (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Provide option to enable the kernel Electric-Fence (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add references to KSPP (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Add missing GRUB command lines for disabled boot parameters (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Show details regarding <code>secure_redirects</code> (again) (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Partial inclusion of GrapheneOS infrastructure blacklist (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Set <code>sysctl fs.binfmt_misc.status=0</code> (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Re-enable (default) <code>secure_redirects</code> for ICMP redirect messages (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Disable some legacy framebuffer drivers and legacy drivers. These were all previously blacklisted for over 2 years. (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+<li>Restrict unprivileged user namespaces (Thanks to <span class="mention">@raja-grewal</span>!)</li>
+</ul>
+</li>
+<li>
+<p>setup-dist (CLI):</p>
+<ul>
+<li>Add missing dependency.</li>
+<li>Show error message legal notice instead of poweroff if disclaimer is rejected.</li>
+</ul>
+</li>
+<li>
+<p>setup-wizard-dist:</p>
+<ul>
+<li>Fix detection of Whonix-Workstation, thus fixing autostart of setup-wizard-dist inside Whonix-Workstation.</li>
+<li>No longer autostart setup-wizard-dist on Kicksecure.</li>
+<li>Skip setup-wizard-dist (systemcheck autostart at first boot) in Kicksecure-Qubes by default (this would lead to too many systemcheck runs at Qubes VM first starts).</li>
+<li>Fix auto starting systemcheck at first boot inside Whonix-Gateway.</li>
+</ul>
+</li>
+<li>
+<p>swap-file-creator:</p>
+<ul>
+<li>Skip swap-file-creator if xen was detected (likely a Qubes HVM, which has dynamic RAM assignment).</li>
+</ul>
+</li>
+<li>
+<p>systemcheck:</p>
+<ul>
+<li>No longer check if setup-dist (or setup-wizard-dist) has been completed, as this is no longer required due to auto-connecting to the public Tor network <a href="https://forums.whonix.org/t/connect-to-public-tor-network-by-default-avoid-anon-connection-wizard-acw-popup-at-first-boot/17848" class="inline-onebox">connect to public Tor network by default / avoid Anon Connection Wizard (ACW) popup at first boot - News - Whonix Forum</a>.</li>
+<li><a href="https://github.com/Kicksecure/developer-meta-files/issues/3">Systemcheck warning against GeoClue privacy concerns associated with GeoClue</a></li>
+</ul>
+</li>
+<li>
+<p>timesanitycheck:</p>
+<ul>
+<li>Updated minimum_unixtime.</li>
+</ul>
+</li>
+<li>
+<p>usability-misc:</p>
+<ul>
+<li>Set <code>thunar</code> as default file manager for <code>xdg-mime</code>, to fix issue:
+<ul>
+<li><a href="https://forums.whonix.org/t/is-catfish-the-new-default-in-the-qubes-domain-open-file-manager-quick-widget-for-whonix/20233" class="inline-onebox">Is catfish the new default in the Qubes Domain open file manager quick widget for whonix? - Qubes-Whonix - Whonix Forum</a></li>
+</ul>
+</li>
+<li>Fix shellcheck warnings (Thanks to nyxnor!).</li>
+<li>Kicksecure / Whonix VM installer for Linux: fix <code>kali_domain_debsource: unbound variable</code> <a href="https://forums.kicksecure.com/t/followed-wiki-but-get-error-for-whonix-install/454/4" class="inline-onebox">Followed wiki but get error for Whonix install - #4 by anon1</a>.</li>
+</ul>
+</li>
+<li>
+<p>derivative-maker:</p>
+<ul>
+<li>Remove superfluous comment: <code>live-config-dist</code> already <code>Depends:</code> on <code>rsync</code>.</li>
+<li>help-steps/dm-build-official: fix: <code>--target iso</code> is required to download Calamares from backports.</li>
+<li>VirtualBox 7.1.0.</li>
+<li>Fix multiple repository creation.</li>
+<li>Move bind-dirs configuration from qubes-whonix package to individual packages.</li>
+<li>Add explanatory comment for bookworm-backports entries in <code>debian_stable_current_clearnet.list</code> (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!).</li>
+<li>Download Calamares from bookworm-backports (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!).</li>
+<li>Fix installation of <code>efi_weak_recommended_packages_list</code>.</li>
+<li>Create signing keys also if CI detected.</li>
+<li>Do not create signing key when building redistributable builds. There is no risk of overwriting signing keys because <code>signing-key-create</code> checks if signing keys already exist and never overwrites. However, if signing keys are missing for redistributable builds, then the keys should be manually put in place to avoid signing redistributable builds using auto-generated keys.</li>
+<li>Install <code>cryptsetup-initramfs</code> by default during ISO build process because <code>/usr/sbin/bootloader-config</code> by Calamares-settings-Debian might install it, which might be slow.</li>
+</ul>
+</li>
+<li>
+<p>debug-misc:</p>
+<ul>
+<li>Update README.md (Thanks to <span class="mention">@raja-grewal</span>!).</li>
+<li>Allow infinite “oopses” (Thanks to <span class="mention">@raja-grewal</span>!).</li>
+<li>Do not force eventual reboot upon kernel panic (Thanks to <span class="mention">@raja-grewal</span>!).</li>
+<li>Update debugging relevant to kernel panics <a href="https://github.com/Kicksecure/security-misc/pull/268#issuecomment-2317112703" class="inline-onebox">Enable `panic_on_warn=1` by raja-grewal · Pull Request #268 · Kicksecure/security-misc · GitHub</a> (Thanks to <span class="mention">@raja-grewal</span>!).</li>
+</ul>
+</li>
+<li>
+<p>genmkfile:</p>
+<ul>
+<li><code>reprepro deleteunreferenced</code>.</li>
+<li>Fix multiple repository usage.</li>
+<li>Fix: <code>make_reprepro_codename</code> is not a local variable, can be a global variable.</li>
+<li>Fix: Allow “downgrades” by using <code>--allow-downgrades</code> if installing using genmkfile. This is because if the same version was already installed from the repository, APT will consider it a “downgrade” if re-installing locally.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-1296-full-difference-of-all-changes-4" class="anchor" href="https://forums.kicksecure.com#p-1296-full-difference-of-all-changes-4"></a>Full difference of all changes</h1>
+<p><a href="https://github.com/Kicksecure/derivative-maker/compare/17.2.0.7-developers-only...17.2.3.7-developers-only">https://github.com/Kicksecure/derivative-maker/compare/17.2.0.7-developers-only…17.2.3.7-developers-only</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-17-2-3-7-point-release/587/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-17-2-3-7-point-release/587/1</link>
+        <pubDate>Mon, 30 Sep 2024 08:47:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-587-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-17-2-3-7-point-release/587.rss">Kicksecure 17.2.3.7 - Point Release!</source>
+      </item>
+  </channel>
+</rss>
