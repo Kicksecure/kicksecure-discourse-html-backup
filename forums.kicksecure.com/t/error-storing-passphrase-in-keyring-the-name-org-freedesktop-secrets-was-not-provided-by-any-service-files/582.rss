@@ -31,9 +31,33 @@ related:
 
 https://github.com/keepassxreboot/keepassxc/issues/6274</description>
     
-    <lastBuildDate>Sat, 28 Sep 2024 04:18:52 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 01 Oct 2024 23:54:00 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I don’t think KeePassXC can be used by default as the secret service provider in its current state without some significant hacks. It almost could, but it’s missing some features needed to get there.</p>
+<p>In order to use KeePassXC as a secret service, you have to create a password database and configure it to be used for secret storage. Therefore in order for there to be a working secret service out of the box, there has to be some way to make a database automatically during installation or at user creation time (since each user account on the system needs its own separate database for obvious reasons).</p>
+<p>Creating a database automatically is a problem because only specially configured databases can be used for secret storage. One has to specify that the database is usable for secret storage, and which “group” inside the database should be used for the purpose. This configuration is stored <em>in the database</em>. You can’t easily set it by editing a text file like you could with a usual config file. While <code>keepassxc-cli is able to *create* databases, it is not able to edit these in-database configuration options. The </code>db-edit` command it provides appears to only be usable for changing the database’s password, key file, etc.</p>
+<p>Without the ability to set which group to use for secret storage in a database, a database will be set by default to not be used for secret storage at all. Thus you can’t make a new database from scratch that is usable for secret storage.</p>
+<p>So now for the hacks. What <em>would</em> potentially be possible is to make a properly configured empty database with some sort of default password or key, then ship that database as part of Kicksecure. To avoid everyone having the same authentication data on their database, we could then have a routine that runs on first boot that generates a new key file, binds it to the database, then clears any default authentication data in the database so that only the user’s key file can unlock it. We can then have a script that runs automatically every time Kicksecure is started that launches KeePassXC with this database and key file pair opened automatically.</p>
+<p>The main problem I see with this solution is:</p>
+<ul>
+<li>It’s not elegant <em>at all</em>. It’s hacky.</li>
+<li>It literally requires shipping an encrypted binary blob as part of Kicksecure. I mean, yes, it’s one that the user could inspect themselves with sufficient effort but yikes.</li>
+<li>It could be insecure. I don’t know how KeePassXC’s internals work, but if it uses a “master key” encrypted by a password or key file, this won’t work at all because then everyone will have the same master key for their secret storage database, which is bad from a security standpoint for obvious reasons.</li>
+</ul>
+<p>In a perfect world, we’d be able to simply set the database settings from the command line. Then we could create a database automatically, set it as usable for secret storage, specify the root group as the one to use for that purpose, and then set up KeePassXC to auto-launch and auto-unlock the database on boot. The only part that’s really missing for this to work is setting a database as usable for secret storage and setting eht group to be used for that purpose. Perhaps that can be a later contribution to upstream KeePassXC.</p>
+<p>In the mean time, an existing “automatic” secret service provider like gnome-keyring will probably do a good enough job.</p>
+          <p><a href="https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582/2</link>
+        <pubDate>Tue, 01 Oct 2024 23:39:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-582-2</guid>
+        <source url="https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582.rss">Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</source>
+      </item>
       <item>
         <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

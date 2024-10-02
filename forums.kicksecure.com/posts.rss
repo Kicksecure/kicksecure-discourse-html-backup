@@ -5,6 +5,185 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t think KeePassXC can be used by default as the secret service provider in its current state without some significant hacks. It almost could, but it’s missing some features needed to get there.</p>
+<p>In order to use KeePassXC as a secret service, you have to create a password database and configure it to be used for secret storage. Therefore in order for there to be a working secret service out of the box, there has to be some way to make a database automatically during installation or at user creation time (since each user account on the system needs its own separate database for obvious reasons).</p>
+<p>Creating a database automatically is a problem because only specially configured databases can be used for secret storage. One has to specify that the database is usable for secret storage, and which “group” inside the database should be used for the purpose. This configuration is stored <em>in the database</em>. You can’t easily set it by editing a text file like you could with a usual config file. While <code>keepassxc-cli is able to *create* databases, it is not able to edit these in-database configuration options. The </code>db-edit` command it provides appears to only be usable for changing the database’s password, key file, etc.</p>
+<p>Without the ability to set which group to use for secret storage in a database, a database will be set by default to not be used for secret storage at all. Thus you can’t make a new database from scratch that is usable for secret storage.</p>
+<p>So now for the hacks. What <em>would</em> potentially be possible is to make a properly configured empty database with some sort of default password or key, then ship that database as part of Kicksecure. To avoid everyone having the same authentication data on their database, we could then have a routine that runs on first boot that generates a new key file, binds it to the database, then clears any default authentication data in the database so that only the user’s key file can unlock it. We can then have a script that runs automatically every time Kicksecure is started that launches KeePassXC with this database and key file pair opened automatically.</p>
+<p>The main problem I see with this solution is:</p>
+<ul>
+<li>It’s not elegant <em>at all</em>. It’s hacky.</li>
+<li>It literally requires shipping an encrypted binary blob as part of Kicksecure. I mean, yes, it’s one that the user could inspect themselves with sufficient effort but yikes.</li>
+<li>It could be insecure. I don’t know how KeePassXC’s internals work, but if it uses a “master key” encrypted by a password or key file, this won’t work at all because then everyone will have the same master key for their secret storage database, which is bad from a security standpoint for obvious reasons.</li>
+</ul>
+<p>In a perfect world, we’d be able to simply set the database settings from the command line. Then we could create a database automatically, set it as usable for secret storage, specify the root group as the one to use for that purpose, and then set up KeePassXC to auto-launch and auto-unlock the database on boot. The only part that’s really missing for this to work is setting a database as usable for secret storage and setting eht group to be used for that purpose. Perhaps that can be a later contribution to upstream KeePassXC.</p>
+<p>In the mean time, an existing “automatic” secret service provider like gnome-keyring will probably do a good enough job.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582#post_2</link>
+        <pubDate>Tue, 01 Oct 2024 23:39:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1313</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <p>Can not run flatpak apps after Kicksecure update</p>
+<p>/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=raider com.github.ADBeveridge.Raider<br>
+bwrap: No permissions to create new namespace, likely because the kernel does not allow non-privileged user namespaces.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_1</link>
+        <pubDate>Tue, 01 Oct 2024 16:21:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1312</guid>
+      </item>
+      <item>
+        <title>Luks1 version issue</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>The initial ramdisk (initrd) (created by default by initrd creator<br>
+“dracut” in Kicksecure at time of writing).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_9</link>
+        <pubDate>Tue, 01 Oct 2024 07:14:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1310</guid>
+      </item>
+      <item>
+        <title>Ubiquity / LVM / TPM</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="8" data-topic="585">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="585">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Did you ever use LVM or are you theorizing? Did you accept my challenge:</p>
+</blockquote>
+</aside>
+<p>LVM is the default installation by qubes because it uses anaconda, and debian because it uses d-i (which i use both).</p>
+<p>The challenge which you are proposing is a specific use case which i described above for ubiquity bugs, it doesnt provide any critical bug which LVM suffer VS no LVM.</p>
+</blockquote>
+</aside>
+<p>If you cannot pass the challenge, you’re not really using LVM except for some transparent use in Qubes but no real user interaction.</p>
+<p>Why argue for a feature which you’re actively making use yourself? Feature completeness?</p>
+<p>No, feature completeness based on theoretic considerations is an insufficient argument.</p>
+<p>The Linux boot process is complicated enough. (<a href="https://www.kicksecure.com/wiki/Dev/image_creation" class="inline-onebox">Development of System Image Creation and Bootstrapping Tools</a>)</p>
+<p>Stacking another layer of complexity (LVM) without strong rationale is only making a bigger mess on top the existing usability mess. That’s why I even created <a href="https://www.kicksecure.com/wiki/Broken_Boot" class="inline-onebox">Broken Boot - Kicksecure</a>. Once the boot process is broken, analysis and recovery without re-installation is extremely complicated. The internet is full of of support requests by users which went unresolved.</p>
+<p>I think the issue is, that we don’t have a feature request template for Kicksecure yet. This is what Qubes has:</p>
+<blockquote>
+<ul>
+<li>The problem you’re addressing (if any)</li>
+<li>The solution you’d like</li>
+<li>The value to a user, and who that user might be</li>
+</ul>
+</blockquote>
+<p>And this is from systemd:</p>
+<blockquote>
+<ul>
+<li>Is your feature request related to a problem? Please describe
+<ul>
+<li>A clear and concise description of what the problem is. Ex. I’m always frustrated when […]</li>
+</ul>
+</li>
+<li>Describe the solution you’d like
+<ul>
+<li>A clear and concise description of what you want to happen.</li>
+</ul>
+</li>
+<li>Describe alternatives you’ve considered
+<ul>
+<li>A clear and concise description of any alternative solutions or features you’ve considered.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>Please fill this out, describe the feature you’re <strong>personally</strong> missing.</p>
+<p>Because then maybe way to get this feature is indeed LVM but perhaps there are more suitable, simpler alternatives such as btrfs</p>
+<p>It might make sense to request features that one doesn’t personally need but thinks this would be good for the overall health of the project since others those need it don’t even make a feature request. But in case of LVM, I don’t think that makes sense.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="8" data-topic="585">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>We cant just point out that this is crushed and not booting because oh there is LVM mentioned on the screen, real cause need to be identified then decided if its really LVM specific or not.</p>
+</blockquote>
+</aside>
+<p>LVM doesn’t make analysis any simpler.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="8" data-topic="585">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>If it was generic use issue, many would have fallen under the same condition, including marmarek himself. Probably its just unman specific config issue.</p>
+</blockquote>
+</aside>
+<p>If even unman runs into this issue, doesn’t know how to fix it and nobody knows it either, then it’s simply too difficult.</p>
+<p>Or take <a href="https://github.com/QubesOS/qubes-issues/issues/8707" class="inline-onebox">Unable to boot | "qubes_dom0-root does not exist" | Possible LVM problem · Issue #8707 · QubesOS/qubes-issues · GitHub</a>. After complex analysis, it just stalled. DemiMarie (Qubes developer) didn’t answer anymore for some reason. That could be running out of ideas or time or something else. But the reasons are speculation since the end result is the same. It’s too complex, requires too much effort to debug.</p>
+<p>Since in case of Kicksecure it’s optional and doesn’t have a strong rationale, it’s best avoided.</p>
+<p>That’s not the kind of reliability, stability and maintainability that I set as project goals. Related:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stable_Version_User_Experience">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener" title="04:03PM - 17 January 2024">Kicksecure – 17 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener">Kicksecure Stable Version User Experience</a></h3>
+
+  <p>Aims for a seamless and robust user experience in the stable release of Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/maintainability">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener" title="09:14AM - 29 August 2024">Kicksecure – 29 Aug 24</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener">maintainability</a></h3>
+
+  <p>Exploring the challenges of maintainability in the Kicksecure project and Open Source development.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="nurmagoz" data-post="7" data-topic="585">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Looking at the mess calamares development approach for LVM, i dont know, it sound like they have zero clue how to do it correctly, not sure it will ever see the sun.</p>
+</blockquote>
+</aside>
+<p>Which further strengthens my point: Highly technical people either aren’t motivated to work with LVM or unable due to technical challenges, then it’s best avoided unless there is a strong rationale.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_11</link>
+        <pubDate>Tue, 01 Oct 2024 06:38:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1309</guid>
+      </item>
+      <item>
         <title>Ubiquity / LVM / TPM</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
@@ -2094,78 +2273,6 @@ I’d be glad to have any indications or help to deal with this, many thanks !</
         <link>https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134#post_10</link>
         <pubDate>Sat, 14 Sep 2024 20:42:13 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1250</guid>
-      </item>
-      <item>
-        <title>Upstream Patch Tracking Bug Blocking Haveged Updates</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Quote <a href="https://forums.whonix.org/t/haveged-entropy-daemon/17158" class="inline-onebox">haveged - Entropy daemon - Development - Whonix Forum</a></p>
-<aside class="quote no-group" data-username="Patrick">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<ul>
-<li>Commented on Debian bug report <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=999811">HAVEGED is obsolete starting from linux kernel 5.6</a> just now to clarify the situation.</li>
-<li>Also created Debian feature request <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1078052"> upload new version haveged 1.9.18</a> just now.</li>
-</ul>
-</blockquote>
-</aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/upstream-patch-tracking-bug-blocking-haveged-updates/320#post_2</link>
-        <pubDate>Sat, 14 Sep 2024 15:25:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1249</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>How could Kicksecure be configured to have a firewall enabled by default for Kicksecure desktop but at the same time do not enable the firewall by default for users installing using distribution morphing method?</p>
-<p>Why not enable Kicksecure firewall by default for users installing using distribution morphing method? It’s a too intrusive change. Because if they are distribution morphing a server, they might lock themselves out from SSH and other services such as their webserver might become unreachable.</p>
-<p>What’s the solution?</p>
-<p>A Kicksecure systemd unit which comes disabled by default using systemd presets. It would be enabled by default for Kicksecure for desktop using calamares but users using distribution morphing would need to run <code>sudo systemctl enable --now kicksecure-firewall</code> (not yet implemented at time of writing).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_11</link>
-        <pubDate>Sat, 14 Sep 2024 14:28:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1248</guid>
-      </item>
-      <item>
-        <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This is implemented in <code>17.2.2.7</code> and above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420#post_7</link>
-        <pubDate>Sat, 14 Sep 2024 14:18:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1247</guid>
-      </item>
-      <item>
-        <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This might likely be fixed once Debian live-build gets dracut support.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://salsa.debian.org/live-team/live-build/-/merge_requests/353">
-  <header class="source">
-      <img src="https://salsa.debian.org/uploads/-/system/appearance/favicon/1/gitlabian_32.png" class="site-icon" width="32" height="32">
-
-      <a href="https://salsa.debian.org/live-team/live-build/-/merge_requests/353" target="_blank" rel="noopener">GitLab</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="64" height="64" src="https://salsa.debian.org/uploads/-/system/project/avatar/11221/cff0636030243073f6fc8fd31416a61a.png" class="thumbnail onebox-avatar">
-
-<h3><a href="https://salsa.debian.org/live-team/live-build/-/merge_requests/353" target="_blank" rel="noopener">Draft: dracut support (!353) · Merge requests · Debian Live Team / live-build...</a></h3>
-
-  <p>New: adds support for dracut instead of initramfs-tools. Closes #1031903</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>And once Kicksecure starts using live-build to create ISO images.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_5</link>
-        <pubDate>Sat, 14 Sep 2024 13:50:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1246</guid>
       </item>
   </channel>
 </rss>
