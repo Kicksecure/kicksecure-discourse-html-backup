@@ -5,6 +5,591 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>security-misc changed in this release:</p>
+<p><code>kernel.unprivileged_userns_clone=0</code></p>
+</blockquote>
+</aside>
+<p>This is good to have and kept as default, something else should be figured out on how to make flatpak work.</p>
+<p>Alpinelinux using the same kernel option:</p>
+<aside class="onebox stackexchange" data-onebox-src="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux">
+  <header class="source">
+
+      <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">superuser.com</a>
+  </header>
+
+  <article class="onebox-body">
+      <a href="https://superuser.com/users/1118308/pjeremymalouf" target="_blank" rel="noopener">
+    <img alt="PJeremyMalouf" src="https://www.gravatar.com/avatar/6c09cba963c7e78e35f4755062697395?s=256&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="256" height="256">
+  </a>
+
+<h4>
+  <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">Enable kernel.unprivileged_userns_clone in Alpine Linux</a>
+</h4>
+
+<div class="tags">
+  <strong>docker, amazon-web-services, alpine-linux</strong>
+</div>
+
+<div class="date">
+  asked by
+  
+  <a href="https://superuser.com/users/1118308/pjeremymalouf" target="_blank" rel="noopener">
+    PJeremyMalouf
+  </a>
+  on <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">06:49AM - 04 Dec 19 UTC</a>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>But they say if you have flatpak permission issue just " add your user to the <strong>flatpak</strong> group."</p>
+<p><a href="https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors" class="onebox" target="_blank" rel="noopener">https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors</a></p>
+<p>Why turning off this option is not solution:</p>
+<aside class="onebox stackexchange" data-onebox-src="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533">
+  <header class="source">
+
+      <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">security.stackexchange.com</a>
+  </header>
+
+  <article class="onebox-body">
+      <a href="https://security.stackexchange.com/users/106285/forest" target="_blank" rel="noopener">
+    <img alt="forest" src="https://i.sstatic.net/mVwQm.jpg?s=256" class="thumbnail onebox-avatar" width="256" height="256">
+  </a>
+
+<h4>
+  <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">What does enabling kernel.unprivileged_userns_clone do?</a>
+</h4>
+
+<div class="tags">
+  <strong>linux</strong>
+</div>
+
+<div class="date">
+  
+  answered by
+  <a href="https://security.stackexchange.com/users/106285/forest" target="_blank" rel="noopener">
+    forest
+  </a>
+  on <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">01:41AM - 05 May 19 UTC</a>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Temporary workaround to undo this setting (untested):</p>
+<p><code>sudo sysctl -w kernel.unprivileged_userns_clone=1</code></p>
+</blockquote>
+</aside>
+<p>Workaround, worked:</p>
+<pre><code class="lang-auto">[user ~]% sudo sysctl -w kernel.unprivileged_userns_clone=1
+kernel.unprivileged_userns_clone = 1
+[user ~]% flatpak install org.mozilla.firefox
+Looking for matches…
+Required runtime for org.mozilla.firefox/x86_64/stable (runtime/org.freedesktop.Platform/x86_64/23.08) found in remote flathub
+Do you want to install it? [Y/n]: n 
+error: The application org.mozilla.firefox/x86_64/stable requires the runtime org.freedesktop.Platform/x86_64/23.08 which is not installed
+zsh: exit 1     flatpak install org.mozilla.firefox
+[user ~]% flatpak install io.freetubeapp.FreeTube
+Looking for matches…
+Required runtime for io.freetubeapp.FreeTube/x86_64/stable (runtime/org.freedesktop.Platform/x86_64/23.08) found in remote flathub
+Do you want to install it? [Y/n]: y
+
+io.freetubeapp.FreeTube permissions:
+    ipc        network                pulseaudio             x11
+    dri        file access [1]        dbus access [2]        bus ownership [3]
+
+    [1] xdg-download
+    [2] org.freedesktop.PowerManagement, org.freedesktop.ScreenSaver, org.gnome.SessionManager,
+        org.gnome.SettingsDaemon
+    [3] org.mpris.MediaPlayer2.chromium.*, org.mpris.MediaPlayer2.freetube
+
+
+        ID                                     Branch         Op    Remote    Download
+ 1. [✓] org.freedesktop.Platform.GL.default    23.08          i     flathub   164.6 MB / 163.8 MB
+ 2. [✓] org.freedesktop.Platform.GL.default    23.08-extra    i     flathub    22.6 MB / 163.8 MB
+ 3. [✓] org.freedesktop.Platform.Locale        23.08          i     flathub    17.9 kB / 371.6 MB
+ 4. [✓] org.freedesktop.Platform.openh264      2.2.0          i     flathub     1.2 MB / 944.3 kB
+ 5. [✓] org.freedesktop.Platform               23.08          i     flathub   250.0 MB / 230.9 MB
+ 6. [✓] io.freetubeapp.FreeTube                stable         i     flathub   123.4 MB / 114.8 MB
+
+Installation complete.
+[user ~]%
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_9</link>
+        <pubDate>Wed, 02 Oct 2024 23:33:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1340</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/274">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/274" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/274" target="_blank" rel="noopener">`kernel.unprivileged_userns_clone=0` breaks too much</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-10-02" data-time="17:09:37" data-timezone="UTC">05:09PM - 02 Oct 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">* https://forums.whonix.org/t/in-place-release-upgrade-to-whonix-17-2-3-7-seems-<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">to-have-broken-my-flatpaks/20486
+* https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594
+* https://forums.kicksecure.com/t/impossible-to-start-evolution-app-since-the-last-update/601</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_8</link>
+        <pubDate>Wed, 02 Oct 2024 17:09:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1338</guid>
+      </item>
+      <item>
+        <title>Cannot run some AppImage apps after Kicksecure upate</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Try the same as mentioned in this very forum post: <a href="https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592/7" class="inline-onebox">Can not run flatpak apps after Kicksecure update - #7 by Patrick</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_3</link>
+        <pubDate>Wed, 02 Oct 2024 17:06:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1337</guid>
+      </item>
+      <item>
+        <title>Impossible to start Evolution app since the last update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="jnd" data-post="1" data-topic="601">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/a587f6/48.png" class="avatar"> jnd:</div>
+<blockquote>
+<p>bwrap: No permissions to create new namespace, likely because the kernel does not allow non-privileged user namespaces.</p>
+</blockquote>
+</aside>
+<p>Try the same as mentioned in this very forum post: <a href="https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592/7" class="inline-onebox">Can not run flatpak apps after Kicksecure update - #7 by Patrick</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/impossible-to-start-evolution-app-since-the-last-update/601#post_2</link>
+        <pubDate>Wed, 02 Oct 2024 17:03:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1336</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>security-misc changed in this release:</p>
+<pre><code>kernel.unprivileged_userns_clone=0
+</code></pre>
+<p>Temporary workaround to undo this setting (untested):</p>
+<pre><code>sudo sysctl -w kernel.unprivileged_userns_clone=1
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_7</link>
+        <pubDate>Wed, 02 Oct 2024 17:02:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1335</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="kinoe" data-post="1" data-topic="602">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/f9ae1b/48.png" class="avatar"> kinoe:</div>
+<blockquote>
+<p>I also do have this issue even without running kicksecure fom ventoy!</p>
+</blockquote>
+</aside>
+<p>Then I don’t recommend mixing it into the ventoy related forum thread.<br>
+(<a href="https://forums.kicksecure.com/t/install-on-usb-dont-boot/574" class="inline-onebox">Install on usb don't boot</a>)</p>
+<aside class="quote no-group" data-username="kinoe" data-post="1" data-topic="602">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/f9ae1b/48.png" class="avatar"> kinoe:</div>
+<blockquote>
+<p>I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</p>
+</blockquote>
+</aside>
+<p>What exactly did you do?<br>
+Write ISO to USB?<br>
+Boot the ISO.<br>
+So far so good?<br>
+Then installed Kicksecure to internal harddrive?<br>
+Fails to boot after installation?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_3</link>
+        <pubDate>Wed, 02 Oct 2024 16:35:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1334</guid>
+      </item>
+      <item>
+        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>related issue:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2379">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/2379" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/2379" target="_blank" rel="noopener">With `preCheckEncryption` enabled, it becomes impossible to disable encryption without using manual partitioning</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-10-02" data-time="16:02:51" data-timezone="UTC">04:02PM - 02 Oct 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Describe the bug**
+Calamares provides a feature, `preCheckEncryption`, that c<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">an be set in the `partition` module. This feature is designed to make the encryption checkbox checked automatically, requiring the user to either enter an encryption passphrase *or* disable encryption in order to proceed. This ensures that the user notices that encryption is available and is encouraged to use it.
+
+This feature however only half works - while the user is encouraged to set a passphrase, they are *not* able to disable encryption and proceed past the "Partitions" screen. Trying to do so results in erratic behavior, and the "Next" button is never enabled even if the "Encrypt system" check box is unchecked. A video of exactly what happens can be seen below.
+
+**To Reproduce**
+Steps to reproduce the behavior:
+1. Boot up an ISO from a distro that uses Calamares as the installer.
+2. Ensure that `/etc/calamares/modules/partition.conf` has the `preCheckEncryption` setting enabled.
+3. Launch Calamares.
+4. Proceed through the screens until you get to the "Partitions" screen.
+5. Click "Erase disk".
+6. Uncheck the "Encrypt system" checkbox - the passphrase text boxes will vanish, but the "Encrypt system" checkbox itself will remain checked, and the "Next" button will not be enabled.
+7. Uncheck the "Encrypt system" checkbox again - this time it will become unchecked, but the "Next" button will still not be enabled.
+
+**Expected behavior**
+Unchecking the "Encrypt system" checkbox should result in the box becoming unchecked, the passphrase text boxes vanishing, and the "Next" button becoming clickable.
+
+**Screenshots and Logs**
+
+https://github.com/user-attachments/assets/82710517-9716-4290-9064-8879bf175f95
+
+**Additional context**
+
+Looking at the code, I think the problem is in `calamares/src/modules/partition/gui/ChoicePage.cpp`, in function `ChoicePage::updateActionChoicePreview`. There are a couple of spots in the function that run `if ( m_config-&gt;preCheckEncryption() ) { m_encryptWidget-&gt;setEncryptionCheckbox( true ); }`. This happens *every time* the preview is updated, which means that even if the user explicitly unchecks the box, it could end up becoming checked again. I assume that this is what's causing the encrypt system box to not really uncheck the first time you go to uncheck it - the very action of unchecking it triggers a preview refresh, which then re-checks it.
+
+Assuming this is the problem, it would probably solve the issue to simply ensure that the box is only ever checked once. After the first time, it should never be put into a checked state programatically. That way what the user chooses to do thereafter is respected. I'll test this and probably append it to my existing PR for fixing https://github.com/calamares/calamares/issues/2375.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubpullrequest" data-onebox-src="https://github.com/calamares/calamares/pull/2376">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/pull/2376" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+
+
+
+    <div class="github-icon-container" title="Pull Request">
+      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
+    </div>
+
+  <div class="github-info-container">
+
+
+
+      <h4>
+        <a href="https://github.com/calamares/calamares/pull/2376" target="_blank" rel="noopener">Partition module fixes for encryption checkbox</a>
+      </h4>
+
+    <div class="branches">
+      <code>calamares:calamares</code> ← <code>ArrayBolt3:calamares</code>
+    </div>
+
+      <div class="github-info">
+        <div class="date">
+          opened <span class="discourse-local-date" data-format="ll" data-date="2024-09-25" data-time="23:02:53" data-timezone="UTC">11:02PM - 25 Sep 24 UTC</span>
+        </div>
+
+        <div class="user">
+          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+            ArrayBolt3
+          </a>
+        </div>
+
+        <div class="lines" title="2 commits changed 3 files with 8 additions and 8 deletions">
+          <a href="https://github.com/calamares/calamares/pull/2376/files" target="_blank" rel="noopener">
+            <span class="added">+8</span>
+            <span class="removed">-8</span>
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Fixes https://github.com/calamares/calamares/issues/2375, https://github.com/cal<span class="show-more-container"><a href="https://github.com/calamares/calamares/pull/2376" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">amares/calamares/issues/2379</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_9</link>
+        <pubDate>Wed, 02 Oct 2024 16:27:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1332</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>it security-misc. I checked. set it to debian and flatpak will stop working</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_6</link>
+        <pubDate>Wed, 02 Oct 2024 15:31:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1331</guid>
+      </item>
+      <item>
+        <title>Impossible to start Evolution app since the last update</title>
+        <dc:creator><![CDATA[@jnd]]></dc:creator>
+        <description><![CDATA[ <p>Hello,<br>
+Since the last Kicksecure update, I can no longer launch Evolution, the messaging application. It’s set as the default application, but it won’t start either with a graphical command or from the command line.<br>
+When I try to launch it from the command line, I get the following messages, which are totally incomprehensible to me.<br>
+Thank you for your help!</p>
+<p>** (evolution:7570): WARNING **: 17:21:58.837: Failed to canonicalize path /home/jeronath/.local/share/evolution/preview-plugins: Aucun fichier ou dossier de ce type</p>
+<p>** (evolution:7570): CRITICAL **: 17:21:58.838: Attempted to add disallowed path to sandbox: /home/jeronath/.local/share/evolution/preview-plugins<br>
+bwrap: No permissions to create new namespace, likely because the kernel does not allow non-privileged user namespaces. See deb.li/bubblewrap or file:///usr/share/doc/bubblewrap/README.Debian.gz.</p>
+<p>** (evolution:7570): ERROR **: 17:21:58.916: Failed to fully launch dbus-proxy: Le processus fils s’est terminé avec le code 1<br>
+Trappe pour point d’arrêt et de trace (core dumped)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/impossible-to-start-evolution-app-since-the-last-update/601#post_1</link>
+        <pubDate>Wed, 02 Oct 2024 15:30:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1330</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Are you using the latest Kicksecure ISO? Some of the earlier ISOs could have this issue, but it should be fixed in the latest ISO.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_2</link>
+        <pubDate>Wed, 02 Oct 2024 15:15:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1329</guid>
+      </item>
+      <item>
+        <title>Cannot run some AppImage apps after Kicksecure upate</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote quote-modified" data-post="4" data-topic="592">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592/4">Can not run flatpak apps after Kicksecure update</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_2</link>
+        <pubDate>Wed, 02 Oct 2024 15:05:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1328</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This sounds like either Kicksecure has a kernel built without unprivileged user namespace creation abilities, or a major AppArmor update came through that is disabling the feature. I’ll look into this later today most likely.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_5</link>
+        <pubDate>Wed, 02 Oct 2024 14:54:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1326</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/in-place-release-upgrade-to-whonix-17-2-3-7-seems-to-have-broken-my-flatpaks/20486">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/in-place-release-upgrade-to-whonix-17-2-3-7-seems-to-have-broken-my-flatpaks/20486" target="_blank" rel="noopener" title="06:28PM - 30 September 2024">Whonix Forum – 30 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/in-place-release-upgrade-to-whonix-17-2-3-7-seems-to-have-broken-my-flatpaks/20486" target="_blank" rel="noopener">In-place release upgrade to Whonix 17.2.3.7 seems to have broken my flatpaks</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #8C6238;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Support</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>Whonix workstation- virtualbox version  I upgraded my packages via the software manager. There were a lot of packages to install. I assume that was due to the Whonix 17.2.3.7 upgrade.  When I restarted Whonix later, I discovered that my flatpaks...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_4</link>
+        <pubDate>Wed, 02 Oct 2024 14:24:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1323</guid>
+      </item>
+      <item>
+        <title>ISO - cryptsetup Full Disk Encryption (FDE) - set more secure default encryption settings</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://invent.kde.org/system/kpmcore/-/merge_requests/54">
+  <header class="source">
+      <img src="https://invent.kde.org/uploads/-/system/appearance/favicon/1/kde-logo-white-blue-128x128.png" class="site-icon" width="128" height="128">
+
+      <a href="https://invent.kde.org/system/kpmcore/-/merge_requests/54" target="_blank" rel="noopener">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://invent.kde.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar">
+
+<h3><a href="https://invent.kde.org/system/kpmcore/-/merge_requests/54" target="_blank" rel="noopener">Harden default LUKS2 settings (!54) · Merge requests · System / KPMCore · GitLab</a></h3>
+
+  <p>See https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764 for rationale. tl;dr: the default settings for LUKS2 encryption in libkpmcore aren't as secure as they could be and it would...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588#post_2</link>
+        <pubDate>Wed, 02 Oct 2024 13:23:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1322</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>I also do have this issue even without running kicksecure fom ventoy!<br>
+I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_1</link>
+        <pubDate>Wed, 02 Oct 2024 10:53:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1321</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>Yes. Flatpak and some Appimage cant run <img src="https://forums.kicksecure.com/images/emoji/twitter/frowning.png?v=12" title=":frowning:" class="emoji" alt=":frowning:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_3</link>
+        <pubDate>Wed, 02 Oct 2024 05:33:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1317</guid>
+      </item>
+      <item>
+        <title>Cannot run some AppImage apps after Kicksecure upate</title>
+        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
+        <description><![CDATA[ <p>Some AppImage, not all, cannot run anymore after the latest point release 17.2.3.7 update. Here is an example with Bitwarden:</p>
+<pre><code class="lang-auto">[user ~]% ./AppImage/Bitwarden-2024.9.0-x86_64.AppImage
+[9616:1002/015207.279258:FATAL:setuid_sandbox_host.cc(163)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /tmp/user/1000/.mount_BitwarIjvoLY/chrome-sandbox is owned by root and has mode 4755.
+Trace/breakpoint trap (core dumped)
+zsh: exit 133   ./AppImage/Bitwarden-2024.9.0-x86_64.AppImage
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_1</link>
+        <pubDate>Wed, 02 Oct 2024 02:13:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1316</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
+        <description><![CDATA[ <p>Issue confirmed for me too. Zero changes done on Flatpak apps, issue only occured after latest kicksecure piont release 17.2.3.7 update.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_2</link>
+        <pubDate>Wed, 02 Oct 2024 01:58:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1315</guid>
+      </item>
+      <item>
         <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>I don’t think KeePassXC can be used by default as the secret service provider in its current state without some significant hacks. It almost could, but it’s missing some features needed to get there.</p>
@@ -1722,557 +2307,6 @@ Simply removing the `if ( newState != m_state )` statement from EncryptWidget.cp
         <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_4</link>
         <pubDate>Fri, 27 Sep 2024 02:27:38 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1276</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>arraybolt3 via Kicksecure Forums:</p>
-<blockquote>
-<p>There are a few ways one could implement this, some of them more<br>
-invasive than others. One way that might work is to simply prevent the<br>
-user from proceeding past the partitioning screen if encryption is<br>
-enabled but a passphrase isn’t set, and then have the disk encryption<br>
-checkbox<em>checked by default</em>.<br>
-In that instance a user would be required to either choose a passphrase<br>
-or disable encryption. IMO this is the best solution since it should be<br>
-reasonably obvious to the user<em>why</em>  they can’t proceed, and it forces them to make a conscious choice, which is the goal.</p>
-</blockquote>
-<p>This “easy” solution sounds good for now.</p>
-<p>Later maybe…</p>
-<pre><code class="lang-auto">Do you wish to use Full Disk Encryption (FDE)?
-
-[ ] use FDE
-[ ] do not use FDE
-
-Setting up FDE later is very difficult.
-</code></pre>
-<p>The text needs more work probably if this is even realistic. The text<br>
-could be improved to explain what FDE is and whatnot.</p>
-<p>“Setting up FDE later is very difficult.” - maybe only show if selecting<br>
-“no”</p>
-<p>Could be difficult since that might require modifications to the<br>
-calamares partition module, which is not written in python.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_3</link>
-        <pubDate>Thu, 26 Sep 2024 13:06:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1275</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>There are a few ways one could implement this, some of them more invasive than others. One way that might work is to simply prevent the user from proceeding past the partitioning screen if encryption is enabled but a passphrase isn’t set, and then have the disk encryption checkbox <em>checked by default</em>. In that instance a user would be required to either choose a passphrase or disable encryption. IMO this is the best solution since it should be reasonably obvious to the user <em>why</em> they can’t proceed, and it forces them to make a conscious choice, which is the goal.</p>
-<p>It’s also possible to make the “Encrypt system” checkbox tristate, but that comes with some disadvantages and probably won’t have good UX (it might not be clear to the user <em>why</em> they can’t proceed, especially since users oftentimes don’t even notice that the disk encryption checkbox is there at all).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_2</link>
-        <pubDate>Wed, 25 Sep 2024 20:33:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1274</guid>
-      </item>
-      <item>
-        <title>Consider installing systemd-oomd by default</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Thank you for sharing this!</p>
-<p>So we’ll not do this.</p>
-<hr>
-<p>On SysRq, that’s a different topic:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/SysRq">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/SysRq" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/480;"><img src="https://www.kicksecure.com/w/images/6/6e/Sysrq12312d21.jpg?version=fcd75ab702311c3f69f7acd12081dd72" class="thumbnail" width="640" height="480"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/SysRq" target="_blank" rel="noopener">System Recovery using SysRq Key</a></h3>
-
-  <p>HowTo: Use SysRq for System Recovery and to prevent Malware from Sniffing the Root Password. The SysRq function in Linux is equivalent to the well known Control-Alt-Delete (Ctrl+Alt+Del) function in Window.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p><a href="https://forums.whonix.org/t/sysrq-magic-sysrq-key/8079" class="onebox" target="_blank" rel="noopener">https://forums.whonix.org/t/sysrq-magic-sysrq-key/8079</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/consider-installing-systemd-oomd-by-default/223#post_5</link>
-        <pubDate>Wed, 25 Sep 2024 01:51:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1266</guid>
-      </item>
-      <item>
-        <title>ISO - Install to system desktop icon: maximize window</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Seems like desktop, multi-tasking is still possible. So this is nice.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-install-to-system-desktop-icon-maximize-window/419#post_3</link>
-        <pubDate>Wed, 25 Sep 2024 01:49:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1265</guid>
-      </item>
-      <item>
-        <title>ISO - Install to system desktop icon: maximize window</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Is it OK if this is a fullscreen window? Simply maximizing the window is hard, but there’s an option in Calamares for making it fullscreen. For context, this is how it looks on Lubuntu:</p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/fe58e5254648b11f790cb589b45eb3ba50632b5a.png" data-download-href="https://forums.kicksecure.com/uploads/default/fe58e5254648b11f790cb589b45eb3ba50632b5a" title="Screenshot_20240924_204551"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/fe58e5254648b11f790cb589b45eb3ba50632b5a_2_690x469.png" alt="Screenshot_20240924_204551" data-base62-sha1="Ai3JwUknkHmAztrA5zNzE2lAhzI" width="690" height="469" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/fe58e5254648b11f790cb589b45eb3ba50632b5a_2_690x469.png, https://forums.kicksecure.com/uploads/default/optimized/1X/fe58e5254648b11f790cb589b45eb3ba50632b5a_2_1035x703.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/fe58e5254648b11f790cb589b45eb3ba50632b5a_2_1380x938.png 2x" data-dominant-color="B6B9C1"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-install-to-system-desktop-icon-maximize-window/419#post_2</link>
-        <pubDate>Wed, 25 Sep 2024 01:46:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1264</guid>
-      </item>
-      <item>
-        <title>Consider installing systemd-oomd by default</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Theoretically, having something like this should make it so that users don’t lose more unsaved work than is absolutely necessary to avoid a fully system crash. However, in practice systemd-oomd can be a source of trouble. Most notably, entire related process <em>groups</em> are killed all at once, rather than just individual processes. With the kernel OOM killer, an individual browser tab can be terminated without taking the entire browser out. systemd-oomd on the other hand will (or at least used to) terminate the whole browser. It’s also rather aggressive about when it kills applications - this resulted in some <a href="https://lists.ubuntu.com/archives/ubuntu-devel/2022-June/042116.html" rel="noopener nofollow ugc">significant problems</a> when Ubuntu chose to enable it by default in Ubuntu 22.04.</p>
-<p>I’m not entirely sure what a good solution here is, but one novel thought is to potentially enable the Magic SysRq key for manual OOM killer triggers. See <a href="https://docs.kernel.org/admin-guide/sysrq.html" class="inline-onebox" rel="noopener nofollow ugc">Linux Magic System Request Key Hacks — The Linux Kernel documentation</a> - if the proper setting is enabled, one can type <kbd>Alt+SysRq+F</kbd> to make the kernel’s OOM killer terminate whatever process it believes is the most “dangerous” to the system at the moment from a memory pressure standpoint. This feature can also be triggered in software, so it might even be possible to make a custom app that warns the user when memory is getting dangerously full and provides them a “quick fix” button (with sufficient warnings about data loss).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/consider-installing-systemd-oomd-by-default/223#post_4</link>
-        <pubDate>Wed, 25 Sep 2024 01:34:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1263</guid>
-      </item>
-      <item>
-        <title>ISO - Development</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Merged:</p>
-<aside class="onebox githubpullrequest" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/pull/1">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/pull/1" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-
-
-
-    <div class="github-icon-container" title="Pull Request">
-      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
-    </div>
-
-  <div class="github-info-container">
-
-
-
-      <h4>
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/pull/1" target="_blank" rel="noopener">Fix ISO build failure, add xdg-desktop-portal(-gtk)</a>
-      </h4>
-
-    <div class="branches">
-      <code>Kicksecure:master</code> ← <code>ArrayBolt3:master</code>
-    </div>
-
-      <div class="github-info">
-        <div class="date">
-          opened <span class="discourse-local-date" data-format="ll" data-date="2024-09-24" data-time="17:49:04" data-timezone="UTC">05:49PM - 24 Sep 24 UTC</span>
-        </div>
-
-        <div class="user">
-          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-            ArrayBolt3
-          </a>
-        </div>
-
-        <div class="lines" title="2 commits changed 1 files with 3 additions and 1 deletions">
-          <a href="https://github.com/Kicksecure/kicksecure-meta-packages/pull/1/files" target="_blank" rel="noopener">
-            <span class="added">+3</span>
-            <span class="removed">-1</span>
-          </a>
-        </div>
-      </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">## Changes
-
-* Add xdg-desktop-portal to kicksecure-desktop-envrionment-essenti<span class="show-more-container"><a href="https://github.com/Kicksecure/kicksecure-meta-packages/pull/1" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">al-gui, and add xdg-desktop-portal-gtk to kicksecure-desktop-environment-essential-xfce. These are used for the XDG portal in Xebian (another Debian-based XFCE-based distro), and simply installing them in a live session is enough for them to function properly on Kicksecure.
-* Fix a typo in a package name causing an ISO build failure.
-
-## Mandatory Checklist
-
-- [x] Legal agreements accepted. By contributing to this organisation, you acknowledge you have read, understood, and agree to be bound by these these agreements:
-
-[Terms of Service](https://www.kicksecure.com/wiki/Terms_of_Service), [Privacy Policy](https://www.kicksecure.com/wiki/Privacy_Policy), [Cookie Policy](https://www.kicksecure.com/wiki/Cookie_Policy), [E-Sign Consent](https://www.kicksecure.com/wiki/E-Sign_Consent), [DMCA](https://www.kicksecure.com/wiki/DMCA), [Imprint](https://www.kicksecure.com/wiki/Imprint)
-
-## Optional Checklist
-The following items are optional but might be requested in certain cases.
-
-- [x] I have tested it locally
-- [x] I have reviewed and updated any documentation if relevant
-- [x] I am providing new code and test(s) for it
-
-Fixes https://www.kicksecure.com/wiki/Dev/audio#mod.rt:_Can.27t_find_org.freedesktop.portal.Desktop._Is_xdg-desktop-portal_running.3F</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-development/371#post_7</link>
-        <pubDate>Wed, 25 Sep 2024 00:32:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1262</guid>
-      </item>
-      <item>
-        <title>APT sources.list One-Line Format versus DEB822-Style Format</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Probably best to avoid implementing this until Debian moves to DEB822 format  by default, if that ever happens. There’s no rush in doing this at all.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267#post_2</link>
-        <pubDate>Thu, 19 Sep 2024 23:05:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1261</guid>
-      </item>
-      <item>
-        <title>Illegal instruction (core dumped)</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>I enabled everything in <code>/etc/default/grub.d/40-cpu*</code> that may disable SMT and this problem was solved after <code>update-grub</code> and restart computer.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556#post_3</link>
-        <pubDate>Tue, 17 Sep 2024 16:05:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1260</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>Thank you. I don’t really want this feature to be enabled by default. I mainly use Kicksecure as server or virtualization host.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_12</link>
-        <pubDate>Tue, 17 Sep 2024 16:03:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1259</guid>
-      </item>
-      <item>
-        <title>Add/Remove Extra Packages</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>gawk:</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/ea99152114f382f5196cf6d606ac44f53f906ebf">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/ea99152114f382f5196cf6d606ac44f53f906ebf" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/ea99152114f382f5196cf6d606ac44f53f906ebf" target="_blank" rel="noopener">add `gawk` to `kicksecure-dependencies-cli`</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2024-09-16" data-time="17:30:01" data-timezone="UTC">05:30PM - 16 Sep 24 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 3 additions and 0 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/ea99152114f382f5196cf6d606ac44f53f906ebf" target="_blank" rel="noopener">
-          <span class="added">+3</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">missing dependency by dracut-core
-https://bugs.debian.org/cgi-bin/bugreport.cgi?<span class="show-more-container"><a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/ea99152114f382f5196cf6d606ac44f53f906ebf" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">bug=1081005</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>debian-keyring:</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/9bc00125c833b9d12ea1512135ef37a221455a48">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/9bc00125c833b9d12ea1512135ef37a221455a48" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/9bc00125c833b9d12ea1512135ef37a221455a48" target="_blank" rel="noopener">add `debian-keyring` to `kicksecure-recommended-cli`</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2024-09-16" data-time="17:31:24" data-timezone="UTC">05:31PM - 16 Sep 24 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 1 additions and 0 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/9bc00125c833b9d12ea1512135ef37a221455a48" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">useful to verify a Debian ISO</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/add-remove-extra-packages/135#post_6</link>
-        <pubDate>Tue, 17 Sep 2024 10:44:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1258</guid>
-      </item>
-      <item>
-        <title>Install on usb don&#39;t boot</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="ted" data-post="1" data-topic="574">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/db5fbb/48.png" class="avatar"> ted:</div>
-<blockquote>
-<p>ventoy</p>
-</blockquote>
-</aside>
-<p>For now, this is unsupported.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
-
-  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>That’s not something that will be supported anytime soon.</p>
-<p>This might be possible once Kicksecure ISO build process gets ported to Debian live-build. That is, if Debian is compatible with ventoy, then Kicksecure might also gain this capability.</p>
-<p>But unfortunately, I am pretty sure, nobody is going to look into explicit ventoy support anytime soon. ISO building is way too complicated and there are a lot higher priority improvements we have to work on first.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/install-on-usb-dont-boot/574#post_3</link>
-        <pubDate>Mon, 16 Sep 2024 17:44:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1257</guid>
-      </item>
-      <item>
-        <title>Running Android Apps inside Kicksecure - Waydroid</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Nagi" data-post="2" data-topic="304">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/nagi/48/82_2.png" class="avatar"> Nagi:</div>
-<blockquote>
-<p>Genymotion</p>
-</blockquote>
-</aside>
-<p>Quote <a href="https://www.kicksecure.com/wiki/Policy_On_Nonfreedom_Software" class="inline-onebox">Kicksecure ™ Policy On Non-Freedom Software</a></p>
-<blockquote>
-<ul>
-<li>Unsolicited recommendations of non-freedom applications; for example - “How do I use remote support?” Answer: “Use anydesk” (prohibited).</li>
-</ul>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304#post_6</link>
-        <pubDate>Mon, 16 Sep 2024 17:41:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1256</guid>
-      </item>
-      <item>
-        <title>Install on usb don&#39;t boot</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="ted" data-post="1" data-topic="574">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/db5fbb/48.png" class="avatar"> ted:</div>
-<blockquote>
-<p>I don’t know how to get kicksecure installed on the usb</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/ISO#Debian">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/ISO#Debian" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/ISO#Debian" target="_blank" rel="noopener">Kicksecure Live ISO and Installer</a></h3>
-
-  <p>Kicksecure Installation Guide. This guide will help you download the ISO image, create your bootable media, and install Kicksecure on your computer.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>or any other tool like <a href="https://www.balena.io/etcher">Balena Etcher</a> or <a href="https://bztsrc.gitlab.io/usbimager/">USBImager</a>.</p>
-<aside class="quote no-group" data-username="ted" data-post="1" data-topic="574">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/db5fbb/48.png" class="avatar"> ted:</div>
-<blockquote>
-<p>i found no indication on partitioning nor on how to manage luks encrypted partitions</p>
-</blockquote>
-</aside>
-<p>This is handled by calamares gui installer.</p>
-<p>If issue is not resolved, maybe write in details every step you are doing to see whats the issue you are doing.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/install-on-usb-dont-boot/574#post_2</link>
-        <pubDate>Mon, 16 Sep 2024 15:00:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1255</guid>
-      </item>
-      <item>
-        <title>Running Android Apps inside Kicksecure - Waydroid</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="304" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>I have, in the past, gotten Waydroid to run under an X11 session with the help of Weston (running in windowed mode). It’s finicky and fiddly, but it works for the most part.</p>
-</blockquote>
-</aside>
-<p>It just doesnt work no matter what check:</p>
-<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/running-android-apps-inside-whonix-workstation-waydroid/16911">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/running-android-apps-inside-whonix-workstation-waydroid/16911" target="_blank" rel="noopener" title="08:40PM - 18 July 2023">Whonix Forum – 18 Jul 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/running-android-apps-inside-whonix-workstation-waydroid/16911" target="_blank" rel="noopener">Running Android Apps inside Whonix-Workstation - Waydroid</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Development</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>This topic similar to anbox but since anbox is now deprecated, Waydroid looks good alternative.  Issues im facing when installing waydroid on whonix:   Downloading waydroid will give early failure:     Found a solution by using -f on previous...</p>
-
-  <p>
-    <span class="label1">Reading time: 1 mins 🕑</span>
-      <span class="label2">Likes: 2 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304#post_5</link>
-        <pubDate>Mon, 16 Sep 2024 04:24:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1254</guid>
-      </item>
-      <item>
-        <title>Running Android Apps inside Kicksecure - Waydroid</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Nagi" data-post="2" data-topic="304">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/nagi/48/82_2.png" class="avatar"> Nagi:</div>
-<blockquote>
-<p>We recommend trying Genymotion!</p>
-</blockquote>
-</aside>
-<p>Non-free software OS.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-android-apps-inside-kicksecure-waydroid/304#post_4</link>
-        <pubDate>Mon, 16 Sep 2024 04:23:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1253</guid>
-      </item>
-      <item>
-        <title>Install on usb don&#39;t boot</title>
-        <dc:creator><![CDATA[@ted]]></dc:creator>
-        <description><![CDATA[ <p>hi friends</p>
-<p>I’m very interested in kicksecure and wanted to have it installed on a usb drive to test it longer before installing on hard drive, but i’ve got a serious problem. I can’t have the usb drive running the totally standard install</p>
-<p>I run from a ventoy usb with kicksecure 17 iso; and install on another usb drive.<br>
-Config is standard : erase complete sdb device, and automatic partitioning</p>
-<p>BUT, whether I choose luks crypted or not, the USBN isn’t bootable<br>
-a few errors appears before grub shell starts : I reach GNU GRUB version 2.06 etc… minimal bash-like line editing.</p>
-<p>errors very briefly appears just before :<br>
-<code>error : no such device: /.disk/info.</code><br>
-<code>.................''...../.disk/mini-info.</code><br>
-<code>.................''...../26adaabd-0000-0000...etc...</code></p>
-<p>and then go to gnu grub bash like command line</p>
-<p>I don’t know how to get kicksecure installed on the usb, although I keept all the standard ready to go parameters.<br>
-I looked on the net, and didn’t find much. The tutorial from kicksecure for installing on a usb is very limited ; i found no indication on partitioning nor on how to manage luks encrypted partitions<br>
-I’d be glad to have any indications or help to deal with this, many thanks !</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/install-on-usb-dont-boot/574#post_1</link>
-        <pubDate>Sat, 14 Sep 2024 22:00:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1252</guid>
-      </item>
-      <item>
-        <title>Sdwdate failed to start in debian 12 bookworm (next release)</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Fixed a long time ago.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/sdwdate-failed-to-start-in-debian-12-bookworm-next-release/134#post_10</link>
-        <pubDate>Sat, 14 Sep 2024 20:42:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1250</guid>
       </item>
   </channel>
 </rss>
