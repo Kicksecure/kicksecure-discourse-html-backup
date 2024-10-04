@@ -6,6 +6,354 @@
     <description>Latest posts</description>
       <item>
         <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>FWIW Ubuntu implemented a very similar policy to this using AppArmor. I don’t think Debian 12 will have the needed code for it to work, but their solution to this issue was to make AppArmor able to grant unprivileged user namespace creation privileges to individual apps via AppArmor policies. This is documented at <a href="https://discourse.ubuntu.com/t/ubuntu-24-04-lts-noble-numbat-release-notes/39890#unprivileged-user-namespace-restrictions" class="inline-onebox" rel="noopener nofollow ugc">Ubuntu 24.04 LTS (Noble Numbat) Release Notes - Release - Ubuntu Community Hub</a>. Sadly, this solution is not easy to use with AppImages.</p>
+<p>IMO it would be worthwhile figuring out how to disable unprivileged userns creation in Kicksecure in a way that doesn’t render many apps unusable. Perhaps if Trixie has the needed code for using AppArmor policies for this, a permissions-granting app could be created and used here.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_16</link>
+        <pubDate>Fri, 04 Oct 2024 00:12:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1352</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="12" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>But that will also break flatpak.</p>
+</blockquote>
+</aside>
+<p>It doesnt matter, break flatpak or break thunderbird… idea is that this option preventing malicious attacks, breaking it for app/s satisfactory is security nonsense.</p>
+<p>workaround mean either giving user extra (even if insecure) instructions because this is user decision to decide or a workaround that can be implemented but keeps up the same security level.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="12" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>no longer set <code>kernel.unprivileged_userns_clone=0</code> · Kicksecure/security-misc@0e3ffa3 · GitHub</p>
+</blockquote>
+</aside>
+<p>how come this is a good security decision for the users? this is a degrade to the security for just user self satisfactory.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://opensourcewatch.beehiiv.com/p/nasty-linux-bug-cve20241086-loose">
+  <header class="source">
+      <img src="https://media.beehiiv.com/cdn-cgi/image/fit=scale-down,format=auto,onerror=redirect,quality=80/uploads/publication/logo/479c6f06-175e-4e93-9da8-13db93b55923/thumb_sjvn.jpeg.256x256_q100_crop-smart.jpg" class="site-icon" width="200" height="200">
+
+      <a href="https://opensourcewatch.beehiiv.com/p/nasty-linux-bug-cve20241086-loose" target="_blank" rel="noopener">Open Source Watch</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/361;"><img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/b25157dc-a462-46d7-9b0a-fc2397fa0c8e/Bug_vs._Tux.jpg?t=1717370564" class="thumbnail" width="500" height="500"></div>
+
+<h3><a href="https://opensourcewatch.beehiiv.com/p/nasty-linux-bug-cve20241086-loose" target="_blank" rel="noopener">Nasty Linux Bug, CVE-2024-1086, is on the loose</a></h3>
+
+  <p>I thought we'd fixed this, but recent reports indicate it's alive, well, and screwing systems over everywhere.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p>But, if you can’t patch it or think there may indeed be a new version of the vulnerability out there? In that case, you can mitigate it by disabling the ability for unprivileged users to create namespaces. To do this temporarily, in the Debian/Ubuntu world run:</p>
+<p>$ sudo sysctl -w kernel.unprivileged_userns_clone=0</p>
+<p>To disable it for once and all:</p>
+<p>echo kernel.unprivileged_userns_clone=0 | \ sudo tee /etc/sysctl.d/99-disable-unpriv-userns.conf</p>
+<p>Personally, I’ve never been keen on granting unprivileged users the ability to create namespaces. As a wise admin once said, <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do?utm_source=opensourcewatch.beehiiv.com&amp;utm_medium=referral&amp;utm_campaign=nasty-linux-bug-cve-2024-1086-is-on-the-loose">"Unless you truly need it, just disable it.</a>"</p>
+</blockquote>
+<p>Nasty.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_15</link>
+        <pubDate>Thu, 03 Oct 2024 15:11:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1351</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>Thank you very much! I really like this update - it fixed old bugs, and now flatpak works. Kicksecure works great even on my kde plasma <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_14</link>
+        <pubDate>Thu, 03 Oct 2024 11:31:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1350</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="Patrick" data-post="12" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><a href="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c" class="inline-onebox">no longer set `kernel.unprivileged_userns_clone=0` · Kicksecure/security-misc@0e3ffa3 · GitHub</a></p>
+</blockquote>
+</aside>
+<p>This is now in all Kicksecure repositories.</p>
+<p>This means after updates + reboot this issue will be resolved.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_13</link>
+        <pubDate>Thu, 03 Oct 2024 09:20:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1349</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This has been reverted in git:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c" target="_blank" rel="noopener">no longer set `kernel.unprivileged_userns_clone=0`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2024-10-03" data-time="06:58:58" data-timezone="UTC">06:58AM - 03 Oct 24 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 11 additions and 8 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c" target="_blank" rel="noopener">
+          <span class="added">+11</span>
+          <span class="removed">-8</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">because it breaks too much
+
+fixes https://github.com/Kicksecure/security-misc/is<span class="show-more-container"><a href="https://github.com/Kicksecure/security-misc/commit/0e3ffa3f11a0049e57803c8f2e75dbb7d8ceb22c" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">sues/274</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Background information for developers:</p>
+<p><code>kernel.unprivileged_userns_clone=0</code> is a Debian specific kernel feature. Not in Linux mainline.</p>
+<p>Why Kicksecure-Qubes (and therefore Qubes-Whonix) is unaffected? Because it uses dom0 kernel by Qubes default. And Qubes dom0 provided kernel is not a Debian kernel. Related: <a href="https://github.com/QubesOS/qubes-issues/issues/5212" class="inline-onebox">Simplify and promote using in-vm kernel · Issue #5212 · QubesOS/qubes-issues · GitHub</a></p>
+<p><a href="https://kspp.github.io/Recommended_Settings.html" class="inline-onebox">Recommended Settings | Linux Kernel Self-Protection Project</a> recommends:</p>
+<blockquote>
+<pre><code class="lang-auto"># Disable User Namespaces, as it opens up a large attack surface to unprivileged users.
+user.max_user_namespaces = 0
+</code></pre>
+</blockquote>
+<p>But that will also break flatpak. To break flatpak temporarily, run: <code>sudo sysctl -w user.max_user_namespaces=0</code>. To unbreak, reboot or <code>sudo sysctl -w user.max_user_namespaces=3643</code>. Where number <code>3643</code> is coming from?  That’s the default that can be seen using: <code>sysctl -a | grep user.max_user_namespaces</code></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_12</link>
+        <pubDate>Thu, 03 Oct 2024 07:17:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1347</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for taking an interest.<br>
+-I followed the instructions here: <a href="https://www.kicksecure.com/wiki/Live_Mode#Boot_standard_-_live_mode_or_persistent_mode" class="inline-onebox" rel="noopener nofollow ugc">Live Mode for Kicksecure</a><br>
+-Version: Kicksecure-Xfce-17.2.3.7.iso copied to flash drive by balenaEtcher<br>
+-Booted and installed to another 64GB USB flash drive with luks encryption<br>
+-Booted that new installed Kicksecure 64GB USB flash drive, installed Whonix and shut down - so far so good<br>
+But after running the host system (Arch Linux) once, without flash drive plugged in, the replugged Kicksecure flash drive merely boots to Grub bash line!<br>
+I managed to boot it by the help of Super-Grub2-disk, which finds the Grub entry and boots from it.<br>
+Journalctl is reporting a Swap File Creator error but I’m not sure its relevant.<br>
+In Kicksecure again I did as follows:</p>
+<pre><code class="lang-auto">sudo apt-get full-upgrade
+sudo apt-get full-upgrade --target-release=bookworm-fasttrack
+whonix-xfce-installer-cli
+</code></pre>
+<p>and to fix the boot issue I kinda fiddled around, maybe made it worse:</p>
+<pre><code class="lang-auto">dpkg-query -W -f='${db:Status-Status}' dracut '=&gt; installed
+dpkg-query -W -f='${db:Status-Status}' initramfs-tools ' =&gt; not-installed
+sudo apt install --reinstall dracut grub-live
+sudo dracut --hostonly --force
+sudo update-grub =&gt; no errors
+</code></pre>
+<p>Here is the /etc/default/grub:</p>
+<pre><code class="lang-auto">GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR='Kicksecure'
+GRUB_CMDLINE_LINUX_DEFAULT='quiet rd.luks.uuid=82fbd4c5-b874-4c81-9a30-7aad4eb2aee4'
+GRUB_CMDLINE_LINUX=""
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_5</link>
+        <pubDate>Thu, 03 Oct 2024 06:51:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1346</guid>
+      </item>
+      <item>
+        <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Agreed. Best to install gnome-keyring by default as using keepassxc for this purpose is too difficult as a Linux distribution.</p>
+<p>Done.</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">add `gnome-keyring` to `kicksecure-desktop-environment-essential-xfce`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2024-10-03" data-time="06:34:09" data-timezone="UTC">06:34AM - 03 Oct 24 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 0 deletions">
+        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">to fix error message
+
+&gt; Error storing passphrase in keyring (The name org.freede<span class="show-more-container"><a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">sktop.secrets was not provided by any .service files)
+
+https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582#post_3</link>
+        <pubDate>Thu, 03 Oct 2024 06:37:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1345</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="9" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>But they say if you have flatpak permission issue just " add your user to the <strong>flatpak</strong> group."</p>
+<p><a href="https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors">https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors </a></p>
+</blockquote>
+</aside>
+<p>Not clear what this is about since they failed to show the error message. I don<br>
+t think it’ not a permission issue. The error message is very clear and links to documentation. Permission issue would probably be a different issue. On Debian, there is no <code>flatpak</code> linux user group.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="9" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Why turning off this option is not solution:</p>
+</blockquote>
+</aside>
+<p>There are only two solutions. Debian and Flatpak are very clear about it. References:</p>
+<ul>
+<li><a href="https://github.com/flatpak/flatpak/wiki/User-namespace-requirements" class="inline-onebox">User namespace requirements · flatpak/flatpak Wiki · GitHub</a></li>
+<li><a href="https://salsa.debian.org/debian/bubblewrap/-/blob/debian/latest/debian/README.Debian" class="inline-onebox">debian/README.Debian · debian/latest · Debian / bubblewrap · GitLab</a></li>
+</ul>
+<p>The only options are,</p>
+<ul>
+<li>A) bubblewrap SUID; or</li>
+<li>B) <code>kernel.unprivileged_userns_clone=1</code> Linux sysctl; or</li>
+<li>C) Not using Flatpak.</li>
+</ul>
+<p>As for <code>bubblewrap SUID</code>, quote Flatpak documenation:</p>
+<blockquote>
+<p>This mode is not recommended, and some Flatpak apps and features will not work.</p>
+</blockquote>
+<p>Quote Debian readme:</p>
+<blockquote>
+<p>This can be a security risk: if there are bugs in bubblewrap, it might be<br>
+possible for an unprivileged user to get root privileges by running a<br>
+setuid version of the bwrap executable. CVE-2020-5291 and CVE-2016-8659<br>
+are examples of bugs that had this effect in the past. However, it allows<br>
+the kernel to be configured to disallow creation of user namespaces by<br>
+unprivileged users, which prevents attacks like CVE-2016-3135 from being<br>
+carried out against the kernel. This is a trade-off between different<br>
+security risks.</p>
+</blockquote>
+<p>Quote Flatpak documentation:</p>
+<blockquote>
+<p>This is a security trade-off. Disallowing unprivileged use of user namespaces reduces the kernel’s attack surface, which mitigates some attacks; but it also disallows some sandboxing techniques, which prevents other attacks from being mitigated. Making <code>bwrap</code> or <code>flatpak-bwrap</code> setuid root also carries some risk: an attacker might be able to exploit vulnerabilities in <code>bwrap</code> to achieve root privilege escalation.</p>
+</blockquote>
+<p>So there is no perfect solution. However, since SUID is being discouraged by Flatpak, the choice is simple: B) <code>kernel.unprivileged_userns_clone=1</code> Linux sysctl.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_11</link>
+        <pubDate>Thu, 03 Oct 2024 06:12:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1344</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>(post deleted by author)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_4</link>
+        <pubDate>Thu, 03 Oct 2024 05:47:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1343</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
+        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
+        <description><![CDATA[ <p>I confirm the workaround worked, thanks</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_10</link>
+        <pubDate>Thu, 03 Oct 2024 02:03:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1342</guid>
+      </item>
+      <item>
+        <title>Cannot run some AppImage apps after Kicksecure upate</title>
+        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
+        <description><![CDATA[ <p>Got it, it works, thanks!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_4</link>
+        <pubDate>Thu, 03 Oct 2024 02:02:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1341</guid>
+      </item>
+      <item>
+        <title>Can not run flatpak apps after Kicksecure update</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="592">
 <div class="title">
@@ -1812,501 +2160,6 @@ Would be nice if there'd be some button which **gives you a list of available en
         <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_2</link>
         <pubDate>Sun, 29 Sep 2024 10:27:27 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1289</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="567">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Later maybe…</p>
-<pre><code class="lang-auto">Do you wish to use Full Disk Encryption (FDE)?
-
-[ ] use FDE
-[ ] do not use FDE
-
-Setting up FDE later is very difficult.
-</code></pre>
-<p>The text needs more work probably if this is even realistic. The text<br>
-could be improved to explain what FDE is and whatnot.</p>
-<p>“Setting up FDE later is very difficult.” - maybe only show if selecting<br>
-“no”</p>
-</blockquote>
-</aside>
-<p>Ubiquity has a nice implementation.</p>
-<p>related: <a href="https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585" class="inline-onebox">Ubiquity / LVM / TPM</a></p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png" data-download-href="https://forums.kicksecure.com/uploads/default/84ae411c969bdf3c1b42e84c6adb859965db6ded" title="tris3"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded_2_690x469.png" alt="tris3" data-base62-sha1="iVKmAomUqeM7VP8zzZGaWPrnEhn" width="690" height="469" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded_2_690x469.png, https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png 2x" data-dominant-color="AEACAA"></a></div><p></p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png" data-download-href="https://forums.kicksecure.com/uploads/default/0abba6f73c93174217b878fd06a340274c9e3d96" title="tris4"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/0abba6f73c93174217b878fd06a340274c9e3d96_2_690x472.png" alt="tris4" data-base62-sha1="1wWOHhfQWPDWU5PeL7LbXMLLhvo" width="690" height="472" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/0abba6f73c93174217b878fd06a340274c9e3d96_2_690x472.png, https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png 2x" data-dominant-color="AFACA9"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_8</link>
-        <pubDate>Sun, 29 Sep 2024 09:56:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1288</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Ubiquity is the default for <a href="https://wiki.ubuntu.com/Ubiquity">Ubuntu</a>, <a href="https://packages.trisquel.org/aramo/ubiquity">Trisquel</a>, <a href="https://github.com/linuxmint/ubiquity">Mint</a>…etc</p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png" data-download-href="https://forums.kicksecure.com/uploads/default/84ae411c969bdf3c1b42e84c6adb859965db6ded" title="tris3"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded_2_690x469.png" alt="tris3" data-base62-sha1="iVKmAomUqeM7VP8zzZGaWPrnEhn" width="690" height="469" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded_2_690x469.png, https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/84ae411c969bdf3c1b42e84c6adb859965db6ded.png 2x" data-dominant-color="AEACAA"></a></div><p></p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png" data-download-href="https://forums.kicksecure.com/uploads/default/0abba6f73c93174217b878fd06a340274c9e3d96" title="tris4"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/0abba6f73c93174217b878fd06a340274c9e3d96_2_690x472.png" alt="tris4" data-base62-sha1="1wWOHhfQWPDWU5PeL7LbXMLLhvo" width="690" height="472" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/0abba6f73c93174217b878fd06a340274c9e3d96_2_690x472.png, https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/0abba6f73c93174217b878fd06a340274c9e3d96.png 2x" data-dominant-color="AFACA9"></a></div><p></p>
-<p>It has advantages on what calamares provide:</p>
-<ul>
-<li><a href="https://canonical-subiquity.readthedocs-hosted.com/en/latest/reference/autoinstall-reference.html#supported-layouts">Support LVM</a> which <a href="https://github.com/calamares/calamares/issues/2343">calamares lack</a>.</li>
-<li><a href="https://discourse.ubuntu.com/t/subiquity-23-10-1-has-been-released-to-the-stable-channel/39344">Support TPM-fde</a> installation which <a href="https://github.com/calamares/calamares/issues/2355">calamares lack</a>.</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_1</link>
-        <pubDate>Sun, 29 Sep 2024 09:49:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1286</guid>
-      </item>
-      <item>
-        <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Debian bug report:<br>
-<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1082891">dracut-core: Live Bookworm ISO + dracut boot faliure with "mount: /sysroot: special device LiveOS_rootfs does not exist.</a></p>
-<p>Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418#post_6</link>
-        <pubDate>Sun, 29 Sep 2024 09:12:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1285</guid>
-      </item>
-      <item>
-        <title>ISO - Install to system desktop icon: maximize window</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Implemented in Kicksecure <code>17.2.3.7</code> and above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-install-to-system-desktop-icon-maximize-window/419#post_4</link>
-        <pubDate>Sun, 29 Sep 2024 09:10:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1284</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Implemented in Kicksecure <code>17.2.3.7</code> and above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_6</link>
-        <pubDate>Sun, 29 Sep 2024 09:09:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1283</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Users cannot fix this.</p>
-<p>(Except with a workaround: manual installation, <a href="https://www.kicksecure.com/wiki/Distribution_Morphing" class="inline-onebox">Distribution Morphing - Transforming of a Linux Distribution into Another Linux Distribution</a> → <a href="https://www.kicksecure.com/wiki/Debian" class="inline-onebox">Install Kicksecure inside Debian</a> because then other installation methods can be used such as manual setup of encryption which is however needs to be figured out as per <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy.">https://www.kicksecure.com/wiki/Self_Support_First_Policy.</a>)</p>
-<p>Kicksecure <code>17.2.3.7</code> and above will come with luks2 by default. Unreleased at time of writing. Will probably be released soon (October 2024). Stay tuned. → <a href="https://www.kicksecure.com/wiki/Stay_Tuned" class="inline-onebox">Follow Kicksecure Developments</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_2</link>
-        <pubDate>Sun, 29 Sep 2024 09:08:14 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1282</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@Benjamin]]></dc:creator>
-        <description><![CDATA[ <p>Why does Kicksecure installation built-in FDE option utilize LUKS1 format instead of newer safer LUKS2? How can it be fixed? Sorry for such stupid questions, i’m new to this, thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_1</link>
-        <pubDate>Sun, 29 Sep 2024 08:24:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1281</guid>
-      </item>
-      <item>
-        <title>Kicksecure breaks Firefox and KeepassXC</title>
-        <dc:creator><![CDATA[@PrivacyTux]]></dc:creator>
-        <description><![CDATA[ <p>It is possible to reproduce the problem when booting a current Debian 5.10 or a non Debian 5.15 kernel. With a 6.1 kernel, the problem does not exist if you use current Kicksecure packages. In mid-2024 the Kicksecure packages were compatible with the 5.10 kernel of Debian Bullseye in Debian Bookworm.</p>
-<p>Can you please try again to reproduce the problem with a current 5.10 kernel, e.g. from the Debian Bullseye repository?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-breaks-firefox-and-keepassxc/489#post_6</link>
-        <pubDate>Sat, 28 Sep 2024 14:10:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1279</guid>
-      </item>
-      <item>
-        <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>After booting the ISO → Xfce desktop → double click on “17 GB Encrypted” (from a previous installation) → enter password → save password permanently.</p>
-<blockquote>
-<p>Failed to mount “rootfs”</p>
-</blockquote>
-<blockquote>
-<p>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</p>
-</blockquote>
-<aside class="onebox stackexchange" data-onebox-src="https://superuser.com/questions/536433/what-applications-provide-org-freedesktop-secrets-service">
-  <header class="source">
-
-      <a href="https://superuser.com/questions/536433/what-applications-provide-org-freedesktop-secrets-service" target="_blank" rel="noopener">superuser.com</a>
-  </header>
-
-  <article class="onebox-body">
-      <a href="https://superuser.com/users/190060/lmcanavals" target="_blank" rel="noopener">
-    <img alt="lmcanavals" src="https://i.sstatic.net/xIV9d.jpg?s=256" class="thumbnail onebox-avatar" width="256" height="256">
-  </a>
-
-<h4>
-  <a href="https://superuser.com/questions/536433/what-applications-provide-org-freedesktop-secrets-service" target="_blank" rel="noopener">What applications provide org.freedesktop.secrets.service</a>
-</h4>
-
-<div class="tags">
-  <strong>password-management, xfce, gnome-keyring</strong>
-</div>
-
-<div class="date">
-  asked by
-  
-  <a href="https://superuser.com/users/190060/lmcanavals" target="_blank" rel="noopener">
-    lmcanavals
-  </a>
-  on <a href="https://superuser.com/questions/536433/what-applications-provide-org-freedesktop-secrets-service" target="_blank" rel="noopener">09:17AM - 15 Jan 13 UTC</a>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Since we’re already installing KeePassXC by default, it might make sense to use KeePassXC as a <code>org.freedesktop.secrets</code> provider. Here is a promising looking (untested by me) guide:</p>
-<p><a href="https://c3pb.de/blog/keepassxc-secrets-service.html" class="onebox" target="_blank" rel="noopener">https://c3pb.de/blog/keepassxc-secrets-service.html</a></p>
-<p>KeePassXC might be more leightweight than gnome-keyring.</p>
-<blockquote>
-<p>In KeePassXC, go to <code>Tools</code> &gt; <code>Settings</code> &gt; <code>Secret-Service-Integration</code> and enable <code>Enable KeepassXC Freedesktop.org Secret Service integration</code>.</p>
-</blockquote>
-<p>This might be a bit more hard to do for a Linux distribution.</p>
-<p>Maybe could be done similar to how it’s done here:</p>
-<ul>
-<li>usability-misc
-<ul>
-<li>/etc/profile.d/50_default_editor.sh</li>
-<li>/usr/share/usability-misc/xdg-override/</li>
-</ul>
-</li>
-</ul>
-<p>related:</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/keepassxreboot/keepassxc/issues/6274">
-  <header class="source">
-
-      <a href="https://github.com/keepassxreboot/keepassxc/issues/6274" target="_blank" rel="noopener">github.com/keepassxreboot/keepassxc</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/keepassxreboot/keepassxc/issues/6274" target="_blank" rel="noopener">Register as the default Secret Service provider (DBus service)</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2021-03-13" data-time="13:27:53" data-timezone="UTC">01:27PM - 13 Mar 21 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/raffaem" target="_blank" rel="noopener">
-          <img alt="raffaem" src="https://avatars.githubusercontent.com/u/54762742?v=4" class="onebox-avatar-inline" width="20" height="20">
-          raffaem
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          new feature
-        </span>
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          feature: Secret Service
-        </span>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">In Tools-&gt;Settings-&gt;Secret Service, in the General tab, there should be an optio<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">n to register KeePassXC as systemd default Secret Service provider.
-
-On Ubuntu 20.10 this can be achieved by opening `/usr/share/dbus-1/services/org.freedesktop.secrets.service` and changing
-
-```
-Exec=/usr/bin/keepassxc/usr/bin/gnome-keyring-daemon --start --foreground --components=secrets
-```
-
-into
-
-```
-Exec=/usr/bin/keepassxc
-```
-
-We can probably have a backup of the file and if the user de-select the option we restore the backup
-
-## REASON
-
-When an application ask for the Secret Service API on D-Bus, if there is no provider, systemd will open the defaut provider as specified in that service file. On Ubuntu this will default to `gnome-keyring`.
-
-Enabling "KeePassXC freedesktop.org Secret Service integration" does not change this behavior. If KeePassXC is not already opened, at a Secret Service request on D-Bus, `gnome-keyring`, not KeePassXC, will be opened.
-
-For a real use case scenario, see [Maestral#352](https://github.com/SamSchott/maestral/issues/352).
-
-## TEMPORARY WORKAROUND
-
-Open a terminal and run
-
-```sudo sed -i -E 's/Exec=.*/Exec=\/usr\/bin\/keepassxc/g' /usr/share/dbus-1/services/org.freedesktop.secrets.service```</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582#post_1</link>
-        <pubDate>Sat, 28 Sep 2024 04:15:31 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1278</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubpullrequest" data-onebox-src="https://github.com/calamares/calamares/pull/2376">
-  <header class="source">
-
-      <a href="https://github.com/calamares/calamares/pull/2376" target="_blank" rel="noopener">github.com/calamares/calamares</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-
-
-
-    <div class="github-icon-container" title="Pull Request">
-      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
-    </div>
-
-  <div class="github-info-container">
-
-
-
-      <h4>
-        <a href="https://github.com/calamares/calamares/pull/2376" target="_blank" rel="noopener">[partition] Always update EncryptWidget's m_state when updateState is called</a>
-      </h4>
-
-    <div class="branches">
-      <code>calamares:calamares</code> ← <code>ArrayBolt3:calamares</code>
-    </div>
-
-      <div class="github-info">
-        <div class="date">
-          opened <span class="discourse-local-date" data-format="ll" data-date="2024-09-25" data-time="23:02:53" data-timezone="UTC">11:02PM - 25 Sep 24 UTC</span>
-        </div>
-
-        <div class="user">
-          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-            ArrayBolt3
-          </a>
-        </div>
-
-        <div class="lines" title="1 commits changed 1 files with 3 additions and 6 deletions">
-          <a href="https://github.com/calamares/calamares/pull/2376/files" target="_blank" rel="noopener">
-            <span class="added">+3</span>
-            <span class="removed">-6</span>
-          </a>
-        </div>
-      </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Fixes https://github.com/calamares/calamares/issues/2375</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_5</link>
-        <pubDate>Fri, 27 Sep 2024 02:38:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1277</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/live-config-dist/commit/410c62e664e7d1387e7c013867242838ff2cb912">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/live-config-dist/commit/410c62e664e7d1387e7c013867242838ff2cb912" target="_blank" rel="noopener">github.com/ArrayBolt3/live-config-dist</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/live-config-dist/commit/410c62e664e7d1387e7c013867242838ff2cb912" target="_blank" rel="noopener">Make formatting less arbitrary, enable preCheckEncryption</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2024-09-25" data-time="22:42:07" data-timezone="UTC">10:42PM - 25 Sep 24 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 4 additions and 3 deletions">
-        <a href="https://github.com/ArrayBolt3/live-config-dist/commit/410c62e664e7d1387e7c013867242838ff2cb912" target="_blank" rel="noopener">
-          <span class="added">+4</span>
-          <span class="removed">-3</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2375">
-  <header class="source">
-
-      <a href="https://github.com/calamares/calamares/issues/2375" target="_blank" rel="noopener">github.com/calamares/calamares</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/calamares/calamares/issues/2375" target="_blank" rel="noopener">After checking "Encrypt system", the user can proceed past the Partitions screen without entering a passphrase</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-09-25" data-time="23:00:50" data-timezone="UTC">11:00PM - 25 Sep 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">**Describe the bug**
-If the user checks "Encrypt System", the "Next" button rem<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ains enabled and they can proceed past the partitions screen without entering a passphrase. Unchecking and rechecking the box results in the "Next" button being grayed out as expected.
-
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Launch Calamares.
-2. Click "Next" until you get to the partitions screen.
-3. Click "Erase Disk".
-4. Check the "Encrypt system" checkbox.
-5. Click "Next" (do not enter a passphrase first).
-
-**Expected behavior**
-"Next" button should be disabled and unable to be clicked.
-
-**Screenshots and Logs**
-![Screenshot_20240925_175929](https://github.com/user-attachments/assets/ab1133bc-0c72-4de7-9285-ab8fc998bee1)
-
-**Additional context**
-I debugged this issue using gdb and traced it to a logic error in `src/modules/partition/gui/EncryptWidget.cpp`:
-
-```c++
-    // In function EncryptWidget::updateState( const bool notify ):
-    // ...
-    if ( newState != m_state )
-    {   
-        m_state = newState;
-        if ( notify ) 
-        {   
-            Q_EMIT stateChanged( m_state );
-        }       
-    }
-```
-The `if ( newState != m_state )` is causing the issue.
-
-In the constructor, `m_state` is initialized to `Encryption::Disabled`, but when the constructor calls `updateState()` in EncryptWidget.cpp line 68, `m_state` gets changed to `Encryption::Unconfirmed`. This is because `updateState()` is called while the "Encrypt system" checkbox is still invisible, thus triggering the following code path:
-
-```c++
-EncryptWidget::Encryption
-EncryptWidget::state() const
-{
-    Encryption newState = Encryption::Unconfirmed;
-
-    // This `if` statement is entered because the "Encrypt system" check box is invisible since the app is still starting up
-    if ( m_ui-&gt;m_encryptCheckBox-&gt;isChecked() || !m_ui-&gt;m_encryptCheckBox-&gt;isVisible() )
-    {
-        // And naturally, the passphrase text boxes are also empty, so this `if` statement will be skipped over...
-        if ( !m_ui-&gt;m_passphraseLineEdit-&gt;text().isEmpty()
-             &amp;&amp; m_ui-&gt;m_passphraseLineEdit-&gt;text() == m_ui-&gt;m_confirmLineEdit-&gt;text() )
-        {
-            newState = Encryption::Confirmed;
-        }
-        else // ...and this one is run instead, thus returning `Encryption::Unconfirmed` which is what m_state is then set to.
-        {
-            newState = Encryption::Unconfirmed;
-        }
-    }
-    else
-    {
-        newState = Encryption::Disabled;
-    }
-
-    return newState;
-}
-```
-
-So ultimately `m_state` ends up being set to `Encryption::Unconfirmed` once the encryption widget's constructor is finished. Then when the user checks the "Encrypt system" checkbox later on, `EncryptWidget::state()` properly determines that the state is `Encryption::Unconfirmed`, but because `m_state` is already `Encryption::Unconfirmed`, it does **not** emit a `stateChanged` signal. This means that `ChoicePage::onEncryptWidgetStateChanged` is not called when the user first checks the checkbox, and thus the "Next" button is not disabled.
-
-Simply removing the `if ( newState != m_state )` statement from EncryptWidget.cpp should be enough to resolve the bug.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_4</link>
-        <pubDate>Fri, 27 Sep 2024 02:27:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1276</guid>
       </item>
   </channel>
 </rss>

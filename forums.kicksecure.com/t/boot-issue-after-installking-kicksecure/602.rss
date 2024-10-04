@@ -6,9 +6,59 @@
     <description>I also do have this issue even without running kicksecure fom ventoy!
 I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</description>
     
-    <lastBuildDate>Wed, 02 Oct 2024 16:35:07 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 03 Oct 2024 06:51:08 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks for taking an interest.<br>
+-I followed the instructions here: <a href="https://www.kicksecure.com/wiki/Live_Mode#Boot_standard_-_live_mode_or_persistent_mode" class="inline-onebox" rel="noopener nofollow ugc">Live Mode for Kicksecure</a><br>
+-Version: Kicksecure-Xfce-17.2.3.7.iso copied to flash drive by balenaEtcher<br>
+-Booted and installed to another 64GB USB flash drive with luks encryption<br>
+-Booted that new installed Kicksecure 64GB USB flash drive, installed Whonix and shut down - so far so good<br>
+But after running the host system (Arch Linux) once, without flash drive plugged in, the replugged Kicksecure flash drive merely boots to Grub bash line!<br>
+I managed to boot it by the help of Super-Grub2-disk, which finds the Grub entry and boots from it.<br>
+Journalctl is reporting a Swap File Creator error but I’m not sure its relevant.<br>
+In Kicksecure again I did as follows:</p>
+<pre><code class="lang-auto">sudo apt-get full-upgrade
+sudo apt-get full-upgrade --target-release=bookworm-fasttrack
+whonix-xfce-installer-cli
+</code></pre>
+<p>and to fix the boot issue I kinda fiddled around, maybe made it worse:</p>
+<pre><code class="lang-auto">dpkg-query -W -f='${db:Status-Status}' dracut '=&gt; installed
+dpkg-query -W -f='${db:Status-Status}' initramfs-tools ' =&gt; not-installed
+sudo apt install --reinstall dracut grub-live
+sudo dracut --hostonly --force
+sudo update-grub =&gt; no errors
+</code></pre>
+<p>Here is the /etc/default/grub:</p>
+<pre><code class="lang-auto">GRUB_DEFAULT=0
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR='Kicksecure'
+GRUB_CMDLINE_LINUX_DEFAULT='quiet rd.luks.uuid=82fbd4c5-b874-4c81-9a30-7aad4eb2aee4'
+GRUB_CMDLINE_LINUX=""
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/5</link>
+        <pubDate>Thu, 03 Oct 2024 06:51:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-5</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>(post deleted by author)</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/4</link>
+        <pubDate>Thu, 03 Oct 2024 05:47:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-4</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
       <item>
         <title>Boot issue after installking Kicksecure</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
