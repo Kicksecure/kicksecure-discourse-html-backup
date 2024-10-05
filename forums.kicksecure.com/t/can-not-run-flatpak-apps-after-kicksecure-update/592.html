@@ -130,9 +130,9 @@ END custom CSS / JS
 <meta property="og:article:section" content="Support" />
 <meta property="og:article:section:color" content="0088CC" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="2 mins 🕑" />
+<meta name="twitter:data1" value="4 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="3 ❤" />
+<meta name="twitter:data2" value="5 ❤" />
 <meta property="article:published_time" content="2024-10-01T16:21:52+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -1026,8 +1026,8 @@ user.max_user_namespaces = 0
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="0" />
-              <span class='post-likes'></span>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
             </div>
 
           </div>
@@ -1051,6 +1051,185 @@ user.max_user_namespaces = 0
             <div class='post' itemprop='text'>
               <p>FWIW Ubuntu implemented a very similar policy to this using AppArmor. I don’t think Debian 12 will have the needed code for it to work, but their solution to this issue was to make AppArmor able to grant unprivileged user namespace creation privileges to individual apps via AppArmor policies. This is documented at <a href="../../../external.html?link=https://discourse.ubuntu.com/t/ubuntu-24-04-lts-noble-numbat-release-notes/39890#unprivileged-user-namespace-restrictions" class="inline-onebox" rel="noopener nofollow ugc">Ubuntu 24.04 LTS (Noble Numbat) Release Notes - Release - Ubuntu Community Hub</a>. Sadly, this solution is not easy to use with AppImages.</p>
 <p>IMO it would be worthwhile figuring out how to disable unprivileged userns creation in Kicksecure in a way that doesn’t render many apps unusable. Perhaps if Trixie has the needed code for using AppArmor policies for this, a permissions-granting app could be created and used here.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_17' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/qtzvytqr77x4t5cq'><span itemprop='name'>qtzvytqr77x4t5cq</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-10-04T05:35:47Z' class='post-time'>
+                    October 4, 2024,  5:35am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-10-04T05:35:47Z'>
+              <span itemprop='position'>17</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I am sympathetic to nurmagoz’s reasoning here. If kernel.unprivileged_userns_clone=0 helps security, I would think it would be good to have it that way by default for a security-oriented distribution. Users who want to use flatpak can look at documentation on how to make it kernel.unprivileged_userns_clone=1 in order to use flatpak. However, I have alternatives to flatpak that suit my needs, so I guess I am biased.</p>
+<p>In regards to appimages breaking, wouldn’t the “–no-sandbox” option for appimages solve the problem? For example, under kernel.unprivileged_userns_clone=0, my appimage for FreeTube does not work if I go to the terminal and type “./freetube_0.21.3_amd64.AppImage”. However, it does work if I type “./freetube_0.21.3_amd64.AppImage --no-sandbox”. Would the appimages that the other commenters are talking about work with the “–no-sandbox” option?</p>
+<p>Regardless, I decided to go in and follow nurmagoz’s quoted instructions. However, the command was not working for me.</p>
+<pre><code class="lang-auto">
+user@host:~$ echo kernel.unprivileged_userns_clone=0 | \ sudo tee /etc/sysctl.d/99-disable-unpriv-userns.conf
+
+-bash: sudo: command not found
+
+user@host:~$ sudo -i
+
+[sudo] password for user:
+
+root@host:~# echo kernel.unprivileged_userns_clone=0 | \ tee /etc/sysctl.d/99-disable-unpriv-userns.conf
+
+-bash: tee: command not found
+</code></pre>
+<p>I do not know why it was not working. So I ran this command instead to disable it.</p>
+<pre><code class="lang-auto">
+user@host:~$ sudo -i
+
+[sudo] password for user:
+
+root@host:~# echo kernel.unprivileged_userns_clone=0 &gt; /etc/sysctl.d/99-disable-unpriv-userns.conf
+</code></pre>
+<p>That command works. So if anyone wants to set kernel.unprivileged_userns_clone=0 instead of the current default of kernel.unprivileged_userns_clone=1, they can do it that way.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_18' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-10-04T11:32:33Z' class='post-time'>
+                    October 4, 2024, 11:32am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-10-04T11:32:33Z'>
+              <span itemprop='position'>18</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>how come this is a good security decision for the users? this is a degrade to the security for just user self satisfactory.</p>
+</blockquote>
+</aside>
+<p><code>kernel.unprivileged_userns_clone=1</code> by default incompatible with project goals. There was <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience" class="inline-onebox">Kicksecure Stable Version User Experience</a> but on the same page I elaborated just now and added a new wiki chapter, <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience#Security_versus_Usability">Security versus Usability</a>.</p>
+<aside class="quote no-group" data-username="qtzvytqr77x4t5cq" data-post="17" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/q/a4c791/48.png" class="avatar"> qtzvytqr77x4t5cq:</div>
+<blockquote>
+<p>In regards to appimages breaking, wouldn’t the “–no-sandbox” option for appimages solve the problem?</p>
+</blockquote>
+</aside>
+<p>Without looking into the details… A sandbox is “usually” a security feature. <code>--no-sandbox</code> would disable the sandbox, i.e. would disable a security feature.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="16" data-topic="592" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>FWIW Ubuntu implemented a very similar policy to this using AppArmor. I don’t think Debian 12 will have the needed code for it to work, but their solution to this issue was to make AppArmor able to grant unprivileged user namespace creation privileges to individual apps via AppArmor policies. This is documented at <a href="../../../external.html?link=https://discourse.ubuntu.com/t/ubuntu-24-04-lts-noble-numbat-release-notes/39890#unprivileged-user-namespace-restrictions">Ubuntu 24.04 LTS (Noble Numbat) Release Notes - Release - Ubuntu Community Hub</a>. Sadly, this solution is not easy to use with AppImages.</p>
+<p>IMO it would be worthwhile figuring out how to disable unprivileged userns creation in Kicksecure in a way that doesn’t render many apps unusable. Perhaps if Trixie has the needed code for using AppArmor policies for this, a permissions-granting app could be created and used here.</p>
+</blockquote>
+</aside>
+<p>This can be future work.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_19' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/qtzvytqr77x4t5cq'><span itemprop='name'>qtzvytqr77x4t5cq</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-10-04T14:40:46Z' class='post-time'>
+                    October 4, 2024,  2:40pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-10-04T14:40:46Z'>
+              <span itemprop='position'>19</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="18" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Without looking into the details… A sandbox is “usually” a security feature. <code>--no-sandbox</code> would disable the sandbox, i.e. would disable a security feature.</p>
+</blockquote>
+</aside>
+<p>Yes, it would disable a security feature. Presumably, setting kernel.unprivileged_userns_clone=1 instead of 0 is also disabling a security feature. Anyways, I am not so much offering a recommendation as I am offering a potential way to make appimages work under kernel.unprivileged_userns_clone=0. This is because previous comments said that some appimages were not working under kernel.unprivileged_userns_clone=0.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_20' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/linuxer'><span itemprop='name'>linuxer</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-10-04T17:02:29Z' class='post-time'>
+                    October 4, 2024,  5:02pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-10-04T17:02:29Z'>
+              <span itemprop='position'>20</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="qtzvytqr77x4t5cq" data-post="17" data-topic="592">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/q/a4c791/48.png" class="avatar"> qtzvytqr77x4t5cq:</div>
+<blockquote>
+<p>I am sympathetic to nurmagoz’s reasoning here. If kernel.unprivileged_userns_clone=0 helps security, I would think it would be good to have it that way by default for a security-oriented distribution. Users who want to use flatpak can look at documentation on how to make it kernel.unprivileged_userns_clone=1 in order to use flatpak. However, I have alternatives to flatpak that suit my needs, so I guess I am biased.</p>
+</blockquote>
+</aside>
+<p>TOR browser is focused on security. But by default, all scripts in noscript are not disabled - only most basic protection. If you want max protection - change settings. Here is a similar situation, OS should be convenient for new users</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
