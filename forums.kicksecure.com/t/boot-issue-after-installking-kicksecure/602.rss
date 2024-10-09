@@ -6,9 +6,171 @@
     <description>I also do have this issue even without running kicksecure fom ventoy!
 I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</description>
     
-    <lastBuildDate>Mon, 07 Oct 2024 16:06:46 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 08 Oct 2024 18:34:49 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Nice! Glad it’s up-and-running now <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/18">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/18</link>
+        <pubDate>Tue, 08 Oct 2024 18:34:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-18</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you a lot. That fixed it! <img src="https://forums.kicksecure.com/images/emoji/twitter/dizzy.png?v=12" title=":dizzy:" class="emoji" alt=":dizzy:" loading="lazy" width="20" height="20"> Even rebooting Kicksecure after running host OS shows the entry! Thanks again arraybolt3!</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/17</link>
+        <pubDate>Tue, 08 Oct 2024 18:32:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-17</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Ah, ok. I thought the entry was missing from the GRUB boot menu, which is how I got confused.</p>
+<p>I think I can reproduce your issue here. Somehow your UEFI firmware isn’t picking up a Kicksecure boot entry, meaning the only option you have in your list is just the USB drive’s boot entry. Booting from that results in Kicksecure’s fallback bootloader being invoked, and due to a bug in Kicksecure this simply drops you to a GRUB shell.</p>
+<p>To fix the problem, you should be able to use efibootmgr within Kicksecure to add a Kicksecure boot entry to the list that will work properly. Based on the screenshots you’ve sent, the proper command to do this <em>should</em> be:</p>
+<pre><code>sudo efibootmgr -c -d /dev/sda -p 1 -L 'Kicksecure' -l 'EFI\Kicksecure\shimx64.efi'
+</code></pre>
+<p>The other bug (where the fallback bootloader doesn’t work) needs to be solved and is something I’ll likely be looking into in the near future.</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/16</link>
+        <pubDate>Tue, 08 Oct 2024 17:47:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-16</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<ul>
+<li>Run <code>sudo nano /etc/default/grub</code> on the main OS, then find the line that looks like <code>#GRUB_DISABLE_OS_PROBER=false</code> and uncomment it by removing the <code>#</code> from the start. Then press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to exit. (It’s possible that you’ll find that this line is already uncommented, in which case you can just close the file and proceed to the next step.)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Run <code>sudo update-grub</code> to regenerate the GRUB menu.</li>
+</ul>
+</blockquote>
+<p> → unfortunately it doesn’t fix the issue</p>
+<blockquote>
+<p>Another possible option is to use your computer’s built-in boot menu rather than GRUB’s boot menu. Most systems have a key you can press during early boot (usually it’s <kbd>Esc</kbd> though sometimes it can be <kbd>F2</kbd>, <kbd>F7</kbd>, or something else) that will show you a list of operating systems you can boot from. If Kicksecure is in that list, or if your USB drive shows up in that list, try selecting it to boot from.</p>
+</blockquote>
+<p> → in fact that is the way I boot all OSs installed on usb flash drive in the first place anyway The thing is, Kicksecures boot partition doesn’t show up in that list, as mentioned above</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/15</link>
+        <pubDate>Tue, 08 Oct 2024 17:31:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-15</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Installing Kicksecure to a USB flash drive is basically the same as dual-booting from the hardware’s perspective, so the solution mentioned earlier has a pretty good chance of working.</p>
+<p>Another possible option is to use your computer’s built-in boot menu rather than GRUB’s boot menu. Most systems have a key you can press during early boot (usually it’s <kbd>Esc</kbd> though sometimes it can be <kbd>F2</kbd>, <kbd>F7</kbd>, or something else) that will show you a list of operating systems you can boot from. If Kicksecure is in that list, or if your USB drive shows up in that list, try selecting it to boot from.</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/14</link>
+        <pubDate>Tue, 08 Oct 2024 16:23:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-14</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks for the answer. I’m <strong>not</strong> <em>dual-booting</em> Kicksecure, rather installed it on usb flash drive.<br>
+I tried to boot it on a host system which uses itself Grub2 and on another which boots by systemdboot. On both Laptops the boot partition of Kicksecure is only detected as long as the host system has not been booted!</p>
+<p>And here’s the partition table of the flash drive as gparted displays it:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png" data-download-href="https://forums.kicksecure.com/uploads/default/a638086946bcf9b13132a25e8522f63224c2abe1" title="yyyy"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a638086946bcf9b13132a25e8522f63224c2abe1_2_690x159.png" alt="yyyy" data-base62-sha1="nIrjdolVQTVWWUgtgLvkKdVlis9" width="690" height="159" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a638086946bcf9b13132a25e8522f63224c2abe1_2_690x159.png, https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png 2x" data-dominant-color="E1E8EE"></a></div><br>
+german ‘nicht zugeteilt’ means not allocated<p></p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/13</link>
+        <pubDate>Tue, 08 Oct 2024 15:38:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-13</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>The GRUB “errors” aren’t really issues, GRUB is looking for files that are sometimes present on ISO files that aren’t present on your particular ISO file (the Super Grub Disk one).</p>
+<p>Kicksecure boots by UUIDs in the GRUB config file.</p>
+<p>To be clear, are you <em>dual-booting</em> Kicksecure alongside another Linux distro? If so, you probably need to enable <code>os-prober</code> on your primary distro. To do that:</p>
+<ul>
+<li>Run <code>sudo nano /etc/default/grub</code> on the main OS, then find the line that looks like <code>#GRUB_DISABLE_OS_PROBER=false</code> and uncomment it by removing the <code>#</code> from the start. Then press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to exit. (It’s possible that you’ll find that this line is already uncommented, in which case you can just close the file and proceed to the next step.)</li>
+<li>Run <code>sudo update-grub</code> to regenerate the GRUB menu.</li>
+<li>On your next reboot you should see an entry for Kicksecure in the boot menu. Boot into Kicksecure and repeat this process there so that in the event Kicksecure’s GRUB takes over, you can still see and boot your main OS.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/12</link>
+        <pubDate>Tue, 08 Oct 2024 15:02:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-12</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>I really don’t know what is going on here: After booting Kicksecure several times with the aid of Super Grub Disk, an entry for Kicksecure showed up in the Grub menu, meaning Partition 2 (hd0, gpt2) is detected! But after running the host OS, the entry to Kicksecure is gone again, whats left is: <em>UEFI: USB, Partition 1</em> thats leading to the Grub cmd line only.</p>
+<p>EDIT: Tried booting on another Laptop ends up with the same result: No entry for Partition 2 and choosing Partition 1 ends with Grub cmd line</p>
+<p>EDIT2: During boot resp. boot attempt of Kicksecure (with Super Grub Disk resp. without it) shows an error for a split second:</p>
+<pre><code class="lang-auto">error: no such device: /.disk/info.
+error: no such device: /.disk/mini-info.
+</code></pre>
+<p>Don’t know if thats relevant</p>
+<p>Does Kicksecure (configure Grub2 to) boot by uuid or by labels? In fstab its uuid.</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/11</link>
+        <pubDate>Tue, 08 Oct 2024 07:35:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-11</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[kinoe]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks for taking an interest. Here is the output of Grub cmd line <code>ls</code>:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a89a32e5646bea10def1352e861ef6a733dba9f4.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/a89a32e5646bea10def1352e861ef6a733dba9f4" title="xxx"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_690x38.jpeg" alt="xxx" data-base62-sha1="o3wAeH77INsThTMvab9R7dfiIGo" width="690" height="38" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_690x38.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_1035x57.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_1380x76.jpeg 2x" data-dominant-color="3E3F49"></a></div><br>
+As you can see Grub lists the boot partition hd0,gpt2! So I don’t know why it does not boot it.<p></p>
+<p>And here are the boot methods that are detected by Super Grub2 Disk:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/dab34687462346edfb1d091b1543c132300183a5.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/dab34687462346edfb1d091b1543c132300183a5" title="zzz_optimized"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_690x202.jpeg" alt="zzz_optimized" data-base62-sha1="vcIbrp7fx78s1t5AwD3W1IMhfG5" width="690" height="202" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_690x202.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_1035x303.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_1380x404.jpeg 2x" data-dominant-color="9C6C41"></a></div><p></p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/10</link>
+        <pubDate>Tue, 08 Oct 2024 07:06:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-10</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>When you’re dropped to the grub command line, can you run <code>ls</code> and show the output? I’m wondering if maybe you’re in a situation where the Linux kernel and your BIOS can read your disk, but GRUB can’t.</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/9</link>
+        <pubDate>Tue, 08 Oct 2024 03:43:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-9</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
       <item>
         <title>Boot issue after installking Kicksecure</title>
         <dc:creator><![CDATA[kinoe]]></dc:creator>

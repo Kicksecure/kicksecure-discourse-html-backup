@@ -6,6 +6,194 @@
     <description>Latest posts</description>
       <item>
         <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Nice! Glad it’s up-and-running now <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_18</link>
+        <pubDate>Tue, 08 Oct 2024 18:34:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1385</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>Thank you a lot. That fixed it! <img src="https://forums.kicksecure.com/images/emoji/twitter/dizzy.png?v=12" title=":dizzy:" class="emoji" alt=":dizzy:" loading="lazy" width="20" height="20"> Even rebooting Kicksecure after running host OS shows the entry! Thanks again arraybolt3!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_17</link>
+        <pubDate>Tue, 08 Oct 2024 18:32:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1384</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Ah, ok. I thought the entry was missing from the GRUB boot menu, which is how I got confused.</p>
+<p>I think I can reproduce your issue here. Somehow your UEFI firmware isn’t picking up a Kicksecure boot entry, meaning the only option you have in your list is just the USB drive’s boot entry. Booting from that results in Kicksecure’s fallback bootloader being invoked, and due to a bug in Kicksecure this simply drops you to a GRUB shell.</p>
+<p>To fix the problem, you should be able to use efibootmgr within Kicksecure to add a Kicksecure boot entry to the list that will work properly. Based on the screenshots you’ve sent, the proper command to do this <em>should</em> be:</p>
+<pre><code>sudo efibootmgr -c -d /dev/sda -p 1 -L 'Kicksecure' -l 'EFI\Kicksecure\shimx64.efi'
+</code></pre>
+<p>The other bug (where the fallback bootloader doesn’t work) needs to be solved and is something I’ll likely be looking into in the near future.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_16</link>
+        <pubDate>Tue, 08 Oct 2024 17:47:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1383</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<ul>
+<li>Run <code>sudo nano /etc/default/grub</code> on the main OS, then find the line that looks like <code>#GRUB_DISABLE_OS_PROBER=false</code> and uncomment it by removing the <code>#</code> from the start. Then press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to exit. (It’s possible that you’ll find that this line is already uncommented, in which case you can just close the file and proceed to the next step.)</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>Run <code>sudo update-grub</code> to regenerate the GRUB menu.</li>
+</ul>
+</blockquote>
+<p> → unfortunately it doesn’t fix the issue</p>
+<blockquote>
+<p>Another possible option is to use your computer’s built-in boot menu rather than GRUB’s boot menu. Most systems have a key you can press during early boot (usually it’s <kbd>Esc</kbd> though sometimes it can be <kbd>F2</kbd>, <kbd>F7</kbd>, or something else) that will show you a list of operating systems you can boot from. If Kicksecure is in that list, or if your USB drive shows up in that list, try selecting it to boot from.</p>
+</blockquote>
+<p> → in fact that is the way I boot all OSs installed on usb flash drive in the first place anyway The thing is, Kicksecures boot partition doesn’t show up in that list, as mentioned above</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_15</link>
+        <pubDate>Tue, 08 Oct 2024 17:31:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1382</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Installing Kicksecure to a USB flash drive is basically the same as dual-booting from the hardware’s perspective, so the solution mentioned earlier has a pretty good chance of working.</p>
+<p>Another possible option is to use your computer’s built-in boot menu rather than GRUB’s boot menu. Most systems have a key you can press during early boot (usually it’s <kbd>Esc</kbd> though sometimes it can be <kbd>F2</kbd>, <kbd>F7</kbd>, or something else) that will show you a list of operating systems you can boot from. If Kicksecure is in that list, or if your USB drive shows up in that list, try selecting it to boot from.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_14</link>
+        <pubDate>Tue, 08 Oct 2024 16:23:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1381</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for the answer. I’m <strong>not</strong> <em>dual-booting</em> Kicksecure, rather installed it on usb flash drive.<br>
+I tried to boot it on a host system which uses itself Grub2 and on another which boots by systemdboot. On both Laptops the boot partition of Kicksecure is only detected as long as the host system has not been booted!</p>
+<p>And here’s the partition table of the flash drive as gparted displays it:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png" data-download-href="https://forums.kicksecure.com/uploads/default/a638086946bcf9b13132a25e8522f63224c2abe1" title="yyyy"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a638086946bcf9b13132a25e8522f63224c2abe1_2_690x159.png" alt="yyyy" data-base62-sha1="nIrjdolVQTVWWUgtgLvkKdVlis9" width="690" height="159" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a638086946bcf9b13132a25e8522f63224c2abe1_2_690x159.png, https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/a638086946bcf9b13132a25e8522f63224c2abe1.png 2x" data-dominant-color="E1E8EE"></a></div><br>
+german ‘nicht zugeteilt’ means not allocated<p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_13</link>
+        <pubDate>Tue, 08 Oct 2024 15:38:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1380</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>The GRUB “errors” aren’t really issues, GRUB is looking for files that are sometimes present on ISO files that aren’t present on your particular ISO file (the Super Grub Disk one).</p>
+<p>Kicksecure boots by UUIDs in the GRUB config file.</p>
+<p>To be clear, are you <em>dual-booting</em> Kicksecure alongside another Linux distro? If so, you probably need to enable <code>os-prober</code> on your primary distro. To do that:</p>
+<ul>
+<li>Run <code>sudo nano /etc/default/grub</code> on the main OS, then find the line that looks like <code>#GRUB_DISABLE_OS_PROBER=false</code> and uncomment it by removing the <code>#</code> from the start. Then press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to exit. (It’s possible that you’ll find that this line is already uncommented, in which case you can just close the file and proceed to the next step.)</li>
+<li>Run <code>sudo update-grub</code> to regenerate the GRUB menu.</li>
+<li>On your next reboot you should see an entry for Kicksecure in the boot menu. Boot into Kicksecure and repeat this process there so that in the event Kicksecure’s GRUB takes over, you can still see and boot your main OS.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_12</link>
+        <pubDate>Tue, 08 Oct 2024 15:02:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379</guid>
+      </item>
+      <item>
+        <title>Locale layout installation error</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This will be fixed in Kicksecure 17.2.3.8 and above.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/locale-layout-installation-error/611#post_7</link>
+        <pubDate>Tue, 08 Oct 2024 11:25:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1378</guid>
+      </item>
+      <item>
+        <title>Locale layout installation error</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Developer information:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/live-config-dist/commit/fe3eb5da1a8a2c464026941c572e61de90d3e6e6">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/live-config-dist/commit/fe3eb5da1a8a2c464026941c572e61de90d3e6e6" target="_blank" rel="noopener">github.com/ArrayBolt3/live-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/live-config-dist/commit/fe3eb5da1a8a2c464026941c572e61de90d3e6e6" target="_blank" rel="noopener">fixconkeys_part1: Only take into account the first loaded keyboard layout</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2024-10-06" data-time="22:15:25" data-timezone="UTC">10:15PM - 06 Oct 24 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
+        <a href="https://github.com/ArrayBolt3/live-config-dist/commit/fe3eb5da1a8a2c464026941c572e61de90d3e6e6" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-1</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/locale-layout-installation-error/611#post_6</link>
+        <pubDate>Tue, 08 Oct 2024 11:25:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1377</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>I really don’t know what is going on here: After booting Kicksecure several times with the aid of Super Grub Disk, an entry for Kicksecure showed up in the Grub menu, meaning Partition 2 (hd0, gpt2) is detected! But after running the host OS, the entry to Kicksecure is gone again, whats left is: <em>UEFI: USB, Partition 1</em> thats leading to the Grub cmd line only.</p>
+<p>EDIT: Tried booting on another Laptop ends up with the same result: No entry for Partition 2 and choosing Partition 1 ends with Grub cmd line</p>
+<p>EDIT2: During boot resp. boot attempt of Kicksecure (with Super Grub Disk resp. without it) shows an error for a split second:</p>
+<pre><code class="lang-auto">error: no such device: /.disk/info.
+error: no such device: /.disk/mini-info.
+</code></pre>
+<p>Don’t know if thats relevant</p>
+<p>Does Kicksecure (configure Grub2 to) boot by uuid or by labels? In fstab its uuid.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_11</link>
+        <pubDate>Tue, 08 Oct 2024 07:35:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1376</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for taking an interest. Here is the output of Grub cmd line <code>ls</code>:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a89a32e5646bea10def1352e861ef6a733dba9f4.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/a89a32e5646bea10def1352e861ef6a733dba9f4" title="xxx"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_690x38.jpeg" alt="xxx" data-base62-sha1="o3wAeH77INsThTMvab9R7dfiIGo" width="690" height="38" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_690x38.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_1035x57.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/a89a32e5646bea10def1352e861ef6a733dba9f4_2_1380x76.jpeg 2x" data-dominant-color="3E3F49"></a></div><br>
+As you can see Grub lists the boot partition hd0,gpt2! So I don’t know why it does not boot it.<p></p>
+<p>And here are the boot methods that are detected by Super Grub2 Disk:<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/dab34687462346edfb1d091b1543c132300183a5.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/dab34687462346edfb1d091b1543c132300183a5" title="zzz_optimized"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_690x202.jpeg" alt="zzz_optimized" data-base62-sha1="vcIbrp7fx78s1t5AwD3W1IMhfG5" width="690" height="202" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_690x202.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_1035x303.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/dab34687462346edfb1d091b1543c132300183a5_2_1380x404.jpeg 2x" data-dominant-color="9C6C41"></a></div><p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_10</link>
+        <pubDate>Tue, 08 Oct 2024 07:06:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1375</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>When you’re dropped to the grub command line, can you run <code>ls</code> and show the output? I’m wondering if maybe you’re in a situation where the Linux kernel and your BIOS can read your disk, but GRUB can’t.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_9</link>
+        <pubDate>Tue, 08 Oct 2024 03:43:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1374</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
         <dc:creator><![CDATA[@kinoe]]></dc:creator>
         <description><![CDATA[ <p>No feedback of any kind???</p> ]]></description>
         <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_8</link>
@@ -1113,326 +1301,6 @@ Trappe pour point d’arrêt et de trace (core dumped)</p> ]]></description>
         <link>https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588#post_2</link>
         <pubDate>Wed, 02 Oct 2024 13:23:20 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1322</guid>
-      </item>
-      <item>
-        <title>Boot issue after installking Kicksecure</title>
-        <dc:creator><![CDATA[@kinoe]]></dc:creator>
-        <description><![CDATA[ <p>I also do have this issue even without running kicksecure fom ventoy!<br>
-I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602#post_1</link>
-        <pubDate>Wed, 02 Oct 2024 10:53:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1321</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Yes. Flatpak and some Appimage cant run <img src="https://forums.kicksecure.com/images/emoji/twitter/frowning.png?v=12" title=":frowning:" class="emoji" alt=":frowning:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_3</link>
-        <pubDate>Wed, 02 Oct 2024 05:33:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1317</guid>
-      </item>
-      <item>
-        <title>Cannot run some AppImage apps after Kicksecure upate</title>
-        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
-        <description><![CDATA[ <p>Some AppImage, not all, cannot run anymore after the latest point release 17.2.3.7 update. Here is an example with Bitwarden:</p>
-<pre><code class="lang-auto">[user ~]% ./AppImage/Bitwarden-2024.9.0-x86_64.AppImage
-[9616:1002/015207.279258:FATAL:setuid_sandbox_host.cc(163)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /tmp/user/1000/.mount_BitwarIjvoLY/chrome-sandbox is owned by root and has mode 4755.
-Trace/breakpoint trap (core dumped)
-zsh: exit 133   ./AppImage/Bitwarden-2024.9.0-x86_64.AppImage
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_1</link>
-        <pubDate>Wed, 02 Oct 2024 02:13:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1316</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
-        <description><![CDATA[ <p>Issue confirmed for me too. Zero changes done on Flatpak apps, issue only occured after latest kicksecure piont release 17.2.3.7 update.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_2</link>
-        <pubDate>Wed, 02 Oct 2024 01:58:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1315</guid>
-      </item>
-      <item>
-        <title>Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>I don’t think KeePassXC can be used by default as the secret service provider in its current state without some significant hacks. It almost could, but it’s missing some features needed to get there.</p>
-<p>In order to use KeePassXC as a secret service, you have to create a password database and configure it to be used for secret storage. Therefore in order for there to be a working secret service out of the box, there has to be some way to make a database automatically during installation or at user creation time (since each user account on the system needs its own separate database for obvious reasons).</p>
-<p>Creating a database automatically is a problem because only specially configured databases can be used for secret storage. One has to specify that the database is usable for secret storage, and which “group” inside the database should be used for the purpose. This configuration is stored <em>in the database</em>. You can’t easily set it by editing a text file like you could with a usual config file. While <code>keepassxc-cli is able to *create* databases, it is not able to edit these in-database configuration options. The </code>db-edit` command it provides appears to only be usable for changing the database’s password, key file, etc.</p>
-<p>Without the ability to set which group to use for secret storage in a database, a database will be set by default to not be used for secret storage at all. Thus you can’t make a new database from scratch that is usable for secret storage.</p>
-<p>So now for the hacks. What <em>would</em> potentially be possible is to make a properly configured empty database with some sort of default password or key, then ship that database as part of Kicksecure. To avoid everyone having the same authentication data on their database, we could then have a routine that runs on first boot that generates a new key file, binds it to the database, then clears any default authentication data in the database so that only the user’s key file can unlock it. We can then have a script that runs automatically every time Kicksecure is started that launches KeePassXC with this database and key file pair opened automatically.</p>
-<p>The main problem I see with this solution is:</p>
-<ul>
-<li>It’s not elegant <em>at all</em>. It’s hacky.</li>
-<li>It literally requires shipping an encrypted binary blob as part of Kicksecure. I mean, yes, it’s one that the user could inspect themselves with sufficient effort but yikes.</li>
-<li>It could be insecure. I don’t know how KeePassXC’s internals work, but if it uses a “master key” encrypted by a password or key file, this won’t work at all because then everyone will have the same master key for their secret storage database, which is bad from a security standpoint for obvious reasons.</li>
-</ul>
-<p>In a perfect world, we’d be able to simply set the database settings from the command line. Then we could create a database automatically, set it as usable for secret storage, specify the root group as the one to use for that purpose, and then set up KeePassXC to auto-launch and auto-unlock the database on boot. The only part that’s really missing for this to work is setting a database as usable for secret storage and setting eht group to be used for that purpose. Perhaps that can be a later contribution to upstream KeePassXC.</p>
-<p>In the mean time, an existing “automatic” secret service provider like gnome-keyring will probably do a good enough job.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582#post_2</link>
-        <pubDate>Tue, 01 Oct 2024 23:39:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1313</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>Can not run flatpak apps after Kicksecure update</p>
-<p>/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=raider com.github.ADBeveridge.Raider<br>
-bwrap: No permissions to create new namespace, likely because the kernel does not allow non-privileged user namespaces.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_1</link>
-        <pubDate>Tue, 01 Oct 2024 16:21:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1312</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>The initial ramdisk (initrd) (created by default by initrd creator<br>
-“dracut” in Kicksecure at time of writing).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_9</link>
-        <pubDate>Tue, 01 Oct 2024 07:14:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1310</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="8" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Did you ever use LVM or are you theorizing? Did you accept my challenge:</p>
-</blockquote>
-</aside>
-<p>LVM is the default installation by qubes because it uses anaconda, and debian because it uses d-i (which i use both).</p>
-<p>The challenge which you are proposing is a specific use case which i described above for ubiquity bugs, it doesnt provide any critical bug which LVM suffer VS no LVM.</p>
-</blockquote>
-</aside>
-<p>If you cannot pass the challenge, you’re not really using LVM except for some transparent use in Qubes but no real user interaction.</p>
-<p>Why argue for a feature which you’re actively making use yourself? Feature completeness?</p>
-<p>No, feature completeness based on theoretic considerations is an insufficient argument.</p>
-<p>The Linux boot process is complicated enough. (<a href="https://www.kicksecure.com/wiki/Dev/image_creation" class="inline-onebox">Development of System Image Creation and Bootstrapping Tools</a>)</p>
-<p>Stacking another layer of complexity (LVM) without strong rationale is only making a bigger mess on top the existing usability mess. That’s why I even created <a href="https://www.kicksecure.com/wiki/Broken_Boot" class="inline-onebox">Broken Boot - Kicksecure</a>. Once the boot process is broken, analysis and recovery without re-installation is extremely complicated. The internet is full of of support requests by users which went unresolved.</p>
-<p>I think the issue is, that we don’t have a feature request template for Kicksecure yet. This is what Qubes has:</p>
-<blockquote>
-<ul>
-<li>The problem you’re addressing (if any)</li>
-<li>The solution you’d like</li>
-<li>The value to a user, and who that user might be</li>
-</ul>
-</blockquote>
-<p>And this is from systemd:</p>
-<blockquote>
-<ul>
-<li>Is your feature request related to a problem? Please describe
-<ul>
-<li>A clear and concise description of what the problem is. Ex. I’m always frustrated when […]</li>
-</ul>
-</li>
-<li>Describe the solution you’d like
-<ul>
-<li>A clear and concise description of what you want to happen.</li>
-</ul>
-</li>
-<li>Describe alternatives you’ve considered
-<ul>
-<li>A clear and concise description of any alternative solutions or features you’ve considered.</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<p>Please fill this out, describe the feature you’re <strong>personally</strong> missing.</p>
-<p>Because then maybe way to get this feature is indeed LVM but perhaps there are more suitable, simpler alternatives such as btrfs</p>
-<p>It might make sense to request features that one doesn’t personally need but thinks this would be good for the overall health of the project since others those need it don’t even make a feature request. But in case of LVM, I don’t think that makes sense.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="8" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>We cant just point out that this is crushed and not booting because oh there is LVM mentioned on the screen, real cause need to be identified then decided if its really LVM specific or not.</p>
-</blockquote>
-</aside>
-<p>LVM doesn’t make analysis any simpler.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="8" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>If it was generic use issue, many would have fallen under the same condition, including marmarek himself. Probably its just unman specific config issue.</p>
-</blockquote>
-</aside>
-<p>If even unman runs into this issue, doesn’t know how to fix it and nobody knows it either, then it’s simply too difficult.</p>
-<p>Or take <a href="https://github.com/QubesOS/qubes-issues/issues/8707" class="inline-onebox">Unable to boot | "qubes_dom0-root does not exist" | Possible LVM problem · Issue #8707 · QubesOS/qubes-issues · GitHub</a>. After complex analysis, it just stalled. DemiMarie (Qubes developer) didn’t answer anymore for some reason. That could be running out of ideas or time or something else. But the reasons are speculation since the end result is the same. It’s too complex, requires too much effort to debug.</p>
-<p>Since in case of Kicksecure it’s optional and doesn’t have a strong rationale, it’s best avoided.</p>
-<p>That’s not the kind of reliability, stability and maintainability that I set as project goals. Related:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stable_Version_User_Experience">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener" title="04:03PM - 17 January 2024">Kicksecure – 17 Jan 24</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener">Kicksecure Stable Version User Experience</a></h3>
-
-  <p>Aims for a seamless and robust user experience in the stable release of Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/maintainability">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion=4" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener" title="09:14AM - 29 August 2024">Kicksecure – 29 Aug 24</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener">maintainability</a></h3>
-
-  <p>Exploring the challenges of maintainability in the Kicksecure project and Open Source development.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="nurmagoz" data-post="7" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>Looking at the mess calamares development approach for LVM, i dont know, it sound like they have zero clue how to do it correctly, not sure it will ever see the sun.</p>
-</blockquote>
-</aside>
-<p>Which further strengthens my point: Highly technical people either aren’t motivated to work with LVM or unable due to technical challenges, then it’s best avoided unless there is a strong rationale.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_11</link>
-        <pubDate>Tue, 01 Oct 2024 06:38:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1309</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>the details of which can be found at <a href="https://discourse.ubuntu.com/t/from-installation-to-provisioning-upgrading-the-ubuntu-desktop-installer/42139">From installation to provisioning - upgrading the Ubuntu Desktop installer - Desktop - Ubuntu Community Hub</a>, That system is ubuntu-desktop-provision.</p>
-</blockquote>
-</aside>
-<p>Yeah now i have collected and linked everything, although i have read that article before it didnt come to my mind the differentiation between subiquity and ubiquity</p>
-<p>Ubiquity code on launchpad not on github, mint and others forked ubiquity code from launchpad and post it on github, but the one on github from ubuntu is subiquity.</p>
-<p>ubiquity,subiquity… how is this not confusing <img src="https://forums.kicksecure.com/images/emoji/twitter/expressionless.png?v=12" title=":expressionless:" class="emoji" alt=":expressionless:" loading="lazy" width="20" height="20"></p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Ubiquity was nearly removed from the Ubuntu archives entirely in the 24.04 cycle</p>
-</blockquote>
-</aside>
-<p>Yeah discussion about ubiquity stops here, its crazy that no where to find they said it loudly that ubiquity is deprecated…</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Here’s the <a href="https://launchpad.net/ubuntu/+source/calamares-settings-ubuntu/1:24.04.19">package upload</a> done to add Ubuntu Unity support to Ubuntu’s Calamares package, along with the <a href="https://bugs.launchpad.net/ubuntu/+source/calamares-settings-ubuntu/+bug/2055799">Feature Freeze exception</a> granted to allow this change to be done.</p>
-</blockquote>
-</aside>
-<p>Thats very recently, the video i have sent you is before 2 years ago.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Yeah, it is messed up pretty badly. Again though, that could be libkpmcore’s fault, but that’s uncertain. Would have to look deeper at the code to find out.</p>
-</blockquote>
-</aside>
-<p>Thats nice if it could be figured out where is at least the cause of the problem.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="585">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>I am an Ubuntu Developer, <a href="https://launchpad.net/~arraybolt3">Aaron Rainbolt in Launchpad</a></p>
-</blockquote>
-</aside>
-<p>Pleasure to meet you <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_10</link>
-        <pubDate>Tue, 01 Oct 2024 01:03:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1307</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Alright .</p>
-<p>As far as i see kicksecure uses calamares installer with luks2 without encrypted boot<br>
-It still uses Grub to boot Kicksecure witch will not ask for password unlike when boot was encrypted.</p>
-<p>1-could you explain what decrypts luks2 partition instead of grub?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_8</link>
-        <pubDate>Mon, 30 Sep 2024 23:43:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1306</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="6" data-topic="584">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>What unlocks the disk faster than GRUB ?<br>
-Did you mean when boot is not encrypted, Grub are not involved or needed?</p>
-</blockquote>
-</aside>
-<p>Well, that too. But also GRUB seems to literally be slower than Linux itself at running the code needed to unlock a LUKS volume.</p>
-<aside class="quote no-group" data-username="suse211213" data-post="6" data-topic="584">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>For me when used calamares with luks1 and encrypted boot i didn’t face any problem .<br>
-Grubs default us English layout was not a big issue for me .</p>
-</blockquote>
-</aside>
-<p>For some, it has been a big deal, and doing things this way avoids the need for Kicksecure to distribute a custom-built bootloader (which would add maintenance burden) while still getting the security advantages of LUKS2. It does mean that files under /boot could potentially be modified by an attacker to do bad things on next boot, but even if you have /boot encrypted an attacker could still modify the unencrypted bit of GRUB to do bad things on next boot.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_7</link>
-        <pubDate>Mon, 30 Sep 2024 22:55:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1305</guid>
-      </item>
-      <item>
-        <title>Luks1 version issue</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>What unlocks the disk faster than GRUB ?<br>
-Did you mean when boot is not encrypted, Grub are not involved or needed?</p>
-<p>For me when used calamares with luks1 and encrypted boot i didn’t face any problem .<br>
-Grubs default us English layout  was not a big issue for me .</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/luks1-version-issue/584#post_6</link>
-        <pubDate>Mon, 30 Sep 2024 22:32:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1304</guid>
       </item>
   </channel>
 </rss>
