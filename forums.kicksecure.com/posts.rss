@@ -5,6 +5,151 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Unallocated space</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t know the exact reason for this unallocated space currently, however I highly suspect it’s because of how the GUID Partition Table (GPT) disk structure works. Disks that are GPT-partitioned have <em>two</em> partition tables, a primary one at the start of the drive, and a backup one at the very end of the drive. The GPT table is about 16 kilobytes in size.</p>
+<p>It’s also possible this is related to partition alignment - disks perform faster if you make sure that partitions start and end at particular locations on the disk, and sometimes a little bit of free space has to be left in order to make that happen.</p>
+<p>It is extremely unlikely any unencrypted data would leak into the unallocated portions of the disk. There’s no reason for the LUKS code to write unencrypted data anywhere except volatile memory (i.e. RAM), and it would be a fatal security flaw for it to do so. There are also all sorts of problems that would occur with code that wrote data into unallocated disk space by design (i.e. what would the code do if there wasn’t unallocated space to use, or what about disks where the unallocated space actually <em>is</em> used, for instance by the system bootloader?), so it would be pointless, insecure, and a usability nightmare for LUKS to do that.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unallocated-space/613#post_4</link>
+        <pubDate>Sun, 13 Oct 2024 00:47:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1403</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>File structure of my mounted boot partitions:</p>
+<pre><code class="lang-auto">/boot
+  |
+  |---efi · grub · config-6.1.0-25-amd64 · config-6.1.0-26-amd64 · initrd.img-6.1.0-25-amd64 · initrd.img-6.1.0-26-amd64 · vmlinuz-6.1.0-25-amd64 · vmlinuz-6.1.0-26-amd64
+       |     |
+       |     |---fonts · grub.cfg · grubenv · locale · unicode.pf2 · x86_64-efi
+       |
+       |---EFI
+            |
+            |---boot · Kicksecure
+                 |         |
+                 |         |---BOOTX64.CSV · bx64.efi · grub.cfg · grubx64.efi · mmx64.efi · shimx64.efi
+                 |
+                 |---bootx64.efi · grubx64.efi · mmx64.efi
+</code></pre>
+<p>Best expand view to see the full picture. Maybe something got mixed up</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602?page=2#post_30</link>
+        <pubDate>Sat, 12 Oct 2024 22:09:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1402</guid>
+      </item>
+      <item>
+        <title>Unallocated space</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>Thanks,</p>
+<p>I’ve  comprehensible read the whole documentation about FDE.</p>
+<p>Full means the whole drive should be used  without exception .</p>
+<p>Maybe even FDE data could be leak into unallocated space</p>
+<p>For example,</p>
+<p>Debian Luks on LVM  results in non creation of free space  luks2.</p>
+<p>Debian live calamares installer also won’t create free space luks1  if i remember.</p>
+<p>I will test another install options on debian without lvm and see how it works.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unallocated-space/613#post_3</link>
+        <pubDate>Sat, 12 Oct 2024 18:43:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1401</guid>
+      </item>
+      <item>
+        <title>Unallocated space</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>What is the purpose of unallocated space .</p>
+</blockquote>
+<p>None, that I am aware of.</p>
+<blockquote>
+<p>How to prevent the installer from creating it.</p>
+</blockquote>
+<p>Users cannot do this. Unsupported.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1728725424" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="08:07AM - 12 October 2024">Kicksecure – 12 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
+
+  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Would require a developer contributing to calamares (and maybe by extension to partitioning tools and whatnot). This might be difficult digging into partitioning stuff. Might even not be calamares issue but general partitioning issues.</p>
+<p>Unless you do it or pay someone (not me) to do it the chance of this ever changing is extremely small.</p>
+<blockquote>
+<p>Historical data might be left in it .</p>
+</blockquote>
+<p>Even overwriting might not delete it. Forensics is a difficult topic. See:<br>
+<a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#Advice_for_Solid-state_Drives_and_USB_Storage">Advice for Solid-state Drives and USB Storage</a></p>
+<p>How to avoid this issue? Never store data unencrypted. Always use:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Full_Disk_Encryption">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1728725424" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener" title="10:23AM - 29 September 2024">Kicksecure – 29 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0d/Fulldeskencryption423423.jpg?version=d499f65d45ec9fa7630b7a52e5dad247" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener">Full Disk Encryption (FDE)</a></h3>
+
+  <p>Full Disk Encryption, Additional Security Measures</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/unallocated-space/613#post_2</link>
+        <pubDate>Sat, 12 Oct 2024 13:46:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1400</guid>
+      </item>
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[@kinoe]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for bothering. <img src="https://forums.kicksecure.com/images/emoji/twitter/hugs.png?v=12" title=":hugs:" class="emoji" alt=":hugs:" loading="lazy" width="20" height="20"><br>
+I followed your tutorial but it didn’t fix the issue <img src="https://forums.kicksecure.com/images/emoji/twitter/expressionless.png?v=12" title=":expressionless:" class="emoji" alt=":expressionless:" loading="lazy" width="20" height="20"><br>
+I also consider something is iffy with my hardware config resp. with my UEFI setup.<br>
+The entry of the (non-booting) partition 1 (= /boot/efi) is constantly ‘restored’ (or so it seems) no matter what I do (like <code>efibootmgr -c -d /dev/sda -p 1 -L 'Kicksecure' -l 'EFI\Kicksecure\shimx64.efi'</code> or installing GRUB to the fallback bootloader location on the USB drive as you explained in detail).<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/2db6d694fa15b6db7bc2756560b878fef9d77eb5" title="uefi"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpeg" alt="uefi" data-base62-sha1="6wpdllkYvhBYHlWg8H0U0nAVVhr" width="690" height="314" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpeg, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 2x" data-dominant-color="BCBAC6"></a></div><p></p>
+<p><em>On the other hand I never had this hardware/ UEFI problem with any other OS installed on an usb flash drive!?</em> How can it be? And why isn’t there the same boot problem with the flash drive running LIVE Kicksecure?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602?page=2#post_29</link>
+        <pubDate>Sat, 12 Oct 2024 08:46:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1399</guid>
+      </item>
+      <item>
+        <title>Unallocated space</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>Installed kicksecure ISO with full disk encryption on virtual box, but Gparted shows a small unallocated space at the end of the drive .</p>
+<p>What is the purpose of unallocated space .<br>
+How to prevent the installer from creating it.<br>
+Historical data might be left in it .</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unallocated-space/613#post_1</link>
+        <pubDate>Sat, 12 Oct 2024 05:08:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1398</guid>
+      </item>
+      <item>
         <title>Boot issue after installking Kicksecure</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>I just finished testing in a QEMU VM, making a setup with Linux Mint installed to a virtual internal drive, and Kicksecure installed to a virtual USB drive. Making GRUB install to the fallback bootloader location overwrote the bootloader on the USB drive, and appears to have left Mint’s bootloader intact. So I believe this works.</p> ]]></description>
@@ -35,14 +180,6 @@ And an installation of Kicksecure on another usb flash drive ended up with the s
         <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602?page=2#post_26</link>
         <pubDate>Fri, 11 Oct 2024 20:47:56 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1395</guid>
-      </item>
-      <item>
-        <title>Boot issue after installking Kicksecure</title>
-        <dc:creator><![CDATA[@kinoe]]></dc:creator>
-        <description><![CDATA[ <p>(post deleted by author)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602?page=2#post_25</link>
-        <pubDate>Fri, 11 Oct 2024 20:23:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1394</guid>
       </item>
       <item>
         <title>Boot issue after installking Kicksecure</title>
@@ -2125,230 +2262,6 @@ security risks.</p>
         <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_11</link>
         <pubDate>Thu, 03 Oct 2024 06:12:33 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1344</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
-        <description><![CDATA[ <p>I confirm the workaround worked, thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_10</link>
-        <pubDate>Thu, 03 Oct 2024 02:03:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1342</guid>
-      </item>
-      <item>
-        <title>Cannot run some AppImage apps after Kicksecure upate</title>
-        <dc:creator><![CDATA[@cookie.monster]]></dc:creator>
-        <description><![CDATA[ <p>Got it, it works, thanks!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_4</link>
-        <pubDate>Thu, 03 Oct 2024 02:02:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1341</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="592">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>security-misc changed in this release:</p>
-<p><code>kernel.unprivileged_userns_clone=0</code></p>
-</blockquote>
-</aside>
-<p>This is good to have and kept as default, something else should be figured out on how to make flatpak work.</p>
-<p>Alpinelinux using the same kernel option:</p>
-<aside class="onebox stackexchange" data-onebox-src="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux">
-  <header class="source">
-
-      <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">superuser.com</a>
-  </header>
-
-  <article class="onebox-body">
-      <a href="https://superuser.com/users/1118308/pjeremymalouf" target="_blank" rel="noopener">
-    <img alt="PJeremyMalouf" src="https://www.gravatar.com/avatar/6c09cba963c7e78e35f4755062697395?s=256&amp;d=identicon&amp;r=PG" class="thumbnail onebox-avatar" width="256" height="256">
-  </a>
-
-<h4>
-  <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">Enable kernel.unprivileged_userns_clone in Alpine Linux</a>
-</h4>
-
-<div class="tags">
-  <strong>docker, amazon-web-services, alpine-linux</strong>
-</div>
-
-<div class="date">
-  asked by
-  
-  <a href="https://superuser.com/users/1118308/pjeremymalouf" target="_blank" rel="noopener">
-    PJeremyMalouf
-  </a>
-  on <a href="https://superuser.com/questions/1507236/enable-kernel-unprivileged-userns-clone-in-alpine-linux" target="_blank" rel="noopener">06:49AM - 04 Dec 19 UTC</a>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>But they say if you have flatpak permission issue just " add your user to the <strong>flatpak</strong> group."</p>
-<p><a href="https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors" class="onebox" target="_blank" rel="noopener">https://wiki.alpinelinux.org/wiki/Flatpak#Permission_errors</a></p>
-<p>Why turning off this option is not solution:</p>
-<aside class="onebox stackexchange" data-onebox-src="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533">
-  <header class="source">
-
-      <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">security.stackexchange.com</a>
-  </header>
-
-  <article class="onebox-body">
-      <a href="https://security.stackexchange.com/users/106285/forest" target="_blank" rel="noopener">
-    <img alt="forest" src="https://i.sstatic.net/mVwQm.jpg?s=256" class="thumbnail onebox-avatar" width="256" height="256">
-  </a>
-
-<h4>
-  <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">What does enabling kernel.unprivileged_userns_clone do?</a>
-</h4>
-
-<div class="tags">
-  <strong>linux</strong>
-</div>
-
-<div class="date">
-  
-  answered by
-  <a href="https://security.stackexchange.com/users/106285/forest" target="_blank" rel="noopener">
-    forest
-  </a>
-  on <a href="https://security.stackexchange.com/questions/209529/what-does-enabling-kernel-unprivileged-userns-clone-do/209533#209533" target="_blank" rel="noopener">01:41AM - 05 May 19 UTC</a>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="592">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Temporary workaround to undo this setting (untested):</p>
-<p><code>sudo sysctl -w kernel.unprivileged_userns_clone=1</code></p>
-</blockquote>
-</aside>
-<p>Workaround, worked:</p>
-<pre><code class="lang-auto">[user ~]% sudo sysctl -w kernel.unprivileged_userns_clone=1
-kernel.unprivileged_userns_clone = 1
-[user ~]% flatpak install org.mozilla.firefox
-Looking for matches…
-Required runtime for org.mozilla.firefox/x86_64/stable (runtime/org.freedesktop.Platform/x86_64/23.08) found in remote flathub
-Do you want to install it? [Y/n]: n 
-error: The application org.mozilla.firefox/x86_64/stable requires the runtime org.freedesktop.Platform/x86_64/23.08 which is not installed
-zsh: exit 1     flatpak install org.mozilla.firefox
-[user ~]% flatpak install io.freetubeapp.FreeTube
-Looking for matches…
-Required runtime for io.freetubeapp.FreeTube/x86_64/stable (runtime/org.freedesktop.Platform/x86_64/23.08) found in remote flathub
-Do you want to install it? [Y/n]: y
-
-io.freetubeapp.FreeTube permissions:
-    ipc        network                pulseaudio             x11
-    dri        file access [1]        dbus access [2]        bus ownership [3]
-
-    [1] xdg-download
-    [2] org.freedesktop.PowerManagement, org.freedesktop.ScreenSaver, org.gnome.SessionManager,
-        org.gnome.SettingsDaemon
-    [3] org.mpris.MediaPlayer2.chromium.*, org.mpris.MediaPlayer2.freetube
-
-
-        ID                                     Branch         Op    Remote    Download
- 1. [✓] org.freedesktop.Platform.GL.default    23.08          i     flathub   164.6 MB / 163.8 MB
- 2. [✓] org.freedesktop.Platform.GL.default    23.08-extra    i     flathub    22.6 MB / 163.8 MB
- 3. [✓] org.freedesktop.Platform.Locale        23.08          i     flathub    17.9 kB / 371.6 MB
- 4. [✓] org.freedesktop.Platform.openh264      2.2.0          i     flathub     1.2 MB / 944.3 kB
- 5. [✓] org.freedesktop.Platform               23.08          i     flathub   250.0 MB / 230.9 MB
- 6. [✓] io.freetubeapp.FreeTube                stable         i     flathub   123.4 MB / 114.8 MB
-
-Installation complete.
-[user ~]%
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_9</link>
-        <pubDate>Wed, 02 Oct 2024 23:33:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1340</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/274">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/security-misc/issues/274" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/security-misc/issues/274" target="_blank" rel="noopener">`kernel.unprivileged_userns_clone=0` breaks too much</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-10-02" data-time="17:09:37" data-timezone="UTC">05:09PM - 02 Oct 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">* https://forums.whonix.org/t/in-place-release-upgrade-to-whonix-17-2-3-7-seems-<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">to-have-broken-my-flatpaks/20486
-* https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594
-* https://forums.kicksecure.com/t/impossible-to-start-evolution-app-since-the-last-update/601</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592#post_8</link>
-        <pubDate>Wed, 02 Oct 2024 17:09:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1338</guid>
-      </item>
-      <item>
-        <title>Cannot run some AppImage apps after Kicksecure upate</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Try the same as mentioned in this very forum post: <a href="https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592/7" class="inline-onebox">Can not run flatpak apps after Kicksecure update - #7 by Patrick</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/cannot-run-some-appimage-apps-after-kicksecure-upate/594#post_3</link>
-        <pubDate>Wed, 02 Oct 2024 17:06:39 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1337</guid>
       </item>
   </channel>
 </rss>
