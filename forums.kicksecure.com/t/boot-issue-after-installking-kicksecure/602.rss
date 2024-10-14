@@ -6,9 +6,22 @@
     <description>I also do have this issue even without running kicksecure fom ventoy!
 I installed kicksecure onto usb flash drive following word for word the official installation tutorial to install kicksecure iso to usb flash drive. Booting after installation works, but afterwards I shutdown, unplugged the flash drive and booted the linux host on the hardware, kicksecure boots only to grub bash line.</description>
     
-    <lastBuildDate>Sat, 12 Oct 2024 22:09:02 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 13 Oct 2024 23:34:37 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Boot issue after installking Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>That looks <em>mostly</em> right… except there should be a <code>grub.cfg</code> file under <code>/boot/efi/EFI/boot</code>. Why that isn’t there is a mystery to me. Could you try <code>sudo cp /boot/efi/EFI/Kicksecure/grub.cfg /boot/efi/EFI/boot/grub.cfg</code> and see if that resolves the issue?</p>
+<p>(Note: Do <strong>NOT</strong> copy <code>/boot/grub/grub.cfg</code>, that is the wrong file. EFI systems use <em>two</em> grub.cfg files, you want the one currently residing at <code>/boot/efi/EFI/Kicksecure/grub.cfg</code>.)</p>
+          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/31">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/31</link>
+        <pubDate>Sun, 13 Oct 2024 23:34:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-602-31</guid>
+        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
+      </item>
       <item>
         <title>Boot issue after installking Kicksecure</title>
         <dc:creator><![CDATA[kinoe]]></dc:creator>
@@ -44,6 +57,7 @@ I installed kicksecure onto usb flash drive following word for word the official
 I followed your tutorial but it didn’t fix the issue <img src="https://forums.kicksecure.com/images/emoji/twitter/expressionless.png?v=12" title=":expressionless:" class="emoji" alt=":expressionless:" loading="lazy" width="20" height="20"><br>
 I also consider something is iffy with my hardware config resp. with my UEFI setup.<br>
 The entry of the (non-booting) partition 1 (= /boot/efi) is constantly ‘restored’ (or so it seems) no matter what I do (like <code>efibootmgr -c -d /dev/sda -p 1 -L 'Kicksecure' -l 'EFI\Kicksecure\shimx64.efi'</code> or installing GRUB to the fallback bootloader location on the USB drive as you explained in detail).<br>
+So the entry ‘Kicksecure’ is always exchanged in favor of ‘UEFI: USB, Partition 1’<br>
 </p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/2db6d694fa15b6db7bc2756560b878fef9d77eb5" title="uefi"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpeg" alt="uefi" data-base62-sha1="6wpdllkYvhBYHlWg8H0U0nAVVhr" width="690" height="314" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpeg, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 2x" data-dominant-color="BCBAC6"></a></div><p></p>
 <p><em>On the other hand I never had this hardware/ UEFI problem with any other OS installed on an usb flash drive!?</em> How can it be? And why isn’t there the same boot problem with the flash drive running LIVE Kicksecure?</p>
           <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/29">Read full topic</a></p>
@@ -1570,44 +1584,6 @@ Edit: Trying to boot, the boot partition (first one) isn’t recognized apparent
         <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/6</link>
         <pubDate>Sat, 05 Oct 2024 05:43:38 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-602-6</guid>
-        <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
-      </item>
-      <item>
-        <title>Boot issue after installking Kicksecure</title>
-        <dc:creator><![CDATA[kinoe]]></dc:creator>
-        <description><![CDATA[
-            <p>Thanks for taking an interest.<br>
--I followed the instructions here: <a href="https://www.kicksecure.com/wiki/Live_Mode#Boot_standard_-_live_mode_or_persistent_mode" class="inline-onebox" rel="noopener nofollow ugc">Live Mode for Kicksecure</a><br>
--Version: Kicksecure-Xfce-17.2.3.7.iso copied to flash drive by balenaEtcher<br>
--Booted and installed to another 64GB USB flash drive with luks encryption<br>
--Booted that new installed Kicksecure 64GB USB flash drive, installed Whonix and shut down - so far so good<br>
-But after running the host system (Arch Linux) once, without flash drive plugged in, the replugged Kicksecure flash drive merely boots to Grub bash line!<br>
-I managed to boot it by the help of Super-Grub2-disk, which finds the Grub entry and boots from it.<br>
-Journalctl is reporting a Swap File Creator error but I’m not sure its relevant.<br>
-In Kicksecure again I did as follows:</p>
-<pre><code class="lang-auto">sudo apt-get full-upgrade
-sudo apt-get full-upgrade --target-release=bookworm-fasttrack
-whonix-xfce-installer-cli
-</code></pre>
-<p>and to fix the boot issue I kinda fiddled around, maybe made it worse:</p>
-<pre><code class="lang-auto">dpkg-query -W -f='${db:Status-Status}' dracut '=&gt; installed
-dpkg-query -W -f='${db:Status-Status}' initramfs-tools ' =&gt; not-installed
-sudo apt install --reinstall dracut grub-live
-sudo dracut --hostonly --force
-sudo update-grub =&gt; no errors
-</code></pre>
-<p>Here is the /etc/default/grub:</p>
-<pre><code class="lang-auto">GRUB_DEFAULT=0
-GRUB_TIMEOUT=5
-GRUB_DISTRIBUTOR='Kicksecure'
-GRUB_CMDLINE_LINUX_DEFAULT='quiet rd.luks.uuid=82fbd4c5-b874-4c81-9a30-7aad4eb2aee4'
-GRUB_CMDLINE_LINUX=""
-</code></pre>
-          <p><a href="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/5">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602/5</link>
-        <pubDate>Thu, 03 Oct 2024 06:51:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-602-5</guid>
         <source url="https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602.rss">Boot issue after installking Kicksecure</source>
       </item>
   </channel>

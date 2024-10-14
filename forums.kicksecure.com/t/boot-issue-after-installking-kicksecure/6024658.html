@@ -1560,7 +1560,7 @@ And an installation of Kicksecure on another usb flash drive ended up with the s
                   <time itemprop='datePublished' datetime='2024-10-12T08:46:05Z' class='post-time'>
                     October 12, 2024,  8:46am
                   </time>
-                  <meta itemprop='dateModified' content='2024-10-12T21:13:18Z'>
+                  <meta itemprop='dateModified' content='2024-10-13T06:18:27Z'>
               <span itemprop='position'>29</span>
               </span>
             </div>
@@ -1569,6 +1569,7 @@ And an installation of Kicksecure on another usb flash drive ended up with the s
 I followed your tutorial but it didn’t fix the issue <img src="../../images/emoji/twitter/expressionlesse5bf.png?v=12" title=":expressionless:" class="emoji" alt=":expressionless:" loading="lazy" width="20" height="20"><br>
 I also consider something is iffy with my hardware config resp. with my UEFI setup.<br>
 The entry of the (non-booting) partition 1 (= /boot/efi) is constantly ‘restored’ (or so it seems) no matter what I do (like <code>efibootmgr -c -d /dev/sda -p 1 -L 'Kicksecure' -l 'EFI\Kicksecure\shimx64.efi'</code> or installing GRUB to the fallback bootloader location on the USB drive as you explained in detail).<br>
+So the entry ‘Kicksecure’ is always exchanged in favor of ‘UEFI: USB, Partition 1’<br>
 <div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpg" data-download-href="https://forums.kicksecure.com/uploads/default/2db6d694fa15b6db7bc2756560b878fef9d77eb5" title="uefi"><img src="../../uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpg" alt="uefi" data-base62-sha1="6wpdllkYvhBYHlWg8H0U0nAVVhr" width="690" height="314" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5_2_690x314.jpeg, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/2db6d694fa15b6db7bc2756560b878fef9d77eb5.jpeg 2x" data-dominant-color="BCBAC6"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">uefi</span><span class="informations">800×365 53.5 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
 <p><em>On the other hand I never had this hardware/ UEFI problem with any other OS installed on an usb flash drive!?</em> How can it be? And why isn’t there the same boot problem with the flash drive running LIVE Kicksecure?</p>
             </div>
@@ -1614,6 +1615,35 @@ The entry of the (non-booting) partition 1 (= /boot/efi) is constantly ‘restor
                  |---bootx64.efi · grubx64.efi · mmx64.efi
 </code></pre>
 <p>Best expand view to see the full picture. Maybe something got mixed up</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_31' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-10-13T23:34:37Z' class='post-time'>
+                    October 13, 2024, 11:34pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-10-13T23:34:37Z'>
+              <span itemprop='position'>31</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>That looks <em>mostly</em> right… except there should be a <code>grub.cfg</code> file under <code>/boot/efi/EFI/boot</code>. Why that isn’t there is a mystery to me. Could you try <code>sudo cp /boot/efi/EFI/Kicksecure/grub.cfg /boot/efi/EFI/boot/grub.cfg</code> and see if that resolves the issue?</p>
+<p>(Note: Do <strong>NOT</strong> copy <code>/boot/grub/grub.cfg</code>, that is the wrong file. EFI systems use <em>two</em> grub.cfg files, you want the one currently residing at <code>/boot/efi/EFI/Kicksecure/grub.cfg</code>.)</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
