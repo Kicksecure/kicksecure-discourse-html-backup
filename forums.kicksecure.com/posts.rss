@@ -5,6 +5,47 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>filesystem: “unknown”</p>
+</blockquote>
+<p>Correct, this means go with whatever the default.</p>
+<blockquote>
+<p>Let’s just change the default and avoid adding an extra question?</p>
+</blockquote>
+<p>BTRFS comes with significant additional maintenance needs and benefits from the user having some level of technical expertise. I would be leery of using it as the default. Lubuntu, Kubuntu, and Ubuntu Unity have been shipping with a multi-choice between ext4, BTRFS, and xfs for a while now and no one has reported problems figuring it out (presumably because they stick with the default of ext4 if in doubt). Those who know what they’re doing can change it manually, was my thinking.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626#post_7</link>
+        <pubDate>Sun, 27 Oct 2024 15:17:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1489</guid>
+      </item>
+      <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>As of <a href="https://github.com/Kicksecure/live-config-dist/commit/b1d9959208243c3b4101f273241740f765f14708#diff-1434c04e884ad562f7390189c1d79e0dda763dd842a707678e7d22be421550deR26" class="inline-onebox">Offer BTRFS as a usable filesystem · Kicksecure/live-config-dist@b1d9959 · GitHub</a> it’s</p>
+<blockquote>
+<p><code>filesystem: "unknown"</code></p>
+</blockquote>
+<p>Which will as I assume into asking the user if btrfs or ext4.</p>
+<blockquote>
+<p><code>defaultFileSystemType: "ext4"</code></p>
+</blockquote>
+<p>Let’s just change the default and avoid adding an extra question? Advanced users are free to use the partition too but I think for most users this is a too confusing, difficult question to decide.</p>
+<hr>
+<p>Do we currently have “double swap” issue? swap-file-creator + swap sub volume created by calamares?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626#post_6</link>
+        <pubDate>Sun, 27 Oct 2024 09:18:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1488</guid>
+      </item>
+      <item>
+        <title>Boot Clock Randomization - Log Inspection</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Yes. Documented here: <a href="https://www.kicksecure.com/wiki/Troubleshooting#System_Logs">System Logs</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/boot-clock-randomization-log-inspection/639#post_5</link>
+        <pubDate>Sun, 27 Oct 2024 09:02:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1487</guid>
+      </item>
+      <item>
         <title>Boot Clock Randomization - Log Inspection</title>
         <dc:creator><![CDATA[@suse211213]]></dc:creator>
         <description><![CDATA[ <p>Thanks.<br>
@@ -1443,85 +1484,6 @@ Are luks encrypted system drive with external boot and header suspicious ?</p>
         <link>https://forums.kicksecure.com/t/trying-to-source-bashrc-to-add-an-alias/620#post_2</link>
         <pubDate>Wed, 16 Oct 2024 11:14:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1427</guid>
-      </item>
-      <item>
-        <title>Plausible Deniability / Unallocated space</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="5" data-topic="613">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>Otherwise i dont know how to propely achieve plausible deniabilty with linux system compared to filesystem.</p>
-</blockquote>
-</aside>
-<p>Me neither. Also unlikely to materialize. See  <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#Plausible_Deniability_-_Deniable_Encryption">Plausible Deniability - Deniable Encryption</a>, which has been updated just now.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/plausible-deniability-unallocated-space/613#post_6</link>
-        <pubDate>Wed, 16 Oct 2024 08:17:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1426</guid>
-      </item>
-      <item>
-        <title>Trying to source ~/.bashrc to add an alias</title>
-        <dc:creator><![CDATA[@curiousgeorge]]></dc:creator>
-        <description><![CDATA[ <p>Hi,<br>
-I’m using Kicksecure as my OS, not live.</p>
-<p>I’m trying to add an alias, so when I modify the ~/.bashrc and then source it I get the following response :</p>
-<pre><code class="lang-auto">/home/user/.bashrc:18: command not found: shopt
-/home/user/.bashrc:26: command not found: shopt
-/home/user/.bashrc:106: command not found: shopt
-/usr/share/bash-completion/bash_completion:45: command not found: shopt
-/usr/share/bash-completion/bash_completion:53: command not found: complete
-/usr/share/bash-completion/bash_completion:56: command not found: complete
-/usr/share/bash-completion/bash_completion:59: command not found: complete
-/usr/share/bash-completion/bash_completion:62: command not found: complete
-/usr/share/bash-completion/bash_completion:65: command not found: complete
-/usr/share/bash-completion/bash_completion:68: command not found: complete
-/usr/share/bash-completion/bash_completion:71: command not found: complete
-/usr/share/bash-completion/bash_completion:74: command not found: complete
-/usr/share/bash-completion/bash_completion:77: command not found: complete
-/usr/share/bash-completion/bash_completion:80: command not found: complete
-/usr/share/bash-completion/bash_completion:1596: parse error near `|'
-/usr/libexec/helper-scripts/bashrc-terminal-emulator:18: command not found: shopt
-[REDACTED FOR PRIVACY]
-Welcome to Kicksecure (TM)!
-https://www.kicksecure.com
-
-Kicksecure Copyright (C) 2012 - 2023 ENCRYPTED SUPPORT LP
-Kicksecure is Freedom Software, and you are welcome to redistribute it under
-certain conditions; type "kicksecure-license" &lt;enter&gt; for details.
-Kicksecure is a compilation of software packages, each under its own copyright and
-license. The exact license terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Kicksecure GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law; for details type "kicksecure-disclaimer" &lt;enter&gt;.
-
-Kicksecure is a derivative of Debian GNU/Linux.
-
-Kicksecure is a research project.
-
-default user account: user
-default password: No password required. (Passwordless login.)
-
-\[\e]0;\u@\h: \w\a\]\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$
-</code></pre>
-<p>It then launches another shell with a weird prompt (last string at the end) where the alias does work, but when I quit and open another terminal the prompt is back to normal and the alias doesn’t work. When I check the .bashrc file the modification are still there.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/trying-to-source-bashrc-to-add-an-alias/620#post_1</link>
-        <pubDate>Tue, 15 Oct 2024 14:51:48 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1425</guid>
-      </item>
-      <item>
-        <title>Plausible Deniability / Unallocated space</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Unlike veracrypt hiden system</p>
-<p>In case of luks detached header, might these spaces defeat the prupose of plausible deniability to prove that the disk is an encrypted disk</p>
-<p>Could be used to measure file randomness.</p>
-<p>Otherwise lvm with luks seems better in partitioning</p>
-<p>Otherwise i dont know how to propely achieve plausible deniabilty with linux system compared to filesystem.</p>
-<p>Think of journalists living in non democratic countries,where human rights abuses.torture etc.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/plausible-deniability-unallocated-space/613#post_5</link>
-        <pubDate>Tue, 15 Oct 2024 13:38:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1423</guid>
       </item>
   </channel>
 </rss>
