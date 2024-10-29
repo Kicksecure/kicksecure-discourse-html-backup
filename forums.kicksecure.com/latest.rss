@@ -5,8 +5,25 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Thu, 24 Oct 2024 23:53:35 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 28 Oct 2024 19:23:17 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Error: Plymouth conflict in Debian morphing</title>
+          <dc:creator><![CDATA[sam]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>sudo apt install --no-install-recommends kicksecure-xfce-host - Conflict with Plymouth after entering this command when morphing Debian, MX Linux and LMDE. This error was made by me and all my friends. Today, my friend also received it. <em>sudo apt remove plymouth</em> resolves problem. Write about it in morphing instructions so that people know what to do in this situation. It seems that someone has complained about this error on this forum</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641</link>
+          <pubDate>Mon, 28 Oct 2024 19:23:17 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-641</guid>
+          <source url="https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641.rss">Error: Plymouth conflict in Debian morphing</source>
+        </item>
         <item>
           <title>Boot Clock Randomization - Log Inspection</title>
           <dc:creator><![CDATA[suse211213]]></dc:creator>
@@ -40,7 +57,7 @@ what should these command outputs</p>
 <p>From searches on the Whonix forums, I have seen it suggested to downgrade Tor and then re-enable Vanguards? (Again, I can’t include the link to this…)</p>
 <p>Is this correct, and are there any special requirements for re-enabling Vanguards or does it simply need to be installed and enabled via systemctl?</p>
 <p>Thanks.</p>
-            <p><small>2 posts - 2 participants</small></p>
+            <p><small>3 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/are-tor-hidden-services-on-kicksecure-safe-against-entry-guard-attacks/638">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/are-tor-hidden-services-on-kicksecure-safe-against-entry-guard-attacks/638</link>
@@ -1357,162 +1374,6 @@ Please help!</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-556</guid>
           <source url="https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556.rss">Illegal instruction (core dumped)</source>
-        </item>
-        <item>
-          <title>Grub live ideas and suggestions / Grub live entry for offline mode / Grub live entry that boots with Tor only firewall rules</title>
-          <dc:creator><![CDATA[Yatogami]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Dear Kicksecure Development Team,</p>
-<p>I would like to suggest some enhancements to the GRUB Live environment. Specifically, it would be beneficial to include additional features or options that could improve user experience and functionality. Here are two ideas to include with the grub-live package:</p>
-<ul>
-<li>
-<p><strong>Grub live entry for offline mode</strong>:  another grub live entry for booting into Live mode USER with all networking disabled</p>
-</li>
-<li>
-<p><strong>Grub live entry that boots with Tor only firewall rules</strong>:  another grub live entry for booting into Live mode USER with Tor only firewall with tor transparent proxy for users that are on lower RAM systems that don’t want to install whonix with the installer in usability misc but already have tb-launcher installed. Tor daemon already comes installed with Kicksecure so additionally maybe load some torsocks wrappers for certain commands like curl, wget, git, whois, etc. if possible.</p>
-</li>
-</ul>
-<p>Here are some drafts that I havent tried yet but will put them here for a starting point, reference, and ideas.</p>
-<p><strong>offline mode</strong><br>
-<code>/etc/grub.d/40_offline_mode</code></p>
-<pre><code class="lang-auto"># GRUB Live entry to disable networking (offline mode)
-menuentry "LIVE mode USER (Offline Mode)" {
-    # Run the disable networking script that blacklists all wireless drivers and firewall to block all traffic
-    /usr/local/bin/disable_networking
-    set root=(hd0,1)  # Adjust this to your root partition
-    # mask network target
-    linux /vmlinuz-linux root=/dev/sda1 quiet splash systemd.mask=network.target
-    initrd /initramfs-linux.img
-}
-</code></pre>
-<p><code>/usr/local/bin/disable_networking</code></p>
-<pre><code class="lang-auto">#!/bin/bash
-### Grub disable networking script called by 
-## Blacklist all wifi drivers
-## Blacklist bluetooth driver (commented out)
-
-# Create blacklist file
-
-touch /etc/modprobe.d/disable_networking.conf 2&gt;/dev/null
-
-# Define the blacklist file path
-BLACKLIST_FILE="/etc/modprobe.d/disable_networking.conf"
-
-# Create or clear the blacklist file
-echo "# Custom blacklist for wireless drivers" | tee $BLACKLIST_FILE &gt; /dev/null
-
-# Get the list of wireless drivers
-WIRELESS_DRIVERS=$(ls /lib/modules/$(uname -r)/kernel/drivers/net/wireless/)
-
-# Check if there are any wireless drivers
-if [ -z "$WIRELESS_DRIVERS" ]; then
-    echo "No wireless drivers found in /lib/modules/$(uname -r)/kernel/drivers/net/wireless/"
-else
-    # Loop through each driver and add it to the blacklist
-    for DRIVER in $WIRELESS_DRIVERS; do
-        DRIVER_NAME=$(basename "$DRIVER" | sed 's/\.[^.]*$//')  # Remove file extension
-        echo "blacklist $DRIVER_NAME" | tee -a $BLACKLIST_FILE &gt; /dev/null
-        echo "Blacklisted driver: $DRIVER_NAME"
-        
-        # Remove the driver if it is currently loaded
-        if lsmod | grep -q "$DRIVER_NAME"; then
-            echo "Removing loaded driver: $DRIVER_NAME"
-            modprobe -r "$DRIVER_NAME"
-        fi
-    done
-fi
-
-## Blacklist bluetooth
-# List of Bluetooth drivers to blacklist
-#BT_DRIVERS=(
-#    "btusb"
-#    "bluetooth"
-#    "btintel"
-#)
-#
-# Loop through the drivers and add them to the blacklist
-#for DRIVER in "${BT_DRIVERS[@]}"; do
-#    echo "blacklist $DRIVER" &gt;&gt; "BLACKLIST_FILE"
-#    modprobe -r "$DRIVER"
-#done
-
-
-### Firewall
-# Set up nftables to disable all incoming, forwarding, and outgoing traffic
-echo "Setting up nftables to disable all network traffic..."
-
-# Flush existing rules
-nft flush ruleset
-
-# Create a new ruleset
-nft add table inet filter
-nft add chain inet filter input { type filter hook input priority 0; }
-nft add chain inet filter forward { type filter hook forward priority 0; }
-nft add chain inet filter output { type filter hook output priority 0; }
-
-# Set default policies to drop all traffic
-nft add rule inet filter input drop
-nft add rule inet filter forward drop
-nft add rule inet filter output drop
-
-echo -e " All wireless drivers have been blacklisted in $BLACKLIST_FILE.\n All network traffic has been disabled.\n Offline mode enabled"
-</code></pre>
-<p><strong>Tor only</strong><br>
-<code>/etc/grub.d/40_tor_only_firewall</code></p>
-<pre><code class="lang-auto">menuentry "LIVE mode USER (Tor Only)" {
-    # Run the Tor firewall script
-    /usr/local/bin/Tor_only_firewall
-    # Boot into the default kernel
-    linux /vmlinuz-&lt;your-kernel-version&gt; root=/dev/sda1 ro
-    initrd /initrd.img-&lt;your-kernel-version&gt;
-}
-</code></pre>
-<p><code>/usr/local/bin/Tor_only_firewall</code></p>
-<pre><code class="lang-auto">#!/bin/bash
-### Tor only firewall for GRUB Live (Tor Only)
-# Flush existing rules
-nft flush ruleset
-
-# Create a new ruleset
-nft add table inet filter
-nft add chain inet filter input { type filter hook input priority 0; }
-nft add chain inet filter forward { type filter hook forward priority 0; }
-nft add chain inet filter output { type filter hook output priority 0; }
-
-# Allow loopback traffic
-nft add rule inet filter input iif "lo" accept
-nft add rule inet filter output oif "lo" accept
-
-# Allow established and related connections
-nft add rule inet filter input ct state established,related accept
-nft add rule inet filter output ct state established,related accept
-
-# Allow Tor traffic (default Tor port is 9050)
-nft add rule inet filter input tcp dport 9050 accept
-nft add rule inet filter output tcp sport 9050 accept
-
-# Allow DNS traffic (UDP port 53)
-nft add rule inet filter input udp dport 53 accept
-nft add rule inet filter output udp sport 53 accept
-
-# Drop all other traffic
-nft add rule inet filter input drop
-nft add rule inet filter forward drop
-nft add rule inet filter output drop
-
-echo "Tor only firewall rules applied."
-</code></pre>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553</link>
-          <pubDate>Thu, 29 Aug 2024 03:46:10 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-553</guid>
-          <source url="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553.rss">Grub live ideas and suggestions / Grub live entry for offline mode / Grub live entry that boots with Tor only firewall rules</source>
         </item>
   </channel>
 </rss>
