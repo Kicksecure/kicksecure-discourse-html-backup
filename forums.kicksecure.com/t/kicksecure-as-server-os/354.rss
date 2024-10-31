@@ -5,9 +5,65 @@
     <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354</link>
     <description>Does Kicksecure include hardening for servers or just for Desktop? Thanks</description>
     
-    <lastBuildDate>Tue, 29 Oct 2024 20:32:07 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 30 Oct 2024 08:02:53 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>Could we make D-I install only the <code>kicksecure-cli(-host)</code> meta package?</p>
+</blockquote>
+<p>We can add the kicksecure source list as a <code>late_command</code> or <code>early_command</code> in preseed config. Something like this:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+in-target sh -c 'echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list';
+</code></pre>
+<p>And then install the package after update:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+    in-target apt-get update; \
+    in-target apt-get install -y --no-install-recommends kicksecure-cli-host 
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/14</link>
+        <pubDate>Wed, 30 Oct 2024 08:02:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-14</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="649">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/debian-installer-d-i/649">Debian Installer (`D-I`)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!). 
+references: 
+
+
+
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+<a href="https://wiki.debian.org/DebianInstaller">https://wiki.debian.org/DebianInstaller</a>
+<a href="https://wiki.debian.org/DebianInstaller/FAQ" class="inline-onebox">DebianInstaller/FAQ - Debian Wiki</a>
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+
+What this is not? This is not calamares.
+  </blockquote>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/13</link>
+        <pubDate>Wed, 30 Oct 2024 06:57:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-13</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
       <item>
         <title>Kicksecure as Server OS?</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

@@ -5,6 +5,239 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730280625" class="site-icon" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts" target="_blank" rel="noopener nofollow ugc" title="10:01AM - 04 March 2024">Whonix – 4 Mar 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/360;"><img src="https://www.whonix.org/w/images/6/65/MACaddress2131.jpg?version=6f5b990fb19db0f4fcdb9dc23ff9a728" class="thumbnail" width="640" height="360"></div>
+
+<h3><a href="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts" target="_blank" rel="noopener nofollow ugc">MAC Address</a></h3>
+
+  <p>MAC Address Spoofing and Tracking Threats</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I think this would be edited ?<br>
+Latest Qubes sys-net do randomize mac by default .<br>
+Hostname aren’t sent by default due to missing /etc/hostname</p>
+<p>hostname randomization section</p>
+<p>It isn’t necessary to randomize the hostname when one can simply not leak it</p>
+<p>I would revert this, allow sent it after its randomized.</p>
+<p>Note: wont open new thread in qubes section due to relation to this topic</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565#post_3</link>
+        <pubDate>Wed, 30 Oct 2024 18:32:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1518</guid>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[@mmap]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>Could we make D-I install only the <code>kicksecure-cli(-host)</code> meta package?</p>
+</blockquote>
+<p>We can add the kicksecure source list as a <code>late_command</code> or <code>early_command</code> in preseed config. Something like this:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+in-target sh -c 'echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list';
+</code></pre>
+<p>And then install the package after update:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+    in-target apt-get update; \
+    in-target apt-get install -y --no-install-recommends kicksecure-cli-host 
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354#post_14</link>
+        <pubDate>Wed, 30 Oct 2024 08:02:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1515</guid>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>related:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="649">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/debian-installer-d-i/649">Debian Installer (`D-I`)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!). 
+references: 
+
+
+
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+<a href="https://wiki.debian.org/DebianInstaller">https://wiki.debian.org/DebianInstaller</a>
+<a href="https://wiki.debian.org/DebianInstaller/FAQ" class="inline-onebox">DebianInstaller/FAQ - Debian Wiki</a>
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+
+What this is not? This is not calamares.
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354#post_13</link>
+        <pubDate>Wed, 30 Oct 2024 06:57:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1514</guid>
+      </item>
+      <item>
+        <title>Debian Installer (`D-I`)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!).</p>
+<p>references:</p>
+<aside class="onebox wikipedia" data-onebox-src="https://en.wikipedia.org/wiki/Debian-Installer">
+  <header class="source">
+
+      <a href="https://en.wikipedia.org/wiki/Debian-Installer" target="_blank" rel="noopener">en.wikipedia.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://en.wikipedia.org/wiki/Debian-Installer" target="_blank" rel="noopener">Debian-Installer</a></h3>
+
+<p>Debian-Installer is a system installer for Debian and its derivatives. It originally appeared in Skolelinux (Debian-Edu) 1.0, released in June 2004, but is now used as the official installation system since Debian 3.1 (Sarge), which was released on June 6, 2005.
+ Debian-Installer consists of two modes: a text mode and a graphical mode. Multiple components of the installer exists to configure various aspects of the installed system, and configuration of some components may require user input.
+ Reg...</p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a></li>
+<li><a href="https://wiki.debian.org/DebianInstaller">https://wiki.debian.org/DebianInstaller</a></li>
+<li><a href="https://wiki.debian.org/DebianInstaller/FAQ">https://wiki.debian.org/DebianInstaller/FAQ</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a></li>
+</ul>
+<p>What this is <strong>not</strong>? <strong>This is not calamares.</strong></p>
+<aside class="onebox wikipedia" data-onebox-src="https://en.wikipedia.org/wiki/Calamares_(software)">
+  <header class="source">
+
+      <a href="https://en.wikipedia.org/wiki/Calamares_(software)" target="_blank" rel="noopener">en.wikipedia.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://en.wikipedia.org/wiki/Calamares_(software)" target="_blank" rel="noopener">Calamares (software)</a></h3>
+
+<p>Calamares is a free and open-source independent and "distribution-agnostic" system installer for Linux distributions.
+ Calamares is used by NixOS, CachyOS, Garuda Linux, Huayra_GNU/Linux, Manjaro, Netrunner, KaOS, KDE neon, Kubuntu, Lubuntu, Sabayon Linux, Chakra, EndeavourOS, Peppermint OS, Artix Linux, OpenMandriva Lx, Q4OS, the Live medium of Debian, and several less known Linux distributions. It also has been used to automate the installation of command line distributions and to make custom d...</p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>D-I is somewhat a “by-product” of switching to build the ISO using Debian live-build (which was done to fix some booting related issues).</p>
+<p>Not much (none at time of writing) D-I related development is planned. Main focus will remain Calamares.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-installer-d-i/649#post_1</link>
+        <pubDate>Wed, 30 Oct 2024 06:57:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1513</guid>
+      </item>
+      <item>
+        <title>Swap-file-creator missing when in Qubes templates (morphing &amp; official derivative templates)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>At time of writing (and it’s unlikely this will change), <a href="https://www.kicksecure.com/wiki/Swap-file-creator">swap-file-creator</a> is for non-Qubes only. (Should that ever change, documentation would be updated.)</p>
+<p>swap-file-creator for Qubes is unsupported.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730194225" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="08:07AM - 12 October 2024">Kicksecure – 12 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
+
+  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Setting up swap and/or encryption of any kind is completely up to Qubes. Unspecific to Kicksecure.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730194225" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Added to documentation just now.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/swap-file-creator-missing-when-in-qubes-templates-morphing-official-derivative-templates/644#post_3</link>
+        <pubDate>Wed, 30 Oct 2024 06:31:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1512</guid>
+      </item>
+      <item>
+        <title>Why is the uwt not included in the Kicksecure repository?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>It’s part of Whonix only. Not part of Kicksecure.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/why-is-the-uwt-not-included-in-the-kicksecure-repository/647#post_2</link>
+        <pubDate>Wed, 30 Oct 2024 06:22:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1511</guid>
+      </item>
+      <item>
+        <title>Why is the uwt not included in the Kicksecure repository?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Why is the uwt package not included in the Kicksecure repository or included with Kicksecure by default?</p>
+<p>I went to see if its installed or available to install but its not in the repo.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/why-is-the-uwt-not-included-in-the-kicksecure-repository/647#post_1</link>
+        <pubDate>Wed, 30 Oct 2024 06:22:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1509</guid>
+      </item>
+      <item>
         <title>Swap-file-creator missing when in Qubes templates (morphing &amp; official derivative templates)</title>
         <dc:creator><![CDATA[@Crok]]></dc:creator>
         <description><![CDATA[ <p>I tend to have a promising idea for digging into something right after posting a question.</p>
@@ -1382,141 +1615,6 @@ the “sudo” command.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_16</link>
         <pubDate>Sun, 20 Oct 2024 10:44:38 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1452</guid>
-      </item>
-      <item>
-        <title>Debian to Kicksecure double swap</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Insalled debian as encrypted lvm wich allready created user–vg-swap_1<br>
-After converted to kicksecure swap file creator still exists .</p>
-<p>lsblk</p>
-<p>loop0                   xxx    0  3.6G  0 loop<br>
-└─swapfile</p>
-<p>user–vg-swap_1 xxx  976M  0 lvm</p>
-<p>will same occur after convert if installed debian on bare metal</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/debian-to-kicksecure-double-swap/628#post_1</link>
-        <pubDate>Sat, 19 Oct 2024 19:07:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1451</guid>
-      </item>
-      <item>
-        <title>Use Btrfs as the default journaling file system</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Btrfs provide easy roll back snapshots compatible with timeshift or snapper.</p>
-<p>Good explanation about it:</p>
-<p><a href="https://www.youtube.com/watch?v=J2QP4onqJKI">BTRFS Guide | The Best Desktop File System</a></p>
-
-<p>Atm it needs some manual work to make btrfs, good explanation can be found here:</p>
-<aside class="onebox githubrepo" data-onebox-src="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks">
-  <header class="source">
-
-      <a href="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" target="_blank" rel="noopener">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-  <img width="690" height="344" src="https://opengraph.githubassets.com/11efe0685f78d2cfb3622cf41fb7f1fb/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" class="thumbnail">
-
-  <h3><a href="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" target="_blank" rel="noopener">GitHub - david-cortes/snapper-in-debian-guide: Step-by-step guide for configuring Debian with...</a></h3>
-
-    <p><span class="github-repo-description">Step-by-step guide for configuring Debian with automated BTRFS snapshots and rollbacks from the boot menu</span></p>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Many suggest to not use swap since you are on SSD e.g:</p>
-<p><a href="https://www.youtube.com/watch?v=MoWApyUb5w8&amp;t=404">Debian 12 Bookworm Minimal Install w/BTRFS</a></p>
-
-<p><a href="https://www.youtube.com/watch?v=b4vTKg-qW_0&amp;t=260">Debian 12: Fighting with OpenSUSE Snapper!</a></p>
-
-<p>(Suggest to use <a href="https://en.wikipedia.org/wiki/Zram">zRAM</a> instead, known to be even faster).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626#post_1</link>
-        <pubDate>Sat, 19 Oct 2024 18:42:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1449</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Why TPM is important:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://blog.invisiblethings.org/2011/09/07/anti-evil-maid.html">
-  <header class="source">
-      <img src="https://blog.invisiblethings.org/attachment/icons/512x512/apps/qubes-logo-icon.png" class="site-icon" width="" height="">
-
-      <a href="https://blog.invisiblethings.org/2011/09/07/anti-evil-maid.html" target="_blank" rel="noopener">blog.invisiblethings.org</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://blog.invisiblethings.org/2011/09/07/anti-evil-maid.html" target="_blank" rel="noopener">Anti Evil Maid | The Invisible Things Blog</a></h3>
-
-  <p>Anti Evil Maid is an implementation of a TPM-based static trusted boot with a primary goal to prevent Evil Maid attacks.The adjective trusted, in trusted boo...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Good point:</p>
-<blockquote>
-<p>use custom TPM SRK password (so, you did <em>not</em> pass -z to tpm_takeownership), then you can install Anti Evil Maid onto your regular boot partition.</p>
-</blockquote>
-<p>Good point to why use USB to unlock your PC:</p>
-<blockquote>
-<p>Anti Evil Maid on a separate USB stick rather than on your built-in disk boot partition. This is because you can use Anti Evil Maid as a provider of a keyfile to your LUKS disk encryption (as an additional file unsealable by the TPM). This way you could also stop adversary that is able to sniff your keystrokes (e.g. using hidden camera, or electromagnetic leak), and capture your disk decryption passphrase (see the discussion in the next section).</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_15</link>
-        <pubDate>Sat, 19 Oct 2024 18:09:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1448</guid>
-      </item>
-      <item>
-        <title>Plausible Deniability / Unallocated space</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Excellent, I’ll get back to you soon.<br>
-Thanks for helping.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/plausible-deniability-unallocated-space/613#post_11</link>
-        <pubDate>Sat, 19 Oct 2024 15:41:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1447</guid>
-      </item>
-      <item>
-        <title>About Aaron Rainbolt</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Slight correction - I’ve been active in the open-source world since mid-April 2022, having gotten involved in Lubuntu early in the Kinetic Kudu release cycle. You can see some of my first bug fixing activity here: <a href="https://bugs.launchpad.net/ubuntu/+source/calamares-settings-ubuntu/+bug/1966774" class="inline-onebox" rel="noopener nofollow ugc">Bug #1966774 “btrfs partioning with calamares results in unboota...” : Bugs : calamares-settings-ubuntu package : Ubuntu</a> But still, that’s not a whole lot of time, so you raise a valid concern and careful review is a very good idea. (Besides, I’m a human and make mistakes, and peer review helps keep those from getting into the finished product.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/about-aaron-rainbolt/624#post_2</link>
-        <pubDate>Fri, 18 Oct 2024 21:28:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1445</guid>
-      </item>
-      <item>
-        <title>About Aaron Rainbolt</title>
-        <dc:creator><![CDATA[@whkicks]]></dc:creator>
-        <description><![CDATA[ <p>Hi Patrick,</p>
-<p>I see Aaron Rainbolt is only active since end 2022. Who is this guy? How can have so much knowledge while only being publicly active for 2 years? A Kicksecure coder has a lot of responsibilities.</p>
-<p>Please triple check all his code and be sure it’s not a bad actor like with xz</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/about-aaron-rainbolt/624#post_1</link>
-        <pubDate>Fri, 18 Oct 2024 20:35:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1444</guid>
-      </item>
-      <item>
-        <title>Setcap notice when upgrading</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Ignore this.</p>
-<p>Output is telling you what’s happening. It’s not a request for the user<br>
-to perform actions.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/setcap-notice-when-upgrading/622#post_2</link>
-        <pubDate>Fri, 18 Oct 2024 10:27:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1443</guid>
       </item>
   </channel>
 </rss>
