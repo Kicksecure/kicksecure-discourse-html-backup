@@ -6,6 +6,220 @@
     <description>Latest posts</description>
       <item>
         <title>Enable and use zRAM instead for swap</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>A different configuration is needed for host versus VMs?</p>
+<p>What advantages and disadvantage we’d get wiht zram, zwap,</p>
+<ul>
+<li>inside VM,</li>
+<li>on the host operating system?</li>
+</ul>
+</blockquote>
+</aside>
+<p>It’s not so much a question of whether it’s in a VM or on the host, as it is a question of how much RAM there is. zram has the advantages of being totally ephemeral and very fast, but it can only increase available RAM so much. According to <a href="https://wiki.gentoo.org/wiki/Zram" class="inline-onebox" rel="noopener nofollow ugc">zram - Gentoo wiki</a>, zram offers about a 3:1 compression ratio. This doesn’t let you just say “a 4 GB RAM system will act like it has 12 GB”, since you have to account for overhead, but assuming you have 1 GB of uncompressed RAM at any one time and the remainder is compressed, you could expand 4 GB to approximately (3 * 3) + 1 = 10 GB. 3 GB could be expanded to about 7 GB. 2 GB could expand to about 4 GB, which is where you start getting cramped. Moderate-to-light web browsing gets hard at that point.</p>
+<p>zswap of course gets around this issue by allowing you to also swap RAM contents out to disk, but that’s much slower and also not totally ephemeral. (Certainly with encryption it’s close to impossible to ever read the RAM contents, but in theory just not saving memory to disk is even more secure.) Also the overhead of encrypting and decrypting swap contents makes things even slower.</p>
+<p>Perhaps we could use zswap for systems with &lt;= 2 GB RAM, and zram otherwise?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_6</link>
+        <pubDate>Sun, 03 Nov 2024 00:22:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1543</guid>
+      </item>
+      <item>
+        <title>Enable and use zRAM instead for swap</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>hibernate requires swap.</p>
+</blockquote>
+</aside>
+<p>Unsupported feature (by default).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_5</link>
+        <pubDate>Sat, 02 Nov 2024 14:03:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1542</guid>
+      </item>
+      <item>
+        <title>Disposables read-only</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>I have read provided docs.<br>
+Ok it answered my first question</p>
+<p>But not 2<br>
+How securely mount encrypted media on qubes in general against malware and forensic.</p>
+<p>Apart from FDE.</p>
+<p>But If kicksecure is used as host .everething is understandable</p>
+<p>Since per doc<br>
+disposable are suited alternative to host live mode<br>
+However disposable are not amnesic</p>
+<p>Anyhow i will back to kicksecure host .<br>
+I don’t see anything special in qubes except networking benefits. Secure host + vbox can do same</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/disposables-read-only/655#post_3</link>
+        <pubDate>Sat, 02 Nov 2024 12:55:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1541</guid>
+      </item>
+      <item>
+        <title>Disposables read-only</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="1" data-topic="655">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>Install kvm or vbox inside disposable</p>
+</blockquote>
+</aside>
+<p>It stops right there already.  → Please read:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nested_Virtualization">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730453425" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Nested_Virtualization" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:625/500;"><img src="https://www.kicksecure.com/w/images/c/c0/Mastomys-332686640.jpg?version=6e5379443148bb8451898b49a23240c9" class="thumbnail" width="625" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nested_Virtualization" target="_blank" rel="noopener">Nested Virtualization</a></h3>
+
+  <p>It is possible to run Virtual Machines (VMs) inside other VMs. That is called Nested Virtualization.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>specifically <a href="https://www.kicksecure.com/wiki/Nested_Virtualization#Qubes">Nested Virtualization, Qubes</a> and <a href="https://www.kicksecure.com/wiki/Nested_Virtualization#Security_Considerations">Security Considerations</a>.</p>
+<hr>
+<p>related:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Anti-Forensics_Precautions">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730453425" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Anti-Forensics_Precautions" target="_blank" rel="noopener" title="09:12AM - 02 November 2024">Kicksecure – 2 Nov 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/08/Fornesic324234.jpg?version=3b86ef620503fd876c7007bc26864ed0" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Anti-Forensics_Precautions" target="_blank" rel="noopener">VM Live Mode: Anti-forensics Precautions</a></h3>
+
+  <p>Minimize what is written to the hard drive when using Kicksecure VMs in Live Mode.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/disposables-read-only/655#post_2</link>
+        <pubDate>Sat, 02 Nov 2024 09:13:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1533</guid>
+      </item>
+      <item>
+        <title>Enable and use zRAM instead for swap</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <ul>
+<li>Suspend to RAM (aka suspend)</li>
+<li>Suspend to disk (aka hibernate)</li>
+</ul>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(though I think swap-file-creator is encrypting the swapfile).</p>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>dont think any disk swap is needed in nowadays hardware.</p>
+</blockquote>
+</aside>
+<p>hibernate requires swap.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>swap-file-creator might be a good place to configure this?</p>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I personally prefer zram on my systems, however for VMs with only 2 or 3 GB RAM zswap might be more practical.</p>
+</blockquote>
+</aside>
+<p>A different configuration is needed for host versus VMs?</p>
+<p>What advantages and disadvantage we’d get wiht zram, zwap,</p>
+<ul>
+<li>inside VM,</li>
+<li>on the host operating system?</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_4</link>
+        <pubDate>Sat, 02 Nov 2024 09:08:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1532</guid>
+      </item>
+      <item>
+        <title>Disposables read-only</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Read-only#Qubes">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730453425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Read-only#Qubes" target="_blank" rel="noopener nofollow ugc" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/Read-only#Qubes" target="_blank" rel="noopener nofollow ugc">Read-Only: Setting Hard Drives to Read-Only</a></h3>
+
+  <p>When using live mode, no changes are made to the disk. For added security, consider setting your disk to read-only mode, if possible.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Install kvm or vbox inside disposable to set disks to read only = immutable to boot second OS inside</p>
+<p>Will this increases the security as alternative to host live mode</p>
+<p>How securely mount encrypted media on qubes in general against malware and forensic.</p>
+<p>Can this considered as another disadvatage of qubes behavour.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/disposables-read-only/655#post_1</link>
+        <pubDate>Sat, 02 Nov 2024 08:53:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1531</guid>
+      </item>
+      <item>
+        <title>Enable and use zRAM instead for swap</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <p>Thanks for the input, i see only to use zram, no need for anything else, as i dont think any disk swap is needed in nowadays hardware.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_3</link>
@@ -1576,105 +1790,6 @@ what should these command outputs</p> ]]></description>
         <link>https://forums.kicksecure.com/t/boot-clock-randomization-log-inspection/639#post_1</link>
         <pubDate>Thu, 24 Oct 2024 23:53:35 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1478</guid>
-      </item>
-      <item>
-        <title>Are Tor hidden services on Kicksecure safe against entry-guard attacks?</title>
-        <dc:creator><![CDATA[@NobodyImportant]]></dc:creator>
-        <description><![CDATA[ <p>Hi, I am making this topic because I am curious about the current safety status of using Kicksecure to run a Tor hidden service under default configurations, and what mitigations against entry-guard attacks are currently recommended and supported, if any.</p>
-<p>I understand that Tor itself is baked-in with Vanguards Lite, but unless I am misunderstanding the documentation, this is not appropriate for a hidden service that is intended to be active for more than one month. (I would provide this documentation for review, but the board will not let me post a link).</p>
-<p>From searches on the Whonix forums, I have seen it suggested to downgrade Tor and then re-enable Vanguards? (Again, I can’t include the link to this…)</p>
-<p>Is this correct, and are there any special requirements for re-enabling Vanguards or does it simply need to be installed and enabled via systemctl?</p>
-<p>Thanks.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/are-tor-hidden-services-on-kicksecure-safe-against-entry-guard-attacks/638#post_1</link>
-        <pubDate>Thu, 24 Oct 2024 19:12:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1477</guid>
-      </item>
-      <item>
-        <title>Server planned maintenance downtime - 2024-11-26, 02:30 AM UTC</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>server vendor side maintenance:</p>
-<blockquote>
-<p>We apologise for the inconvenience and thank you for your understanding.</p>
-<p>Type: Maintenance<br>
-State: planned<br>
-Start: 2024-11-26, 02:30 AM UTC<br>
-Estimated end: 2024-11-26, 03:30 AM UTC</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/server-planned-maintenance-downtime-2024-11-26-02-30-am-utc/636#post_1</link>
-        <pubDate>Thu, 24 Oct 2024 18:08:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1475</guid>
-      </item>
-      <item>
-        <title>RAM encryption / Confidential Cloud</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://lore.kernel.org/lkml/20241003194147.2566a393@kf-ir16/T/">Investigating practicality of process memory encryption techniques using frozen cache and TRESOR/RamCrypt</a></p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/confidential_computing">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1729794863" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener" title="06:57PM - 24 October 2024">Kicksecure – 24 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/394;"><img src="https://www.kicksecure.com/w/images/f/ff/Confidential_computing.jpeg?version=e8d28b4a626bbb896fb54671c36b43af" class="thumbnail" width="690" height="394"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener">Confidential Computing</a></h3>
-
-  <p>Confidential computing is an advanced security technology that protects data while it's in use, complementing existing protections for data at rest and in transit. The goal is to isolate sensitive data from unauthorized access, even from the cloud...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635#post_1</link>
-        <pubDate>Thu, 24 Oct 2024 18:07:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474</guid>
-      </item>
-      <item>
-        <title>Usb iso boot loop</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I am not aware LVM helps with <a href="https://forums.kicksecure.com/t/plausible-deniability-unallocated-space/613" class="inline-onebox">Plausible Deniability / Unallocated space</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usb-iso-boot-loop/563#post_14</link>
-        <pubDate>Wed, 23 Oct 2024 06:25:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1466</guid>
-      </item>
-      <item>
-        <title>Can not run flatpak apps after Kicksecure update</title>
-        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
-        <description><![CDATA[ <p>I do not know about appimage. For flatpak, I have been suspicious about their sandbox ever since I read flatkill website (<a href="https://flatkill.org/" rel="noopener nofollow ugc">https://flatkill.org/</a> and <a href="https://flatkill.org/2020/" rel="noopener nofollow ugc">https://flatkill.org/2020/</a>). Also see <a href="https://madaidans-insecurities.github.io/linux.html#flatpak" class="inline-onebox" rel="noopener nofollow ugc">Linux | Madaidan's Insecurities</a>.</p>
-<p>Either way, today I started getting a warning saying that tor browser might not be as secure in my operating system configurations. This was because I set kernel.unprivileged_userns_clone=0 using previous instructions. See <a href="https://gitlab.torproject.org/tpo/applications/tor-browser/-/issues/43101" class="inline-onebox" rel="noopener nofollow ugc">Security features warning links to Firefox installation support page with incomplete info (#43101) · Issues · The Tor Project / Applications / Tor Browser · GitLab</a> and <a href="https://support.mozilla.org/en-US/kb/install-firefox-linux?as=u&amp;utm_source=inproduct#w_security-features-warning" class="inline-onebox" rel="noopener nofollow ugc">Install Firefox on Linux | Firefox Help</a>.</p>
-<p>I deleted /etc/sysctl.d/99-disable-unpriv-userns.conf (created using previous instructions), and now I do not get the warning. So I guess that is another reason to prefer kernel.unprivileged_userns_clone=1.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/can-not-run-flatpak-apps-after-kicksecure-update/592?page=2#post_22</link>
-        <pubDate>Tue, 22 Oct 2024 23:03:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1465</guid>
-      </item>
-      <item>
-        <title>Usb iso boot loop</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="12" data-topic="563">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p><a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" class="inline-onebox" rel="noopener nofollow ugc">Utilize Search Engines, Documentation and AI</a></p>
-</blockquote>
-</aside>
-<p>“Keep in mind that AI can hallucinate, so again always verify the information using primary sources.”</p>
-<p>95 % of blog sites about IT are based on chat gpt copy paste .<br>
-I dont read any content based on chatgpt .<br>
-I hate AI , its not helpful nor was able to find forgotten quote i looked for until searched deep manually without AI</p>
-<p>As newcomer i will discuss lvm afterward related to PDE<br>
-maybe in case of hiding encryption</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usb-iso-boot-loop/563#post_13</link>
-        <pubDate>Tue, 22 Oct 2024 21:23:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1464</guid>
       </item>
   </channel>
 </rss>
