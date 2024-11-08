@@ -5,6 +5,71 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Enable and use zRAM instead for swap</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Before re-inventing here… What are their settings of other distributions?</p>
+</blockquote>
+</aside>
+<ul>
+<li>Kubuntu 24.04
+<ul>
+<li>Doesn’t use zram or zswap by default at all.</li>
+</ul>
+</li>
+<li>Ubuntu Desktop 24.04
+<ul>
+<li>Apparently <em>also</em> doesn’t use zram or zswap by default at all anymore!</li>
+</ul>
+</li>
+<li>Fedora 40
+<ul>
+<li>zram enabled by default. Places swap on zram, with the zram device set to 50% of RAM size. (<a href="https://fedoraproject.org/wiki/Changes/SwapOnZRAM" class="inline-onebox" rel="noopener nofollow ugc">Changes/SwapOnZRAM - Fedora Project Wiki</a>) This mentions the device size is capped at 4 GB, however on my 16 GB VM the zram device is 8 GB so maybe they increased that. Algorithm used is <code>lzo-rle</code>, which is fast but doesn’t compress all that well.</li>
+</ul>
+</li>
+<li>Debian
+<ul>
+<li>Not enabled by default, no recommendations for size or algorithm, mentions using zram-tools or systemd-zram-generator for easier management of zram devices.</li>
+</ul>
+</li>
+<li>Arch Linux
+<ul>
+<li>Not enabled by default, <a href="https://wiki.archlinux.org/title/Zram" rel="noopener nofollow ugc">documentation</a> suggests creating a device half the size of available memory but mentions that making a device with a size equal to or larger than available memory is acceptable. Suggests using the zstd algorithm, which compresses better, and mentions that real-world use often shows a 3:1 compression ratio.</li>
+</ul>
+</li>
+<li>Manjaro
+<ul>
+<li>Not enabled by default, <a href="https://forum.manjaro.org/t/howto-install-and-configure-zram-using-zram-generator/168610" rel="noopener nofollow ugc">documentation</a> suggests creating a device twice the size of available memory. Also suggests using the zstd algorithm.</li>
+</ul>
+</li>
+<li>Gentoo
+<ul>
+<li>Not enabled by default, <a href="https://wiki.gentoo.org/wiki/Zram" rel="noopener nofollow ugc">documentation</a> (which is very thorough) mentions a plethora of different sizes and algorithms and makes no effort to recommend any particular size or algorithm that I can tell. Also mentions the 3:1 compression ratio.</li>
+</ul>
+</li>
+</ul>
+<p>So really it’s all over the map. Personally, I’ve previously used a zram device equal to the size of my physical memory with lzo-rle compression, but recently have been experimenting with a zram device size of (physical memory size - 1 GB) * 3 with zstd to see how it goes. Personally I think using zstd rather than lzo-rle is a very good idea if we’re going to try using zram devices larger than physical memory, since it should compress better according to <a href="https://github.com/ecdye/zram-config/blob/main/README.md#configure" class="inline-onebox" rel="noopener nofollow ugc">zram-config/README.md at main · ecdye/zram-config · GitHub</a></p>
+<blockquote>
+<p><code>lzo-rle</code> is the fastest with <code>zstd</code> having much better text compression.</p>
+</blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="654">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>hibernate requires swap.</p>
+</blockquote>
+</aside>
+<p>I personally would shy away from supporting hibernation. It’s incompatible with Secure Boot, systems sometimes experience malfunctions when using it with Linux (maybe even oftentimes), and it requires that RAM contents be saved to disk either unencrypted or with a recoverable encryption key, which is a substantial reduction of security since now otherwise volatile data is now persistent.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_8</link>
+        <pubDate>Fri, 08 Nov 2024 02:20:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569</guid>
+      </item>
+      <item>
         <title>Error: Plymouth conflict in Debian morphing</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <p>Good that i was able to reproduce it easily:</p>
@@ -1928,26 +1993,6 @@ Unrelated <a href="https://forums.kicksecure.com/t/swap-file-creator-missing-whe
         <link>https://forums.kicksecure.com/t/swap-file-creator-missing-when-in-qubes-templates-morphing-official-derivative-templates/644#post_1</link>
         <pubDate>Tue, 29 Oct 2024 22:37:52 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1505</guid>
-      </item>
-      <item>
-        <title>Kicksecure as Server OS?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer" class="inline-onebox">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!).</p>
-<p>Would that help?</p>
-<p>It supports preseed (<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>) (<a href="https://wiki.debian.org/DebianInstaller/Preseed" class="inline-onebox">DebianInstaller/Preseed - Debian Wiki</a>) and whatnot. These are features inherited from D-I.</p>
-<p>Could we make D-I install only the <code>kicksecure-cli(-host)</code> meta package? Or would we require a separate headless ISO? Or an option in calamares?</p>
-<aside class="quote no-group" data-username="mmap" data-post="6" data-topic="354" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
-<blockquote>
-<p>And are there any plans to migrate from debian to a more secure distro such as Alpine or Arch?</p>
-</blockquote>
-</aside>
-<p>1 question = 1 forum thread please. This is a much different question than Kicksecure for server.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354#post_12</link>
-        <pubDate>Tue, 29 Oct 2024 20:32:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1503</guid>
       </item>
   </channel>
 </rss>
