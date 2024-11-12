@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Splitting security-misc into shared, desktop, and server packages</title>
+    <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674</link>
+    <description>Read through the discussion at https://github.com/Kicksecure/security-misc/issues/187, and created a table of (almost) all of the files and directories in security-misc, along with what subpackage they should go into. The vast majority of the package looks like it can remain shared. Some bugs were also potentially uncovered while reviewing this.
+
+The full table is very large and has very long lines, so rather than pasting it here, I put it in a GitHub gist here: https://gist.github.com/ArrayBolt3/1fef29b2214f27054cd85785530e7f7f</description>
+    
+    <lastBuildDate>Mon, 11 Nov 2024 14:20:43 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Splitting security-misc into shared, desktop, and server packages</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>I’d like to address the bugs found first, as that seems easy and to simplify this discussion.</p>
+<blockquote>
+<ul>
+<li>[!] │   │   ├── pkexec.security-misc                                                              (shared)  (useful on desktop and server, however lxqt-sudo won’t be present on a server, but pkexec may be used on a server. Resolve by allowing the use of sudo.)</li>
+</ul>
+</blockquote>
+<p>Fixed by deleting this legacy leftover file.</p>
+<blockquote>
+<ul>
+<li>[!] │   │       ├── disable-kernel-module-loading                                                 (shared)  (useful on desktop and server, BUT SOMEHOW ISN’T SET EXECUTABLE???)</li>
+</ul>
+</blockquote>
+<p>Fixed.</p>
+<pre><code class="lang-auto">* [!] │   ├── dkms                                                                                  (none)    (see files below)
+* [!] │   │   └── framework.conf.d                                                                  (none)    (see files below)
+* [!] │   │       └── 30_security-misc.conf                                                         (none)    (should be moved out of security-isc)
+</code></pre>
+<blockquote>
+<ul>
+<li>[!] │   │       │   ├── panic-on-oops.service                                                     (shared)  (useful on desktop and server, systemd config looks invalid with a conflict between WantedBy and After)</li>
+</ul>
+</blockquote>
+<p>Fixed.</p>
+<blockquote>
+<p><code>* [x] │   │       ├── install matroxfb_bases /usr/bin/disabled-framebuffer-by-security-misc         (shared)  (ancient, obsolete, TYPO'D - THIS SHOULD BE BASE, NOT BASES)</code></p>
+</blockquote>
+<p>Fixed.</p>
+<hr>
+<p>All bugs should have been addressed.</p>
+<hr>
+<p>Server? Could also be a home server with a GUI?</p>
+<hr>
+<blockquote>
+<ul>
+<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   │   ├── <code>glib-compile-schemas /usr/share/glib-2.0/schemas || true</code>                        (desktop) (glib-compile-schemas is of no use on a server)</li>
+</ul>
+</blockquote>
+<p>No use but also no harm? So just keep as is for simplicity? Also a remote server might have a GUI.</p>
+<blockquote>
+<ul>
+<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   ├── security-misc.gconf-defaults                                                          (desktop) (nautilus won’t be present on a server)</li>
+</ul>
+</blockquote>
+<p>Similar as above. Doesn’t harm and useful if a GUI is used on the server.</p>
+<blockquote>
+<p><code>* [x] │   ├── bluetooth                                                                             (desktop) (all subfiles are desktop)</code><br>
+<code>* [x] │   │   └── 30_security-misc.conf                                                             (desktop) (bluez should only be present on desktops)</code></p>
+</blockquote>
+<p>But if on a server, this config does not harm, even useful?</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_hardened_malloc.conf                                         (server)  (desktops don't use hardened-malloc)</code></p>
+</blockquote>
+<p>We actually did but <a href="https://www.kicksecure.com/wiki/Hardened_Malloc" class="inline-onebox">Hardened Malloc</a> is nowadays deprecated in Kicksecure.</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_postfix.conf                                                 (server)  (desktops shouldn't run postfix)</code></p>
+</blockquote>
+<p>The primary defense for desktops would be not installing postfix then? But then postfix might be installed thorugh a <code>Depends:</code>, or <code>Recommends:</code>. In that case, indeed, best if not whitelisted.</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_spice.conf                                                   (desktop) (only desktops need USB passthrough with SPICE)</code></p>
+</blockquote>
+<p>SPICE over network to server?</p>
+<hr>
+<p>I guess I would tend to keep as much shared as possible. The more remains shared, the less migration work there will be.</p>
+<p>The file per file analysis is a great approach!</p>
+          <p><a href="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/2</link>
+        <pubDate>Mon, 11 Nov 2024 14:20:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-674-2</guid>
+        <source url="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674.rss">Splitting security-misc into shared, desktop, and server packages</source>
+      </item>
+      <item>
+        <title>Splitting security-misc into shared, desktop, and server packages</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Read through the discussion at <a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox" rel="noopener nofollow ugc">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a>, and created a table of (almost) all of the files and directories in security-misc, along with what subpackage they should go into. The vast majority of the package looks like it can remain shared. Some bugs were also potentially uncovered while reviewing this.</p>
+<p>The full table is very large and has very long lines, so rather than pasting it here, I put it in a GitHub gist here: <a href="https://gist.github.com/ArrayBolt3/1fef29b2214f27054cd85785530e7f7f" class="inline-onebox" rel="noopener nofollow ugc">Suggested way to split the security-misc package into shared, desktop, and server packages. · GitHub</a></p>
+          <p><a href="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/1</link>
+        <pubDate>Mon, 11 Nov 2024 06:11:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-674-1</guid>
+        <source url="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674.rss">Splitting security-misc into shared, desktop, and server packages</source>
+      </item>
+  </channel>
+</rss>

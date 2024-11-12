@@ -5,6 +5,486 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Would randomizing machine-id each boot cause issues?</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <p>Could you randomize the global /etc/machine-id but then set a static-id<br>
+<code>$STATIC-ID=b08dfa6083e7567a1921a715000001fb</code> exported from a new file name <code>/etc/static-machine-id</code> and set it for services like NetworkManager and D-Bus or ones that may break somehow?</p>
+<p>I don’t recall Apt requiring a mchine-id for updates/upgrades?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/would-randomizing-machine-id-each-boot-cause-issues/439#post_6</link>
+        <pubDate>Tue, 12 Nov 2024 00:47:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1600</guid>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <p>Also Can you have set separate hostnames with Network Namespaces?</p>
+<p><code>ip netns exec thunderbird hostname computer</code></p>
+<p>If this is the case I don’t think hostname is not automatically preserved when the namespace is deleted and recreated so maybe something like a random UUID for each generation could be used. But a UUID would be too long.</p>
+<p><code>cat /proc/sys/kernel/random/uuid | wc -m</code></p>
+<blockquote>
+<p>37 characters</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565#post_8</link>
+        <pubDate>Tue, 12 Nov 2024 00:39:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1598</guid>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[@Crawfish]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+</blockquote>
+</aside>
+<p>Yes, couldn’t it be possible to configure your system in such a way that your MAC address is spoofed on a Wi-Fi network while using a different MAC address (your real MAC address or a spoofed static MAC address) for an SSH connection to your VPS. Through the use of network namespaces and virtual interfaces. Here’s a general approach how to maybe accomplish this:</p>
+<h3><a name="p-1597-steps-to-spoof-mac-address-on-wi-fi-while-using-a-different-mac-for-ssh-1" class="anchor" href="https://forums.kicksecure.com#p-1597-steps-to-spoof-mac-address-on-wi-fi-while-using-a-different-mac-for-ssh-1"></a>Steps to Spoof MAC Address on Wi-Fi While Using a Different MAC for SSH</h3>
+<ol>
+<li><strong>Create a Network Namespace</strong>:<br>
+You can create a network namespace to isolate the network settings for your SSH connection.</li>
+</ol>
+<pre><code class="lang-auto">ip netns add ssh-ns
+</code></pre>
+<ol start="2">
+<li><strong>Create Virtual Ethernet Interfaces</strong>:<br>
+Create a pair of virtual Ethernet interfaces (veth) to connect the namespace to the main network.</li>
+</ol>
+<pre><code class="lang-auto">ip link add veth0 type veth peer name veth1
+</code></pre>
+<ol start="3">
+<li><strong>Assign Interfaces to the Namespace</strong>:<br>
+Move one of the interfaces into the network namespace.</li>
+</ol>
+<pre><code class="lang-auto"> ip link set veth1 netns ssh-ns
+</code></pre>
+<ol start="4">
+<li><strong>Configure the Interfaces</strong>:<br>
+Assign IP addresses and bring up the interfaces. You can set a different MAC address for the interface in the namespace.</li>
+</ol>
+<pre><code class="lang-auto"># On the main namespace
+ip addr add &lt;your_ip&gt; dev veth0
+ip link set veth0 up
+
+# Inside the namespace
+ip netns exec ssh-ns ip addr add &lt;ssh_ip&gt; dev veth1
+ip netns exec ssh-ns ip link set veth1 up
+ip netns exec ssh-ns ip link set dev veth1 address &lt;static_mac_address&gt;
+</code></pre>
+<ol start="5">
+<li><strong>Spoof Your MAC Address on the Wi-Fi/Ethernet Interfaces</strong>:<br>
+Change the MAC address of your Wi-Fi interface to the desired spoofed MAC address.</li>
+</ol>
+<pre><code class="lang-auto">[device]
+wifi.scan-rand-mac-address=yes
+
+[connection]
+wifi.cloned-mac-address=stable
+ethernet.cloned-mac-address=stable
+connection.stable-id=${CONNECTION}/${BOOT}
+</code></pre>
+<ol start="6">
+<li><strong>SSH into Your VPS</strong>:<br>
+Now, when you want to SSH into your VPS, you can do so from within the network namespace, which will use the static MAC address you set for <code>veth1</code>.</li>
+</ol>
+<pre><code class="lang-auto">ip netns exec ssh-ns ssh user@your_vps_ip
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565#post_7</link>
+        <pubDate>Tue, 12 Nov 2024 00:38:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1597</guid>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development</title>
+        <dc:creator><![CDATA[@ksec]]></dc:creator>
+        <description><![CDATA[ <p>Please work with minimal templates in mind from the get go. <code>sys-</code> templates with a plethora of desktop apps installed are not great.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development/679#post_2</link>
+        <pubDate>Mon, 11 Nov 2024 23:15:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1596</guid>
+      </item>
+      <item>
+        <title>Kernel-hardening-checker</title>
+        <dc:creator><![CDATA[@SlowMoe]]></dc:creator>
+        <description><![CDATA[ <p>cAN i DO THIS: AND HOW?</p>
+<p>#!/usr/bin/env python3</p>
+<p>“”"<br>
+This tool is for checking the security hardening options of the Linux kernel.</p>
+<p>SPDX-FileCopyrightText: Alexander Popov <a href="mailto:alex.popov@linux.com">alex.popov@linux.com</a><br>
+SPDX-License-Identifier: GPL-3.0-only</p>
+<p>This file is for using the tool without installation via setuptools.<br>
+“”"</p>
+<p>import os<br>
+import sys<br>
+import inspect</p>
+<p>current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))<br>
+parent_dir = os.path.dirname(current_dir)<br>
+sys.path.insert(0, parent_dir)</p>
+<p>import kernel_hardening_checker</p>
+<p>kernel_hardening_checker.main()</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kernel-hardening-checker/678#post_2</link>
+        <pubDate>Mon, 11 Nov 2024 21:13:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1594</guid>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/9573">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/9573" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/9573" target="_blank" rel="noopener">build Kicksecure Qubes Template</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-11" data-time="20:07:07" data-timezone="UTC">08:07PM - 11 Nov 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          T: enhancement
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### The problem you're addressing (if any)
+
+A Kicksecure Qubes Template is una<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">vailable.
+
+The only way to use Kicksecure in Qubes is [Distribution Morphing](https://www.kicksecure.com/wiki/Qubes#Distribution_Morphing).
+
+### The solution you'd like
+
+Provide a Kicksecure Qubes template that can be installed using:
+
+    qvm-template install --enablerepo=qubes-templates-community kicksecure-17
+
+### The value to a user, and who that user might be
+
+Easily installable Kicksecure Template that does not come with issue https://github.com/QubesOS/qubes-issues/issues/7447, requires no lengthy distribution morphing instructions, comes security hardened by default. 
+
+(Should also come with in-VM kernel enabled by default. (https://github.com/QubesOS/qubes-issues/issues/9570))
+
+Users that indicated interest for a Kicksecure Qubes Template:
+
+* https://forum.qubes-os.org/search?q=kicksecure%20in%3Atitle
+* https://github.com/QubesOS/qubes-issues/issues?q=is%3Aissue+kicksecure+in%3Atitle
+* https://forums.kicksecure.com/search?q=qubes%20in%3Atitle
+
+### Work-in-progress
+
+https://github.com/Kicksecure/qubes-template-kicksecure
+Untested.
+
+### Related non-duplicates
+
+* https://github.com/QubesOS/qubes-issues/issues/9332 (ticket isn't about Kicksecure) (is a ticket about default use of a hardened Template)
+
+### Completion criteria checklist
+
+(This section is for developer use only. Please do not modify it.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/qubes-template-kicksecure">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/qubes-template-kicksecure" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/c3f87ff512f4b7927bfbc191fa80e2ed/Kicksecure/qubes-template-kicksecure" class="thumbnail">
+
+  <h3><a href="https://github.com/Kicksecure/qubes-template-kicksecure" target="_blank" rel="noopener">GitHub - Kicksecure/qubes-template-kicksecure</a></h3>
+
+    <p><span class="github-repo-description">Contribute to Kicksecure/qubes-template-kicksecure development by creating an account on GitHub.</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Qubes#Template">Qubes Template</a></li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development/679#post_1</link>
+        <pubDate>Mon, 11 Nov 2024 20:15:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1593</guid>
+      </item>
+      <item>
+        <title>Kernel-hardening-checker</title>
+        <dc:creator><![CDATA[@SlowMoe]]></dc:creator>
+        <description><![CDATA[ <p>I try to install kernel-hardening-checker and I get this: What to do as I simply used the instructions?</p>
+<p>pip install git+https://github.com/a13xp0p0v/kernel-hardening-checker<br>
+error: externally-managed-environment</p>
+<p>× This environment is externally managed<br>
+╰─&gt; To install Python packages system-wide, try apt install<br>
+python3-xyz, where xyz is the package you are trying to<br>
+install.</p>
+<pre><code>If you wish to install a non-Debian-packaged Python package,
+create a virtual environment using python3 -m venv path/to/venv.
+Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+sure you have python3-full installed.
+
+If you wish to install a non-Debian packaged Python application,
+it may be easiest to use pipx install xyz, which will manage a
+virtual environment for you. Make sure you have pipx installed.
+
+See /usr/share/doc/python3.11/README.venv for more information.
+</code></pre>
+<p>note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.<br>
+hint: See PEP 668 for the detailed specification.<br>
+zsh: exit 1     pip install git+https://github.com/a13xp0p0v/kernel-hardening-checker</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kernel-hardening-checker/678#post_1</link>
+        <pubDate>Mon, 11 Nov 2024 18:32:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1592</guid>
+      </item>
+      <item>
+        <title>Enable and use zRAM instead for swap</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Until we decide the future of swap in Kicksecure…</p>
+<p>Let’s break support for hibernation by default. Then swap-file-creator could also create a smaller swap file by default.</p>
+<p>Related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a></li>
+<li>
+<pre><code>calculate-swap-size
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p>Usage: calculate-swap-size [RAM in MB] [Hibernation (yes/no)]</p>
+</blockquote>
+<p>Examples:</p>
+<ul>
+<li>
+<pre><code>calculate-swap-size 4096 yes
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p>Calculating swap size…<br>
+RAM in MB: 4096<br>
+Hibernation considered: yes<br>
+RAM in GB (approximated for calculation): 4<br>
+RAM &gt; 2GB and &lt;= 8GB with hibernation: Swap size is 2 times the RAM<br>
+Calculated Swap Size in MB: 8192</p>
+</blockquote>
+<ul>
+<li>
+<pre><code>calculate-swap-size 4096 no
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p>Calculating swap size…<br>
+RAM in MB: 4096<br>
+Hibernation considered: no<br>
+RAM in GB (approximated for calculation): 4<br>
+RAM &gt; 2GB and &lt;= 8GB without hibernation: Swap size equals RAM<br>
+Calculated Swap Size in MB: 4096</p>
+</blockquote>
+<p>A smaller swap file by default is a small progress.</p>
+<p>Once decided what to do about zwap / zram, we might even deprecate the current default file based swap.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_9</link>
+        <pubDate>Mon, 11 Nov 2024 15:38:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1589</guid>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Very helpful. This was the foundation for <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> who succeeded to diagnose the issue and translate it into a upstream calamares bug report.</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2397">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">Allow distros to restrict what filesystems can be used in manual partitioning</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-10" data-time="23:42:09" data-timezone="UTC">11:42PM - 10 Nov 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
+Calamares cu<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">rrently allows one to pick from a large number of different filesystems when setting up a system with manual partitioning. For the most part this is good, however because not all filesystems work well with all distros, it is possible for the user to shoot themselves in the foot by picking a filesystem that won't work. For instance, currently nothing in Calamares prevents the user from attempting to install a Debian-based distro like Kicksecure onto a FAT32-formatted root partition.
+
+![Screenshot_20241110_173418](https://github.com/user-attachments/assets/16f77507-654b-4754-afcc-e99b2950f4f7)
+
+Obviously this won't work in the long run, however the installation actually tries to proceed and gets quite far. The error message that the installation eventually fails with is less-than-obvious:
+
+![Screenshot_20241110_173630](https://github.com/user-attachments/assets/e3dcd4f7-6fa1-4e04-bc64-69951644ef8a)
+
+**Describe the solution you'd like**
+I think the best solution here would be to allow distros to specify what filesystems can be used at what mountpoints. Ideally, the manual partitioning screen would prevent the user from selecting a "bad" filesystem, however it might be sufficient to simply warn them that what they're doing is likely to fail in weird ways if they continue. Calamares could use a default "deny-map" (or whatever you want to call it) that would prevent some common blunders (such as using a non-UNIX filesystem for the root filesystem), but the map would be fully configurable by the distro developer.
+
+**Describe alternatives you've considered**
+The simplest solution would be to simply prohibit using fat32 as a filesystem for the root filesystem, however this doesn't seem like the right decision to make since in theory some distros might actually want to support a fat32 root filesystem.
+
+**Additional context**
+The issue mentioned above has tripped up at least one user in the wild: https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_7</link>
+        <pubDate>Mon, 11 Nov 2024 15:10:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1588</guid>
+      </item>
+      <item>
+        <title>Splitting security-misc into shared, desktop, and server packages</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>I’d like to address the bugs found first, as that seems easy and to simplify this discussion.</p>
+<blockquote>
+<ul>
+<li>[!] │   │   ├── pkexec.security-misc                                                              (shared)  (useful on desktop and server, however lxqt-sudo won’t be present on a server, but pkexec may be used on a server. Resolve by allowing the use of sudo.)</li>
+</ul>
+</blockquote>
+<p>Fixed by deleting this legacy leftover file.</p>
+<blockquote>
+<ul>
+<li>[!] │   │       ├── disable-kernel-module-loading                                                 (shared)  (useful on desktop and server, BUT SOMEHOW ISN’T SET EXECUTABLE???)</li>
+</ul>
+</blockquote>
+<p>Fixed.</p>
+<pre><code class="lang-auto">* [!] │   ├── dkms                                                                                  (none)    (see files below)
+* [!] │   │   └── framework.conf.d                                                                  (none)    (see files below)
+* [!] │   │       └── 30_security-misc.conf                                                         (none)    (should be moved out of security-isc)
+</code></pre>
+<blockquote>
+<ul>
+<li>[!] │   │       │   ├── panic-on-oops.service                                                     (shared)  (useful on desktop and server, systemd config looks invalid with a conflict between WantedBy and After)</li>
+</ul>
+</blockquote>
+<p>Fixed.</p>
+<blockquote>
+<p><code>* [x] │   │       ├── install matroxfb_bases /usr/bin/disabled-framebuffer-by-security-misc         (shared)  (ancient, obsolete, TYPO'D - THIS SHOULD BE BASE, NOT BASES)</code></p>
+</blockquote>
+<p>Fixed.</p>
+<hr>
+<p>All bugs should have been addressed.</p>
+<hr>
+<p>Server? Could also be a home server with a GUI?</p>
+<hr>
+<blockquote>
+<ul>
+<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   │   ├── <code>glib-compile-schemas /usr/share/glib-2.0/schemas || true</code>                        (desktop) (glib-compile-schemas is of no use on a server)</li>
+</ul>
+</blockquote>
+<p>No use but also no harm? So just keep as is for simplicity? Also a remote server might have a GUI.</p>
+<blockquote>
+<ul>
+<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   ├── security-misc.gconf-defaults                                                          (desktop) (nautilus won’t be present on a server)</li>
+</ul>
+</blockquote>
+<p>Similar as above. Doesn’t harm and useful if a GUI is used on the server.</p>
+<blockquote>
+<p><code>* [x] │   ├── bluetooth                                                                             (desktop) (all subfiles are desktop)</code><br>
+<code>* [x] │   │   └── 30_security-misc.conf                                                             (desktop) (bluez should only be present on desktops)</code></p>
+</blockquote>
+<p>But if on a server, this config does not harm, even useful?</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_hardened_malloc.conf                                         (server)  (desktops don't use hardened-malloc)</code></p>
+</blockquote>
+<p>We actually did but <a href="https://www.kicksecure.com/wiki/Hardened_Malloc" class="inline-onebox">Hardened Malloc</a> is nowadays deprecated in Kicksecure.</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_postfix.conf                                                 (server)  (desktops shouldn't run postfix)</code></p>
+</blockquote>
+<p>The primary defense for desktops would be not installing postfix then? But then postfix might be installed thorugh a <code>Depends:</code>, or <code>Recommends:</code>. In that case, indeed, best if not whitelisted.</p>
+<blockquote>
+<p><code>* [x] │   │   ├── 25_default_whitelist_spice.conf                                                   (desktop) (only desktops need USB passthrough with SPICE)</code></p>
+</blockquote>
+<p>SPICE over network to server?</p>
+<hr>
+<p>I guess I would tend to keep as much shared as possible. The more remains shared, the less migration work there will be.</p>
+<p>The file per file analysis is a great approach!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_2</link>
+        <pubDate>Mon, 11 Nov 2024 14:20:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1586</guid>
+      </item>
+      <item>
+        <title>Splitting security-misc into shared, desktop, and server packages</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Read through the discussion at <a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox" rel="noopener nofollow ugc">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a>, and created a table of (almost) all of the files and directories in security-misc, along with what subpackage they should go into. The vast majority of the package looks like it can remain shared. Some bugs were also potentially uncovered while reviewing this.</p>
+<p>The full table is very large and has very long lines, so rather than pasting it here, I put it in a GitHub gist here: <a href="https://gist.github.com/ArrayBolt3/1fef29b2214f27054cd85785530e7f7f" class="inline-onebox" rel="noopener nofollow ugc">Suggested way to split the security-misc package into shared, desktop, and server packages. · GitHub</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_1</link>
+        <pubDate>Mon, 11 Nov 2024 06:11:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1585</guid>
+      </item>
+      <item>
         <title>ISO - Development</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <aside class="onebox githubpullrequest" data-onebox-src="https://github.com/Kicksecure/derivative-maker/pull/2">
@@ -1345,631 +1825,6 @@ Why are the following applications part of <code>kicksecure-desktop-applications
         <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_4</link>
         <pubDate>Sat, 02 Nov 2024 09:08:22 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1532</guid>
-      </item>
-      <item>
-        <title>Disposables read-only</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Read-only#Qubes">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730453425" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Read-only#Qubes" target="_blank" rel="noopener nofollow ugc" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/Read-only#Qubes" target="_blank" rel="noopener nofollow ugc">Read-Only: Setting Hard Drives to Read-Only</a></h3>
-
-  <p>When using live mode, no changes are made to the disk. For added security, consider setting your disk to read-only mode, if possible.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Install kvm or vbox inside disposable to set disks to read only = immutable to boot second OS inside</p>
-<p>Will this increases the security as alternative to host live mode</p>
-<p>How securely mount encrypted media on qubes in general against malware and forensic.</p>
-<p>Can this considered as another disadvatage of qubes behavour.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/disposables-read-only/655#post_1</link>
-        <pubDate>Sat, 02 Nov 2024 08:53:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1531</guid>
-      </item>
-      <item>
-        <title>Enable and use zRAM instead for swap</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the input, i see only to use zram, no need for anything else, as i dont think any disk swap is needed in nowadays hardware.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_3</link>
-        <pubDate>Fri, 01 Nov 2024 21:36:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1530</guid>
-      </item>
-      <item>
-        <title>Enable and use zRAM instead for swap</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>There are a couple aspects to this that need to be explored.</p>
-<p>For one, there’s zram and zswap. zram is fully ephemeral - no data in RAM ever touches the disk in any form, encrypted or otherwise. This helps reduce disk wear-and-tear, and could be theoretically useful from a security standpoint. However, it does mean that systems with lower RAM can only get so much out of zram - the amount of stuff you can have in RAM increases, but there’s an upper limit that depends on what kind of data you’re working on.</p>
-<p>zswap on the other hand is basically zram and a swapfile combined. Data is compressed in RAM first, and then infrequently used data is swapped out to disk. This gives you speed benefits, and it lets you fit more stuff in your RAM than normal while also allowing you to have the “virtually infinite memory” capabilities of a normal swapfile. However, it’s a bit trickier to configure, and it does end up with memory contents written to disk which could be bad from a security standpoint (though I think swap-file-creator is encrypting the swapfile).</p>
-<p>I personally prefer zram on my systems, however for VMs with only 2 or 3 GB RAM zswap might be more practical. swap-file-creator might be a good place to configure this?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_2</link>
-        <pubDate>Fri, 01 Nov 2024 17:18:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1529</guid>
-      </item>
-      <item>
-        <title>Enable and use zRAM instead for swap</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Its enabled by default in fedora and ubuntu, would be good to have it on kicksecure.</p>
-<p>As suggested here to be used on SSD, <strong>without</strong> the need to use swap:</p>
-<p><a href="https://www.youtube.com/watch?v=b4vTKg-qW_0&amp;t=260">Debian 12: Fighting with OpenSUSE Snapper!</a></p>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_1</link>
-        <pubDate>Thu, 31 Oct 2024 21:31:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1528</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <h4><a name="p-1527-tpm-12-is-flawed-deprecated-thus-no-machine-with-this-type-of-tpm-considered-under-the-radar-of-yes-i-have-tpm-on-my-hardware-1" class="anchor" href="https://forums.kicksecure.com#p-1527-tpm-12-is-flawed-deprecated-thus-no-machine-with-this-type-of-tpm-considered-under-the-radar-of-yes-i-have-tpm-on-my-hardware-1"></a>TPM 1.2 is flawed, deprecated, thus no machine with this type of TPM considered under the radar of “yes i have TPM on my hardware”:</h4>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.ncsc.gov.uk/guidance/roca-infineon-tpm-and-secure-element-rsa-vulnerability-guidance">
-  <header class="source">
-      <img src="https://www.ncsc.gov.uk/files/favicon.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://www.ncsc.gov.uk/guidance/roca-infineon-tpm-and-secure-element-rsa-vulnerability-guidance" target="_blank" rel="noopener">ncsc.gov.uk</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.ncsc.gov.uk/guidance/roca-infineon-tpm-and-secure-element-rsa-vulnerability-guidance" target="_blank" rel="noopener">ROCA: Infineon TPM and Secure Element RSA Vulnerability Guidance</a></h3>
-
-  <p>Guidance for those who want to understand and reduce the impact of the ROCA vulnerability.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p><a href="https://crocs.fi.muni.cz/public/papers/rsa_ccs17" class="onebox" target="_blank" rel="noopener">https://crocs.fi.muni.cz/public/papers/rsa_ccs17</a></p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.rapid7.com/db/vulnerabilities/msft-cve-2017-15361/">
-  <header class="source">
-      <img src="https://www.rapid7.com/includes/img/favicon.ico" class="site-icon" width="16" height="16">
-
-      <a href="https://www.rapid7.com/db/vulnerabilities/msft-cve-2017-15361/" target="_blank" rel="noopener">Rapid7</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/361;"><img src="https://www.rapid7.com/globalassets/rapid7-og.jpg" class="thumbnail" width="690" height="361"></div>
-
-<h3><a href="https://www.rapid7.com/db/vulnerabilities/msft-cve-2017-15361/" target="_blank" rel="noopener">Microsoft CVE-2017-15361: Vulnerability in TPM could allow Security Feature...</a></h3>
-
-  <p>Rapid7's VulnDB is curated repository of vetted computer software exploits and exploitable vulnerabilities.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<h4><a name="p-1527-mandatory-of-usage-of-passwordusbkeyetc-for-tpm-the-no-password-thing-is-bs-2" class="anchor" href="https://forums.kicksecure.com#p-1527-mandatory-of-usage-of-passwordusbkeyetc-for-tpm-the-no-password-thing-is-bs-2"></a>Mandatory of usage of password/usbkey…etc for TPM: (the no password thing is BS)</h4>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets">
-  <header class="source">
-      <img src="https://www.secura.com/newDist/dist/favicons/favicon-32x32.png" class="site-icon" width="32" height="32">
-
-      <a href="https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets" target="_blank" rel="noopener">English</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/361;"><img src="https://www.secura.com/uploads/media/Diagrams/_1200x630_crop_center-center_none/pcbite.jpg" class="thumbnail" width="690" height="362"></div>
-
-<h3><a href="https://www.secura.com/blog/tpm-sniffing-attacks-against-non-bitlocker-targets" target="_blank" rel="noopener">TPM Sniffing Attacks Against Non-Bitlocker Targets | Secura</a></h3>
-
-  <p>Preboot passwords are important when using BitLocker to prevent all kinds of attacks. One of those attacks is the ability to sniff the TPM chip communication and recover the decryption key. This article shows you how to attack Linux disk encryption...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://arstechnica.com/gadgets/2021/08/how-to-go-from-stolen-pc-to-network-intrusion-in-30-minutes/">
-  <header class="source">
-      <img src="https://cdn.arstechnica.net/wp-content/uploads/2016/10/cropped-ars-logo-512_480-60x60.png" class="site-icon" width="60" height="60">
-
-      <a href="https://arstechnica.com/gadgets/2021/08/how-to-go-from-stolen-pc-to-network-intrusion-in-30-minutes/" target="_blank" rel="noopener" title="01:32PM - 03 August 2021">Ars Technica – 3 Aug 21</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/446;"><img src="https://cdn.arstechnica.net/wp-content/uploads/2021/08/burning-laptop-1000x648.jpeg" class="thumbnail" width="690" height="447"></div>
-
-<h3><a href="https://arstechnica.com/gadgets/2021/08/how-to-go-from-stolen-pc-to-network-intrusion-in-30-minutes/" target="_blank" rel="noopener">Trusted platform module security defeated in 30 minutes, no soldering required</a></h3>
-
-  <p>Sometimes, locking down a laptop with the latest defenses isn’t enough.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubgist" data-onebox-src="https://gist.github.com/osy/45e612345376a65c56d0678834535166#what-does-tpm-protect">
-  <header class="source">
-
-      <a href="https://gist.github.com/osy/45e612345376a65c56d0678834535166#what-does-tpm-protect" target="_blank" rel="noopener">gist.github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <h4><a href="https://gist.github.com/osy/45e612345376a65c56d0678834535166#what-does-tpm-protect" target="_blank" rel="noopener">https://gist.github.com/osy/45e612345376a65c56d0678834535166#what-does-tpm-protect</a></h4>
-
-  <h5>tpm-rant.md</h5>
-  <pre><code class="Markdown">TPM provides zero practical security
-====================================
-
-TPM (Trusted Platform Module) is as useful for preventing real attackers as the TSA is at preventing real terrorists. The architecture is fundamentally flawed and most existing implementations are completely broken. I thought this argument was settled decades ago[[1]](https://en.wikipedia.org/wiki/Trusted_Computing#Criticism) when "trusted computing" was introduced mostly as a way to provide DRM and ownership capabilities to organizations. It has largely failed to impact the consumer market when it was introduced back in the early 2000s. However, recently there seems to be a movement by certain parties to reintroduce this failed product back to the market. Microsoft argues that in order to use Windows 11, you need TPM 2.0 compatible hardware because[[2]](https://blogs.windows.com/windows-insider/2021/08/27/update-on-windows-11-minimum-system-requirements-and-the-pc-health-check-app/):
-
-&gt; The Trusted Platform Module(TPM) requirement enables Windows 11 to be a true Passwordless operating system, addressing phishing and other password-based attacks that are easier for attackers to execute when the TPM is not present.
-
-Google is trying to force the ideas of "trusted computing" to web browsers[[3]](https://github.com/RupertBenWiser/Web-Environment-Integrity/blob/main/explainer.md) which although does not mention TPM explicitly, describes a design that would fit well into it.
-
-Even Canonical is jumping on the bandwagon by bringing TPM based full-disk-encryption to Ubuntu[[4]](https://ubuntu.com/blog/tpm-backed-full-disk-encryption-is-coming-to-ubuntu) and claims it "eliminates the need for users to manually enter passphrases during boot" which is vacuously true (you also don't need to enter a passphrase if you disable it altogether but that doesn't mean it's any secure) and "eliminate the attacker’s ability to perform offline brute-force attacks against the passphrase" which is just plain false (you can brute force at a much slower speed).</code></pre>
-   This file has been truncated. <a href="https://gist.github.com/osy/45e612345376a65c56d0678834535166#what-does-tpm-protect" target="_blank" rel="noopener">show original</a>
-
-<p>
-</p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<h4><a name="p-1527-yet-tpm-must-be-implemented-correctly-otherwise-will-be-useless-yeah-trusting-blindly-whoever-made-it-until-an-open-source-hardware-for-it-available-3" class="anchor" href="https://forums.kicksecure.com#p-1527-yet-tpm-must-be-implemented-correctly-otherwise-will-be-useless-yeah-trusting-blindly-whoever-made-it-until-an-open-source-hardware-for-it-available-3"></a>Yet TPM must be implemented correctly otherwise will be useless (yeah trusting blindly whoever made it, until an open source hardware for it available)</h4>
-<aside class="onebox pdf" data-onebox-src="https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-han.pdf">
-  <header class="source">
-
-      <a href="https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-han.pdf" target="_blank" rel="noopener">usenix.org</a>
-  </header>
-
-  <article class="onebox-body">
-    <a href="https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-han.pdf" target="_blank" rel="noopener"><span class="pdf-onebox-logo"></span></a>
-
-<h3><a href="https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-han.pdf" target="_blank" rel="noopener">sec18-han.pdf</a></h3>
-
-  <p class="filesize">728.22 KB</p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p><a href="https://support.lenovo.com/us/en/product_security/ps500550-nuvoton-tpm-denial-of-service-vulnerability" class="onebox" target="_blank" rel="noopener">https://support.lenovo.com/us/en/product_security/ps500550-nuvoton-tpm-denial-of-service-vulnerability</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585?page=2#post_21</link>
-        <pubDate>Thu, 31 Oct 2024 21:27:04 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1527</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>FWIW I have tried two full installations and one “replace partition” installation of Kicksecure-Xfce-17.2.3.7.iso, and have not been able to reproduce this problem.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_5</link>
-        <pubDate>Thu, 31 Oct 2024 20:06:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1526</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Are you using manual partitioning, “replace partition”, or “install alongside” by any chance? If so, could you share with us the partition layout you’re setting?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_4</link>
-        <pubDate>Thu, 31 Oct 2024 19:55:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1525</guid>
-      </item>
-      <item>
-        <title>Ubiquity / LVM / TPM</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://www.techspot.com/news/101792-microsoft-bitlocker-encryption-can-cracked-43-seconds-4.html">Microsoft BitLocker encryption cracked in just 43 seconds with a $4 Raspberry Pi Pico</a> <a href="https://web.archive.org/web/https://www.techspot.com/news/101792-microsoft-bitlocker-encryption-can-cracked-43-seconds-4.html"><img src="https://www.kicksecure.com/w/images/7/73/Internet_Archive_logo.png" alt="archive.org" width="13" height="15"></a></p>
-<blockquote>
-<p>According to the researcher, targeted attacks can bypass BitLocker’s encryption by directly accessing the hardware and extracting the encryption keys stored in the computer’s Trusted Platform Module (<strong>TPM</strong>) via the LPC bus.</p>
-</blockquote>
-<hr>
-<p><a href="https://www.youtube.com/watch?v=wTl4vEednkQ"><img src="https://www.kicksecure.com/w/images/8/82/Video-general-icon.svg" alt="Videos general icon" width="4" height="4"> </a><a href="https://www.youtube.com/watch?v=wTl4vEednkQ">Breaking Bitlocker - Bypassing the Windows Disk Encryption </a><a href="https://www.youtube.com/watch?v=wTl4vEednkQ"><img src="https://www.kicksecure.com/w/images/thumb/b/b6/Youtube-logo.png/50px-Youtube-logo.png" alt="YouTube icon" width="50" height="50"></a> <a href="https://yewtu.be/watch?v=wTl4vEednkQ"><img src="https://www.kicksecure.com/w/images/thumb/c/cd/Invidious-logo.png/50px-Invidious-logo.png" alt="Invidious icon" width="50" height="50"></a> <a href="http://invidiousge2cq2qegp4vdzsfu6mvpqdf6dtcyzmqbv7yx2spvkkajad.onion/watch?v=wTl4vEednkQ"><img src="https://www.kicksecure.com/w/images/thumb/a/a8/Iconfinder_tor_386502.png/50px-Iconfinder_tor_386502.png" alt="Onion icon" width="50" height="50"></a></p>
-<ul>
-<li><a href="https://github.com/stacksmashing/pico-tpmsniffer" class="inline-onebox">GitHub - stacksmashing/pico-tpmsniffer: A simple, very experimental TPM sniffer for LPC bus</a></li>
-</ul>
-<p>Hardware dependent.</p>
-<p>Maybe would be less of an issue if the TPM was integrated inside the CPU (because nobody can disassemble a CPU, not even Intel / TSMC):</p>
-<p>Quote <a href="https://www.reddit.com/r/intel/comments/1b3z5s4/where_is_the_tpm_physically_located/">https://www.reddit.com/r/intel/comments/1b3z5s4/where_is_the_tpm_physically_located/</a></p>
-<blockquote>
-<p>TPM is usually on the motherboard. otherwise TPP would be listed in the specs of the cpus on intels site.</p>
-</blockquote>
-<p>That comment makes seems helpful. If TPM was integrated inside the CPU, it would be mentioned in the specification of the CPU.</p>
-<p>Maybe better with AMD fTPM and Intel PTT (Platform Trust Technology).</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.guru3d.com/story/researchers-expose-vulnerabilities-in-amds-firmware-based-tpms/">
-  <header class="source">
-      <img src="https://www.guru3d.com/data/themes/frontend/Guru3D/images/favicon_64x64.png" class="site-icon" width="64" height="64">
-
-      <a href="https://www.guru3d.com/story/researchers-expose-vulnerabilities-in-amds-firmware-based-tpms/" target="_blank" rel="noopener" title="08:51AM - 03 May 2023">www.guru3d.com – 3 May 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="" height="" src="https://www.guru3d.com/data/themes/Guru3D/images/logo_large.png" class="thumbnail">
-
-<h3><a href="https://www.guru3d.com/story/researchers-expose-vulnerabilities-in-amds-firmware-based-tpms/" target="_blank" rel="noopener">Researchers Expose Vulnerabilities in AMD's Firmware-Based TPMs</a></h3>
-
-  <p>In their recent paper, "faulTPM: Exposing AMD fTPMs' Deepest Secrets," researchers at the Technical University of Berlin have highlighted a new exploit targeting AMD's firmware-based Tru...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585#post_20</link>
-        <pubDate>Thu, 31 Oct 2024 10:46:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1524</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>We might need the log to be able to debug this. Please provide.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_3</link>
-        <pubDate>Thu, 31 Oct 2024 05:38:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1523</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>related:</p><aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/1251">
-  <header class="source">
-
-      <a href="https://github.com/calamares/calamares/issues/1251" target="_blank" rel="noopener">github.com/calamares/calamares</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/calamares/calamares/issues/1251" target="_blank" rel="noopener">Cannot set timezone. Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2019-09-27" data-time="14:40:55" data-timezone="UTC">02:40PM - 27 Sep 19 UTC</span>
-      </div>
-
-        <div class="date">
-          closed <span class="discourse-local-date" data-format="ll" data-date="2019-10-08" data-time="09:46:29" data-timezone="UTC">09:46AM - 08 Oct 19 UTC</span>
-        </div>
-
-      <div class="user">
-        <a href="https://github.com/kevinsmia1939" target="_blank" rel="noopener">
-          <img alt="kevinsmia1939" src="https://avatars.githubusercontent.com/u/11407922?v=4" class="onebox-avatar-inline" width="20" height="20">
-          kevinsmia1939
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">So I create a live ISO with openSUSE's Kiwi
-The live ISO use openSUSE Tumblewee<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">d repo with KDE DE
-
-I include Calamares as one of the package in the live ISO
-
-I start Calamares with 
-sudo -E calamares -d 
-The installation procedures is nothing special, 
-Select language English (which is the default)
-Select timezone default (america, newyork )
-The partition table was selected as "Erase all" with EXT4
-After confirm to install the error message popup
-```
-
-Cannot set timezone. 
-Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime
-```
-I tried delete /etc/localtime and try again, same error.
-Full log 
-```
-sudo -E calamares -d
-[sudo] password for root: 
-No protocol specified
-QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
-QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
-QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
-QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
-22:57:26 [1]: Calamares version: 3.1.11 
-Translation: Calamares: Using system locale: "en_US"
-22:57:26 [1]: Default font ===== 
-Pixel size:    -1 
-Point size:    10 
-Point sizeF:   10 
-Font family:   "Noto Sans" 
-Metric height: 18 
-22:57:26 [1]: Font height: 18 
-22:57:26 [1]: Available languages: ("ar", "ast", "bg", "ca", "cs_CZ", "da", "de", "el", "en", "en_GB", "es_MX", "es", "eu", "fr", "he", "hr", "hu", "id", "is", "it_IT", "ja", "lt", "nl", "pl", "pt_BR", "pt_PT", "ro", "ru", "sk", "sv", "th", "tr_TR", "zh_CN", "zh_TW") 
-22:57:26 [1]: CalamaresApplication thread: 0x55f5d2a8bb10 
-22:57:26 [1]: Using log file: "/root/.cache/Calamares/Calamares/Calamares.log" 
-22:57:26 [1]: Using Calamares settings file at "/usr/share/calamares/settings.conf" 
-22:57:26 [1]: Using Calamares branding file at "/usr/share/calamares/branding/default/branding.desc" 
-22:57:26 [1]: WARNING: the selected branding component does not ship translations. 
-22:57:26 [1]: Loaded branding component "default" 
-22:57:26 [1]: STARTUP: initQmlPath, initSettings, initBranding done 
-22:57:26 [1]: STARTUP: initModuleManager: module init started 
-22:57:26 [1]: STARTUP: initModuleManager: all modules init done 
-22:57:26 [1]: STARTUP: initJobQueue done 
-22:57:26 [1]: Available size QSize(1024, 732) 
-22:57:26 [1]:   Proposed window size: 1024 648 
-22:57:26 [1]: STARTUP: CalamaresWindow created; loadModules started 
-22:57:26 [1]: Initial locale  "en_US" 
-22:57:26 [8]: Translation: Calamares: Using system locale: "en_US"
-22:57:26 [1]: Welcome string false "KalaOS" 
-22:57:26 [1]: ViewModule "welcome@welcome" loading complete. 
-22:57:26 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
-22:57:26 [1]: ViewModule "locale@locale" loading complete. 
-No protocol specified
-22:57:26 [1]: ViewModule "keyboard@keyboard" loading complete. 
-22:57:26 [8]: Loaded backend plugin:  "pmlibpartedbackendplugin"
-22:57:26 [1]: ViewModule "partition@partition" loading complete. 
-22:57:26 [1]: ViewModule "users@users" loading complete. 
-22:57:26 [1]: ViewModule "summary@summary" loading complete. 
-22:57:26 [1]: Module "partition@partition" already loaded. 
-22:57:26 [1]: QML import paths: ("/usr/share/calamares/qml", "/usr/bin", "qrc:/qt-project.org/imports", "/usr/lib64/qt5/qml") 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "mount" 
-22:57:26 [1]: Module "mount@mount" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "unpackfs" 
-22:57:26 [1]: Module "unpackfs@unpackfs" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "machineid" 
-22:57:26 [1]: Module "machineid@machineid" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "fstab" 
-22:57:26 [1]: Module "fstab@fstab" cannot be created from descriptor. 
-22:57:26 [1]: Module "locale@locale" already loaded. 
-22:57:26 [1]: Module "keyboard@keyboard" already loaded. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "localecfg" 
-22:57:26 [1]: Module "localecfg@localecfg" cannot be created from descriptor. 
-22:57:26 [1]: Module "users@users" already loaded. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "displaymanager" 
-22:57:26 [1]: Module "displaymanager@displaymanager" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "networkcfg" 
-22:57:26 [1]: Module "networkcfg@networkcfg" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "hwclock" 
-22:57:26 [1]: Module "hwclock@hwclock" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "dracut" 
-22:57:26 [1]: Module "dracut@dracut" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "grubcfg" 
-22:57:26 [1]: Module "grubcfg@grubcfg" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "bootloader" 
-22:57:26 [1]: Module "bootloader@bootloader" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "packages" 
-22:57:26 [1]: Module "packages@packages" cannot be created from descriptor. 
-22:57:26 [0]: Python modules are not supported in this version of Calamares. 
-22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "umount" 
-22:57:26 [1]: Module "umount@umount" cannot be created from descriptor. 
-22:57:26 [1]: FinishedPage() 
-22:57:26 [1]: ViewModule "finished@finished" loading complete. 
-22:57:26 [1]: STARTUP: loadModules for all modules done 
-22:57:26 [1]: STARTUP: Window now visible and ProgressTreeView populated 
-22:57:27 [8]: getting smart status failed for  "/dev/vda" :  Operation not supported
-22:57:27 [1]: Removing unsuitable devices: 1 candidates. 
-22:57:27 [1]: LIST OF DETECTED DEVICES: 
-22:57:27 [1]: node      capacity        name    prettyName 
-22:57:27 [1]: "/dev/vda" 21467980800 "Virtio Block Device" "Virtio Block Device – 19.99 GiB (/dev/vda)" 
-22:57:27 [1]: .. 1 devices detected. 
-03:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
-22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
-22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
-22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
-22:57:27 [1]: Cannot open file "/etc/locale.gen" . Assuming the supported languages are already built into the locale archive. 
-22:57:27 [1]: Need at least storage bytes: 5905580032 
-22:57:27 [1]: Need at least ram bytes: 1073741824 
-22:57:27 [1]: enoughStorage, enoughRam, hasPower, hasInternet, isRoot:  true true true false true 
-No protocol specified
-22:57:27 [1]: xkbmap selection changed to:  "us" - "" 
-22:57:27 [1]: "Osprober lines, clean:\n" 
-22:57:27 [1]: Updating partitioning state widgets. 
-22:57:27 [0]: QObject::setParent: Cannot set parent, new parent is in a different thread
-22:57:27 [1]: Required  storage B: 8589934592 "(8GB)" 
-22:57:27 [1]: Available storage B: 20949517312 "(19GB)" for "/dev/vda1"    length: 41927602    sectorsUsed: 1010576    fsType: "ext4" 
-22:57:27 [1]: Partition "/dev/vda1" authorized for resize + autopartition install. 
-22:57:27 [1]: Required  storage B: 6442450944 "(6GB)" 
-22:57:27 [1]: Storage capacity  B: 21466932224 "(19GB)" for "/dev/vda1"    length: 41927602 
-22:57:27 [1]: Partition "/dev/vda1" authorized for replace install. 
-22:57:27 [1]: Updating partitioning preview widgets. 
-22:57:33 [1]: Updating partitioning preview widgets. 
-22:57:34 [1]: Updating partitioning preview widgets. 
-22:57:34 [1]: CreatePartitionTableJob::createTable trying to make table for device "/dev/vda" 
-22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
-22:57:34 [1]: Suggested swap size: 6.2356 GiB 
-22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
-22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
-22:57:34 [1]: # Queue: 
-22:57:34 [1]: ## Device: "Virtio Block Device" 
-22:57:34 [1]: - "Create new msdos partition table on /dev/vda." 
-22:57:34 [1]: - "Create new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs." 
-22:57:34 [1]: - "Create new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap." 
-22:57:34 [1]: Updating partitioning preview widgets. 
-22:57:34 [1]: Required  storage B: 6442450944 "(6GB)" 
-22:57:34 [1]: Storage capacity  B: 21466932224 "(19GB)" for "/dev/vda1"    length: 41927602 
-22:57:34 [1]: Partition "/dev/vda1" authorized for replace install. 
-22:57:37 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
-22:57:42 [0]: QLayout: Attempting to add QLayout "" to QWidget "", which already has a layout
-22:57:42 [0]: QObject::setParent: Cannot set parent, new parent is in a different thread
-22:57:42 [1]: Creating FillGlobalStorageJob with bootLoader path "/dev/vda" 
-22:57:42 [1]: PartitionCodeModule has been asked for jobs. About to return: "Clear all temporary mounts.\nClear mounts for partitioning operations on /dev/vda\nCreate new msdos partition table on /dev/vda.\nCreate new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs.\nCreate new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap.\nSet partition information" 
-22:57:42 [1]: Gathering UUIDs for partitions that exist now. 
-22:57:42 [1]: QHash(("", "")) 
-22:57:42 [1]: Writing to GlobalStorage["partitions"] 
-22:57:42 [1]: "" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "" 
-22:57:42 [1]: "" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "" 
-22:57:42 [8]: QVariant(QString, "") "" "/" "btrfs"
-22:57:42 [8]: QVariant(QString, "") "" "" "linuxswap"
-22:57:42 [1]: Gathering UUIDs for partitions that exist now. 
-22:57:42 [1]: QHash(("", "")) 
-22:57:42 [1]: Writing to GlobalStorage["partitions"] 
-22:57:42 [1]: "" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "" 
-22:57:42 [1]: "" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "" 
-22:57:42 [8]: QVariant(QString, "") "" "/" "btrfs"
-22:57:42 [8]: QVariant(QString, "") "" "" "linuxswap"
-22:57:42 [1]: Summary widget is larger than viewport, enlarge by 27 to QSize(822, 623) 
-22:57:44 [1]: Creating FillGlobalStorageJob with bootLoader path "/dev/vda" 
-22:57:44 [1]: PartitionCodeModule has been asked for jobs. About to return: "Clear all temporary mounts.\nClear mounts for partitioning operations on /dev/vda\nCreate new msdos partition table on /dev/vda.\nCreate new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs.\nCreate new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap.\nSet partition information" 
-22:57:44 [0]: Starting job "Clear all temporary mounts." 
-22:57:44 [1]: Opened mtab. Lines: 
-22:57:44 [1]: "sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "devtmpfs /dev devtmpfs rw,nosuid,size=1453304k,nr_inodes=363326,mode=755 0 0" 
-22:57:44 [1]: "securityfs /sys/kernel/security securityfs rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0" 
-22:57:44 [1]: "devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000 0 0" 
-22:57:44 [1]: "tmpfs /run tmpfs rw,nosuid,nodev,mode=755 0 0" 
-22:57:44 [1]: "tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,mode=755 0 0" 
-22:57:44 [1]: "cgroup2 /sys/fs/cgroup/unified cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/systemd cgroup rw,nosuid,nodev,noexec,relatime,xattr,name=systemd 0 0" 
-22:57:44 [1]: "pstore /sys/fs/pstore pstore rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "bpf /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime,mode=700 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/blkio cgroup rw,nosuid,nodev,noexec,relatime,blkio 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/pids cgroup rw,nosuid,nodev,noexec,relatime,pids 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/memory cgroup rw,nosuid,nodev,noexec,relatime,memory 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/net_cls,net_prio cgroup rw,nosuid,nodev,noexec,relatime,net_cls,net_prio 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/devices cgroup rw,nosuid,nodev,noexec,relatime,devices 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/cpuset cgroup rw,nosuid,nodev,noexec,relatime,cpuset 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/cpu,cpuacct cgroup rw,nosuid,nodev,noexec,relatime,cpu,cpuacct 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/freezer cgroup rw,nosuid,nodev,noexec,relatime,freezer 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/hugetlb cgroup rw,nosuid,nodev,noexec,relatime,hugetlb 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/perf_event cgroup rw,nosuid,nodev,noexec,relatime,perf_event 0 0" 
-22:57:44 [1]: "cgroup /sys/fs/cgroup/rdma cgroup rw,nosuid,nodev,noexec,relatime,rdma 0 0" 
-22:57:44 [1]: "/dev/sr0 /run/initramfs/live iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048 0 0" 
-22:57:44 [1]: "/dev/loop0 /run/initramfs/squashfs_container squashfs ro,relatime 0 0" 
-22:57:44 [1]: "/dev/loop1 /run/rootfsbase ext4 ro,relatime 0 0" 
-22:57:44 [1]: "LiveOS_rootfs / overlay rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs/rw,workdir=/run/overlayfs/work 0 0" 
-22:57:44 [1]: "rpc_pipefs /var/lib/nfs/rpc_pipefs rpc_pipefs rw,relatime 0 0" 
-22:57:44 [1]: "systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=33,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=20446 0 0" 
-22:57:44 [1]: "debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "mqueue /dev/mqueue mqueue rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: "hugetlbfs /dev/hugepages hugetlbfs rw,relatime,pagesize=2M 0 0" 
-22:57:44 [1]: "tmpfs /run/user/1000 tmpfs rw,nosuid,nodev,relatime,size=297204k,mode=700,uid=1000,gid=1000 0 0" 
-22:57:44 [1]: "gvfsd-fuse /run/user/1000/gvfs fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0" 
-22:57:44 [1]: "tracefs /sys/kernel/debug/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0" 
-22:57:44 [1]: ClearTempMountsJob finished. Here's what was done:
- "" 
-22:57:44 [0]: Starting job "Clear mounts for partitioning operations on /dev/vda" 
-22:57:45 [1]: ClearMountsJob finished. Here's what was done:
- "" 
-22:57:45 [0]: Starting job "Create new msdos partition table on /dev/vda." 
-22:57:45 [1]: CreatePartitionTableJob::createTable trying to make table for device "/dev/vda" 
-22:57:45 [1]: Creating new partition table of type "msdos" , uncommitted yet:
- true 
-22:57:45 [1]: lsblk:
- "NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nloop0    7:0    0  4.1G  1 loop /run/initramfs/squashfs_container\nloop1    7:1    0 26.1G  1 loop /run/rootfsbase\nsr0     11:0    1  4.2G  0 rom  /run/initramfs/live\nvda    253:0    0   20G  0 disk \n\xE2\x94\x94\xE2\x94\x80vda1 253:1    0   20G  0 part \n" 
-22:57:45 [1]: mount:
- "sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)\nproc on /proc type proc (rw,nosuid,nodev,noexec,relatime)\ndevtmpfs on /dev type devtmpfs (rw,nosuid,size=1453304k,nr_inodes=363326,mode=755)\nsecurityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)\ntmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)\ndevpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)\ntmpfs on /run type tmpfs (rw,nosuid,nodev,mode=755)\ntmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755)\ncgroup2 on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)\ncgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,name=systemd)\npstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)\nbpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)\ncgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)\ncgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)\ncgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)\ncgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_cls,net_prio)\ncgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)\ncgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)\ncgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)\ncgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)\ncgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)\ncgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)\ncgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)\n/dev/sr0 on /run/initramfs/live type iso9660 (ro,relatime,nojoliet,check=s,map=n,blocksize=2048)\n/run/initramfs/live/LiveOS/squashfs.img on /run/initramfs/squashfs_container type squashfs (ro,relatime)\n/run/initramfs/squashfs_container/LiveOS/rootfs.img on /run/rootfsbase type ext4 (ro,relatime)\nLiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs/rw,workdir=/run/overlayfs/work)\nrpc_pipefs on /var/lib/nfs/rpc_pipefs type rpc_pipefs (rw,relatime)\nsystemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=33,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=20446)\ndebugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)\nmqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)\nhugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)\ntmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=297204k,mode=700,uid=1000,gid=1000)\ngvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)\ntracefs on /sys/kernel/debug/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)\n" 
-22:57:45 [0]: Starting job "Create new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs." 
-22:57:46 [0]: Starting job "Create new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap." 
-22:57:46 [0]: Starting job "Set partition information" 
-22:57:46 [1]: Gathering UUIDs for partitions that exist now. 
-22:57:46 [1]: QHash(("/dev/vda2", "846b894d-8cd7-46e1-a04e-c637cc8ba01a")("/dev/vda1", "6272cbb6-eaed-4c6c-816d-f2726cb9e115")) 
-22:57:46 [1]: Writing to GlobalStorage["partitions"] 
-22:57:46 [1]: "/dev/vda1" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "6272cbb6-eaed-4c6c-816d-f2726cb9e115" 
-22:57:46 [1]: "/dev/vda2" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "846b894d-8cd7-46e1-a04e-c637cc8ba01a" 
-22:57:46 [1]: FillGlobalStorageJob writing bootLoader path: QVariant(QVariantMap, QMap(("installPath", QVariant(QString, "/dev/vda")))) 
-22:57:46 [0]: Starting job "Set timezone to America/New_York" 
-22:57:46 [0]: No rootMountPoint in global storage 
-22:57:46 [0]: No rootMountPoint in global storage 
-22:57:46 [0]: Installation failed: 
-22:57:46 [0]: - message: "Cannot set timezone." 
-22:57:46 [0]: - details: "Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime" 
-22:57:46 [0]: Calamares will quit when the dialog closes. 
-22:57:46 [1]: FinishedPage::setUpRestart() 
-22:58:37 [8]: Shutting down Calamares... 
-22:58:37 [8]: Finished shutdown. 
-22:58:37 [0]: QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
-22:58:37 [0]: QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
-
-`
-```</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_2</link>
-        <pubDate>Thu, 31 Oct 2024 05:36:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1522</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@Mutaz]]></dc:creator>
-        <description><![CDATA[ <p>I have a problem installing the KickSecure version… Every time I reach the penultimate stage, it shows me: timezone failed. I tried my region and more than one region, but it was not resolved.<br>
-</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/7fd8400eaffb5d5db553ae8ca07c4704a6850f78" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_666x500.jpeg" alt="image" data-base62-sha1="ieXX4eL06RlzVi8U8r9DlRBfPzW" width="666" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_666x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_999x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_1332x1000.jpeg 2x" data-dominant-color="9FA09D"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_1</link>
-        <pubDate>Thu, 31 Oct 2024 05:33:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1520</guid>
       </item>
   </channel>
 </rss>

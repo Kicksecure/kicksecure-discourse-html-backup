@@ -14,9 +14,97 @@ sudo hostname shows
 
 localhost</description>
     
-    <lastBuildDate>Wed, 06 Nov 2024 12:03:56 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 12 Nov 2024 00:39:26 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Crawfish]]></dc:creator>
+        <description><![CDATA[
+            <p>Also Can you have set separate hostnames with Network Namespaces?</p>
+<p><code>ip netns exec thunderbird hostname computer</code></p>
+<p>If this is the case I don’t think hostname is not automatically preserved when the namespace is deleted and recreated so maybe something like a random UUID for each generation could be used. But a UUID would be too long.</p>
+<p><code>cat /proc/sys/kernel/random/uuid | wc -m</code></p>
+<blockquote>
+<p>37 characters</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/8</link>
+        <pubDate>Tue, 12 Nov 2024 00:39:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-8</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Crawfish]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+</blockquote>
+</aside>
+<p>Yes, couldn’t it be possible to configure your system in such a way that your MAC address is spoofed on a Wi-Fi network while using a different MAC address (your real MAC address or a spoofed static MAC address) for an SSH connection to your VPS. Through the use of network namespaces and virtual interfaces. Here’s a general approach how to maybe accomplish this:</p>
+<h3><a name="p-1597-steps-to-spoof-mac-address-on-wi-fi-while-using-a-different-mac-for-ssh-1" class="anchor" href="https://forums.kicksecure.com#p-1597-steps-to-spoof-mac-address-on-wi-fi-while-using-a-different-mac-for-ssh-1"></a>Steps to Spoof MAC Address on Wi-Fi While Using a Different MAC for SSH</h3>
+<ol>
+<li><strong>Create a Network Namespace</strong>:<br>
+You can create a network namespace to isolate the network settings for your SSH connection.</li>
+</ol>
+<pre><code class="lang-auto">ip netns add ssh-ns
+</code></pre>
+<ol start="2">
+<li><strong>Create Virtual Ethernet Interfaces</strong>:<br>
+Create a pair of virtual Ethernet interfaces (veth) to connect the namespace to the main network.</li>
+</ol>
+<pre><code class="lang-auto">ip link add veth0 type veth peer name veth1
+</code></pre>
+<ol start="3">
+<li><strong>Assign Interfaces to the Namespace</strong>:<br>
+Move one of the interfaces into the network namespace.</li>
+</ol>
+<pre><code class="lang-auto"> ip link set veth1 netns ssh-ns
+</code></pre>
+<ol start="4">
+<li><strong>Configure the Interfaces</strong>:<br>
+Assign IP addresses and bring up the interfaces. You can set a different MAC address for the interface in the namespace.</li>
+</ol>
+<pre><code class="lang-auto"># On the main namespace
+ip addr add &lt;your_ip&gt; dev veth0
+ip link set veth0 up
+
+# Inside the namespace
+ip netns exec ssh-ns ip addr add &lt;ssh_ip&gt; dev veth1
+ip netns exec ssh-ns ip link set veth1 up
+ip netns exec ssh-ns ip link set dev veth1 address &lt;static_mac_address&gt;
+</code></pre>
+<ol start="5">
+<li><strong>Spoof Your MAC Address on the Wi-Fi/Ethernet Interfaces</strong>:<br>
+Change the MAC address of your Wi-Fi interface to the desired spoofed MAC address.</li>
+</ol>
+<pre><code class="lang-auto">[device]
+wifi.scan-rand-mac-address=yes
+
+[connection]
+wifi.cloned-mac-address=stable
+ethernet.cloned-mac-address=stable
+connection.stable-id=${CONNECTION}/${BOOT}
+</code></pre>
+<ol start="6">
+<li><strong>SSH into Your VPS</strong>:<br>
+Now, when you want to SSH into your VPS, you can do so from within the network namespace, which will use the static MAC address you set for <code>veth1</code>.</li>
+</ol>
+<pre><code class="lang-auto">ip netns exec ssh-ns ssh user@your_vps_ip
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/7</link>
+        <pubDate>Tue, 12 Nov 2024 00:38:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-7</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
       <item>
         <title>Randomized hostname protocol</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
