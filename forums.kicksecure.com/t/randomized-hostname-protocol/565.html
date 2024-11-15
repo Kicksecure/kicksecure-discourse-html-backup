@@ -849,6 +849,62 @@ Now, when you want to SSH into your VPS, you can do so from within the network n
             </div>
 
           </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Quiksilver'><span itemprop='name'>Quiksilver</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-11-14T21:28:01Z' class='post-time'>
+                    November 14, 2024,  9:28pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-11-14T21:28:01Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Crawfish" data-post="7" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/c/3e96dc/48.png" class="avatar"> Crawfish:</div>
+<blockquote>
+<p>Using a Different MAC for SSH</p>
+</blockquote>
+</aside>
+<p>SSH doesn’t send the devices MAC Address at most it might send the hostname but good info about using network namespaces that might be useful for something in Kicksecure.</p>
+<p>As far as I understand the issue related to</p>
+<blockquote>
+<p>MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic</p>
+</blockquote>
+<p>I believe they are referring to Installing Kicksecure as the OS on VPS server.<br>
+In this case I think Kicksecure should just NOT randomize Ethernet MAC addresses by commenting it out. Reason being most servers are wired in especially VPS, if you look at any server rack they aren’t going to be using wireless as that would create too much cross talk and you wouldn’t get optimized speeds.</p>
+<pre><code class="lang-auto">#ethernet.cloned-mac-address=stable
+</code></pre>
+<p>Also like <a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/crawfish">@Crawfish</a> said</p>
+<aside class="quote no-group" data-username="Crawfish" data-post="7" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/c/3e96dc/48.png" class="avatar"> Crawfish:</div>
+<blockquote>
+<p><code>connection.stable-id=${CONNECTION}/${BOOT}</code></p>
+</blockquote>
+</aside>
+<p>This has to be set if you don’t want Network Manager to leak or revert back to permaddr cause Network Manger will.</p>
+<p>Alternatively you could also set it to set a new mac everytime you reconnect in a session instead.</p>
+<p><code>connection.stable-id=${CONNECTION}/${RANDOM}</code></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
     </div>
 
 

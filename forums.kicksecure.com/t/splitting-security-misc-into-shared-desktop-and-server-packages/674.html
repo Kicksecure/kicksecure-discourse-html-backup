@@ -130,7 +130,7 @@ END custom CSS / JS
 <meta name="twitter:label1" value="Reading time" />
 <meta name="twitter:data1" value="1 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="1 ❤" />
+<meta name="twitter:data2" value="2 ❤" />
 <meta property="article:published_time" content="2024-11-11T06:11:26+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -304,6 +304,84 @@ END custom CSS / JS
 <hr>
 <p>I guess I would tend to keep as much shared as possible. The more remains shared, the less migration work there will be.</p>
 <p>The file per file analysis is a great approach!</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-11-14T03:29:03Z' class='post-time'>
+                    November 14, 2024,  3:29am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-11-14T03:29:03Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group quote-modified" data-username="Patrick" data-post="2" data-topic="674">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<blockquote>
+<ul>
+<li>[!] │ │ │ ├── panic-on-oops.service (shared) (useful on desktop and server, systemd config looks invalid with a conflict between WantedBy and After)</li>
+</ul>
+</blockquote>
+<p>Fixed.</p>
+</blockquote>
+</aside>
+<p>It turns out I was wrong here - the config <em>looked</em> invalid but actually was not. I had mistakenly thought that <code>WantedBy</code> required the wanted service to start before the wanting service. This was false, the <code>systemd.unit</code> manpage states:</p>
+<blockquote>
+<p>Note that requirement dependencies do not influence the order in which services are started or stopped. This has to be configured independently with the <code>After=</code> or <code>Before=</code> options. If unit <code>foo.service</code> pulls in unit <code>bar.service</code> as configured with <code>Wants=</code> and no ordering is configured with <code>After=</code> or <code>Before=</code> , then both units will be started simultaneously and without any delay between them if <code>foo.service</code> is activated.</p>
+</blockquote>
+<p>So having a unit be both <code>WantedBy=multi-user.target</code> and <code>After=multi-user.target</code> is actually valid. Furthermore, removing the <code>After=multi-user.target</code> line has resulted in an error message on boot:</p>
+<pre><code>[ SKIP ] Ordering cycle found, skipping panic-on-oops.service
+</code></pre>
+<p>Adding back <code>After=multi-user.target</code> to <code>/usr/lib/systemd/system/panic-on-oops.service</code> resolves the issue.</p>
+<p>Sorry about the mix-up here.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-11-14T20:45:58Z' class='post-time'>
+                    November 14, 2024,  8:45pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-11-14T20:45:58Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>No worries.</p>
+<p>Fixed by git revert.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
