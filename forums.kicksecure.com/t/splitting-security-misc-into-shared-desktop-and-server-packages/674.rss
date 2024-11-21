@@ -7,9 +7,45 @@
 
 The full table is very large and has very long lines, so rather than pasting it here, I put it in a GitHub gist here: https://gist.github.com/ArrayBolt3/1fef29b2214f27054cd85785530e7f7f</description>
     
-    <lastBuildDate>Wed, 20 Nov 2024 01:14:04 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 20 Nov 2024 13:49:12 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Splitting security-misc into shared, desktop, and server packages</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>I no longer know how important that exception for <code>spice-client-glib-usb-acl-helper</code> is at all. Cannot find how it ended up getting added.</p>
+<p><code>spice-client-glib-usb-acl-helper</code> isn’t installed by default in Kicksecure (or Whonix). Not even inside VMs.</p>
+<p>Therefore, someone who installs it, will actually need it.</p>
+<p>The issue is also that the threat model of permission hardener isn’t well enough defined.</p>
+<p><code>spice-client-glib-usb-acl-helper</code> isn’t installed by default and doesn’t install itself using <code>apt install spice-client-glib-usb-acl-helper</code> by accident either. If malware was able to run <code>apt install spice-client-glib-usb-acl-helper</code>, then there would already be a root compromise and permission hardener couldn’t help anymore either.</p>
+<p>From that perspective, that exception can stay shared for simplicity?</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="674">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Finally. the binary is setuid. Obscure-but-insecure things are where a lot of vulnerabilities are found, like the recent CUPS RCE.</p>
+</blockquote>
+</aside>
+<p>Right.</p>
+<p>That’s why permission hardener disables many historically used SUIDs that are nowadays no longer popular (at least not by Kicksecure (or Whonix) users).</p>
+<p>Some examples include:</p>
+<ul>
+<li>write SUID, wall SUID</li>
+<li>passwd SUID (using it with sudo instead, multi-users desktops are not popular where this is required)</li>
+<li>su (using sudo instead, maybe <a href="https://forums.whonix.org/t/replace-sudo-with-doas/17482" class="inline-onebox">Replace sudo with doas - Development - Whonix Forum</a>)</li>
+</ul>
+<p>These are well suitable for permission hardener, since these are installed by default and hard (infeasible? / impossible?) to not have installed by default.</p>
+<p>This is the main motivation for permission hardener. To disable SUIDs where it’s not strictly required for most users, yet having these binaries around is “mandatory”.</p>
+<p>However, for packages such as <code>spice-client-glib-usb-acl-helper</code> maybe, the SUID functionality might be specifically wanted by the user?</p>
+          <p><a href="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674/6</link>
+        <pubDate>Wed, 20 Nov 2024 13:49:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-674-6</guid>
+        <source url="https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674.rss">Splitting security-misc into shared, desktop, and server packages</source>
+      </item>
       <item>
         <title>Splitting security-misc into shared, desktop, and server packages</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
