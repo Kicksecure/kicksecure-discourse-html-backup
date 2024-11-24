@@ -5,6 +5,242 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="724">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Not to be confused:</p>
+<ul>
+<li>A) dracut recovery shell [This topic]</li>
+<li>B) Linux recovery mode (Single-User Mode) [somewhat related, but not the same]</li>
+</ul>
+</blockquote>
+</aside>
+<p>Right, that’s what I thought. Then yeah, I think this change would make sense.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="724">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>If protecting all GRUB bootloader boot menu entries, is there still a point in disabling dracut recovery shell?</p>
+</blockquote>
+</aside>
+<p>I guess it depends. Theoretically an attacker could try to gain a root shell on a system by fooling some privileged component of the system into damaging boot files, then reboot and have a root shell. That would let them turn a data corruption vulnerability into a privilege escalation one. Blocking the Dracut recovery shell prevents that - the attacker can use the data corruption vuln to render the system unbootable, but can’t use that to then gain root access. If the system under attack was a physical system, this wouldn’t be that important to defend against since the user is probably using FDE which would prevent this sort of attack too, but if the system under attack if an unencrypted VM hosted on a server, then this would be a reasonable attack to fear and I can see this being a good mitigation for it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724#post_4</link>
+        <pubDate>Sat, 23 Nov 2024 23:54:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1683</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>It might help to clarify under what situations a bootloader password provides a meaningful level of additional security. From my standpoint, you have to have at least a bootloader password, a root password, and a BIOS password for it to be useful at all (the root password keeps you from gaining privileges when powered on, the bootloader password keeps you from gaining privileges by rebooting and entering recovery mode, and the BIOS password keeps you from gaining privileges by rebooting into an OS on an external drive). At that point you have to take the drive out of the victim computer in order to attack it easily.</p>
+<p>With FDE, the bootloader password is only able to help prevent an attacker from easily modifying the contents of the disk blindly, and it still needs to be combined with a BIOS password to do that effectively.</p>
+<p>I don’t see a whole lot of value in enabling a bootup password. That should be FDE’s job. On systems with soldered storage, a bootup password might complicate attacks, but FDE can do the same thing with all systems, even if those systems use non-soldered storage like a SATA or NVMe drive. I do see value in pairing a BIOS password with a bootloader password that prevents config modifications or boot menu access though, since the attacker now at least has to remove the storage drive from the victim system in order to tamper with the disk contents. The memory issue you bring up is helpful, but as long as the bootloader and admin passwords are the same, that should help avoid memory problems.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="3" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Having a bootloader password makes little sense if the user account isn’t password-protected and passwordless sudo is available.</p>
+</blockquote>
+</aside>
+<p>I don’t see the strong connection between those.</p>
+</blockquote>
+</aside>
+<p>If you have passwordless sudo, you can just <code>sudo -i</code> and then remove the bootloader password or change bootloader config as you see fit. Granted, FDE would protect against that.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Bootloader password + FDE + user auto login might make sense?</p>
+</blockquote>
+</aside>
+<p>If paired with a BIOS password, I think so.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="4" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it probably makes sense for the bootloader and admin user passwords to be the same.</p>
+</blockquote>
+</aside>
+<p>In theory nice, but when changing 1 password (such as the Linux user account admin password), coudln’t the GRUB bootloader (root) password get desync? That could be confusing.</p>
+</blockquote>
+</aside>
+<p>Yeah, that’s a decent point. If our app was the canonical “how to change your password” app in Kicksecure, that would help prevent that problem, but then there’s probably a feature in XFCE that will change only just the user password, and of course <code>passwd</code> exists. Not sure how to deal with that…</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_5</link>
+        <pubDate>Sat, 23 Nov 2024 23:46:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1682</guid>
+      </item>
+      <item>
+        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Not to be confused:</p>
+<ul>
+<li>A) dracut recovery shell [This topic]</li>
+<li>B) Linux recovery mode (Single-User Mode) [somewhat related, but not the same]</li>
+</ul>
+<hr>
+<p>This topic overlaps very much with <a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723" class="inline-onebox">Harden GRUB bootloader using bootloader password</a>.</p>
+<p>If protecting all GRUB bootloader boot menu entries, is there still a point in disabling dracut recovery shell?</p>
+<p>Specifically, since there is a Linux recovery mode boot menu entry anyhow.</p>
+<p>A theoretic argument could be made “if an attacker can bypass GRUB passwords”, but these minor <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" class="inline-onebox">Protection against Physical Attacks</a> measures help against weak adversaries. An advanced adversary that could in theory bypass the bootloader password, would probably bother with neither GRUB passwords, dracut recovery shell nor Linux recovery mode but instead use <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Malicious_Hardware_Modifications">Malicious Hardware Modifications</a>, <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Side_Channel_Attacks">Side Channel Attacks</a> or similar.</p>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Recovery#Recovery_Mode">Recovery Mode</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Root#Recovery_Mode">Root Login using Recovery Mode</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Root#Passwordless_Recovery_Mode_Security_Discussion">Passwordless Recovery Mode Security Discussion</a></li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724#post_3</link>
+        <pubDate>Sat, 23 Nov 2024 09:09:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1680</guid>
+      </item>
+      <item>
+        <title>Morphing LMDE 6 to Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732267825" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" target="_blank" rel="noopener" title="02:13PM - 22 October 2024">Kicksecure – 22 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/436;"><img src="https://www.kicksecure.com/w/images/1/1a/Usesearchengine.jpg?version=5e9554ee776455694f21fc054f14be65" class="thumbnail" width="640" height="436"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" target="_blank" rel="noopener">Utilize Search Engines, Documentation and AI</a></h3>
+
+  <p>Avoid basic questions. Effective use of search engines and AI (Artificial Intelligence). Utilizing extensive Kicksecure documentation.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote" data-post="1" data-topic="46">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/h/8491ac/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46">Kicksecure inside LMDE 5?</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    Hi! 
+Anyone tried to install Kicksecure on top of Linux Mint Debian Edition? 
+The recently released version of LMDE 5 is based on Debian 11 Bullseye. 
+Is there a chance it will work properly?
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/morphing-lmde-6-to-kicksecure/722#post_2</link>
+        <pubDate>Sat, 23 Nov 2024 09:04:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1678</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Should the GRUB bootloader, if unavailable:</p>
+<ul>
+<li>A) prevent all boots?; or</li>
+<li>B) prevent only editing GRUB configuration (kernel parameters) and some boot menu entries such as recovery mode?</li>
+<li>C) the user should decide that (either by manually setting that up and/or using our maybe yet to be invented tool)?</li>
+</ul>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>So perhaps the tool that does this should set user and bootloader passwords?</p>
+</blockquote>
+</aside>
+<p>Just for everyone else reading (as you probably know that)… As per Linux / GRUB default - unspecific to Kicksecure - technically there are many different passwords available… At least…</p>
+<ul>
+<li>A) Linux user account <code>user</code> password</li>
+<li>B) Linux user account <code>admin</code> password</li>
+<li>C) Linux user account <code>root</code> password</li>
+<li>D) GRUB bootloader <code>user</code> password</li>
+<li>E) GRUB bootloader <code>root</code> password</li>
+</ul>
+<p>These are all independent, stored in different “places”.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it probably makes sense for the bootloader and admin user passwords to be the same.</p>
+</blockquote>
+</aside>
+<p>In theory nice, but when changing 1 password (such as the Linux user account admin password), coudln’t the GRUB bootloader (root) password get desync? That could be confusing.</p>
+<p>In theory, always asking for a bootloader password might make most sense. This lowers the chance that the user will forget the password when needed. (If never asked for GRUB user password but then 1 year later being asked for GRUB root password could be an issue.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_4</link>
+        <pubDate>Sat, 23 Nov 2024 08:11:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Having a bootloader password makes little sense if the user account isn’t password-protected and passwordless sudo is available.</p>
+</blockquote>
+</aside>
+<p>I don’t see the strong connection between those.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Having a bootloader password makes little sense if the user account isn’t password-protected and passwordless sudo is available.</p>
+</blockquote>
+</aside>
+<p>Bootloader password + FDE + user auto login might make sense?</p>
+<p>Because the bootloader password is a minor <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" class="inline-onebox">Protection against Physical Attacks</a>.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>do we want this to be separate from the user password?</p>
+</blockquote>
+</aside>
+<p>I guess an argument could be made why it should be different but then “100” different passwords is bad usability. Those who insist on different passwords for everything should be able to set them. But if we provide a tool to easily set up a GRUB password, using the same password as user <code>user</code> or <code>admin</code> (?) might make sense.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Lastly, for most users, it probably makes sense for the bootloader and admin user passwords to be the same.</p>
+</blockquote>
+</aside>
+<p>Right, probably best if same by default.</p>
+<p>The difference is only something we should document.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_3</link>
+        <pubDate>Sat, 23 Nov 2024 07:59:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1676</guid>
+      </item>
+      <item>
         <title>Harden GRUB bootloader using bootloader password</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>It may be worth asking, do we want this to be separate from the user password? Having a bootloader password makes little sense if the user account isn’t password-protected and passwordless sudo is available. Similarly, for unencrypted systems, having a user password isn’t very helpful if the bootloader has no password set. Lastly, for most users, it probably makes sense for the bootloader and admin user passwords to be the same. So perhaps the tool that does this should set user and bootloader passwords?</p> ]]></description>
@@ -72,7 +308,15 @@
         <dc:creator><![CDATA[@LMDE]]></dc:creator>
         <description><![CDATA[ <p>HI all,<br>
 I realise morphing Linux Mint Debian edition to Kicksecure is unsupported, but I’m interested in learning from the experience of anyone who has done this. One thing I’m wondering is how updates will work after morphing. Will I continue to get updates from Linux Mint? Are there any big problems you’ve encountered?<br>
-Thanks</p> ]]></description>
+Thanks</p>
+<p>Edit:<br>
+Hi Patrick,<br>
+Thanks for replying. Yes, I’m aware of those links/options. That’s why I specifically stated I know it’s unsupported. I was hoping for some feedback and discussion from other users, not support from the team.</p>
+<p>If such discussions are not allowed here, can you direct me to somewhere they are allowed?</p>
+<p>I’ve searched and there are very few discussions of Kicksecure + Linux Mint elsewhere on the web. I’m not surprised as it’s increasingly difficult to ask questions anywhere these days.</p>
+<p>I’ve asked a similar question on the Linux Mint forums and they also closed the topic, saying it wasnt relevant to Mint and I should ask the question on Kicksecure forums. The rules for posting on Reddit forums are labyrinthine and arbitrary at the same time.</p>
+<p>So, if such a discussion can’t be allowed here either, where are Kicksecure users supposed to learn from each other? Please consider reopening this topic or else consider adding a forum section where users are able to discuss things among themselves without expecting involvement from the Kicksecure team. This would be another valuable learning resource.<br>
+Regards</p> ]]></description>
         <link>https://forums.kicksecure.com/t/morphing-lmde-6-to-kicksecure/722#post_1</link>
         <pubDate>Fri, 22 Nov 2024 16:07:02 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1670</guid>
@@ -1246,358 +1490,6 @@ Untested.
         <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development/679#post_1</link>
         <pubDate>Mon, 11 Nov 2024 20:15:39 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1593</guid>
-      </item>
-      <item>
-        <title>Kernel-hardening-checker</title>
-        <dc:creator><![CDATA[@SlowMoe]]></dc:creator>
-        <description><![CDATA[ <p>I try to install kernel-hardening-checker and I get this: What to do as I simply used the instructions?</p>
-<p>pip install git+https://github.com/a13xp0p0v/kernel-hardening-checker<br>
-error: externally-managed-environment</p>
-<p>× This environment is externally managed<br>
-╰─&gt; To install Python packages system-wide, try apt install<br>
-python3-xyz, where xyz is the package you are trying to<br>
-install.</p>
-<pre><code>If you wish to install a non-Debian-packaged Python package,
-create a virtual environment using python3 -m venv path/to/venv.
-Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
-sure you have python3-full installed.
-
-If you wish to install a non-Debian packaged Python application,
-it may be easiest to use pipx install xyz, which will manage a
-virtual environment for you. Make sure you have pipx installed.
-
-See /usr/share/doc/python3.11/README.venv for more information.
-</code></pre>
-<p>note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.<br>
-hint: See PEP 668 for the detailed specification.<br>
-zsh: exit 1     pip install git+https://github.com/a13xp0p0v/kernel-hardening-checker</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kernel-hardening-checker/678#post_1</link>
-        <pubDate>Mon, 11 Nov 2024 18:32:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1592</guid>
-      </item>
-      <item>
-        <title>Enable and use zRAM instead for swap</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Until we decide the future of swap in Kicksecure…</p>
-<p>Let’s break support for hibernation by default. Then swap-file-creator could also create a smaller swap file by default.</p>
-<p>Related:</p>
-<ul>
-<li><a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a></li>
-<li>
-<pre><code>calculate-swap-size
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>Usage: calculate-swap-size [RAM in MB] [Hibernation (yes/no)]</p>
-</blockquote>
-<p>Examples:</p>
-<ul>
-<li>
-<pre><code>calculate-swap-size 4096 yes
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>Calculating swap size…<br>
-RAM in MB: 4096<br>
-Hibernation considered: yes<br>
-RAM in GB (approximated for calculation): 4<br>
-RAM &gt; 2GB and &lt;= 8GB with hibernation: Swap size is 2 times the RAM<br>
-Calculated Swap Size in MB: 8192</p>
-</blockquote>
-<ul>
-<li>
-<pre><code>calculate-swap-size 4096 no
-</code></pre>
-</li>
-</ul>
-<blockquote>
-<p>Calculating swap size…<br>
-RAM in MB: 4096<br>
-Hibernation considered: no<br>
-RAM in GB (approximated for calculation): 4<br>
-RAM &gt; 2GB and &lt;= 8GB without hibernation: Swap size equals RAM<br>
-Calculated Swap Size in MB: 4096</p>
-</blockquote>
-<p>A smaller swap file by default is a small progress.</p>
-<p>Once decided what to do about zwap / zram, we might even deprecate the current default file based swap.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_9</link>
-        <pubDate>Mon, 11 Nov 2024 15:38:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1589</guid>
-      </item>
-      <item>
-        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Very helpful. This was the foundation for <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> who succeeded to diagnose the issue and translate it into a upstream calamares bug report.</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2397">
-  <header class="source">
-
-      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">github.com/calamares/calamares</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">Allow distros to restrict what filesystems can be used in manual partitioning</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-10" data-time="23:42:09" data-timezone="UTC">11:42PM - 10 Nov 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
-Calamares cu<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">rrently allows one to pick from a large number of different filesystems when setting up a system with manual partitioning. For the most part this is good, however because not all filesystems work well with all distros, it is possible for the user to shoot themselves in the foot by picking a filesystem that won't work. For instance, currently nothing in Calamares prevents the user from attempting to install a Debian-based distro like Kicksecure onto a FAT32-formatted root partition.
-
-![Screenshot_20241110_173418](https://github.com/user-attachments/assets/16f77507-654b-4754-afcc-e99b2950f4f7)
-
-Obviously this won't work in the long run, however the installation actually tries to proceed and gets quite far. The error message that the installation eventually fails with is less-than-obvious:
-
-![Screenshot_20241110_173630](https://github.com/user-attachments/assets/e3dcd4f7-6fa1-4e04-bc64-69951644ef8a)
-
-**Describe the solution you'd like**
-I think the best solution here would be to allow distros to specify what filesystems can be used at what mountpoints. Ideally, the manual partitioning screen would prevent the user from selecting a "bad" filesystem, however it might be sufficient to simply warn them that what they're doing is likely to fail in weird ways if they continue. Calamares could use a default "deny-map" (or whatever you want to call it) that would prevent some common blunders (such as using a non-UNIX filesystem for the root filesystem), but the map would be fully configurable by the distro developer.
-
-**Describe alternatives you've considered**
-The simplest solution would be to simply prohibit using fat32 as a filesystem for the root filesystem, however this doesn't seem like the right decision to make since in theory some distros might actually want to support a fat32 root filesystem.
-
-**Additional context**
-The issue mentioned above has tripped up at least one user in the wild: https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652#post_7</link>
-        <pubDate>Mon, 11 Nov 2024 15:10:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1588</guid>
-      </item>
-      <item>
-        <title>Splitting security-misc into shared, desktop, and server packages</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I’d like to address the bugs found first, as that seems easy and to simplify this discussion.</p>
-<blockquote>
-<ul>
-<li>[!] │   │   ├── pkexec.security-misc                                                              (shared)  (useful on desktop and server, however lxqt-sudo won’t be present on a server, but pkexec may be used on a server. Resolve by allowing the use of sudo.)</li>
-</ul>
-</blockquote>
-<p>Fixed by deleting this legacy leftover file.</p>
-<blockquote>
-<ul>
-<li>[!] │   │       ├── disable-kernel-module-loading                                                 (shared)  (useful on desktop and server, BUT SOMEHOW ISN’T SET EXECUTABLE???)</li>
-</ul>
-</blockquote>
-<p>Fixed.</p>
-<pre><code class="lang-auto">* [!] │   ├── dkms                                                                                  (none)    (see files below)
-* [!] │   │   └── framework.conf.d                                                                  (none)    (see files below)
-* [!] │   │       └── 30_security-misc.conf                                                         (none)    (should be moved out of security-isc)
-</code></pre>
-<blockquote>
-<ul>
-<li>[!] │   │       │   ├── panic-on-oops.service                                                     (shared)  (useful on desktop and server, systemd config looks invalid with a conflict between WantedBy and After)</li>
-</ul>
-</blockquote>
-<p>Fixed.</p>
-<blockquote>
-<p><code>* [x] │   │       ├── install matroxfb_bases /usr/bin/disabled-framebuffer-by-security-misc         (shared)  (ancient, obsolete, TYPO'D - THIS SHOULD BE BASE, NOT BASES)</code></p>
-</blockquote>
-<p>Fixed.</p>
-<hr>
-<p>All bugs should have been addressed.</p>
-<hr>
-<p>Server? Could also be a home server with a GUI?</p>
-<hr>
-<blockquote>
-<ul>
-<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   │   ├── <code>glib-compile-schemas /usr/share/glib-2.0/schemas || true</code>                        (desktop) (glib-compile-schemas is of no use on a server)</li>
-</ul>
-</blockquote>
-<p>No use but also no harm? So just keep as is for simplicity? Also a remote server might have a GUI.</p>
-<blockquote>
-<ul>
-<li><span class="chcklst-box checked fa fa-check-square-o fa-fw"></span> │   ├── security-misc.gconf-defaults                                                          (desktop) (nautilus won’t be present on a server)</li>
-</ul>
-</blockquote>
-<p>Similar as above. Doesn’t harm and useful if a GUI is used on the server.</p>
-<blockquote>
-<p><code>* [x] │   ├── bluetooth                                                                             (desktop) (all subfiles are desktop)</code><br>
-<code>* [x] │   │   └── 30_security-misc.conf                                                             (desktop) (bluez should only be present on desktops)</code></p>
-</blockquote>
-<p>But if on a server, this config does not harm, even useful?</p>
-<blockquote>
-<p><code>* [x] │   │   ├── 25_default_whitelist_hardened_malloc.conf                                         (server)  (desktops don't use hardened-malloc)</code></p>
-</blockquote>
-<p>We actually did but <a href="https://www.kicksecure.com/wiki/Hardened_Malloc" class="inline-onebox">Hardened Malloc</a> is nowadays deprecated in Kicksecure.</p>
-<blockquote>
-<p><code>* [x] │   │   ├── 25_default_whitelist_postfix.conf                                                 (server)  (desktops shouldn't run postfix)</code></p>
-</blockquote>
-<p>The primary defense for desktops would be not installing postfix then? But then postfix might be installed thorugh a <code>Depends:</code>, or <code>Recommends:</code>. In that case, indeed, best if not whitelisted.</p>
-<blockquote>
-<p><code>* [x] │   │   ├── 25_default_whitelist_spice.conf                                                   (desktop) (only desktops need USB passthrough with SPICE)</code></p>
-</blockquote>
-<p>SPICE over network to server?</p>
-<hr>
-<p>I guess I would tend to keep as much shared as possible. The more remains shared, the less migration work there will be.</p>
-<p>The file per file analysis is a great approach!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_2</link>
-        <pubDate>Mon, 11 Nov 2024 14:20:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1586</guid>
-      </item>
-      <item>
-        <title>Splitting security-misc into shared, desktop, and server packages</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Read through the discussion at <a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox" rel="noopener nofollow ugc">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a>, and created a table of (almost) all of the files and directories in security-misc, along with what subpackage they should go into. The vast majority of the package looks like it can remain shared. Some bugs were also potentially uncovered while reviewing this.</p>
-<p>The full table is very large and has very long lines, so rather than pasting it here, I put it in a GitHub gist here: <a href="https://gist.github.com/ArrayBolt3/1fef29b2214f27054cd85785530e7f7f" class="inline-onebox" rel="noopener nofollow ugc">Suggested way to split the security-misc package into shared, desktop, and server packages. · GitHub</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_1</link>
-        <pubDate>Mon, 11 Nov 2024 06:11:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1585</guid>
-      </item>
-      <item>
-        <title>ISO - Development</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubpullrequest" data-onebox-src="https://github.com/Kicksecure/derivative-maker/pull/2">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/derivative-maker/pull/2" target="_blank" rel="noopener">github.com/Kicksecure/derivative-maker</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-
-
-
-    <div class="github-icon-container" title="Pull Request">
-      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
-    </div>
-
-  <div class="github-info-container">
-
-
-
-      <h4>
-        <a href="https://github.com/Kicksecure/derivative-maker/pull/2" target="_blank" rel="noopener">Use live-build to build the Kicksecure ISO by default</a>
-      </h4>
-
-    <div class="branches">
-      <code>Kicksecure:master</code> ← <code>ArrayBolt3:arraybolt3/live-build</code>
-    </div>
-
-      <div class="github-info">
-        <div class="date">
-          opened <span class="discourse-local-date" data-format="ll" data-date="2024-10-28" data-time="01:46:11" data-timezone="UTC">01:46AM - 28 Oct 24 UTC</span>
-        </div>
-
-        <div class="user">
-          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-            ArrayBolt3
-          </a>
-        </div>
-
-        <div class="lines" title="1 commits changed 28 files with 1240 additions and 0 deletions">
-          <a href="https://github.com/Kicksecure/derivative-maker/pull/2/files" target="_blank" rel="noopener">
-            <span class="added">+1240</span>
-            <span class="removed">-0</span>
-          </a>
-        </div>
-      </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">This pull request adds live-build support to derivative-maker. At present it is <span class="show-more-container"><a href="https://github.com/Kicksecure/derivative-maker/pull/2" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">designed and enabled for the Kicksecure ISO only. The ISO features a functional live mode, Calamares installer, and debian-installer.
-
-Some notes:
-
-* Both normal ISO builds and `--remote-derivative-repository` ISO builds work.
-* Whonix and Kicksecure VM builds still work. I have **NOT** tested derivative-makers various other build features beyond this!
-* debian-installer's basic functionality works, I have not thoroughly tested every edge case though, nor have I tested (encrypted) LVM or manual partitioning. debian-installer is very powerful, complicated, and isn't really designed to work the way Kicksecure works, so the included preseed file is intended to make most of the "scary" options vanish and leave the user with only "safe" options, however the end-user can override this using GRUB options if they so choose.
-* **Three Kicksecure packages required changes in order for this to work.** All three of these must be updated before merging this, or there will be problems. The packages (and links to my forks of them) are:
-  * live-config-dist (https://github.com/ArrayBolt3/live-config-dist/tree/arraybolt3/live-build)
-  * dist-base-files (https://github.com/ArrayBolt3/dist-base-files/tree/arraybolt3/live-build)
-  * anon-apt-sources-list (https://github.com/ArrayBolt3/anon-apt-sources-list/tree/arraybolt3/live-build)
-* **A fork of live-build must be used in order to build this, as it makes use of several experimental features I wrote for this purpose.** The fork can be seen here: https://salsa.debian.org/ArrayBolt3/live-build/-/tree/arraybolt3/lb-dracut?ref_type=heads In particular, this code uses local repository support, mmdebstrap support, and `apt update`-specific options, all of which are not yet merged upstream.
-
-## Changes
-
-* build-steps.d/2800_create-lb-iso
-  * This is the ISO creation script used when live-build is enabled. Due to live-build's design, this script handles bootstrapping, chroot installation, and ISO packaging all at the same time. It essentially generates a live-build configuration tree dynamically at runtime, then runs live-build stages on this configuration tree to create the ISO. Due to the complexity of Kicksecure's chroot installation process, the script does quite a bit of "fiddling" to make sure the ISO is properly configured.
-* build-steps.d/3200_create-raw-image
-* build-steps.d/3500_install-packages
-* build-steps.d/4300_run-chroot-scripts-post-d
-* build-steps.d/4400_zerofree-raw
-* build-steps.d/4700_convert-to-iso
-  * Added checks so that these don't run when building a Kicksecure ISO.
-* live-build-data/d-i-branding/*
-  * Kicksecure branding for debian-installer.
-* live-build-data/d-i-theme/gtkrc
-  * Theming for debian-installer. Without this, the default "emerald" color scheme is used which really does not look right with Kicksecure's blue logo.
-* live-build-data/grub-config/*
-  * GRUB menu configuration for the ISO. Provides live mode, expert installation modes (for debian-installer), and the ability to access UEFI firmware settings if applicable.
-* live-build-data/live-build-config/*
-  * Static configuration files for live-build. 2800_create-lb-iso copies these into the appropriate locations at runtime.
-* live-build-data/preseed.cfg
-  * Configuration file for debian-installer, so that the installation process actually works right. This ends up embedded into the ISO's initramfs files so also cannot be shipped as a package.
-* packages/kicksecure/developer-meta-files
-  * Latest commits from developer-meta-files, updated by accident. Can easily revert, probably would be better to in order to avoid having unrelated changes mixed up.
-
-## Mandatory Checklist
-
-- [x] Legal agreements accepted. By contributing to this organisation, you acknowledge you have read, understood, and agree to be bound by these these agreements:
-
-[Terms of Service](https://www.kicksecure.com/wiki/Terms_of_Service), [Privacy Policy](https://www.kicksecure.com/wiki/Privacy_Policy), [Cookie Policy](https://www.kicksecure.com/wiki/Cookie_Policy), [E-Sign Consent](https://www.kicksecure.com/wiki/E-Sign_Consent), [DMCA](https://www.kicksecure.com/wiki/DMCA), [Imprint](https://www.kicksecure.com/wiki/Imprint)
-
-## Optional Checklist
-The following items are optional but might be requested in certain cases.
-
-- [x] I have tested it locally
-- [x] I have reviewed and updated any documentation if relevant
-- [x] I am providing new code and test(s) for it
-
-Fixes: https://www.kicksecure.com/wiki/Dev/todo#ISO_-_port_to_live-build</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-development/371#post_8</link>
-        <pubDate>Sun, 10 Nov 2024 12:25:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1584</guid>
       </item>
   </channel>
 </rss>

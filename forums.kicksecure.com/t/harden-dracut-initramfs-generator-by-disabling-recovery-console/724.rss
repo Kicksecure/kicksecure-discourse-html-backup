@@ -13,9 +13,69 @@ Should set kernel parameters:
 
 As per https://serverfault.com/questions/554853/how-can-i-secure-the-dracut-shell?</description>
     
-    <lastBuildDate>Fri, 22 Nov 2024 19:28:04 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 23 Nov 2024 23:54:07 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="724">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Not to be confused:</p>
+<ul>
+<li>A) dracut recovery shell [This topic]</li>
+<li>B) Linux recovery mode (Single-User Mode) [somewhat related, but not the same]</li>
+</ul>
+</blockquote>
+</aside>
+<p>Right, that’s what I thought. Then yeah, I think this change would make sense.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="724">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>If protecting all GRUB bootloader boot menu entries, is there still a point in disabling dracut recovery shell?</p>
+</blockquote>
+</aside>
+<p>I guess it depends. Theoretically an attacker could try to gain a root shell on a system by fooling some privileged component of the system into damaging boot files, then reboot and have a root shell. That would let them turn a data corruption vulnerability into a privilege escalation one. Blocking the Dracut recovery shell prevents that - the attacker can use the data corruption vuln to render the system unbootable, but can’t use that to then gain root access. If the system under attack was a physical system, this wouldn’t be that important to defend against since the user is probably using FDE which would prevent this sort of attack too, but if the system under attack if an unencrypted VM hosted on a server, then this would be a reasonable attack to fear and I can see this being a good mitigation for it.</p>
+          <p><a href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/4</link>
+        <pubDate>Sat, 23 Nov 2024 23:54:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-724-4</guid>
+        <source url="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724.rss">Harden DRACUT initramfs-generator by disabling Recovery Console?</source>
+      </item>
+      <item>
+        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Not to be confused:</p>
+<ul>
+<li>A) dracut recovery shell [This topic]</li>
+<li>B) Linux recovery mode (Single-User Mode) [somewhat related, but not the same]</li>
+</ul>
+<hr>
+<p>This topic overlaps very much with <a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723" class="inline-onebox">Harden GRUB bootloader using bootloader password</a>.</p>
+<p>If protecting all GRUB bootloader boot menu entries, is there still a point in disabling dracut recovery shell?</p>
+<p>Specifically, since there is a Linux recovery mode boot menu entry anyhow.</p>
+<p>A theoretic argument could be made “if an attacker can bypass GRUB passwords”, but these minor <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" class="inline-onebox">Protection against Physical Attacks</a> measures help against weak adversaries. An advanced adversary that could in theory bypass the bootloader password, would probably bother with neither GRUB passwords, dracut recovery shell nor Linux recovery mode but instead use <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Malicious_Hardware_Modifications">Malicious Hardware Modifications</a>, <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Side_Channel_Attacks">Side Channel Attacks</a> or similar.</p>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Recovery#Recovery_Mode">Recovery Mode</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Root#Recovery_Mode">Root Login using Recovery Mode</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Root#Passwordless_Recovery_Mode_Security_Discussion">Passwordless Recovery Mode Security Discussion</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/3</link>
+        <pubDate>Sat, 23 Nov 2024 09:09:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-724-3</guid>
+        <source url="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724.rss">Harden DRACUT initramfs-generator by disabling Recovery Console?</source>
+      </item>
       <item>
         <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
