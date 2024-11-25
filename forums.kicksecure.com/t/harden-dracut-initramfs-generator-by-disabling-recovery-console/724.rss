@@ -13,9 +13,28 @@ Should set kernel parameters:
 
 As per https://serverfault.com/questions/554853/how-can-i-secure-the-dracut-shell?</description>
     
-    <lastBuildDate>Sat, 23 Nov 2024 23:54:07 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 Nov 2024 15:13:01 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Right. So similar to <a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/6" class="inline-onebox">Harden GRUB bootloader using bootloader password - #6 by Patrick</a> there could be a corporate setup use case.</p>
+<p>A malicious employee could manage to corrupt some system files to then get a dracut recovery shell.</p>
+<p>Or the complex VM related attack you’ve described.</p>
+<p>We could set <code>rd.shell=0 rd.emergency=halt</code> in security-misc. (And then undo the setting in debug-misc, if not already the case.)</p>
+<p>But we would only set it for <code>GRUB_CMDLINE_LINUX_DEFAULT</code> (default boot entry) or <code>GRUB_CMDLINE_LINUX</code> (all boot entries, including recovery boot entry)?</p>
+<p>The kernel parameters <code>rd.shell=0 rd.emergency=halt</code> can be modified or unset from GRUB boot menu. But those who worry about that, can either set a BIOS password and/or a bootloader password, depending on their threat model.</p>
+<p>Setting it for default (non-recovery) boot menu entries might makes sense. Because those who want to protect Linux recovery mode boot entries, need to set a GRUB root password anyhow.</p>
+<p>Another related solution: <a href="https://forums.kicksecure.com/t/remove-linux-recovery-mode-boot-option-from-default-grub-boot-menu/727" class="inline-onebox">Remove Linux recovery mode boot option from default GRUB boot menu</a></p>
+          <p><a href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724/5</link>
+        <pubDate>Sun, 24 Nov 2024 15:13:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-724-5</guid>
+        <source url="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724.rss">Harden DRACUT initramfs-generator by disabling Recovery Console?</source>
+      </item>
       <item>
         <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>

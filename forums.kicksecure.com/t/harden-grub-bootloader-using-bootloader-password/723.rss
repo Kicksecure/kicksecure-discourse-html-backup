@@ -11,9 +11,161 @@ There is `grub2-setpassword` but unavailable in Debian.
 
 https://www.gnu.org/software/grub/manual/grub/html_node/Authentication-and-authorisation.html</description>
     
-    <lastBuildDate>Sat, 23 Nov 2024 23:46:18 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 24 Nov 2024 15:38:28 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I think I see where I’m misunderstanding - I’m thinking of using BIOS and bootloader passwords specifically for preventing access to advanced configuration settings, i.e. the system can be <em>booted</em> without either password, but dropping to a GRUB shell or booting from an external drive using the BIOS should require one of the system passwords. In this context the passwords are only useful for preventing unauthorized root access and denying the ability to tamper with the system’s storage without removing the internal drive. Thus ability to gain root access on an unencrypted system has been the threat I’ve been considering most strongly. I think you’re thinking about these passwords being used to prevent even bootup, such that the system is essentially bricked unless you possess both BIOS and bootloader passwords. This way the passwords are used not just to prevent unauthorized root, but as a form of authentication to even use the system. We should decide on which one we’re discussing so that we’re both talking about the same thing.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Doesn’t a BIOS password alone already prevent all of that and requires taking out the drive or some other physical attack?</p>
+</blockquote>
+</aside>
+<p>If the BIOS password only prevents getting into BIOS options, no, it does not. One simply has to drop to a GRUB console (trivially doable on many EFI systems by repeatedly pressing <kbd>Esc</kbd> during bootup) and they can then boot any arbitrary OS by hand, including one provided on an external USB drive. Similarly, if you have a bootloader password but not BIOS password, you can trivially bypass it by booting from an external drive using the BIOS’s boot functionality. Only password-protecting both seriously complicates attacks that involve booting from an external drive.</p>
+<p>If the BIOS password prevents booting the machine too, then yes, it does do all of that already. But in that situation a bootloader password isn’t all that useful, except as defense-in-depth against a relatively unskilled adversary. (Granted, most adversaries most of our users encounter will be relatively unskilled, and I can definitely imagine someone who can figure out a BIOS password reset via an article from the Internet but who can’t figure out how to get past a bootloader password.)</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Then surely the question will come up “in which cases it does not suffice?” The answer is most likely, in complex cases which are not applicable to the reader, because if these were applicable, the question would not come up. One case that can be constructed is some sort of corporate setup.</p>
+</blockquote>
+</aside>
+<p>I think this is applicable to everyday users too though, whether you’re requiring passwords for bootup or for config access. Depending on the difficulty of opening a device, being forced to take the drive out of the machine to modify it is a very significant hurdle that an attacker may not have the opportunity to carry out (i.e. someone who gains physical access to a machine but only for a very short period of time, and who has to leave the machine more-or-less intact once their attack is complete, this is basically the classic evil maid scenario). Some machines even have soldered internal storage, especially cheap, lightweight devices like “HP Stream” and “onn.” machines - this makes this class of attack nearly impossible without access to advanced, expensive equipment for desoldering the storage chips and resoldering them onto something that allows reading and writing them.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>A BIOS password alone will stop most non-technical attackers. More technical attackers who steal the hard drive would be stopped by FDE. That’s why BIOS password + FDE always seemed to be as the most important passwords.</p>
+</blockquote>
+</aside>
+<p>The bootloader password is still valuable though, even against a non-technical attacker, if the passwords are being used to prevent bootup entirely. Many machines have a manufacturer-provided backdoor for resetting BIOS passwords, and tools for exploiting these backdoors are publicly available on the open Internet (<a href="https://bios-pw.org/" rel="noopener nofollow ugc">https://bios-pw.org/</a> is a good example). For machines such as this, a non-technical attacker can probably bypass the BIOS password easily enough, but then they have the bootloader password to contend with. Obviously at this point an attacker with slightly more skill would insert a live USB into the victim machine and boot from that, but there are plenty of attackers who lack that skill, especially in domestic abuse situations, so this still seems valuable to me, even if the benefits are limited at best.</p>
+<blockquote>
+<p>But a reboot will go through BIOS or are you referring to kexec? (I don’t know if GRUB can be load somehow using kexec.)</p>
+</blockquote>
+<p>I meant a reboot that goes through BIOS. Assuming the system is not password-protected, you can easily gain a root shell on Kicksecure without the root or user passwords by following <a href="https://www.kicksecure.com/wiki/Recovery#Recovery_Mode" class="inline-onebox" rel="noopener nofollow ugc">Recovery - Kicksecure</a>. An FDE password prevents this though.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>In conclusion, the bootloader password seems to only make sense in niche cases.</p>
+<ul>
+<li>BIOS password bypass included in the threat model</li>
+</ul>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>corporate (alike) situations</p>
+</blockquote>
+</aside>
+<p>Not necessarily.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>adversary taking out the hard drive and attempting to boot it in a different computer (circumventing BIOS password) (but then FDE would be much more important)</p>
+</blockquote>
+</aside>
+<p>I guess sorta, though any attacker with the skill needed to move a drive between laptops probably also has the skill needed to boot a live USB to bypass the bootloader password. FDE would be much more important here, agreed.</p>
+          <p><a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/7</link>
+        <pubDate>Sun, 24 Nov 2024 15:38:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-723-7</guid>
+        <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>It might help to clarify under what situations a bootloader password provides a meaningful level of additional security.</p>
+</blockquote>
+<p>Right.</p>
+<p>I am documenting that here: <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Bootloader_Password">Bootloader Password</a></p>
+<blockquote>
+<p>From my standpoint, you have to have at least a bootloader password, a root password, and a BIOS password for it to be useful at all (the root password keeps you from gaining privileges when powered on, the bootloader password keeps you from gaining privileges by rebooting and entering recovery mode, and the BIOS password keeps you from gaining privileges by rebooting into an OS on an external drive).</p>
+</blockquote>
+<p>Doesn’t a BIOS password alone already prevent all of that and requires taking out the drive or some other physical attack?</p>
+<p>Well, one could add the assumption that the adversary has a BIOS password bypass. Then the bootloader password might help. This might be an unrealistic assumption.</p>
+<p>I think a BIOS password + FDE pre boot authentication password is sufficient “in most cases”.</p>
+<p>Then surely the question will come up “in which cases it does not suffice?” The answer is most likely, in complex cases which are not applicable to the reader, because if these were applicable, the question would not come up. One case that can be constructed is some sort of corporate setup.</p>
+<p>For example, an employee is given a BIOS password for booting from the internal hard drive, but not from other devices. Furthermore, the employee is allowed to boot using the standard/default option but prevented from booting the recovery boot option, because that password would be retained for system administrators only.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(the root password keeps you from gaining privileges when powered on</p>
+</blockquote>
+</aside>
+<p>That reminds me of, quote <a href="https://xkcd.com/1200/" class="inline-onebox">xkcd: Authorization</a></p>
+<blockquote>
+<p>If someone steals my laptop while I’m logged in, they can read my email, take my money, and impersonate me to my friends, but at least they can’t install drivers without my permission.</p>
+</blockquote>
+<p>But more seriously…</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(the root password keeps you from gaining privileges when powered on</p>
+</blockquote>
+</aside>
+<p>I guess it depends on the threat model. Physical attacks while powered on are always a very high risk situation.</p>
+<p>I however was thinking of BIOS password, bootloader password, FDE password, Linux user password, Linux root/sudo password in terms physical attacks while the machine is powered off.</p>
+<p>A BIOS password alone will stop most non-technical attackers. More technical attackers who steal the hard drive would be stopped by FDE. That’s why BIOS password + FDE always seemed to be as the most important passwords.</p>
+<p>If a physical attacker gets to run (passwordless) sudo, as mentioned in the xkcd, I might not mind much, as most sensitive data is accessible already when logged in as user (not root).</p>
+<blockquote>
+<p>the bootloader password keeps you from gaining privileges by rebooting</p>
+</blockquote>
+<p>But a reboot will go through BIOS or are you referring to kexec? (I don’t know if GRUB can be load somehow using kexec.)</p>
+<p>Good, you could say not having a sudo password will allow a physical attacker to run kexec. But is that even still neeed? → xkcd</p>
+<p>In that threat model that I am considering here now, physical attacks while powered are excluded. [1]</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If you have passwordless sudo, you can just <code>sudo -i</code> and then remove the bootloader password or change bootloader config as you see fit. Granted, FDE would protect against that.</p>
+</blockquote>
+</aside>
+<p>Right. I would exclude that form that threat model anyhow due to xkcd.</p>
+<hr>
+<p>In conclusion, the bootloader password seems to only make sense in niche cases.</p>
+<ul>
+<li>BIOS password bypass included in the threat model</li>
+<li>corporate (alike) situations</li>
+<li>adversary taking out the hard drive and attempting to boot it in a different computer (circumventing BIOS password) (but then FDE would be much more important)</li>
+</ul>
+<p>Please correct me if I am wrong. Happy to present the full threat model analysis in the wiki.</p>
+<hr>
+<p>[1] For physical attacks while powered on:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Screen_Lock">Screen Lock</a> (weak)</li>
+<li><a href="https://forums.whonix.org/t/panic-button-panic-shutdown-buskill-the-usb-kill-cord-for-your-laptop/13755" class="inline-onebox">panic button / panic shutdown / BusKill - The USB kill cord for your laptop - Development - Whonix Forum</a> (ticket)</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/6</link>
+        <pubDate>Sun, 24 Nov 2024 14:37:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-723-6</guid>
+        <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
+      </item>
       <item>
         <title>Harden GRUB bootloader using bootloader password</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
