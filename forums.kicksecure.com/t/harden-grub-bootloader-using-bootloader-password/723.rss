@@ -11,9 +11,92 @@ There is `grub2-setpassword` but unavailable in Debian.
 
 https://www.gnu.org/software/grub/manual/grub/html_node/Authentication-and-authorisation.html</description>
     
-    <lastBuildDate>Sun, 24 Nov 2024 15:38:28 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 25 Nov 2024 23:18:59 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I think I like the idea, especially in combination with disabling “easy” recovery mode and the Dracut recovery console. I think the only thing I’d really like to add to all of the above is that we document how to make the Dracut recovery console available again. I’ve used it for multiple debugging sessions that would have been rendered impossible or close to impossible without it. Let’s go with requiring the password on every boot since that provides substantial benefits over just locking out the configuration options.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
+</blockquote>
+</aside>
+<p>We should be careful with calling it more secure IMO - the bootloader password may be harder to bypass, but the BIOS password is necessary to complicate attacks that involve booting from an external USB drive. They both have their pros and cons, and ideally should be used together.</p>
+<p>Also, we should consider how whatever tooling we make for setting this password interacts with FDE. A user with high security requirements might use BIOS password, bootloader password, FDE passphrase, and a user account password, preferably all different. Most users with moderate security requirements will get away with just FDE though, and those with lower requirements can use a BIOS + bootloader password and avoid the overhead and potential data loss risk of FDE. Do we want our tool to tell the user “You’re using FDE, you probably don’t need a bootloader password”? If so, should we make some brief in-tool documentation that explains the threat models each configuration might be used to defend against?</p>
+          <p><a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/9</link>
+        <pubDate>Mon, 25 Nov 2024 23:16:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-723-9</guid>
+        <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>There are many different options.</p>
+<ul>
+<li>F) BIOS power-on password</li>
+<li>G) BIOS administrator password</li>
+</ul>
+<p>These can be different passwords. Administrator password can usually clear/change power-on password and is also allowed to boot.</p>
+<p>In this discussion, I was revering to <code>F) BIOS power-on password</code>, a password that is required for every boot.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If the BIOS password prevents booting the machine too, then yes, it does do all of that already.</p>
+</blockquote>
+</aside>
+<p>This was my assumption.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But in that situation a bootloader password isn’t all that useful, except as defense-in-depth against a relatively unskilled adversary. (Granted, most adversaries most of our users encounter will be relatively unskilled, and I can definitely imagine someone who can figure out a BIOS password reset via an article from the Internet but who can’t figure out how to get past a bootloader password.)</p>
+</blockquote>
+</aside>
+<p>Right. The the protection provided by the BIOS power-on password isn’t that great. It’s a “hardware magic feature”. Some BIOS can be reset with:</p>
+<ul>
+<li>recovery code provided by websites, and</li>
+<li>removal of CMOS battery,</li>
+<li>motherboard BIOS reset jumper.</li>
+</ul>
+<p>There might be some BIOS resistant to that, designed to not easily being reset, but that is dependent on the hardware producer and may be dependent on the BIOS settings.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The bootloader password is still valuable though, even against a non-technical attacker, if the passwords are being used to prevent bootup entirely.</p>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Obviously at this point an attacker with slightly more skill would insert a live USB into the victim machine and boot from that, but there are plenty of attackers who lack that skill, especially in domestic abuse situations, so this still seems valuable to me, even if the benefits are limited at best.</p>
+</blockquote>
+</aside>
+<p>Right.</p>
+          <p><a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723/8</link>
+        <pubDate>Mon, 25 Nov 2024 11:41:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-723-8</guid>
+        <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
+      </item>
       <item>
         <title>Harden GRUB bootloader using bootloader password</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>

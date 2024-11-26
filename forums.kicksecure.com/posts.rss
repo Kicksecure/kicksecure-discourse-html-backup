@@ -5,6 +5,191 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>You’ll have to give more specific steps for how to reproduce this. I’ve just attempted to reproduce the issue using Debian 12 + KDE Plasma, on a UEFI-based virt-manager machine. The exact steps taken are:</p>
+<ul>
+<li>Create a new virtual machine, specify that a Debian 12.7.0 netinst ISO should be used</li>
+<li>Set RAM to 4 GB, disk space to 20 GB</li>
+<li>Check “Customize configuration before installing” on the final screen of the VM creation wizard</li>
+<li>Set firmware to UEFI (specifically <code>OVMF_CODE_4M.fd</code>)</li>
+<li>Begin installation</li>
+<li>Configure as follows:
+<ul>
+<li>Full Name: <code>User</code></li>
+<li>Username: <code>user</code></li>
+<li>Disk configuration:
+<ul>
+<li>Partition 1: EFI System Partition, 300 MB</li>
+<li>Partition 2: ext4 mounted at <code>/</code>, use all remaining disk space</li>
+</ul>
+</li>
+<li>Desktop environment: KDE Plasma</li>
+<li>Timezone and locale settings set appropriately</li>
+</ul>
+</li>
+<li>Once installation is complete, reboot</li>
+<li>Carefully follow instructions at <a href="https://www.kicksecure.com/wiki/Debian" class="inline-onebox" rel="noopener nofollow ugc">Install Kicksecure inside Debian</a> to morph the distribution into Kicksecure, some notes as to how I followed the instructions:
+<ul>
+<li>When given the option of using extrepo or manual configuration for initially adding the Kicksecure repository, I chose manual configuration.</li>
+<li>Signing key was downloaded using TLS.</li>
+<li>“Clearnet Rep.” settings were used for manually configuring the Kicksecure repo.</li>
+<li>The Kicksecure metapackage I installed was <code>kicksecure-cli-host</code>, to avoid pulling in XFCE</li>
+<li>Before following post-installation steps, I rebooted, tested login via SDDM with both Plasma X11 and Plasma Wayland sessions, confirmed it worked, and confirmed <code>security-misc</code> was installed using <code>dpkg-query -s security-misc</code> (it came back as <code>install ok installed</code>)</li>
+<li>In the post-installation steps, I used <code>sudo rm /etc/apt/sources.list</code> rather than <code>sudo mv /etc/apt/sources.list ~/</code> for getting rid of the original sources.list file, it contained nothing important</li>
+</ul>
+</li>
+</ul>
+<p>With this setup, Kicksecure is installed, <code>security-misc</code> is installed, and SDDM login works just fine, both with Wayland and X11 options. <s>I did not test sleep since this is a virtual machine and getting a virt-manager VM out of sleep can be <em>really hard</em>, but I would expect it to work.</s> EDIT: Just tested sleep too, works without issues, even with <code>security-misc</code> installed.</p>
+<p>Some things about your configuration that you may want to double-check that may be the source of some of the issues:</p>
+<ul>
+<li>Did you install <code>kicksecure-cli-host</code> or <code>kicksecure-xfce-host</code>? Doing the latter on a machine with another desktop environment already will end up installing XFCE on the machine, which could conflict with your existing desktop environment in interesting ways.</li>
+<li>Is your user account named <code>user</code>? There are some subsystems in Kicksecure that only allow an account named <code>user</code> to take certain actions. It’s possible (though unlikely) that the inability to take those actions with another account could be causing the issue.</li>
+</ul>
+<p>I’ve not yet tested with the Cinnamon desktop, or with Debian derivatives such as Sparky or Mint.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_13</link>
+        <pubDate>Mon, 25 Nov 2024 23:51:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1698</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I think I like the idea, especially in combination with disabling “easy” recovery mode and the Dracut recovery console. I think the only thing I’d really like to add to all of the above is that we document how to make the Dracut recovery console available again. I’ve used it for multiple debugging sessions that would have been rendered impossible or close to impossible without it. Let’s go with requiring the password on every boot since that provides substantial benefits over just locking out the configuration options.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
+</blockquote>
+</aside>
+<p>We should be careful with calling it more secure IMO - the bootloader password may be harder to bypass, but the BIOS password is necessary to complicate attacks that involve booting from an external USB drive. They both have their pros and cons, and ideally should be used together.</p>
+<p>Also, we should consider how whatever tooling we make for setting this password interacts with FDE. A user with high security requirements might use BIOS password, bootloader password, FDE passphrase, and a user account password, preferably all different. Most users with moderate security requirements will get away with just FDE though, and those with lower requirements can use a BIOS + bootloader password and avoid the overhead and potential data loss risk of FDE. Do we want our tool to tell the user “You’re using FDE, you probably don’t need a bootloader password”? If so, should we make some brief in-tool documentation that explains the threat models each configuration might be used to defend against?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_9</link>
+        <pubDate>Mon, 25 Nov 2024 23:16:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1697</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>System freezes on startup after entering login and password</p>
+<p>polkit-agent-helper-1[4010]: pam_exec(polkit-1:auth): usr/libexec/security-misc/pam_faillock_not_if_x failed: exit code 1<br>
+pam_wheel(polkit-1:auth): Ignoring access request ‘user’ for ‘user’</p>
+<p>sddm [1940] authentication information: "usr/libexec/security-misc/pam-info: WARNING: 1 failed login attempt<br>
+sddm [1940] authentication information: “Login will be blocked after 50 attempts”<br>
+sddm-helper-[4089]: pam_exec(sddm:auth): usr/libexec/security-misc/pam_faillocl_not_if_x failed: exit code 1<br>
+sddm[1940]: Existing authentication ongoing, aborting</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_12</link>
+        <pubDate>Mon, 25 Nov 2024 13:22:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1696</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>kernel: Low-power S0 idle used by default for system suspend<br>
+kernel: nvme 0000:04:00.0: platform quirk: setting simple suspend<br>
+kded5[2685]: kscreen.kded: PowerDevil SuspendSession action not available!<br>
+systemd-logind[1521]: The system will suspend now!<br>
+ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
+systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
+systemd-sleep[4816]: Entering sleep state ‘suspend’…<br>
+kernel: PM: suspend entry (s2idle)<br>
+kernel: printk: Suspending console(s) (use no_console_suspend to debug)<br>
+kernel:  amdgpu_device_suspend+0x53/0x150 [amdgpu]<br>
+kernel:  pci_pm_suspend+0x78/0x170<br>
+kernel:  __device_suspend+0xf1/0x470<br>
+kernel:  async_suspend+0x1a/0x80<br>
+kernel: queueing ieee80211 work while going to suspend<br>
+kernel: amd_pmc AMDI0009:00: Last suspend didn’t reach deepest state<br>
+kernel: PM: suspend exit<br>
+systemd[1]: systemd-suspend.service: Deactivated successfully.<br>
+systemd[1]: Finished systemd-suspend.service - System Suspend.<br>
+systemd[1]: Reached target suspend.target - Suspend.<br>
+systemd[1]: Stopped target suspend.target - Suspend.<br>
+systemd-logind[1521]: The system will suspend now!<br>
+ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
+systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
+systemd-sleep[8743]: Entering sleep state ‘suspend’…<br>
+kernel: PM: suspend entry (s2idle)<br>
+kernel: printk: Suspending console(s) (use no_console_suspend to debug)<br>
+kernel:  amdgpu_device_suspend+0x53/0x150 [amdgpu]<br>
+kernel:  pci_pm_suspend+0x78/0x170<br>
+kernel:  __device_suspend+0xf1/0x470<br>
+kernel:  async_suspend+0x1a/0x80<br>
+kernel: amd_pmc AMDI0009:00: Last suspend didn’t reach deepest state<br>
+kernel: PM: suspend exit<br>
+systemd[1]: systemd-suspend.service: Deactivated successfully.<br>
+systemd[1]: Finished systemd-suspend.service - System Suspend.<br>
+systemd[1]: Reached target suspend.target - Suspend.<br>
+systemd[1]: Stopped target suspend.target - Suspend.<br>
+systemd-logind[1521]: The system will suspend now!<br>
+ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
+systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
+systemd-sleep[11869]: Entering sleep state ‘suspend’…<br>
+kernel: PM: suspend entry (s2idle)</p>
+<p>my friend’s journal. he has the most interesting situation in debian kde plasma - system does not want to go into sleep mode, desktop reboots only. then system started sleep mode and hung. He said he didnot notice any other errors in journal. but sleep mode error goes away immediately if you delete security-misc and reboot</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_11</link>
+        <pubDate>Mon, 25 Nov 2024 13:05:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1694</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>There are many different options.</p>
+<ul>
+<li>F) BIOS power-on password</li>
+<li>G) BIOS administrator password</li>
+</ul>
+<p>These can be different passwords. Administrator password can usually clear/change power-on password and is also allowed to boot.</p>
+<p>In this discussion, I was revering to <code>F) BIOS power-on password</code>, a password that is required for every boot.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If the BIOS password prevents booting the machine too, then yes, it does do all of that already.</p>
+</blockquote>
+</aside>
+<p>This was my assumption.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But in that situation a bootloader password isn’t all that useful, except as defense-in-depth against a relatively unskilled adversary. (Granted, most adversaries most of our users encounter will be relatively unskilled, and I can definitely imagine someone who can figure out a BIOS password reset via an article from the Internet but who can’t figure out how to get past a bootloader password.)</p>
+</blockquote>
+</aside>
+<p>Right. The the protection provided by the BIOS power-on password isn’t that great. It’s a “hardware magic feature”. Some BIOS can be reset with:</p>
+<ul>
+<li>recovery code provided by websites, and</li>
+<li>removal of CMOS battery,</li>
+<li>motherboard BIOS reset jumper.</li>
+</ul>
+<p>There might be some BIOS resistant to that, designed to not easily being reset, but that is dependent on the hardware producer and may be dependent on the BIOS settings.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The bootloader password is still valuable though, even against a non-technical attacker, if the passwords are being used to prevent bootup entirely.</p>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Obviously at this point an attacker with slightly more skill would insert a live USB into the victim machine and boot from that, but there are plenty of attackers who lack that skill, especially in domestic abuse situations, so this still seems valuable to me, even if the benefits are limited at best.</p>
+</blockquote>
+</aside>
+<p>Right.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_8</link>
+        <pubDate>Mon, 25 Nov 2024 11:41:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1692</guid>
+      </item>
+      <item>
         <title>Harden GRUB bootloader using bootloader password</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>I think I see where I’m misunderstanding - I’m thinking of using BIOS and bootloader passwords specifically for preventing access to advanced configuration settings, i.e. the system can be <em>booted</em> without either password, but dropping to a GRUB shell or booting from an external drive using the BIOS should require one of the system passwords. In this context the passwords are only useful for preventing unauthorized root access and denying the ability to tamper with the system’s storage without removing the internal drive. Thus ability to gain root access on an unencrypted system has been the threat I’ve been considering most strongly. I think you’re thinking about these passwords being used to prevent even bootup, such that the system is essentially bricked unless you possess both BIOS and bootloader passwords. This way the passwords are used not just to prevent unauthorized root, but as a form of authentication to even use the system. We should decide on which one we’re discussing so that we’re both talking about the same thing.</p>
@@ -1260,178 +1445,6 @@ In this case I think Kicksecure should just NOT randomize Ethernet MAC addresses
         <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_3</link>
         <pubDate>Wed, 13 Nov 2024 21:11:25 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1610</guid>
-      </item>
-      <item>
-        <title>KickSecure SMB setup</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Should be same as on Debian.</p>
-<p>Unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1731403825" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can be resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1731403825" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_2</link>
-        <pubDate>Wed, 13 Nov 2024 08:52:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1608</guid>
-      </item>
-      <item>
-        <title>KickSecure SMB setup</title>
-        <dc:creator><![CDATA[@SlowMoe]]></dc:creator>
-        <description><![CDATA[ <p>Hi,</p>
-<p>I am setting up SMB or wanting to. Now I have a GLinet Flint 2 router and it seems very basic to setup but I am running into issues. Is there something to install on either the router or in KickSecure? I thought this would be a easy setup.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_1</link>
-        <pubDate>Wed, 13 Nov 2024 05:23:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1607</guid>
-      </item>
-      <item>
-        <title>Security misc break live mode with hardened malloc enabled</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>Deprecated in Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Hardened_Malloc#Deprecation_in_Kicksecure">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1731403825" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Hardened_Malloc#Deprecation_in_Kicksecure" target="_blank" rel="noopener nofollow ugc" title="10:41AM - 18 February 2024">Kicksecure – 18 Feb 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/420;"><img src="https://www.kicksecure.com/w/images/0/06/Malloc423.jpg?version=218aedcb2078cd9e5f41a301cb19f13a" class="thumbnail" width="640" height="420"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Hardened_Malloc#Deprecation_in_Kicksecure" target="_blank" rel="noopener nofollow ugc">Hardened Malloc</a></h3>
-
-  <p>Hardened Memory Allocator for many Applications to increase Security - installation from Kicksecure repository</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/security-misc-break-live-mode-with-hardened-malloc-enabled/683#post_2</link>
-        <pubDate>Tue, 12 Nov 2024 19:51:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1606</guid>
-      </item>
-      <item>
-        <title>Security misc break live mode with hardened malloc enabled</title>
-        <dc:creator><![CDATA[@whkicks]]></dc:creator>
-        <description><![CDATA[ <p>After updating security-misc today my VM with hardened-malloc + LKRG enabled doesn’t boot into live mode anymore. Regardless of how many resources I give the VM.</p>
-<p>With hardened-malloc-light it works but I want to use default mode. Please take a look and fix this</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/security-misc-break-live-mode-with-hardened-malloc-enabled/683#post_1</link>
-        <pubDate>Tue, 12 Nov 2024 15:41:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1605</guid>
-      </item>
-      <item>
-        <title>Kernel-hardening-checker</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Seems unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1731317425" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can be resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1731317425" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>pip, related:<br>
-<a href="https://www.kicksecure.com/wiki/Install_Software#Best_Practices">Install Software, Best Practices, Avoid Third Party Package Managers</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kernel-hardening-checker/678#post_3</link>
-        <pubDate>Tue, 12 Nov 2024 06:39:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1604</guid>
       </item>
   </channel>
 </rss>
