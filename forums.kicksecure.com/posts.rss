@@ -5,6 +5,397 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Kicksecure on cloud</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>From cloud manager dashboard and glish<br>
+First of all two config profiles are needed during netinstall</p>
+<p>1- installer profile<br>
+2- boot profile</p>
+<p>Enable option full virtualization prefered over para-virtualization</p>
+<p>Booting</p>
+<p>Adde disc &amp; boot config<br>
+Boot this config , once instance is running .you click on launch console then  click Glish then text pop up where luks passwd needed .</p>
+<p>Not all cloud provider offer fde feature<br>
+Some are worse</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_5</link>
+        <pubDate>Tue, 26 Nov 2024 23:04:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1710</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Hmm, I hadn’t thought about this being a Calamares feature request, though I guess that makes sense now that you mention it. I see there’s already an open report that you’ve interacted with at <a href="https://github.com/calamares/calamares/issues/2137" class="inline-onebox" rel="noopener nofollow ugc">Allow Calamares to set GRUB password · Issue #2137 · calamares/calamares · GitHub</a>.</p>
+<p>Then again, do we <em>want</em> it in Calamares for Kicksecure? We’d be introducing more system state changing bits into the installer, which I know is something we’ve wanted to avoid in the past. It might be better to have a custom tool within the OS that the user can use to set or change the password. Such a tool would be usable in preinstalled VMs as well as newly installed systems.</p>
+<p>If we were to use the custom tool solution, I don’t think this is something we could easily upstream somewhere, though it may be worth looking for existing tools that do this. If we want the installer-based solution, then naturally Calamares would be the best place to upstream it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_11</link>
+        <pubDate>Tue, 26 Nov 2024 22:38:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1709</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>kk, I’ll give it another shot with physical hardware and installing kicksecure-xfce-host instead.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_15</link>
+        <pubDate>Tue, 26 Nov 2024 20:30:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1708</guid>
+      </item>
+      <item>
+        <title>Harden GRUB bootloader using bootloader password</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p><a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#How_to_set_a_bootloader_password">How to set a bootloader password</a> has been documented thanks to <a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a>.</p>
+<p>If we had a simple script to automate these simple but non-trivial steps, that would be good progress.</p>
+<p>Could that be upstreamed somewhere?</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I think the only thing I’d really like to add to all of the above is that we document how to make the Dracut recovery console available again. I’ve used it for multiple debugging sessions that would have been rendered impossible or close to impossible without it.</p>
+</blockquote>
+</aside>
+<p>That’s for sure.</p>
+<ul>
+<li>documentation</li>
+<li>added to debug-misc package</li>
+</ul>
+<p>(Completely separate things.)</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>We should be careful with calling it more secure IMO - the bootloader password may be harder to bypass, but the BIOS password is necessary to complicate attacks that involve booting from an external USB drive. They both have their pros and cons, and ideally should be used together.</p>
+</blockquote>
+</aside>
+<p>Alright.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Also, we should consider how whatever tooling we make for setting this password interacts with FDE. A user with high security requirements might use BIOS password, bootloader password, FDE passphrase, and a user account password, preferably all different. Most users with moderate security requirements will get away with just FDE though, and those with lower requirements can use a BIOS + bootloader password and avoid the overhead and potential data loss risk of FDE. Do we want our tool to tell the user “You’re using FDE, you probably don’t need a bootloader password”? If so, should we make some brief in-tool documentation that explains the threat models each configuration might be used to defend against?</p>
+</blockquote>
+</aside>
+<p>Probably yes.</p>
+<p>Step 1: Writing good documention explaining all of what we discussed in the wiki on <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" class="inline-onebox">Protection against Physical Attacks</a>.</p>
+<p>Step 2: This might be quite difficult to get the usability design right. Perhaps this should be discussed with calamares for wider input?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_10</link>
+        <pubDate>Tue, 26 Nov 2024 20:05:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1707</guid>
+      </item>
+      <item>
+        <title>Kicksecure on cloud</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>And how do you boot the server and enter the full disk encryption password?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_4</link>
+        <pubDate>Tue, 26 Nov 2024 19:45:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1706</guid>
+      </item>
+      <item>
+        <title>Kicksecure on cloud</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="732">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Probably, but solving FDE on the server will be hard.</p>
+</blockquote>
+</aside>
+<p>What u mean .<br>
+You mean its hard to setup fde on server ?<br>
+As some provider provide guide on how to setup this through netinstall</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_3</link>
+        <pubDate>Tue, 26 Nov 2024 18:13:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1705</guid>
+      </item>
+      <item>
+        <title>24GB of disk taken by fresh install Bookworm distromorph? + other notes</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>Disks application says 24GB used?</p>
+</blockquote>
+<p><a href="https://www.kicksecure.com/wiki/Software#Disk_Space_Analyzer">Disk Space<br>
+Analyzer</a></p>
+<blockquote>
+<p>Sidenote: Installed tor browser which has started suggesting browsing history in address bar after starting tor browser. (Computer was powered on just prior to starting tor browser.) All browsing history settings are off and tor browser default settings should prevent any browsing history carry on from previous instanses.</p>
+</blockquote>
+<p>Unspecific to Kicksecure.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p>Is there way to confirm things are the way they should be with the tor browser.</p>
+</blockquote>
+<p>Not much. You can compare with Debian.</p>
+<p>See also:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/System_Audit">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener" title="10:43AM - 21 September 2024">Kicksecure – 21 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/4/4a/Systemcheck1234640.png?version=a11126a6375fcc587b9175b32d5b34b2" class="thumbnail onebox-avatar">
+
+<h3><a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener">System Audit</a></h3>
+
+  <p>Verifying the system is configured as intended</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p>Farsidenote: Also there was no calculator in applications. Had to install gnome calculator myself. Is this normal?</p>
+</blockquote>
+<p>Yes.</p>
+<blockquote>
+<p>Morenote: Is it ok to install OpenSnitch on Kicksecure. Would like to see who is calling where. I have been using it as a comforting passifier or excuse, for years for not delving deeper into ip taples cringe.</p>
+</blockquote>
+<p>Ok.</p>
+<p>Not much advice available at this point. When this changes, the<br>
+following wiki page will be updated:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Host_Firewall">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener" title="12:42PM - 21 October 2024">Kicksecure – 21 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:466/500;"><img src="https://www.kicksecure.com/w/images/9/9e/Firewall-34227640.png?version=59eb59ff4820ab81ba8c7b480fc7dbb5" class="thumbnail" width="466" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener">Host Firewall</a></h3>
+
+  <p>Host Firewall Installation and Configuration</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Updates will be posted here:</p>
+<aside class="quote" data-post="1" data-topic="378">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Kicksecure Firewall</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    What is the Firewall comes with Kicksecure on CLI? ufw was not included anywhere in any metapackage.
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/24gb-of-disk-taken-by-fresh-install-bookworm-distromorph-other-notes/731#post_2</link>
+        <pubDate>Tue, 26 Nov 2024 17:21:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1704</guid>
+      </item>
+      <item>
+        <title>Kicksecure on cloud</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>suse211213 via Kicksecure Forums:</p>
+<blockquote>
+<p>When using kicksecure as instance on cloud with FDE<br>
+Where is key stored<br>
+How is the privacy and security</p>
+</blockquote>
+<p>Nothing special. Unspecific to Kicksecure.</p>
+<blockquote>
+<p>Does cloud provider in this case act as host system where everething can be monitored accessed.</p>
+</blockquote>
+<p>Yes.</p>
+<blockquote>
+<p>Ram wipe worth it ?</p>
+</blockquote>
+<p>Probably, but solving FDE on the server will be hard.</p>
+<blockquote>
+<p>Any related docs about vps to consider</p>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/SSH">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/SSH" target="_blank" rel="noopener" title="07:13AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/SSH" target="_blank" rel="noopener">Secure Shell (SSH)</a></h3>
+
+  <p>SSH Hardening Tips; Recommended Client and Server Settings for better Security</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Full_Disk_Encryption">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener" title="08:55PM - 23 November 2024">Kicksecure – 23 Nov 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0d/Fulldeskencryption423423.jpg?version=d499f65d45ec9fa7630b7a52e5dad247" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener">Full Disk Encryption (FDE)</a></h3>
+
+  <p>Full Disk Encryption, Additional Security Measures</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" target="_blank" rel="noopener" title="06:32PM - 25 November 2024">Kicksecure – 25 Nov 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/d/d8/Protectionagainst234234234.jpg?version=be39d97982a001431c9c5b5eb98e0120" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" target="_blank" rel="noopener">Protection against Physical Attacks</a></h3>
+
+  <p>BIOS Password, Problematic Interfaces, Screen Lock, Virtual Consoles, Login Screen, Side Channel Attacks</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/confidential_computing">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener" title="09:18PM - 31 October 2024">Kicksecure – 31 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/394;"><img src="https://www.kicksecure.com/w/images/f/ff/Confidential_computing.jpeg?version=e8d28b4a626bbb896fb54671c36b43af" class="thumbnail" width="690" height="394"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener">Confidential Computing</a></h3>
+
+  <p>Confidential computing is an advanced security technology that protects data while it's in use, complementing existing protections for data at rest and in transit. The goal is to isolate sensitive data from unauthorized access, even from the cloud...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_2</link>
+        <pubDate>Tue, 26 Nov 2024 17:17:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1703</guid>
+      </item>
+      <item>
+        <title>Kicksecure on cloud</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>When using kicksecure as instance on cloud with FDE<br>
+Where is key stored<br>
+How is the privacy and security<br>
+Does cloud provider in this case act as host system where everething can be monitored accessed.</p>
+<p>Ram wipe worth it ?</p>
+<p>Any related docs about vps to consider</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_1</link>
+        <pubDate>Tue, 26 Nov 2024 17:04:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1702</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>me and my friends used standard morphing installation. i would be grateful if you wrote installation for kde plasma and cinnamon. what commands to enter instead of sudo apt install --no-install-recommends kicksecure-xfce-host. But i also installed separate packages - grub-live, security-misc, tirdad and sdwdate - this also led to login hang. Perhaps there are nuances on the virtual machine, so there are no records of sleep mode and sddm. but i have not yet seen a host system that would not have sddm hang after last security-misc update. in some computers sddm hangs only after an incorrect password. in other computers (and mine) when entering any password. but sleep mode does not hang on my computer and on the computer of one friend, but on two other friends sleep mode always hangs - removing security-misc solved this problem. Even installing only one security-misc package on cde plasma and cinnamon caused freezes. I thought the conflict was only with cde plasma, but recently my friend’s LMDE also froze Lightdm</p>
+<p>in old versions of security-misc, these problems were not there. only problem was the wrong password entry in sddm at startup. but sleep mode worked well for everyone. If you install kicksecure xfce morph and remove security-misc, then there are no problems and errors - this has been tested on all the OSes I mentioned</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_14</link>
+        <pubDate>Tue, 26 Nov 2024 12:50:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1701</guid>
+      </item>
+      <item>
+        <title>24GB of disk taken by fresh install Bookworm distromorph? + other notes</title>
+        <dc:creator><![CDATA[@johnsmith1001]]></dc:creator>
+        <description><![CDATA[ <p>Downloaded and verified Debian bookworm ISO.<br>
+dd if=offed it to a usb stick.<br>
+Installed Debian xfce to my laptops 80GB ssd.<br>
+Distromorphed Kicksecure following these instructions:</p>
+<p>trafotin com v kicksecure</p>
+<p>When starting first time to the desktop the Disks application says 24GB used?</p>
+<p>This cant be normal. Could some kicksecures memory security features cause this?</p>
+<p>Sidenotes:<br>
+-Installed tor browser bundle, which has now started suggesting browsing history in address bar after starting tor browser. (Computer was powered on just prior to starting tor browser.) All browsing history settings are off and tor browser default settings should prevent any browsing history carry on from previous instanses. Just mentioning this if it is related to other funnybusiness. Posting this to tor forum also. Search about it gave very little.</p>
+<p>-Is it ok to install OpenSnitch on Kicksecure. Would like to see who is calling where. I have been using it as a comforting passifier or excuse, for years for not delving deeper into firewall and ip-taples cringe.</p>
+<p>-CD/DVD wont play. VLC player gives error message:</p>
+<p>-There was no calculator in applications? Installed Gnome Calculator myself.</p>
+<p>Otherwise all is sweet so far.</p>
+<p>Thank you for all the great work and effort you have put into this.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/24gb-of-disk-taken-by-fresh-install-bookworm-distromorph-other-notes/731#post_1</link>
+        <pubDate>Tue, 26 Nov 2024 06:44:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1700</guid>
+      </item>
+      <item>
         <title>Kicksecure inside LMDE 5?</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>You’ll have to give more specific steps for how to reproduce this. I’ve just attempted to reproduce the issue using Debian 12 + KDE Plasma, on a UEFI-based virt-manager machine. The exact steps taken are:</p>
@@ -1138,313 +1529,6 @@ I couldnt change this error. Could you try to reproduce and write a solution to 
         <link>https://forums.kicksecure.com/t/how-to-stop-writing-my-isos-as-rock-ridge-joliet/687#post_4</link>
         <pubDate>Fri, 15 Nov 2024 17:59:19 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1622</guid>
-      </item>
-      <item>
-        <title>How to stop writing my ISO&#39;s as Rock Ridge/Joliet</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>You might want to take a look at <a href="https://www.kicksecure.com/wiki/Malware_and_Firmware_Trojans#Valid_Compromise_Indicators_versus_Invalid_Compromise_Indicators" class="inline-onebox" rel="noopener nofollow ugc">Malware, Computer Viruses, Firmware Trojans and Antivirus Scanners</a>, malware as a general rule does not make itself obvious because that runs entirely against the point of making malware in the first place.</p>
-<p>Where did you get that xorriso command from?</p>
-<p>Bluetooth is intentionally enabled in Kicksecure, there are features that make it safer baked into the distro.</p>
-<p>overlayfs is intentionally provided in Kicksecure, it is even used in the “live mode” feature.</p>
-<p>FUSE is intentionally provided in Kicksecure, it’s necessary to run AppImages and the like and should be present on pretty much all distros.</p>
-<p>NTFS-3g lets you access NTFS drives, which is another thing many distros enable and which is useful for many users.</p>
-<p>You haven’t indicated what you think the manpages should look like, so I’m not sure what’s unusual there.</p>
-<p>I think you understand what I’m getting at. So far none of what you’ve shown indicates compromise for sure. That’s not to say you definitely aren’t compromised (you can’t prove a negative), but there isn’t sufficient evidence of it here. If you are a high-profile target (most people aren’t), whoever’s targeting you probably isn’t foolish enough to make themselves this obvious. If you aren’t a high-profile target, it’s very unlikely that someone would rationally pour this much effort into attacking you.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-stop-writing-my-isos-as-rock-ridge-joliet/687#post_3</link>
-        <pubDate>Fri, 15 Nov 2024 17:38:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1621</guid>
-      </item>
-      <item>
-        <title>How to stop writing my ISO&#39;s as Rock Ridge/Joliet</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>This gets called anytime I download an ISO</p>
-</blockquote>
-</aside>
-<aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>xorriso -as mkisofs -R -r -J -joliet-long -l -cache-inodes -iso-level 3 --grub2-boot-info --grub2-mbr /usr/lib/grub/i386-pc/boot_hybrid.img -efi-boot-part --efi-boot-image -v -A “application_id” -p “preparer” -publisher “publisher” -V “cdlabel” --modification-date=20240XXXXXXXX -no-emul-boot -boot-load-size 4 -boot-info-table -b boot/grub/grub_eltorito -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus -o /home/user/derivative-binary/17.2.3.7/Kicksecure-Xfce-17.2.3.7.iso /home/user/derivative-binary/Kicksecure-Xfce_iso-tmp</p>
-</blockquote>
-</aside>
-<p>Where, how do you see that this command gets executed anytime you download an ISO?</p>
-<aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>So, what I’m trying to get at as is, has anyone dealt with this before?</p>
-</blockquote>
-</aside>
-<p>I highly doubt it.</p>
-<aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>Is this a known thing that others are getting attacked with in the wild,</p>
-</blockquote>
-</aside>
-<p>I highly doubt that too.</p>
-<aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>the boot loader they force me to boot from contains a kernel for Windows, Mac, and Linux</p>
-</blockquote>
-</aside>
-<p>Sounds like the most sophisticated malware ever.</p>
-<p>Even Stuxnet, Flame, Duqu, Operation Triangulation aren’t multi operating system capable.</p>
-<p>Such highly sophisticated malware would usually attempt to stay stealth. The user wouldn’t notice it. This is elaborated in wiki chapter <a href="https://www.kicksecure.com/wiki/Malware#Valid_Compromise_Indicators_versus_Invalid_Compromise_Indicators">Valid Compromise Indicators versus Invalid Compromise Indicators</a>.</p>
-<p>This is because the development effort to create such malware is so expensive, that it’s not supposed to be detected. How expensive? My first guess is far excess in access of $ 100 K USD and several months or years of development work.</p>
-<p>So you must be an extremely valuable target.</p>
-<p>However, this case is a strange combination, because…</p>
-<aside class="quote no-group" data-username="z24" data-post="1" data-topic="687">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/ce7236/48.png" class="avatar"> z24:</div>
-<blockquote>
-<p>the man pages and python documentation are not standard, almost all of the binaries serve an alternate purpose than their name would lead you to believe, for example I can run ‘gpic FILENAME &gt; OUTPUT.txt’ and deobfuscate data hidden inside of files. There is a man page for GNUstep (if I recall correctly) that’s as long as novel and it goes into detail about how to write code in order to cause a buffer overflow in the kernel.</p>
-</blockquote>
-</aside>
-<p>This is impossible to happen by accident as a side-effect of the malware. The <a href="https://en.wikipedia.org/wiki/XZ_Utils_backdoor" class="inline-onebox">XZ Utils backdoor - Wikipedia</a> had side effects such as high CPU usage and longer SSH login times, but nothing even remotely similar to what you’re describing.</p>
-<p>This can only happen if source code was specifically written to purposefully change the system behavior. Someone must have written that novel or at least copied it into the source code of malware or installed it later post system compromise.</p>
-<p>So what would be happening here is <a href="https://en.wikipedia.org/wiki/Zersetzung" class="inline-onebox">Zersetzung - Wikipedia</a>. Because these effects are intentional and no malware developer can be as stupid as replacing a man page with a novel by mistake. This can only be intentional.</p>
-<p>The Kicksecure project does not offer system / malware audits. For reasons why that is so, see wiki chapter <a href="https://www.kicksecure.com/wiki/Malware#Malware_Audits">Malware Audits</a>.</p>
-<p>I had an interesting chat with ChatGPT about this topic, which might be useful for inspiration on what you can do next.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://chatgpt.com/share/67378590-66a4-8000-b30d-b55247e40177">
-  <header class="source">
-      <img src="https://cdn.oaistatic.com/assets/favicon-32x32-p4ktpm1x.webp" class="site-icon" width="32" height="32">
-
-      <a href="https://chatgpt.com/share/67378590-66a4-8000-b30d-b55247e40177" target="_blank" rel="noopener">chatgpt.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/388;"><img src="https://cdn.oaistatic.com/assets/chatgpt-share-og-u7j5uyao.webp" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://chatgpt.com/share/67378590-66a4-8000-b30d-b55247e40177" target="_blank" rel="noopener">ChatGPT</a></h3>
-
-  <p>A conversational AI system that listens, learns, and challenges</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-stop-writing-my-isos-as-rock-ridge-joliet/687#post_2</link>
-        <pubDate>Fri, 15 Nov 2024 17:33:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1620</guid>
-      </item>
-      <item>
-        <title>How to stop writing my ISO&#39;s as Rock Ridge/Joliet</title>
-        <dc:creator><![CDATA[@z24]]></dc:creator>
-        <description><![CDATA[ <p>Edit: I may have included too much additional information, I tried to provide enough data so others that have experienced this or may experience it in the future are able to locate this thread through search engines and hopefully get a resolution the issue.</p>
-<p>This gets called anytime I download an ISO and I can’t figure out how to make it stop. Its able to replace the freshly downloaded ISO with the Rock Ridge version instantaneously before I could even run a dd command or launch disk image writer to get the fresh ISO written to disk before it is modified.</p>
-<blockquote>
-<p>xorriso -as mkisofs -R -r -J -joliet-long -l -cache-inodes -iso-level 3 --grub2-boot-info --grub2-mbr /usr/lib/grub/i386-pc/boot_hybrid.img -efi-boot-part --efi-boot-image -v -A “application_id” -p “preparer” -publisher “publisher” -V “cdlabel” --modification-date=20240XXXXXXXX -no-emul-boot -boot-load-size 4 -boot-info-table -b boot/grub/grub_eltorito -eltorito-alt-boot -e boot/grub/efi.img -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus -o /home/user/derivative-binary/17.2.3.7/Kicksecure-Xfce-17.2.3.7.iso /home/user/derivative-binary/Kicksecure-Xfce_iso-tmp</p>
-</blockquote>
-<p>I don’t think I’m on the real Kicksecure anymore. A lot of things that shouldn’t be enabled by default are enabled like the bluetooth.service, overlayfs, fuse, and ntfs3g are also enabled. My xdg-user-dirs is normally /home/user/.config I think, it has been changed to point to /usr/bin/share/, that way I load flatpaks from the wrong directory just like the flatpak escape 0day did.</p>
-<p>The doocumentation (man pages for example) aren’t even the same and my grub menu shows that lines have been removed, there is a new line added that is a if fi statement to insert two more kernel modules named lzopio and xen (I think that’s the name of them, very close if not). It seems like the lower deck of the overlayfs  is hooking into upper deck with some malicious binaries and shared objects, deleting anything hooked into the upper deck causes a crash, the lower deck is all lib32 software running on a squashfs.img and its dependencies get mangled in with my own, I have to download SSH libs for apps that don’t require networking to function or other random packages that should not be dependencies. I also have to delete the boot order using efitbootmgr and modify my grub entry in order to actually boot into the system at the lower deck. Even figuring out how to boot into the lower deck of the system doesn’t solve the problem though unfortunately.</p>
-<p>It’s not as simple as reformatting my USB drive and secure erasing my SSD then using a fresh ISO, it’s like the data doesn’t really get wiped from the USB even though it appears that way to software like gparted and gnome-disks reading the disk image. I have wiped it then brought it over to a remote location, away from my potentially infected machine and it still manages to write that same ISO with the overlayfs and Rock Ridge ISO.</p>
-<p>So, what I’m trying to get at as is, has anyone dealt with this before? What can I do aside from considering my devices trashed? I’m strongly considering dumping this data publicly out of frustration but something doesn’t feel right about doing that, somebody certainly put a lot of time and effort into devoping and writing documentation for this system.</p>
-<p>As mentioned earlier, the man pages and python documentation are not standard, almost all of the binaries serve an alternate purpose than their name would lead you to believe, for example I can run ‘gpic FILENAME &gt; OUTPUT.txt’ and deobfuscate data hidden inside of files. There is a man page for GNUstep (if I recall correctly) that’s as long as novel and it goes into detail about how to write code in order to cause a buffer overflow in the kernel. So sharing something like that publicly seems to me like I would be destroying the hard work of someone or some group of individuals who have put a lot of time into it. As much I hate what they did to me, I’m also in awe of their work and complexity of the system at the same time.</p>
-<p>Is this a known thing that others are getting attacked with in the wild, is it more likely a targeted attack and not wide spread? Locally it seems to spread like a worm via usb and through the network, the boot loader they force me to boot from contains a kernel for Windows, Mac, and Linux (version 5.1, unsupported and out of date), so even switching operating systems does not solve the problem. I hope someone can provide a solution that doesn’t involve throwing my machine into the dump.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-stop-writing-my-isos-as-rock-ridge-joliet/687#post_1</link>
-        <pubDate>Fri, 15 Nov 2024 14:12:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1619</guid>
-      </item>
-      <item>
-        <title>Enable and use zRAM instead for swap</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/swap-file-creator/commit/528694be791b126da112cbf71276a1dacd9273f6">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/swap-file-creator/commit/528694be791b126da112cbf71276a1dacd9273f6" target="_blank" rel="noopener">github.com/Kicksecure/swap-file-creator</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/swap-file-creator/commit/528694be791b126da112cbf71276a1dacd9273f6" target="_blank" rel="noopener">no longer consider hibernation by default</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2024-11-15" data-time="11:16:30" data-timezone="UTC">11:16AM - 15 Nov 24 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 4 additions and 1 deletions">
-        <a href="https://github.com/Kicksecure/swap-file-creator/commit/528694be791b126da112cbf71276a1dacd9273f6" target="_blank" rel="noopener">
-          <span class="added">+4</span>
-          <span class="removed">-1</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">to have a smaller default swap file by default
-
-and because hibernation is not y<span class="show-more-container"><a href="https://github.com/Kicksecure/swap-file-creator/commit/528694be791b126da112cbf71276a1dacd9273f6" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">et compatible with Secure Boot
-
-https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654/8</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/enable-and-use-zram-instead-for-swap/654#post_10</link>
-        <pubDate>Fri, 15 Nov 2024 11:18:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1617</guid>
-      </item>
-      <item>
-        <title>KickSecure SMB setup</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="SlowMoe" data-post="1" data-topic="684">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/slowmoe/48/104_2.png" class="avatar"> SlowMoe:</div>
-<blockquote>
-<p>Now I have a GLinet Flint 2 router</p>
-</blockquote>
-</aside>
-<p>GLinet runs on modified version on OpenWRT.<br>
-I suggest you flash it with stock OpenWRT cause I personally dont trust GLinet’s firmware.</p>
-<p>Also ask on the OpenWRT forum about this “SMB”.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_5</link>
-        <pubDate>Thu, 14 Nov 2024 21:32:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1616</guid>
-      </item>
-      <item>
-        <title>Randomized hostname protocol</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Crawfish" data-post="7" data-topic="565">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/3e96dc/48.png" class="avatar"> Crawfish:</div>
-<blockquote>
-<p>Using a Different MAC for SSH</p>
-</blockquote>
-</aside>
-<p>SSH doesn’t send the devices MAC Address at most it might send the hostname but good info about using network namespaces that might be useful for something in Kicksecure.</p>
-<p>As far as I understand the issue related to</p>
-<blockquote>
-<p>MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic</p>
-</blockquote>
-<p>I believe they are referring to Installing Kicksecure as the OS on VPS server.<br>
-In this case I think Kicksecure should just NOT randomize Ethernet MAC addresses by commenting it out. Reason being most servers are wired in especially VPS, if you look at any server rack they aren’t going to be using wireless as that would create too much cross talk and you wouldn’t get optimized speeds.</p>
-<pre><code class="lang-auto">#ethernet.cloned-mac-address=stable
-</code></pre>
-<p>Also like <a class="mention" href="https://forums.kicksecure.com/u/crawfish">@Crawfish</a> said</p>
-<aside class="quote no-group" data-username="Crawfish" data-post="7" data-topic="565">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/3e96dc/48.png" class="avatar"> Crawfish:</div>
-<blockquote>
-<p><code>connection.stable-id=${CONNECTION}/${BOOT}</code></p>
-</blockquote>
-</aside>
-<p>This has to be set if you don’t want Network Manager to leak or revert back to permaddr cause Network Manger will.</p>
-<p>Alternatively you could also set it to set a new mac everytime you reconnect in a session instead.</p>
-<p><code>connection.stable-id=${CONNECTION}/${RANDOM}</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565#post_10</link>
-        <pubDate>Thu, 14 Nov 2024 21:28:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1615</guid>
-      </item>
-      <item>
-        <title>KickSecure SMB setup</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Try <a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Generic_Bug_Reproduction">Generic Bug Reproduction</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_4</link>
-        <pubDate>Thu, 14 Nov 2024 20:58:37 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1614</guid>
-      </item>
-      <item>
-        <title>ISO - Development</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1087470">live-build: Binary stage runs apt commands, breaking certain image build workflows</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-development/371#post_9</link>
-        <pubDate>Thu, 14 Nov 2024 20:57:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1613</guid>
-      </item>
-      <item>
-        <title>Splitting security-misc into shared, desktop, and server packages</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>No worries.</p>
-<p>Fixed by git revert.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_4</link>
-        <pubDate>Thu, 14 Nov 2024 20:45:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1612</guid>
-      </item>
-      <item>
-        <title>Splitting security-misc into shared, desktop, and server packages</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="Patrick" data-post="2" data-topic="674">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<blockquote>
-<ul>
-<li>[!] │ │ │ ├── panic-on-oops.service (shared) (useful on desktop and server, systemd config looks invalid with a conflict between WantedBy and After)</li>
-</ul>
-</blockquote>
-<p>Fixed.</p>
-</blockquote>
-</aside>
-<p>It turns out I was wrong here - the config <em>looked</em> invalid but actually was not. I had mistakenly thought that <code>WantedBy</code> required the wanted service to start before the wanting service. This was false, the <code>systemd.unit</code> manpage states:</p>
-<blockquote>
-<p>Note that requirement dependencies do not influence the order in which services are started or stopped. This has to be configured independently with the <code>After=</code> or <code>Before=</code> options. If unit <code>foo.service</code> pulls in unit <code>bar.service</code> as configured with <code>Wants=</code> and no ordering is configured with <code>After=</code> or <code>Before=</code> , then both units will be started simultaneously and without any delay between them if <code>foo.service</code> is activated.</p>
-</blockquote>
-<p>So having a unit be both <code>WantedBy=multi-user.target</code> and <code>After=multi-user.target</code> is actually valid. Furthermore, removing the <code>After=multi-user.target</code> line has resulted in an error message on boot:</p>
-<pre><code>[ SKIP ] Ordering cycle found, skipping panic-on-oops.service
-</code></pre>
-<p>Adding back <code>After=multi-user.target</code> to <code>/usr/lib/systemd/system/panic-on-oops.service</code> resolves the issue.</p>
-<p>Sorry about the mix-up here.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/splitting-security-misc-into-shared-desktop-and-server-packages/674#post_3</link>
-        <pubDate>Thu, 14 Nov 2024 03:29:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1611</guid>
-      </item>
-      <item>
-        <title>KickSecure SMB setup</title>
-        <dc:creator><![CDATA[@SlowMoe]]></dc:creator>
-        <description><![CDATA[ <p>I think Kicksecure may have some security settings that prevent it from setting up. ty. Im going to check that</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-smb-setup/684#post_3</link>
-        <pubDate>Wed, 13 Nov 2024 21:11:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1610</guid>
       </item>
   </channel>
 </rss>
