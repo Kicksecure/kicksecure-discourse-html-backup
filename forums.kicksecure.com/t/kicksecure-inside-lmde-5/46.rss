@@ -9,9 +9,50 @@ Anyone tried to install Kicksecure on top of Linux Mint Debian Edition?
 The recently released version of LMDE 5 is based on Debian 11 Bullseye.
 Is there a chance it will work properly?</description>
     
-    <lastBuildDate>Wed, 27 Nov 2024 19:46:08 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Dec 2024 01:49:10 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Back from testing sleep, seems to work fine here, and KDE’s lock screen copes just fine with the lockout warnings from security-misc, so this is probably hardware-dependent. Also, this might not be a bug in SDDM itself, but might be a problem with Plasma’s SDDM theme.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46/24">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46/24</link>
+        <pubDate>Tue, 03 Dec 2024 01:49:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-46-24</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46.rss">Kicksecure inside LMDE 5?</source>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Alright, I didn’t manage to test the sleep mode stuff yet, but I managed to get SDDM to hang reliably. If you always type your password correctly, it works, but if you type your password wrong once, it will make SDDM hang every time you try to enter a password thereafter, regardless of whether that password is correct or not. The quickest way to fix it is to log in at a TTY, then immediately <code>exit</code> and then try logging in at SDDM again.</p>
+<p>Can you test the following for me and see if it works to fix the issue?</p>
+<ul>
+<li>Reinstall security-misc (<code>sudo apt install security-misc</code>)</li>
+<li>Run <code>sudo nano /etc/pam.d/common-auth</code></li>
+<li>Comment out this line of the file (it should be the first line in the file that isn’t already a comment):</li>
+</ul>
+<pre><code class="lang-auto">auth    optional        pam_exec.so debug stdout seteuid /usr/libexec/security-misc/pam-info
+</code></pre>
+<ul>
+<li>Press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to close the file</li>
+<li>Log out of KDE Plasma</li>
+<li>Type a wrong password at the SDDM screen, wait for it to be rejected</li>
+<li>Type <em>another</em> wrong password, this also should be rejected</li>
+<li>Now type the right password, it should be accepted</li>
+</ul>
+<p>If this works on your end, then at least part of the problem has been found - SDDM can’t handle the warning in Kicksecure about how many more times you can fail to enter the correct password before you’re locked out. If this is the case, it’s a bug in SDDM that will require some research to fix.</p>
+<p>Going to test sleep and resume now, I should have tested that while I was still booted into Kicksecure but I forgot to.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46/23">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46/23</link>
+        <pubDate>Tue, 03 Dec 2024 01:43:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-46-23</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46.rss">Kicksecure inside LMDE 5?</source>
+      </item>
       <item>
         <title>Kicksecure inside LMDE 5?</title>
         <dc:creator><![CDATA[sam]]></dc:creator>
