@@ -5,6 +5,289 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="23" data-topic="46">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>Comment out this line of the file (it should be the first line in the file that isn’t already a comment):</li>
+</ul>
+<p><code>auth    optional        pam_exec.so debug stdout seteuid /usr/libexec/security-misc/pam-info</code></p>
+</blockquote>
+</aside>
+<p>it worked! on all computers login works with correct or incorrect passwords.<br>
+I also tested with lightdm - result is also excellent.</p>
+<p>but you are right - it did not solve sleep mode problem in kde plasma. even using lightdm did not solve sleep bug on my friends computers</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_28</link>
+        <pubDate>Tue, 03 Dec 2024 20:37:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1775</guid>
+      </item>
+      <item>
+        <title>CPU off-line on Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Related documentation - which does disable a lot more CPU mitiggations than only  re-enabling SMT - see <a href="https://www.kicksecure.com/wiki/Tuning" class="inline-onebox">Kicksecure Tuning</a> wiki page chapter <a href="https://www.kicksecure.com/wiki/Tuning#Disable_CPU_Mitigations">Disable CPU Mitigations</a>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cpu-off-line-on-kicksecure/751#post_3</link>
+        <pubDate>Tue, 03 Dec 2024 18:50:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774</guid>
+      </item>
+      <item>
+        <title>VPN does not work after installing Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="linuxer" data-post="8" data-topic="742" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
+<blockquote>
+<p>which kicksecure package disables systemd-resolved?</p>
+</blockquote>
+</aside>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Dev/git#Find_Keywords">Find Keywords</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Dev/git#Find_Files">Find Files</a></li>
+</ul>
+<p>Then…</p>
+<pre><code>myfind . | grep -i resolved
+</code></pre>
+<pre><code class="lang-auto">...
+./packages/kicksecure/kicksecure-network-conf/usr/lib/systemd/system/systemd-resolved.service.d/40_kicksecure-network-conf.conf
+./packages/kicksecure/kicksecure-network-conf/usr/lib/systemd/resolved.conf.d/40_kicksecure-network-conf.conf
+</code></pre>
+<pre><code>cat ./packages/kicksecure/kicksecure-network-conf/usr/lib/systemd/system/systemd-resolved.service.d/40_kicksecure-network-conf.conf
+</code></pre>
+<blockquote>
+<pre><code class="lang-auto">## Disable &lt;code&gt;systemd-resolved&lt;/code&gt; unless file
+## &lt;code&gt;/etc/dns-enable&lt;/code&gt; exists
+</code></pre>
+</blockquote>
+<aside class="quote no-group" data-username="linuxer" data-post="8" data-topic="742" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
+<blockquote>
+<p>which kicksecure package disables systemd-resolved?</p>
+</blockquote>
+</aside>
+<p><a href="https://github.com/Kicksecure/kicksecure-network-conf">kicksecure-network-conf</a><a href="https://web.archive.org/web/https://github.com/Kicksecure/kicksecure-network-conf"><img src="https://www.kicksecure.com/w/images/7/73/Internet_Archive_logo.png" alt="archive.org" width="13" height="15"></a></p>
+<p>This wiki page might help enabling systemd-resolved, which has been created just now:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/DNS">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1733218225" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/DNS" target="_blank" rel="noopener" title="06:42PM - 03 December 2024">Kicksecure – 3 Dec 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/DNS" target="_blank" rel="noopener">DNS</a></h3>
+
+  <p>DNS</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/vpn-does-not-work-after-installing-kicksecure/742#post_13</link>
+        <pubDate>Tue, 03 Dec 2024 18:47:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1773</guid>
+      </item>
+      <item>
+        <title>CPU off-line on Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>The feature you’re referencing is called “hyperthreading”. In essence, your CPU chip has 16 actual CPUs on it, but each one of those is “pretending” to be two CPUs. This allows more efficient utilization of the CPUs, but also opens up the possibility for data to leak between two unrelated processes that happen to be running on the same CPU at the same time. This has resulted in many real-world vulnerabilities, collectively known as “Microarchitectural Data Sampling” (or “MDS” for short). See <a href="https://en.wikipedia.org/wiki/Microarchitectural_Data_Sampling" class="inline-onebox" rel="noopener nofollow ugc">Microarchitectural Data Sampling - Wikipedia</a>. Kicksecure intentionally disables hyperthreading for this reason, using a kernel boot parameter.</p>
+<p>If you must, you <em>can</em> re-enable hyperthreading, but it’s not recommended. Run <code>sudo nano /etc/default/grub.d/40_cpu_mitigations.cfg</code>, then find all instances of <code>nosmt</code> in this file and remove them (you may have to remove some commas too, and there’s at least one instance of <code>nosmt=force</code> that will need removed entirely). Be careful to not break your system when doing this, you should NOT do this unless you know what you’re doing with editing GRUB configuration. Once you have edited the file, save your changes and then reboot. This should enable all 32 threads on the CPU.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cpu-off-line-on-kicksecure/751#post_2</link>
+        <pubDate>Tue, 03 Dec 2024 17:53:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1772</guid>
+      </item>
+      <item>
+        <title>CPU off-line on Kicksecure</title>
+        <dc:creator><![CDATA[@Lulu]]></dc:creator>
+        <description><![CDATA[ <p>Hello, I wanted to create a VM on virt-manager but I noticed that it offers me 16 cpu instead of 32 because I have 2 processors of 16 threads. After some research I saw that kicksecure had indeed found 32 threads but that half of them are disabled, so I tried to enable them manually by going through the sys folder but I have no right to modify the /sys/devices/system/cpu/cpu1/online file. How can I fix this? Thanks in advance</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cpu-off-line-on-kicksecure/751#post_1</link>
+        <pubDate>Tue, 03 Dec 2024 17:17:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1771</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>You can actually choose LightDM rather than SDDM while <code>kicksecure-xfce-host</code> is installing - you’ll get a prompt asking you which one to use. Still, SDDM <em>should</em> work, so it would be nice if it <em>did</em> work.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_27</link>
+        <pubDate>Tue, 03 Dec 2024 15:16:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1769</guid>
+      </item>
+      <item>
+        <title>VPN does not work after installing Kicksecure</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <p>so what package affects systemd-resolved?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vpn-does-not-work-after-installing-kicksecure/742#post_12</link>
+        <pubDate>Tue, 03 Dec 2024 14:31:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1768</guid>
+      </item>
+      <item>
+        <title>Getting some strange errors in Whonix on a new PC</title>
+        <dc:creator><![CDATA[@Kobrakai]]></dc:creator>
+        <description><![CDATA[ <p>When you said Whonix is based on Kicksecure I assumed you were implying that this isn’t a Whonix issue so I posted the same question here.</p>
+<p>It doesn’t matter anyway since this isnt a Whonix or Kicksecure problem. It’s a long-standing problem with VirtualBox and AMD processors. As I said in my other thread on the Whonix forums, the workaround is to set the number of CPUs/cores to 1 in VirtualBox.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/getting-some-strange-errors-in-whonix-on-a-new-pc/748#post_3</link>
+        <pubDate>Tue, 03 Dec 2024 12:54:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1767</guid>
+      </item>
+      <item>
+        <title>Enhanced heuristics for determining the swap file size in swap-file-creator?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Yes, please.</p>
+<p><a href="https://github.com/Kicksecure/helper-scripts/blob/master/usr/bin/calculate-swap-size">calculate-swap-size</a> and/or <a href="https://github.com/Kicksecure/swap-file-creator/blob/master/usr/share/swap-file-creator/swap-file-creator" class="inline-onebox">swap-file-creator/usr/share/swap-file-creator/swap-file-creator at master · Kicksecure/swap-file-creator · GitHub</a> improvements are most welcome.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749#post_2</link>
+        <pubDate>Tue, 03 Dec 2024 11:58:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1766</guid>
+      </item>
+      <item>
+        <title>Getting some strange errors in Whonix on a new PC</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Kobrakai" data-post="1" data-topic="748">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/8491ac/48.png" class="avatar"> Kobrakai:</div>
+<blockquote>
+<p>but they suggested I ask here.</p>
+</blockquote>
+</aside>
+<p>I did not say that. I just said:</p>
+<blockquote>
+<p>(Whonix is based on Kicksecure.)</p>
+</blockquote>
+<p>Which is true. Which means, the <a href="https://www.kicksecure.com/wiki/VirtualBox/Troubleshooting" class="inline-onebox">Kicksecure ™ in VirtualBox - Troubleshooting - Kicksecure ™ does not Start?</a> URL links to the Kicksecure website but the documentation to be found there in this case is also applicable to Whonix.</p>
+<p>Duplicate of:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="748">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/8491ac/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/getting-some-strange-errors-in-whonix-on-a-new-pc/748">Getting some strange errors in Whonix on a new PC</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    I’ve been using Whonix which is based on Kicksecure for many years but I just got a new PC and now I’m having problems booting it in VirtualBox. I tried posting this on the Whonix forums but they suggested I ask here. 
+Sometimes it will boot correctly and sometimes it will get stuck. I’m often seeing strange errors/warnings around where it gets stuck which could be related. Unfortunately this forum won’t allow me to post a link or upload an image. 
+The errors seem to refer to the CPU so it might…
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/getting-some-strange-errors-in-whonix-on-a-new-pc/748#post_2</link>
+        <pubDate>Tue, 03 Dec 2024 11:55:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1765</guid>
+      </item>
+      <item>
+        <title>VPN does not work after installing Kicksecure</title>
+        <dc:creator><![CDATA[@extraextra]]></dc:creator>
+        <description><![CDATA[ <p>I didn’t quote you, reply to you.</p>
+<p>I replied to “we try to avoid systemd as much as possible” for which I don’t know where that is coming from.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vpn-does-not-work-after-installing-kicksecure/742#post_11</link>
+        <pubDate>Tue, 03 Dec 2024 11:33:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1764</guid>
+      </item>
+      <item>
+        <title>VPN does not work after installing Kicksecure</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <aside class="quote" data-post="2" data-topic="745">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745/2">How does Kicksecure compare to Silverblue?</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    Created just now to answer this:
+  </blockquote>
+</aside>
+<p>
+This is written in this article</p>
+<p>“Kicksecure does not use systemd-resolved by default.<br>
+systemd-resolved and other tools would require further research. This and systemd-resolved is mentioned here: [DNS Security]”</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vpn-does-not-work-after-installing-kicksecure/742#post_10</link>
+        <pubDate>Tue, 03 Dec 2024 09:31:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1763</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>Maybe replace SDDM with Ligthdm in plasma?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_26</link>
+        <pubDate>Tue, 03 Dec 2024 08:31:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1762</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>Yes. Thank you.  I will test it on my laptop and on my friends computers</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_25</link>
+        <pubDate>Tue, 03 Dec 2024 08:30:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1761</guid>
+      </item>
+      <item>
+        <title>Enhanced heuristics for determining the swap file size in swap-file-creator?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I just finished installing Debian 12 onto a USB flash drive, then distro-morphing it to Kicksecure on my primary development laptop. The laptop has 32 GB RAM, while the flash drive is about 128 GB. I noticed swap-file-creator report it was creating a swapfile that was around 45 GB in size. I can see how this probably happened (I’m guessing it’s making a file equal to RAM size plus 50%), but two things come to mind:</p>
+<ul>
+<li>Creating a 45GB swap file is almost certainly overkill.</li>
+<li>Creating a swapfile that takes up over 35% of available disk space is almost certainly overkill.</li>
+</ul>
+<p>By default, Debian chose to give me a swap partition that was only 1 GB in size, which seems much more reasonable for systems that have lots of RAM like mine. Then again, for someone with very little RAM, 1 GB of swap probably doesn’t make much sense and creating a swapfile equal to 1.5x RAM size would be helpful.</p>
+<p>Should we change the algorithm used for determining swap file size? Perhaps 1.5x RAM is fine in general, but we should cap the maximum size to 8 GB or so. Taking into account the size of the storage device would probably also be a good idea.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749#post_1</link>
+        <pubDate>Tue, 03 Dec 2024 01:55:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1760</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Back from testing sleep, seems to work fine here, and KDE’s lock screen copes just fine with the lockout warnings from security-misc, so this is probably hardware-dependent. Also, this might not be a bug in SDDM itself, but might be a problem with Plasma’s SDDM theme. Edit: Looks like it’s a problem in SDDM itself. I’ve tried three different SDDM themes and they all break the same way.</p>
+<p>Edit 2: More debugging underway. So far I’ve concluded:</p>
+<ul>
+<li>It is not a socket read failure within SDDM, or if it is, my workarounds didn’t work.</li>
+<li>It definitely <em>is</em> a problem within SDDM, I can see valuable info about the issue in the journalctl logs and it isn’t theme-dependent.</li>
+<li>I currently think SDDM is, for some unknown reason, failing to ever hand the password to PAM. It gets the user account handed over, it reads the warning about the risk of a lockout, and then it doesn’t seem to write the password (or if it does, it’s not finalizing <em>something</em> AFAICT). I think this because I can see SDDM is getting the lockout warning in the logs, but the lockout counter still only indicates one failed login even after trying to login with a bad password <em>twice</em>. So that’s probably where I’ll hunt for issues next.</li>
+</ul>
+<p>I did check the upstream SDDM bugtracker to see if this was a known issue, and didn’t see anything about it. I should try to reproduce the issue with an updated version of SDDM, and try to come up with a minimal reproducible example.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_24</link>
+        <pubDate>Tue, 03 Dec 2024 01:49:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1759</guid>
+      </item>
+      <item>
+        <title>Kicksecure inside LMDE 5?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Alright, I didn’t manage to test the sleep mode stuff yet, but I managed to get SDDM to hang reliably. If you always type your password correctly, it works, but if you type your password wrong once, it will make SDDM hang every time you try to enter a password thereafter, regardless of whether that password is correct or not. The quickest way to fix it is to log in at a TTY, then immediately <code>exit</code> and then try logging in at SDDM again.</p>
+<p>Can you test the following for me and see if it works to fix the issue?</p>
+<ul>
+<li>Reinstall security-misc (<code>sudo apt install security-misc</code>)</li>
+<li>Run <code>sudo nano /etc/pam.d/common-auth</code></li>
+<li>Comment out this line of the file (it should be the first line in the file that isn’t already a comment):</li>
+</ul>
+<pre><code class="lang-auto">auth    optional        pam_exec.so debug stdout seteuid /usr/libexec/security-misc/pam-info
+</code></pre>
+<ul>
+<li>Press <kbd>Ctrl+S</kbd> to save, then <kbd>Ctrl+X</kbd> to close the file</li>
+<li>Log out of KDE Plasma</li>
+<li>Type a wrong password at the SDDM screen, wait for it to be rejected</li>
+<li>Type <em>another</em> wrong password, this also should be rejected</li>
+<li>Now type the right password, it should be accepted</li>
+</ul>
+<p>If this works on your end, then at least part of the problem has been found - SDDM can’t handle the warning in Kicksecure about how many more times you can fail to enter the correct password before you’re locked out. If this is the case, it’s a bug in SDDM that will require some research to fix.</p>
+<p>Going to test sleep and resume now, I should have tested that while I was still booted into Kicksecure but I forgot to.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46?page=2#post_23</link>
+        <pubDate>Tue, 03 Dec 2024 01:43:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1758</guid>
+      </item>
+      <item>
         <title>VPN does not work after installing Kicksecure</title>
         <dc:creator><![CDATA[@extraextra]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="7" data-topic="742">
@@ -638,597 +921,6 @@ This topic is dedicated to other linuxes and is listed on the site as a discussi
         <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_17</link>
         <pubDate>Wed, 27 Nov 2024 11:32:46 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1713</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>I have now tested distro morphing Debian 12 Cinnamon into Kicksecure on physical hardware (my main development machine). I used <code>kicksecure-xfce-host</code> this time since it sounded like that’s what you were using. I still can’t reproduce the issue - the install works just fine, security-misc is present, LightDM doesn’t freeze whether I feed it good passwords or bad passwords, sleep works out of the box.</p>
-<p>If you and your friend are both running into issues, it’s likely to be the result of one of the following:</p>
-<ul>
-<li>What you’re calling Debian is not what I’m calling Debian. I’m using the official Debian 12 (Bookworm) netinstaller, which gives me a vanilla Debian installation. This is what Kicksecure supports, so it’s expected to work. If your “Debian” is Debian 11 (Bullseye) or Debian Testing (Trixie at the time of this writing), that could be the problem.</li>
-<li>You and your friend happen to use the same third-party repository on your systems, and that repository is incompatible with Kicksecure in some way.</li>
-<li>Both of you are shockingly unlucky when it comes to what hardware you ended up with. (Hardware-specific issues like this are relatively rare nowadays so I wouldn’t expect this to be the case.)</li>
-</ul>
-<p>I don’t know for sure if any of the above apply here, this is just what comes to mind initially. If there’s any further data you can give about how you’re reproducing this (what software versions you’re using, what steps you’re taking, even hardware info might come in handy), that might help debug this. Currently though I can’t get it to break.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_16</link>
-        <pubDate>Wed, 27 Nov 2024 07:09:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1712</guid>
-      </item>
-      <item>
-        <title>Kicksecure on cloud</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>From cloud manager dashboard and glish<br>
-First of all two config profiles are needed during netinstall</p>
-<p>1- installer profile<br>
-2- boot profile</p>
-<p>Enable option full virtualization prefered over para-virtualization</p>
-<p>Booting</p>
-<p>Adde disc &amp; boot config<br>
-Boot this config , once instance is running .you click on launch console then  click Glish then text pop up where luks passwd needed .</p>
-<p>Not all cloud provider offer fde feature<br>
-Some are worse</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_5</link>
-        <pubDate>Tue, 26 Nov 2024 23:04:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1710</guid>
-      </item>
-      <item>
-        <title>Harden GRUB bootloader using bootloader password</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Hmm, I hadn’t thought about this being a Calamares feature request, though I guess that makes sense now that you mention it. I see there’s already an open report that you’ve interacted with at <a href="https://github.com/calamares/calamares/issues/2137" class="inline-onebox" rel="noopener nofollow ugc">Allow Calamares to set GRUB password · Issue #2137 · calamares/calamares · GitHub</a>.</p>
-<p>Then again, do we <em>want</em> it in Calamares for Kicksecure? We’d be introducing more system state changing bits into the installer, which I know is something we’ve wanted to avoid in the past. It might be better to have a custom tool within the OS that the user can use to set or change the password. Such a tool would be usable in preinstalled VMs as well as newly installed systems.</p>
-<p>If we were to use the custom tool solution, I don’t think this is something we could easily upstream somewhere, though it may be worth looking for existing tools that do this. If we want the installer-based solution, then naturally Calamares would be the best place to upstream it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_11</link>
-        <pubDate>Tue, 26 Nov 2024 22:38:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1709</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>kk, I’ll give it another shot with physical hardware and installing kicksecure-xfce-host instead.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_15</link>
-        <pubDate>Tue, 26 Nov 2024 20:30:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1708</guid>
-      </item>
-      <item>
-        <title>Harden GRUB bootloader using bootloader password</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#How_to_set_a_bootloader_password">How to set a bootloader password</a> has been documented thanks to <a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a>.</p>
-<p>If we had a simple script to automate these simple but non-trivial steps, that would be good progress.</p>
-<p>Could that be upstreamed somewhere?</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>I think the only thing I’d really like to add to all of the above is that we document how to make the Dracut recovery console available again. I’ve used it for multiple debugging sessions that would have been rendered impossible or close to impossible without it.</p>
-</blockquote>
-</aside>
-<p>That’s for sure.</p>
-<ul>
-<li>documentation</li>
-<li>added to debug-misc package</li>
-</ul>
-<p>(Completely separate things.)</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>We should be careful with calling it more secure IMO - the bootloader password may be harder to bypass, but the BIOS password is necessary to complicate attacks that involve booting from an external USB drive. They both have their pros and cons, and ideally should be used together.</p>
-</blockquote>
-</aside>
-<p>Alright.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Also, we should consider how whatever tooling we make for setting this password interacts with FDE. A user with high security requirements might use BIOS password, bootloader password, FDE passphrase, and a user account password, preferably all different. Most users with moderate security requirements will get away with just FDE though, and those with lower requirements can use a BIOS + bootloader password and avoid the overhead and potential data loss risk of FDE. Do we want our tool to tell the user “You’re using FDE, you probably don’t need a bootloader password”? If so, should we make some brief in-tool documentation that explains the threat models each configuration might be used to defend against?</p>
-</blockquote>
-</aside>
-<p>Probably yes.</p>
-<p>Step 1: Writing good documention explaining all of what we discussed in the wiki on <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" class="inline-onebox">Protection against Physical Attacks</a>.</p>
-<p>Step 2: This might be quite difficult to get the usability design right. Perhaps this should be discussed with calamares for wider input?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_10</link>
-        <pubDate>Tue, 26 Nov 2024 20:05:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1707</guid>
-      </item>
-      <item>
-        <title>Kicksecure on cloud</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>And how do you boot the server and enter the full disk encryption password?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_4</link>
-        <pubDate>Tue, 26 Nov 2024 19:45:41 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1706</guid>
-      </item>
-      <item>
-        <title>Kicksecure on cloud</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="732">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Probably, but solving FDE on the server will be hard.</p>
-</blockquote>
-</aside>
-<p>What u mean .<br>
-You mean its hard to setup fde on server ?<br>
-As some provider provide guide on how to setup this through netinstall</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_3</link>
-        <pubDate>Tue, 26 Nov 2024 18:13:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1705</guid>
-      </item>
-      <item>
-        <title>24GB of disk taken by fresh install Bookworm distromorph? + other notes</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>Disks application says 24GB used?</p>
-</blockquote>
-<p><a href="https://www.kicksecure.com/wiki/Software#Disk_Space_Analyzer">Disk Space<br>
-Analyzer</a></p>
-<blockquote>
-<p>Sidenote: Installed tor browser which has started suggesting browsing history in address bar after starting tor browser. (Computer was powered on just prior to starting tor browser.) All browsing history settings are off and tor browser default settings should prevent any browsing history carry on from previous instanses.</p>
-</blockquote>
-<p>Unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<blockquote>
-<p>Is there way to confirm things are the way they should be with the tor browser.</p>
-</blockquote>
-<p>Not much. You can compare with Debian.</p>
-<p>See also:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/System_Audit">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener" title="10:43AM - 21 September 2024">Kicksecure – 21 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/4/4a/Systemcheck1234640.png?version=a11126a6375fcc587b9175b32d5b34b2" class="thumbnail onebox-avatar">
-
-<h3><a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener">System Audit</a></h3>
-
-  <p>Verifying the system is configured as intended</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<blockquote>
-<p>Farsidenote: Also there was no calculator in applications. Had to install gnome calculator myself. Is this normal?</p>
-</blockquote>
-<p>Yes.</p>
-<blockquote>
-<p>Morenote: Is it ok to install OpenSnitch on Kicksecure. Would like to see who is calling where. I have been using it as a comforting passifier or excuse, for years for not delving deeper into ip taples cringe.</p>
-</blockquote>
-<p>Ok.</p>
-<p>Not much advice available at this point. When this changes, the<br>
-following wiki page will be updated:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Host_Firewall">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732613425" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener" title="12:42PM - 21 October 2024">Kicksecure – 21 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:466/500;"><img src="https://www.kicksecure.com/w/images/9/9e/Firewall-34227640.png?version=59eb59ff4820ab81ba8c7b480fc7dbb5" class="thumbnail" width="466" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener">Host Firewall</a></h3>
-
-  <p>Host Firewall Installation and Configuration</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Updates will be posted here:</p>
-<aside class="quote" data-post="1" data-topic="378">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Kicksecure Firewall</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
-  </div>
-  <blockquote>
-    What is the Firewall comes with Kicksecure on CLI? ufw was not included anywhere in any metapackage.
-  </blockquote>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/24gb-of-disk-taken-by-fresh-install-bookworm-distromorph-other-notes/731#post_2</link>
-        <pubDate>Tue, 26 Nov 2024 17:21:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1704</guid>
-      </item>
-      <item>
-        <title>Kicksecure on cloud</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>suse211213 via Kicksecure Forums:</p>
-<blockquote>
-<p>When using kicksecure as instance on cloud with FDE<br>
-Where is key stored<br>
-How is the privacy and security</p>
-</blockquote>
-<p>Nothing special. Unspecific to Kicksecure.</p>
-<blockquote>
-<p>Does cloud provider in this case act as host system where everething can be monitored accessed.</p>
-</blockquote>
-<p>Yes.</p>
-<blockquote>
-<p>Ram wipe worth it ?</p>
-</blockquote>
-<p>Probably, but solving FDE on the server will be hard.</p>
-<blockquote>
-<p>Any related docs about vps to consider</p>
-</blockquote>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/SSH">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732699825" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/SSH" target="_blank" rel="noopener" title="07:46PM - 26 November 2024">Kicksecure – 26 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:131/129;"><img src="https://www.kicksecure.com/w/images/8/8d/Sshlogo.png?version=408127b3e46a9506f59d3da8f763f7e3" class="thumbnail" width="131" height="129"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/SSH" target="_blank" rel="noopener">Secure Shell (SSH)</a></h3>
-
-  <p>SSH Hardening Tips; Recommended Client and Server Settings for better Security</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Full_Disk_Encryption">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732699825" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener" title="12:28PM - 27 November 2024">Kicksecure – 27 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0d/Fulldeskencryption423423.jpg?version=d499f65d45ec9fa7630b7a52e5dad247" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" target="_blank" rel="noopener">Full Disk Encryption (FDE)</a></h3>
-
-  <p>Full Disk Encryption, Additional Security Measures</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732699825" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" target="_blank" rel="noopener" title="01:16PM - 27 November 2024">Kicksecure – 27 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/d/d8/Protectionagainst234234234.jpg?version=be39d97982a001431c9c5b5eb98e0120" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks" target="_blank" rel="noopener">Protection against Physical Attacks</a></h3>
-
-  <p>BIOS Password, Problematic Interfaces, Screen Lock, Virtual Consoles, Login Screen, Side Channel Attacks</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/confidential_computing">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1732699825" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener" title="09:18PM - 31 October 2024">Kicksecure – 31 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/394;"><img src="https://www.kicksecure.com/w/images/f/ff/Confidential_computing.jpeg?version=e8d28b4a626bbb896fb54671c36b43af" class="thumbnail" width="690" height="394"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" target="_blank" rel="noopener">Confidential Computing</a></h3>
-
-  <p>Confidential computing is an advanced security technology that protects data while it's in use, complementing existing protections for data at rest and in transit. The goal is to isolate sensitive data from unauthorized access, even from the cloud...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_2</link>
-        <pubDate>Tue, 26 Nov 2024 17:17:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1703</guid>
-      </item>
-      <item>
-        <title>Kicksecure on cloud</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>When using kicksecure as instance on cloud with FDE<br>
-Where is key stored<br>
-How is the privacy and security<br>
-Does cloud provider in this case act as host system where everething can be monitored accessed.</p>
-<p>Ram wipe worth it ?</p>
-<p>Any related docs about vps to consider</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-cloud/732#post_1</link>
-        <pubDate>Tue, 26 Nov 2024 17:04:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1702</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>me and my friends used standard morphing installation. i would be grateful if you wrote installation for kde plasma and cinnamon. what commands to enter instead of sudo apt install --no-install-recommends kicksecure-xfce-host. But i also installed separate packages - grub-live, security-misc, tirdad and sdwdate - this also led to login hang. Perhaps there are nuances on the virtual machine, so there are no records of sleep mode and sddm. but i have not yet seen a host system that would not have sddm hang after last security-misc update. in some computers sddm hangs only after an incorrect password. in other computers (and mine) when entering any password. but sleep mode does not hang on my computer and on the computer of one friend, but on two other friends sleep mode always hangs - removing security-misc solved this problem. Even installing only one security-misc package on cde plasma and cinnamon caused freezes. I thought the conflict was only with cde plasma, but recently my friend’s LMDE also froze Lightdm</p>
-<p>in old versions of security-misc, these problems were not there. only problem was the wrong password entry in sddm at startup. but sleep mode worked well for everyone. If you install kicksecure xfce morph and remove security-misc, then there are no problems and errors - this has been tested on all the OSes I mentioned</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_14</link>
-        <pubDate>Tue, 26 Nov 2024 12:50:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1701</guid>
-      </item>
-      <item>
-        <title>24GB of disk taken by fresh install Bookworm distromorph? + other notes</title>
-        <dc:creator><![CDATA[@johnsmith1001]]></dc:creator>
-        <description><![CDATA[ <p>Downloaded and verified Debian bookworm ISO.<br>
-dd if=offed it to a usb stick.<br>
-Installed Debian xfce to my laptops 80GB ssd.<br>
-Distromorphed Kicksecure following these instructions:</p>
-<p>trafotin com v kicksecure</p>
-<p>When starting first time to the desktop the Disks application says 24GB used?</p>
-<p>This cant be normal. Could some kicksecures memory security features cause this?</p>
-<p>Sidenotes:<br>
--Installed tor browser bundle, which has now started suggesting browsing history in address bar after starting tor browser. (Computer was powered on just prior to starting tor browser.) All browsing history settings are off and tor browser default settings should prevent any browsing history carry on from previous instanses. Just mentioning this if it is related to other funnybusiness. Posting this to tor forum also. Search about it gave very little.</p>
-<p>-Is it ok to install OpenSnitch on Kicksecure. Would like to see who is calling where. I have been using it as a comforting passifier or excuse, for years for not delving deeper into firewall and ip-taples cringe.</p>
-<p>-CD/DVD wont play. VLC player gives error message:</p>
-<p>-There was no calculator in applications? Installed Gnome Calculator myself.</p>
-<p>Otherwise all is sweet so far.</p>
-<p>Thank you for all the great work and effort you have put into this.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/24gb-of-disk-taken-by-fresh-install-bookworm-distromorph-other-notes/731#post_1</link>
-        <pubDate>Tue, 26 Nov 2024 06:44:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1700</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>You’ll have to give more specific steps for how to reproduce this. I’ve just attempted to reproduce the issue using Debian 12 + KDE Plasma, on a UEFI-based virt-manager machine. The exact steps taken are:</p>
-<ul>
-<li>Create a new virtual machine, specify that a Debian 12.7.0 netinst ISO should be used</li>
-<li>Set RAM to 4 GB, disk space to 20 GB</li>
-<li>Check “Customize configuration before installing” on the final screen of the VM creation wizard</li>
-<li>Set firmware to UEFI (specifically <code>OVMF_CODE_4M.fd</code>)</li>
-<li>Begin installation</li>
-<li>Configure as follows:
-<ul>
-<li>Full Name: <code>User</code></li>
-<li>Username: <code>user</code></li>
-<li>Disk configuration:
-<ul>
-<li>Partition 1: EFI System Partition, 300 MB</li>
-<li>Partition 2: ext4 mounted at <code>/</code>, use all remaining disk space</li>
-</ul>
-</li>
-<li>Desktop environment: KDE Plasma</li>
-<li>Timezone and locale settings set appropriately</li>
-</ul>
-</li>
-<li>Once installation is complete, reboot</li>
-<li>Carefully follow instructions at <a href="https://www.kicksecure.com/wiki/Debian" class="inline-onebox" rel="noopener nofollow ugc">Install Kicksecure inside Debian</a> to morph the distribution into Kicksecure, some notes as to how I followed the instructions:
-<ul>
-<li>When given the option of using extrepo or manual configuration for initially adding the Kicksecure repository, I chose manual configuration.</li>
-<li>Signing key was downloaded using TLS.</li>
-<li>“Clearnet Rep.” settings were used for manually configuring the Kicksecure repo.</li>
-<li>The Kicksecure metapackage I installed was <code>kicksecure-cli-host</code>, to avoid pulling in XFCE</li>
-<li>Before following post-installation steps, I rebooted, tested login via SDDM with both Plasma X11 and Plasma Wayland sessions, confirmed it worked, and confirmed <code>security-misc</code> was installed using <code>dpkg-query -s security-misc</code> (it came back as <code>install ok installed</code>)</li>
-<li>In the post-installation steps, I used <code>sudo rm /etc/apt/sources.list</code> rather than <code>sudo mv /etc/apt/sources.list ~/</code> for getting rid of the original sources.list file, it contained nothing important</li>
-</ul>
-</li>
-</ul>
-<p>With this setup, Kicksecure is installed, <code>security-misc</code> is installed, and SDDM login works just fine, both with Wayland and X11 options. <s>I did not test sleep since this is a virtual machine and getting a virt-manager VM out of sleep can be <em>really hard</em>, but I would expect it to work.</s> EDIT: Just tested sleep too, works without issues, even with <code>security-misc</code> installed.</p>
-<p>Some things about your configuration that you may want to double-check that may be the source of some of the issues:</p>
-<ul>
-<li>Did you install <code>kicksecure-cli-host</code> or <code>kicksecure-xfce-host</code>? Doing the latter on a machine with another desktop environment already will end up installing XFCE on the machine, which could conflict with your existing desktop environment in interesting ways.</li>
-<li>Is your user account named <code>user</code>? There are some subsystems in Kicksecure that only allow an account named <code>user</code> to take certain actions. It’s possible (though unlikely) that the inability to take those actions with another account could be causing the issue.</li>
-</ul>
-<p>I’ve not yet tested with the Cinnamon desktop, or with Debian derivatives such as Sparky or Mint.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_13</link>
-        <pubDate>Mon, 25 Nov 2024 23:51:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1698</guid>
-      </item>
-      <item>
-        <title>Harden GRUB bootloader using bootloader password</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>I think I like the idea, especially in combination with disabling “easy” recovery mode and the Dracut recovery console. I think the only thing I’d really like to add to all of the above is that we document how to make the Dracut recovery console available again. I’ve used it for multiple debugging sessions that would have been rendered impossible or close to impossible without it. Let’s go with requiring the password on every boot since that provides substantial benefits over just locking out the configuration options.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
-</blockquote>
-</aside>
-<p>We should be careful with calling it more secure IMO - the bootloader password may be harder to bypass, but the BIOS password is necessary to complicate attacks that involve booting from an external USB drive. They both have their pros and cons, and ideally should be used together.</p>
-<p>Also, we should consider how whatever tooling we make for setting this password interacts with FDE. A user with high security requirements might use BIOS password, bootloader password, FDE passphrase, and a user account password, preferably all different. Most users with moderate security requirements will get away with just FDE though, and those with lower requirements can use a BIOS + bootloader password and avoid the overhead and potential data loss risk of FDE. Do we want our tool to tell the user “You’re using FDE, you probably don’t need a bootloader password”? If so, should we make some brief in-tool documentation that explains the threat models each configuration might be used to defend against?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_9</link>
-        <pubDate>Mon, 25 Nov 2024 23:16:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1697</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>System freezes on startup after entering login and password</p>
-<p>polkit-agent-helper-1[4010]: pam_exec(polkit-1:auth): usr/libexec/security-misc/pam_faillock_not_if_x failed: exit code 1<br>
-pam_wheel(polkit-1:auth): Ignoring access request ‘user’ for ‘user’</p>
-<p>sddm [1940] authentication information: "usr/libexec/security-misc/pam-info: WARNING: 1 failed login attempt<br>
-sddm [1940] authentication information: “Login will be blocked after 50 attempts”<br>
-sddm-helper-[4089]: pam_exec(sddm:auth): usr/libexec/security-misc/pam_faillocl_not_if_x failed: exit code 1<br>
-sddm[1940]: Existing authentication ongoing, aborting</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_12</link>
-        <pubDate>Mon, 25 Nov 2024 13:22:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1696</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside LMDE 5?</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>kernel: Low-power S0 idle used by default for system suspend<br>
-kernel: nvme 0000:04:00.0: platform quirk: setting simple suspend<br>
-kded5[2685]: kscreen.kded: PowerDevil SuspendSession action not available!<br>
-systemd-logind[1521]: The system will suspend now!<br>
-ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
-systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
-systemd-sleep[4816]: Entering sleep state ‘suspend’…<br>
-kernel: PM: suspend entry (s2idle)<br>
-kernel: printk: Suspending console(s) (use no_console_suspend to debug)<br>
-kernel:  amdgpu_device_suspend+0x53/0x150 [amdgpu]<br>
-kernel:  pci_pm_suspend+0x78/0x170<br>
-kernel:  __device_suspend+0xf1/0x470<br>
-kernel:  async_suspend+0x1a/0x80<br>
-kernel: queueing ieee80211 work while going to suspend<br>
-kernel: amd_pmc AMDI0009:00: Last suspend didn’t reach deepest state<br>
-kernel: PM: suspend exit<br>
-systemd[1]: systemd-suspend.service: Deactivated successfully.<br>
-systemd[1]: Finished systemd-suspend.service - System Suspend.<br>
-systemd[1]: Reached target suspend.target - Suspend.<br>
-systemd[1]: Stopped target suspend.target - Suspend.<br>
-systemd-logind[1521]: The system will suspend now!<br>
-ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
-systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
-systemd-sleep[8743]: Entering sleep state ‘suspend’…<br>
-kernel: PM: suspend entry (s2idle)<br>
-kernel: printk: Suspending console(s) (use no_console_suspend to debug)<br>
-kernel:  amdgpu_device_suspend+0x53/0x150 [amdgpu]<br>
-kernel:  pci_pm_suspend+0x78/0x170<br>
-kernel:  __device_suspend+0xf1/0x470<br>
-kernel:  async_suspend+0x1a/0x80<br>
-kernel: amd_pmc AMDI0009:00: Last suspend didn’t reach deepest state<br>
-kernel: PM: suspend exit<br>
-systemd[1]: systemd-suspend.service: Deactivated successfully.<br>
-systemd[1]: Finished systemd-suspend.service - System Suspend.<br>
-systemd[1]: Reached target suspend.target - Suspend.<br>
-systemd[1]: Stopped target suspend.target - Suspend.<br>
-systemd-logind[1521]: The system will suspend now!<br>
-ModemManager[1606]:   [sleep-monitor-systemd] system is about to suspend<br>
-systemd[1]: Starting systemd-suspend.service - System Suspend…<br>
-systemd-sleep[11869]: Entering sleep state ‘suspend’…<br>
-kernel: PM: suspend entry (s2idle)</p>
-<p>my friend’s journal. he has the most interesting situation in debian kde plasma - system does not want to go into sleep mode, desktop reboots only. then system started sleep mode and hung. He said he didnot notice any other errors in journal. but sleep mode error goes away immediately if you delete security-misc and reboot</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-lmde-5/46#post_11</link>
-        <pubDate>Mon, 25 Nov 2024 13:05:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1694</guid>
-      </item>
-      <item>
-        <title>Harden GRUB bootloader using bootloader password</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>There are many different options.</p>
-<ul>
-<li>F) BIOS power-on password</li>
-<li>G) BIOS administrator password</li>
-</ul>
-<p>These can be different passwords. Administrator password can usually clear/change power-on password and is also allowed to boot.</p>
-<p>In this discussion, I was revering to <code>F) BIOS power-on password</code>, a password that is required for every boot.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>If the BIOS password prevents booting the machine too, then yes, it does do all of that already.</p>
-</blockquote>
-</aside>
-<p>This was my assumption.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>But in that situation a bootloader password isn’t all that useful, except as defense-in-depth against a relatively unskilled adversary. (Granted, most adversaries most of our users encounter will be relatively unskilled, and I can definitely imagine someone who can figure out a BIOS password reset via an article from the Internet but who can’t figure out how to get past a bootloader password.)</p>
-</blockquote>
-</aside>
-<p>Right. The the protection provided by the BIOS power-on password isn’t that great. It’s a “hardware magic feature”. Some BIOS can be reset with:</p>
-<ul>
-<li>recovery code provided by websites, and</li>
-<li>removal of CMOS battery,</li>
-<li>motherboard BIOS reset jumper.</li>
-</ul>
-<p>There might be some BIOS resistant to that, designed to not easily being reset, but that is dependent on the hardware producer and may be dependent on the BIOS settings.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>The bootloader password is still valuable though, even against a non-technical attacker, if the passwords are being used to prevent bootup entirely.</p>
-</blockquote>
-</aside>
-<p>Yes.</p>
-<p>GRUB bootloader password to prevent all boot menu entries could be considered more secure than BIOS power-on password, because it’s not a “hardware magic feature” but instead a software feature implemented in Freedom Software, GRUB.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="723">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Obviously at this point an attacker with slightly more skill would insert a live USB into the victim machine and boot from that, but there are plenty of attackers who lack that skill, especially in domestic abuse situations, so this still seems valuable to me, even if the benefits are limited at best.</p>
-</blockquote>
-</aside>
-<p>Right.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723#post_8</link>
-        <pubDate>Mon, 25 Nov 2024 11:41:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1692</guid>
       </item>
   </channel>
 </rss>

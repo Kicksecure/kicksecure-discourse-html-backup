@@ -5,8 +5,31 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Sun, 24 Nov 2024 15:12:32 +0000</lastBuildDate>
+      <lastBuildDate>Tue, 03 Dec 2024 01:55:49 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Enhanced heuristics for determining the swap file size in swap-file-creator?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>I just finished installing Debian 12 onto a USB flash drive, then distro-morphing it to Kicksecure on my primary development laptop. The laptop has 32 GB RAM, while the flash drive is about 128 GB. I noticed swap-file-creator report it was creating a swapfile that was around 45 GB in size. I can see how this probably happened (I’m guessing it’s making a file equal to RAM size plus 50%), but two things come to mind:</p>
+<ul>
+<li>Creating a 45GB swap file is almost certainly overkill.</li>
+<li>Creating a swapfile that takes up over 35% of available disk space is almost certainly overkill.</li>
+</ul>
+<p>By default, Debian chose to give me a swap partition that was only 1 GB in size, which seems much more reasonable for systems that have lots of RAM like mine. Then again, for someone with very little RAM, 1 GB of swap probably doesn’t make much sense and creating a swapfile equal to 1.5x RAM size would be helpful.</p>
+<p>Should we change the algorithm used for determining swap file size? Perhaps 1.5x RAM is fine in general, but we should cap the maximum size to 8 GB or so. Taking into account the size of the storage device would probably also be a good idea.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749</link>
+          <pubDate>Tue, 03 Dec 2024 01:55:49 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-749</guid>
+          <source url="https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749.rss">Enhanced heuristics for determining the swap file size in swap-file-creator?</source>
+        </item>
         <item>
           <title>Remove Linux recovery mode boot option from default GRUB boot menu</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -1519,64 +1542,6 @@ UUID=4B6E-AD38                            /boot/efi      vfat    defaults,noatim
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-416</guid>
           <source url="https://forums.kicksecure.com/t/iso-calamares-installer-created-etc-fstab/416.rss">ISO - Calamares Installer created /etc/fstab</source>
-        </item>
-        <item>
-          <title>Meta Packages: Kicksecure Desktop versus Kicksecure Server</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p><a href="https://github.com/Kicksecure/kicksecure-meta-packages" class="inline-onebox">GitHub - Kicksecure/kicksecure-meta-packages</a> needs improvements:</p>
-<ul>
-<li><code>kicksecure-cli</code> - keep existing package as is</li>
-<li><code>kicksecure-cli-server</code> - new package to be added to kicksecure-meta-packages
-<ul>
-<li><code>Depends: kicksecure-desktop-firewall</code>
-<ul>
-<li>includes firewall that by default opens port 22 (SSH’s default port)</li>
-</ul>
-</li>
-<li>security-misc-server [no MAC address randomization]</li>
-</ul>
-</li>
-<li><code>kicksecure-cli-desktop</code> - new package to be added to kicksecure-meta-packages
-<ul>
-<li><code>Depends: kicksecure-desktop-firewall</code> - new package to be created
-<ul>
-<li>Comes with all ports closed by default.</li>
-</ul>
-</li>
-<li><code>Depends: security-misc-desktop</code> - new package to be created
-<ul>
-<li>Might come with MAC address randomization. → <a href="https://github.com/Kicksecure/security-misc/issues/184">ticket</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>kicksecure-xfce</code> - keep existing package as is</li>
-<li><code>kicksecure-xfce-server</code> [Will not be created.]</li>
-<li><code>kicksecure-xfce-desktop</code> - new package to be created
-<ul>
-<li><code>Depends: kicksecure-cli-desktop</code></li>
-</ul>
-</li>
-</ul>
-<hr>
-<p>related:</p>
-<ul>
-<li><a href="https://www.kicksecure.com/wiki/Debian_Packages" class="inline-onebox">Debian Packages - Kicksecure</a></li>
-<li><a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a></li>
-<li><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></li>
-</ul>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415</link>
-          <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-415</guid>
-          <source url="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415.rss">Meta Packages: Kicksecure Desktop versus Kicksecure Server</source>
         </item>
   </channel>
 </rss>
