@@ -5,9 +5,61 @@
     <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745</link>
     <description>How does Kicksecure compare to Silverblue?</description>
     
-    <lastBuildDate>Sat, 30 Nov 2024 16:42:45 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 07 Dec 2024 01:03:02 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>How does Kicksecure compare to Silverblue?</title>
+        <dc:creator><![CDATA[qtzvytqr77x4t5cq]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>How does Kicksecure compare to Silverblue?</p>
+</blockquote>
+<p>Silverblue/Secureblue is an atomic-based distribution. Updates to the system are done in one go via updating the entire system image. This is very different than debian/kicksecure, which updates via individual packages and allows the user to install/remove packages at will.</p>
+<p>Because of the above, graphical installations are not installed via fedora’s package repository. They are instead installed via flatpak, which provides containerized applications that “keep themselves separate from the base system” and “allow for fine-grained control over their permissions.” See <a href="https://fedoraproject.org/atomic-desktops/silverblue/" class="inline-onebox" rel="noopener nofollow ugc">Fedora Silverblue | The Fedora Project</a>.</p>
+<p>This is in contrast to debian/kicksecure. While debian/kicksecure allow for flatpaks, the primary way of installing applications is from the debian and kicksecure package repositories (as well as other repositories that the user may add). This means that most applications run without a sandbox by default. However, the choice to use flatpaks as a primary method of app distribution by Secureblue means that they have to deal with the downsides of flatpak. See the (controversial) opinions <a href="https://flatkill.org/2020/" class="inline-onebox" rel="noopener nofollow ugc">Flatpak - a security nightmare</a> and <a href="https://madaidans-insecurities.github.io/linux.html#flatpak" class="inline-onebox" rel="noopener nofollow ugc">Linux | Madaidan's Insecurities</a>.</p>
+<p>Also, kicksecure/debian rely on old “stable” packages with security fixes that receive CVEs backported to them. This has been criticized for missing many security vulnerabilities that do not receive CVEs. From the (controversial) madaidan article-</p>
+<blockquote>
+<p>A myriad of common Linux distributions, including Debian, Ubuntu, RHEL/CentOS, among numerous others use what’s known as a “stable” software release model. This involves freezing packages for a very long time and only ever backporting security fixes that have received a CVE. However, this approach misses the vast majority of security fixes. Most security fixes do not receive CVEs because either the developer simply doesn’t care or because it’s not obvious whether or not a bug is exploitable at first.</p>
+<p>Distribution maintainers cannot analyse every single commit perfectly and backport every security fix, so they have to rely on CVEs, which people do not use properly. For example, the Linux kernel is particularly bad at this. Even when there is a CVE assigned to an issue, sometimes fixes still aren’t backported, such as in the Debian Chromium package, which is still affected by many severe and public vulnerabilities, some of which are even being exploited in the wild.</p>
+<p>This is in contrast to a rolling release model, in which users can update as soon as the software is released, thereby acquiring all security fixes up to that point.</p>
+</blockquote>
+<p>By contrast, Silverblue/Secureblue is based on fedora, which is likely to have newer packages. Newer packages will presumably have the security fixes up to that point without backporting, although it is possible for newer packages to accidentally break previous security patches. It is also possible for newer packages to introduce new bugs and new vulnerabilities. Flatpaks will also usually have the newest software available.</p>
+<p>Additionally, Silverblue/Secureblue uses the GNOME desktop environment and presumably the Wayland protocol by default. By contrast, debian/kicksecure uses the xfce desktop environment and the X11 display server by default. X11 is thought to be less secure than Wayland due to lack of GUI isolation. See madaidan again</p>
+<blockquote>
+<p>Another example of Flatpak’s broad permissions is how it allows unfiltered access to the X11 socket, permitting easy sandbox escapes due to X11’s lack of GUI isolation. Adding X11 sandboxing via a nested X11 server, such as Xpra, would not be difficult, but Flatpak developers refuse to acknowledge this and continue to claim, “X11 is impossible to secure”.</p>
+</blockquote>
+<p>Because kicksecure uses xfce and x11, kicksecure has this problem, while silverblue does not. However, the development team behind xfce is working on making the desktop environment compatible with wayland. Kicksecure can switch to wayland after xfce releases a version that supports wayland.</p>
+<p>To sum up, those are four big differences-</p>
+<ol>
+<li>“Atomic” distribution vs. traditional distribution</li>
+<li>Level of reliance on flatpak</li>
+<li>Newness of the packages</li>
+<li>Wayland vs. X11</li>
+</ol>
+<p>And there are other differences, but those are four big ones.</p>
+          <p><a href="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745/5</link>
+        <pubDate>Sat, 07 Dec 2024 00:47:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-745-5</guid>
+        <source url="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745.rss">How does Kicksecure compare to Silverblue?</source>
+      </item>
+      <item>
+        <title>How does Kicksecure compare to Silverblue?</title>
+        <dc:creator><![CDATA[qtzvytqr77x4t5cq]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure uses sudo. Secureblue now uses run0. See <a href="https://github.com/secureblue/secureblue/releases/tag/v4.2.0" class="inline-onebox" rel="noopener nofollow ugc">Release v4.2.0 - secureblue goes sudoless! · secureblue/secureblue · GitHub</a>.</p>
+<blockquote>
+<p>In a continuing effort to minimize and eventually eliminate suid-root binaries, sudo, su, and pkexec have all been removed from the images. As noted at the end of this section of the postinstall readme, polkit prompts and manual polkit invokations via run0 can be used to accomplish the same functionality without suid-root, notably even for non-wheel users (by prompting for the wheel user’s password). In addition, suid-root has been removed from numerous other binaries that don’t require it.</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745/4</link>
+        <pubDate>Sat, 07 Dec 2024 00:22:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-745-4</guid>
+        <source url="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745.rss">How does Kicksecure compare to Silverblue?</source>
+      </item>
       <item>
         <title>How does Kicksecure compare to Silverblue?</title>
         <dc:creator><![CDATA[sam]]></dc:creator>

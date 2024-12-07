@@ -5,6 +5,50 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>How does Kicksecure compare to Silverblue?</title>
+        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>How does Kicksecure compare to Silverblue?</p>
+</blockquote>
+<p>Silverblue/Secureblue is an atomic-based distribution. Updates to the system are done in one go via updating the entire system image. This is very different than debian/kicksecure, which updates via individual packages and allows the user to install/remove packages at will.</p>
+<p>Because of the above, graphical installations are not installed via fedora’s package repository. They are instead installed via flatpak, which provides containerized applications that “keep themselves separate from the base system” and “allow for fine-grained control over their permissions.” See <a href="https://fedoraproject.org/atomic-desktops/silverblue/" class="inline-onebox" rel="noopener nofollow ugc">Fedora Silverblue | The Fedora Project</a>.</p>
+<p>This is in contrast to debian/kicksecure. While debian/kicksecure allow for flatpaks, the primary way of installing applications is from the debian and kicksecure package repositories (as well as other repositories that the user may add). This means that most applications run without a sandbox by default. However, the choice to use flatpaks as a primary method of app distribution by Secureblue means that they have to deal with the downsides of flatpak. See the (controversial) opinions <a href="https://flatkill.org/2020/" class="inline-onebox" rel="noopener nofollow ugc">Flatpak - a security nightmare</a> and <a href="https://madaidans-insecurities.github.io/linux.html#flatpak" class="inline-onebox" rel="noopener nofollow ugc">Linux | Madaidan's Insecurities</a>.</p>
+<p>Also, kicksecure/debian rely on old “stable” packages with security fixes that receive CVEs backported to them. This has been criticized for missing many security vulnerabilities that do not receive CVEs. From the (controversial) madaidan article-</p>
+<blockquote>
+<p>A myriad of common Linux distributions, including Debian, Ubuntu, RHEL/CentOS, among numerous others use what’s known as a “stable” software release model. This involves freezing packages for a very long time and only ever backporting security fixes that have received a CVE. However, this approach misses the vast majority of security fixes. Most security fixes do not receive CVEs because either the developer simply doesn’t care or because it’s not obvious whether or not a bug is exploitable at first.</p>
+<p>Distribution maintainers cannot analyse every single commit perfectly and backport every security fix, so they have to rely on CVEs, which people do not use properly. For example, the Linux kernel is particularly bad at this. Even when there is a CVE assigned to an issue, sometimes fixes still aren’t backported, such as in the Debian Chromium package, which is still affected by many severe and public vulnerabilities, some of which are even being exploited in the wild.</p>
+<p>This is in contrast to a rolling release model, in which users can update as soon as the software is released, thereby acquiring all security fixes up to that point.</p>
+</blockquote>
+<p>By contrast, Silverblue/Secureblue is based on fedora, which is likely to have newer packages. Newer packages will presumably have the security fixes up to that point without backporting, although it is possible for newer packages to accidentally break previous security patches. It is also possible for newer packages to introduce new bugs and new vulnerabilities. Flatpaks will also usually have the newest software available.</p>
+<p>Additionally, Silverblue/Secureblue uses the GNOME desktop environment and presumably the Wayland protocol by default. By contrast, debian/kicksecure uses the xfce desktop environment and the X11 display server by default. X11 is thought to be less secure than Wayland due to lack of GUI isolation. See madaidan again</p>
+<blockquote>
+<p>Another example of Flatpak’s broad permissions is how it allows unfiltered access to the X11 socket, permitting easy sandbox escapes due to X11’s lack of GUI isolation. Adding X11 sandboxing via a nested X11 server, such as Xpra, would not be difficult, but Flatpak developers refuse to acknowledge this and continue to claim, “X11 is impossible to secure”.</p>
+</blockquote>
+<p>Because kicksecure uses xfce and x11, kicksecure has this problem, while silverblue does not. However, the development team behind xfce is working on making the desktop environment compatible with wayland. Kicksecure can switch to wayland after xfce releases a version that supports wayland.</p>
+<p>To sum up, those are four big differences-</p>
+<ol>
+<li>“Atomic” distribution vs. traditional distribution</li>
+<li>Level of reliance on flatpak</li>
+<li>Newness of the packages</li>
+<li>Wayland vs. X11</li>
+</ol>
+<p>And there are other differences, but those are four big ones.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745#post_5</link>
+        <pubDate>Sat, 07 Dec 2024 00:47:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1813</guid>
+      </item>
+      <item>
+        <title>How does Kicksecure compare to Silverblue?</title>
+        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
+        <description><![CDATA[ <p>Kicksecure uses sudo. Secureblue now uses run0. See <a href="https://github.com/secureblue/secureblue/releases/tag/v4.2.0" class="inline-onebox" rel="noopener nofollow ugc">Release v4.2.0 - secureblue goes sudoless! · secureblue/secureblue · GitHub</a>.</p>
+<blockquote>
+<p>In a continuing effort to minimize and eventually eliminate suid-root binaries, sudo, su, and pkexec have all been removed from the images. As noted at the end of this section of the postinstall readme, polkit prompts and manual polkit invokations via run0 can be used to accomplish the same functionality without suid-root, notably even for non-wheel users (by prompting for the wheel user’s password). In addition, suid-root has been removed from numerous other binaries that don’t require it.</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745#post_4</link>
+        <pubDate>Sat, 07 Dec 2024 00:22:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1812</guid>
+      </item>
+      <item>
         <title>PureVPN does not work after installing Kicksecure</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="18" data-topic="742">
@@ -1104,36 +1148,6 @@ systemd-resolved and other tools would require further research. This and system
         <link>https://forums.kicksecure.com/t/purevpn-does-not-work-after-installing-kicksecure/742#post_7</link>
         <pubDate>Mon, 02 Dec 2024 12:04:49 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1752</guid>
-      </item>
-      <item>
-        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="724" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>We should make sure this doesn’t break Recovery Mode, that’s the only thing wrong I can think of with that.</p>
-</blockquote>
-</aside>
-<p>Actually i would argue against that, why do we need to rely on recovery mode?</p>
-<p>I think of recovery mode ability is like backdooring your own OS, what we need to do is that change the mentality of how user reacting with OS:</p>
-<p>Since we are moving towards btrfs/snapshot feature this will reduce the reliability on recovery mode.</p>
-<p>Other thing is that think about a mobile phone got whatever issue to the boot of the OS, yes it has recovery mode but very unlikely users gonna figure out how to use it let alone if its even possible to have any usefulness when entering recovery mode as it will just allow you to reinstall the OS…</p>
-<p>So how to solve this? another mental change to the user that he should always backup his own data to his own hardware and that can be his own flash/hard drive, or internal clould (NAS/Nexcloud…etc) or even external server… something he choose but the OS will not backdoor itself for recovery mode.</p>
-<p>Note: booting into recovery mode is a malicious boot up of the system, because it will be booting with minimalistic services meaning will disable almost all security features that user needs, other word its just the wrong method in nowadays time.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724#post_6</link>
-        <pubDate>Mon, 02 Dec 2024 11:58:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1751</guid>
-      </item>
-      <item>
-        <title>GrapheneOS Attacks Kicksecure! What should the response be?</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>Don’t forget, GrapheneOS/Micay is attacking any privacy project considered competition. These projecs are competing for attention and donations. It’s as if you’re expecting Burger King to say good things about McDonalds.</p>
-<p>Cooperation would be preferable over drama. This rivalry is unfortunate and ridiculous. The real competion is Microsoft, who will be happy about any Linux distribution infighting.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/grapheneos-attacks-kicksecure-what-should-the-response-be/739#post_7</link>
-        <pubDate>Sun, 01 Dec 2024 23:55:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1749</guid>
       </item>
   </channel>
 </rss>
