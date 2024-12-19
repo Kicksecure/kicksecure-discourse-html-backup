@@ -5,9 +5,72 @@
     <link>https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641</link>
     <description>sudo apt install --no-install-recommends kicksecure-xfce-host - Conflict with Plymouth after entering this command when morphing Debian, MX Linux and LMDE. This error was made by me and all my friends. Today, my friend also received it. *sudo apt remove plymouth* resolves problem. Write about it in morphing instructions so that people know what to do in this situation. It seems that someone has complained about this error on this forum</description>
     
-    <lastBuildDate>Sun, 17 Nov 2024 14:23:18 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 19 Dec 2024 02:23:26 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Error: Plymouth conflict in Debian morphing</title>
+        <dc:creator><![CDATA[flotsam2000]]></dc:creator>
+        <description><![CDATA[
+            <p>I feel like I’m running into a similar issue: I tried both <code>extrepo</code> and manual methods. Not meeting with success, and I know it is probably something basic I’m missing. Does this look familiar to anyone?</p>
+<p>Installed <code>extrepo</code> Successfully</p>
+<pre data-code-wrap="plaintext"><code class="lang-plaintext">sudo apt install extrepo
+sudo extrepo enable kicksecure
+</code></pre>
+<p>This appeared to work. However, issues started when trying to install the <code>kicksecure-xfce-host</code> package.</p>
+<p>Conflicting Keys Error</p>
+<p>I encountered conflicts with the repository keys. I attempted to address this by using the recommended key location:</p>
+<pre data-code-wrap="plaintext"><code class="lang-plaintext">sudo rm /usr/share/keyrings/kicksecure.asc
+echo "deb [signed-by=/var/lib/extrepo/keys/kicksecure.asc] ... bookworm main" | sudo tee /etc/apt/sources.list.d/kicksecure.list
+sudo apt update
+</code></pre>
+<p>This resolved the key conflict temporarily but led to new warnings about multiple configurations and <code>plymouth</code>.</p>
+<p>The Main Issue: <code>plymouth</code> vs <code>console-common</code></p>
+<p>Attempts to install the package resulted in:</p>
+<pre data-code-wrap="plaintext"><code class="lang-plaintext">The following packages have unmet dependencies:
+ plymouth : Conflicts: console-common but 0.7.91 is to be installed
+</code></pre>
+<p>Steps I Took</p>
+<ol>
+<li>Verified if <code>console-common</code> was installed:<pre data-code-wrap="plaintext"><code class="lang-plaintext"></code></pre>
+</li>
+</ol>
+<p>sudo apt-mark showhold<br>
+sudo apt purge console-common</p>
+<pre><code class="lang-auto">   Result: It wasn’t installed, but the conflict persisted.
+
+2. Ensured no broken packages:
+   ```plaintext
+sudo apt --fix-broken install
+</code></pre>
+<ol start="3">
+<li>Forced installation:<pre data-code-wrap="plaintext"><code class="lang-plaintext"></code></pre>
+</li>
+</ol>
+<p>sudo apt install --no-install-recommends --allow-remove-essential --allow-downgrades kicksecure-xfce-host</p>
+<pre><code class="lang-auto">   Result: The same `plymouth` conflict error.
+
+4. Attempted downloading and manual installation:
+   ```plaintext
+sudo apt download kicksecure-xfce-host
+sudo dpkg -i kicksecure-xfce-host_&lt;version&gt;.deb
+</code></pre>
+<p>Result: Dependencies failed due to the same conflict.</p>
+<p>Current Situation</p>
+<ul>
+<li><code>console-common</code> isn’t installed.</li>
+<li><code>plymouth</code> is already at the latest version.</li>
+<li><code>apt update &amp;&amp; apt full-upgrade</code> works without issue, so the system seems otherwise stable.</li>
+</ul>
+<p>I’d appreciate any insight into resolving this <code>plymouth</code> vs <code>console-common</code> issue or a workaround for installing <code>kicksecure-xfce-host</code>.</p>
+<p>Does anyone know if this is specific to <code>bookworm</code> or recent Kicksecure changes?</p>
+          <p><a href="https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641/11</link>
+        <pubDate>Thu, 19 Dec 2024 02:23:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-641-11</guid>
+        <source url="https://forums.kicksecure.com/t/error-plymouth-conflict-in-debian-morphing/641.rss">Error: Plymouth conflict in Debian morphing</source>
+      </item>
       <item>
         <title>Error: Plymouth conflict in Debian morphing</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
