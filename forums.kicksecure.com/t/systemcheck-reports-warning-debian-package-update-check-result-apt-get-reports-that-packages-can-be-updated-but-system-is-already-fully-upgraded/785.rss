@@ -11,136 +11,34 @@ Please update this machine:
 upgrade-nonroot
 Even if system is update. I checked it on my computer and a friend&#39;s computer - always this message. Could you please change it so that this warning appears when there are non-updated packages only?</description>
     
-    <lastBuildDate>Fri, 20 Dec 2024 00:44:25 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 20 Dec 2024 06:43:15 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785.rss" rel="self" type="application/rss+xml" />
       <item>
         <title>Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</title>
-        <dc:creator><![CDATA[extraextra]]></dc:creator>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
-            <p>Not at the end. At the exact spot as suggested by developer.</p>
-          <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/11">Read full topic</a></p>
+            <p>Alright. So this fix will be included in the next point release. Version 17.2.8.7 and above.</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/14">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/11</link>
-        <pubDate>Fri, 20 Dec 2024 00:44:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-785-11</guid>
+        <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/14</link>
+        <pubDate>Fri, 20 Dec 2024 06:43:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-785-14</guid>
         <source url="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785.rss">Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</source>
       </item>
       <item>
         <title>Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</title>
         <dc:creator><![CDATA[sam]]></dc:creator>
         <description><![CDATA[
-            <aside class="quote no-group" data-username="sam" data-post="8" data-topic="785">
+            <aside class="quote no-group" data-username="Patrick" data-post="9" data-topic="785">
 <div class="title">
 <div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
 <blockquote>
-<p><code>systemcheck</code></p>
+<p>Can you emulate these 2 changes and see if that fixes it for you?</p>
 </blockquote>
 </aside>
-<p>Should we add this code at the end of documents usr/libexec/helper-scripts/apt-get-update-simulate and usr/libexec/security-misc/apt-get-update? We did this, but system update warning remains</p>
-<pre><code class="lang-auto">#!/bin/bash
-
-## Copyright (C) 2012 - 2024 ENCRYPTED SUPPORT LP &lt;adrelanos@whonix.org&gt;
-## See the file COPYING for copying conditions.
-
-set -o errexit
-set -o nounset
-set -o errtrace
-set -o pipefail
-
-write_pid_file() {
-  [[ -z "${TMP:-}" ]] &amp;&amp; error "TMP is unset"
-  safe-rm -rf "$TMP/security-misc-apt-get-update-pid";
-  install -m644 /dev/null "$TMP/security-misc-apt-get-update-pid"
-  echo "$$" | sponge -- "$TMP/security-misc-apt-get-update-pid"
-}
-
-sigterm_trap() {
-   if [ "$lastpid" = "" ]; then
-      exit 143
-   fi
-   ps -p "$lastpid" &gt;/dev/null 2&gt;&amp;1
-   if [ ! "$?" = "0" ]; then
-      ## Already terminated.
-      exit 143
-   fi
-   kill -s sigterm "$lastpid"
-   exit 143
-}
-
-trap "sigterm_trap" SIGTERM SIGINT
-
-[[ -v timeout_after ]] || timeout_after="600"
-[[ -v kill_after ]] || kill_after="10"
-
-write_pid_file
-
-timeout \
-   --kill-after="$kill_after" \
-   "$timeout_after" \
-   apt-get update --error-on=any "$@" &amp;
-
-lastpid="$!"
-wait "$lastpid"
-
-exit "$?"
-set -o errtrace
-set -o pipefail
-
-export LANG=C
-
-write_pid_file() {
-  [[ -z "${TMP:-}" ]] &amp;&amp; error "TMP is unset"
-  safe-rm -rf "$TMP/security-misc-apt-get-update-pid";
-</code></pre>
-<pre><code class="lang-auto">#!/bin/bash
-
-## Copyright (C) 2012 - 2023 ENCRYPTED SUPPORT LP &lt;adrelanos@whonix.org&gt;
-## See the file COPYING for copying conditions.
-
-## Required to run apt-get dist-upgrade --simulate as user (non-root).
-## Required for systemcheck function check_operating_system.
-## Exception to run /usr/bin/apt-get-update as user
-## is defined in /etc/sudoers.d/.
-
-sigterm_trap() {
-   if [ "$lastpid" = "" ]; then
-      exit 0
-   fi
-   ps -p "$lastpid" &gt;/dev/null 2&gt;&amp;1
-   if [ ! "$?" = "0" ]; then
-      ## Already terminated.
-      exit 0
-   fi
-   kill -s sigterm "$lastpid"
-   exit "$?"
-}
-
-trap "sigterm_trap" SIGTERM SIGINT
-
-timeout_after="10"
-kill_after="5"
-
-timeout \
-   --kill-after="$kill_after" \
-   "$timeout_after" \
-   apt-get dist-upgrade --simulate &amp;
-
-lastpid="$!"
-wait "$lastpid"
-
-exit "$?"
-
-## Exception to run /usr/bin/apt-get-update as user
-## is defined in /etc/sudoers.d/.
-
-export LANG=C
-
-sigterm_trap() {
-   if [ "$lastpid" = "" ]; then
-      exit 0
-</code></pre>
+<p>Yes, it work! Thank you!</p>
 <pre><code class="lang-auto">[user ~]% systemcheck --debug --function check_operating_system
 systemcheck debug output...
 Script running as user
@@ -240,7 +138,7 @@ Alternatively, if want to run from command line, but still use the graphical use
 + PROJECT_NAME_LOWERCASE=kicksecure
 + user_name=user
 ++ mktemp --directory
-+ TEMP_DIR=/tmp/user/1000/tmp.FxlFJyhuhU
++ TEMP_DIR=/tmp/user/1000/tmp.y4I0lAFzBu
 + export TEMP_DIR
 + get_local_derivative_version
 + derivative_deb_package_version='Could not detect derivative debian version. (Code: 1) Please report this bug!'
@@ -278,7 +176,7 @@ Alternatively, if want to run from command line, but still use the graphical use
 + test -f /etc/kicksecure_version
 ++ cat /etc/kicksecure_version
 + derivative_major_release_version=17
-+ chmod 700 /tmp/user/1000/tmp.FxlFJyhuhU
++ chmod 700 /tmp/user/1000/tmp.y4I0lAFzBu
 + '[' -f /usr/share/anon-gw-base-files/gateway ']'
 + '[' -f /usr/share/anon-ws-base-files/workstation ']'
 + VM=machine
@@ -373,7 +271,7 @@ Alternatively, if want to run from command line, but still use the graphical use
 + silent=0
 + TITLE_X='systemcheck | machine'
 ++ date
-+ TITLE_CLI=' | machine | Чт 19 дек 2024 17:24:47 EET'
++ TITLE_CLI=' | machine | Пт 20 дек 2024 06:58:27 EET'
 + output_func_general --icon /usr/share/icons/gnome/24x24/status/info.png
 + output_func --icon /usr/share/icons/gnome/24x24/status/info.png
 + local output_text
@@ -401,17 +299,17 @@ Alternatively, if want to run from command line, but still use the graphical use
 + output_func_x --titlex 'systemcheck | machine'
 + '[' '' = true ']'
 + true '/usr/libexec/systemcheck/systemcheck: output_func_x: skipping because msgdispatcher_running_x is not set to true.'
-+ output_func_cli --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ output_func_cli --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + '[' true = true ']'
-+ output_func --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ output_func --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + local output_text
 + output_text=("$@")
-+ /bin/echo --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ /bin/echo --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + true 'INFO: ARG_MAX test passed, ok.'
-+ true before: --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET BEFORE'
-+ true after : --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET AFTER'
++ true before: --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET BEFORE'
++ true after : --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET AFTER'
 + '[' '' = true ']'
-+ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + return 0
 + return 0
 + output_func_general --lefttop
@@ -501,8 +399,8 @@ Alternatively, if want to run from command line, but still use the graphical use
 + local apt_get_exit_code
 + apt_get_exit_code=0
 + '[' 0 -ge 1 ']'
-+ apt_get_update_pid=18422
-+ wait 18422
++ apt_get_update_pid=10882
++ wait 10882
 + setsid -- sudo --non-interactive -- /usr/libexec/security-misc/apt-get-update
 + unset apt_get_update_pid
 + '[' false = true ']'
@@ -514,21 +412,21 @@ Alternatively, if want to run from command line, but still use the graphical use
 + local check_os_output check_os_output_show check_os_exit_code
 + check_os_exit_code=0
 ++ setsid -- sudo --non-interactive -- /usr/libexec/helper-scripts/apt-get-update-simulate
-+ check_os_output='Чтение списков пакетов…
-Построение дерева зависимостей…
-Чтение информации о состоянии…
-Расчёт обновлений…
-Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.'
-++ /usr/libexec/msgcollector/br_add 'Чтение списков пакетов…
-Построение дерева зависимостей…
-Чтение информации о состоянии…
-Расчёт обновлений…
-Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.'
-+ check_os_output_show='Чтение списков пакетов…&lt;br /&gt;
-Построение дерева зависимостей…&lt;br /&gt;
-Чтение информации о состоянии…&lt;br /&gt;
-Расчёт обновлений…&lt;br /&gt;
-Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.'
++ check_os_output='Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
+++ /usr/libexec/msgcollector/br_add 'Reading package lists...
+Building dependency tree...
+Reading state information...
+Calculating upgrade...
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
++ check_os_output_show='Reading package lists...&lt;br /&gt;
+Building dependency tree...&lt;br /&gt;
+Reading state information...&lt;br /&gt;
+Calculating upgrade...&lt;br /&gt;
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
 + '[' 0 -ge 1 ']'
 + '[' '!' 0 = 0 ']'
 + local number_upgraded line first_char
@@ -539,85 +437,63 @@ Alternatively, if want to run from command line, but still use the graphical use
 + for line in $check_os_output
 + IFS=' 	
 '
-+ true 'line: Чтение списков пакетов…'
-+ first_char=Ч
-+ [[ Ч = '' ]]
-+ [[ Ч != *[!0-9]* ]]
++ true 'line: Reading package lists...'
++ first_char=R
++ [[ R = '' ]]
++ [[ R != *[!0-9]* ]]
 + for line in $check_os_output
 + IFS=' 	
 '
-+ true 'line: Построение дерева зависимостей…'
-+ first_char=П
-+ [[ П = '' ]]
-+ [[ П != *[!0-9]* ]]
++ true 'line: Building dependency tree...'
++ first_char=B
++ [[ B = '' ]]
++ [[ B != *[!0-9]* ]]
 + for line in $check_os_output
 + IFS=' 	
 '
-+ true 'line: Чтение информации о состоянии…'
-+ first_char=Ч
-+ [[ Ч = '' ]]
-+ [[ Ч != *[!0-9]* ]]
++ true 'line: Reading state information...'
++ first_char=R
++ [[ R = '' ]]
++ [[ R != *[!0-9]* ]]
 + for line in $check_os_output
 + IFS=' 	
 '
-+ true 'line: Расчёт обновлений…'
-+ first_char=Р
-+ [[ Р = '' ]]
-+ [[ Р != *[!0-9]* ]]
++ true 'line: Calculating upgrade...'
++ first_char=C
++ [[ C = '' ]]
++ [[ C != *[!0-9]* ]]
 + for line in $check_os_output
 + IFS=' 	
 '
-+ true 'line: Обновлено 0 пакетов, установлено 0 новых пакетов, для удаления отмечено 0 пакетов, и 0 пакетов не обновлено.'
-+ first_char=О
-+ [[ О = '' ]]
-+ [[ О != *[!0-9]* ]]
++ true 'line: 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.'
++ first_char=0
++ [[ 0 = '' ]]
++ [[ 0 != *[!0-9]* ]]
++ true ''\''0'\'' is strictly numeric.'
++ read -r number_upgraded _
++ true 'number_upgraded: 0'
++ break
 + IFS=' 	
 '
-+ '[' '' = 0 ']'
-+ '[' false = true ']'
-+ local 'MSG=&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
-+ output_func_x --messagex --typex warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
++ '[' 0 = 0 ']'
++ local 'MSG=&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
++ '[' 0 -ge 2 ']'
++ output_func_x --messagex --typex info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
 + '[' '' = true ']'
 + true '/usr/libexec/systemcheck/systemcheck: output_func_x: skipping because msgdispatcher_running_x is not set to true.'
-+ output_func_cli --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
++ output_func_cli --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
 + '[' true = true ']'
-+ output_func --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
++ output_func --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
 + local output_text
 + output_text=("$@")
-+ /bin/echo --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
++ /bin/echo --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
 + true 'INFO: ARG_MAX test passed, ok.'
-+ true before: --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt; BEFORE'
-+ true after : --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt; AFTER'
++ true before: --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt; BEFORE'
++ true after : --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt; AFTER'
 + '[' '' = true ']'
-+ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --messagecli --typecli warning --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: &lt;b&gt;apt-get reports that packages can be updated.&lt;/b&gt;
-&lt;br&gt;&lt;/br&gt;Please update this machine:
-&lt;br&gt;&lt;/br&gt;(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-&lt;code&gt;&lt;blockquote&gt;upgrade-nonroot&lt;/blockquote&gt;&lt;/code&gt;&lt;/p&gt;'
-[WARNING] [systemcheck] Debian Package Update Check Result: apt-get reports that packages can be updated.
-Please update this machine:
-(Open a terminal, Start Menu -&gt; System -&gt; Terminal.)
-upgrade-nonroot
++ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --messagecli --typecli info --message '&lt;p&gt;&lt;a href=https://www.kicksecure.com/wiki/Update&gt;Debian Package Update&lt;/a&gt; Check Result: No updates found via apt-get.&lt;/p&gt;'
+[INFO] [systemcheck] Debian Package Update Check Result: No updates found via apt-get.
++ return 0
 + return 0
 + return 0
 + cleanup
@@ -651,8 +527,8 @@ upgrade-nonroot
 + return 0
 + cleanup_files
 + '[' '' = false ']'
-+ '[' -d /tmp/user/1000/tmp.FxlFJyhuhU ']'
-+ rm --recursive /tmp/user/1000/tmp.FxlFJyhuhU
++ '[' -d /tmp/user/1000/tmp.y4I0lAFzBu ']'
++ rm --recursive /tmp/user/1000/tmp.y4I0lAFzBu
 + local command_v_output_exit_code
 + command_v_output_exit_code=0
 + command -v output_func
@@ -676,21 +552,21 @@ upgrade-nonroot
 + '[' '' = 0 ']'
 + true 'No progress bar open. No need to send progress 100 to close progress bar.'
 + '[' 'systemcheck | machine' = '' ']'
-+ '[' ' | machine | Чт 19 дек 2024 17:24:47 EET' = '' ']'
++ '[' ' | machine | Пт 20 дек 2024 06:58:27 EET' = '' ']'
 + output_func_x --titlex 'systemcheck | machine'
 + '[' '' = true ']'
 + true '/usr/libexec/systemcheck/systemcheck: output_func_x: skipping because msgdispatcher_running_x is not set to true.'
-+ output_func_cli --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ output_func_cli --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + '[' true = true ']'
-+ output_func --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ output_func --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + local output_text
 + output_text=("$@")
-+ /bin/echo --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ /bin/echo --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + true 'INFO: ARG_MAX test passed, ok.'
-+ true before: --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET BEFORE'
-+ true after : --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET AFTER'
++ true before: --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET BEFORE'
++ true after : --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET AFTER'
 + '[' '' = true ']'
-+ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --titlecli ' | machine | Чт 19 дек 2024 17:24:47 EET'
++ /usr/libexec/msgcollector/msgcollector --identifier systemcheck --titlecli ' | machine | Пт 20 дек 2024 06:58:27 EET'
 + return 0
 + return 0
 + '[' '!' NONE = NONE ']'
@@ -714,6 +590,57 @@ upgrade-nonroot
 + EXIT_CODE=0
 + exit 0
 </code></pre>
+<pre><code class="lang-auto">[user ~]% systemcheck
+[INFO] [systemcheck] Connected to Tor.
+[INFO] [systemcheck] Kicksecure is a research project. https://www.kicksecure.com
+[INFO] [systemcheck] Kicksecure APT Repository: Enabled.
+When the Kicksecure team releases BOOKWORM updates,
+they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)
+along with updated packages from the Debian team. Please
+read https://www.kicksecure.com/wiki/Trust to understand the risk.
+If you want to change this, use:
+    sudo repository-dist
+[INFO] [systemcheck] Debian Package Update Check: Checking for software updates via apt-get... ( Documentation: https://www.kicksecure.com/wiki/Update )
+[INFO] [systemcheck] Debian Package Update Check Result: No updates found via apt-get.
+[INFO] [systemcheck] Please donate!
+   See: https://www.kicksecure.com/wiki/Donate
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/13</link>
+        <pubDate>Fri, 20 Dec 2024 05:01:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-785-13</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785.rss">Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</source>
+      </item>
+      <item>
+        <title>Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Oh yes. Sorry</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/12</link>
+        <pubDate>Fri, 20 Dec 2024 04:59:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-785-12</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785.rss">Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</source>
+      </item>
+      <item>
+        <title>Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</title>
+        <dc:creator><![CDATA[extraextra]]></dc:creator>
+        <description><![CDATA[
+            <p>Not at the end. At the exact spot as suggested by developer.</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/11</link>
+        <pubDate>Fri, 20 Dec 2024 00:44:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-785-11</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785.rss">Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</source>
+      </item>
+      <item>
+        <title>Systemcheck reports `WARNING: Debian Package Update Check Result: apt-get reports that packages can be updated.` but system is already fully upgraded</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Should we add this code at the end of documents usr/libexec/helper-scripts/apt-get-update-simulate and usr/libexec/security-misc/apt-get-update? We did this, but system update warning remains</p>
           <p><a href="https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/10">Read full topic</a></p>
         ]]></description>
         <link>https://forums.kicksecure.com/t/systemcheck-reports-warning-debian-package-update-check-result-apt-get-reports-that-packages-can-be-updated-but-system-is-already-fully-upgraded/785/10</link>
