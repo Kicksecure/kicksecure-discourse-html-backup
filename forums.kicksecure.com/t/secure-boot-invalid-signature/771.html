@@ -131,7 +131,7 @@ END custom CSS / JS
 <meta name="twitter:label1" value="Reading time" />
 <meta name="twitter:data1" value="1 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="1 ❤" />
+<meta name="twitter:data2" value="2 ❤" />
 <meta property="article:published_time" content="2024-12-11T10:02:47+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -497,6 +497,63 @@ END custom CSS / JS
             </div>
             <div class='post' itemprop='text'>
               <p>Sorry for my last post I want to correct myself, copying grub.cfg does bring back the boot option for Kicksecure but it is incompatible with secure boot it still shows the invalid signature error very similar to the earlier bug.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-12-22T19:11:06Z' class='post-time'>
+                    December 22, 2024,  7:11pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-12-22T19:11:06Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>So I’ve now tested this quite a bit, and I believe the root issue here is that Calamares is just not installing the fallback bootloader correctly for Debian-based systems on Secure Boot enabled devices. The way Calamares handles installing the fallback bootloader is to simply copy grubx64.efi from the Kicksecure-specific bootloader to the fallback bootloader location. This doesn’t work - Debian (and therefore Kicksecure) need it to be copying shimx64.efi, fbx64.efi, and mmx64.efi to the fallback bootloader location, renaming shimx64.efi to bootx64.efi in the process.</p>
+<p>Debian Testing has the <em>exact</em> same problem as Kicksecure in this regard it appears. Somehow this actually works on Ubuntu, but not on Debian, and I do not know why yet.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_11' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-12-22T19:42:35Z' class='post-time'>
+                    December 22, 2024,  7:42pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-12-22T19:42:35Z'>
+              <span itemprop='position'>11</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>OK, I think I get it a bit more - Ubuntu seems to default to installing the GRUB bootloader to the fallback bootloader path, while Debian’s bootloader config defaults to <em>not</em> installing it in that fashion. The exact way in which bootloader installation works is also different between the two. Solving this probably requires enabling fallback bootloader installation by default.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">

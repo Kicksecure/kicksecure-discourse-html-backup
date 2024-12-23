@@ -38,9 +38,121 @@ After extensive testing, it would appear that the MAC control and permission har
 
 **Kloak** - keystroke anonymization is also a very interesting Kicksecure feature under development that is not offered in any other major distribution.</description>
     
-    <lastBuildDate>Sun, 22 Dec 2024 02:31:40 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 23 Dec 2024 01:33:45 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="KSWhonixXMR" data-post="1" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>A live Kicksecure host cannot run a VM.</p>
+</blockquote>
+</aside>
+<p>The main challenge here is that while live mode keeps the root filesystem read-only, the OS itself needs to be able to write to the root filesystem. This paradox means we have to use an overlayfs in RAM, which keeps all changes to the root filesystem in RAM. This means that while booted in live mode, your available disk space is limited by available system RAM. VMs used during this time have to run <em>entirely</em> in RAM, which is hard when your VM disks are even modestly large. When you modify a file when using OverlayFS, the base file is copied wholesale into the overlayed filesystem, meaning if you boot a Whonix VM while in live mode, the whole disk image has to be loaded into RAM, which is difficult unless you have <em>a lot</em> of RAM. For this reason, it will probably be impractical to run a Whonix VM while booted into Kicksecure’s live mode. Instead, you can boot Kicksecure into persistent mode, and then boot the Whonix VMs themselves in live mode.</p>
+<p>What may be possible in the future (no promises, I’ve only talked about this idea briefly with <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> and it may not be on the roadmap at all) is that Kicksecure could potentially boot <em>itself</em> in a VM while in live mode. Essentially when the root filesystem is immutable, you can actually boot it multiple times (once on the host and then once per VM you run) without running into any conflicts, so long as each user of the base filesystem uses their own overlay and doesn’t touch the contents of the base disk. This would let you have the protection offered by a VM, without requiring any extra disk space. This wouldn’t give you the advantages of Whonix (at least not the way I have it envisioned), but it would give you sandboxing. This will potentially become easy to implement if Kicksecure gets support for <a href="https://www.kicksecure.com/wiki/Verified_Boot" rel="noopener nofollow ugc">Verified Boot</a>.</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="1" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>‘<strong>hardened-kernel</strong>’ is a highly appreciated feature in Kicksecure.</p>
+</blockquote>
+</aside>
+<p>I don’t think hardened-kernel was actually fully released, and it seems to be somewhat outdated. The last commit to it was last year, and it’s downloading a now-EOL LTS 4.x kernel. I would advise against using it. As the wiki page notes, it’s for developers only.</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="6" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>Seeing Kloak in action was very exciting. Kloak is not available in Qubes OS (Fedora bare-metal) or TAILS but site-side deanonymization via type fingerprinting analysis much be a major source of identifying information in cyberspace.</p>
+</blockquote>
+</aside>
+<p>Tails is based on Debian, so it should be relatively trivial to get Kloak up and running on it. See the README.md for <a href="https://github.com/Whonix/kloak" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Whonix/kloak</a>. As for Qubes OS support, Qubes OS R4.3 will have a kloak-like feature built into the GUI daemon that can be used on any desired qube by setting a configuration option. See <a href="https://github.com/QubesOS/qubes-gui-daemon/pull/149" class="inline-onebox" rel="noopener nofollow ugc">Add event buffering for cloaking user input patterns by ArrayBolt3 · Pull Request #149 · QubesOS/qubes-gui-daemon · GitHub</a>.</p>
+          <p><a href="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/7</link>
+        <pubDate>Mon, 23 Dec 2024 01:33:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-779-7</guid>
+        <source url="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779.rss">Live Kicksecure Host, Live Whonix VM</source>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[KSWhonixXMR]]></dc:creator>
+        <description><![CDATA[
+            <p><strong>Observations on Kloak</strong></p>
+<p>Of course, typing off-line is the best way to prevent site-side keystroke fingerprinting but that behavior is inconvinent if one is always copy pasting to search bars and not just to paragraph or multi-sentence texteras (postings). But Kloak also anonymizes peripheral inputs which cannot be taken off-line like mouse<br>
+and scrolls.</p>
+<p>When installed on the host, you can immediately detect that the sensitivity of the inputs has changed.</p>
+<p>Since there is no bare-metal Whonix, I presume that the fact that Kloak is alrealy installed means that some action is taking place, although it is not sensorily evident.</p>
+<p>The test from vmonaco(dot)com/device-fingerprinting was very interesting. You can see that ‘N=’ changes between enabling or disabling kloak via <code>systemctl</code>.</p>
+<p>Since I interepret <span class="mention">@quicksilver</span> as referring to touch screens on mobile devices, I will also add that the UBlock Origin add-on functions in a similar way when testing with vmonaco and this can be added to mobile browsers. No doubt, Kloak is much more advanced.</p>
+<p>Seeing Kloak in action was very exciting. Kloak is not available in Qubes OS (Fedora bare-metal) or TAILS but site-side deanonymization via type fingerprinting analysis much be a major source of identifying information in cyberspace.</p>
+<hr>
+<p><a class="mention" href="https://forums.kicksecure.com/u/privacy">@privacy</a> - dvm (live/disposible VMs) in Qubes with any VPN service does not function. In a sense, tor is just a particular kind of VPN and it does function live. Mullvad does not function live in any way. I have tried it. Please prove what you claim is true with a screenshot or a substantiate with a link. You are trolling, it could be claimed. What is ESL? It is not possible to run a guest VM with a live host. That is not trolling. You have some prejudice about substanitating or citing information.</p>
+<p>Aparently, people only use Linux for onionsites or bitcoin or have one device for every other aspect of the interenet that doesn’t function with tor and the highest levels of anonymity and another device for projects similar to Whonix. Another possibility is that everyone in the tor community is wating for the day when everything is onionsprayed and accessible via tor and not blocked by corporate capitalism that wants everything tracked and blocks tor.</p>
+          <p><a href="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/6</link>
+        <pubDate>Mon, 23 Dec 2024 00:28:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-779-6</guid>
+        <source url="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779.rss">Live Kicksecure Host, Live Whonix VM</source>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[privacy]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/q/9fc29f/48.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>I’m a little leary about these proton links has anyone verified them?</p>
+</blockquote>
+</aside>
+<p>They appear to be screenshots of errors but last link makes me think this person might be a “ESL” troll</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="4" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>Q: Why can’t you run a VPN live?</p>
+</blockquote>
+</aside>
+<p>You can, I’m running Mullvad VPN on debian morphed Kicksecure and I have no issue using it in booted in live mode.</p>
+<blockquote>
+<p>Q: Why can’t you run a virtual machine on a live host but you can have a live VM?</p>
+</blockquote>
+<p>Are you sure about this?<br>
+Maybe the way that grub-live is as compared to overlay-root that tails uses?</p>
+<p>There is a project called <strong>aforensics/HiddenVM</strong> on github that allows you run a VM on Tails (live host) that Kicksecure could see how they do it to fix this if indeed an issue.<br>
+But like I said it may be do to how grub-live works compared to tails overlay-root or however their live system implementation is.</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="4" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>I am very interested in Kicksecure as a strong and trusted host for utilizing Nym mixnet network for Zcash</p>
+</blockquote>
+</aside>
+<p>Doesn’t Nym require lots of heavy installation/dependencies?<br>
+Why would you ned Nym for Zcash?<br>
+Zcash is not good as it requires a trusted setup and is not shielded by default.</p>
+<blockquote>
+<p>Monero in Electrum Wallet</p>
+</blockquote>
+<p>You mean feather the wallet based off of Electrum?</p>
+          <p><a href="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779/5</link>
+        <pubDate>Sun, 22 Dec 2024 19:30:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-779-5</guid>
+        <source url="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779.rss">Live Kicksecure Host, Live Whonix VM</source>
+      </item>
       <item>
         <title>Live Kicksecure Host, Live Whonix VM</title>
         <dc:creator><![CDATA[KSWhonixXMR]]></dc:creator>
