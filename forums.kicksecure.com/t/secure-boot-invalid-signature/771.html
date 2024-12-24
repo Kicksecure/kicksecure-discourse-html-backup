@@ -131,7 +131,7 @@ END custom CSS / JS
 <meta name="twitter:label1" value="Reading time" />
 <meta name="twitter:data1" value="1 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="2 ❤" />
+<meta name="twitter:data2" value="5 ❤" />
 <meta property="article:published_time" content="2024-12-11T10:02:47+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -530,8 +530,8 @@ END custom CSS / JS
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="1" />
-              <span class='post-likes'>1 Like</span>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
             </div>
 
           </div>
@@ -558,8 +558,178 @@ END custom CSS / JS
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="0" />
-              <span class='post-likes'></span>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_12' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-12-23T03:23:21Z' class='post-time'>
+                    December 23, 2024,  3:23am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-12-23T03:23:21Z'>
+              <span itemprop='position'>12</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Got some bug reports / feature requests sent so that this issue can eventually be solved “the right way”. Unfortunately Kicksecure’s current behavior in this area is pretty much the same as Debian Trixie’s behavior, and research into this issue suggests it’s not going to be an easy one to fix correctly.</p>
+<aside class="onebox githubissue" data-onebox-src="../../../external.html?link=https://github.com/calamares/calamares/issues/2416">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/calamares/calamares/issues/2416" target="_blank" rel="noopener nofollow ugc">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/calamares/calamares/issues/2416" target="_blank" rel="noopener nofollow ugc">Enhance GRUB UEFI fallback bootloader installation support with OS-specific code</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-23" data-time="02:38:01" data-timezone="UTC">02:38AM - 23 Dec 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="ArrayBolt3" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
+Calamares cu<span class="show-more-container"><a href="#" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">rrently has a setting `installEFIFallback` in `/etc/calamares/modules/bootloader.conf`. This feature is supposed to install a copy of the OS bootloader to the removable media path (e.g., `/boot/efi/EFI/BOOT`), allowing the installation to be booted even if the UEFI BIOS isn't able to find the OS-specific bootloader.
+
+While dynamite in theory, the implementation is a bit too simple to work reliably on all distros. Right now all it does (simplifying away arch-specific considerations) is finds the `grubx64.efi` file from the normal bootloader location for the OS, and copies it to `bootx64.efi` in the removable media path. While I guess this could work on some distros, this doesn't work at all on Debian (and by extension Kicksecure) for at least two reasons:
+
+* Debian's GRUB requires a stub `grub.cfg` file to be shipped alongside the GRUB EFI executable itself. This stub config tells GRUB how to find the real `grub.cfg`. Without this stub config file, the bootloader simply drops you to a GRUB shell.
+* `grubx64.efi` can't be booted directly with Secure Boot in 99.9% of circumstances. You have to boot `shimx64.efi`. The shim then boots `grubx64.efi` which in turn boots the kernel and initramfs. If you copy `grubx64.efi` to the removable media path on a Secure Boot system, it is unusable because Secure Boot will reject it.
+
+Under Debian, the proper way to install GRUB to the fallback bootloader location is:
+
+```
+sudo debconf-set-selections &lt;&lt;&lt; "grub-efi-amd64 grub2/force_efi_extra_removable boolean true"
+sudo dpkg-reconfigure --default-priority grub-efi-amd64
+```
+
+In essence, this sets a configuration variable in debconf that tells Debian "any time you're reinstalling GRUB, make sure to install it to both the normal *and* fallback bootloader locations." Then it tells Debian to reconfigure the grub-efi-amd64 package, thus resulting in GRUB being reinstalled to both the normal and fallback locations as requested.
+
+Obviously, this won't work on anything other than Debian and *some* of its derivatives (notably, this can't be used on Ubuntu because Ubuntu's GRUB package doesn't have the `grub2/force_efi_extra_removable` debconf setting), but for Debian and suitably similar derivatives, it would be far preferable to the current way of installing the fallback bootloader.
+
+**Describe the solution you'd like**
+It would be really awesome if Calamares' fallback bootloader installation code could look at the OS its running on, and use an OS-specific routine for installing the fallback bootloader if that particular OS is supported. If that OS is not supported by a special routine, fallback to the existing way of installing the bootloader, potentially echoing a warning to the log. (The warning might be a step too far, not sure.)
+
+**Describe alternatives you've considered**
+We could do this using shellprocesses instead, but that seems wrong. Calamares offers a feature for installing the bootloader to the fallback location, so I don't think it's unreasonable to make that feature do what it says on the tin more reliably.
+
+**Additional context**
+Multiple Kicksecure users are trying to install Kicksecure onto USB drives (as in, doing full installations of Kicksecure to a USB like they'd do to a hard drive). This setup is particularly vulnerable to ending up with the normal bootloader becoming unusable, since such a portable installation may be booted on multiple computers, or the computer it is intended for use on might be booted with the USB drive removed in some instances. One way or another, users end up having to rely on the fallback bootloader, and the fallback bootloader is currently totally unusable. See https://forums.kicksecure.com/t/secure-boot-invalid-signature/771/4 and https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="../../../external.html?link=https://github.com/grml/grml-debootstrap/issues/297">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/grml/grml-debootstrap/issues/297" target="_blank" rel="noopener nofollow ugc">github.com/grml/grml-debootstrap</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/grml/grml-debootstrap/issues/297" target="_blank" rel="noopener nofollow ugc">UEFI bootloader updates seem broken</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-23" data-time="03:17:01" data-timezone="UTC">03:17AM - 23 Dec 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="ArrayBolt3" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">grml-debootstrap currently installs grub-efi-amd64-signed when building an image<span class="show-more-container"><a href="#" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> with EFI boot support. However, it does *not* install grub-efi-amd64 itself, which means that the actual GRUB installation won't be updated when the GRUB package is updated. As the `grub-efi-amd64-bin` package description warns:
+
+```
+ This package contains GRUB modules that have been built for use with the
+ EFI-AMD64 architecture, as used by Intel Macs (unless a BIOS interface has
+ been activated).  It can be installed in parallel with other flavours, but
+ will not automatically install GRUB as the active boot loader nor
+ automatically update grub.cfg on upgrade unless grub-efi-amd64 is also
+ installed.
+ ```
+ 
+grub-pc, on the other hand, is installed by default, which means that the BIOS bootloader will be updated properly. Sadly grub-pc and grub-efi-amd64 can't be installed at the same time, so you can't have both bootloaders be continuously updated. Of the two, I'd argue the UEFI bootloader is the more important one to keep continuously up-to-date, because it's the one that has Secure Boot implications, while grub-pc doesn't.
+
+Furthermore, while grml-debootstrap installs the bootloader to the removable media location by default using the `--removable` switch, the `grub2/force_efi_extra_removable` debconf variable isn't being set. This means that even if `grub-efi-amd64` is installed, the fallback bootloader won't be updated when GRUB updates, potentially leaving security issues.
+
+(Note: This isn't an issue that can be solved entirely in grml-debootstrap. In my testing, even installing `grub-efi-amd64` and setting the debconf variable correctly wasn't working to get UEFI bootloader updates to work on an image built with grml-debootstrap. I don't understand why, but suspect it may be a bug in Debian's `grub-efi-amd64.postinst` script.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>In the mean time, I’ll work on a “quick fix” in derivative-maker that will fix the problem for now, at least for Kicksecure ISOs.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
             </div>
 
           </div>

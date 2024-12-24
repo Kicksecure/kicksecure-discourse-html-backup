@@ -7,6 +7,203 @@
       <item>
         <title>Live Kicksecure Host, Live Whonix VM</title>
         <dc:creator><![CDATA[@KSWhonixXMR]]></dc:creator>
+        <description><![CDATA[ <p>Thank you for answering <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>. Do you think 32GB of RAM (which is the highest, standard amount of 16x2) would be sufficient? Then a custom and expensive amount of RAM would not be necessary and running both guest and host live is a reasonable possibility.</p>
+<p>At one time Qubes OS offered an ‘alpha’ live USB iso. I sought out a new ‘developer’ OS after my Qubes system was destroyed by an attacker (ROP sigkill VM-s, qubesd and d-bus – I shared drive links to screenshots of these events if anyone is curious). Perhaps an expert looking at the slides (that is another good use for sandboxing if mistrustful) would be able to tell what sort of vulnerability caused the crashes. At the time, I was also experiencing frequent kernel crashes on Graphene OS. As you noted, adding Kloak to TAILS is possible, but that might not be optimal even though additional software can be added. TAILS is an OS that seeks to appear uniform (everyone looks like tor Windows) and is not a ‘development’ OS for testing and building new projects.</p>
+<p>If <strong>harden-kernel</strong> is not maintained well enough for mainstream use, is that also true of <strong>hide-hardware-info</strong> (abstraction with virtualization does this to a certain extent as does mandatory access control)? These are still interesting development areas even if more work is needed.</p>
+<p>It is probably wise to onionize deb.whonix (for Kloak) and deb.kicksecure in derivative.list for best security. Or do you think https is sufficient? <strong>Onion-tls</strong> <strong>repositories</strong> are also under development. Do you have any thoughts about building secure signing enclaves like Arch or do you think apt is still the best way to update and acquire packages? I read the discussion about getting a tarball vs. the service unit for Kloak. There is no way to ‘update’ an .ova or a .libvirt; it is transferred (“transmitted”) like a tar file is “down” loaded. Checking the shasum or .asc can’t be much improved upon. Only a very advanced adversary could forge such a file, no?</p>
+<p>Thanks for answering the primary question and addressing a few of the other exploratory topics.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_8</link>
+        <pubDate>Mon, 23 Dec 2024 22:18:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1999</guid>
+      </item>
+      <item>
+        <title>Secure Boot - invalid signature</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Got some bug reports / feature requests sent so that this issue can eventually be solved “the right way”. Unfortunately Kicksecure’s current behavior in this area is pretty much the same as Debian Trixie’s behavior, and research into this issue suggests it’s not going to be an easy one to fix correctly.</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2416">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/2416" target="_blank" rel="noopener nofollow ugc">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/2416" target="_blank" rel="noopener nofollow ugc">Enhance GRUB UEFI fallback bootloader installation support with OS-specific code</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-23" data-time="02:38:01" data-timezone="UTC">02:38AM - 23 Dec 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
+Calamares cu<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">rrently has a setting `installEFIFallback` in `/etc/calamares/modules/bootloader.conf`. This feature is supposed to install a copy of the OS bootloader to the removable media path (e.g., `/boot/efi/EFI/BOOT`), allowing the installation to be booted even if the UEFI BIOS isn't able to find the OS-specific bootloader.
+
+While dynamite in theory, the implementation is a bit too simple to work reliably on all distros. Right now all it does (simplifying away arch-specific considerations) is finds the `grubx64.efi` file from the normal bootloader location for the OS, and copies it to `bootx64.efi` in the removable media path. While I guess this could work on some distros, this doesn't work at all on Debian (and by extension Kicksecure) for at least two reasons:
+
+* Debian's GRUB requires a stub `grub.cfg` file to be shipped alongside the GRUB EFI executable itself. This stub config tells GRUB how to find the real `grub.cfg`. Without this stub config file, the bootloader simply drops you to a GRUB shell.
+* `grubx64.efi` can't be booted directly with Secure Boot in 99.9% of circumstances. You have to boot `shimx64.efi`. The shim then boots `grubx64.efi` which in turn boots the kernel and initramfs. If you copy `grubx64.efi` to the removable media path on a Secure Boot system, it is unusable because Secure Boot will reject it.
+
+Under Debian, the proper way to install GRUB to the fallback bootloader location is:
+
+```
+sudo debconf-set-selections &lt;&lt;&lt; "grub-efi-amd64 grub2/force_efi_extra_removable boolean true"
+sudo dpkg-reconfigure --default-priority grub-efi-amd64
+```
+
+In essence, this sets a configuration variable in debconf that tells Debian "any time you're reinstalling GRUB, make sure to install it to both the normal *and* fallback bootloader locations." Then it tells Debian to reconfigure the grub-efi-amd64 package, thus resulting in GRUB being reinstalled to both the normal and fallback locations as requested.
+
+Obviously, this won't work on anything other than Debian and *some* of its derivatives (notably, this can't be used on Ubuntu because Ubuntu's GRUB package doesn't have the `grub2/force_efi_extra_removable` debconf setting), but for Debian and suitably similar derivatives, it would be far preferable to the current way of installing the fallback bootloader.
+
+**Describe the solution you'd like**
+It would be really awesome if Calamares' fallback bootloader installation code could look at the OS its running on, and use an OS-specific routine for installing the fallback bootloader if that particular OS is supported. If that OS is not supported by a special routine, fallback to the existing way of installing the bootloader, potentially echoing a warning to the log. (The warning might be a step too far, not sure.)
+
+**Describe alternatives you've considered**
+We could do this using shellprocesses instead, but that seems wrong. Calamares offers a feature for installing the bootloader to the fallback location, so I don't think it's unreasonable to make that feature do what it says on the tin more reliably.
+
+**Additional context**
+Multiple Kicksecure users are trying to install Kicksecure onto USB drives (as in, doing full installations of Kicksecure to a USB like they'd do to a hard drive). This setup is particularly vulnerable to ending up with the normal bootloader becoming unusable, since such a portable installation may be booted on multiple computers, or the computer it is intended for use on might be booted with the USB drive removed in some instances. One way or another, users end up having to rely on the fallback bootloader, and the fallback bootloader is currently totally unusable. See https://forums.kicksecure.com/t/secure-boot-invalid-signature/771/4 and https://forums.kicksecure.com/t/boot-issue-after-installking-kicksecure/602</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/grml/grml-debootstrap/issues/297">
+  <header class="source">
+
+      <a href="https://github.com/grml/grml-debootstrap/issues/297" target="_blank" rel="noopener nofollow ugc">github.com/grml/grml-debootstrap</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/grml/grml-debootstrap/issues/297" target="_blank" rel="noopener nofollow ugc">UEFI bootloader updates seem broken</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-23" data-time="03:17:01" data-timezone="UTC">03:17AM - 23 Dec 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">grml-debootstrap currently installs grub-efi-amd64-signed when building an image<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> with EFI boot support. However, it does *not* install grub-efi-amd64 itself, which means that the actual GRUB installation won't be updated when the GRUB package is updated. As the `grub-efi-amd64-bin` package description warns:
+
+```
+ This package contains GRUB modules that have been built for use with the
+ EFI-AMD64 architecture, as used by Intel Macs (unless a BIOS interface has
+ been activated).  It can be installed in parallel with other flavours, but
+ will not automatically install GRUB as the active boot loader nor
+ automatically update grub.cfg on upgrade unless grub-efi-amd64 is also
+ installed.
+ ```
+ 
+grub-pc, on the other hand, is installed by default, which means that the BIOS bootloader will be updated properly. Sadly grub-pc and grub-efi-amd64 can't be installed at the same time, so you can't have both bootloaders be continuously updated. Of the two, I'd argue the UEFI bootloader is the more important one to keep continuously up-to-date, because it's the one that has Secure Boot implications, while grub-pc doesn't.
+
+Furthermore, while grml-debootstrap installs the bootloader to the removable media location by default using the `--removable` switch, the `grub2/force_efi_extra_removable` debconf variable isn't being set. This means that even if `grub-efi-amd64` is installed, the fallback bootloader won't be updated when GRUB updates, potentially leaving security issues.
+
+(Note: This isn't an issue that can be solved entirely in grml-debootstrap. In my testing, even installing `grub-efi-amd64` and setting the debconf variable correctly wasn't working to get UEFI bootloader updates to work on an image built with grml-debootstrap. I don't understand why, but suspect it may be a bug in Debian's `grub-efi-amd64.postinst` script.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>In the mean time, I’ll work on a “quick fix” in derivative-maker that will fix the problem for now, at least for Kicksecure ISOs.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/secure-boot-invalid-signature/771#post_12</link>
+        <pubDate>Mon, 23 Dec 2024 03:23:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1997</guid>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="KSWhonixXMR" data-post="1" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>A live Kicksecure host cannot run a VM.</p>
+</blockquote>
+</aside>
+<p>The main challenge here is that while live mode keeps the root filesystem read-only, the OS itself needs to be able to write to the root filesystem. This paradox means we have to use an overlayfs in RAM, which keeps all changes to the root filesystem in RAM. This means that while booted in live mode, your available disk space is limited by available system RAM. VMs used during this time have to run <em>entirely</em> in RAM, which is hard when your VM disks are even modestly large. When you modify a file when using OverlayFS, the base file is copied wholesale into the overlayed filesystem, meaning if you boot a Whonix VM while in live mode, the whole disk image has to be loaded into RAM, which is difficult unless you have <em>a lot</em> of RAM. For this reason, it will probably be impractical to run a Whonix VM while booted into Kicksecure’s live mode. Instead, you can boot Kicksecure into persistent mode, and then boot the Whonix VMs themselves in live mode.</p>
+<p>What may be possible in the future (no promises, I’ve only talked about this idea briefly with <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> and it may not be on the roadmap at all) is that Kicksecure could potentially boot <em>itself</em> in a VM while in live mode. Essentially when the root filesystem is immutable, you can actually boot it multiple times (once on the host and then once per VM you run) without running into any conflicts, so long as each user of the base filesystem uses their own overlay and doesn’t touch the contents of the base disk. This would let you have the protection offered by a VM, without requiring any extra disk space. This wouldn’t give you the advantages of Whonix (at least not the way I have it envisioned), but it would give you sandboxing. This will potentially become easy to implement if Kicksecure gets support for <a href="https://www.kicksecure.com/wiki/Verified_Boot" rel="noopener nofollow ugc">Verified Boot</a>.</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="1" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>‘<strong>hardened-kernel</strong>’ is a highly appreciated feature in Kicksecure.</p>
+</blockquote>
+</aside>
+<p>I don’t think hardened-kernel was actually fully released, and it seems to be somewhat outdated. The last commit to it was last year, and it’s downloading a now-EOL LTS 4.x kernel. I would advise against using it. As the wiki page notes, it’s for developers only.</p>
+<aside class="quote no-group" data-username="KSWhonixXMR" data-post="6" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>Seeing Kloak in action was very exciting. Kloak is not available in Qubes OS (Fedora bare-metal) or TAILS but site-side deanonymization via type fingerprinting analysis much be a major source of identifying information in cyberspace.</p>
+</blockquote>
+</aside>
+<p>Tails is based on Debian, so it should be relatively trivial to get Kloak up and running on it. See the README.md for <a href="https://github.com/Whonix/kloak" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Whonix/kloak</a>. As for Qubes OS support, Qubes OS R4.3 will have a kloak-like feature built into the GUI daemon that can be used on any desired qube by setting a configuration option. See <a href="https://github.com/QubesOS/qubes-gui-daemon/pull/149" class="inline-onebox" rel="noopener nofollow ugc">Add event buffering for cloaking user input patterns by ArrayBolt3 · Pull Request #149 · QubesOS/qubes-gui-daemon · GitHub</a>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_7</link>
+        <pubDate>Mon, 23 Dec 2024 01:33:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1996</guid>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[@KSWhonixXMR]]></dc:creator>
         <description><![CDATA[ <p><strong>Observations on Kloak</strong></p>
 <p>Of course, typing off-line is the best way to prevent site-side keystroke fingerprinting but that behavior is inconvinent if one is always copy pasting to search bars and not just to paragraph or multi-sentence texteras (postings). But Kloak also anonymizes peripheral inputs which cannot be taken off-line like mouse<br>
 and scrolls.</p>
@@ -2044,98 +2241,6 @@ Even if system is update. I checked it on my computer and a friend’s computer 
         <link>https://forums.kicksecure.com/t/grapheneos-attacks-kicksecure-what-should-the-response-be/739#post_9</link>
         <pubDate>Wed, 18 Dec 2024 03:47:33 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1867</guid>
-      </item>
-      <item>
-        <title>Notifications about new updates</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="qtzvytqr77x4t5cq" data-post="5" data-topic="774">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/q/a4c791/48.png" class="avatar"> qtzvytqr77x4t5cq:</div>
-<blockquote>
-<p>I also do not know if there is an equivalent application on kicksecure.</p>
-</blockquote>
-</aside>
-<p>systemcheck is available on Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Systemcheck">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1734427826" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Systemcheck" target="_blank" rel="noopener" title="07:13AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/Systemcheck" target="_blank" rel="noopener">systemcheck - Security Check Application</a></h3>
-
-  <p>Connectivity Test. Sanity Test. Update Check. And More.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="qtzvytqr77x4t5cq" data-post="5" data-topic="774">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/q/a4c791/48.png" class="avatar"> qtzvytqr77x4t5cq:</div>
-<blockquote>
-<p>Maybe there is a way to run the system check application automatically on startup</p>
-</blockquote>
-</aside>
-<p>Documented just now:<br>
-<a href="https://www.kicksecure.com/wiki/Systemcheck#autostart_systemcheck">autostart systemcheck</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/notifications-about-new-updates/774#post_6</link>
-        <pubDate>Wed, 18 Dec 2024 02:28:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1866</guid>
-      </item>
-      <item>
-        <title>Notifications about new updates</title>
-        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
-        <description><![CDATA[ <p>I am using whonix. In whonix gateway and workstation, there is a “system check” application. I put a desktop shortcut for it and click it when I start the vm.</p>
-<p>Maybe there is a way to run the system check application automatically on startup, but I am not a developer and not a linux expert, so I do not know.</p>
-<p>I also do not know if there is an equivalent application on kicksecure.</p>
-<p>One thing I wish that the system check application did do was to check outdated flatpaks as well as the debian repositories. Maybe in the future I will make a launcher that runs “upgrade nonroot” and “flatpak update” sequentially and put it on the desktop to click.</p>
-<p>edit- It seems to not allow me to do this.</p>
-<blockquote>
-<p>user@host:~$ flatpak update &amp; upgrade-nonroot<br>
-[1] 15542<br>
-Looking for updates…<br>
-Hit:1 tor+https://deb.kicksecure.com bookworm InRelease<br>
-Hit:2 tor+https://deb.debian.org/debian bookworm InRelease<br>
-Hit:3 tor+https://fasttrack.debian.net/debian bookworm-fasttrack InRelease<br>
-Hit:4 tor+https://deb.whonix.org bookworm InRelease<br>
-Hit:5 tor+https://deb.debian.org/debian bookworm-updates InRelease<br>
-Hit:6 tor+https://deb.debian.org/debian-security bookworm-security InRelease<br>
-Hit:7 tor+https://deb.debian.org/debian bookworm-backports InRelease<br>
-Hit:8 <a href="https://packages.element.io/debian" rel="noopener nofollow ugc">https://packages.element.io/debian</a> default InRelease<br>
-Reading package lists… Done<br>
-Reading package lists… Done<br>
-Building dependency tree… Done<br>
-Reading state information… Done<br>
-Calculating upgrade… Done<br>
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.</p>
-<p>[1]+  Stopped                 flatpak update<br>
-user@host:~$</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/notifications-about-new-updates/774#post_5</link>
-        <pubDate>Tue, 17 Dec 2024 17:07:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1865</guid>
-      </item>
-      <item>
-        <title>Notifications about new updates</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>this article recommends a self cli-update. do you think it is better than not to know about new updates and than to use notifications from third-party apps/scripts? but maybe kicksecure will cli-notify about new updates and recommend cli-update in terminal? I am against auto updates, but notifications about new updates are convenient and safe. I agree that user does not always remember about updating without notification. especially new users. I am not a newbie, but I rarely check for updates - I do not think about it</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/notifications-about-new-updates/774#post_4</link>
-        <pubDate>Tue, 17 Dec 2024 15:05:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1864</guid>
       </item>
   </channel>
 </rss>
