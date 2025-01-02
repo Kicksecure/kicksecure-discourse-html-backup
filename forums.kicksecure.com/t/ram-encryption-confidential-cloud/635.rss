@@ -8,9 +8,209 @@
 
 https://www.kicksecure.com/wiki/Dev/confidential_computing</description>
     
-    <lastBuildDate>Thu, 24 Oct 2024 18:59:14 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jan 2025 11:57:38 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>RAM encryption / Confidential Cloud</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/keylime/keylime/issues/1712">
+  <header class="source">
+
+      <a href="https://github.com/keylime/keylime/issues/1712" target="_blank" rel="noopener">github.com/keylime/keylime</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/keylime/keylime/issues/1712" target="_blank" rel="noopener">mitigate relay attacks</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-01-01" data-time="11:57:23" data-timezone="UTC">11:57AM - 01 Jan 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Does keylime mitigate relay attacks? From what I've read, I would not know how i<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t could.
+
+What do you I mean by relay attack? Quote [Trusted Boot (Anti-Evil-Maid, Heads, and PureBoot)](https://tech.michaelaltfield.net/2023/02/16/evil-maid-heads-pureboot/):
+
+&gt; Relay attack
+&gt; 
+&gt; While the TOTP solution cleverly solves the replay attack, it’s still vulnerable to a relay attack.
+&gt; 
+&gt; An attacker could steal your laptop and leave behind an identical-looking malicious laptop. When you (unknowingly) boot the malicious relay laptop, it communicates out to your real laptop — which relays the 6-digit OTP code down to the malicious laptop. You verify that the 6-digit OTP is correct and type your FDE decryption password — which is relayed out to the attacker with your real laptop.
+
+Notes:
+
+* Yes: This is about re**lay** attacks. (There is no "`p`" inside the word "`relay`".) As in "to relay", "proxy", man-in-the-middle (MiTM).
+* No: This is not about `replay` attacks.
+
+It is similar to the following issue with OpenPGP / gpg.
+
+```
+gpg: WARNING: This key is not certified with a trusted signature!
+gpg:          There is no indication that the signature belongs to the owner.
+```
+
+Or SSH.
+
+```
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
+Someone could be eavesdropping on you right now (man-in-the-middle attack)!
+It is also possible that a host key has just been changed.
+The fingerprint for the RSA key sent by the remote host is
+6e:45:f9:a8:af:38:3d:a1:a5:c7:76:1d:02:f8:77:00.
+Please contact your system administrator.
+Add correct host key in /home/hostname /.ssh/known_hosts to get rid of this message.
+Offending RSA key in /var/lib/sss/pubconf/known_hosts:4
+RSA host key for pong has changed and you have requested strict checking.
+Host key verification failed.
+```
+
+Even with a TPM EK (endorsement key) when provisioning a new server in a untrusted cloud, there does not seem even conceptually a way to resolve this issue. With the TPM EK there is evidence that the customer is talking to "a real TPM". That TPM however might be proxied (MiTMd) through another machine and another TPM.
+
+Potential solutions:
+
+* TOFU: Ignoring this issue and trust on first use.
+* local, physical provisioning: Customer provisions their own hardware locally to learn the TPM EK and then ships the hardware to the cloud provider.
+* cloud provider should publish the TPM EK fingerprint upfront: Before provisioning a server, the cloud provider should be expected to reveal the TPM endorsement key fingerprint. Would that help or would that still be vulnerable to relay attacks? The initial SSH key setup might still get intercepted?
+
+See also:
+
+* [Firmware authentication, avoiding relay attacks](https://www.kicksecure.com/wiki/Verified_Boot#Firmware_authentication.2C_avoiding_relay_attacks), where relay attacks are described in detail as well as potential solutions. (Written by @ArrayBolt3 with minor edits by myself.)
+* https://github.com/linuxboot/heads/issues/1881
+
+Purpose of this ticket:
+
+* Solve this issue and/or,
+* document the issue in user documentation / threat model.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635/3</link>
+        <pubDate>Wed, 01 Jan 2025 11:57:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-635-3</guid>
+        <source url="https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635.rss">RAM encryption / Confidential Cloud</source>
+      </item>
+      <item>
+        <title>RAM encryption / Confidential Cloud</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/linuxboot/heads/issues/1881">
+  <header class="source">
+
+      <a href="https://github.com/linuxboot/heads/issues/1881" target="_blank" rel="noopener">github.com/linuxboot/heads</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/linuxboot/heads/issues/1881" target="_blank" rel="noopener">mitigate relay attacks</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-29" data-time="10:57:29" data-timezone="UTC">10:57AM - 29 Dec 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
+
+Quote http<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">s://tech.michaelaltfield.net/2023/02/16/evil-maid-heads-pureboot/
+
+&gt; Relay attack
+&gt; 
+&gt; While the TOTP solution cleverly solves the replay attack, it’s still vulnerable to a relay attack.
+&gt; 
+&gt; An attacker could steal your laptop and leave behind an identical-looking malicious laptop. When you (unknowingly) boot the malicious relay laptop, it communicates out to your real laptop — which relays the 6-digit OTP code down to the malicious laptop. You verify that the 6-digit OTP is correct and type your FDE decryption password — which is relayed out to the attacker with your real laptop.
+
+**Describe the solution you'd like**
+
+&gt; a high-speed device, connected via a serial or perhaps USB interface, to manage authentication. This device can send an authentication challenge, receive a response, measure its timing, and verify it. If the response is both valid and received quickly enough, we can trust that the device and its firmware are authentic.
+
+**Describe alternatives you've considered**
+
+* FlashKeeper
+* CPU features
+* many more
+
+**Additional context**
+
+See also [Firmware authentication, avoiding relay attacks](https://www.kicksecure.com/wiki/Verified_Boot#Firmware_authentication.2C_avoiding_relay_attacks), where relay attacks are described in detail as well as potential solutions. (Written by @ArrayBolt3 with minor edits by myself.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635/2</link>
+        <pubDate>Wed, 01 Jan 2025 11:48:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-635-2</guid>
+        <source url="https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635.rss">RAM encryption / Confidential Cloud</source>
+      </item>
       <item>
         <title>RAM encryption / Confidential Cloud</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
