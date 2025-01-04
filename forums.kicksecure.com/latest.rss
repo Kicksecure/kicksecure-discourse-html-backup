@@ -5,8 +5,36 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Mon, 30 Dec 2024 03:28:55 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 03 Jan 2025 02:55:57 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Reducing the risk of installing malicious apt packages?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>(Was waiting for a very long software build to finish and this idea popped into my head, so I decided to write it up and post it.)</p>
+<p>A distro’s package manager is an interesting potential malware vector for a number of reasons. They are implicitly trusted by the distribution as being a safe source of software. The fact that these repositories are maintained by distributions and don’t simply allow anyone to throw software onto them increases their trustworthiness, and thus increases a user’s likelihood to treat them as entirely safe. Even though I do not (any longer) trust a distro’s official repos to be totally safe, I do generally trust <code>sudo apt install</code> to be more safe than most other ways of obtaining software.</p>
+<p>However, while a distro’s repositories are indeed <em>more</em> safe than using the Internet at large as your software repository (thanks Windows for proving that), that doesn’t mean that a package manager is entirely safe:</p>
+<ul>
+<li>Very little code review is generally done when packaging a software application for several major distributions, including Debian. Debian does not require (or even particularly encourage) packagers to do a code review, and the people who review new packages to ensure they are suitable for inclusion into the Debian archives mostly check that the <em>packaging</em> looks good, not the code of the application. As a result it is very possible for a malicious package to be introduced into the archive on accident. Similarly, it’s possible for malicious code to be introduced into a previously legitimate application without anyone noticing. (This has happened at least twice before, once very notably in the xz-utils incident, and once in a <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">lesser-known backdoor attack on the UnrealIRCD server, which affected Gentoo</a>. That second attack <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">went undetected for six or seven months</a>.)</li>
+<li>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision. This is especially true if the packager is a Debian Maintainer (thus able to upload specific packages without needing a sponsor) or a Debian Developer (thus able to upload an update to any package without needing a sponsor). A malicious or compromised DM or DD could thus potentially introduce malicious code into the archive without being noticed. Supplying updates for a package in a stable release is harder and would probably not be so easy to compromise in this way thankfully, but you still are putting your trust in the DMs and DDs of Debian, which could be poorly placed. Remember that Jia Tan was fully trusted and that turned out to be a bad idea.</li>
+<li>Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code. The Chromium browser package is a good example of this - it was so often out-of-date that the Linux Mint developers <a href="https://blog.linuxmint.com/?p=3978" rel="noopener nofollow ugc">decided to build it themselves for LMDE</a>. Chromium, despite its apparently good security design, is also a massive source of security vulnerabilities probably because it is such a popular application and thus everyone’s looking for vulnerabilities in it. The problems with Chromium might not be as bad now as they were back then, but this kind of thing is still worrying.</li>
+<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
+<li>Users may enable third-party repositories to get software that isn’t available from the Debian archives, or that is outdated in Debian. These repositories are probably OK if the user is installing software from an official upstream source, but there’s nothing stopping someone from making a malicious Debian repo that advertises newer versions of outdated software to make itself attractive. There’s also the incident with a <a href="https://debugpointnews.com/free-download-manager-debian/" rel="noopener nofollow ugc">malicious third-party repo for Free Download Manager</a>, which involved a compromise of the authentic Free Download Manager website. (That attack went undetected for <a href="https://www.freedownloadmanager.org/blog/?p=664" rel="noopener nofollow ugc">around two years</a>.)</li>
+</ul>
+<p>All of these issues could potentially cause serious trouble even for a security-conscious user, and to my awareness no major operating system (Linux or otherwise) makes any attempt to significantly mitigate the risks these kinds of attacks introduce. (Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know. Similarly Windows’ and MacOS’s restrictions related to signed code can make it more difficult to run code by people who don’t provide a clear link between their software and their identity, but there’s nothing stopping someone from just publishing signed malicious code, plus identity theft is a thing.) The user is left to figure out what they do or don’t trust by themselves, and while the user should <strong>always</strong> be the final authority on what is or isn’t trusted, it should be recognized that some users are just plain bad at making good decisions about what to trust. As the saying goes, <a href="https://en.wikipedia.org/wiki/Dancing_pigs" rel="noopener nofollow ugc">“Given a choice between dancing pigs and security, users will pick dancing pigs every time.”</a></p>
+<p>How could we harden apt in order to make this problem less of a problem? We <strong>absolutely should not block users from installing software</strong> regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn’t do. One potential idea might be to wrap <code>apt install</code> commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of “known good software” and another database of “known bad software”. If the user is trying to install something that isn’t explicitly trusted, they’ll get a warning they can click through, and if they’re trying to install something that is explicitly distrusted, they’ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don’t get backlash for “locking down” the OS if we go that route, then again I don’t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it’s intrinsically dangerous or not, but you get my point.) We’d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don’t know for sure if this is the best way of doing this, but it might work.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848</link>
+          <pubDate>Fri, 03 Jan 2025 02:55:57 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-848</guid>
+          <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+        </item>
         <item>
           <title>Calamares installer to manual</title>
           <dc:creator><![CDATA[suse211213]]></dc:creator>
@@ -16,7 +44,7 @@
 <p>I would partition through cli for learning purpose while having same kicksecure partitioning results</p>
 <p>As an example<br>
 Straightforward Luks on partition + encrypted separat swap , all online guides i found are only combined with LVM</p>
-            <p><small>9 posts - 2 participants</small></p>
+            <p><small>11 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/calamares-installer-to-manual/843">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843</link>
@@ -458,7 +486,7 @@ article /  10.1007/s41870-019-00294-x</li>
 After extensive testing, it would appear that the MAC control and permission hardening paradigm of TAILS is stronger than the compartmentalization and isolation through virtualization strategy of Qubes OS.</p>
 <p><strong>Dual Strength Tor Level</strong> options – If one takes a look at Nym (Chaum mixnet - Free Haven whitepapers) VPN, you can see that there is a Wireguard level and a mixnet level for secure messaging and confidential layer blockchain. I would recommend something similar if not handled on an app-by-app basis for levels of tor: <em>one layer with Vanguards</em> and another <em>layer for low-latency</em> tor.</p>
 <p><strong>Kloak</strong> - keystroke anonymization is also a very interesting Kicksecure feature under development that is not offered in any other major distribution.</p>
-            <p><small>10 posts - 5 participants</small></p>
+            <p><small>11 posts - 5 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779</link>
@@ -1354,29 +1382,6 @@ also System Check program cant connect to Tor for Tor Bootstrap test.</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-766</guid>
           <source url="https://forums.kicksecure.com/t/systemd-discussion/766.rss">Systemd discussion</source>
-        </item>
-        <item>
-          <title>Enhanced heuristics for determining the swap file size in swap-file-creator?</title>
-          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>I just finished installing Debian 12 onto a USB flash drive, then distro-morphing it to Kicksecure on my primary development laptop. The laptop has 32 GB RAM, while the flash drive is about 128 GB. I noticed swap-file-creator report it was creating a swapfile that was around 45 GB in size. I can see how this probably happened (I’m guessing it’s making a file equal to RAM size plus 50%), but two things come to mind:</p>
-<ul>
-<li>Creating a 45GB swap file is almost certainly overkill.</li>
-<li>Creating a swapfile that takes up over 35% of available disk space is almost certainly overkill.</li>
-</ul>
-<p>By default, Debian chose to give me a swap partition that was only 1 GB in size, which seems much more reasonable for systems that have lots of RAM like mine. Then again, for someone with very little RAM, 1 GB of swap probably doesn’t make much sense and creating a swapfile equal to 1.5x RAM size would be helpful.</p>
-<p>Should we change the algorithm used for determining swap file size? Perhaps 1.5x RAM is fine in general, but we should cap the maximum size to 8 GB or so. Taking into account the size of the storage device would probably also be a good idea.</p>
-            <p><small>4 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749</link>
-          <pubDate>Tue, 03 Dec 2024 01:55:49 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-749</guid>
-          <source url="https://forums.kicksecure.com/t/enhanced-heuristics-for-determining-the-swap-file-size-in-swap-file-creator/749.rss">Enhanced heuristics for determining the swap file size in swap-file-creator?</source>
         </item>
   </channel>
 </rss>
