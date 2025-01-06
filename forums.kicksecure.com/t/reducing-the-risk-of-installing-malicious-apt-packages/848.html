@@ -129,6 +129,10 @@ END custom CSS / JS
 <meta name="twitter:description" content="(Was waiting for a very long software build to finish and this idea popped into my head, so I decided to write it up and post it.)  A distro’s package manager is an interesting potential malware vector for a number of reasons. They are implicitly trusted by the distribution as being a safe source of software. The fact that these repositories are maintained by distributions and don’t simply allow anyone to throw software onto them increases their trustworthiness, and thus increases a user’s likel..." />
 <meta property="og:article:section" content="Development" />
 <meta property="og:article:section:color" content="25AAE2" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="3 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="1 ❤" />
 <meta property="article:published_time" content="2025-01-03T02:55:57+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -221,6 +225,134 @@ END custom CSS / JS
 </ul>
 <p>All of these issues could potentially cause serious trouble even for a security-conscious user, and to my awareness no major operating system (Linux or otherwise) makes any attempt to significantly mitigate the risks these kinds of attacks introduce. (Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know. Similarly Windows’ and MacOS’s restrictions related to signed code can make it more difficult to run code by people who don’t provide a clear link between their software and their identity, but there’s nothing stopping someone from just publishing signed malicious code, plus identity theft is a thing.) The user is left to figure out what they do or don’t trust by themselves, and while the user should <strong>always</strong> be the final authority on what is or isn’t trusted, it should be recognized that some users are just plain bad at making good decisions about what to trust. As the saying goes, <a href="../../../external.html?link=https://en.wikipedia.org/wiki/Dancing_pigs" rel="noopener nofollow ugc">“Given a choice between dancing pigs and security, users will pick dancing pigs every time.”</a></p>
 <p>How could we harden apt in order to make this problem less of a problem? We <strong>absolutely should not block users from installing software</strong> regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn’t do. One potential idea might be to wrap <code>apt install</code> commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of “known good software” and another database of “known bad software”. If the user is trying to install something that isn’t explicitly trusted, they’ll get a warning they can click through, and if they’re trying to install something that is explicitly distrusted, they’ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don’t get backlash for “locking down” the OS if we go that route, then again I don’t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it’s intrinsically dangerous or not, but you get my point.) We’d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don’t know for sure if this is the best way of doing this, but it might work.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-01-05T09:47:32Z' class='post-time'>
+                    January 5, 2025,  9:47am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-01-05T09:47:32Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
+</ul>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know.</p>
+</blockquote>
+</aside>
+<p>Related: There’s a ticket for <code>check-support-status</code>.</p>
+<aside class="onebox discoursetopic" data-onebox-src="../../../external.html?link=https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262">
+  <header class="source">
+      <img src="../../../external.html?link=https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="../../../external.html?link=https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener" title="05:52PM - 19 February 2024">Whonix Forum – 19 Feb 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="../../../external.html?link=https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="../../../external.html?link=https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener">find packages without security support / consider installation of...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #0088CC;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Phabricator Tickets</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Information ID: 135  PHID: PHID-TASK-tdyojm657xusmg66py6f  Author: Patrick  Status at Migration Time: open  Priority at Migration Time: Normal  Description When the Debian security team ends security support for packages, and an affected package...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>One potential idea might be to wrap <code>apt install</code> commands</p>
+</blockquote>
+</aside>
+<p>In case we implement this: Or we could keep <code>apt</code> unmodified and instead teach users to use our APT wrapper program instead with a name yet to be invented? (This is to avoid breaking existing scripts.)</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>we could always expand the database if people find things that we can determine are widely used</p>
+</blockquote>
+</aside>
+<p>This assumes, popular application = more secure?</p>
+<p>I am worried to become something similar to a certificate authority. Becoming an entity that makes complicated decisions on “trustworthy” and “untrustworthy”. That seems difficult, opinionated to argue about without good reasons to back it up such as code audits, which we cannot provide due to lack of resources. Imagine software projects contacting us, asking why they’re on the bad list, why that is and how to get off the list.</p>
+<p>Then imagine users wanting to install a program of their use case. A calculator or so. Our program would warn “this program has low popularity”. Then the user would ask in the forums what should be used instead. What’s the answer? Maybe there isn’t any popular calculator. The calculator is just a made up example. Could be any use case.</p>
+<p>Can it be based on objective data? For example, if popularity is the primary decider, then we could base it on <a href="../../../external.html?link=https://popcon.debian.org/">https://popcon.debian.org</a> or other similar databases?</p>
+<p>Or by looking into (Debian) CVE databases and warn against installing packages with known unpatched CVEs.</p>
+<p>Why only about installing? It seems a tool that can also audit an already installed system would be useful as well. Similar to check-support-status but better.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">

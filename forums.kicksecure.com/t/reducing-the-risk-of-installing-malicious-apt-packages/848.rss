@@ -19,9 +19,121 @@ All of these issues could potentially cause serious trouble even for a security-
 
 How could we harden apt in order to make this problem less of a problem? We **absolutely should not block users from installing software** regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn&#39;t do. One potential idea might be to wrap `apt install` commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of &quot;known good software&quot; and another database of &quot;known bad software&quot;. If the user is trying to install something that isn&#39;t explicitly trusted, they&#39;ll get a warning they can click through, and if they&#39;re trying to install something that is explicitly distrusted, they&#39;ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don&#39;t get backlash for &quot;locking down&quot; the OS if we go that route, then again I don&#39;t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn&#39;t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it&#39;s intrinsically dangerous or not, but you get my point.) We&#39;d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don&#39;t know for sure if this is the best way of doing this, but it might work.</description>
     
-    <lastBuildDate>Fri, 03 Jan 2025 03:54:59 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jan 2025 09:47:32 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
+</ul>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know.</p>
+</blockquote>
+</aside>
+<p>Related: There’s a ticket for <code>check-support-status</code>.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener" title="05:52PM - 19 February 2024">Whonix Forum – 19 Feb 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener">find packages without security support / consider installation of...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #0088CC;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Phabricator Tickets</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Information ID: 135  PHID: PHID-TASK-tdyojm657xusmg66py6f  Author: Patrick  Status at Migration Time: open  Priority at Migration Time: Normal  Description When the Debian security team ends security support for packages, and an affected package...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>One potential idea might be to wrap <code>apt install</code> commands</p>
+</blockquote>
+</aside>
+<p>In case we implement this: Or we could keep <code>apt</code> unmodified and instead teach users to use our APT wrapper program instead with a name yet to be invented? (This is to avoid breaking existing scripts.)</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>we could always expand the database if people find things that we can determine are widely used</p>
+</blockquote>
+</aside>
+<p>This assumes, popular application = more secure?</p>
+<p>I am worried to become something similar to a certificate authority. Becoming an entity that makes complicated decisions on “trustworthy” and “untrustworthy”. That seems difficult, opinionated to argue about without good reasons to back it up such as code audits, which we cannot provide due to lack of resources. Imagine software projects contacting us, asking why they’re on the bad list, why that is and how to get off the list.</p>
+<p>Then imagine users wanting to install a program of their use case. A calculator or so. Our program would warn “this program has low popularity”. Then the user would ask in the forums what should be used instead. What’s the answer? Maybe there isn’t any popular calculator. The calculator is just a made up example. Could be any use case.</p>
+<p>Can it be based on objective data? For example, if popularity is the primary decider, then we could base it on <a href="https://popcon.debian.org">https://popcon.debian.org</a> or other similar databases?</p>
+<p>Or by looking into (Debian) CVE databases and warn against installing packages with known unpatched CVEs.</p>
+<p>Why only about installing? It seems a tool that can also audit an already installed system would be useful as well. Similar to check-support-status but better.</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/2</link>
+        <pubDate>Sun, 05 Jan 2025 09:47:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-2</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
       <item>
         <title>Reducing the risk of installing malicious apt packages?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
