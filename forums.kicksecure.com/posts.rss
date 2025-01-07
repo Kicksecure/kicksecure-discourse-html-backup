@@ -5,6 +5,155 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Battery threshold permission denied?</title>
+        <dc:creator><![CDATA[@paramount9]]></dc:creator>
+        <description><![CDATA[ <p>That is a very clear and detailed explanation, thank you for sharing it! <img src="https://forums.kicksecure.com/images/emoji/twitter/smiley.png?v=12" title=":smiley:" class="emoji" alt=":smiley:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/battery-threshold-permission-denied/855#post_5</link>
+        <pubDate>Tue, 07 Jan 2025 01:05:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2113</guid>
+      </item>
+      <item>
+        <title>Battery threshold permission denied?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>If the file doesn’t exist, you can’t create it. <code>/sys</code> isn’t a normal filesystem, it’s a “virtual filesystem” provided by the kernel that exposes various knobs and buttons, and provides info about various subsystems. If a file exists <em>and</em> the kernel allows it to be modified, then you can use that file to work with that component of the system, but otherwise, you can’t write to <code>/sys</code> (in particular creating new files appears to be forbidden). If this <code>charge_control_end_threshold</code> file doesn’t exist, either your hardware doesn’t support this feature, or your kernel doesn’t have the code needed to use it. Either way, the feature effectively doesn’t exist.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/battery-threshold-permission-denied/855#post_4</link>
+        <pubDate>Mon, 06 Jan 2025 15:04:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2111</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@UniksKorn25]]></dc:creator>
+        <description><![CDATA[ <p>What are the DNS servers listed in <code>/etc/resolv.conf</code>?</p>
+<pre><code class="lang-auto">nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+<p>These are virtual IP addresses, <strong>how do they work</strong>?</p>
+<p>I didn’t find this IPs in a local network, firewall, /etc/hosts, systemd-resolved, unbound. No info in the kicksecure wiki, anything. <strong>How does it work?</strong></p>
+<pre><code class="lang-auto">[user ~]% traceroute 10.139.1.1
+...
+27  * * *
+28  * * *
+29  * * *
+30  * * *
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_1</link>
+        <pubDate>Mon, 06 Jan 2025 14:16:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2110</guid>
+      </item>
+      <item>
+        <title>Calamares installer to manual</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>I foun this . but its not a bullet proof.</p>
+<p><a href="https://www.debian.org/releases/stable/amd64/apds03.en.html" class="onebox" target="_blank" rel="noopener nofollow ugc">https://www.debian.org/releases/stable/amd64/apds03.en.html</a></p>
+<p>Can be inspired by it .</p>
+<p>I didn’t expect it to be complicated unlike arch</p>
+<p>I’d rather stay by TUI installer and focus on buiding own iso.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_13</link>
+        <pubDate>Mon, 06 Jan 2025 13:41:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2108</guid>
+      </item>
+      <item>
+        <title>Battery threshold permission denied?</title>
+        <dc:creator><![CDATA[@paramount9]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for pointing that out! I’m trying to create a <code>charge_control_end_threshold</code> file in <code>/sys/class/power_supply/BAT0</code> to limit my battery’s charge level and lessen wear and tear. I’m just having trouble getting past the permission denied prompt. It would also be very helpful if you know of a way for the battery threshold to persist beyond reboots. <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/battery-threshold-permission-denied/855#post_3</link>
+        <pubDate>Mon, 06 Jan 2025 12:44:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2107</guid>
+      </item>
+      <item>
+        <title>Battery threshold permission denied?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="paramount9" data-post="1" data-topic="855">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/7ea924/48.png" class="avatar"> paramount9:</div>
+<blockquote>
+<p>sys/class/power_supply/BAT1/charge_control_end_threshold</p>
+</blockquote>
+</aside>
+<p>If /sys is concerend, “usually” (not sure if there are exceptions), don’t echo (write) something without confirming file existence. Or at least if write access fails, check if the file or folders even exist.</p>
+<ul>
+<li>You wrote, wrong: sys</li>
+<li>Instead, you should write, correct: /sys</li>
+</ul>
+<p>To check file existence:</p>
+<pre><code>ls /sys/class/power_supply/BAT1/charge_control_end_threshold
+</code></pre>
+<p>Folder existence:</p>
+<pre><code>ls /sys/class/power_supply/BAT1/
+</code></pre>
+<p>Folder existence:</p>
+<p>ls /sys/class/power_supply/</p>
+<p>Note, that writing to /sys is only temporary until reboot. (As per Linux /sys default.)</p>
+<p>For persistent changes, you need something else.</p>
+<p>And I am answering generally about /sys. I don’t really know what you’re trying to accomplish.</p>
+<p>Potentially appliable:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736155826" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736155826" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
+
+  <p>Definition of the Self Support First Policy for Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/battery-threshold-permission-denied/855#post_2</link>
+        <pubDate>Mon, 06 Jan 2025 12:17:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2106</guid>
+      </item>
+      <item>
+        <title>Battery threshold permission denied?</title>
+        <dc:creator><![CDATA[@paramount9]]></dc:creator>
+        <description><![CDATA[ <p>Hi, I’m novice and I’ve been trying to set battery thresholds but am having some issues.</p>
+<p><strong><span class="hashtag-raw">#1</span>. How can I overcome the permission issue?</strong><br>
+<code>echo '50' | sudo tee sys/class/power_supply/BAT1/charge_control_end_threshold: Permission denied 50</code></p>
+<p>I’ve also tried <code>sudo nano charge_control_end_threshold</code> but also get the permission denied error.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/battery-threshold-permission-denied/855#post_1</link>
+        <pubDate>Mon, 06 Jan 2025 11:44:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2104</guid>
+      </item>
+      <item>
         <title>Additional package to Kicksecure ISO build</title>
         <dc:creator><![CDATA[@suse211213]]></dc:creator>
         <description><![CDATA[ <p>Thanks for help.<br>
@@ -1551,78 +1700,6 @@ extension = blending</p>
         <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_6</link>
         <pubDate>Thu, 26 Dec 2024 23:11:56 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2039</guid>
-      </item>
-      <item>
-        <title>Cannot login to onion version of the forums</title>
-        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
-        <description><![CDATA[ <p>Yes, thank you for the link.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/cannot-login-to-onion-version-of-the-forums/824#post_3</link>
-        <pubDate>Thu, 26 Dec 2024 22:40:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2038</guid>
-      </item>
-      <item>
-        <title>Reshaping the future of KickSecure &amp; Whonix</title>
-        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>If <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> is reading this, let me ask you a few question. How do you Mr. Patrick define KickSecure &amp; Whonix and who are the targeted audience. Reply me without looking at your wiki. Not KickSecure / Whonix’s Wiki. None.</p>
-</blockquote>
-<p>If you are not willing to read the documentation, I do not think the developers will have a positive attitude towards whatever it is you want to propose!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_2</link>
-        <pubDate>Thu, 26 Dec 2024 22:39:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2037</guid>
-      </item>
-      <item>
-        <title>Faillock: Error reading tally directory: No such file or directory</title>
-        <dc:creator><![CDATA[@doremifasola]]></dc:creator>
-        <description><![CDATA[ <p>Woke up one morning with the laptop on my chest. To get Tor rocking I tried to set manually sdwdate clock like I always do, because the CMOS battery is done or something else is off since replacing the battery didint make any difference.</p>
-<p>Anyway got <strong>ERROR: Login blocked after 50 attempts</strong>. Followed unlocking instructions from Unlock User Account: Excessive Wrong Password Entry Attempts on Safely Use Root Commands page.</p>
-<p>Booted in to a recovery mode in GRUB/BIOS advanced options for … something.<br>
-Run the      <strong>faillock --user user --reset</strong>     in the maintenance state/mode.<br>
-Went back to regular kicksecure and sudo/login pw was still locked.<br>
-Tried several times back and forth with no avail.<br>
-Also tried only <strong>faillock</strong> command which should show list of login attempts.<br>
-It told me:  <strong>faillock: Error reading tally directory: No such file or directory</strong><br>
-Tried  <strong>which faillock</strong>  it told me the path to faillock, so it seems to be existing anyway.</p>
-<p>To clarify I can get to desktop by turning on laptop since there is only encryption password prompt, but cant do anything sudo and if I let it idle too long the login prompt comes up and I have to reboot to get back, though I could maybe remove hibernation or whatever it is that triggers login prompt.</p>
-<p>Printed all that internets had about it. Havent tried other stuff yet. Many point towards creating/touching such a directory. Dont know if I should follow strangers advice to touch hidden places. What could go wrong?</p>
-<p>Still wondering how it got locked. Is it even possible to fall a sleep with hands on keyboard on such a position that the user login prompt gets saturated? Will it accept continous enter as a attempt?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/faillock-error-reading-tally-directory-no-such-file-or-directory/827#post_1</link>
-        <pubDate>Thu, 26 Dec 2024 21:46:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2036</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>If the OS has malware that is running as root / administrator / SYSTEM / some other highly privileged user account depending on the particular OS you’re working with, then yes. Read-only flags are enforced in software only, and anything with high privileges on a system can turn off or even just ignore those flags. So if you’re going to do this, you should only share the drive between systems you trust to not have malware on them.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_5</link>
-        <pubDate>Thu, 26 Dec 2024 21:37:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2035</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@ZenLong]]></dc:creator>
-        <description><![CDATA[ <p>Is it possible for them to be infected if the directory itself only have read and execute permission ?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_4</link>
-        <pubDate>Thu, 26 Dec 2024 21:25:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2034</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@ZenLong]]></dc:creator>
-        <description><![CDATA[ <p>What I’m trying to achieve is to run brave browser &amp; tor browser which I’ve downloaded from the official source. They’re both located in /mnt/brave and /mnt/tor respectively with permission code 0655.</p>
-<p>I’ve tried running tor browser but got lots of permission denied error, fed up and deleted the whole partition. Well I think I’m calm enough to learn what have I done wrong. <em>Yeah, just ignore me deleting the whole partition. Will download and set them up properly later</em></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_3</link>
-        <pubDate>Thu, 26 Dec 2024 21:24:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2033</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>What kind of catch?</p>
-<p>Sharing programs with different operating systems? Then any malware infection could travel to each.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_2</link>
-        <pubDate>Thu, 26 Dec 2024 20:44:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2031</guid>
       </item>
   </channel>
 </rss>
