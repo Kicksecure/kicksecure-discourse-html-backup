@@ -5,6 +5,112 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>What are the DNS servers listed in <code>/etc/resolv.conf</code>?</p>
+</blockquote>
+<p>It’s an address within the range that’s assigned by the DHCP server.</p>
+<p>You can control that range via dnsmasq.conf.</p>
+<pre><code class="lang-auto"># Uncomment this to enable the integrated DHCP server, you need
+# to supply the range of addresses available for lease and optionally
+# a lease time. If you have more than one network, you will need to
+# repeat this for each network on which you want to supply DHCP
+# service.
+#dhcp-range=192.168.0.50,192.168.0.150,12h
+</code></pre>
+<p>If you don’t want this at all, simply disable it and add a DNS server of your choosing. Just don’t forget to add <code>dns=none</code> to <code>/etc/NetworkManager/NetworkManager.conf</code> or <code>/etc/resolv.conf</code> will be overwritten by network-manager.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_3</link>
+        <pubDate>Tue, 07 Jan 2025 21:13:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2119</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>Apologies, I accidentally posted on Whonix Forums.</p>
+<p>Hi everyone,</p>
+<p>I’m trying to get Wayland working with Kicksecure/KVM.</p>
+<p>Installing a Wayland compositor like sway or labwc in XFCE Kicksecure is not an option, due to the qemu bug which rotates the cursor by 180 degress. This happens with any DE that doesn’t fully integrate Wayland. (sway issue <span class="hashtag-raw">#6581</span> on git)</p>
+<p>Using Kicksecure with LXQT or KDE which have native Wayland support fixes that issue. (already tested with CLI Version)</p>
+<p>Can I simply replace or add a few packages in Derivative-Maker to achieve this?</p>
+<p>Looks like <code>derivative-maker/packages/kicksecure/kicksecure-meta-packages/debian/control</code>, lists the following meta-packages and their dependencies (containing all xfce packages) which could be changed to install LXQT instead of XFCE:</p>
+<pre><code class="lang-auto">kicksecure-xfce
+kicksecure-desktop-applications-xfce
+kicksecure-desktop-environment-essential-xfce
+kicksecure-shared-host-xfce
+.......etc
+</code></pre>
+<p>For example:</p>
+<pre><code class="lang-auto">xfce4 &gt; lxqt
+mousepad &gt; featherpad
+xfce4-terminal &gt; qterminal
+....etc
+</code></pre>
+<p>After some more digging the variable <code>dist_build_script_build_dependency</code> in <code>build-steps.d/1200_prepare-build-machine</code> contains all the packages listed in <code>kicksecure-meta-packages/debian/control</code>.</p>
+<p>I keep seeing <code>"$@"</code> in  <code>3500_install-packages</code> later on, so I’m assuming some of the packages are passed as an argument to the install functions.</p>
+<p>My plan would be to either switch the xfce packages to lxqt in <code>/kicksecure/kicksecure-meta-packages/debian/control</code> or if that’s no good then sed replace them in the variable that holds all install dependencies.</p>
+<p>Finally, config stuff seems to be handled by <code>derivative-maker/packages/kicksecure/desktop-config-dist</code>. There I’d just replace <code>/etc/skel/.config</code> xmls with lxqt ones.</p>
+<p>Is that pretty much it or am I missing something?</p>
+<p>Kind regards</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_1</link>
+        <pubDate>Tue, 07 Jan 2025 17:15:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2118</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@UniksKorn25]]></dc:creator>
+        <description><![CDATA[ <p>Judging by <code>tcpdump -i any port 53</code>, if the tor is running, then the DNS is resolved via tor.<br>
+The <code>/etc/resolv.conf</code> file begins to be used if the <code>tor@default</code> systemd service is stopped.</p>
+<p>I don’t know how that works.</p>
+<pre><code class="lang-auto">[user ~]% sudo ip netns list                                  
+[user ~]%
+</code></pre>
+<pre><code class="lang-auto">[user ~]% nmcli device status
+DEVICE  TYPE      STATE                   CONNECTION 
+lo      loopback  connected (externally)  lo         
+XXXXX   ethernet  unmanaged               --         
+XXXXX   ethernet  unmanaged               --
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo ip rule show
+0:	from all lookup local
+32766:	from all lookup main
+32767:	from all lookup default
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo iptables-save
+sudo: iptables-save: command not found
+</code></pre>
+<pre><code class="lang-auto">root@localhost:/home/user# nft list ruleset
+...
+nft: command not found
+</code></pre>
+<pre><code class="lang-auto">root@localhost:/home/user# resolvectl
+...
+resolvectl: command not found
+</code></pre>
+<p>This is beyond my comprehension. I wouldn’t say I like it when I can’t control the system, I’ll use it as a tor gateway, unlikely for my applications, but i’m not sure yet.</p>
+<p>And it’s also odd that the tor config doesn’t have a <code>DNSPort</code> directive to resolve hosts IP addresses.</p>
+<pre><code class="lang-auto">[user ~]% pgrep -af tor                                                    
+8266 /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+
+[user ~]% grep DNSPort /usr/share/tor/tor-service-defaults-torrc /etc/tor/torrc
+zsh: exit 1     grep --color=auto DNSPort /usr/share/tor/tor-service-defaults-torrc 
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_2</link>
+        <pubDate>Tue, 07 Jan 2025 13:15:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2115</guid>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[@KSWhonixXMR]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> Thank you for the wiki links! Great survey of the mobile Linux options, none of which approach the high security profile of Kicksecure or Whonix yet. I hope that one day there will be such an option, since mobile computing apps (wallets, sensors, messaging) and speedy access are so convenient.</p>
+<p>I began this development thread by mentioning that all my Linux devices suffered simultaneous hostile takeovers and repeated system failures inexplicably. My TAILS device did not. That is why I inquired about the possibility of developing a fully live, host-guest Whonix environment.</p>
+<p>TAILS runs live and can persist. Whatever an attacker does during a session will not continue after rebooting.  There was a live (host-guest) alpha USB Qubes iso available years ago that was not maintained and has been completely abandoned. <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> wrote that the fs might be modified in such a way to further the design goals of this live host-guest configuration but a more comprehensive understanding appears to find this configuration unnecessary or at least not in need of becoming a priority. The features of security-misc (permission hardener, hide hardware info, proc hide pid) might secure the system to a state equivalent to the resilience of live mode. I am also interested in a mobile, laptop workstation, so 32GB+ of RAM might be infeasible and I have not yet tested that solution.</p>
+<p>After checking out the forum again, I read that securing RAM through encryption is an area for potential development which contrasted in my mind with the amnesiac method TAILS utilizes in order to safeguard RAM against physical attacks by clearing the information instead of encrypting it. Since then, I began looking into the specifics of TAILS to see if elements of Kicksecure’s design could be implemented in the reverse direction. Upon preliminary investigation, I discovered that TAILS cannot add Kloak via additional packages and it’s sources cannot be modified in order to install the application as a systemd service. TAILS utilizes tor+https (fastly cdn) and does not offer onion repositories like Kicksecure and Debian. The Vanguards application can only be run as a clone from git and with sudo which defeats some of TAILS security elements. Kloak can’t be installed similarly as it requires dependencies. I was not aware that TAILS was configured like this and I began to speculate about if the strategy of “blending in” (by not onionizing updates and appearing uniform and like Windows whenever possible) is really that much better of an option when compared to the design of Kicksecure and Whonix.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_12</link>
+        <pubDate>Tue, 07 Jan 2025 02:30:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2114</guid>
+      </item>
+      <item>
         <title>Battery threshold permission denied?</title>
         <dc:creator><![CDATA[@paramount9]]></dc:creator>
         <description><![CDATA[ <p>That is a very clear and detailed explanation, thank you for sharing it! <img src="https://forums.kicksecure.com/images/emoji/twitter/smiley.png?v=12" title=":smiley:" class="emoji" alt=":smiley:" loading="lazy" width="20" height="20"></p> ]]></description>
@@ -83,14 +189,15 @@ nameserver 10.139.1.2
 <pre><code>ls /sys/class/power_supply/BAT1/
 </code></pre>
 <p>Folder existence:</p>
-<p>ls /sys/class/power_supply/</p>
+<pre><code>ls /sys/class/power_supply/
+</code></pre>
 <p>Note, that writing to /sys is only temporary until reboot. (As per Linux /sys default.)</p>
 <p>For persistent changes, you need something else.</p>
 <p>And I am answering generally about /sys. I don’t really know what you’re trying to accomplish.</p>
 <p>Potentially appliable:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736155826" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736242225" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
   </header>
@@ -115,7 +222,7 @@ nameserver 10.139.1.2
 
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736155826" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736242225" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
   </header>
@@ -1620,86 +1727,6 @@ at the end of the installation comes this error message what could that be</p>
         <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_4</link>
         <pubDate>Fri, 27 Dec 2024 07:38:01 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2047</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>user needs write permission. If you want to have non-standard file system setup, things will be more difficult. No matter what file system. You need to learn Linux file permissions.</p>
-<p>Any portable folder app requires write permission. Just set the correct owner.</p>
-<pre><code>sudo chown -R user:user /mnt
-</code></pre>
-<aside class="quote no-group" data-username="ZenLong" data-post="3" data-topic="825">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/c57346/48.png" class="avatar"> ZenLong:</div>
-<blockquote>
-<p>permission code 0655.</p>
-</blockquote>
-</aside>
-<p>That shouldn’t be required. Applications should have correct permissions by default. Setting all to executable is wrong. Can only be restored with re-install of app.</p>
-<p>chmod 700 or 770 if any but really shouldn’t be required manually.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_8</link>
-        <pubDate>Fri, 27 Dec 2024 07:20:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2046</guid>
-      </item>
-      <item>
-        <title>Whonix packages to install on Kicksecure for anonymized hostname, machine id and timezone</title>
-        <dc:creator><![CDATA[@frorum]]></dc:creator>
-        <description><![CDATA[ <p>Hi,</p>
-<p>If Whonix is an extension of Tor Browser, I want Kicksecure as an extension of Mullvad Browser.</p>
-<p>I don’t need Tor networking, but I would like to hide my timezone and hostname, etc. Are there simple packages from Whonix that can be installed to hide it in Kicksecure?</p>
-<p>Is it ‘anon-ws-base-files’?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/whonix-packages-to-install-on-kicksecure-for-anonymized-hostname-machine-id-and-timezone/829#post_1</link>
-        <pubDate>Thu, 26 Dec 2024 23:35:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2042</guid>
-      </item>
-      <item>
-        <title>Reshaping the future of KickSecure &amp; Whonix</title>
-        <dc:creator><![CDATA[@ZenLong]]></dc:creator>
-        <description><![CDATA[ <p>I think <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> have a definition. *his definition</p>
-<h1><a name="p-2040-draft-1" class="anchor" href="https://forums.kicksecure.com#p-2040-draft-1"></a>Draft</h1>
-<p>I just think the operating system is developing too fast, and lack a little grounding in the process. KS &amp; W are one operating system, not two (efficiency-wise).</p>
-<p>KS = base (earth), W = extension (building).<br>
-Without a strong and stable ‘earth’ / ‘ground’, how’s the ‘building’ even gonna hold up.</p>
-<p>base = core<br>
-extension = blending</p>
-<p>We can have some sort of module to enable the ‘extension’. Take a look at slax(dot).org. Let’s build something similiar.</p>
-<p>I’m typing kind of randomly because I’m flooded with idea that can draw more attention. Whonix is publically know to be better than Tails (most of the time). Tails and Whonix are well known. Whonix is second to QubesOS(the extreme). It is considered lighter in resource usage. Low End Computer can still take advantage of KickSecure.</p>
-<p>Bear with me, Please plot mindmap and you’ll understand what I want to present.</p>
-<p>Suggestion</p>
-<ol>
-<li>module based (features can be loaded and unloaded) (this can help to target people with specific requirement, strictest or not)</li>
-<li>securityManager (all security related settings are only in here, so we don’t need package separation)</li>
-<li>light on resources</li>
-<li>To make the operating system beautiful, hire archcraft owner to do the beautifying job</li>
-<li>Documenting can be hard, switch to arch based one day. Because every live mode will boot into a fresh state. We can take advantage of documented resources.</li>
-<li>Make the operating system light enough to support copy2ram</li>
-<li>Strip out bluetooth, audio by default. Can be reloaded via module.</li>
-<li>Ship with Firefox ESR with strictest privacy options enable. No Extension Yet of course. It’s not hardening like arkenfox thing, but default settings after pulled to the max security.</li>
-<li>coming soon.</li>
-</ol>
-<p>is heavy operating system really required to ensure security ? is what i’m really curious about. Not saying Whonix or KickSecure is heavy but hey it’s an improvement and the code base will be easy to manage, small &amp; efficient. Isn’t that what we want ? We’re the technology itself.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_3</link>
-        <pubDate>Thu, 26 Dec 2024 23:13:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2040</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@ZenLong]]></dc:creator>
-        <description><![CDATA[ <p>The running operating system is <strong>KickSecure</strong> and the partition was created during one of the session, So I trust the files &amp; operating system. The differences between the output of the specified software in different distribution is that <strong>KS</strong> basically output ‘<em>permission denied</em>’ while others runs them without any issue.</p>
-<p>Recreating the issue can be rather simple. (# before line indicate it is to run with <code>sudo</code>)</p>
-<pre><code class="lang-auto"># fdisk /dev/sdx; (input: 'n', 'enter'*2, '+4G', 'w')
-# mkfs.ext4 /dev/sdx1;
-# mount /dev/sdx1 /mnt;
-# mkdir /mnt/{brave,tor};
-# mv /path/to/brave /mnt/brave;
-# mv /path/to/tor /mnt/tor;
-/mnt/brave/brave;
-/mnt/tor/firefox.real;
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_6</link>
-        <pubDate>Thu, 26 Dec 2024 23:11:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2039</guid>
       </item>
   </channel>
 </rss>

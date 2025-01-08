@@ -235,6 +235,109 @@ nameserver 10.139.1.2
             </div>
 
           </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/UniksKorn25'><span itemprop='name'>UniksKorn25</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-01-07T13:15:50Z' class='post-time'>
+                    January 7, 2025,  1:15pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-01-07T13:34:37Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Judging by <code>tcpdump -i any port 53</code>, if the tor is running, then the DNS is resolved via tor.<br>
+The <code>/etc/resolv.conf</code> file begins to be used if the <code>tor@default</code> systemd service is stopped.</p>
+<p>I don’t know how that works.</p>
+<pre><code class="lang-auto">[user ~]% sudo ip netns list                                  
+[user ~]%
+</code></pre>
+<pre><code class="lang-auto">[user ~]% nmcli device status
+DEVICE  TYPE      STATE                   CONNECTION 
+lo      loopback  connected (externally)  lo         
+XXXXX   ethernet  unmanaged               --         
+XXXXX   ethernet  unmanaged               --
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo ip rule show
+0:	from all lookup local
+32766:	from all lookup main
+32767:	from all lookup default
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo iptables-save
+sudo: iptables-save: command not found
+</code></pre>
+<pre><code class="lang-auto">root@localhost:/home/user# nft list ruleset
+...
+nft: command not found
+</code></pre>
+<pre><code class="lang-auto">root@localhost:/home/user# resolvectl
+...
+resolvectl: command not found
+</code></pre>
+<p>This is beyond my comprehension. I wouldn’t say I like it when I can’t control the system, I’ll use it as a tor gateway, unlikely for my applications, but i’m not sure yet.</p>
+<p>And it’s also odd that the tor config doesn’t have a <code>DNSPort</code> directive to resolve hosts IP addresses.</p>
+<pre><code class="lang-auto">[user ~]% pgrep -af tor                                                    
+8266 /usr/bin/tor --defaults-torrc /usr/share/tor/tor-service-defaults-torrc -f /etc/tor/torrc --RunAsDaemon 0
+
+[user ~]% grep DNSPort /usr/share/tor/tor-service-defaults-torrc /etc/tor/torrc
+zsh: exit 1     grep --color=auto DNSPort /usr/share/tor/tor-service-defaults-torrc 
+</code></pre>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" href='../../../external.html?link=https://forums.kicksecure.com/u/e-coin'><span itemprop='name'>e-coin</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-01-07T21:13:33Z' class='post-time'>
+                    January 7, 2025,  9:13pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-01-07T21:13:33Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <blockquote>
+<p>What are the DNS servers listed in <code>/etc/resolv.conf</code>?</p>
+</blockquote>
+<p>It’s an address within the range that’s assigned by the DHCP server.</p>
+<p>You can control that range via dnsmasq.conf.</p>
+<pre><code class="lang-auto"># Uncomment this to enable the integrated DHCP server, you need
+# to supply the range of addresses available for lease and optionally
+# a lease time. If you have more than one network, you will need to
+# repeat this for each network on which you want to supply DHCP
+# service.
+#dhcp-range=192.168.0.50,192.168.0.150,12h
+</code></pre>
+<p>If you don’t want this at all, simply disable it and add a DNS server of your choosing. Just don’t forget to add <code>dns=none</code> to <code>/etc/NetworkManager/NetworkManager.conf</code> or <code>/etc/resolv.conf</code> will be overwritten by network-manager.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
     </div>
 
 

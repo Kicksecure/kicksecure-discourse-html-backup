@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Building Kicksecure with different Desktop Environment</title>
+    <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862</link>
+    <description>Apologies, I accidentally posted on Whonix Forums.
+
+Hi everyone,
+
+I&#39;m trying to get Wayland working with Kicksecure/KVM.
+
+Installing a Wayland compositor like sway or labwc in XFCE Kicksecure is not an option, due to the qemu bug which rotates the cursor by 180 degress. This happens with any DE that doesn’t fully integrate Wayland. (sway issue #6581 on git)
+
+Using Kicksecure with LXQT or KDE which have native Wayland support fixes that issue. (already tested with CLI Version)
+
+Can I simply replace or add a few packages in Derivative-Maker to achieve this?
+
+Looks like `derivative-maker/packages/kicksecure/kicksecure-meta-packages/debian/control`, lists the following meta-packages and their dependencies (containing all xfce packages) which could be changed to install LXQT instead of XFCE:
+
+```
+kicksecure-xfce
+kicksecure-desktop-applications-xfce
+kicksecure-desktop-environment-essential-xfce
+kicksecure-shared-host-xfce
+.......etc
+```
+For example:
+```
+xfce4 &gt; lxqt
+mousepad &gt; featherpad
+xfce4-terminal &gt; qterminal
+....etc
+```
+After some more digging the variable `dist_build_script_build_dependency` in `build-steps.d/1200_prepare-build-machine` contains all the packages listed in `kicksecure-meta-packages/debian/control`.
+
+I keep seeing `&quot;$@&quot;` in  `3500_install-packages` later on, so I&#39;m assuming some of the packages are passed as an argument to the install functions.
+
+My plan would be to either switch the xfce packages to lxqt in `/kicksecure/kicksecure-meta-packages/debian/control` or if that&#39;s no good then sed replace them in the variable that holds all install dependencies.
+
+Finally, config stuff seems to be handled by `derivative-maker/packages/kicksecure/desktop-config-dist`. There I’d just replace `/etc/skel/.config` xmls with lxqt ones.
+
+Is that pretty much it or am I missing something?
+
+Kind regards</description>
+    
+    <lastBuildDate>Tue, 07 Jan 2025 17:15:56 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <p>Apologies, I accidentally posted on Whonix Forums.</p>
+<p>Hi everyone,</p>
+<p>I’m trying to get Wayland working with Kicksecure/KVM.</p>
+<p>Installing a Wayland compositor like sway or labwc in XFCE Kicksecure is not an option, due to the qemu bug which rotates the cursor by 180 degress. This happens with any DE that doesn’t fully integrate Wayland. (sway issue <span class="hashtag-raw">#6581</span> on git)</p>
+<p>Using Kicksecure with LXQT or KDE which have native Wayland support fixes that issue. (already tested with CLI Version)</p>
+<p>Can I simply replace or add a few packages in Derivative-Maker to achieve this?</p>
+<p>Looks like <code>derivative-maker/packages/kicksecure/kicksecure-meta-packages/debian/control</code>, lists the following meta-packages and their dependencies (containing all xfce packages) which could be changed to install LXQT instead of XFCE:</p>
+<pre><code class="lang-auto">kicksecure-xfce
+kicksecure-desktop-applications-xfce
+kicksecure-desktop-environment-essential-xfce
+kicksecure-shared-host-xfce
+.......etc
+</code></pre>
+<p>For example:</p>
+<pre><code class="lang-auto">xfce4 &gt; lxqt
+mousepad &gt; featherpad
+xfce4-terminal &gt; qterminal
+....etc
+</code></pre>
+<p>After some more digging the variable <code>dist_build_script_build_dependency</code> in <code>build-steps.d/1200_prepare-build-machine</code> contains all the packages listed in <code>kicksecure-meta-packages/debian/control</code>.</p>
+<p>I keep seeing <code>"$@"</code> in  <code>3500_install-packages</code> later on, so I’m assuming some of the packages are passed as an argument to the install functions.</p>
+<p>My plan would be to either switch the xfce packages to lxqt in <code>/kicksecure/kicksecure-meta-packages/debian/control</code> or if that’s no good then sed replace them in the variable that holds all install dependencies.</p>
+<p>Finally, config stuff seems to be handled by <code>derivative-maker/packages/kicksecure/desktop-config-dist</code>. There I’d just replace <code>/etc/skel/.config</code> xmls with lxqt ones.</p>
+<p>Is that pretty much it or am I missing something?</p>
+<p>Kind regards</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/1</link>
+        <pubDate>Tue, 07 Jan 2025 17:15:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-1</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+  </channel>
+</rss>

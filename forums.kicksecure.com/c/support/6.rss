@@ -5,8 +5,49 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Mon, 06 Jan 2025 14:16:55 +0000</lastBuildDate>
+      <lastBuildDate>Tue, 07 Jan 2025 17:15:56 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Building Kicksecure with different Desktop Environment</title>
+          <dc:creator><![CDATA[e-coin]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Apologies, I accidentally posted on Whonix Forums.</p>
+<p>Hi everyone,</p>
+<p>I’m trying to get Wayland working with Kicksecure/KVM.</p>
+<p>Installing a Wayland compositor like sway or labwc in XFCE Kicksecure is not an option, due to the qemu bug which rotates the cursor by 180 degress. This happens with any DE that doesn’t fully integrate Wayland. (sway issue <span class="hashtag-raw">#6581</span> on git)</p>
+<p>Using Kicksecure with LXQT or KDE which have native Wayland support fixes that issue. (already tested with CLI Version)</p>
+<p>Can I simply replace or add a few packages in Derivative-Maker to achieve this?</p>
+<p>Looks like <code>derivative-maker/packages/kicksecure/kicksecure-meta-packages/debian/control</code>, lists the following meta-packages and their dependencies (containing all xfce packages) which could be changed to install LXQT instead of XFCE:</p>
+<pre><code class="lang-auto">kicksecure-xfce
+kicksecure-desktop-applications-xfce
+kicksecure-desktop-environment-essential-xfce
+kicksecure-shared-host-xfce
+.......etc
+</code></pre>
+<p>For example:</p>
+<pre><code class="lang-auto">xfce4 &gt; lxqt
+mousepad &gt; featherpad
+xfce4-terminal &gt; qterminal
+....etc
+</code></pre>
+<p>After some more digging the variable <code>dist_build_script_build_dependency</code> in <code>build-steps.d/1200_prepare-build-machine</code> contains all the packages listed in <code>kicksecure-meta-packages/debian/control</code>.</p>
+<p>I keep seeing <code>"$@"</code> in  <code>3500_install-packages</code> later on, so I’m assuming some of the packages are passed as an argument to the install functions.</p>
+<p>My plan would be to either switch the xfce packages to lxqt in <code>/kicksecure/kicksecure-meta-packages/debian/control</code> or if that’s no good then sed replace them in the variable that holds all install dependencies.</p>
+<p>Finally, config stuff seems to be handled by <code>derivative-maker/packages/kicksecure/desktop-config-dist</code>. There I’d just replace <code>/etc/skel/.config</code> xmls with lxqt ones.</p>
+<p>Is that pretty much it or am I missing something?</p>
+<p>Kind regards</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862</link>
+          <pubDate>Tue, 07 Jan 2025 17:15:56 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-862</guid>
+          <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+        </item>
         <item>
           <title>DNS nameserver 10.139.1.1</title>
           <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
@@ -25,7 +66,7 @@ nameserver 10.139.1.2
 29  * * *
 30  * * *
 </code></pre>
-            <p><small>1 post - 1 participant</small></p>
+            <p><small>3 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858</link>
@@ -570,23 +611,6 @@ also System Check program cant connect to Tor for Tor Bootstrap test.</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-745</guid>
           <source url="https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745.rss">How does Kicksecure compare to Silverblue?</source>
-        </item>
-        <item>
-          <title>PureVPN does not work after installing Kicksecure</title>
-          <dc:creator><![CDATA[linuxer]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>hi. my girlfriend installed morphing kicksecure on debian xfce and her pure-vpn stopped working - can’t connect to server. it looks like these are problems due to dns changes. how to return default dns settings or what package to delete so that kicksecure doesn’t interfere with dns? i tried to delete several packages, but to no avail. only timeshift solves problem - a return to default debian. i use nordvpn and mullvad - there is no such problem.</p>
-            <p><small>14 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/purevpn-does-not-work-after-installing-kicksecure/742">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/purevpn-does-not-work-after-installing-kicksecure/742</link>
-          <pubDate>Thu, 28 Nov 2024 09:23:08 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-742</guid>
-          <source url="https://forums.kicksecure.com/t/purevpn-does-not-work-after-installing-kicksecure/742.rss">PureVPN does not work after installing Kicksecure</source>
         </item>
   </channel>
 </rss>
