@@ -21,9 +21,146 @@ I didn&#39;t find this IPs in a local network, firewall, /etc/hosts, systemd-res
 30  * * *
 ```</description>
     
-    <lastBuildDate>Tue, 07 Jan 2025 21:13:33 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jan 2025 18:10:01 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="UniksKorn25" data-post="4" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>At first, it’s not true. Be careful, the first my post is about unbound, the second is about network maganer. They both do not participate in dns resolve.</p>
+</blockquote>
+</aside>
+<p>Of course network-manager interferes with /etc/resolv.conf, that’s why I advised you to add <code>dns=none</code> to the NetworkManager.conf, in case you intended to manually change it.</p>
+<p>I thought this was a KVM related case, that’s why I mentioned dnsmasq.</p>
+<p>Either way, a bunch of different things update /etc/resolv.conf on Debian.</p>
+<p>dhclient or network-manager are the usual culprits.</p>
+<p>dhclient fix:</p>
+<pre><code class="lang-auto">echo 'make_resolv_conf() { :; }' &gt; /etc/dhcp/dhclient-enter-hooks.d/leave_my_resolv_conf_alone
+chmod 755 /etc/dhcp/dhclient-enter-hooks.d/leave_my_resolv_conf_alone
+</code></pre>
+<p>last resort:</p>
+<pre><code class="lang-auto">chattr +i /etc/resolv.conf
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/7</link>
+        <pubDate>Wed, 08 Jan 2025 18:10:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-7</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[extraextra]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="UniksKorn25" data-post="2" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<pre><code class="lang-auto">[user ~]% sudo iptables-save
+sudo: iptables-save: command not found
+</code></pre>
+</blockquote>
+</aside>
+<p>iptables is deprecated upstream. Use nftables equivalent or install iptables if you insist.</p>
+<aside class="quote no-group" data-username="UniksKorn25" data-post="2" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<pre><code class="lang-auto">root@localhost:/home/user# resolvectl
+...
+resolvectl: command not found
+</code></pre>
+<p>This is beyond my comprehension. I wouldn’t say I like it when I can’t control the system,</p>
+</blockquote>
+</aside>
+<p>It’s not a control issue. You can install missing software as you like.</p>
+<aside class="quote no-group" data-username="UniksKorn25" data-post="4" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>Second, my question is, why are the values in <code>/etc/resolv.conf</code> ignored by the system?</p>
+</blockquote>
+</aside>
+<p>They aren’t. Why do you make the assumption? Comment out all entries or delete the file. In result, nslookup command will be broken.</p>
+<aside class="quote no-group" data-username="UniksKorn25" data-post="4" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>network maganer. They both do not participate in dns resolve.</p>
+</blockquote>
+</aside>
+<p>Network Manager has a built-in DHCP client and can update /etc/resolv.conf.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/6</link>
+        <pubDate>Wed, 08 Jan 2025 14:21:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-6</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[extraextra]]></dc:creator>
+        <description><![CDATA[
+            <p>Just look up the source code.</p>
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/kicksecure-network-conf">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/kicksecure-network-conf" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/4c03ad76a37ef29078e39cba20742c05/Kicksecure/kicksecure-network-conf" class="thumbnail">
+
+  <h3><a href="https://github.com/Kicksecure/kicksecure-network-conf" target="_blank" rel="noopener nofollow ugc">GitHub - Kicksecure/kicksecure-network-conf</a></h3>
+
+    <p><span class="github-repo-description">Contribute to Kicksecure/kicksecure-network-conf development by creating an account on GitHub.</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>It’s just network-manager-gnome plus some modifications. Otherwise same as Debian.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/5</link>
+        <pubDate>Wed, 08 Jan 2025 13:53:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-5</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>It’s an address within the range that’s assigned by the DHCP server.</p>
+</blockquote>
+<p>At first, it’s not true. Be careful, the first my post is about unbound, the second is about network maganer. They both do not participate in dns resolve.</p>
+<p>Second, my question is, why are the values in <code>/etc/resolv.conf</code> ignored by the system? And how DNS resolving works in kicksecure OS?</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/4</link>
+        <pubDate>Wed, 08 Jan 2025 04:26:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-4</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
       <item>
         <title>DNS nameserver 10.139.1.1</title>
         <dc:creator><![CDATA[e-coin]]></dc:creator>
