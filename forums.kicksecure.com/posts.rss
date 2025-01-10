@@ -5,6 +5,150 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>Hello, thanks for the reply.</p>
+<p>I read the entire code again and things are getting clearer now. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p>
+<blockquote>
+<p>Probably the easiest for hacky custom solutions… Written just now:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/Derivative-Maker#Custom_Packages" rel="noopener nofollow ugc">Custom Packages </a></p>
+</blockquote>
+<p>Thanks, so <code>flavor_meta_packages_to_install</code> is defined in <code>help-steps/variables</code> and (among other variables) called with source, which is used in every build step. (That took me a while to see)</p>
+<blockquote>
+<p>Are you looking for a hacky custom solution or implementing this properly and upstreaming to Kicksecure?</p>
+</blockquote>
+<p>For the hacky solution I’d just follow your suggestion with <code>flavor_meta_packages_to_install="kicksecure-cli-vm"</code> (or exclude specific xfce packages via <code>dist_build_script_skip_package_install</code>) and install the new lxqt packages with <code>pkg_install_list=lxqt-pkg1 lxqt-pkg2.....</code></p>
+<p>I’d be happy to help if you guys are interested in kicksecure-lxqt meta-packages.<br>
+I already started replacing all the dependencies in the control file before.</p>
+<p>Those should be the new ones (if I didn’t miss anything):</p>
+<pre><code class="lang-auto">kicksecure-lxqt, kicksecure-desktop-applications-lxqt, kicksecure-desktop-environment-essential-lxqt, kicksecure-lxqt-host, kicksecure-lxqt-vm, kicksecure-shared-host-xfce`
+</code></pre>
+<p>Minimal LXQT is probably superior to XFCE in terms of resource requirements anyway and Wayland support is a nice bonus.</p>
+<p>I read <code>build-steps.d/3500_install-packages</code> a bunch of times but couldn’t find a function that “installs” all the stuff from <code>derivative-maker/packages/kicksecure/*</code>. Where does this actually happen?</p>
+<p>For example, <code>3500_install-packages</code>  install_packages() function copies the apt binary directly from that directory, but <code>4300_run-chroot-scripts-post-d</code> already expects <code>/usr/libexec/initializer-dist/chroot-scripts-post.d</code> to be there from the initializer-dist package.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_3</link>
+        <pubDate>Thu, 09 Jan 2025 23:11:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2130</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@UniksKorn25]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/e-coin">@e-coin</a> , <a class="mention" href="https://forums.kicksecure.com/u/extraextra">@extraextra</a></p>
+<blockquote>
+<p>why are the values in <code>/etc/resolv.conf</code> ignored by the system?</p>
+<blockquote>
+<p>It’s not a control issue</p>
+</blockquote>
+</blockquote>
+<p>Yes, you’re right. Everything is working fine today, i must have made a mistake and confused in my own hosts. <code>/etc/resolv.conf</code> works.</p>
+<p>I’m still investigating the system. I am interested in the Kicksecure standard DNS address <code>10.139.1.1</code>.</p>
+<p>I use  <a href="https://www.kicksecure.com/wiki/KVM#CLI" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure for KVM with Xfce</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
+<pre><code class="lang-auto">[user ~]% sudo systemctl is-active NetworkManager
+inactive
+</code></pre>
+<pre><code class="lang-auto">[user ~]% pgrep -af dhc
+zsh: exit 1     pgrep -af dhc
+</code></pre>
+<p>The <code>resolv.conf</code> file contains <strong>standard Kicksecure DNS servers</strong>. These aren’t my servers, this is standard OS file:</p>
+<pre><code class="lang-auto">[user ~]% cat /etc/resolv.conf
+nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+<blockquote>
+<p>These IP addresses are likely part of a private network, as they fall within the range of private IP addresses defined by the Internet Engineering Task Force (IETF). <strong>Private IP addresses are not routable on the public internet and are typically used within local networks.</strong></p>
+</blockquote>
+<pre><code class="lang-auto">[user ~]% sudo tcpdump -i any port 53
+tcpdump: data link type LINUX_SLL2
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
+15:06:30.294506 vmbr4 Out IP 192.168.4.50.45050 &gt; 10.139.1.1.domain: 16119+ A? google.us. (27)
+15:06:30.536671 vmbr4 In  IP 10.139.1.1.domain &gt; 192.168.4.50.45050: 45045 1/0/1 AAAA 2a00:1450:4017:810::2004 (66)
+
+</code></pre>
+<p>Private nameserver IP <code>10.139.1.1</code>, <code> 10.139.1.2</code> is not from my network, that is standard Kicksecure address, but somehow they works.</p>
+<p>Maybe the answer is in wiki - <a href="https://www.kicksecure.com/wiki/DNS_Security" class="inline-onebox" rel="noopener nofollow ugc">DNS Security - Kicksecure</a>, but I didn’t see it or understand it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_9</link>
+        <pubDate>Thu, 09 Jan 2025 15:48:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2129</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>related:<br>
+<a href="https://forums.whonix.org/t/port-to-wayland/17380" class="inline-onebox">port to Wayland - Development - Whonix Forum</a></p>
+<p>Are you looking for a hacky custom solution or implementing this properly and upstreaming to Kicksecure?</p>
+<p>For a proper solution, new meta packages need to be invented and contributed to kicksecure-meta-packages.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>Can I simply replace or add a few packages in Derivative-Maker to achieve this?</p>
+</blockquote>
+</aside>
+<p>Depends on how you intent on upgrading?</p>
+<ul>
+<li>upgrading from source code: OK</li>
+<li>upgrade from remote repository: changed packaging will get reverted on upgrades</li>
+</ul>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>(already tested with CLI Version)</p>
+</blockquote>
+</aside>
+<p>Probably the easiest for hacky custom solutions…  Written just now:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/Derivative-Maker#Custom_Packages">Custom Packages</a></p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>dist_build_script_build_dependency</p>
+</blockquote>
+</aside>
+<p>That’s build host dependencies. That’s not installed packages inside images.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I keep seeing <code>"$@"</code> in <code>3500_install-packages</code> later on, so I’m assuming some of the packages are passed as an argument to the install functions.</p>
+</blockquote>
+</aside>
+<p>Ignore that. <code>"$@"</code> isn’t used and should probably be removed to avoid confusion.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>Finally, config stuff seems to be handled by <code>derivative-maker/packages/kicksecure/desktop-config-dist</code>. There I’d just replace <code>/etc/skel/.config</code> xmls with lxqt ones.</p>
+</blockquote>
+</aside>
+<p>I would suggest additional configuration files instead of changing exiting ones which don’t do harm.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_2</link>
+        <pubDate>Thu, 09 Jan 2025 14:23:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2128</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="UniksKorn25" data-post="2" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>I wouldn’t say I like it when I can’t control the system,</p>
+</blockquote>
+</aside>
+<p>Here are <a href="https://www.kicksecure.com/wiki/Reasons_for_Freedom_Software#No_Intentional_User_Freedom_Restrictions">No Intentional User Freedom Restrictions</a>. Only sysadmin tasks.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_8</link>
+        <pubDate>Thu, 09 Jan 2025 13:15:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2127</guid>
+      </item>
+      <item>
         <title>DNS nameserver 10.139.1.1</title>
         <dc:creator><![CDATA[@e-coin]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="UniksKorn25" data-post="4" data-topic="858">
@@ -56,7 +200,7 @@ resolvectl: command not found
 <p>This is beyond my comprehension. I wouldn’t say I like it when I can’t control the system,</p>
 </blockquote>
 </aside>
-<p>It’s not a control issue. You can install missing software as you line.</p>
+<p>It’s not a control issue. You can install missing software as you like.</p>
 <aside class="quote no-group" data-username="UniksKorn25" data-post="4" data-topic="858">
 <div class="title">
 <div class="quote-controls"></div>
@@ -1736,82 +1880,6 @@ Straightforward Luks on partition + encrypted separat swap , all online guides i
         <link>https://forums.kicksecure.com/t/kicksecure-cloning-error/823#post_11</link>
         <pubDate>Sun, 29 Dec 2024 10:15:56 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2062</guid>
-      </item>
-      <item>
-        <title>Virtualbox/KVM for Kicksecure Live</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="shawna98" data-post="1" data-topic="838">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/fbc32d/48.png" class="avatar"> shawna98:</div>
-<blockquote>
-<p>virtualbox is there before installation, but not after, to reduce attack surface</p>
-</blockquote>
-</aside>
-<p>How is that going to reduce the attack surface if vbox is there by default? actually it will increase it.</p>
-<p>Also Kicksecure like any other iso based OS, has no direct relation to be used on VMs, main focus is to be used directly on the hardware not in a VM.</p>
-<aside class="quote no-group" data-username="shawna98" data-post="1" data-topic="838">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/fbc32d/48.png" class="avatar"> shawna98:</div>
-<blockquote>
-<p>If every Kicksecure installation out there contained Virtualbox by default, it would be impossible for an attacker to claim that someone installed virtualisation software for a purpose of hiding something.</p>
-</blockquote>
-</aside>
-<p>Not sure what you are saying, but bloating the OS with more xyz is a way of increasing the attack surface and size. So better to keep it as minimal as possible, only essential things should be there.</p>
-<aside class="quote no-group" data-username="shawna98" data-post="1" data-topic="838">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/fbc32d/48.png" class="avatar"> shawna98:</div>
-<blockquote>
-<p>If that is not possible, at least we should consider creating a wiki-guide with information on how to add Virtualbox in Kicksecure Live Installation USB manually.</p>
-</blockquote>
-</aside>
-<p>If you are talking about using live mode from the iso, you can install any package and it will be wiped up if you remove the usb/dvd. If you are talking about live mode while you already installed the system you can open the system administration mode install whatever you want then boot into the live mode again.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/virtualbox-kvm-for-kicksecure-live/838#post_2</link>
-        <pubDate>Sat, 28 Dec 2024 16:50:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2060</guid>
-      </item>
-      <item>
-        <title>Virtualbox/KVM for Kicksecure Live</title>
-        <dc:creator><![CDATA[@shawna98]]></dc:creator>
-        <description><![CDATA[ <p>Virtualbox/KVM for Kicksecure Live</p>
-<p>We should consider adding Virtualbox to Kicksecure by default, maybe only for Kicksecure Live USB at least (virtualbox is there before installation, but not after, to reduce attack surface). This will make possible to run any virtual machines from a plausibly-deniable external drive without leaving a trace on the computer. This also helps to reduce attack surface for the host os (kicksecure live usb), as it is amnesic and it is harder for malware to persist, especially with physical write-protection switch enabled.</p>
-<p>Kicksecure Live USB → Virtualbox/KVM → Whonix VM/other OS.</p>
-<p>Something like this could be done if Kicksecure was installed on the usb drive and the virtualbox installed on it manually, and after that user must be careful to launch live-mode only every time. But this is not as plausibly-deniable as a plain Kicksecure installation media, and it is obvious that Virtualbox was installed there for a reason. If every Kicksecure installation out there contained Virtualbox by default, it would be impossible for an attacker to claim that someone installed virtualisation software for a purpose of hiding something.</p>
-<p>Essentially I am talking about something like HiddenVM mod for TAILS but with proper hardened nature of Kicksecure.</p>
-<p>If that is not possible, at least we should consider creating a wiki-guide with information on how to add Virtualbox in Kicksecure Live Installation USB manually.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/virtualbox-kvm-for-kicksecure-live/838#post_1</link>
-        <pubDate>Sat, 28 Dec 2024 16:42:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2058</guid>
-      </item>
-      <item>
-        <title>Problems with the installation</title>
-        <dc:creator><![CDATA[@Michel]]></dc:creator>
-        <description><![CDATA[ <p>hello<br>
-at the end of the installation comes this error message what could that be</p>
-<p>greetings</p>
-<p>Michael<br>
-</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/7cbfd4d852bb765b1725c0300490a87f579efaa3.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/7cbfd4d852bb765b1725c0300490a87f579efaa3" title="IMG_6545"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/7cbfd4d852bb765b1725c0300490a87f579efaa3_2_666x500.jpeg" alt="IMG_6545" data-base62-sha1="hNAcBmWbKtB0oAPf4z6xPrH7IDF" width="666" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/7cbfd4d852bb765b1725c0300490a87f579efaa3_2_666x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/7cbfd4d852bb765b1725c0300490a87f579efaa3_2_999x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/7cbfd4d852bb765b1725c0300490a87f579efaa3_2_1332x1000.jpeg 2x" data-dominant-color="90908C"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/problems-with-the-installation/836#post_1</link>
-        <pubDate>Sat, 28 Dec 2024 16:40:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2056</guid>
-      </item>
-      <item>
-        <title>Kicksecure cloning error</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>The answer was already given.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="823">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p><a href="https://github.com/calamares/calamares/issues/2269" rel="noopener nofollow ugc">calamares breaks when using libpam-tmpdir · Issue #2269 · calamares/calamares · GitHub</a></p>
-</blockquote>
-</aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-cloning-error/823#post_10</link>
-        <pubDate>Sat, 28 Dec 2024 08:59:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2055</guid>
       </item>
   </channel>
 </rss>

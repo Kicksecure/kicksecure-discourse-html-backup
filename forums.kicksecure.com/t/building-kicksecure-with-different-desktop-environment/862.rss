@@ -43,9 +43,117 @@ Is that pretty much it or am I missing something?
 
 Kind regards</description>
     
-    <lastBuildDate>Tue, 07 Jan 2025 17:15:56 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jan 2025 01:41:53 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>How does the whisker menu compare to the menu that LXQT uses?<br>
+I like xfce due to its lightweightness but I do not like the whisker menu compaired to other DE application menus.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/4</link>
+        <pubDate>Fri, 10 Jan 2025 01:41:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-4</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello, thanks for the reply.</p>
+<p>I read the entire code again and things are getting clearer now. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p>
+<blockquote>
+<p>Probably the easiest for hacky custom solutions… Written just now:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/Derivative-Maker#Custom_Packages" rel="noopener nofollow ugc">Custom Packages </a></p>
+</blockquote>
+<p>Thanks, so <code>flavor_meta_packages_to_install</code> is defined in <code>help-steps/variables</code> and (among other variables) called with source, which is used in every build step. (That took me a while to see)</p>
+<blockquote>
+<p>Are you looking for a hacky custom solution or implementing this properly and upstreaming to Kicksecure?</p>
+</blockquote>
+<p>For the hacky solution I’d just follow your suggestion with <code>flavor_meta_packages_to_install="kicksecure-cli-vm"</code> (or exclude specific xfce packages via <code>dist_build_script_skip_package_install</code>) and install the new lxqt packages with <code>pkg_install_list=lxqt-pkg1 lxqt-pkg2.....</code></p>
+<p>I’d be happy to help if you guys are interested in kicksecure-lxqt meta-packages.<br>
+I already started replacing all the dependencies in the control file before.</p>
+<p>Those should be the new ones (if I didn’t miss anything):</p>
+<pre><code class="lang-auto">kicksecure-lxqt, kicksecure-desktop-applications-lxqt, kicksecure-desktop-environment-essential-lxqt, kicksecure-lxqt-host, kicksecure-lxqt-vm, kicksecure-shared-host-xfce`
+</code></pre>
+<p>Minimal LXQT is probably superior to XFCE in terms of resource requirements anyway and Wayland support is a nice bonus.</p>
+<p>I read <code>build-steps.d/3500_install-packages</code> a bunch of times but couldn’t find a function that “installs” all the stuff from <code>derivative-maker/packages/kicksecure/*</code>. Where does this actually happen?</p>
+<p>For example, <code>3500_install-packages</code>  install_packages() function copies the apt binary directly from that directory, but <code>4300_run-chroot-scripts-post-d</code> already expects <code>/usr/libexec/initializer-dist/chroot-scripts-post.d</code> to be there from the initializer-dist package.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/3</link>
+        <pubDate>Thu, 09 Jan 2025 23:11:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-3</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related:<br>
+<a href="https://forums.whonix.org/t/port-to-wayland/17380" class="inline-onebox">port to Wayland - Development - Whonix Forum</a></p>
+<p>Are you looking for a hacky custom solution or implementing this properly and upstreaming to Kicksecure?</p>
+<p>For a proper solution, new meta packages need to be invented and contributed to kicksecure-meta-packages.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>Can I simply replace or add a few packages in Derivative-Maker to achieve this?</p>
+</blockquote>
+</aside>
+<p>Depends on how you intent on upgrading?</p>
+<ul>
+<li>upgrading from source code: OK</li>
+<li>upgrade from remote repository: changed packaging will get reverted on upgrades</li>
+</ul>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>(already tested with CLI Version)</p>
+</blockquote>
+</aside>
+<p>Probably the easiest for hacky custom solutions…  Written just now:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/Derivative-Maker#Custom_Packages">Custom Packages</a></p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>dist_build_script_build_dependency</p>
+</blockquote>
+</aside>
+<p>That’s build host dependencies. That’s not installed packages inside images.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I keep seeing <code>"$@"</code> in <code>3500_install-packages</code> later on, so I’m assuming some of the packages are passed as an argument to the install functions.</p>
+</blockquote>
+</aside>
+<p>Ignore that. <code>"$@"</code> isn’t used and should probably be removed to avoid confusion.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="1" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>Finally, config stuff seems to be handled by <code>derivative-maker/packages/kicksecure/desktop-config-dist</code>. There I’d just replace <code>/etc/skel/.config</code> xmls with lxqt ones.</p>
+</blockquote>
+</aside>
+<p>I would suggest additional configuration files instead of changing exiting ones which don’t do harm.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/2</link>
+        <pubDate>Thu, 09 Jan 2025 14:23:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-2</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
       <item>
         <title>Building Kicksecure with different Desktop Environment</title>
         <dc:creator><![CDATA[e-coin]]></dc:creator>

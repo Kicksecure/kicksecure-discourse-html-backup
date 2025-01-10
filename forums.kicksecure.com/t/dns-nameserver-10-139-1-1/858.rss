@@ -21,9 +21,74 @@ I didn&#39;t find this IPs in a local network, firewall, /etc/hosts, systemd-res
 30  * * *
 ```</description>
     
-    <lastBuildDate>Wed, 08 Jan 2025 18:10:01 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jan 2025 15:48:09 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/e-coin">@e-coin</a> , <a class="mention" href="https://forums.kicksecure.com/u/extraextra">@extraextra</a></p>
+<blockquote>
+<p>why are the values in <code>/etc/resolv.conf</code> ignored by the system?</p>
+<blockquote>
+<p>It’s not a control issue</p>
+</blockquote>
+</blockquote>
+<p>Yes, you’re right. Everything is working fine today, i must have made a mistake and confused in my own hosts. <code>/etc/resolv.conf</code> works.</p>
+<p>I’m still investigating the system. I am interested in the Kicksecure standard DNS address <code>10.139.1.1</code>.</p>
+<p>I use  <a href="https://www.kicksecure.com/wiki/KVM#CLI" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure for KVM with Xfce</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
+<pre><code class="lang-auto">[user ~]% sudo systemctl is-active NetworkManager
+inactive
+</code></pre>
+<pre><code class="lang-auto">[user ~]% pgrep -af dhc
+zsh: exit 1     pgrep -af dhc
+</code></pre>
+<p>The <code>resolv.conf</code> file contains <strong>standard Kicksecure DNS servers</strong>. These aren’t my servers, this is standard OS file:</p>
+<pre><code class="lang-auto">[user ~]% cat /etc/resolv.conf
+nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+<blockquote>
+<p>These IP addresses are likely part of a private network, as they fall within the range of private IP addresses defined by the Internet Engineering Task Force (IETF). <strong>Private IP addresses are not routable on the public internet and are typically used within local networks.</strong></p>
+</blockquote>
+<pre><code class="lang-auto">[user ~]% sudo tcpdump -i any port 53
+tcpdump: data link type LINUX_SLL2
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
+15:06:30.294506 vmbr4 Out IP 192.168.4.50.45050 &gt; 10.139.1.1.domain: 16119+ A? google.us. (27)
+15:06:30.536671 vmbr4 In  IP 10.139.1.1.domain &gt; 192.168.4.50.45050: 45045 1/0/1 AAAA 2a00:1450:4017:810::2004 (66)
+
+</code></pre>
+<p>Private nameserver IP <code>10.139.1.1</code>, <code> 10.139.1.2</code> is not from my network, that is standard Kicksecure address, but somehow they works.</p>
+<p>Maybe the answer is in wiki - <a href="https://www.kicksecure.com/wiki/DNS_Security" class="inline-onebox" rel="noopener nofollow ugc">DNS Security - Kicksecure</a>, but I didn’t see it or understand it.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/9</link>
+        <pubDate>Thu, 09 Jan 2025 15:48:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-9</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="UniksKorn25" data-post="2" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>I wouldn’t say I like it when I can’t control the system,</p>
+</blockquote>
+</aside>
+<p>Here are <a href="https://www.kicksecure.com/wiki/Reasons_for_Freedom_Software#No_Intentional_User_Freedom_Restrictions">No Intentional User Freedom Restrictions</a>. Only sysadmin tasks.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/8</link>
+        <pubDate>Thu, 09 Jan 2025 13:15:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-8</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
       <item>
         <title>DNS nameserver 10.139.1.1</title>
         <dc:creator><![CDATA[e-coin]]></dc:creator>
