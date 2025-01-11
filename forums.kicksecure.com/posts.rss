@@ -7,6 +7,852 @@
       <item>
         <title>Building Kicksecure with different Desktop Environment</title>
         <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>Hi, yes I missed a bunch of stuff there. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_9</link>
+        <pubDate>Fri, 10 Jan 2025 18:24:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2155</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p><code>pkg_list</code> is defined in <code>derivative-maker/buildconfig.d/30_pkg_list.conf</code>. Not sure if that answers your exact question or not since I’m moving a bit too fast, but it might help.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_8</link>
+        <pubDate>Fri, 10 Jan 2025 18:20:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2154</guid>
+      </item>
+      <item>
+        <title>How to go out of hibernation?</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>VM or Host?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_3</link>
+        <pubDate>Fri, 10 Jan 2025 18:18:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2153</guid>
+      </item>
+      <item>
+        <title>How to go out of hibernation?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>By “can’t go out of hibernation mode”, what exactly are the symptoms you’re running into? Does the machine refuse to power on? Does it power on but doesn’t restore your session?</p>
+<p>Hibernation is not well-supported on Kicksecure at the moment. You should avoid using it if at all possible.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_2</link>
+        <pubDate>Fri, 10 Jan 2025 18:15:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2152</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>A pull request introducing a LXQt meta package(s) would be welcome.</p>
+</blockquote>
+<p>I wanna be sure everything is perfect before making a pull, but I think something like that could be nice.</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://pastebin.com/ZpUBrNsM">
+  <header class="source">
+      <img src="https://pastebin.com/favicon.ico" class="site-icon" width="16" height="16">
+
+      <a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">Pastebin</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="" height="" src="https://pastebin.com/i/facebook.png" class="thumbnail">
+
+<h3><a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">kicksecure-meta-packages LXQt - Pastebin.com</a></h3>
+
+  <p>Pastebin.com is the number one paste tool since 2002. Pastebin is a website where you can store text online for a set period of time.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><code>kicksecure-desktop-environment-essential-lxqt</code> only pulls in <code>lxqt-core openbox</code> which is the absolute bare minimum.</p>
+<p>This package depends on <code>kicksecure-desktop-environment-essential-gui</code>, so that’s regular x11 + openbox.</p>
+<p>Then there is the new <code>kicksecure-desktop-environment-essential-gui-wayland</code> which skips all the xorg/x11 packages, installs drivers and a basic Wayland environment.</p>
+<p>Finally, <code>kicksecure-desktop-environment-essential-lxqt-wayland</code> again installs <code>lxqt-core</code> but instead depends on <code>kicksecure-desktop-environment-essential-lxqt-wayland</code></p>
+<p>The new <code>lxqt-wayland-session</code> code only comes in <code>lxqt-core 32</code> which is currently available under trixie, but not bookworm (lxqt-core 31). I’m sure derivative-maker can use apt pinning to give those lxqt packages a higher priority under trixie. (Gonna add that too if needed)</p>
+<blockquote>
+<p>It does not happen at all. It’s possible to add packages to the packages folder, which are built, but never installed, which is quite useful to maintain opt-in packages and during development.</p>
+</blockquote>
+<p>I carefully looked into <code>2100_create-debian-package</code> and have a question. Particularly, <code>create_derivative_distribution_debian_packages()</code></p>
+<p>The first for loop iterates over $derivative_name_list which is either <code>kicksecure</code>, <code>whonix</code> or both, depending on what is set in help-steps.d/variables.</p>
+<p>The second for loop runs through <code>$pkg_list</code>, which should hold all the local package names in <code>packages/kicksecure/*</code> but is not defined anywhere. I double checked, it’s not in <code>help-steps.d/variables</code>, <code>help-steps.d/pre</code> or the script itself.</p>
+<p>Thus, the second loop should only run once, <code>$item</code> remains <code>.../derivative-maker/packages/kicksecure</code> and pushd doesn’t actually save any useful paths.</p>
+<p>So why does genmkfile not fail later on when the packages are built?</p>
+<pre><code class="lang-auto"> for derivative_name_item in $derivative_name_list ; do
+      for item in $pkg_list ; do
+         item="$source_code_folder_dist/packages/$derivative_name_item/$item"
+         if [ ! -d "$item" ]; then
+            true "INFO: Not a folder: $item"
+            continue
+         fi
+         pushd "$item" &gt;/dev/null
+         number_folder_current="$(( number_folder_current + 1 ))"
+         local base_name
+         base_name="${item##*/}"
+         if [ "$base_name" = "developer-meta-files" ]; then
+            true "${cyan}INFO: Skipping $base_name as expected.${reset}"
+            popd
+            continue
+         fi
+</code></pre>
+<p>Edit: My bad the loop works, I just wasn’t looking carefully, enough.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_7</link>
+        <pubDate>Fri, 10 Jan 2025 18:09:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2151</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>These are leaking from the Qubes build VM into the image during the official build process for redistributable builds, which isn’t great, but also isn’t a big deal. It’s functional by accident rather than design.</p>
+<hr>
+<p><code>grml-debootstrap</code> copies <code>/etc/resolv.conf</code>.</p>
+<blockquote>
+<p>[ -f “${MNTPOINT}”/etc/resolv.conf ] || cp ${VERBOSE:±v} /etc/resolv.conf “${MNTPOINT}”/etc/resolv.conf</p>
+</blockquote>
+<hr>
+<p>Handling of <code>/etc/resolv.conf</code> during the build process is difficult. For details, see mentions of:</p>
+<blockquote>
+<p>/etc/resolv.conf</p>
+</blockquote>
+<p>in <a href="https://github.com/Kicksecure/derivative-maker/blob/master/help-steps/chroot-raw" class="inline-onebox">derivative-maker/help-steps/chroot-raw at master · Kicksecure/derivative-maker · GitHub</a>.</p>
+<hr>
+<p>The question is what would be a good default value for <code>/etc/resolv.conf</code> for Kicksecure KVM and Kicksecure VirtualBox?</p>
+<p>Why mention Kicksecure VirtualBox? Because these are built at the same time to safe build time. The only difference is the image format conversion later during the build process (<code>.qcow</code> for KVM, <code>.ova</code> for VirtualBox).</p>
+<p>So the VM image default <code>/etc/resolv.conf</code> needs to be compatible with both virtualizers.</p>
+<p>It would be preferable to have an explicit default <code>/etc/resolv.conf</code>.</p>
+<p>Should <code>/etc/resolv.conf</code> be managed by package? Probably not. A good default value written explicitly during the build process would be better. Otherwise, this file should later be user managed (not managed by a package).</p>
+<p>That is, unless… Related:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener" title="12:33PM - 14 September 2019">Whonix Forum – 14 Sep 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener">Use DNSCrypt by default in Kicksecure? (not Whonix!)</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+            <span class="discourse-tag simple">component_kicksecure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Alternative is using unencrypted, non-DNSSEC ISP provided servers.</p>
+
+  <p>
+    <span class="label1">Reading time: 15 mins 🕑</span>
+      <span class="label2">Likes: 45 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener" title="05:51PM - 08 July 2023">Whonix Forum – 8 Jul 23</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener">Default DNS Provider Discussion for Kicksecure (not Whonix!)</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>It’s not a simple as “yeah, enable DNSEC validation” and “yeah, add configuration option DNS_ENCRYPTION=true”, done, call it a day…   A)        B)   Then a specific server needs to be chosen. It’s okay if the user decides to use such a setup and...</p>
+
+  <p>
+    <span class="label1">Reading time: 11 mins 🕑</span>
+      <span class="label2">Likes: 9 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_15</link>
+        <pubDate>Fri, 10 Jan 2025 18:05:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2150</guid>
+      </item>
+      <item>
+        <title>How to go out of hibernation?</title>
+        <dc:creator><![CDATA[@gredhurk]]></dc:creator>
+        <description><![CDATA[ <p>Sorry for such question. I can’t go out of hibernation mode on my laptop. How to do it? Please help.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_1</link>
+        <pubDate>Fri, 10 Jan 2025 16:54:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2149</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@UniksKorn25]]></dc:creator>
+        <description><![CDATA[ <pre><code class="lang-auto">wget https://www.kicksecure.com/download/libvirt/17.2.8.5/Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2.libvirt.xz
+
+tar -xvf Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2.libvirt.xz
+
+qemu-nbd -c /dev/nbd0 /home/user/Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2
+
+mount /dev/nbd0p3 /mnt/
+
+root@host:~# cat /mnt/etc/resolv.conf
+nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+<p>These DNS IP addresses are not in the source code, but now they are inside the qcow2 image.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_14</link>
+        <pubDate>Fri, 10 Jan 2025 14:16:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2147</guid>
+      </item>
+      <item>
+        <title>Gnome-keyring dependency and chromium browsers</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>why is gnome-keyring dependency needed</p>
+</blockquote>
+</aside>
+<p>You can follow the history of that here:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="582">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582">Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    After booting the ISO → Xfce desktop → double click on “17 GB Encrypted” (from a previous installation) → enter password → save password permanently. 
+
+Failed to mount “rootfs” 
+
+
+Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files) 
+
+
+
+Since we’re already installing KeePassXC by default, it might make sense to use KeePassXC as a org.freedesktop.secrets provider. Here is a promising looking (untested by me) guide: 
+<a href="https://c3pb.de/blog/keepassxc-secrets-service.html" class="onebox" target="_blank" rel="noopener">https://c3pb.de/blog/kee…</a>
+  </blockquote>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">add `gnome-keyring` to `kicksecure-desktop-environment-essential-xfce`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2024-10-03" data-time="06:34:09" data-timezone="UTC">06:34AM - 03 Oct 24 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 0 deletions">
+        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">to fix error message
+
+&gt; Error storing passphrase in keyring (The name org.freede<span class="show-more-container"><a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">sktop.secrets was not provided by any .service files)
+
+https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>When you type <code>sudo apt purge gnome-keyring</code> it will show the other dependencies to remove are <code>kicksecure-desktop-environment-essential-xfce</code> and other Kicksecure specific ones so obviously I chose NOT to go forward.</p>
+</blockquote>
+</aside>
+<p>This is documented here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian_Packages">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736501429" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener" title="11:54AM - 29 December 2024">Kicksecure – 29 Dec 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:614/500;"><img src="https://www.kicksecure.com/w/images/a/aa/Box-158523640.png?version=4622f187d3eec6059bd842d42be6d941" class="thumbnail" width="614" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener">Debian Packages</a></h3>
+
+  <p>Which Kicksecure Debian packages are safe to remove? What is a meta package? What other packages do Kicksecure meta packages install? Which packages should never be removed?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Anyway the fix always used to be purge <code>gnome-keyring</code> however this doesn’t seem to be the best choice.</p>
+</blockquote>
+</aside>
+<p>Feel free to experiment with removal of <code>gnome-keyring</code>. This should be easily possible thanks to <a href="https://www.kicksecure.com/wiki/Debian_Packages#dummy-dependency">dummy-dependency</a>, <a href="https://www.kicksecure.com/wiki/Debian_Packages#Removal_Instructions">Removal Instructions</a>.</p>
+<pre><code>sudo dummy-dependency --yes --purge gnome-keyring
+</code></pre>
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>So you would edit your launcher <code>Exec=/usr/bin/browser --password-store=basic</code> for the browser application or you could edit your <code>/usr/share/application/browser.desktop</code> file for desktop file but this might get updated with new updates so launcher seems like the safer bet.</p>
+</blockquote>
+</aside>
+<p>Even if we find a technical solution to do this reliably by default [1], I am not sure we should change chromium default keystore settings. Comments welcome.</p>
+<hr>
+<p>[1] We would probably have to solve the stackable wrappers issue.</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">Kicksecure/proposals/blob/master/634-stackable-wrappers.md</a></h4>
+
+
+      <pre><code class="lang-md"># Stackable Wrappers (Proposal 634)
+
+- Ticket: https://forums.whonix.org/t/write-draft-for-stackable-wrappers-on-debian-devel/18776
+- File: https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md
+
+# Description
+
+In Debian, there is no such thing as stackable wrappers. It would be desirable to have them.
+
+A wrapper in this context is defined as a minimal script that automatically prepends something in front of a program the user wants to run or appends something, such as default command-line parameters.
+
+Here are some examples of commands to prepend:
+
+* `firejail firefox`
+* `torsocks gpg`
+* `LD_PRELOAD="$LD_PRELOAD":libeatmydata.so rsync`
+* `bindp`, `timeprivacy`, and probably a lot more
+* Likely quite a few `dpkg` diversions are used for this purpose
+
+Here are some examples of commands to append:
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/stackable-wrappers/7944">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/stackable-wrappers/7944" target="_blank" rel="noopener" title="08:08PM - 24 August 2019">Whonix Forum – 24 Aug 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/stackable-wrappers/7944" target="_blank" rel="noopener">Stackable Wrappers</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">component_security</span>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Ex Debian dev Michael Stapelberg discusses package install hooks and triggers and how they complicate the package manager and potentially slow down the install process. An exciting development he mentions is “hermetic packages” which is discussed...</p>
+
+  <p>
+    <span class="label1">Reading time: 4 mins 🕑</span>
+      <span class="label2">Likes: 10 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865#post_2</link>
+        <pubDate>Fri, 10 Jan 2025 11:50:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2146</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>On Linux, DNS libraries read the <code>/etc/resolv.conf</code> file. A DNS-resolving client such as Unbound is optional and not strictly required for basic DNS resolution.</p>
+<p>Documented here just now:<br>
+<a href="https://www.kicksecure.com/wiki/DNS#Linux_Default_DNS_Mechanism">Linux Default DNS Mechanism</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_13</link>
+        <pubDate>Fri, 10 Jan 2025 11:36:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2145</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@UniksKorn25]]></dc:creator>
+        <description><![CDATA[ <p>dnsmasq is not installed:</p>
+<pre><code class="lang-auto">[user ~]% sudo apt list dnsmasq*
+Listing... Done
+dnsmasq-base-lua/stable 2.89-1 amd64
+dnsmasq-base/stable 2.89-1 amd64
+dnsmasq-utils/stable 2.89-1 amd64
+dnsmasq/stable 2.89-1 all
+</code></pre>
+<pre><code class="lang-auto">[user ~]% pgrep -af dns ; pgrep -af dhc 
+zsh: exit 1     pgrep -af dns
+zsh: exit 1     pgrep -af dhc
+</code></pre>
+<p>The NAT:</p>
+<pre><code class="lang-auto">[user ~]% ip r
+default via 192.168.4.40 dev vmbr4 onlink 
+192.168.4.0/24 dev vmbr4 proto kernel scope link src 192.168.4.50 
+192.168.5.0/24 dev vmbr5 proto kernel scope link src 192.168.5.50
+</code></pre>
+<pre><code class="lang-auto">[user ~]% ping 10.139.1.1          
+PING 10.139.1.1 (10.139.1.1) 56(84) bytes of data.
+^C
+--- 10.139.1.1 ping statistics ---
+10 packets transmitted, 0 received, 100% packet loss, time 9214ms
+</code></pre>
+<p><strong>A packets to 10.139.1.1 are sent to an external network and domain names somehow resolved there.</strong></p>
+<p>Since <code>resolv.conf</code> works, i added the lines:</p>
+<pre><code class="lang-auto">[user ~]% cat /etc/resolv.conf
+#nameserver 10.139.1.1
+#nameserver 10.139.1.2
+nameserver 127.0.0.1
+</code></pre>
+<p>and line to <code>/etc/tor/torrc</code>:<br>
+<code>DNSPort 127.0.0.1:53</code></p>
+<p>For name-solving through tor like i wanted to.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_12</link>
+        <pubDate>Fri, 10 Jan 2025 10:00:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2144</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="UniksKorn25" data-post="1" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<pre><code class="lang-auto">nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+</blockquote>
+</aside>
+<p>You can <a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a>. There is no mention of textual strings:</p>
+<ul>
+<li>
+<blockquote>
+<p>10.139.1.1</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>10.139.1.2</p>
+</blockquote>
+</li>
+</ul>
+<p>Therefore these IP addresses are not hardcoded in Kicksecure source code.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_11</link>
+        <pubDate>Fri, 10 Jan 2025 09:56:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2143</guid>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="13" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>On suggestion maybe for onions not timing out also would to be to add a config like this?<br>
+<code>/etc/apt/apt.conf.d/99timeout</code></p>
+<pre><code class="lang-auto">Acquire::http::Timeout "15";
+Acquire::http::Retry-After "5";
+Acquire::Retries "3";
+</code></pre>
+<p>15 seconds till timeout, 5 seconds till retry, retries 3 times.</p>
+</blockquote>
+</aside>
+<p>Please open separate forum threads for very specific and actionable bug reports / feature requests such as these ones.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_14</link>
+        <pubDate>Fri, 10 Jan 2025 09:53:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2142</guid>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="Quiksilver" data-post="3" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.</p>
+</blockquote>
+</aside>
+<p>Does Kicksecure ISO use debian unstable?</p>
+</blockquote>
+</aside>
+<p>It doesn’t.</p>
+<p>“Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.” was only an accurate description/reminder how Linux distributions such as Debian are generally designed, describing general computer security issues. This doesn’t directly relate to derivatives such as Kicksecure repository default settings.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>That makes sense but would that be easy to maintain is there a database that could easily be queried of some sort.</p>
+</blockquote>
+</aside>
+<p>This might be a really hard problem to solve.</p>
+<p><a href="https://wiki.debian.org/DebianSecurity/debsecan" class="onebox" target="_blank" rel="noopener">https://wiki.debian.org/DebianSecurity/debsecan</a></p>
+<p><code>debsecan</code> outputs a few thousand CVEs, but that’s overwhelming and not actionable.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848#post_4</link>
+        <pubDate>Fri, 10 Jan 2025 09:37:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2141</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I’d be happy to help if you guys are interested in kicksecure-lxqt meta-packages.</p>
+</blockquote>
+</aside>
+<p>A pull request introducing a LXQt meta package(s) would be welcome.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I read <code>build-steps.d/3500_install-packages</code> a bunch of times but couldn’t find a function that “installs” all the stuff from <code>derivative-maker/packages/kicksecure/*</code>. Where does this actually happen?</p>
+</blockquote>
+</aside>
+<p>It does not happen at all. It’s possible to add packages to the packages folder, which are built, but never installed, which is quite useful to maintain opt-in packages and during development.</p>
+<ul>
+<li>VM builds: “Mostly” install-packages build-step decides what packages are installed. Ideally, it would be the meta package only, but that isn’t possible. (Image creation is complicated. [1]) So that script is the primary reference only.</li>
+<li>ISO builds: Unfortunately work different. See create-lb-iso build-step.</li>
+</ul>
+<aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>, but <code>4300_run-chroot-scripts-post-d</code> already expects <code>/usr/libexec/initializer-dist/chroot-scripts-post.d</code> to be there from the initializer-dist package.</p>
+</blockquote>
+</aside>
+<p>Right. So if no meta package would <code>Depends: initializer-dist</code> and if that package was not hardcoded in above script, then that would break.</p>
+<p>There’s no “auto install all packages built from the packages folder” and there’s no need for that either.</p>
+<hr>
+<p>[1] <a href="https://www.kicksecure.com/wiki/Dev/image_creation" class="inline-onebox">Development of System Image Creation and Bootstrapping Tools</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_6</link>
+        <pubDate>Fri, 10 Jan 2025 09:24:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2140</guid>
+      </item>
+      <item>
+        <title>Running portable application located on external drive</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>In most cases that’s true, in case of Kicksecure there is something important to point out about its initramfs generator. We have been <a href="https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487" class="inline-onebox">replacing initramfs-tools with dracut - Development - Whonix Forum</a> and <code>persistence.conf</code> is part of live-boot, which at time of writing only supports <code>initramfs-tools</code>. So the user would have to create a custom build with <code>initramfs-tools</code> or migrate an exiting image back to <code>initramfs-tools</code>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_12</link>
+        <pubDate>Fri, 10 Jan 2025 09:16:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2139</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>The menu is pretty similar I believe, but lxqt is lighter both in terms of resources and dependencies. Using live-build you can generate a working bookworm iso &lt;450MB with a minimal lxqt DE.</p>
+<p>It requires more pre-configuration though. The defaults don’t look great and can be a bit unintuitive.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_5</link>
+        <pubDate>Fri, 10 Jan 2025 09:11:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2138</guid>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="UniksKorn25" data-post="9" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>I use <a href="https://www.kicksecure.com/wiki/KVM#CLI" rel="noopener nofollow ugc">Kicksecure for KVM with CLI</a>.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="UniksKorn25" data-post="9" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>The <code>resolv.conf</code> file contains <strong>standard Kicksecure DNS servers</strong>. These aren’t my servers, this is standard OS file:</p>
+</blockquote>
+</aside>
+<p>So you do use KVM, which means you probably have dnsmasq installed.<br>
+<code>sudo apt list dnsmasq*</code></p>
+<p>If that’s the case then these private IP addresses are probably from dnsmasq’s dhcp server. If the default network is used, then it’s usually in the range of 192.168.0/24. NAT like the one used in Whonix-External, uses 10.0.2.2</p>
+<pre><code class="lang-auto">&lt;network&gt;
+  &lt;name&gt;Whonix-External&lt;/name&gt;
+  &lt;forward mode='nat'/&gt;
+  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
+  &lt;dns enable="no"/&gt;
+  &lt;ip address='10.0.2.2' netmask='255.255.255.0'/&gt;
+&lt;/network&gt;
+</code></pre>
+<p>Are you using NAT with a 10.139.0/24 ip?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_10</link>
+        <pubDate>Fri, 10 Jan 2025 08:51:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2137</guid>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>This idea reminds me of F-droid’s warning about anti-features.<br>
+I do however like this idea and the key points you raised.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.</p>
+</blockquote>
+</aside>
+<p>Does Kicksecure ISO use debian unstable? I thought it used stable repository.</p>
+<blockquote>
+<p>Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code</p>
+</blockquote>
+<p>That a fair point also</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Or by looking into (Debian) CVE databases and warn against installing packages with known unpatched CVEs.</p>
+</blockquote>
+</aside>
+<p>That makes sense but would that be easy to maintain is there a database that could easily be queried of some sort.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848#post_3</link>
+        <pubDate>Fri, 10 Jan 2025 02:02:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2135</guid>
+      </item>
+      <item>
+        <title>Gnome-keyring dependency and chromium browsers</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>So I just did a full upgrade and now I get prompted to unlock the keyring for Brave browser everytime its launched.</p>
+<p>In the past when I was distrohopping another distro that had xfce I would get that same prompt with Ungoogled-chromium and also Vivaldi which are both chromium based.<br>
+Its weird considering I never even use a browser keyring password manager I dont get why it prompts this.</p>
+<p>Anyway the fix always used to be purge <code>gnome-keyring</code> however this doesn’t seem to be the best choice.</p>
+<p>When you type <code>sudo apt purge gnome-keyring</code> it will show the other dependencies to remove are <code>kicksecure-desktop-environment-essential-xfce</code> and other Kicksecure specific ones so obviously I chose NOT to go forward.</p>
+<p>The only fix in the meantime that is better is to add the chrome flag <code>--password-store=basic</code> which will ingore using GNOME keyring or kwallet (KDE).</p>
+<p>So you would edit your launcher <code>Exec=/usr/bin/browser --password-store=basic</code> for the browser application or you could edit your <code>/usr/share/application/browser.desktop</code> file for desktop file but this might get updated with new updates so launcher seems like the safer bet.</p>
+<p>Back to the point why is gnome-keyring dependency needed and could something be added to Kicksecure like above to automatically fix this pesky issue or to the wiki regarding chromium unlock keyring prompt with gnome-keyring.</p>
+<p><strong>Solution</strong> add the chrome flag <code>--password-store=basic</code></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865#post_1</link>
+        <pubDate>Fri, 10 Jan 2025 01:48:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2134</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>How does the whisker menu compare to the menu that LXQT uses?<br>
+I like xfce due to its lightweightness but I do not like the whisker menu compaired to other DE application menus.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_4</link>
+        <pubDate>Fri, 10 Jan 2025 01:41:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2133</guid>
+      </item>
+      <item>
+        <title>Live Kicksecure Host, Live Whonix VM</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="KSWhonixXMR" data-post="6" data-topic="779">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
+<blockquote>
+<p>Since I interepret <span class="mention">@quicksilver</span> as referring to touch screens on mobile devices</p>
+</blockquote>
+</aside>
+<p>No was referring to screen keyboard that help to mitigate key-loggers since the mouse is used. Not only this but many “Good” crypto wallets have this plugin built in.<br>
+I however was referring to screen keyboard referenced in the “Software Recommendations” part of Kicksecure wiki, the package <code>onboard</code>.</p>
+<p>The on shipped with Tails (GNOME) is much cleaner and responds to clicks in browser and documents/notepad better then onboard. I was stating it would be nice if a screen keyboard could come by default in the system tray/panel to click to activate on Kicksecure/Whonix for easy access.</p>
+<blockquote>
+<p>TAILS is an OS that seeks to appear uniform (everyone looks like tor Windows) and is not a ‘development’ OS for testing and building new projects.</p>
+</blockquote>
+<p>Are you refering to the old feature called camouflage which is basically what Kali linux undercover mode is?</p>
+<blockquote>
+<p>It is probably wise to onionize deb.whonix (for Kloak) and deb.kicksecure in derivative.list for best security.</p>
+</blockquote>
+<p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a><br>
+BTW I went to go update/upgrade computer I’m testing morphed and the onion for <code>deb.debian.org</code> no longer worked for me if I recalled correctly or maybe I mis-configured it (user error).</p>
+<p>On suggestion maybe for onions not timing out also would to be to add a config like this?<br>
+<code>/etc/apt/apt.conf.d/99timeout</code></p>
+<pre><code class="lang-auto">Acquire::http::Timeout "15";
+Acquire::http::Retry-After "5";
+Acquire::Retries "3";
+</code></pre>
+<p>15 seconds till timeout, 5 seconds till retry, retries 3 times.</p>
+<blockquote>
+<p>TAILS utilizes tor+https (fastly cdn) and does not offer onion repositories like Kicksecure and Debian.</p>
+</blockquote>
+<p>This was along the lines of tails reason of unreliable or timed out too much.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_13</link>
+        <pubDate>Fri, 10 Jan 2025 01:30:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2132</guid>
+      </item>
+      <item>
+        <title>Running portable application located on external drive</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>You should look into trying to create a persistence.conf for a Kicksecure USB, this might get you more towards what you want. It should work but I would like to get some others take on it.</p>
+<p>Since it is debian based technically it should work I would think and has been an idea I would like to try.</p>
+<p>Here is a guide from Kali linux but still applies:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kali.org/docs/usb/usb-persistence/">
+  <header class="source">
+      <img src="https://www.kali.org/images/favicon.svg" class="site-icon" width="32" height="32">
+
+      <a href="https://www.kali.org/docs/usb/usb-persistence/" target="_blank" rel="noopener nofollow ugc">Kali Linux</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:519/293;"><img src="https://www.kali.org/images/kali-logo.svg" class="thumbnail" width="519" height="293"></div>
+
+<h3><a href="https://www.kali.org/docs/usb/usb-persistence/" target="_blank" rel="noopener nofollow ugc">Adding Persistence to a Kali Linux Live USB Drive | Kali Linux Documentation</a></h3>
+
+  <p>Kali Linux “Live” has two options in the default boot menu which enable persistence - the preservation of data on the “Kali Live” USB drive - across reboots of “Kali Live”. This can be an extremely useful enhancement, and enables you to retain...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Manpage for <code>persistence.conf</code><br>
+<a href="https://manpages.debian.org/testing/live-boot-doc/persistence.conf.5.en.html" class="onebox" target="_blank" rel="noopener nofollow ugc">https://manpages.debian.org/testing/live-boot-doc/persistence.conf.5.en.html</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_11</link>
+        <pubDate>Fri, 10 Jan 2025 01:25:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2131</guid>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
         <description><![CDATA[ <p>Hello, thanks for the reply.</p>
 <p>I read the entire code again and things are getting clearer now. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p>
 <blockquote>
@@ -42,7 +888,7 @@ I already started replacing all the dependencies in the control file before.</p>
 </blockquote>
 <p>Yes, you’re right. Everything is working fine today, i must have made a mistake and confused in my own hosts. <code>/etc/resolv.conf</code> works.</p>
 <p>I’m still investigating the system. I am interested in the Kicksecure standard DNS address <code>10.139.1.1</code>.</p>
-<p>I use  <a href="https://www.kicksecure.com/wiki/KVM#CLI" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure for KVM with Xfce</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
+<p>I use <a href="https://www.kicksecure.com/wiki/KVM#CLI" rel="noopener nofollow ugc">Kicksecure for KVM with CLI</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
 <pre><code class="lang-auto">[user ~]% sudo systemctl is-active NetworkManager
 inactive
 </code></pre>
@@ -716,1170 +1562,6 @@ Lsblk lsbels only root partition as crypt</p> ]]></description>
         <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_11</link>
         <pubDate>Fri, 03 Jan 2025 23:45:14 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2091</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="9" data-topic="843">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>Install the same above using CLI instead of calamares.</p>
-</blockquote>
-</aside>
-<p>It’s very most likely possible but undocumented. It’s an advanced sysadmin task.</p>
-<ol>
-<li>partition</li>
-<li>install bootloader</li>
-<li>install kernel</li>
-<li>install operating system inside chroot</li>
-</ol>
-<p>Guide <a href="https://www.kicksecure.com/wiki/Chroot" class="inline-onebox">Install Kicksecure inside a folder (chroot)</a> might help but needs adjustment for this use case. A skilled sysadmin would be able to accomplish this.</p>
-<p>That kind of stuff you need to learn yourself or pay people to do it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_10</link>
-        <pubDate>Fri, 03 Jan 2025 06:50:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2090</guid>
-      </item>
-      <item>
-        <title>Live Kicksecure Host, Live Whonix VM</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>Bluetooth is obviously insecure.</p>
-</blockquote>
-</aside>
-<p>Some <a href="https://github.com/Kicksecure/security-misc?tab=readme-ov-file#bluetooth-hardening">Bluetooth Hardening</a> is enabled by default.</p>
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>Cellular broadband is not?</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Router_and_Local_Area_Network_Security">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735810226" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Router_and_Local_Area_Network_Security" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/d/d8/Router.png?version=f8401ecbe3dde5e278ed04aa87d0aa7e" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Router_and_Local_Area_Network_Security" target="_blank" rel="noopener">Router and Local Area Network Security</a></h3>
-
-  <p>Router and Local Area Network Security, Router Settings and Hardware Configurations</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>qubes-os(dot)org<br>
-/t/fully-ephemeral-dispvms/12030</p>
-</blockquote>
-</aside>
-<p>There is no need to avoid using real links.</p>
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>A completely different strategy for similar objective to<br>
-RAM encryption / confidential cloud is at<br>
-qubes-os(dot)org<br>
-/t/fully-ephemeral-dispvms/12030</p>
-</blockquote>
-</aside>
-<p>Disposable VMs with ephemeral key are solving a completely different issue than <a href="https://www.kicksecure.com/wiki/Dev/confidential_computing" class="inline-onebox">Confidential Computing</a>. Both useful but addressing different threats.</p>
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>Do you have any thoughts about <strong>developing mobile</strong> services at some point?</p>
-</blockquote>
-</aside>
-<p>For now, only keeping notes.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Mobile_Operating_System_Comparison">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735810226" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Mobile_Operating_System_Comparison" target="_blank" rel="noopener" title="01:44PM - 24 November 2024">Kicksecure – 24 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/451;"><img src="https://www.kicksecure.com/w/images/a/a7/Mobile-1231889640.jpg?version=f6e8fde3a75702275abad377e68f678d" class="thumbnail" width="640" height="451"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Mobile_Operating_System_Comparison" target="_blank" rel="noopener">Mobile Operating System Comparison</a></h3>
-
-  <p>Comparison of Mobile Phones, Operating Systems that focus on either/and/or security, privacy, anonymity, source-available, Freedom Software, de-googled, un-googled, custom operating system (flash) allowed.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Mobile_Phone_Security">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735810226" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Mobile_Phone_Security" target="_blank" rel="noopener" title="04:54PM - 20 November 2024">Kicksecure – 20 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:676/500;"><img src="https://www.kicksecure.com/w/images/3/32/Phone-danger.jpg?version=80bc15b9d221a8b5c819270213cd9fe5" class="thumbnail" width="675" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Mobile_Phone_Security" target="_blank" rel="noopener">Mobile Devices Privacy and Security</a></h3>
-
-  <p>Mobile devices security and data harvesting. Mobile security best practices and preventative measures against security breaches, data leaks, SIM Swapping Attacks, and more.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>As long as there’s no usable mobile device running Kicksecure’s base distribution (Debian at time of writing), Kicksecure is unlikely to become available on mobile devices.</p>
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>, but since Kicksecure lacks many features of Whonix,</p>
-</blockquote>
-</aside>
-<p>This isn’t considered lack of features. It’s a different project with different goals.</p>
-<aside class="quote no-group" data-username="KSWhonixXMR" data-post="10" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>For instance, why would a Kicksecure user want to run live</p>
-</blockquote>
-</aside>
-<p>Rationale for live mode is documented here:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Live_Mode">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735810226" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Live_Mode" target="_blank" rel="noopener" title="09:18AM - 25 September 2024">Kicksecure – 25 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/79;"><img src="https://www.kicksecure.com/w/images/4/4c/Grub-live_mode_indicator_in_kicksecure.shortened.png?version=1fa4daf09ea4a31a982ef9f8d81d6ca2" class="thumbnail" width="690" height="79"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Live_Mode" target="_blank" rel="noopener">Live Mode for Kicksecure</a></h3>
-
-  <p>Read-only mode. Make all writes go to non-persistent memory (RAM) instead of the hard disk.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_11</link>
-        <pubDate>Fri, 03 Jan 2025 06:45:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2089</guid>
-      </item>
-      <item>
-        <title>How does Kicksecure compare to Silverblue?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>More work is needed to edit that page. It cannot only be deleted.</p>
-<p>On top it says:</p>
-<blockquote>
-<p>Quick, preliminary analysis version 0.1,</p>
-</blockquote>
-<p>Which makes this a non-urgent issue. But that gets wrong, because of that change. So that needs some rewrite too.</p>
-<p>And the userns need a longer comment. Writing a good comment on how that influences the threat model that isn’t something that users can do.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745#post_10</link>
-        <pubDate>Fri, 03 Jan 2025 06:28:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2088</guid>
-      </item>
-      <item>
-        <title>How does Kicksecure compare to Silverblue?</title>
-        <dc:creator><![CDATA[@qtzvytqr77x4t5cq]]></dc:creator>
-        <description><![CDATA[ <p>I submitted a change to the wiki. It is my first time ever editing a wiki, so I am not sure how to add a comment to my edit explaining my change. But I am changing it to remove the non-userns lines, since there are no longer different variants of secureblue.</p>
-<p>Also, apparently RoyalOughtness does not want to help with the comparison, even though they claim that there is “too much inaccuracy.” <a href="https://discuss.privacyguides.net/t/secureblue-immutable-fedora-hardening/16086/237" class="inline-onebox" rel="noopener nofollow ugc">Secureblue - Immutable Fedora Hardening - #237 by RoyalOughtness - Tool Suggestions - Privacy Guides Community</a></p>
-<aside class="quote no-group">
-<blockquote>
-<p>There is too much inaccuracy to comment on concisely. Additionally, I find it unprofessional to air concerns without at least reaching out for clarification first. I aim to keep it professional and hope others will return the favor <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
-<p>So, if there’s something specific from there that you have questions or concerns about, feel free to open specific github issues on our project page.</p>
-</blockquote>
-</aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-does-kicksecure-compare-to-silverblue/745#post_9</link>
-        <pubDate>Fri, 03 Jan 2025 04:08:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2087</guid>
-      </item>
-      <item>
-        <title>Reducing the risk of installing malicious apt packages?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>(Was waiting for a very long software build to finish and this idea popped into my head, so I decided to write it up and post it.)</p>
-<p>A distro’s package manager is an interesting potential malware vector for a number of reasons. They are implicitly trusted by the distribution as being a safe source of software. The fact that these repositories are maintained by distributions and don’t simply allow anyone to throw software onto them increases their trustworthiness, and thus increases a user’s likelihood to treat them as entirely safe. Even though I do not (any longer) trust a distro’s official repos to be totally safe, I do generally trust <code>sudo apt install</code> to be more safe than most other ways of obtaining software.</p>
-<p>However, while a distro’s repositories are indeed <em>more</em> safe than using the Internet at large as your software repository (thanks Windows for proving that), that doesn’t mean that a package manager is entirely safe:</p>
-<ul>
-<li>Very little code review is generally done when packaging a software application for several major distributions, including Debian. Debian does not require (or even particularly encourage) packagers to do a code review, and the people who review new packages to ensure they are suitable for inclusion into the Debian archives mostly check that the <em>packaging</em> looks good, not the code of the application. As a result it is very possible for a malicious package to be introduced into the archive on accident. Similarly, it’s possible for malicious code to be introduced into a previously legitimate application without anyone noticing. (This has happened at least twice before, once very notably in the xz-utils incident, and once in a <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">lesser-known backdoor attack on the UnrealIRCD server, which affected Gentoo</a>. That second attack <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">went undetected for six or seven months</a>.)</li>
-<li>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision. This is especially true if the packager is a Debian Maintainer (thus able to upload specific packages without needing a sponsor) or a Debian Developer (thus able to upload an update to any package without needing a sponsor). A malicious or compromised DM or DD could thus potentially introduce malicious code into the archive without being noticed. Supplying updates for a package in a stable release is harder and would probably not be so easy to compromise in this way thankfully, but you still are putting your trust in the DMs and DDs of Debian, which could be poorly placed. Remember that Jia Tan was fully trusted and that turned out to be a bad idea.</li>
-<li>Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code. The Chromium browser package is a good example of this - it was so often out-of-date that the Linux Mint developers <a href="https://blog.linuxmint.com/?p=3978" rel="noopener nofollow ugc">decided to build it themselves for LMDE</a>. Chromium, despite its apparently good security design, is also a massive source of security vulnerabilities probably because it is such a popular application and thus everyone’s looking for vulnerabilities in it. The problems with Chromium might not be as bad now as they were back then, but this kind of thing is still worrying.</li>
-<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
-<li>Users may enable third-party repositories to get software that isn’t available from the Debian archives, or that is outdated in Debian. These repositories are probably OK if the user is installing software from an official upstream source, but there’s nothing stopping someone from making a malicious Debian repo that advertises newer versions of outdated software to make itself attractive. There’s also the incident with a <a href="https://debugpointnews.com/free-download-manager-debian/" rel="noopener nofollow ugc">malicious third-party repo for Free Download Manager</a>, which involved a compromise of the authentic Free Download Manager website. (That attack went undetected for <a href="https://www.freedownloadmanager.org/blog/?p=664" rel="noopener nofollow ugc">around two years</a>.)</li>
-</ul>
-<p>All of these issues could potentially cause serious trouble even for a security-conscious user, and to my awareness no major operating system (Linux or otherwise) makes any attempt to significantly mitigate the risks these kinds of attacks introduce. (Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know. Similarly Windows’ and MacOS’s restrictions related to signed code can make it more difficult to run code by people who don’t provide a clear link between their software and their identity, but there’s nothing stopping someone from just publishing signed malicious code, plus identity theft is a thing.) The user is left to figure out what they do or don’t trust by themselves, and while the user should <strong>always</strong> be the final authority on what is or isn’t trusted, it should be recognized that some users are just plain bad at making good decisions about what to trust. As the saying goes, <a href="https://en.wikipedia.org/wiki/Dancing_pigs" rel="noopener nofollow ugc">“Given a choice between dancing pigs and security, users will pick dancing pigs every time.”</a></p>
-<p>How could we harden apt in order to make this problem less of a problem? We <strong>absolutely should not block users from installing software</strong> regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn’t do. One potential idea might be to wrap <code>apt install</code> commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of “known good software” and another database of “known bad software”. If the user is trying to install something that isn’t explicitly trusted, they’ll get a warning they can click through, and if they’re trying to install something that is explicitly distrusted, they’ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don’t get backlash for “locking down” the OS if we go that route, then again I don’t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it’s intrinsically dangerous or not, but you get my point.) We’d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don’t know for sure if this is the best way of doing this, but it might work.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848#post_1</link>
-        <pubDate>Fri, 03 Jan 2025 02:55:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2086</guid>
-      </item>
-      <item>
-        <title>Live Kicksecure Host, Live Whonix VM</title>
-        <dc:creator><![CDATA[@KSWhonixXMR]]></dc:creator>
-        <description><![CDATA[ <p><strong>Designing different boot modes</strong></p>
-<p>Thank you. Does the Kicksecure team believe that Wi-Fi cannot be trusted (even public wifi from institutions – ufw “public” mode) even on workstations and rfkill should continue blocking wifi in both server and workstation forms of Kicksecure? Bluetooth is obviously insecure. Cellular broadband is not?</p>
-<p>kicksecure(dot)com</p>
-<pre><code>/wiki/Router_and_Local_Area_Network_Security
-
-/wiki/SUID_Disabler_and_Permission_Hardener
-
-/wiki/Dev/boot_modes
-
-/wiki/Login_spoofing
-</code></pre>
-<p>A completely different strategy for similar objective to<br>
-RAM encryption / confidential cloud is at<br>
-qubes-os(dot)org<br>
-/t/fully-ephemeral-dispvms/12030<br>
-I mention this because of that development topic on this forum which relates to my initial question about a fully live host and Whonix VM, answered by <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> and thanks for elucidating.</p>
-<p>I have long admired the wealth of information supplied by Patrick and his team. The Whonix wiki is great. The software works like a charm. I am certainly a fan and in no way intend to detract from this research project.</p>
-<p>I mentioned above that a broad-spectrum, simultaneous attack against all my Linux devices was undertaken recently and that is why I have turned to Kicksecure and am discussing its security features. I now regard Fedora, Qubes OS, and GOS as inadequate for people who require highly secure computing environments.</p>
-<p>How would you like to lose tons of crypto because your workstation and mobile devices were not prepared to defend against intrusion and system takedowns?</p>
-<p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> – Do you have any thoughts about <strong>developing mobile</strong> services at some point? Morphing mobian into Kicksecure might be a good option for safeguarding mobile crypto wallets, for example. I see that Graphene OS blacklist modules are included in security-misc…</p>
-<p>Since the Whonix project began before Kicksecure, but since Kicksecure lacks many features of Whonix, <strong>how do you envision the best use of Kicksecure</strong>? For instance, why would a Kicksecure user want to run live if most of the applications in Whonix cannot be run with a live host (except with a very large amount of RAM)? Live pentesting applications? Hardened Debian-based servers?</p>
-<p>Although still in the R&amp;D and testing phase of production, features in the <code>security-misc</code> like <code>hide-hardware-info</code> and <code>proc-hidepid</code> (if interested, see <a class="mention" href="https://forums.kicksecure.com/u/procshield">@procShield</a> - Qubes forum from years ago) are exactly the kinds of innovation people are looking for who have a lot to lose if their system is destroyed.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_10</link>
-        <pubDate>Thu, 02 Jan 2025 21:18:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2085</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>I guess you misunderstood my goal.</p>
-<p>Details:</p>
-<p>I have inatalled  debian live iso, calanares  created 2 simple partitions<br>
-sda—sda1 root luks—sda2 cryptswap</p>
-<p>Goal<br>
-Install the same above using CLI instead of calamares.</p>
-<p>Is there anything wrong when i found a guide to do that.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_9</link>
-        <pubDate>Wed, 01 Jan 2025 12:56:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2083</guid>
-      </item>
-      <item>
-        <title>RAM encryption / Confidential Cloud</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/keylime/keylime/issues/1712">
-  <header class="source">
-
-      <a href="https://github.com/keylime/keylime/issues/1712" target="_blank" rel="noopener">github.com/keylime/keylime</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/keylime/keylime/issues/1712" target="_blank" rel="noopener">mitigate relay attacks</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2025-01-01" data-time="11:57:23" data-timezone="UTC">11:57AM - 01 Jan 25 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Does keylime mitigate relay attacks? From what I've read, I would not know how i<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t could.
-
-What do you I mean by relay attack? Quote [Trusted Boot (Anti-Evil-Maid, Heads, and PureBoot)](https://tech.michaelaltfield.net/2023/02/16/evil-maid-heads-pureboot/):
-
-&gt; Relay attack
-&gt; 
-&gt; While the TOTP solution cleverly solves the replay attack, it’s still vulnerable to a relay attack.
-&gt; 
-&gt; An attacker could steal your laptop and leave behind an identical-looking malicious laptop. When you (unknowingly) boot the malicious relay laptop, it communicates out to your real laptop — which relays the 6-digit OTP code down to the malicious laptop. You verify that the 6-digit OTP is correct and type your FDE decryption password — which is relayed out to the attacker with your real laptop.
-
-Notes:
-
-* Yes: This is about re**lay** attacks. (There is no "`p`" inside the word "`relay`".) As in "to relay", "proxy", man-in-the-middle (MiTM).
-* No: This is not about `replay` attacks.
-
-It is similar to the following issue with OpenPGP / gpg.
-
-```
-gpg: WARNING: This key is not certified with a trusted signature!
-gpg:          There is no indication that the signature belongs to the owner.
-```
-
-Or SSH.
-
-```
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@    WARNING: REMOTE HOST IDENTIFICATION HAS CHANGED!     @
-@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-IT IS POSSIBLE THAT SOMEONE IS DOING SOMETHING NASTY!
-Someone could be eavesdropping on you right now (man-in-the-middle attack)!
-It is also possible that a host key has just been changed.
-The fingerprint for the RSA key sent by the remote host is
-6e:45:f9:a8:af:38:3d:a1:a5:c7:76:1d:02:f8:77:00.
-Please contact your system administrator.
-Add correct host key in /home/hostname /.ssh/known_hosts to get rid of this message.
-Offending RSA key in /var/lib/sss/pubconf/known_hosts:4
-RSA host key for pong has changed and you have requested strict checking.
-Host key verification failed.
-```
-
-Even with a TPM EK (endorsement key) when provisioning a new server in a untrusted cloud, there does not seem even conceptually a way to resolve this issue. With the TPM EK there is evidence that the customer is talking to "a real TPM". That TPM however might be proxied (MiTMd) through another machine and another TPM.
-
-Potential solutions:
-
-* TOFU: Ignoring this issue and trust on first use.
-* local, physical provisioning: Customer provisions their own hardware locally to learn the TPM EK and then ships the hardware to the cloud provider.
-* cloud provider should publish the TPM EK fingerprint upfront: Before provisioning a server, the cloud provider should be expected to reveal the TPM endorsement key fingerprint. Would that help or would that still be vulnerable to relay attacks? The initial SSH key setup might still get intercepted?
-
-See also:
-
-* [Firmware authentication, avoiding relay attacks](https://www.kicksecure.com/wiki/Verified_Boot#Firmware_authentication.2C_avoiding_relay_attacks), where relay attacks are described in detail as well as potential solutions. (Written by @ArrayBolt3 with minor edits by myself.)
-* https://github.com/linuxboot/heads/issues/1881
-
-Purpose of this ticket:
-
-* Solve this issue and/or,
-* document the issue in user documentation / threat model.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635#post_3</link>
-        <pubDate>Wed, 01 Jan 2025 11:57:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2082</guid>
-      </item>
-      <item>
-        <title>RAM encryption / Confidential Cloud</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/linuxboot/heads/issues/1881">
-  <header class="source">
-
-      <a href="https://github.com/linuxboot/heads/issues/1881" target="_blank" rel="noopener">github.com/linuxboot/heads</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/linuxboot/heads/issues/1881" target="_blank" rel="noopener">mitigate relay attacks</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-12-29" data-time="10:57:29" data-timezone="UTC">10:57AM - 29 Dec 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
-
-Quote http<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">s://tech.michaelaltfield.net/2023/02/16/evil-maid-heads-pureboot/
-
-&gt; Relay attack
-&gt; 
-&gt; While the TOTP solution cleverly solves the replay attack, it’s still vulnerable to a relay attack.
-&gt; 
-&gt; An attacker could steal your laptop and leave behind an identical-looking malicious laptop. When you (unknowingly) boot the malicious relay laptop, it communicates out to your real laptop — which relays the 6-digit OTP code down to the malicious laptop. You verify that the 6-digit OTP is correct and type your FDE decryption password — which is relayed out to the attacker with your real laptop.
-
-**Describe the solution you'd like**
-
-&gt; a high-speed device, connected via a serial or perhaps USB interface, to manage authentication. This device can send an authentication challenge, receive a response, measure its timing, and verify it. If the response is both valid and received quickly enough, we can trust that the device and its firmware are authentic.
-
-**Describe alternatives you've considered**
-
-* FlashKeeper
-* CPU features
-* many more
-
-**Additional context**
-
-See also [Firmware authentication, avoiding relay attacks](https://www.kicksecure.com/wiki/Verified_Boot#Firmware_authentication.2C_avoiding_relay_attacks), where relay attacks are described in detail as well as potential solutions. (Written by @ArrayBolt3 with minor edits by myself.)</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/ram-encryption-confidential-cloud/635#post_2</link>
-        <pubDate>Wed, 01 Jan 2025 11:48:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2081</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Kicksecure cannot support a lot complex partitioning choices. See <a href="https://github.com/calamares/calamares/pull/2400" class="inline-onebox">Allow restricting the filesystem's usable in manual partitioning by ArrayBolt3 · Pull Request #2400 · calamares/calamares · GitHub</a> to get an insight how complicated, involved that was.</p>
-<p>So for complex partitioning or calamares customizations the only realistic options are either becoming a developer or paying a developer. I highly doubt any forum can answer this for free. This is much too complicated.</p>
-<aside class="quote no-group" data-username="suse211213" data-post="7" data-topic="843">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>must not be luks1</p>
-</blockquote>
-</aside>
-<p><a href="https://forums.kicksecure.com/t/luks1-version-issue-port-to-luks2/584" class="inline-onebox">Luks1 version issue -&gt; port to Luks2</a> has been implemented.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_8</link>
-        <pubDate>Wed, 01 Jan 2025 09:05:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2078</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Yes .</p>
-<p>Debian calamares installer created sda1 as luks root<br>
-sda2 as swap luks partition from sda<br>
-Only one password needed at boot for both .</p>
-<p>What exactly I wanted<br>
-Creating manually the above sheme , must not be luks1 or encrypted boot</p>
-<p>I found only one old guide .but crypttab and fstab then looks not the same somehow as what calamares did</p>
-<p>I searched more . they are using LVM when creating swap partition only . I dont want LVM</p>
-<p>Now my desire to the above are changed.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_7</link>
-        <pubDate>Tue, 31 Dec 2024 20:09:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2077</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Not planned.</p>
-<p>The same features as with Debian and Calamares installer should be available.</p>
-<p>Unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735637426" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can be resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735637426" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_6</link>
-        <pubDate>Tue, 31 Dec 2024 16:39:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2076</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Is it possible to chroot into live kicksecure and do manual partitioning, installing</p>
-<p>It would be great to have a guide on the wiki.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_5</link>
-        <pubDate>Tue, 31 Dec 2024 13:23:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2075</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="843">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>I would know if you told calamares to create spesific layout</p>
-</blockquote>
-</aside>
-<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <h4><a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf</a></h4>
-
-
-      <pre><code class="lang-conf">## https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf
-## https://github.com/bbqlinux/calamares-bbqlinux/blob/master/src/etc/calamares/modules/partition.conf
-
-## Size? See:
-## https://github.com/grml/grml-debootstrap/issues/221
-efi:
-    mountPoint:         "/boot/efi"
-    recommendedSize:    550MiB
-    minimumSize:        550MiB
-    label:              "EFI"
-
-userSwapChoices:
-    - none
-
-drawNestedPartitions: false
-alwaysShowPartitionLabels: true
-defaultFileSystemType: "ext4"
-availableFileSystemTypes: ["ext4"]
-luksGeneration: luks2
-preCheckEncryption: true
-</code></pre>
-
-
-
-  This file has been truncated. <a href="https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">show original</a>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="843">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>and why exactly this sheme on kicksecure.</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/Kicksecure/live-config-dist/commits/master/etc/calamares/modules/partition.conf">
-  <header class="source">
-      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
-
-      <a href="https://github.com/Kicksecure/live-config-dist/commits/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">GitHub</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/b59e9d997aba9acd584a68d4a1f100da21e7caae6dd1c6bce0b6e963b77e5df9/Kicksecure/live-config-dist" class="thumbnail" width="" height=""></div>
-
-<h3><a href="https://github.com/Kicksecure/live-config-dist/commits/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">History for etc/calamares/modules/partition.conf - Kicksecure/live-config-dist</a></h3>
-
-  <p>Contribute to Kicksecure/live-config-dist development by creating an account on GitHub.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote quote-modified" data-post="1" data-topic="420">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420">ISO: Change to unencrypted /boot if using Full Disk Encryption</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
-  </div>
-  <blockquote>
-    Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues. 
-
-GRUB2 needs a very long time to decrypt the root disk.
-Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.
-And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivativ…
-  </blockquote>
-</aside>
-
-<aside class="quote quote-modified" data-post="1" data-topic="626">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626">Use Btrfs as the default journaling file system</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
-  </div>
-  <blockquote>
-    Btrfs provide easy roll back snapshots compatible with timeshift or snapper. 
-Good explanation about it: 
-
-  <a href="https://www.youtube.com/watch?v=J2QP4onqJKI" target="_blank" class="video-thumbnail" rel="noopener">
-    [BTRFS Guide | The Best Desktop File System]
-  </a>
-
-
-Atm it needs some manual work to make btrfs, good explanation can be found here: 
-
-
-Many suggest to not use swap since you are on SSD e.g: 
-
-  <a href="https://www.youtube.com/watch?v=MoWApyUb5w8&amp;t=404" target="_blank" class="video-thumbnail" rel="noopener">
-    [Debian 12 Bookworm Minimal Install w/BTRFS]
-  </a>
-
-
-
-  <a href="https://www.youtube.com/watch?v=b4vTKg-qW_0&amp;t=260" target="_blank" class="video-thumbnail" rel="noopener">
-    [Debian 12: Fighting with OpenSUSE Snapper!]
-  </a>
-
-
-(Suggest to use <a href="https://en.wikipedia.org/wiki/Zram">zRAM</a> instead, known to be even faster).
-  </blockquote>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/filesystem">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735551028" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/filesystem" target="_blank" rel="noopener" title="01:19PM - 29 November 2024">Kicksecure – 29 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/filesystem" target="_blank" rel="noopener">Filesystem Development Considerations</a></h3>
-
-  <p>Considerations for default file system choice for Kicksecure.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_4</link>
-        <pubDate>Tue, 31 Dec 2024 05:15:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2073</guid>
-      </item>
-      <item>
-        <title>Virtualbox/KVM for Kicksecure Live</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>you can create encrypted iso of installed customized kicksecure with your settings and programs using “penguins’ eggs” or you can create iso with pre-installed packages using “cubic”</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/virtualbox-kvm-for-kicksecure-live/838#post_4</link>
-        <pubDate>Mon, 30 Dec 2024 17:28:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2072</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Alright.<br>
-I will look forward on debian based sources.as i have used live iso calamares installer . it created two luks partitions . swap</p>
-<p>I will test again kicksecure on vm and bare metal and study luks partition layout.</p>
-<p>There are several  layouts .lvm . btfrs …</p>
-<p>I would know if you told calamares to create spesific layout and why exactly this sheme on kicksecure.</p>
-<p>Is there a recommended luks partition sheme</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_3</link>
-        <pubDate>Mon, 30 Dec 2024 14:54:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2071</guid>
-      </item>
-      <item>
-        <title>Virtualbox/KVM for Kicksecure Live</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <ol>
-<li>
-<p>Build an ISO normally. This is a prerequisite exercise. → <a href="https://www.kicksecure.com/wiki/Dev/Build_Documentation/images">Kicksecure Images Build Documention</a></p>
-</li>
-<li>
-<p>In derivative-make source code folder… File:</p>
-</li>
-</ol>
-<blockquote>
-<p>live-build-data/live-build-config/live_build_package_list_kicksecure</p>
-</blockquote>
-<p>Append a new line at the end:</p>
-<pre><code>virtualbox
-</code></pre>
-<p>Then build the ISO. Might work. Untested.</p>
-<hr>
-<p>related - useful if already having a persistent installation of Kicksecure:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/VirtualBox/Installer">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/VirtualBox/Installer" target="_blank" rel="noopener" title="07:08AM - 14 September 2024">Kicksecure – 14 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:413/500;"><img src="https://www.kicksecure.com/w/images/b/ba/Virtualbox-installer.png?version=2a87d3a2aa60cb8a6a331da2f0d98fc3" class="thumbnail" width="413" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/VirtualBox/Installer" target="_blank" rel="noopener">VirtualBox Installer for Linux</a></h3>
-
-  <p>The VirtualBox Linux Installer offers a user-friendly method to install VirtualBox on Linux systems.
-It supports Debian, Fedora, and their derivatives such as Ubuntu (starting from version: Ubuntu Jammy (22.04) (LTS)), Linux Mint, RedHat, and...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Linux">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Linux" target="_blank" rel="noopener" title="09:18PM - 15 December 2024">Kicksecure – 15 Dec 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/487;"><img src="https://www.kicksecure.com/w/images/2/25/Gui-preview.jpg?version=8d708f6b80eb8bb88f3dadc286d81794" class="thumbnail" width="690" height="487"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Linux" target="_blank" rel="noopener">Kicksecure Linux Installer for VirtualBox</a></h3>
-
-  <p>Kicksecure for Linux - Stable Version</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/virtualbox-kvm-for-kicksecure-live/838#post_3</link>
-        <pubDate>Mon, 30 Dec 2024 08:37:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2070</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="1" data-topic="843">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
-<blockquote>
-<p>How to convert or where to search or extract partitioning commands used in kicksecure calamares.</p>
-</blockquote>
-</aside>
-<aside class="onebox githubfolder" data-onebox-src="https://github.com/calamares/calamares/tree/calamares/src/modules/partition">
-  <header class="source">
-      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
-
-      <a href="https://github.com/calamares/calamares/tree/calamares/src/modules/partition" target="_blank" rel="noopener">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <h3><a href="https://github.com/calamares/calamares/tree/calamares/src/modules/partition" target="_blank" rel="noopener">calamares/src/modules/partition at calamares · calamares/calamares</a></h3>
-
-
-  <p><span class="label1">Distribution-independent installer framework. Contribute to calamares/calamares development by creating an account on GitHub.</span></p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Unfortunately, this is very complicated. C++ source code. Developers only. Users will be unable to figure out the commands by looking at the source code.</p>
-<p>Therefore unsupported.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="08:07AM - 12 October 2024">Kicksecure – 12 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
-
-  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can only be resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_2</link>
-        <pubDate>Mon, 30 Dec 2024 07:55:41 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2069</guid>
-      </item>
-      <item>
-        <title>Calamares installer to manual</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>How to convert or where to search or extract partitioning commands used in kicksecure calamares.</p>
-<p>I would partition through cli for learning purpose while having same kicksecure partitioning results</p>
-<p>As an example<br>
-Straightforward Luks on partition + encrypted separat swap , all online guides i found are only combined with LVM</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/calamares-installer-to-manual/843#post_1</link>
-        <pubDate>Mon, 30 Dec 2024 03:28:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2068</guid>
-      </item>
-      <item>
-        <title>Problems with the installation</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>What ISO are you using? I can’t reproduce this when doing a German installation in virt-manager using Kicksecure-Xfce-17.2.8.5.Intel_AMD64.iso.</p>
-<p>Are you sure the root filesystem is using a normal Linux filesystem? If you used manual partitioning, make sure to use a filesystem such as ext4 or xfs for the root partition. Filesystems like fat32 or NTFS will almost certainly not allow the installation to succeed.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/problems-with-the-installation/836#post_2</link>
-        <pubDate>Sun, 29 Dec 2024 23:21:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2067</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="ZenLong" data-post="9" data-topic="825">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/c57346/48.png" class="avatar"> ZenLong:</div>
-<blockquote>
-<p>, but I wonder why the exact same applications works with the same permission on other main stream distributions.</p>
-</blockquote>
-</aside>
-<p>required:</p>
-<ul>
-<li><a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Reporting_Guidelines">Reporting Guidelines</a></li>
-<li><a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Sample_Bug_Report">Sample Bug Report</a></li>
-</ul>
-<aside class="quote no-group" data-username="ZenLong" data-post="9" data-topic="825">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/c57346/48.png" class="avatar"> ZenLong:</div>
-<blockquote>
-<p>Do you know what’s the root of the problem ?</p>
-</blockquote>
-</aside>
-<p>Impossible to say without above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_10</link>
-        <pubDate>Sun, 29 Dec 2024 10:20:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2064</guid>
-      </item>
-      <item>
-        <title>Whonix packages to install on Kicksecure for anonymized hostname, machine id and timezone</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="frorum" data-post="1" data-topic="829">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e5b9ba/48.png" class="avatar"> frorum:</div>
-<blockquote>
-<p>Mullvad Browser</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Mullvad_Browser">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener" title="12:38PM - 04 May 2024">Kicksecure – 4 May 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener">Mullvad Browser</a></h3>
-
-  <p>How to install Mullvad Browser in Kicksecure.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="frorum" data-post="1" data-topic="829">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e5b9ba/48.png" class="avatar"> frorum:</div>
-<blockquote>
-<p>Are there simple packages from Whonix that can be installed to hide it in Kicksecure?</p>
-</blockquote>
-</aside>
-<p>Unsupported.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="08:07AM - 12 October 2024">Kicksecure – 12 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
-
-  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Related:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1735464625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="10:04AM - 15 October 2024">Kicksecure – 15 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar">
-
-<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
-
-  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/whonix-packages-to-install-on-kicksecure-for-anonymized-hostname-machine-id-and-timezone/829#post_2</link>
-        <pubDate>Sun, 29 Dec 2024 10:18:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2063</guid>
-      </item>
-      <item>
-        <title>Kicksecure cloning error</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Right. Package <code>libpam-tmpdir</code> is triggering a bug in calamares.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="823">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>(Which will be resolved anyhow, as soon as a newer calamares version <code>3.3.12</code> gets available from Debian backports.)</p>
-</blockquote>
-</aside>
-<aside class="quote no-group" data-username="linuxer" data-post="8" data-topic="823">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
-<blockquote>
-<p>what are differences in installing kicksecure and debian?</p>
-</blockquote>
-</aside>
-<p>That is outside of support for Kicksecure support. Way too complicated to explain. You’d need to look at the source code. Developers only.</p>
-<aside class="onebox githubfolder" data-onebox-src="https://github.com/Kicksecure/derivative-maker/tree/master/live-build-data/live-build-config">
-  <header class="source">
-      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" width="32" height="32">
-
-      <a href="https://github.com/Kicksecure/derivative-maker/tree/master/live-build-data/live-build-config" target="_blank" rel="noopener">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <h3><a href="https://github.com/Kicksecure/derivative-maker/tree/master/live-build-data/live-build-config" target="_blank" rel="noopener">derivative-maker/live-build-data/live-build-config at master ·...</a></h3>
-
-
-  <p><span class="label1">https://www.kicksecure.com/wiki/Imprint. Contribute to Kicksecure/derivative-maker development by creating an account on GitHub.</span></p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-cloning-error/823#post_11</link>
-        <pubDate>Sun, 29 Dec 2024 10:15:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2062</guid>
       </item>
   </channel>
 </rss>

@@ -43,9 +43,161 @@ Is that pretty much it or am I missing something?
 
 Kind regards</description>
     
-    <lastBuildDate>Fri, 10 Jan 2025 01:41:53 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jan 2025 18:41:36 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <p>Hi, yes I missed a bunch of stuff there. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/9</link>
+        <pubDate>Fri, 10 Jan 2025 18:24:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-9</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p><code>pkg_list</code> is defined in <code>derivative-maker/buildconfig.d/30_pkg_list.conf</code>. Not sure if that answers your exact question or not since I’m moving a bit too fast, but it might help.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/8</link>
+        <pubDate>Fri, 10 Jan 2025 18:20:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-8</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>A pull request introducing a LXQt meta package(s) would be welcome.</p>
+</blockquote>
+<p>I wanna be sure everything is perfect before making a pull, but I think something like that could be nice.</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://pastebin.com/ZpUBrNsM">
+  <header class="source">
+      <img src="https://pastebin.com/favicon.ico" class="site-icon" width="16" height="16">
+
+      <a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">Pastebin</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="" height="" src="https://pastebin.com/i/facebook.png" class="thumbnail">
+
+<h3><a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">kicksecure-meta-packages LXQt - Pastebin.com</a></h3>
+
+  <p>Pastebin.com is the number one paste tool since 2002. Pastebin is a website where you can store text online for a set period of time.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><code>kicksecure-desktop-environment-essential-lxqt</code> only pulls in <code>lxqt-core openbox</code> which is the absolute bare minimum.</p>
+<p>This package depends on <code>kicksecure-desktop-environment-essential-gui</code>, so that’s regular x11 + openbox.</p>
+<p>Then there is the new <code>kicksecure-desktop-environment-essential-gui-wayland</code> which skips all the xorg/x11 packages, installs drivers and a basic Wayland environment.</p>
+<p>Finally, <code>kicksecure-desktop-environment-essential-lxqt-wayland</code> again installs <code>lxqt-core</code> but instead depends on <code>kicksecure-desktop-environment-essential-lxqt-wayland</code></p>
+<p>The new <code>lxqt-wayland-session</code> code only comes in <code>lxqt-core 32</code> which is currently available under trixie, but not bookworm (lxqt-core 31). I’m sure derivative-maker can use apt pinning to give those lxqt packages a higher priority under trixie. (Gonna add that too if needed)</p>
+<blockquote>
+<p>It does not happen at all. It’s possible to add packages to the packages folder, which are built, but never installed, which is quite useful to maintain opt-in packages and during development.</p>
+</blockquote>
+<p>I carefully looked into <code>2100_create-debian-package</code> and have a question. Particularly, <code>create_derivative_distribution_debian_packages()</code></p>
+<p>The first for loop iterates over $derivative_name_list which is either <code>kicksecure</code>, <code>whonix</code> or both, depending on what is set in help-steps.d/variables.</p>
+<p>The second for loop runs through <code>$pkg_list</code>, which should hold all the local package names in <code>packages/kicksecure/*</code> but is not defined anywhere. I double checked, it’s not in <code>help-steps.d/variables</code>, <code>help-steps.d/pre</code> or the script itself.</p>
+<p>Thus, the second loop should only run once, <code>$item</code> remains <code>.../derivative-maker/packages/kicksecure</code> and pushd doesn’t actually save any useful paths.</p>
+<p>So why does genmkfile not fail later on when the packages are built?</p>
+<pre><code class="lang-auto"> for derivative_name_item in $derivative_name_list ; do
+      for item in $pkg_list ; do
+         item="$source_code_folder_dist/packages/$derivative_name_item/$item"
+         if [ ! -d "$item" ]; then
+            true "INFO: Not a folder: $item"
+            continue
+         fi
+         pushd "$item" &gt;/dev/null
+         number_folder_current="$(( number_folder_current + 1 ))"
+         local base_name
+         base_name="${item##*/}"
+         if [ "$base_name" = "developer-meta-files" ]; then
+            true "${cyan}INFO: Skipping $base_name as expected.${reset}"
+            popd
+            continue
+         fi
+</code></pre>
+<p>Edit: My bad the loop works, I just wasn’t looking carefully, enough.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/7</link>
+        <pubDate>Fri, 10 Jan 2025 18:09:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-7</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I’d be happy to help if you guys are interested in kicksecure-lxqt meta-packages.</p>
+</blockquote>
+</aside>
+<p>A pull request introducing a LXQt meta package(s) would be welcome.</p>
+<aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>I read <code>build-steps.d/3500_install-packages</code> a bunch of times but couldn’t find a function that “installs” all the stuff from <code>derivative-maker/packages/kicksecure/*</code>. Where does this actually happen?</p>
+</blockquote>
+</aside>
+<p>It does not happen at all. It’s possible to add packages to the packages folder, which are built, but never installed, which is quite useful to maintain opt-in packages and during development.</p>
+<ul>
+<li>VM builds: “Mostly” install-packages build-step decides what packages are installed. Ideally, it would be the meta package only, but that isn’t possible. (Image creation is complicated. [1]) So that script is the primary reference only.</li>
+<li>ISO builds: Unfortunately work different. See create-lb-iso build-step.</li>
+</ul>
+<aside class="quote no-group" data-username="e-coin" data-post="3" data-topic="862">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
+<blockquote>
+<p>, but <code>4300_run-chroot-scripts-post-d</code> already expects <code>/usr/libexec/initializer-dist/chroot-scripts-post.d</code> to be there from the initializer-dist package.</p>
+</blockquote>
+</aside>
+<p>Right. So if no meta package would <code>Depends: initializer-dist</code> and if that package was not hardcoded in above script, then that would break.</p>
+<p>There’s no “auto install all packages built from the packages folder” and there’s no need for that either.</p>
+<hr>
+<p>[1] <a href="https://www.kicksecure.com/wiki/Dev/image_creation" class="inline-onebox">Development of System Image Creation and Bootstrapping Tools</a></p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/6</link>
+        <pubDate>Fri, 10 Jan 2025 09:24:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-6</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
+      <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <p>The menu is pretty similar I believe, but lxqt is lighter both in terms of resources and dependencies. Using live-build you can generate a working bookworm iso &lt;450MB with a minimal lxqt DE.</p>
+<p>It requires more pre-configuration though. The defaults don’t look great and can be a bit unintuitive.</p>
+          <p><a href="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862/5</link>
+        <pubDate>Fri, 10 Jan 2025 09:11:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-862-5</guid>
+        <source url="https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862.rss">Building Kicksecure with different Desktop Environment</source>
+      </item>
       <item>
         <title>Building Kicksecure with different Desktop Environment</title>
         <dc:creator><![CDATA[Quiksilver]]></dc:creator>

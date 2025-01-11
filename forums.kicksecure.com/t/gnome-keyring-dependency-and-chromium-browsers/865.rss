@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Gnome-keyring dependency and chromium browsers</title>
+    <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865</link>
+    <description>So I just did a full upgrade and now I get prompted to unlock the keyring for Brave browser everytime its launched.
+
+In the past when I was distrohopping another distro that had xfce I would get that same prompt with Ungoogled-chromium and also Vivaldi which are both chromium based.
+Its weird considering I never even use a browser keyring password manager I dont get why it prompts this.
+
+Anyway the fix always used to be purge `gnome-keyring` however this doesn&#39;t seem to be the best choice.
+
+When you type `sudo apt purge gnome-keyring` it will show the other dependencies to remove are `kicksecure-desktop-environment-essential-xfce` and other Kicksecure specific ones so obviously I chose NOT to go forward.
+
+The only fix in the meantime that is better is to add the chrome flag `--password-store=basic` which will ingore using GNOME keyring or kwallet (KDE).
+
+So you would edit your launcher `Exec=/usr/bin/browser --password-store=basic` for the browser application or you could edit your `/usr/share/application/browser.desktop` file for desktop file but this might get updated with new updates so launcher seems like the safer bet.
+
+
+Back to the point why is gnome-keyring dependency needed and could something be added to Kicksecure like above to automatically fix this pesky issue or to the wiki regarding chromium unlock keyring prompt with gnome-keyring.
+
+**Solution** add the chrome flag `--password-store=basic`</description>
+    
+    <lastBuildDate>Fri, 10 Jan 2025 11:50:24 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Gnome-keyring dependency and chromium browsers</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>why is gnome-keyring dependency needed</p>
+</blockquote>
+</aside>
+<p>You can follow the history of that here:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="582">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582">Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    After booting the ISO → Xfce desktop → double click on “17 GB Encrypted” (from a previous installation) → enter password → save password permanently. 
+
+Failed to mount “rootfs” 
+
+
+Error storing passphrase in keyring (The name org.freedesktop.secrets was not provided by any .service files) 
+
+
+
+Since we’re already installing KeePassXC by default, it might make sense to use KeePassXC as a org.freedesktop.secrets provider. Here is a promising looking (untested by me) guide: 
+<a href="https://c3pb.de/blog/keepassxc-secrets-service.html" class="onebox" target="_blank" rel="noopener">https://c3pb.de/blog/kee…</a>
+  </blockquote>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">add `gnome-keyring` to `kicksecure-desktop-environment-essential-xfce`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2024-10-03" data-time="06:34:09" data-timezone="UTC">06:34AM - 03 Oct 24 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 0 deletions">
+        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">to fix error message
+
+&gt; Error storing passphrase in keyring (The name org.freede<span class="show-more-container"><a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/6e6b90d016edf52d7de88be6aa76e3281820acf8" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">sktop.secrets was not provided by any .service files)
+
+https://forums.kicksecure.com/t/error-storing-passphrase-in-keyring-the-name-org-freedesktop-secrets-was-not-provided-by-any-service-files/582</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>When you type <code>sudo apt purge gnome-keyring</code> it will show the other dependencies to remove are <code>kicksecure-desktop-environment-essential-xfce</code> and other Kicksecure specific ones so obviously I chose NOT to go forward.</p>
+</blockquote>
+</aside>
+<p>This is documented here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian_Packages">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736501429" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener" title="11:54AM - 29 December 2024">Kicksecure – 29 Dec 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:614/500;"><img src="https://www.kicksecure.com/w/images/a/aa/Box-158523640.png?version=4622f187d3eec6059bd842d42be6d941" class="thumbnail" width="614" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener">Debian Packages</a></h3>
+
+  <p>Which Kicksecure Debian packages are safe to remove? What is a meta package? What other packages do Kicksecure meta packages install? Which packages should never be removed?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Anyway the fix always used to be purge <code>gnome-keyring</code> however this doesn’t seem to be the best choice.</p>
+</blockquote>
+</aside>
+<p>Feel free to experiment with removal of <code>gnome-keyring</code>. This should be easily possible thanks to <a href="https://www.kicksecure.com/wiki/Debian_Packages#dummy-dependency">dummy-dependency</a>, <a href="https://www.kicksecure.com/wiki/Debian_Packages#Removal_Instructions">Removal Instructions</a>.</p>
+<pre><code>sudo dummy-dependency --yes --purge gnome-keyring
+</code></pre>
+<aside class="quote no-group" data-username="Quiksilver" data-post="1" data-topic="865">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>So you would edit your launcher <code>Exec=/usr/bin/browser --password-store=basic</code> for the browser application or you could edit your <code>/usr/share/application/browser.desktop</code> file for desktop file but this might get updated with new updates so launcher seems like the safer bet.</p>
+</blockquote>
+</aside>
+<p>Even if we find a technical solution to do this reliably by default [1], I am not sure we should change chromium default keystore settings. Comments welcome.</p>
+<hr>
+<p>[1] We would probably have to solve the stackable wrappers issue.</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">Kicksecure/proposals/blob/master/634-stackable-wrappers.md</a></h4>
+
+
+      <pre><code class="lang-md"># Stackable Wrappers (Proposal 634)
+
+- Ticket: https://forums.whonix.org/t/write-draft-for-stackable-wrappers-on-debian-devel/18776
+- File: https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md
+
+# Description
+
+In Debian, there is no such thing as stackable wrappers. It would be desirable to have them.
+
+A wrapper in this context is defined as a minimal script that automatically prepends something in front of a program the user wants to run or appends something, such as default command-line parameters.
+
+Here are some examples of commands to prepend:
+
+* `firejail firefox`
+* `torsocks gpg`
+* `LD_PRELOAD="$LD_PRELOAD":libeatmydata.so rsync`
+* `bindp`, `timeprivacy`, and probably a lot more
+* Likely quite a few `dpkg` diversions are used for this purpose
+
+Here are some examples of commands to append:
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/stackable-wrappers/7944">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/stackable-wrappers/7944" target="_blank" rel="noopener" title="08:08PM - 24 August 2019">Whonix Forum – 24 Aug 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/stackable-wrappers/7944" target="_blank" rel="noopener">Stackable Wrappers</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">component_security</span>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Ex Debian dev Michael Stapelberg discusses package install hooks and triggers and how they complicate the package manager and potentially slow down the install process. An exciting development he mentions is “hermetic packages” which is discussed...</p>
+
+  <p>
+    <span class="label1">Reading time: 4 mins 🕑</span>
+      <span class="label2">Likes: 10 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865/2</link>
+        <pubDate>Fri, 10 Jan 2025 11:50:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-865-2</guid>
+        <source url="https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865.rss">Gnome-keyring dependency and chromium browsers</source>
+      </item>
+      <item>
+        <title>Gnome-keyring dependency and chromium browsers</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>So I just did a full upgrade and now I get prompted to unlock the keyring for Brave browser everytime its launched.</p>
+<p>In the past when I was distrohopping another distro that had xfce I would get that same prompt with Ungoogled-chromium and also Vivaldi which are both chromium based.<br>
+Its weird considering I never even use a browser keyring password manager I dont get why it prompts this.</p>
+<p>Anyway the fix always used to be purge <code>gnome-keyring</code> however this doesn’t seem to be the best choice.</p>
+<p>When you type <code>sudo apt purge gnome-keyring</code> it will show the other dependencies to remove are <code>kicksecure-desktop-environment-essential-xfce</code> and other Kicksecure specific ones so obviously I chose NOT to go forward.</p>
+<p>The only fix in the meantime that is better is to add the chrome flag <code>--password-store=basic</code> which will ingore using GNOME keyring or kwallet (KDE).</p>
+<p>So you would edit your launcher <code>Exec=/usr/bin/browser --password-store=basic</code> for the browser application or you could edit your <code>/usr/share/application/browser.desktop</code> file for desktop file but this might get updated with new updates so launcher seems like the safer bet.</p>
+<p>Back to the point why is gnome-keyring dependency needed and could something be added to Kicksecure like above to automatically fix this pesky issue or to the wiki regarding chromium unlock keyring prompt with gnome-keyring.</p>
+<p><strong>Solution</strong> add the chrome flag <code>--password-store=basic</code></p>
+          <p><a href="https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865/1</link>
+        <pubDate>Fri, 10 Jan 2025 01:48:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-865-1</guid>
+        <source url="https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865.rss">Gnome-keyring dependency and chromium browsers</source>
+      </item>
+  </channel>
+</rss>

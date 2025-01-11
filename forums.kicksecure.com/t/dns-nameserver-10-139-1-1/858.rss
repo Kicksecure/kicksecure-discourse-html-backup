@@ -21,9 +21,283 @@ I didn&#39;t find this IPs in a local network, firewall, /etc/hosts, systemd-res
 30  * * *
 ```</description>
     
-    <lastBuildDate>Thu, 09 Jan 2025 15:48:09 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 10 Jan 2025 18:05:35 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>These are leaking from the Qubes build VM into the image during the official build process for redistributable builds, which isn’t great, but also isn’t a big deal. It’s functional by accident rather than design.</p>
+<hr>
+<p><code>grml-debootstrap</code> copies <code>/etc/resolv.conf</code>.</p>
+<blockquote>
+<p>[ -f “${MNTPOINT}”/etc/resolv.conf ] || cp ${VERBOSE:±v} /etc/resolv.conf “${MNTPOINT}”/etc/resolv.conf</p>
+</blockquote>
+<hr>
+<p>Handling of <code>/etc/resolv.conf</code> during the build process is difficult. For details, see mentions of:</p>
+<blockquote>
+<p>/etc/resolv.conf</p>
+</blockquote>
+<p>in <a href="https://github.com/Kicksecure/derivative-maker/blob/master/help-steps/chroot-raw" class="inline-onebox">derivative-maker/help-steps/chroot-raw at master · Kicksecure/derivative-maker · GitHub</a>.</p>
+<hr>
+<p>The question is what would be a good default value for <code>/etc/resolv.conf</code> for Kicksecure KVM and Kicksecure VirtualBox?</p>
+<p>Why mention Kicksecure VirtualBox? Because these are built at the same time to safe build time. The only difference is the image format conversion later during the build process (<code>.qcow</code> for KVM, <code>.ova</code> for VirtualBox).</p>
+<p>So the VM image default <code>/etc/resolv.conf</code> needs to be compatible with both virtualizers.</p>
+<p>It would be preferable to have an explicit default <code>/etc/resolv.conf</code>.</p>
+<p>Should <code>/etc/resolv.conf</code> be managed by package? Probably not. A good default value written explicitly during the build process would be better. Otherwise, this file should later be user managed (not managed by a package).</p>
+<p>That is, unless… Related:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener" title="12:33PM - 14 September 2019">Whonix Forum – 14 Sep 19</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener">Use DNSCrypt by default in Kicksecure? (not Whonix!)</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+            <span class="discourse-tag simple">component_kicksecure</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Alternative is using unencrypted, non-DNSSEC ISP provided servers.</p>
+
+  <p>
+    <span class="label1">Reading time: 15 mins 🕑</span>
+      <span class="label2">Likes: 45 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener" title="05:51PM - 08 July 2023">Whonix Forum – 8 Jul 23</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener">Default DNS Provider Discussion for Kicksecure (not Whonix!)</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>It’s not a simple as “yeah, enable DNSEC validation” and “yeah, add configuration option DNS_ENCRYPTION=true”, done, call it a day…   A)        B)   Then a specific server needs to be chosen. It’s okay if the user decides to use such a setup and...</p>
+
+  <p>
+    <span class="label1">Reading time: 11 mins 🕑</span>
+      <span class="label2">Likes: 9 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/15</link>
+        <pubDate>Fri, 10 Jan 2025 18:05:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-15</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
+        <description><![CDATA[
+            <pre><code class="lang-auto">wget https://www.kicksecure.com/download/libvirt/17.2.8.5/Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2.libvirt.xz
+
+tar -xvf Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2.libvirt.xz
+
+qemu-nbd -c /dev/nbd0 /home/user/Kicksecure-CLI-17.2.8.5.Intel_AMD64.qcow2
+
+mount /dev/nbd0p3 /mnt/
+
+root@host:~# cat /mnt/etc/resolv.conf
+nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+<p>These DNS IP addresses are not in the source code, but now they are inside the qcow2 image.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/14</link>
+        <pubDate>Fri, 10 Jan 2025 14:16:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-14</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>On Linux, DNS libraries read the <code>/etc/resolv.conf</code> file. A DNS-resolving client such as Unbound is optional and not strictly required for basic DNS resolution.</p>
+<p>Documented here just now:<br>
+<a href="https://www.kicksecure.com/wiki/DNS#Linux_Default_DNS_Mechanism">Linux Default DNS Mechanism</a></p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/13</link>
+        <pubDate>Fri, 10 Jan 2025 11:36:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-13</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
+        <description><![CDATA[
+            <p>dnsmasq is not installed:</p>
+<pre><code class="lang-auto">[user ~]% sudo apt list dnsmasq*
+Listing... Done
+dnsmasq-base-lua/stable 2.89-1 amd64
+dnsmasq-base/stable 2.89-1 amd64
+dnsmasq-utils/stable 2.89-1 amd64
+dnsmasq/stable 2.89-1 all
+</code></pre>
+<pre><code class="lang-auto">[user ~]% pgrep -af dns ; pgrep -af dhc 
+zsh: exit 1     pgrep -af dns
+zsh: exit 1     pgrep -af dhc
+</code></pre>
+<p>The NAT:</p>
+<pre><code class="lang-auto">[user ~]% ip r
+default via 192.168.4.40 dev vmbr4 onlink 
+192.168.4.0/24 dev vmbr4 proto kernel scope link src 192.168.4.50 
+192.168.5.0/24 dev vmbr5 proto kernel scope link src 192.168.5.50
+</code></pre>
+<pre><code class="lang-auto">[user ~]% ping 10.139.1.1          
+PING 10.139.1.1 (10.139.1.1) 56(84) bytes of data.
+^C
+--- 10.139.1.1 ping statistics ---
+10 packets transmitted, 0 received, 100% packet loss, time 9214ms
+</code></pre>
+<p><strong>A packets to 10.139.1.1 are sent to an external network and domain names somehow resolved there.</strong></p>
+<p>Since <code>resolv.conf</code> works, i added the lines:</p>
+<pre><code class="lang-auto">[user ~]% cat /etc/resolv.conf
+#nameserver 10.139.1.1
+#nameserver 10.139.1.2
+nameserver 127.0.0.1
+</code></pre>
+<p>and line to <code>/etc/tor/torrc</code>:<br>
+<code>DNSPort 127.0.0.1:53</code></p>
+<p>For name-solving through tor like i wanted to.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/12</link>
+        <pubDate>Fri, 10 Jan 2025 10:00:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-12</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="UniksKorn25" data-post="1" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<pre><code class="lang-auto">nameserver 10.139.1.1
+nameserver 10.139.1.2
+</code></pre>
+</blockquote>
+</aside>
+<p>You can <a href="https://www.kicksecure.com/wiki/Dev/git#Search_the_Source_Code">Search the Source Code</a>. There is no mention of textual strings:</p>
+<ul>
+<li>
+<blockquote>
+<p>10.139.1.1</p>
+</blockquote>
+</li>
+<li>
+<blockquote>
+<p>10.139.1.2</p>
+</blockquote>
+</li>
+</ul>
+<p>Therefore these IP addresses are not hardcoded in Kicksecure source code.</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/11</link>
+        <pubDate>Fri, 10 Jan 2025 09:56:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-11</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
+      <item>
+        <title>DNS nameserver 10.139.1.1</title>
+        <dc:creator><![CDATA[e-coin]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="UniksKorn25" data-post="9" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>I use <a href="https://www.kicksecure.com/wiki/KVM#CLI" rel="noopener nofollow ugc">Kicksecure for KVM with CLI</a>.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="UniksKorn25" data-post="9" data-topic="858">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/u/e47774/48.png" class="avatar"> UniksKorn25:</div>
+<blockquote>
+<p>The <code>resolv.conf</code> file contains <strong>standard Kicksecure DNS servers</strong>. These aren’t my servers, this is standard OS file:</p>
+</blockquote>
+</aside>
+<p>So you do use KVM, which means you probably have dnsmasq installed.<br>
+<code>sudo apt list dnsmasq*</code></p>
+<p>If that’s the case then these private IP addresses are probably from dnsmasq’s dhcp server. If the default network is used, then it’s usually in the range of 192.168.0/24. NAT like the one used in Whonix-External, uses 10.0.2.2</p>
+<pre><code class="lang-auto">&lt;network&gt;
+  &lt;name&gt;Whonix-External&lt;/name&gt;
+  &lt;forward mode='nat'/&gt;
+  &lt;bridge name='virbr1' stp='on' delay='0'/&gt;
+  &lt;dns enable="no"/&gt;
+  &lt;ip address='10.0.2.2' netmask='255.255.255.0'/&gt;
+&lt;/network&gt;
+</code></pre>
+<p>Are you using NAT with a 10.139.0/24 ip?</p>
+          <p><a href="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858/10</link>
+        <pubDate>Fri, 10 Jan 2025 08:51:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-858-10</guid>
+        <source url="https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858.rss">DNS nameserver 10.139.1.1</source>
+      </item>
       <item>
         <title>DNS nameserver 10.139.1.1</title>
         <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
@@ -37,7 +311,7 @@ I didn&#39;t find this IPs in a local network, firewall, /etc/hosts, systemd-res
 </blockquote>
 <p>Yes, you’re right. Everything is working fine today, i must have made a mistake and confused in my own hosts. <code>/etc/resolv.conf</code> works.</p>
 <p>I’m still investigating the system. I am interested in the Kicksecure standard DNS address <code>10.139.1.1</code>.</p>
-<p>I use  <a href="https://www.kicksecure.com/wiki/KVM#CLI" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure for KVM with Xfce</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
+<p>I use <a href="https://www.kicksecure.com/wiki/KVM#CLI" rel="noopener nofollow ugc">Kicksecure for KVM with CLI</a>. Network manager is disabled, I use <code>/etc/network/interfaces</code> and <code>/etc/resolv.conf</code> files to configure network settings. <strong>I don’t use DHCP server and a DHCP local client.</strong></p>
 <pre><code class="lang-auto">[user ~]% sudo systemctl is-active NetworkManager
 inactive
 </code></pre>
