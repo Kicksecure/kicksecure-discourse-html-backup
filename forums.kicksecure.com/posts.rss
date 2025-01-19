@@ -5,6 +5,121 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Building Kicksecure with different Desktop Environment</title>
+        <dc:creator><![CDATA[@e-coin]]></dc:creator>
+        <description><![CDATA[ <p>OK sure, I’ll fix that and make some improvements.<br>
+I’ve been doing a bunch of test builds to ensure a working environment.</p>
+<p><code>sddm</code> for the X11 version is probably a nicer fit, because it depends on a lot of QT libraries that are required anyway, but won’t be included in <code>lxqt-core</code>.<br>
+<code>lxqt-core</code> with <code>--no-install-recommends</code> is possible with minor additions.<br>
+And lastly, <code>kwin-wayland</code> really looks to be the only compositor not suffering from the qemu bug.</p>
+<p>Just the DE and compositor will be around ~350MB. It could be squeezed tighter by not using the lxqt meta-package and directly picking only crucial dependencies, but I think it’s fine.</p>
+<p>I’ll update the list so you guys have something to go on when the time comes.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_18</link>
+        <pubDate>Sat, 18 Jan 2025 17:38:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2205</guid>
+      </item>
+      <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>That’s probably true.</p>
+<p>The conditions to run into this issue are probably rare. The user must lock down user/root isolation as well as modify a package managed configuration file in <code>/etc</code>, later get compromised.</p>
+<p>That tweet sounds dramatic. It assumes a concept (such as <a href="https://www.kicksecure.com/wiki/Dev/user-sysmaint-split" class="inline-onebox">user-sysmaint-split</a>) for meaningful user/root isolation is already a standard feature, which isn’t the case.</p>
+<p>By the time an attacker can run this attack, the has user has usually already bigger issues. The following XKCD applies.</p>
+<p><a href="https://xkcd.com/1200/" class="inline-onebox">xkcd: Authorization</a></p>
+<p>That tweet also seems to completely disregard any prior accomplishments an has the mindset “found 1 issue → trash the whole thing”, which isn’t productive.</p>
+<p>Since user-sysmaint-split is due to become the default for new images with the next release, this report comes at a good time. That might be the end of <code>upgrade-nonroot</code> for account <code>user</code> for the foreseeable future. Other way solutions in the future, related:</p>
+<ul>
+<li><a href="https://forums.kicksecure.com/t/notifications-about-new-updates/774" class="inline-onebox">Notifications about new updates</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Dev/Automatic_Updates" class="inline-onebox">Dev/Automatic Updates - Kicksecure</a></li>
+</ul>
+<p>How this can be fixed in a upcomming stable upgrade:</p>
+<ul>
+<li>A) <code>upgrade-nonroot</code> using <code>apt-get-noninteractive</code> (might be unexpected); or</li>
+<li>B) disable <code>upgrade-nonroot</code>.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_2</link>
+        <pubDate>Sat, 18 Jan 2025 13:13:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2204</guid>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[@MasonicMazer]]></dc:creator>
+        <description><![CDATA[ <p><strong>Proposal for</strong> <strong>Exclusive Authentication Token</strong>:</p>
+<p>system multifactor auth and killswitch in one user-tethered dongle</p>
+<p>Secure boot can be implemented in Kicksecure for platform binding, but what about other hardware-engaging options like locking LUKS with a security key?</p>
+<ul>
+<li>
+<p>search: support nitrokey com – Unlocking LUKS with a USB key on Fedora/Qubes</p>
+</li>
+<li>
+<p>search: Fedora forum - which dracut method (Yubikey)</p>
+</li>
+<li>
+<p>What does the Kicksecure team think about measured boot (HEADS BIOS) and Anti-Evil Maid (see AEM - Qubes OS + TPM)?</p>
+</li>
+</ul>
+<p><em>BusKill</em> by Michael Altfield (on github) utilizes an app that triggers a hotplug removal event (in libusb) and a specific drive and port can be designated (usb: 00x , 00x) so that other USB devices do not trigger the shutdown.</p>
+<p>Therefore, <strong>a single usb device could both</strong> authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).</p>
+<p>Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?</p>
+<p>In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888#post_1</link>
+        <pubDate>Sat, 18 Jan 2025 13:03:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2202</guid>
+      </item>
+      <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[@newcool]]></dc:creator>
+        <description><![CDATA[ <p><a href="https://xcancel.com/ProudmuslimDev/status/1878163686365544823#m" class="onebox" target="_blank" rel="noopener nofollow ugc">https://xcancel.com/ProudmuslimDev/status/1878163686365544823#m</a></p>
+<blockquote>
+<p>upgrade-nonroot<br>
+gives me the option to open a root shell with no auth required</p>
+</blockquote>
+<blockquote>
+<p>Privilege escalation on Kicksecure, a step-by-step guide:</p>
+<ol>
+<li>Start a system update as the default user</li>
+<li>If a config file modified by the sysadmin has been updated by the pkg maintainer, select “open root shell to inspect the problem”*</li>
+<li>Congrats</li>
+</ol>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_1</link>
+        <pubDate>Sat, 18 Jan 2025 13:02:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2200</guid>
+      </item>
+      <item>
+        <title>Unable to download the ISO image file</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Documented just now:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download_Issues">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1737192627" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Download_Issues" target="_blank" rel="noopener" title="12:10PM - 18 January 2025">Kicksecure – 18 Jan 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Download_Issues" target="_blank" rel="noopener">Download Issues</a></h3>
+
+  <p>Troubleshooting issues when attempting to download Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-download-the-iso-image-file/883#post_3</link>
+        <pubDate>Sat, 18 Jan 2025 12:10:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2199</guid>
+      </item>
+      <item>
         <title>Unable to download the ISO image file</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>If you have a Linux computer to do the download from, try downloading it using <code>wget -c https://www.kicksecure.com/download/iso/17.2.8.5/Kicksecure-Xfce-17.2.8.5.Intel_AMD64.iso</code>. If the download gets stuck, you can press Ctrl+C to terminate the download and then re-execute the same command to continue downloading from where you left off.</p> ]]></description>
@@ -1270,131 +1385,6 @@ I do however like this idea and the key points you raised.</p>
         <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848#post_3</link>
         <pubDate>Fri, 10 Jan 2025 02:02:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2135</guid>
-      </item>
-      <item>
-        <title>Gnome-keyring dependency and chromium browsers</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>So I just did a full upgrade and now I get prompted to unlock the keyring for Brave browser everytime its launched.</p>
-<p>In the past when I was distrohopping another distro that had xfce I would get that same prompt with Ungoogled-chromium and also Vivaldi which are both chromium based.<br>
-Its weird considering I never even use a browser keyring password manager I dont get why it prompts this.</p>
-<p>Anyway the fix always used to be purge <code>gnome-keyring</code> however this doesn’t seem to be the best choice.</p>
-<p>When you type <code>sudo apt purge gnome-keyring</code> it will show the other dependencies to remove are <code>kicksecure-desktop-environment-essential-xfce</code> and other Kicksecure specific ones so obviously I chose NOT to go forward.</p>
-<p>The only fix in the meantime that is better is to add the chrome flag <code>--password-store=basic</code> which will ingore using GNOME keyring or kwallet (KDE).</p>
-<p>So you would edit your launcher <code>Exec=/usr/bin/browser --password-store=basic</code> for the browser application or you could edit your <code>/usr/share/application/browser.desktop</code> file for desktop file but this might get updated with new updates so launcher seems like the safer bet.</p>
-<p>Back to the point why is gnome-keyring dependency needed and could something be added to Kicksecure like above to automatically fix this pesky issue or to the wiki regarding chromium unlock keyring prompt with gnome-keyring.</p>
-<p><strong>Solution</strong> add the chrome flag <code>--password-store=basic</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/gnome-keyring-dependency-and-chromium-browsers/865#post_1</link>
-        <pubDate>Fri, 10 Jan 2025 01:48:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2134</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>How does the whisker menu compare to the menu that LXQT uses?<br>
-I like xfce due to its lightweightness but I do not like the whisker menu compaired to other DE application menus.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_4</link>
-        <pubDate>Fri, 10 Jan 2025 01:41:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2133</guid>
-      </item>
-      <item>
-        <title>Live Kicksecure Host, Live Whonix VM</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="KSWhonixXMR" data-post="6" data-topic="779">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/46a35a/48.png" class="avatar"> KSWhonixXMR:</div>
-<blockquote>
-<p>Since I interepret <span class="mention">@quicksilver</span> as referring to touch screens on mobile devices</p>
-</blockquote>
-</aside>
-<p>No was referring to screen keyboard that help to mitigate key-loggers since the mouse is used. Not only this but many “Good” crypto wallets have this plugin built in.<br>
-I however was referring to screen keyboard referenced in the “Software Recommendations” part of Kicksecure wiki, the package <code>onboard</code>.</p>
-<p>The on shipped with Tails (GNOME) is much cleaner and responds to clicks in browser and documents/notepad better then onboard. I was stating it would be nice if a screen keyboard could come by default in the system tray/panel to click to activate on Kicksecure/Whonix for easy access.</p>
-<blockquote>
-<p>TAILS is an OS that seeks to appear uniform (everyone looks like tor Windows) and is not a ‘development’ OS for testing and building new projects.</p>
-</blockquote>
-<p>Are you refering to the old feature called camouflage which is basically what Kali linux undercover mode is?</p>
-<blockquote>
-<p>It is probably wise to onionize deb.whonix (for Kloak) and deb.kicksecure in derivative.list for best security.</p>
-</blockquote>
-<p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a><br>
-BTW I went to go update/upgrade computer I’m testing morphed and the onion for <code>deb.debian.org</code> no longer worked for me if I recalled correctly or maybe I mis-configured it (user error).</p>
-<p>On suggestion maybe for onions not timing out also would to be to add a config like this?<br>
-<code>/etc/apt/apt.conf.d/99timeout</code></p>
-<pre><code class="lang-auto">Acquire::http::Timeout "15";
-Acquire::http::Retry-After "5";
-Acquire::Retries "3";
-</code></pre>
-<p>15 seconds till timeout, 5 seconds till retry, retries 3 times.</p>
-<blockquote>
-<p>TAILS utilizes tor+https (fastly cdn) and does not offer onion repositories like Kicksecure and Debian.</p>
-</blockquote>
-<p>This was along the lines of tails reason of unreliable or timed out too much.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-kicksecure-host-live-whonix-vm/779#post_13</link>
-        <pubDate>Fri, 10 Jan 2025 01:30:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2132</guid>
-      </item>
-      <item>
-        <title>Running portable application located on external drive</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>You should look into trying to create a persistence.conf for a Kicksecure USB, this might get you more towards what you want. It should work but I would like to get some others take on it.</p>
-<p>Since it is debian based technically it should work I would think and has been an idea I would like to try.</p>
-<p>Here is a guide from Kali linux but still applies:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kali.org/docs/usb/usb-persistence/">
-  <header class="source">
-      <img src="https://www.kali.org/images/favicon.svg" class="site-icon" width="32" height="32">
-
-      <a href="https://www.kali.org/docs/usb/usb-persistence/" target="_blank" rel="noopener nofollow ugc">Kali Linux</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:519/293;"><img src="https://www.kali.org/images/kali-logo.svg" class="thumbnail" width="519" height="293"></div>
-
-<h3><a href="https://www.kali.org/docs/usb/usb-persistence/" target="_blank" rel="noopener nofollow ugc">Adding Persistence to a Kali Linux Live USB Drive | Kali Linux Documentation</a></h3>
-
-  <p>Kali Linux “Live” has two options in the default boot menu which enable persistence - the preservation of data on the “Kali Live” USB drive - across reboots of “Kali Live”. This can be an extremely useful enhancement, and enables you to retain...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Manpage for <code>persistence.conf</code><br>
-<a href="https://manpages.debian.org/testing/live-boot-doc/persistence.conf.5.en.html" class="onebox" target="_blank" rel="noopener nofollow ugc">https://manpages.debian.org/testing/live-boot-doc/persistence.conf.5.en.html</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_11</link>
-        <pubDate>Fri, 10 Jan 2025 01:25:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2131</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@e-coin]]></dc:creator>
-        <description><![CDATA[ <p>Hello, thanks for the reply.</p>
-<p>I read the entire code again and things are getting clearer now. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p>
-<blockquote>
-<p>Probably the easiest for hacky custom solutions… Written just now:<br>
-<a href="https://www.kicksecure.com/wiki/Dev/Derivative-Maker#Custom_Packages" rel="noopener nofollow ugc">Custom Packages </a></p>
-</blockquote>
-<p>Thanks, so <code>flavor_meta_packages_to_install</code> is defined in <code>help-steps/variables</code> and (among other variables) called with source, which is used in every build step. (That took me a while to see)</p>
-<blockquote>
-<p>Are you looking for a hacky custom solution or implementing this properly and upstreaming to Kicksecure?</p>
-</blockquote>
-<p>For the hacky solution I’d just follow your suggestion with <code>flavor_meta_packages_to_install="kicksecure-cli-vm"</code> (or exclude specific xfce packages via <code>dist_build_script_skip_package_install</code>) and install the new lxqt packages with <code>pkg_install_list=lxqt-pkg1 lxqt-pkg2.....</code></p>
-<p>I’d be happy to help if you guys are interested in kicksecure-lxqt meta-packages.<br>
-I already started replacing all the dependencies in the control file before.</p>
-<p>Those should be the new ones (if I didn’t miss anything):</p>
-<pre><code class="lang-auto">kicksecure-lxqt, kicksecure-desktop-applications-lxqt, kicksecure-desktop-environment-essential-lxqt, kicksecure-lxqt-host, kicksecure-lxqt-vm, kicksecure-shared-host-xfce`
-</code></pre>
-<p>Minimal LXQT is probably superior to XFCE in terms of resource requirements anyway and Wayland support is a nice bonus.</p>
-<p>I read <code>build-steps.d/3500_install-packages</code> a bunch of times but couldn’t find a function that “installs” all the stuff from <code>derivative-maker/packages/kicksecure/*</code>. Where does this actually happen?</p>
-<p>For example, <code>3500_install-packages</code>  install_packages() function copies the apt binary directly from that directory, but <code>4300_run-chroot-scripts-post-d</code> already expects <code>/usr/libexec/initializer-dist/chroot-scripts-post.d</code> to be there from the initializer-dist package.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_3</link>
-        <pubDate>Thu, 09 Jan 2025 23:11:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2130</guid>
       </item>
   </channel>
 </rss>

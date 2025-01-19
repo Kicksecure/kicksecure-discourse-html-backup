@@ -5,8 +5,42 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Fri, 10 Jan 2025 01:48:18 +0000</lastBuildDate>
+      <lastBuildDate>Sat, 18 Jan 2025 13:03:14 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Exclusive Authentication Token</title>
+          <dc:creator><![CDATA[MasonicMazer]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><strong>Proposal for</strong> <strong>Exclusive Authentication Token</strong>:</p>
+<p>system multifactor auth and killswitch in one user-tethered dongle</p>
+<p>Secure boot can be implemented in Kicksecure for platform binding, but what about other hardware-engaging options like locking LUKS with a security key?</p>
+<ul>
+<li>
+<p>search: support nitrokey com – Unlocking LUKS with a USB key on Fedora/Qubes</p>
+</li>
+<li>
+<p>search: Fedora forum - which dracut method (Yubikey)</p>
+</li>
+<li>
+<p>What does the Kicksecure team think about measured boot (HEADS BIOS) and Anti-Evil Maid (see AEM - Qubes OS + TPM)?</p>
+</li>
+</ul>
+<p><em>BusKill</em> by Michael Altfield (on github) utilizes an app that triggers a hotplug removal event (in libusb) and a specific drive and port can be designated (usb: 00x , 00x) so that other USB devices do not trigger the shutdown.</p>
+<p>Therefore, <strong>a single usb device could both</strong> authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).</p>
+<p>Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?</p>
+<p>In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888</link>
+          <pubDate>Sat, 18 Jan 2025 13:03:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-888</guid>
+          <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+        </item>
         <item>
           <title>Gnome-keyring dependency and chromium browsers</title>
           <dc:creator><![CDATA[Quiksilver]]></dc:creator>
@@ -1513,53 +1547,6 @@ Given that your product is recommended by Canonical as the way to put their imag
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-434</guid>
           <source url="https://forums.kicksecure.com/t/microsoft-windows-iso-writer-documentation-write-kicksecure-iso-to-usb-balenaetcher-issues/434.rss">Microsoft Windows ISO writer documentation (write Kicksecure ISO to USB) / balenaEtcher issues</source>
-        </item>
-        <item>
-          <title>ISO: Change to unencrypted /boot if using Full Disk Encryption</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.</p>
-<ul>
-<li>GRUB2 needs a very long time to decrypt the root disk.</li>
-<li>Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.</li>
-<li>And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivative and also break SecureBoot.)</li>
-</ul>
-<p>This should be no security issue. This is what most distributions are using. The kernel image is not secret. Unencrypted /boot that Debian (CLI looking) installer (“DI”) is using that too. Encrypted /boot is simply not ready due to these upstream bugs which will very most likely not be resolved anytime soon.</p>
-<ul>
-<li><a href="https://github.com/calamares/calamares/issues/1203" class="inline-onebox">Encryption does not work well with non-QWERTY keyboards · Issue #1203 · calamares/calamares · GitHub</a></li>
-<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817" class="inline-onebox">#686817 - grub-pc: Add option to change keyboard layout - Debian Bug report logs</a></li>
-<li><a href="https://savannah.gnu.org/bugs/index.php?65113" class="inline-onebox">GNU GRUB - Bugs: bug #65113, Add All Keyboard Layouts and... [Savannah]</a></li>
-</ul>
-<p>TODO:</p>
-<ul>
-<li>Find a distribution that uses Calamares and implemented unencrypted /boot.
-<ul>
-<li>Maybe Ubuntu? Check
-<ul>
-<li>
-<pre><code>git clone https://git.launchpad.net/~ubuntu-qt-code/+git/calamares-settings-ubuntu
-</code></pre>
-</li>
-</ul>
-</li>
-<li>Linux Mint?</li>
-<li>Elementary OS?</li>
-</ul>
-</li>
-<li>Copy over the Calamares config files to Kicksecure (if permissible by the license, which is probably the case).</li>
-<li>Change Kicksecure Calamares Installer to the usual unencrypted /boot partition.</li>
-</ul>
-            <p><small>7 posts - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420</link>
-          <pubDate>Mon, 18 Mar 2024 14:05:24 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-420</guid>
-          <source url="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420.rss">ISO: Change to unencrypted /boot if using Full Disk Encryption</source>
         </item>
   </channel>
 </rss>
