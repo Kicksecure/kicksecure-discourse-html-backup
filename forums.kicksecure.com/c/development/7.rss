@@ -5,8 +5,61 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Sat, 18 Jan 2025 13:03:14 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 20 Jan 2025 07:42:40 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Verified Boot</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>At the time of writing, verified boot with reasonable security and usability using user-custom keys for Open Source Linux desktop distributions comparable to some Android hardware is unavailable due to a lack of hardware/firmware support (at least on the Intel/AMD64 platform).</p>
+<p>The gigantic <a href="https://www.kicksecure.com/wiki/Verified_Boot">verified boot</a> wiki page has grown as large as it has because <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> and I have been trying to wrap our heads around how verified boot with reasonable security, usability, and user-custom keys for Open Source (Linux) distributions, comparable to some Android hardware, could be implemented.</p>
+<p>Sponsor PUP (related: <a href="https://www.kicksecure.com/wiki/Transparency">Transparency</a>) will pay an OEM with firmware development skills to revise that wiki page with the goal of drafting a concept on how this could be implemented and identifying areas that might require further research.</p>
+<p>If we are lucky, and if financially feasible, this might result in the development of hardware/firmware that allows for full verified boot to be implemented and actually realized.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/verified-boot/901">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/verified-boot/901</link>
+          <pubDate>Mon, 20 Jan 2025 07:42:40 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-901</guid>
+          <source url="https://forums.kicksecure.com/t/verified-boot/901.rss">Verified Boot</source>
+        </item>
+        <item>
+          <title>Onion APT repositories connection timeouts solution?</title>
+          <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Tor onion APT repositories can sometimes fail when updating. This can can happen due to the slowness of generated onion circuits or having a custom <code>/etc/tor/torrc</code> can cause them to timeout when updating.</p>
+<p>In fact the Tails project since 6.4 removed the onion Debian repositories</p>
+<blockquote>
+<p>Switch to using HTTPS addresses instead of an onion addresses for the Debian and Tails APT repositories. This makes the Additional Software feature more reliable.</p>
+<blockquote>
+<p><a href="https://tails.net/news/version_6.4/index.en.html" class="inline-onebox" rel="noopener nofollow ugc">Tails - Tails 6.4</a></p>
+</blockquote>
+</blockquote>
+<p>I created a config <code>/etc/apt/apt.conf.d/99timeout</code></p>
+<p>(15 seconds till timeout, 5 seconds till retry, and retries 3 times.)</p>
+<pre><code class="lang-auto">Acquire::http::Timeout "15";
+Acquire::http::Retry-After "5";
+Acquire::Retries "3";
+</code></pre>
+<p>I’m not sure how the integration tor and APT works but this would only effect http repos which also are what onions are.</p>
+<p>This configuration seemed to work for me but I’m not sure if this fix is placebo?</p>
+<p>In closing I don’t think Kicksecure should follow the same route of removing Onion repositories or Onion Debian repositories as thats one thing i strongly disagree with choice of the other project.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900</link>
+          <pubDate>Mon, 20 Jan 2025 05:13:21 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-900</guid>
+          <source url="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900.rss">Onion APT repositories connection timeouts solution?</source>
+        </item>
         <item>
           <title>Exclusive Authentication Token</title>
           <dc:creator><![CDATA[MasonicMazer]]></dc:creator>
@@ -30,7 +83,7 @@
 <p>Therefore, <strong>a single usb device could both</strong> authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).</p>
 <p>Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?</p>
 <p>In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</p>
-            <p><small>1 post - 1 participant</small></p>
+            <p><small>3 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888</link>
@@ -1220,333 +1273,6 @@ echo "Tor only firewall rules applied."
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-553</guid>
           <source url="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553.rss">Grub live ideas and suggestions / Grub live entry for offline mode / Grub live entry that boots with Tor only firewall rules</source>
-        </item>
-        <item>
-          <title>Auditd removal due to journalctl spam</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>History:</p>
-<aside class="quote no-group" data-username="Patrick" data-post="1" data-topic="275">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"><a href="https://forums.kicksecure.com/t/kicksecure-17-0-1-9-for-virtualbox-major-release-debian-12-bookworm-based-testers-wanted/275/1">Kicksecure 17.0.1.9 - for VirtualBox - Major Release - Debian 12 / bookworm based - Testers Wanted!</a></div>
-<blockquote>
-<p>install auditd by default useful for aa-logprof</p>
-</blockquote>
-</aside>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/306f575c3560b9be14ef26a382eca262a3941e58">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/306f575c3560b9be14ef26a382eca262a3941e58" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/306f575c3560b9be14ef26a382eca262a3941e58" target="_blank" rel="noopener">install auditd by default</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2023-07-05" data-time="14:09:46" data-timezone="UTC">02:09PM - 05 Jul 23 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/306f575c3560b9be14ef26a382eca262a3941e58" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-1</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">useful for aa-logprof</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<p>Update:</p>
-<p>Undone.</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/commit/b003e4e78f3ff735ae83f57e86a6925b032ba726">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/b003e4e78f3ff735ae83f57e86a6925b032ba726" target="_blank" rel="noopener">github.com/Kicksecure/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/b003e4e78f3ff735ae83f57e86a6925b032ba726" target="_blank" rel="noopener">Revert "install auditd by default"</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2024-05-20" data-time="14:11:39" data-timezone="UTC">02:11PM - 20 May 24 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 0 additions and 1 deletions">
-        <a href="https://github.com/Kicksecure/kicksecure-meta-packages/commit/b003e4e78f3ff735ae83f57e86a6925b032ba726" target="_blank" rel="noopener">
-          <span class="added">+0</span>
-          <span class="removed">-1</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">This reverts commit 306f575c3560b9be14ef26a382eca262a3941e58.</p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Reasons:</p>
-<ul>
-<li>Not an essential package.</li>
-<li>Spams journal logs too much.</li>
-<li>Does not add security without anyone looking through these logs. Advanced users doing that, can easily install auditd by themselves.</li>
-<li>Disadvantages outweigh advantages (1 step less needed for setup of aa-logprof to contribute to AppArmor profile fixes).</li>
-</ul>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/auditd-removal-due-to-journalctl-spam/463">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/auditd-removal-due-to-journalctl-spam/463</link>
-          <pubDate>Mon, 20 May 2024 14:17:56 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-463</guid>
-          <source url="https://forums.kicksecure.com/t/auditd-removal-due-to-journalctl-spam/463.rss">Auditd removal due to journalctl spam</source>
-        </item>
-        <item>
-          <title>Microsoft Windows ISO writer documentation (write Kicksecure ISO to USB) / balenaEtcher issues</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Quote <a href="https://tails.net/contribute/design/installation_instructions/#index6h1" class="inline-onebox">Tails - Installation instructions</a></p>
-<blockquote>
-<h1><em>balenaEtcher</em></h1>
-<p>For Windows and macOS, we instruct people to use <a href="https://www.balena.io/etcher/"><em>balenaEtcher</em></a> to copy the USB image onto their USB stick. On top of this, we self-host the downloads of <em>balenaEtcher</em> on our own infrastructure. The <a href="https://gitlab.tails.boum.org/tails/etcher-binary" class="inline-onebox">tails / etcher-binary · GitLab</a> repository is added as an <a href="https://ikiwiki.info/plugins/underlay/">ikiwiki underlay</a> on our website.</p>
-<p>We self-host a copy of <em>balenaEtcher</em> because:</p>
-<ul>
-<li>It gives us more predictability on what users end up doing. This is useful in terms of Help Desk.</li>
-<li>It prevents 3rd parties from learning a bit more about who uses Tails. Pointing to GitHub from our website would provide direct referrers to GitHub (and maybe Balena too) about who is using <em>balenaEtcher</em> to install Tails.</li>
-<li>It prevents GitHub from serving rogue downloads (targeted or not). We might still get a rogue download ourselves but:
-<ul>
-<li>We download <em>balenaEtcher</em> several times from different locations to prevent targeted attacks.</li>
-<li>We download <em>balenaEtcher</em> in a limited time window, which might save our users some supply chain issues. If our users were to download <em>balenaEtcher</em> every time, a short-time supply chain attack would definitely affect some of them.</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<p>balenaEtcher has Telemetry (privacy) issues:</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/balena-io/etcher/issues/3784">
-  <header class="source">
-
-      <a href="https://github.com/balena-io/etcher/issues/3784" target="_blank" rel="noopener">github.com/balena-io/etcher</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/balena-io/etcher/issues/3784" target="_blank" rel="noopener">Telemtery should be opt-in</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2022-07-13" data-time="12:11:13" data-timezone="UTC">12:11PM - 13 Jul 22 UTC</span>
-      </div>
-
-        <div class="date">
-          closed <span class="discourse-local-date" data-format="ll" data-date="2023-10-13" data-time="09:43:23" data-timezone="UTC">09:43AM - 13 Oct 23 UTC</span>
-        </div>
-
-      <div class="user">
-        <a href="https://github.com/oliversalzburg" target="_blank" rel="noopener">
-          <img alt="oliversalzburg" src="https://avatars.githubusercontent.com/u/1658949?v=4" class="onebox-avatar-inline" width="20" height="20">
-          oliversalzburg
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">- **Etcher version:** 1.7.9
-- **Operating system and architecture:** Windows x6<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">4
-- **Image flashed:** irrelevant
-- **What do you think should have happened:**  No information is sent to third-parties without my consent
-- **What happened:** You require me to discover and opt-out of telemetry myself and happily send everything you want prior to that.
-- **Do you see any meaningful error information in the DevTools?** No
-
-
-
-
-
-Given that your product is recommended by Canonical as the way to put their images on storage media, I was unpleasantly surprised to find opt-out telemetry in your product. If you want to exfiltrate information from my machine, please ask me before doing so, so that I can then use a different product to flash images onto media.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox discoursetopic" data-onebox-src="https://forum.torproject.org/t/nature-of-etcher-portable-is-it-safe-a-current-version-doesn-t-start-right/9233">
-  <header class="source">
-      <img src="https://forum.torproject.org/uploads/default/optimized/2X/b/ba042da6abfd2e188336ccce88244624d850757a_2_32x32.png" class="site-icon" width="32" height="32">
-
-      <a href="https://forum.torproject.org/t/nature-of-etcher-portable-is-it-safe-a-current-version-doesn-t-start-right/9233" target="_blank" rel="noopener" title="06:27PM - 15 September 2023">Tor Project Forum – 15 Sep 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <img src="https://forum.torproject.org/uploads/default/original/2X/b/ba042da6abfd2e188336ccce88244624d850757a.png" class="thumbnail onebox-avatar" width="120" height="120">
-
-<div class="title-wrapper">
-  <h3><a href="https://forum.torproject.org/t/nature-of-etcher-portable-is-it-safe-a-current-version-doesn-t-start-right/9233" target="_blank" rel="noopener">Nature of Etcher-Portable: is it “safe”? A current version doesn’t start right</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #8C6238;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">General Discussion</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>Is Etcher-Portable is trustworthy?  Firstly, when you start it, it phones home a lot: requesting…  redirector.gvt1(.)com:443/  o95242.ingest.sentry(.)io:443/  assets.balena(.)io:443/  www.balena(.)io:443/  …A worrywart might wonder if it wants to...</p>
-
-  <p>
-    <span class="label1">Reading time: 1 mins 🕑</span>
-      <span class="label2">Likes: 1 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/issues/20107">
-  <header class="source">
-      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" width="32" height="32">
-
-      <a href="https://gitlab.tails.boum.org/tails/tails/-/issues/20107" target="_blank" rel="noopener">GitLab</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar">
-
-<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/issues/20107" target="_blank" rel="noopener">Re-evaluate balenaEtcher and consider alternatives (#20107) · Issues · tails...</a></h3>
-
-  <p>A user pointed us to https://www.gameindustry.eu/reviews/balenaetcher/  Is this serious enough that we should stop recommending BalenaEtcher? Do we...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/issues/16381">
-  <header class="source">
-      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" width="32" height="32">
-
-      <a href="https://gitlab.tails.boum.org/tails/tails/-/issues/16381" target="_blank" rel="noopener">GitLab</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar">
-
-<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/issues/16381" target="_blank" rel="noopener">Investigate the outgoing network connections of Etcher (#16381) · Issues ·...</a></h3>
-
-  <p>Originally created by @Anonymous on #16381 (Redmine) It looks like...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/microsoft-windows-iso-writer-documentation-write-kicksecure-iso-to-usb-balenaetcher-issues/434">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/microsoft-windows-iso-writer-documentation-write-kicksecure-iso-to-usb-balenaetcher-issues/434</link>
-          <pubDate>Fri, 19 Apr 2024 13:59:18 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-434</guid>
-          <source url="https://forums.kicksecure.com/t/microsoft-windows-iso-writer-documentation-write-kicksecure-iso-to-usb-balenaetcher-issues/434.rss">Microsoft Windows ISO writer documentation (write Kicksecure ISO to USB) / balenaEtcher issues</source>
         </item>
   </channel>
 </rss>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Onion APT repositories connection timeouts solution?</title>
+    <link>https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900</link>
+    <description>Tor onion APT repositories can sometimes fail when updating. This can can happen due to the slowness of generated onion circuits or having a custom `/etc/tor/torrc` can cause them to timeout when updating.
+
+In fact the Tails project since 6.4 removed the onion Debian repositories
+
+&gt; Switch to using HTTPS addresses instead of an onion addresses for the Debian and Tails APT repositories. This makes the Additional Software feature more reliable.
+&gt;&gt; https://tails.net/news/version_6.4/index.en.html
+
+I created a config `/etc/apt/apt.conf.d/99timeout`
+
+(15 seconds till timeout, 5 seconds till retry, and retries 3 times.)
+
+```
+Acquire::http::Timeout &quot;15&quot;;
+Acquire::http::Retry-After &quot;5&quot;;
+Acquire::Retries &quot;3&quot;;
+```
+
+I&#39;m not sure how the integration tor and APT works but this would only effect http repos which also are what onions are.
+
+This configuration seemed to work for me but I&#39;m not sure if this fix is placebo?
+
+In closing I don&#39;t think Kicksecure should follow the same route of removing Onion repositories or Onion Debian repositories as thats one thing i strongly disagree with choice of the other project.</description>
+    
+    <lastBuildDate>Mon, 20 Jan 2025 12:00:50 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Onion APT repositories connection timeouts solution?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>Tor onion APT repositories can sometimes fail when updating. This can can happen due to the slowness of generated onion circuits or having a custom <code>/etc/tor/torrc</code> can cause them to timeout when updating.</p>
+<p>In fact the Tails project since 6.4 removed the onion Debian repositories</p>
+<blockquote>
+<p>Switch to using HTTPS addresses instead of an onion addresses for the Debian and Tails APT repositories. This makes the Additional Software feature more reliable.</p>
+<blockquote>
+<p><a href="https://tails.net/news/version_6.4/index.en.html" class="inline-onebox" rel="noopener nofollow ugc">Tails - Tails 6.4</a></p>
+</blockquote>
+</blockquote>
+<p>I created a config <code>/etc/apt/apt.conf.d/99timeout</code></p>
+<p>(15 seconds till timeout, 5 seconds till retry, and retries 3 times.)</p>
+<pre><code class="lang-auto">Acquire::http::Timeout "15";
+Acquire::http::Retry-After "5";
+Acquire::Retries "3";
+</code></pre>
+<p>I’m not sure how the integration tor and APT works but this would only effect http repos which also are what onions are.</p>
+<p>This configuration seemed to work for me but I’m not sure if this fix is placebo?</p>
+<p>In closing I don’t think Kicksecure should follow the same route of removing Onion repositories or Onion Debian repositories as thats one thing i strongly disagree with choice of the other project.</p>
+          <p><a href="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900/1</link>
+        <pubDate>Mon, 20 Jan 2025 05:13:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-900-1</guid>
+        <source url="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900.rss">Onion APT repositories connection timeouts solution?</source>
+      </item>
+  </channel>
+</rss>
