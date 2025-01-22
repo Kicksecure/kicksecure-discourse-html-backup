@@ -5,8 +5,45 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Mon, 20 Jan 2025 07:42:40 +0000</lastBuildDate>
+      <lastBuildDate>Tue, 21 Jan 2025 12:33:33 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Installing FDE LUKS with Detached LUKS header option</title>
+          <dc:creator><![CDATA[JuicyOdds]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>You know there are great things that have been discussed/mentioned in the other thread called “BusKill” which shreds the LUKS header. Which leads to the data being useless due to it being no different then random data forensically.</p>
+<p>Instead of that it would be better if Kicksecure developed the feature and option when selecting Full Disk Encryption via LUKS at installation. <strong>To have the option to detach the LUKS header</strong> and store it on another device whether that be a USB, SD Card, Smart Card, Yubikey, Nitrokey, etc.</p>
+<p>The main development would be the integration into Grub as it would have to ask for device or detect a saved device that has the luks header aswell as ask for the passphrase. The other integration would be into the graphical installer (e.g. Calamares) for selecting such a option.</p>
+<p>Currently there is no option to set up a Linux install with FDE and a detached header. However this implementation would greatly servers and personal computers alike.</p>
+<p>Here is a good read about this topic.</p>
+<p>skrilnetz .net/bullet-proof-data-encryption-with-luks-and-a-detached-header/</p>
+<p><strong>In summery here are the Benefits:</strong></p>
+<ul>
+<li>
+<p><strong>Enhanced Security</strong>: – By separating the header from the encrypted data, users can reduce the risk of unauthorized access to their encrypted storage.</p>
+</li>
+<li>
+<p><strong>Flexibility</strong>: – Users can choose to store the header in a more secure location, such as a different device or a secure cloud storage solution.</p>
+</li>
+<li>
+<p><strong>Improved Usability</strong>: – This feature would cater to advanced users who require additional security measures for their sensitive data.</p>
+</li>
+<li>
+<p><strong>Plausible Denial</strong>: – By using a detached header, users can claim that the encrypted storage contains random data, as the absence of the header makes it impossible to decrypt the contents without the correct key. This provides a layer of plausible deniability, as users can assert that they do not possess the means to access the data.</p>
+</li>
+</ul>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907</link>
+          <pubDate>Tue, 21 Jan 2025 12:33:33 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-907</guid>
+          <source url="https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907.rss">Installing FDE LUKS with Detached LUKS header option</source>
+        </item>
         <item>
           <title>Verified Boot</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -83,7 +120,7 @@ Acquire::Retries "3";
 <p>Therefore, <strong>a single usb device could both</strong> authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).</p>
 <p>Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?</p>
 <p>In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</p>
-            <p><small>3 posts - 3 participants</small></p>
+            <p><small>6 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888</link>
@@ -1117,162 +1154,6 @@ Open a terminal and run
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-567</guid>
           <source url="https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567.rss">ISO - no default for encryption on/off - user should choose explicitly</source>
-        </item>
-        <item>
-          <title>Grub live ideas and suggestions / Grub live entry for offline mode / Grub live entry that boots with Tor only firewall rules</title>
-          <dc:creator><![CDATA[anon43330669]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Dear Kicksecure Development Team,</p>
-<p>I would like to suggest some enhancements to the GRUB Live environment. Specifically, it would be beneficial to include additional features or options that could improve user experience and functionality. Here are two ideas to include with the grub-live package:</p>
-<ul>
-<li>
-<p><strong>Grub live entry for offline mode</strong>:  another grub live entry for booting into Live mode USER with all networking disabled</p>
-</li>
-<li>
-<p><strong>Grub live entry that boots with Tor only firewall rules</strong>:  another grub live entry for booting into Live mode USER with Tor only firewall with tor transparent proxy for users that are on lower RAM systems that don’t want to install whonix with the installer in usability misc but already have tb-launcher installed. Tor daemon already comes installed with Kicksecure so additionally maybe load some torsocks wrappers for certain commands like curl, wget, git, whois, etc. if possible.</p>
-</li>
-</ul>
-<p>Here are some drafts that I havent tried yet but will put them here for a starting point, reference, and ideas.</p>
-<p><strong>offline mode</strong><br>
-<code>/etc/grub.d/40_offline_mode</code></p>
-<pre><code class="lang-auto"># GRUB Live entry to disable networking (offline mode)
-menuentry "LIVE mode USER (Offline Mode)" {
-    # Run the disable networking script that blacklists all wireless drivers and firewall to block all traffic
-    /usr/local/bin/disable_networking
-    set root=(hd0,1)  # Adjust this to your root partition
-    # mask network target
-    linux /vmlinuz-linux root=/dev/sda1 quiet splash systemd.mask=network.target
-    initrd /initramfs-linux.img
-}
-</code></pre>
-<p><code>/usr/local/bin/disable_networking</code></p>
-<pre><code class="lang-auto">#!/bin/bash
-### Grub disable networking script called by 
-## Blacklist all wifi drivers
-## Blacklist bluetooth driver (commented out)
-
-# Create blacklist file
-
-touch /etc/modprobe.d/disable_networking.conf 2&gt;/dev/null
-
-# Define the blacklist file path
-BLACKLIST_FILE="/etc/modprobe.d/disable_networking.conf"
-
-# Create or clear the blacklist file
-echo "# Custom blacklist for wireless drivers" | tee $BLACKLIST_FILE &gt; /dev/null
-
-# Get the list of wireless drivers
-WIRELESS_DRIVERS=$(ls /lib/modules/$(uname -r)/kernel/drivers/net/wireless/)
-
-# Check if there are any wireless drivers
-if [ -z "$WIRELESS_DRIVERS" ]; then
-    echo "No wireless drivers found in /lib/modules/$(uname -r)/kernel/drivers/net/wireless/"
-else
-    # Loop through each driver and add it to the blacklist
-    for DRIVER in $WIRELESS_DRIVERS; do
-        DRIVER_NAME=$(basename "$DRIVER" | sed 's/\.[^.]*$//')  # Remove file extension
-        echo "blacklist $DRIVER_NAME" | tee -a $BLACKLIST_FILE &gt; /dev/null
-        echo "Blacklisted driver: $DRIVER_NAME"
-        
-        # Remove the driver if it is currently loaded
-        if lsmod | grep -q "$DRIVER_NAME"; then
-            echo "Removing loaded driver: $DRIVER_NAME"
-            modprobe -r "$DRIVER_NAME"
-        fi
-    done
-fi
-
-## Blacklist bluetooth
-# List of Bluetooth drivers to blacklist
-#BT_DRIVERS=(
-#    "btusb"
-#    "bluetooth"
-#    "btintel"
-#)
-#
-# Loop through the drivers and add them to the blacklist
-#for DRIVER in "${BT_DRIVERS[@]}"; do
-#    echo "blacklist $DRIVER" &gt;&gt; "BLACKLIST_FILE"
-#    modprobe -r "$DRIVER"
-#done
-
-
-### Firewall
-# Set up nftables to disable all incoming, forwarding, and outgoing traffic
-echo "Setting up nftables to disable all network traffic..."
-
-# Flush existing rules
-nft flush ruleset
-
-# Create a new ruleset
-nft add table inet filter
-nft add chain inet filter input { type filter hook input priority 0; }
-nft add chain inet filter forward { type filter hook forward priority 0; }
-nft add chain inet filter output { type filter hook output priority 0; }
-
-# Set default policies to drop all traffic
-nft add rule inet filter input drop
-nft add rule inet filter forward drop
-nft add rule inet filter output drop
-
-echo -e " All wireless drivers have been blacklisted in $BLACKLIST_FILE.\n All network traffic has been disabled.\n Offline mode enabled"
-</code></pre>
-<p><strong>Tor only</strong><br>
-<code>/etc/grub.d/40_tor_only_firewall</code></p>
-<pre><code class="lang-auto">menuentry "LIVE mode USER (Tor Only)" {
-    # Run the Tor firewall script
-    /usr/local/bin/Tor_only_firewall
-    # Boot into the default kernel
-    linux /vmlinuz-&lt;your-kernel-version&gt; root=/dev/sda1 ro
-    initrd /initrd.img-&lt;your-kernel-version&gt;
-}
-</code></pre>
-<p><code>/usr/local/bin/Tor_only_firewall</code></p>
-<pre><code class="lang-auto">#!/bin/bash
-### Tor only firewall for GRUB Live (Tor Only)
-# Flush existing rules
-nft flush ruleset
-
-# Create a new ruleset
-nft add table inet filter
-nft add chain inet filter input { type filter hook input priority 0; }
-nft add chain inet filter forward { type filter hook forward priority 0; }
-nft add chain inet filter output { type filter hook output priority 0; }
-
-# Allow loopback traffic
-nft add rule inet filter input iif "lo" accept
-nft add rule inet filter output oif "lo" accept
-
-# Allow established and related connections
-nft add rule inet filter input ct state established,related accept
-nft add rule inet filter output ct state established,related accept
-
-# Allow Tor traffic (default Tor port is 9050)
-nft add rule inet filter input tcp dport 9050 accept
-nft add rule inet filter output tcp sport 9050 accept
-
-# Allow DNS traffic (UDP port 53)
-nft add rule inet filter input udp dport 53 accept
-nft add rule inet filter output udp sport 53 accept
-
-# Drop all other traffic
-nft add rule inet filter input drop
-nft add rule inet filter forward drop
-nft add rule inet filter output drop
-
-echo "Tor only firewall rules applied."
-</code></pre>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553</link>
-          <pubDate>Thu, 29 Aug 2024 03:46:10 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-553</guid>
-          <source url="https://forums.kicksecure.com/t/grub-live-ideas-and-suggestions-grub-live-entry-for-offline-mode-grub-live-entry-that-boots-with-tor-only-firewall-rules/553.rss">Grub live ideas and suggestions / Grub live entry for offline mode / Grub live entry that boots with Tor only firewall rules</source>
         </item>
   </channel>
 </rss>

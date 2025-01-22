@@ -5,6 +5,272 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Adding grub-live to ubuntu host</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>While this thread is about <code>grub-live</code> issues with Ubuntu. Wouldn’t it be best for Ubuntu users that want to take advantage of the hardening that Kicksecure offers to just install <code>kicksecure-cli-host</code> for the time being?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894#post_10</link>
+        <pubDate>Wed, 22 Jan 2025 00:57:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2247</guid>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="maltfield" data-post="3" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/maltfield/48/113_2.png" class="avatar"> maltfield:</div>
+<blockquote>
+<p>We do have at least one BusKill user who uses a YubiKey to both unlock their computer and trigger a lockscreen when removed.</p>
+</blockquote>
+</aside>
+<p>How exactly does that work?<br>
+Would you have to have the Yubikey plugged in the whole time then unplug it when you leave the workstation?</p>
+<p>Also nice work on BusKill BTW I’m a bigly impressed.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888#post_6</link>
+        <pubDate>Wed, 22 Jan 2025 00:53:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2245</guid>
+      </item>
+      <item>
+        <title>Installing FDE LUKS with Detached LUKS header option</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="907">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>This is probably feasible</p>
+</blockquote>
+</aside>
+<p>I found a forum post where a user claims they achieved something that looks like this proposition.</p>
+<p><a href="https://bbs.archlinux.org/viewtopic.php?id=273489" rel="noopener nofollow ugc">[SOLVED] GRUB Boot LUKS Partition Using Detached Header</a></p>
+<p>One issue I see that the package referenced <a href="https://aur.archlinux.org/packages/mkinitcpio-encrypt-detached-header" rel="noopener nofollow ugc">mkinitcpio-encrypt-detached-header</a> is not found in Debian.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="907">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it’s pretty uncommon for people to have a random block of “unallocated” (or allocated-but-unformatted) space on their disk.</p>
+</blockquote>
+</aside>
+<p>Yeah but even if you have the passphrase, without having the luks header its useless and close to impossible to get the data.</p>
+<p>It might make more sense, at least easier for this to be a implementation for a encrypted $HOME folder or another partition rather then the full disk and file-system.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907#post_4</link>
+        <pubDate>Wed, 22 Jan 2025 00:46:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2244</guid>
+      </item>
+      <item>
+        <title>Installing FDE LUKS with Detached LUKS header option</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>I greatly like this idea, however…</p>
+<aside class="quote no-group" data-username="JuicyOdds" data-post="1" data-topic="907">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/a87d85/48.png" class="avatar"> JuicyOdds:</div>
+<blockquote>
+<p><strong>To have the option to detach the LUKS header</strong> and store it on another device whether that be a USB, SD Card, Smart Card, Yubikey, Nitrokey, etc.</p>
+</blockquote>
+</aside>
+<p>Would it even be possible to store the header on a Yubikey or Nitrokey?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907#post_3</link>
+        <pubDate>Wed, 22 Jan 2025 00:44:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2243</guid>
+      </item>
+      <item>
+        <title>Installing FDE LUKS with Detached LUKS header option</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This is probably feasible, though I can’t say if it’s something that I’ll definitely work on or not. Some notes:</p>
+<ul>
+<li>Kicksecure doesn’t use GRUB to unlock encrypted disks. This is because we use Debian’s GRUB, and Debian’s GRUB only has very bad LUKS support (only supports LUKS1, can’t handle non-US keyboard layouts, ugly, slow, only gives you one shot to unlock the drive, and then the Linux kernel has to unlock the drive <em>again</em> once it boots). Instead, we use an unencrypted /boot partition and let the initramfs handle decrypt. This lets us use more secure encryption, provides a better user interface for decryption, works with multiple keyboard layouts, and works faster.</li>
+<li>Plausible deniability should not be relied upon unless you know exactly what you’re doing. It’s well known that such a thing exists, and it’s pretty uncommon for people to have a random block of “unallocated” (or allocated-but-unformatted) space on their disk. If you’re in enough danger to consider needing plausible deniability, you’re in enough danger for even random data to look suspicious if it’s at all unusual.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907#post_2</link>
+        <pubDate>Tue, 21 Jan 2025 22:45:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2242</guid>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="maltfield" data-post="3" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/maltfield/48/113_2.png" class="avatar"> maltfield:</div>
+<blockquote>
+<p>Unfortunately, we see a lot of systems (ab)using this tech as a single factor. I think it would be wise to make sure your LUKS unlocking <em>always</em> requires the user to input a something-you-know secret.</p>
+</blockquote>
+</aside>
+<p>Right.</p>
+<p>Improved chapter <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM_plus_Password">TPM plus Password</a> a bit just now.</p>
+<blockquote>
+<p>Full disk encryption password as first factor (something you know) plus a TPM as a second factor (something you have).</p>
+<p>At the time of writing, this is unavailable in any Linux distribution. See the comparison table below.</p>
+</blockquote>
+<p><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM_Encryption_Comparison_Table">TPM Encryption Comparison Table</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888#post_5</link>
+        <pubDate>Tue, 21 Jan 2025 13:26:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2239</guid>
+      </item>
+      <item>
+        <title>Adding grub-live to ubuntu host</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="rico" data-post="6" data-topic="894">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/7c8e57/48.png" class="avatar"> rico:</div>
+<blockquote>
+<p>dracut-initqueue: starting timeout script<br>
+Could not boot. Starting dracut-energency.service - Dracut Emergency Shell… Warning: “/dev/disk/by-uuid/88a34338…823e” does not exist<br>
+Generating “/run/initramfs/rdsosreport.txt”</p>
+</blockquote>
+</aside>
+<p>dracut issues (specifically if using Ubuntu) are unspecific to Kicksecure.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1737451827" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Need to be resolved as per:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1737451827" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
+
+  <p>Definition of the Self Support First Policy for Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>dracut issues fixing must be done before installing grub-live.</p>
+<p>Maybe you’ll find something useful here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dracut">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1737451827" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dracut" target="_blank" rel="noopener" title="01:17PM - 21 January 2025">Kicksecure – 21 Jan 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dracut" target="_blank" rel="noopener">dracut</a></h3>
+
+  <p>dracut, an initrd generator</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894#post_9</link>
+        <pubDate>Tue, 21 Jan 2025 13:17:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2238</guid>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>You should be able to post links now.<br>
+(<a href="https://www.kicksecure.com/wiki/Forum_Best_Practices#Posting_Links_for_New_Users">Posting Links for New Users</a>)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888#post_4</link>
+        <pubDate>Tue, 21 Jan 2025 12:41:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2237</guid>
+      </item>
+      <item>
+        <title>Installing FDE LUKS with Detached LUKS header option</title>
+        <dc:creator><![CDATA[@JuicyOdds]]></dc:creator>
+        <description><![CDATA[ <p>You know there are great things that have been discussed/mentioned in the other thread called “BusKill” which shreds the LUKS header. Which leads to the data being useless due to it being no different then random data forensically.</p>
+<p>Instead of that it would be better if Kicksecure developed the feature and option when selecting Full Disk Encryption via LUKS at installation. <strong>To have the option to detach the LUKS header</strong> and store it on another device whether that be a USB, SD Card, Smart Card, Yubikey, Nitrokey, etc.</p>
+<p>The main development would be the integration into Grub as it would have to ask for device or detect a saved device that has the luks header aswell as ask for the passphrase. The other integration would be into the graphical installer (e.g. Calamares) for selecting such a option.</p>
+<p>Currently there is no option to set up a Linux install with FDE and a detached header. However this implementation would greatly servers and personal computers alike.</p>
+<p>Here is a good read about this topic.</p>
+<p>skrilnetz .net/bullet-proof-data-encryption-with-luks-and-a-detached-header/</p>
+<p><strong>In summery here are the Benefits:</strong></p>
+<ul>
+<li>
+<p><strong>Enhanced Security</strong>: – By separating the header from the encrypted data, users can reduce the risk of unauthorized access to their encrypted storage.</p>
+</li>
+<li>
+<p><strong>Flexibility</strong>: – Users can choose to store the header in a more secure location, such as a different device or a secure cloud storage solution.</p>
+</li>
+<li>
+<p><strong>Improved Usability</strong>: – This feature would cater to advanced users who require additional security measures for their sensitive data.</p>
+</li>
+<li>
+<p><strong>Plausible Denial</strong>: – By using a detached header, users can claim that the encrypted storage contains random data, as the absence of the header makes it impossible to decrypt the contents without the correct key. This provides a layer of plausible deniability, as users can assert that they do not possess the means to access the data.</p>
+</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907#post_1</link>
+        <pubDate>Tue, 21 Jan 2025 12:33:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2235</guid>
+      </item>
+      <item>
+        <title>Adding grub-live to ubuntu host</title>
+        <dc:creator><![CDATA[@rico]]></dc:creator>
+        <description><![CDATA[ <p>Wow!! Thanks!! It works! grub-live works on ubuntu 24.04 and 24.10 with luks <img src="https://forums.kicksecure.com/images/emoji/twitter/star_struck.png?v=12" title=":star_struck:" class="emoji" alt=":star_struck:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894#post_8</link>
+        <pubDate>Tue, 21 Jan 2025 11:29:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2233</guid>
+      </item>
+      <item>
+        <title>Adding grub-live to ubuntu host</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <p>hi friend. i checked grub-live on kde-neon - it works.<br>
+write in grub:</p>
+<pre><code class="lang-auto">#GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=30
+</code></pre>
+<p>and <code>sudo update-grub</code> to add grub-live in grub menu. install grub-live. don’t install dracut or uninstall plymouth. reboot and select live mode. if you see it</p>
+<pre><code class="lang-auto">Begin: waiting up to 180 secs for any network device to become available
+ipconfig: frommedia: siocgifindex: no such device
+ipconfig: no sevices to configure
+sleeping 180 seconds before retryng getting a DHCP lease
+</code></pre>
+<p>or black screen - write in grub <code>GRUB_CMDLINE_LINUX_DEFAULT=“ip=dhcp”</code><br>
+and update <code>sudo update-grub</code><br>
+done</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894#post_7</link>
+        <pubDate>Tue, 21 Jan 2025 09:42:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2232</guid>
+      </item>
+      <item>
         <title>Exclusive Authentication Token</title>
         <dc:creator><![CDATA[@maltfield]]></dc:creator>
         <description><![CDATA[ <p>In general, I really like the idea of using hardware security tokens (USB, TPM, HSM, etc) for use as a <em>second</em> factor.</p>
@@ -69,7 +335,7 @@ Generating “/run/initramfs/rdsosreport.txt”</p>
       <item>
         <title>Exclusive Authentication Token</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>TPM for <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption:">https://www.kicksecure.com/wiki/Full_Disk_Encryption:</a></p>
+        <description><![CDATA[ <p>TPM for <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" class="inline-onebox">Full Disk Encryption (FDE)</a>…</p>
 <ul>
 <li>Not a priority.</li>
 <li><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM">TPM</a></li>
@@ -910,291 +1176,6 @@ Note, I'm not sure if the approach I'm taking here is correct - it seems a bit o
         <link>https://forums.kicksecure.com/t/unprivileged-user-namespaces-kernel-unprivileged-userns-clone-can-not-run-flatpak-apps-appimages-after-kicksecure-update/592?page=2#post_26</link>
         <pubDate>Sun, 12 Jan 2025 17:29:13 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2168</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>A pull request could be constructed as if Kicksecure was already based on trixie, because then once trixie is available, this would be implemented sooner.</p>
-<aside class="quote no-group" data-username="e-coin" data-post="7" data-topic="862">
-<div class="title">
-<div class="quote-controls"></div>
-<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/b2d939/48.png" class="avatar"> e-coin:</div>
-<blockquote>
-<p>I’m sure derivative-maker can use apt pinning to give those lxqt packages a higher priority under trixie.</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/APT_Pinning">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1736674227" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/APT_Pinning" target="_blank" rel="noopener" title="08:52AM - 02 December 2024">Kicksecure – 2 Dec 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/APT_Pinning" target="_blank" rel="noopener">Dev/APT Pinning</a></h3>
-
-  <p>Why we should avoid Debian APT Pinning</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_12</link>
-        <pubDate>Sun, 12 Jan 2025 15:27:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2167</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>There’s a ticket for Wayland (<a href="https://forums.whonix.org/t/port-to-wayland/17380" class="inline-onebox">port to Wayland - Development - Whonix Forum</a>) and it’s planned when porting Kicksecure to the next major stable version of Debian (trixie), once available.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_11</link>
-        <pubDate>Sun, 12 Jan 2025 15:10:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2166</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Hi friend. I also think kicksecure should move to wayland. I use kicksecure-cli-host on kde plasma and it works great. except for sleep mode, I have not seen any bugs in a long time. LXQT would be a perfect environment for default kicksecure. XFCE is too far behind in implementing wayland</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_10</link>
-        <pubDate>Sun, 12 Jan 2025 14:16:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2165</guid>
-      </item>
-      <item>
-        <title>How to go out of hibernation?</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>I think he means eternal sleep and black screen. I wrote about this problem in sddm. but my friends have this problem on default xfce-kicksecure too. you should disable this mode in new versions. session is not restored and all data is lost <img src="https://forums.kicksecure.com/images/emoji/twitter/frowning.png?v=12" title=":frowning:" class="emoji" alt=":frowning:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_4</link>
-        <pubDate>Sun, 12 Jan 2025 14:01:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2164</guid>
-      </item>
-      <item>
-        <title>ISO - Calamares Installer created /etc/fstab</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>How about crypttab</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-calamares-installer-created-etc-fstab/416#post_2</link>
-        <pubDate>Sat, 11 Jan 2025 23:27:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2162</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@e-coin]]></dc:creator>
-        <description><![CDATA[ <p>Hi, yes I missed a bunch of stuff there. <img src="https://forums.kicksecure.com/images/emoji/twitter/face_with_peeking_eye.png?v=12" title=":face_with_peeking_eye:" class="emoji" alt=":face_with_peeking_eye:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_9</link>
-        <pubDate>Fri, 10 Jan 2025 18:24:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2155</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p><code>pkg_list</code> is defined in <code>derivative-maker/buildconfig.d/30_pkg_list.conf</code>. Not sure if that answers your exact question or not since I’m moving a bit too fast, but it might help.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_8</link>
-        <pubDate>Fri, 10 Jan 2025 18:20:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2154</guid>
-      </item>
-      <item>
-        <title>How to go out of hibernation?</title>
-        <dc:creator><![CDATA[@e-coin]]></dc:creator>
-        <description><![CDATA[ <p>VM or Host?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_3</link>
-        <pubDate>Fri, 10 Jan 2025 18:18:48 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2153</guid>
-      </item>
-      <item>
-        <title>How to go out of hibernation?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>By “can’t go out of hibernation mode”, what exactly are the symptoms you’re running into? Does the machine refuse to power on? Does it power on but doesn’t restore your session?</p>
-<p>Hibernation is not well-supported on Kicksecure at the moment. You should avoid using it if at all possible.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-go-out-of-hibernation/868#post_2</link>
-        <pubDate>Fri, 10 Jan 2025 18:15:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2152</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@e-coin]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>A pull request introducing a LXQt meta package(s) would be welcome.</p>
-</blockquote>
-<p>I wanna be sure everything is perfect before making a pull, but I think something like that could be nice.</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://pastebin.com/ZpUBrNsM">
-  <header class="source">
-      <img src="https://pastebin.com/favicon.ico" class="site-icon" width="16" height="16">
-
-      <a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">Pastebin</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="" height="" src="https://pastebin.com/i/facebook.png" class="thumbnail">
-
-<h3><a href="https://pastebin.com/ZpUBrNsM" target="_blank" rel="noopener nofollow ugc">kicksecure-meta-packages LXQt - Pastebin.com</a></h3>
-
-  <p>Pastebin.com is the number one paste tool since 2002. Pastebin is a website where you can store text online for a set period of time.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p><code>kicksecure-desktop-environment-essential-lxqt</code> only pulls in <code>lxqt-core openbox</code> which is the absolute bare minimum.</p>
-<p>This package depends on <code>kicksecure-desktop-environment-essential-gui</code>, so that’s regular x11 + openbox.</p>
-<p>Then there is the new <code>kicksecure-desktop-environment-essential-gui-wayland</code> which skips all the xorg/x11 packages, installs drivers and a basic Wayland environment.</p>
-<p>Finally, <code>kicksecure-desktop-environment-essential-lxqt-wayland</code> again installs <code>lxqt-core</code> but instead depends on <code>kicksecure-desktop-environment-essential-lxqt-wayland</code></p>
-<p>The new <code>lxqt-wayland-session</code> code only comes in <code>lxqt-core 32</code> which is currently available under trixie, but not bookworm (lxqt-core 31). I’m sure derivative-maker can use apt pinning to give those lxqt packages a higher priority under trixie. (Gonna add that too if needed)</p>
-<blockquote>
-<p>It does not happen at all. It’s possible to add packages to the packages folder, which are built, but never installed, which is quite useful to maintain opt-in packages and during development.</p>
-</blockquote>
-<p>I carefully looked into <code>2100_create-debian-package</code> and have a question. Particularly, <code>create_derivative_distribution_debian_packages()</code></p>
-<p>The first for loop iterates over $derivative_name_list which is either <code>kicksecure</code>, <code>whonix</code> or both, depending on what is set in help-steps.d/variables.</p>
-<p>The second for loop runs through <code>$pkg_list</code>, which should hold all the local package names in <code>packages/kicksecure/*</code> but is not defined anywhere. I double checked, it’s not in <code>help-steps.d/variables</code>, <code>help-steps.d/pre</code> or the script itself.</p>
-<p>Thus, the second loop should only run once, <code>$item</code> remains <code>.../derivative-maker/packages/kicksecure</code> and pushd doesn’t actually save any useful paths.</p>
-<p>So why does genmkfile not fail later on when the packages are built?</p>
-<pre><code class="lang-auto"> for derivative_name_item in $derivative_name_list ; do
-      for item in $pkg_list ; do
-         item="$source_code_folder_dist/packages/$derivative_name_item/$item"
-         if [ ! -d "$item" ]; then
-            true "INFO: Not a folder: $item"
-            continue
-         fi
-         pushd "$item" &gt;/dev/null
-         number_folder_current="$(( number_folder_current + 1 ))"
-         local base_name
-         base_name="${item##*/}"
-         if [ "$base_name" = "developer-meta-files" ]; then
-            true "${cyan}INFO: Skipping $base_name as expected.${reset}"
-            popd
-            continue
-         fi
-</code></pre>
-<p>Edit: My bad the loop works, I just wasn’t looking carefully, enough.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_7</link>
-        <pubDate>Fri, 10 Jan 2025 18:09:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2151</guid>
-      </item>
-      <item>
-        <title>DNS nameserver 10.139.1.1</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>These are leaking from the Qubes build VM into the image during the official build process for redistributable builds, which isn’t great, but also isn’t a big deal. It’s functional by accident rather than design.</p>
-<hr>
-<p><code>grml-debootstrap</code> copies <code>/etc/resolv.conf</code>.</p>
-<blockquote>
-<p>[ -f “${MNTPOINT}”/etc/resolv.conf ] || cp ${VERBOSE:±v} /etc/resolv.conf “${MNTPOINT}”/etc/resolv.conf</p>
-</blockquote>
-<hr>
-<p>Handling of <code>/etc/resolv.conf</code> during the build process is difficult. For details, see mentions of:</p>
-<blockquote>
-<p>/etc/resolv.conf</p>
-</blockquote>
-<p>in <a href="https://github.com/Kicksecure/derivative-maker/blob/master/help-steps/chroot-raw" class="inline-onebox">derivative-maker/help-steps/chroot-raw at master · Kicksecure/derivative-maker · GitHub</a>.</p>
-<hr>
-<p>The question is what would be a good default value for <code>/etc/resolv.conf</code> for Kicksecure KVM and Kicksecure VirtualBox?</p>
-<p>Why mention Kicksecure VirtualBox? Because these are built at the same time to safe build time. The only difference is the image format conversion later during the build process (<code>.qcow</code> for KVM, <code>.ova</code> for VirtualBox).</p>
-<p>So the VM image default <code>/etc/resolv.conf</code> needs to be compatible with both virtualizers.</p>
-<p>It would be preferable to have an explicit default <code>/etc/resolv.conf</code>.</p>
-<p>Should <code>/etc/resolv.conf</code> be managed by package? Probably not. A good default value written explicitly during the build process would be better. Otherwise, this file should later be user managed (not managed by a package).</p>
-<p>That is, unless… Related:</p>
-<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener" title="12:33PM - 14 September 2019">Whonix Forum – 14 Sep 19</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/use-dnscrypt-by-default-in-kicksecure-not-whonix/8117" target="_blank" rel="noopener">Use DNSCrypt by default in Kicksecure? (not Whonix!)</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Development</span>
-        </span>
-      </span>
-    <div class="topic-header-extra">
-      <div class="list-tags">
-        <div class="discourse-tags">
-          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
-            <span class="discourse-tag simple">status_open_issue_todo</span>
-            <span class="discourse-tag simple">component_kicksecure</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <p>Alternative is using unencrypted, non-DNSSEC ISP provided servers.</p>
-
-  <p>
-    <span class="label1">Reading time: 15 mins 🕑</span>
-      <span class="label2">Likes: 45 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener" title="05:51PM - 08 July 2023">Whonix Forum – 8 Jul 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/default-dns-provider-discussion-for-kicksecure-not-whonix/16870" target="_blank" rel="noopener">Default DNS Provider Discussion for Kicksecure (not Whonix!)</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Development</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>It’s not a simple as “yeah, enable DNSEC validation” and “yeah, add configuration option DNS_ENCRYPTION=true”, done, call it a day…   A)        B)   Then a specific server needs to be chosen. It’s okay if the user decides to use such a setup and...</p>
-
-  <p>
-    <span class="label1">Reading time: 11 mins 🕑</span>
-      <span class="label2">Likes: 9 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/dns-nameserver-10-139-1-1/858#post_15</link>
-        <pubDate>Fri, 10 Jan 2025 18:05:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2150</guid>
       </item>
   </channel>
 </rss>
