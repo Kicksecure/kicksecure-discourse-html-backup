@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Consider battery charging thresholds and optimizations</title>
+    <link>https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912</link>
+    <description>It might be a good idea to to look at including the `tlp` and `tlp-rdw` packages
+&gt; TLP supplies separate settings profiles for AC and battery power and
+can enable or disable Bluetooth, Wi-Fi and WWAN radio devices upon
+system startup.
+
+Setting in the `/etc/default/tlp config`
+
+```
+# Sets the charge threshold to 80% similar to windows settings as to not overcharge the battery when AC is plugged in
+TLP_BATTERY_CHARGE_THRESHOLDS=&quot;75 80&quot;
+```
+
+```
+# This sets the default screen display brightness when on battery to 75 and 100 when plugged in
+TLP_DEFAULT_BRIGHTNESS_ON_AC=100
+TLP_DEFAULT_BRIGHTNESS_ON_BAT=75
+```
+
+Another suggestion would be disabling &quot;GNOME animations&quot; which could
+equal Improved Performance, Faster Response Time, and Battery Saving.
+
+Adding these two lines to a custom dconf `/etc/dconf/db/local.d/`
+
+```
+[org/gnome/desktop/interface]
+enable-animations = false
+```
+
+- # Notes about other DE optimizations (speed &amp; performance)
+
+**Disable desktop effects** *(Linux Mint or Cinnamon Desktop Environment)*
+
+```
+gsettings set org.cinnamon.desktop.effect show-desktop false
+```
+
+**Disable compositing for full-screen windows** *xfce* (may also apply to other Desktop Environments)
+
+```
+xfconf-query -c xfwm4 -p /general/use_compositing -s false
+```
+
+(The global config or a user custom specific file should be located in `/etc/xdg/xfconf/xfce-perchannel-xml/`)
+
+&gt; Disabling compositing may improve performance for certain applications, especially games or video players, but it may also disable some visual effects and features like transparency and shadows. If you want to re-enable compositing later, you can follow the same steps and check the options again with &quot;true&quot; instead.
+
+**On KDE If you want to disable the compositor entirely** (which will affect all windows, not just full-screen ones), you can do so with the following command:
+
+```
+kwriteconfig5 --file kwinrc --group &#39;Compositing&#39; --key &#39;Enabled&#39; &#39;false&#39;
+qdbus org.kde.KWin /Compositor suspend
+```
+
+To re-enable it, you can use:
+
+```
+kwriteconfig5 --file kwinrc --group &#39;Compositing&#39; --key &#39;Enabled&#39; &#39;true&#39;
+qdbus org.kde.KWin /Compositor resume
+```</description>
+    
+    <lastBuildDate>Wed, 22 Jan 2025 12:32:27 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Consider battery charging thresholds and optimizations</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Opinions welcome.</p>
+          <p><a href="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912/2</link>
+        <pubDate>Wed, 22 Jan 2025 12:32:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-912-2</guid>
+        <source url="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912.rss">Consider battery charging thresholds and optimizations</source>
+      </item>
+      <item>
+        <title>Consider battery charging thresholds and optimizations</title>
+        <dc:creator><![CDATA[Ashwagandha]]></dc:creator>
+        <description><![CDATA[
+            <p>It might be a good idea to to look at including the <code>tlp</code> and <code>tlp-rdw</code> packages</p>
+<blockquote>
+<p>TLP supplies separate settings profiles for AC and battery power and<br>
+can enable or disable Bluetooth, Wi-Fi and WWAN radio devices upon<br>
+system startup.</p>
+</blockquote>
+<p>Setting in the <code>/etc/default/tlp config</code></p>
+<pre><code class="lang-auto"># Sets the charge threshold to 80% similar to windows settings as to not overcharge the battery when AC is plugged in
+TLP_BATTERY_CHARGE_THRESHOLDS="75 80"
+</code></pre>
+<pre><code class="lang-auto"># This sets the default screen display brightness when on battery to 75 and 100 when plugged in
+TLP_DEFAULT_BRIGHTNESS_ON_AC=100
+TLP_DEFAULT_BRIGHTNESS_ON_BAT=75
+</code></pre>
+<p>Another suggestion would be disabling “GNOME animations” which could<br>
+equal Improved Performance, Faster Response Time, and Battery Saving.</p>
+<p>Adding these two lines to a custom dconf <code>/etc/dconf/db/local.d/</code></p>
+<pre><code class="lang-auto">[org/gnome/desktop/interface]
+enable-animations = false
+</code></pre>
+<ul>
+<li>
+<h1><a name="p-2250-notes-about-other-de-optimizations-speed-performance-1" class="anchor" href="https://forums.kicksecure.com#p-2250-notes-about-other-de-optimizations-speed-performance-1"></a>Notes about other DE optimizations (speed &amp; performance)</h1>
+</li>
+</ul>
+<p><strong>Disable desktop effects</strong> <em>(Linux Mint or Cinnamon Desktop Environment)</em></p>
+<pre><code class="lang-auto">gsettings set org.cinnamon.desktop.effect show-desktop false
+</code></pre>
+<p><strong>Disable compositing for full-screen windows</strong> <em>xfce</em> (may also apply to other Desktop Environments)</p>
+<pre><code class="lang-auto">xfconf-query -c xfwm4 -p /general/use_compositing -s false
+</code></pre>
+<p>(The global config or a user custom specific file should be located in <code>/etc/xdg/xfconf/xfce-perchannel-xml/</code>)</p>
+<blockquote>
+<p>Disabling compositing may improve performance for certain applications, especially games or video players, but it may also disable some visual effects and features like transparency and shadows. If you want to re-enable compositing later, you can follow the same steps and check the options again with “true” instead.</p>
+</blockquote>
+<p><strong>On KDE If you want to disable the compositor entirely</strong> (which will affect all windows, not just full-screen ones), you can do so with the following command:</p>
+<pre><code class="lang-auto">kwriteconfig5 --file kwinrc --group 'Compositing' --key 'Enabled' 'false'
+qdbus org.kde.KWin /Compositor suspend
+</code></pre>
+<p>To re-enable it, you can use:</p>
+<pre><code class="lang-auto">kwriteconfig5 --file kwinrc --group 'Compositing' --key 'Enabled' 'true'
+qdbus org.kde.KWin /Compositor resume
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912/1</link>
+        <pubDate>Wed, 22 Jan 2025 10:49:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-912-1</guid>
+        <source url="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912.rss">Consider battery charging thresholds and optimizations</source>
+      </item>
+  </channel>
+</rss>

@@ -5,8 +5,84 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Tue, 21 Jan 2025 12:33:33 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 22 Jan 2025 10:49:18 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Consider battery charging thresholds and optimizations</title>
+          <dc:creator><![CDATA[Ashwagandha]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>It might be a good idea to to look at including the <code>tlp</code> and <code>tlp-rdw</code> packages</p>
+<blockquote>
+<p>TLP supplies separate settings profiles for AC and battery power and<br>
+can enable or disable Bluetooth, Wi-Fi and WWAN radio devices upon<br>
+system startup.</p>
+</blockquote>
+<p>Setting in the <code>/etc/default/tlp config</code></p>
+<pre><code class="lang-auto"># Sets the charge threshold to 80% similar to windows settings as to not overcharge the battery when AC is plugged in
+TLP_BATTERY_CHARGE_THRESHOLDS="75 80"
+</code></pre>
+<pre><code class="lang-auto"># This sets the default screen display brightness when on battery to 75 and 100 when plugged in
+TLP_DEFAULT_BRIGHTNESS_ON_AC=100
+TLP_DEFAULT_BRIGHTNESS_ON_BAT=75
+</code></pre>
+<p>Another suggestion would be disabling “GNOME animations” which could<br>
+equal Improved Performance, Faster Response Time, and Battery Saving.</p>
+<p>Adding these two lines to a custom dconf <code>/etc/dconf/db/local.d/</code></p>
+<pre><code class="lang-auto">[org/gnome/desktop/interface]
+enable-animations = false
+</code></pre>
+<ul>
+<li>
+<h1><a name="p-2250-notes-about-other-de-optimizations-speed-performance-1" class="anchor" href="https://forums.kicksecure.com#p-2250-notes-about-other-de-optimizations-speed-performance-1"></a>Notes about other DE optimizations (speed &amp; performance)</h1>
+</li>
+</ul>
+<p><strong>Disable desktop effects</strong> <em>(Linux Mint or Cinnamon Desktop Environment)</em></p>
+<pre><code class="lang-auto">gsettings set org.cinnamon.desktop.effect show-desktop false
+</code></pre>
+<p><strong>Disable compositing for full-screen windows</strong> <em>xfce</em> (may also apply to other Desktop Environments)</p>
+<pre><code class="lang-auto">xfconf-query -c xfwm4 -p /general/use_compositing -s false
+</code></pre>
+<p>(The global config or a user custom specific file should be located in <code>/etc/xdg/xfconf/xfce-perchannel-xml/</code>)</p>
+<blockquote>
+<p>Disabling compositing may improve performance for certain applications, especially games or video players, but it may also disable some visual effects and features like transparency and shadows. If you want to re-enable compositing later, you can follow the same steps and check the options again with “true” instead.</p>
+</blockquote>
+<p><strong>On KDE If you want to disable the compositor entirely</strong> (which will affect all windows, not just full-screen ones), you can do so with the following command:</p>
+<pre><code class="lang-auto">kwriteconfig5 --file kwinrc --group 'Compositing' --key 'Enabled' 'false'
+qdbus org.kde.KWin /Compositor suspend
+</code></pre>
+<p>To re-enable it, you can use:</p>
+<pre><code class="lang-auto">kwriteconfig5 --file kwinrc --group 'Compositing' --key 'Enabled' 'true'
+qdbus org.kde.KWin /Compositor resume
+</code></pre>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912</link>
+          <pubDate>Wed, 22 Jan 2025 10:49:18 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-912</guid>
+          <source url="https://forums.kicksecure.com/t/consider-battery-charging-thresholds-and-optimizations/912.rss">Consider battery charging thresholds and optimizations</source>
+        </item>
+        <item>
+          <title>Distribution morphing Ubuntu into Kicksecure (kicksecure-cli-host for Ubuntu)</title>
+          <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>While this thread is about <code>grub-live</code> issues with Ubuntu. Wouldn’t it be best for Ubuntu users that want to take advantage of the hardening that Kicksecure offers to just install <code>kicksecure-cli-host</code> for the time being?</p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/distribution-morphing-ubuntu-into-kicksecure-kicksecure-cli-host-for-ubuntu/914">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/distribution-morphing-ubuntu-into-kicksecure-kicksecure-cli-host-for-ubuntu/914</link>
+          <pubDate>Wed, 22 Jan 2025 00:57:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-914</guid>
+          <source url="https://forums.kicksecure.com/t/distribution-morphing-ubuntu-into-kicksecure-kicksecure-cli-host-for-ubuntu/914.rss">Distribution morphing Ubuntu into Kicksecure (kicksecure-cli-host for Ubuntu)</source>
+        </item>
         <item>
           <title>Installing FDE LUKS with Detached LUKS header option</title>
           <dc:creator><![CDATA[JuicyOdds]]></dc:creator>
@@ -33,7 +109,7 @@
 <p><strong>Plausible Denial</strong>: – By using a detached header, users can claim that the encrypted storage contains random data, as the absence of the header makes it impossible to decrypt the contents without the correct key. This provides a layer of plausible deniability, as users can assert that they do not possess the means to access the data.</p>
 </li>
 </ul>
-            <p><small>4 posts - 3 participants</small></p>
+            <p><small>5 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/installing-fde-luks-with-detached-luks-header-option/907</link>
@@ -103,7 +179,7 @@ Acquire::Retries "3";
           <category>Support</category>
           <description><![CDATA[
             <p>Hi guys. I am using Kicksecure on a virtual machine. Host is ubuntu. I really like ubuntu. in the documentation you say Kicksecure used to work on ubuntu, but you chose debian because of potential problems with canonical. in the documentation you say grub-live can work on ubuntu /wiki/Grub-live#Compatibility, but I tried installing it on ubuntu, mint 22 and kubuntu and grub menu item does not appear. please help me what I should change in code to make it work on ubuntu. I would like to be able to run live mode for the whole system. this could be an additional defense for those using Kicksecure on an ubuntu host. thank you</p>
-            <p><small>10 posts - 4 participants</small></p>
+            <p><small>11 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/adding-grub-live-to-ubuntu-host/894</link>
@@ -704,79 +780,6 @@ Thank You</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-814</guid>
           <source url="https://forums.kicksecure.com/t/audio-output-devices-not-detected-help/814.rss">Audio output devices not detected - Help</source>
-        </item>
-        <item>
-          <title>Apparmor.service failed at boot</title>
-          <dc:creator><![CDATA[jnd]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hello everyone,<br>
-I’ve come to ask for your help again.<br>
-I have been testing the Hunchly application for a few days. I was using their appimage and extension on Brave. At the end of the trial period I decided to delete the application and the extension.<br>
-Since then, I’ve been getting a boot error: apparmor.service won’t start.</p>
-<p>Here are the log messages regarding the boot error and the inability to start the service manually. The problem is clearly related to the presence of a hunchly profile in apparmor.d. But there’s no mention of this in the documentation.</p>
-<p>How can I solve this problem? Thanks in advance for your solution.</p>
-<hr>
-<p>Subject: L’unité (unit) apparmor.service a échoué<br>
-░░ Defined-By: systemd</p>
-<p>░░<br>
-░░ L’unité (unit) apparmor.service a échoué, avec le résultat failed.</p>
-<p>déc. 24 14:02:05 systemd[1]: Starting apparmor.service - Load AppArmor profiles…<br>
-░░ Subject: L’unité (unit) apparmor.service a commencé à démarrer<br>
-░░ Defined-By: systemd</p>
-<p>░░<br>
-░░ L’unité (unit) apparmor.service a commencé à démarrer.<br>
-déc. 24 14:02:05  apparmor.systemd[3741]: Restarting AppArmor<br>
-déc. 24 14:02:05  apparmor.systemd[3741]: Reloading AppArmor profiles<br>
-déc. 24 14:02:05  apparmor.systemd[3750]: Erreur de l’analyseur AppArmor pour /etc/apparmor.d in profile /etc/apparmor.d/hunchly ? la ligne 4 : Could not open ‘abi/4.0’: Aucun fichi&gt;<br>
-déc. 24 14:02:05  apparmor.systemd[3825]: Erreur de l’analyseur AppArmor pour /etc/apparmor.d/hunchly in profile /etc/apparmor.d/hunchly ? la ligne 4 : Could not open ‘abi/4.0’: Auc&gt;<br>
-déc. 24 14:02:05  apparmor.systemd[3741]: Error: At least one profile failed to load<br>
-déc. 24 14:02:05  systemd[1]: apparmor.service: Main process exited, code=exited, status=1/FAILURE<br>
-░░ Subject: Unit process exited<br>
-░░ Defined-By: systemd<br>
-░░<br>
-░░<br>
-░░ An ExecStart= process belonging to unit apparmor.service has exited.<br>
-░░<br>
-░░ The process’ exit code is ‘exited’ and its exit status is 1.<br>
-déc. 24 14:02:05  systemd[1]: apparmor.service: Failed with result ‘exit-code’.<br>
-░░ Subject: Unit failed<br>
-░░ Defined-By: systemd<br>
-░<br>
-░░<br>
-░░ The unit apparmor.service has entered the ‘failed’ state with result ‘exit-code’.<br>
-déc. 24 14:02:05  systemd[1]: Failed to start apparmor.service - Load AppArmor profiles.<br>
-░░ Subject: L’unité (unit) apparmor.service a échoué<br>
-░░ Defined-By: systemd</p>
-<p>░░<br>
-░░ L’unité (unit) apparmor.service a échoué, avec le résultat failed.</p>
-            <p><small>5 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/apparmor-service-failed-at-boot/812">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/apparmor-service-failed-at-boot/812</link>
-          <pubDate>Tue, 24 Dec 2024 13:20:53 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-812</guid>
-          <source url="https://forums.kicksecure.com/t/apparmor-service-failed-at-boot/812.rss">Apparmor.service failed at boot</source>
-        </item>
-        <item>
-          <title>Zsh color theme</title>
-          <dc:creator><![CDATA[rico]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi. help me how to change zsh theme? I have .zsh file which I used in previous linux distribution. if this file replaces default .zsh in /home/user/ then only header changes. default zsh is empty (like on github). I am not advanced user and I can not find file which is responsible for commands color scheme. I found that color scheme is connected with desktop-config-dist package, but I do not understand what file is responsible for zsh colors. if I delete desktop-config-dist then other packages are also deleted - I would not like to do that. I will be grateful for help</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/zsh-color-theme/803">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/zsh-color-theme/803</link>
-          <pubDate>Sat, 21 Dec 2024 17:33:30 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-803</guid>
-          <source url="https://forums.kicksecure.com/t/zsh-color-theme/803.rss">Zsh color theme</source>
         </item>
   </channel>
 </rss>
