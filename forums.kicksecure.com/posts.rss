@@ -5,6 +5,30 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Unable to route kicksecure vm traffic trough whonix gateway</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Kicksecure at time of writing uses <code>NetworkManger</code>.<br>
+Not <code>ifupdown</code>. Therefore not file <code>/etc/network/interfaces</code>.</p>
+<p>Confirm your network settings.</p>
+<pre><code>sudo ifconfig
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-route-kicksecure-vm-traffic-trough-whonix-gateway/932#post_2</link>
+        <pubDate>Thu, 06 Feb 2025 16:31:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2290</guid>
+      </item>
+      <item>
+        <title>Unable to route kicksecure vm traffic trough whonix gateway</title>
+        <dc:creator><![CDATA[@Banebare]]></dc:creator>
+        <description><![CDATA[ <p>For testing purposes id like to route the traffic of the kicksecure virtual machine traffic trough the whonix gateway.<br>
+In all other VMs i change the ipv4 to manual<br>
+address: 10.152.152.12 Netmask:255.255.192.0 Gateway: 10.152.152.10 DNS: 10.152.152.10<br>
+And it works just fine, however when i do the same in a kicksecure VM…crickets.<br>
+What am i doing wrong my duck search didnt provide any workarounds.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-route-kicksecure-vm-traffic-trough-whonix-gateway/932#post_1</link>
+        <pubDate>Thu, 06 Feb 2025 13:14:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2288</guid>
+      </item>
+      <item>
         <title>Running portable application located on external drive</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Does this make all changes to the “live” system persistent, or only changes to a particular directory? I’m virtually 100% sure Dracut can do the former (see the rd.live.overlay option on <a href="https://man7.org/linux/man-pages/man7/dracut.cmdline.7.html" class="inline-onebox" rel="noopener nofollow ugc">dracut.cmdline(7) - Linux manual page</a>). The latter could be done with an fstab tweak, though that would require you to change the fstab in the ISO image which would mean you’d have to build the ISO yourself using derivative-maker. The process for building a Kicksecure ISO is documented at <a href="https://www.kicksecure.com/wiki/Dev/Build_Documentation/VM" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure ™ VM Build Documentation</a>.</p> ]]></description>
@@ -1126,43 +1150,6 @@ Also nice work/contributions by the way.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_3</link>
         <pubDate>Sun, 19 Jan 2025 01:36:55 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2206</guid>
-      </item>
-      <item>
-        <title>Building Kicksecure with different Desktop Environment</title>
-        <dc:creator><![CDATA[@e-coin]]></dc:creator>
-        <description><![CDATA[ <p>OK sure, I’ll fix that and make some improvements.<br>
-I’ve been doing a bunch of test builds to ensure a working environment.</p>
-<p><code>sddm</code> for the X11 version is probably a nicer fit, because it depends on a lot of QT libraries that are required anyway, but won’t be included in <code>lxqt-core</code>.<br>
-<code>lxqt-core</code> with <code>--no-install-recommends</code> is possible with minor additions.<br>
-And lastly, <code>kwin-wayland</code> really looks to be the only compositor not suffering from the qemu bug.</p>
-<p>Just the DE and compositor will be around ~350MB. It could be squeezed tighter by not using the lxqt meta-package and directly picking only crucial dependencies, but I think it’s fine.</p>
-<p>I’ll update the list so you guys have something to go on when the time comes.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/building-kicksecure-with-different-desktop-environment/862#post_18</link>
-        <pubDate>Sat, 18 Jan 2025 17:38:48 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2205</guid>
-      </item>
-      <item>
-        <title>upgrade-nonroot privilege escalation issue?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>That’s probably true.</p>
-<p>The conditions to run into this issue are probably rare. The user must lock down user/root isolation as well as modify a package managed configuration file in <code>/etc</code>, later get compromised.</p>
-<p>That tweet sounds dramatic. It assumes a concept (such as <a href="https://www.kicksecure.com/wiki/Dev/user-sysmaint-split" class="inline-onebox">user-sysmaint-split</a>) for meaningful user/root isolation is already a standard feature, which isn’t the case.</p>
-<p>By the time an attacker can run this attack, the has user has usually already bigger issues. The following XKCD applies.</p>
-<p><a href="https://xkcd.com/1200/" class="inline-onebox">xkcd: Authorization</a></p>
-<p>That tweet also seems to completely disregard any prior accomplishments an has the mindset “found 1 issue → trash the whole thing”, which isn’t productive.</p>
-<p>Since user-sysmaint-split is due to become the default for new images with the next release, this report comes at a good time. That might be the end of <code>upgrade-nonroot</code> for account <code>user</code> for the foreseeable future. Other way solutions in the future, related:</p>
-<ul>
-<li><a href="https://forums.kicksecure.com/t/notifications-about-new-updates/774" class="inline-onebox">Notifications about new updates</a></li>
-<li><a href="https://www.kicksecure.com/wiki/Dev/Automatic_Updates" class="inline-onebox">Dev/Automatic Updates - Kicksecure</a></li>
-</ul>
-<p>How this can be fixed in a upcomming stable upgrade:</p>
-<ul>
-<li>A) <code>upgrade-nonroot</code> using <code>apt-get-noninteractive</code> (might be unexpected); or</li>
-<li>B) disable <code>upgrade-nonroot</code>.</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_2</link>
-        <pubDate>Sat, 18 Jan 2025 13:13:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2204</guid>
       </item>
   </channel>
 </rss>
