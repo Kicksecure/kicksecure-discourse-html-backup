@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Randomized hostname protocol</title>
+    <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565</link>
+    <description># Recommendations
+
+Obviously a generic hostname is advisable, but in practice, there are limited other solutions available at present. One is to turn off any protocols that are not strictly necessary and which leak hostnames, particularly when insecure places are visited. This reduces the attack surface, but is impractical for certain protocols; for example, DHCP is necessary for Internet connectivity and many services depend on protocols such as mDNS. Another option is to use different hostnames for different purposes, rather than relying on a global hostname - this option is available on some OSes. Ultimately, **a randomized hostname protocol is necessary** to protect privacy, similar to methods utilized for MAC addresses. 
+
+What is a randomized hostname protocol? 
+Do kicksecure randomize it? 
+
+sudo hostname shows
+
+localhost</description>
+    
+    <lastBuildDate>Thu, 14 Nov 2024 21:28:01 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="anon24694737" data-post="7" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="/letter_avatar_proxy/v4/letter/a/eada6e/48.png" class="avatar"> anon24694737:</div>
+<blockquote>
+<p>Using a Different MAC for SSH</p>
+</blockquote>
+</aside>
+<p>SSH doesn’t send the devices MAC Address at most it might send the hostname but good info about using network namespaces that might be useful for something in Kicksecure.</p>
+<p>As far as I understand the issue related to</p>
+<blockquote>
+<p>MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic</p>
+</blockquote>
+<p>I believe they are referring to Installing Kicksecure as the OS on VPS server.<br>
+In this case I think Kicksecure should just NOT randomize Ethernet MAC addresses by commenting it out. Reason being most servers are wired in especially VPS, if you look at any server rack they aren’t going to be using wireless as that would create too much cross talk and you wouldn’t get optimized speeds.</p>
+<pre><code class="lang-auto">#ethernet.cloned-mac-address=stable
+</code></pre>
+<p>Also like <a class="mention" href="https://forums.kicksecure.com/u/anon24694737">@anon24694737</a> said</p>
+<aside class="quote no-group" data-username="anon24694737" data-post="7" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="/letter_avatar_proxy/v4/letter/a/eada6e/48.png" class="avatar"> anon24694737:</div>
+<blockquote>
+<p><code>connection.stable-id=${CONNECTION}/${BOOT}</code></p>
+</blockquote>
+</aside>
+<p>This has to be set if you don’t want Network Manager to leak or revert back to permaddr cause Network Manger will.</p>
+<p>Alternatively you could also set it to set a new mac everytime you reconnect in a session instead.</p>
+<p><code>connection.stable-id=${CONNECTION}/${RANDOM}</code></p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/10</link>
+        <pubDate>Thu, 14 Nov 2024 21:28:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-10</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="anon24694737" data-post="7" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="/letter_avatar_proxy/v4/letter/a/eada6e/48.png" class="avatar"> anon24694737:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+</blockquote>
+</aside>
+<p>Yes, couldn’t it be possible</p>
+</blockquote>
+</aside>
+<p>You would need to study the issue (<a href="https://github.com/Kicksecure/security-misc/issues/184" class="inline-onebox">MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic · Issue #184 · Kicksecure/security-misc · GitHub</a>) and come up with solutions.</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/9</link>
+        <pubDate>Tue, 12 Nov 2024 06:33:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-9</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="Quiksilver" data-post="5" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+</blockquote>
+</aside>
+<p>I think MAC randomization should come with it enabled by default like Graphene already does.</p>
+</blockquote>
+</aside>
+<p>That’s not an answer to “MAC randomization is an extremely difficult technical challenge.”</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="5" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>like they do.</p>
+</blockquote>
+</aside>
+<p>“like they do” doesn’t translate to a tested source code contributions compatible with Kicksecure.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="5" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Shipping it enabled by default and adding a patch to the Calamaris installer to disable the config file at install could also be another route.</p>
+</blockquote>
+</aside>
+<p>As per <a href="https://www.kicksecure.com/wiki/Dev/image_formats#Goals">image formats, Goals</a>:</p>
+<blockquote>
+<ul>
+<li>The differences in the code base for Live Systems vs. Installer Systems vs. Installed Systems should be reduced as much as possible.</li>
+<li>Installer specific code should be as minimal as possible.</li>
+</ul>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/6</link>
+        <pubDate>Wed, 06 Nov 2024 12:03:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-6</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="suse211213" data-post="1" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>this option is available on some OSes</p>
+</blockquote>
+</aside>
+<p>I don’t know any of any OS’s that randomize the hostname?<br>
+Are you sure your not getting confused with containerization?</p>
+<aside class="quote no-group" data-username="suse211213" data-post="1" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>DHCP is necessary for Internet connectivity and many services depend on protocols such as mDNS</p>
+</blockquote>
+</aside>
+<p>Yes, there is a debate on if sending the hostname or not makes you more unique.<br>
+TailsOS doesn’t send the hostname to mitigate “DHCP hostname leaks” but arguably sending a more generic hostname may look more normal.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+</blockquote>
+</aside>
+<p>I think MAC randomization should come with it enabled by default like Graphene already does.<br>
+Like <a class="mention" href="https://forums.kicksecure.com/u/suse211213">@suse211213</a> mentioned about Qubes enabling it by default it could be implemented like they do.<br>
+Shipping it enabled by default and adding a patch to the Calamaris installer to disable the config file at install could also be another route.<br>
+However idk what that has to do with hostname randomization but it could be possibly added to Kicksecure depending on implementation.</p>
+<p>Besides DHCP what else sends your hostname?<br>
+What sandboxing or containerization could mitigate it other then virtual machines?</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/5</link>
+        <pubDate>Wed, 06 Nov 2024 01:47:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-5</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Updated wiki a bit just now.</p>
+<aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>Hostname aren’t sent by default due to missing /etc/hostname</p>
+</blockquote>
+</aside>
+<p>Just because <code>/etc/hostname</code> doesn’t mean that there isn’t any hostname. Type:</p>
+<pre><code>hostname
+</code></pre>
+<p>result:</p>
+<blockquote>
+<p>sys-net</p>
+</blockquote>
+<p>If it’s sent or not needs different evidence.</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/4</link>
+        <pubDate>Thu, 31 Oct 2024 05:32:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-4</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730280625" class="site-icon" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts" target="_blank" rel="noopener nofollow ugc" title="10:01AM - 04 March 2024">Whonix – 4 Mar 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/360;"><img src="https://www.whonix.org/w/images/6/65/MACaddress2131.jpg?version=6f5b990fb19db0f4fcdb9dc23ff9a728" class="thumbnail" width="640" height="360"></div>
+
+<h3><a href="https://www.whonix.org/wiki/MAC_Address#Qubes_Hosts" target="_blank" rel="noopener nofollow ugc">MAC Address</a></h3>
+
+  <p>MAC Address Spoofing and Tracking Threats</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I think this would be edited ?<br>
+Latest Qubes sys-net do randomize mac by default .<br>
+Hostname aren’t sent by default due to missing /etc/hostname</p>
+<p>hostname randomization section</p>
+<p>It isn’t necessary to randomize the hostname when one can simply not leak it</p>
+<p>I would revert this, allow sent it after its randomized.</p>
+<p>Note: wont open new thread in qubes section due to relation to this topic</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/3</link>
+        <pubDate>Wed, 30 Oct 2024 18:32:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-3</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Related:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/184">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/184" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/184" target="_blank" rel="noopener">MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-01-06" data-time="13:11:20" data-timezone="UTC">01:11PM - 06 Jan 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">https://github.com/Kicksecure/security-misc/blob/master/usr/lib/NetworkManager/c<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">onf.d/80_randomize-mac.conf
+
+```
+[device-mac-randomization]
+wifi.scan-rand-mac-address=yes
+
+[connection-mac-randomization]
+ethernet.cloned-mac-address=random
+wifi.cloned-mac-address=random
+```
+
+1) Breaks root servers, namely broke kicksecure.com. This is what the server provide sent by e-mail.
+
+```
+We have detected that your server is using different MAC addresses from those allowed by your Robot account.
+
+Please take all necessary measures to avoid this in the future and to solve the issue.
+We also request that you send a short response to us. This response should contain information about how this could have happened and what you intend to do about it.
+In the event that the following steps are not completed successfully, your server can be locked at any time after 2024-01-17 16:51:11 +0100.
+
+How to proceed:
+- Solve the issue
+- Please note, in case you have fixed the problem, please wait at least 10 minutes before rechecking: ...
+- After successfully testing that the issue is resolved, send us a statement by using the following link:...
+
+Please visit our FAQ here, if you are unsure how to proceed:
+https://docs.hetzner.com/robot/dedicated-server/faq/error-faq/#mac-errors
+
+Important note:
+When replying to us, please leave the abuse ID [...] unchanged in the subject line. Manual replies will only be handled in the event of a lock.
+Please note that we do not provide telephone support in our department. If you have any questions, please send them to us by responding to this email.
+
+Kind regards
+
+Network department
+```
+
+2) Breaks VirtualBox DHCP when using Network Manger (in Kicksecure) after VM reboot (`sudo reboot`). It is functional for the first start after powering off and powering on the VM. [1]
+
+Might be related:
+https://forums.virtualbox.org/viewtopic.php?t=86753
+
+Could be a Network Manager issue:
+https://bugs.launchpad.net/ubuntu/+source/network-manager/+bug/1116421
+https://askubuntu.com/questions/307717/networkmanager-problem-with-cloned-mac-address
+
+----
+
+[1] Before someone says that's a VirtualBox issue, no, I mean, maybe, but that doesn't matter.
+VirtualBox is a valid environment. If that breaks, other environments will break as well.
+Broken networking is extremely frustrating. MAC randomization would be suitable for Kicksecure, but only if stable.
+
+It's not important enough to break common network configurations in common environments.
+
+----
+
+TODO: This bug has to be reported to Network Manager (NM) as above bug reports apparently never have reached upstream NM.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Which is blocked by:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/187">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/187" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/187" target="_blank" rel="noopener">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-01-13" data-time="16:40:17" data-timezone="UTC">04:40PM - 13 Jan 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/monsieuremre" target="_blank" rel="noopener">
+          <img alt="monsieuremre" src="https://avatars.githubusercontent.com/u/130907164?v=4" class="onebox-avatar-inline" width="20" height="20">
+          monsieuremre
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Servers and workstations differ heavily, and there is no universal hardening tha<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t is also fine grained for both. A server is inherently a network. This package should prioritize workstations, as kicksecure is meant to be one. I do not support the idea of also being a server system. Firstly, [some of hardening](https://github.com/Kicksecure/security-misc/blob/master/usr/lib/sysctl.d/990-security-misc.conf) already eliminates the possibilty of kicksecure usage on specific server types, like a file sync or an email server might already face problems because of network hardening. They may have gone unnoticed, but this doesn't change the fact. The two reasonable options are:
+* Primarily good option: Forget about servers, do not try to keep support for them universally. This strips us of a very very big area of possible hardening options. If we want to support both, in terms of security, we will be the "jack of all trades, master of none". Nothing would be hardened to its full extend in this case.
+* Secondary, in my opinion the least favorable option, because of the unnecessary work it would require: Split this package in two. One package ```security-misc-desktop``` and one ```security-misc-server```. At this point you can choose any other name you like.
+
+But this has to be addressed in the near future, for the project to develop further.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>MAC randomization is an extremely difficult technical challenge.</p>
+<p>Neither is a priority for Kicksecure at this point due to:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="05:55PM - 23 January 2024">Kicksecure – 23 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar">
+
+<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
+
+  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>So unless contributed, this won’t happen for a very long time.</p>
+<aside class="quote no-group" data-username="suse211213" data-post="1" data-topic="565">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>Do kicksecure randomize it?</p>
+</blockquote>
+</aside>
+<p>Not at time of writing.</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/2</link>
+        <pubDate>Mon, 09 Sep 2024 10:41:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-2</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+      <item>
+        <title>Randomized hostname protocol</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <h1><a name="p-1221-recommendations-1" class="anchor" href="https://forums.kicksecure.com#p-1221-recommendations-1"></a>Recommendations</h1>
+<p>Obviously a generic hostname is advisable, but in practice, there are limited other solutions available at present. One is to turn off any protocols that are not strictly necessary and which leak hostnames, particularly when insecure places are visited. This reduces the attack surface, but is impractical for certain protocols; for example, DHCP is necessary for Internet connectivity and many services depend on protocols such as mDNS. Another option is to use different hostnames for different purposes, rather than relying on a global hostname - this option is available on some OSes. Ultimately, <strong>a randomized hostname protocol is necessary</strong> to protect privacy, similar to methods utilized for MAC addresses.</p>
+<p>What is a randomized hostname protocol?<br>
+Do kicksecure randomize it?</p>
+<p>sudo hostname shows</p>
+<p>localhost</p>
+          <p><a href="https://forums.kicksecure.com/t/randomized-hostname-protocol/565/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/randomized-hostname-protocol/565/1</link>
+        <pubDate>Sun, 08 Sep 2024 19:35:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-565-1</guid>
+        <source url="https://forums.kicksecure.com/t/randomized-hostname-protocol/565.rss">Randomized hostname protocol</source>
+      </item>
+  </channel>
+</rss>

@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652</link>
+    <description>I have a problem installing the KickSecure version.. Every time I reach the penultimate stage, it shows me: timezone failed. I tried my region and more than one region, but it was not resolved.
+![image|666x500](upload://ieXX4eL06RlzVi8U8r9DlRBfPzW.jpeg)</description>
+    
+    <lastBuildDate>Fri, 22 Nov 2024 09:18:10 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubpullrequest" data-onebox-src="https://github.com/calamares/calamares/pull/2400">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/pull/2400" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+
+
+
+    <div class="github-icon-container" title="Pull Request">
+      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
+    </div>
+
+  <div class="github-info-container">
+
+
+
+      <h4>
+        <a href="https://github.com/calamares/calamares/pull/2400" target="_blank" rel="noopener">Allow restricting the filesystem's usable in manual partitioning (wip)</a>
+      </h4>
+
+    <div class="branches">
+      <code>calamares:calamares</code> ← <code>ArrayBolt3:arraybolt3/restrict-fs</code>
+    </div>
+
+      <div class="github-info">
+        <div class="date">
+          opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-21" data-time="08:23:07" data-timezone="UTC">08:23AM - 21 Nov 24 UTC</span>
+        </div>
+
+        <div class="user">
+          <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+            <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+            ArrayBolt3
+          </a>
+        </div>
+
+        <div class="lines" title="1 commits changed 14 files with 424 additions and 18 deletions">
+          <a href="https://github.com/calamares/calamares/pull/2400/files" target="_blank" rel="noopener">
+            <span class="added">+424</span>
+            <span class="removed">-18</span>
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">This is my first attempt at implementing https://github.com/calamares/calamares/<span class="show-more-container"><a href="https://github.com/calamares/calamares/pull/2400" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">issues/2397. I tried to follow the existing conventions when it came to how configuration was fetched, making a new class for the map of restricted filesystems for mountpoints and handling default configuration values in much the same way as other parts of the code handled them. I don't like the way I had to plumb PartitionCoreModule and Config objects into areas of the code that didn't used to use them, but it was the only way I could see to do the job and still be consistent.
+
+There are some major shortcomings still left in the code:
+
+* &lt;s&gt;For mountpoint-specific filesystem whitelists, I'm not taking into account that un-mountable filesystems should always be allowed, even though I document that this is taken into account. This **must** be fixed before this can be merged.&lt;/s&gt; Resolved.
+* &lt;s&gt;It doesn't take into account the case when mountpoint `/a` can be filesystem X, mountpoint `/a/b` cannot be filesystem X, and the user chooses to only make a partition for mountpoint `/a` and leave `/a/b` on the same filesystem as `/a`. In that instance the user could set `/a` to be filesystem X, and thus `/a/b` would also be filesystem X, despite that being prohibited.&lt;/s&gt; Resolved, the UX isn't awesome but it does work.
+* &lt;s&gt;No testing has been done yet, at all. I don't even know if Calamares will launch with this.&lt;/s&gt; Did some testing, it's working decent so far.
+
+I'm not sure if this is the right approach to this, or if I should be approaching the problem in a fundamentally different way. I'm happy to scrap the patch and try again if this isn't the right way to do this.
+
+EDIT: The code is mostly working now. It still needs a good test plan written and thoroughly tested before it's merge-ready, but it seems to work right, and is ready for review.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/8</link>
+        <pubDate>Fri, 22 Nov 2024 09:18:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-8</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Very helpful. This was the foundation for <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> who succeeded to diagnose the issue and translate it into a upstream calamares bug report.</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/2397">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/2397" target="_blank" rel="noopener">Allow distros to restrict what filesystems can be used in manual partitioning</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-10" data-time="23:42:09" data-timezone="UTC">11:42PM - 10 Nov 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="ArrayBolt3" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">**Is your feature request related to a problem? Please describe.**
+Calamares cu<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">rrently allows one to pick from a large number of different filesystems when setting up a system with manual partitioning. For the most part this is good, however because not all filesystems work well with all distros, it is possible for the user to shoot themselves in the foot by picking a filesystem that won't work. For instance, currently nothing in Calamares prevents the user from attempting to install a Debian-based distro like Kicksecure onto a FAT32-formatted root partition.
+
+![Screenshot_20241110_173418](https://github.com/user-attachments/assets/16f77507-654b-4754-afcc-e99b2950f4f7)
+
+Obviously this won't work in the long run, however the installation actually tries to proceed and gets quite far. The error message that the installation eventually fails with is less-than-obvious:
+
+![Screenshot_20241110_173630](https://github.com/user-attachments/assets/e3dcd4f7-6fa1-4e04-bc64-69951644ef8a)
+
+**Describe the solution you'd like**
+I think the best solution here would be to allow distros to specify what filesystems can be used at what mountpoints. Ideally, the manual partitioning screen would prevent the user from selecting a "bad" filesystem, however it might be sufficient to simply warn them that what they're doing is likely to fail in weird ways if they continue. Calamares could use a default "deny-map" (or whatever you want to call it) that would prevent some common blunders (such as using a non-UNIX filesystem for the root filesystem), but the map would be fully configurable by the distro developer.
+
+**Describe alternatives you've considered**
+The simplest solution would be to simply prohibit using fat32 as a filesystem for the root filesystem, however this doesn't seem like the right decision to make since in theory some distros might actually want to support a fat32 root filesystem.
+
+**Additional context**
+The issue mentioned above has tripped up at least one user in the wild: https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/7</link>
+        <pubDate>Mon, 11 Nov 2024 15:10:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-7</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[WMichael]]></dc:creator>
+        <description><![CDATA[
+            <p>TL;DR: Make sure to use ext4 formatting for the Kicksecure partition.</p>
+<p>FWIW, after hours of struggling, I noticed Patrick’s post: “So I create a live ISO with openSUSE’s …” So I tried a minimal Ubuntu install on the USB drive, then replaced it with Kicksecure and it worked!</p>
+<p>Upon further research, I realized that I had misinterpreted the instructions regarding the EFI partition. It turns out that I needed to ensure it was FAT32/ExFAT for proper functioning, but I incorrectly assumed the Kicksecure partition required this format, too. Actually, the Kicksecure partition requires a Linux disk format, and I chose ext4. I was able to verify this was my issue by successfully installing Kicksecure on a second USB drive using an ext4 file system for the Kicksecure partition.</p>
+<p>I hope this is helpful.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/6</link>
+        <pubDate>Sat, 09 Nov 2024 18:31:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-6</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>FWIW I have tried two full installations and one “replace partition” installation of Kicksecure-Xfce-17.2.3.7.iso, and have not been able to reproduce this problem.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/5</link>
+        <pubDate>Thu, 31 Oct 2024 20:06:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-5</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Are you using manual partitioning, “replace partition”, or “install alongside” by any chance? If so, could you share with us the partition layout you’re setting?</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/4</link>
+        <pubDate>Thu, 31 Oct 2024 19:55:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>We might need the log to be able to debug this. Please provide.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/3</link>
+        <pubDate>Thu, 31 Oct 2024 05:38:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related:</p><aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/1251">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/1251" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/1251" target="_blank" rel="noopener">Cannot set timezone. Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2019-09-27" data-time="14:40:55" data-timezone="UTC">02:40PM - 27 Sep 19 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2019-10-08" data-time="09:46:29" data-timezone="UTC">09:46AM - 08 Oct 19 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/kevinsmia1939" target="_blank" rel="noopener">
+          <img alt="kevinsmia1939" src="https://avatars.githubusercontent.com/u/11407922?v=4" class="onebox-avatar-inline" width="20" height="20">
+          kevinsmia1939
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">So I create a live ISO with openSUSE's Kiwi
+The live ISO use openSUSE Tumblewee<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">d repo with KDE DE
+
+I include Calamares as one of the package in the live ISO
+
+I start Calamares with 
+sudo -E calamares -d 
+The installation procedures is nothing special, 
+Select language English (which is the default)
+Select timezone default (america, newyork )
+The partition table was selected as "Erase all" with EXT4
+After confirm to install the error message popup
+```
+
+Cannot set timezone. 
+Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime
+```
+I tried delete /etc/localtime and try again, same error.
+Full log 
+```
+sudo -E calamares -d
+[sudo] password for root: 
+No protocol specified
+QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
+QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
+QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
+QStandardPaths: wrong ownership on runtime directory /run/user/1000, 1000 instead of 0
+22:57:26 [1]: Calamares version: 3.1.11 
+Translation: Calamares: Using system locale: "en_US"
+22:57:26 [1]: Default font ===== 
+Pixel size:    -1 
+Point size:    10 
+Point sizeF:   10 
+Font family:   "Noto Sans" 
+Metric height: 18 
+22:57:26 [1]: Font height: 18 
+22:57:26 [1]: Available languages: ("ar", "ast", "bg", "ca", "cs_CZ", "da", "de", "el", "en", "en_GB", "es_MX", "es", "eu", "fr", "he", "hr", "hu", "id", "is", "it_IT", "ja", "lt", "nl", "pl", "pt_BR", "pt_PT", "ro", "ru", "sk", "sv", "th", "tr_TR", "zh_CN", "zh_TW") 
+22:57:26 [1]: CalamaresApplication thread: 0x55f5d2a8bb10 
+22:57:26 [1]: Using log file: "/root/.cache/Calamares/Calamares/Calamares.log" 
+22:57:26 [1]: Using Calamares settings file at "/usr/share/calamares/settings.conf" 
+22:57:26 [1]: Using Calamares branding file at "/usr/share/calamares/branding/default/branding.desc" 
+22:57:26 [1]: WARNING: the selected branding component does not ship translations. 
+22:57:26 [1]: Loaded branding component "default" 
+22:57:26 [1]: STARTUP: initQmlPath, initSettings, initBranding done 
+22:57:26 [1]: STARTUP: initModuleManager: module init started 
+22:57:26 [1]: STARTUP: initModuleManager: all modules init done 
+22:57:26 [1]: STARTUP: initJobQueue done 
+22:57:26 [1]: Available size QSize(1024, 732) 
+22:57:26 [1]:   Proposed window size: 1024 648 
+22:57:26 [1]: STARTUP: CalamaresWindow created; loadModules started 
+22:57:26 [1]: Initial locale  "en_US" 
+22:57:26 [8]: Translation: Calamares: Using system locale: "en_US"
+22:57:26 [1]: Welcome string false "KalaOS" 
+22:57:26 [1]: ViewModule "welcome@welcome" loading complete. 
+22:57:26 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
+22:57:26 [1]: ViewModule "locale@locale" loading complete. 
+No protocol specified
+22:57:26 [1]: ViewModule "keyboard@keyboard" loading complete. 
+22:57:26 [8]: Loaded backend plugin:  "pmlibpartedbackendplugin"
+22:57:26 [1]: ViewModule "partition@partition" loading complete. 
+22:57:26 [1]: ViewModule "users@users" loading complete. 
+22:57:26 [1]: ViewModule "summary@summary" loading complete. 
+22:57:26 [1]: Module "partition@partition" already loaded. 
+22:57:26 [1]: QML import paths: ("/usr/share/calamares/qml", "/usr/bin", "qrc:/qt-project.org/imports", "/usr/lib64/qt5/qml") 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "mount" 
+22:57:26 [1]: Module "mount@mount" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "unpackfs" 
+22:57:26 [1]: Module "unpackfs@unpackfs" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "machineid" 
+22:57:26 [1]: Module "machineid@machineid" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "fstab" 
+22:57:26 [1]: Module "fstab@fstab" cannot be created from descriptor. 
+22:57:26 [1]: Module "locale@locale" already loaded. 
+22:57:26 [1]: Module "keyboard@keyboard" already loaded. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "localecfg" 
+22:57:26 [1]: Module "localecfg@localecfg" cannot be created from descriptor. 
+22:57:26 [1]: Module "users@users" already loaded. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "displaymanager" 
+22:57:26 [1]: Module "displaymanager@displaymanager" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "networkcfg" 
+22:57:26 [1]: Module "networkcfg@networkcfg" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "hwclock" 
+22:57:26 [1]: Module "hwclock@hwclock" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "dracut" 
+22:57:26 [1]: Module "dracut@dracut" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "grubcfg" 
+22:57:26 [1]: Module "grubcfg@grubcfg" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "bootloader" 
+22:57:26 [1]: Module "bootloader@bootloader" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "packages" 
+22:57:26 [1]: Module "packages@packages" cannot be created from descriptor. 
+22:57:26 [0]: Python modules are not supported in this version of Calamares. 
+22:57:26 [0]: Bad module type ( "job" ) or interface string ( "python" ) for module  "umount" 
+22:57:26 [1]: Module "umount@umount" cannot be created from descriptor. 
+22:57:26 [1]: FinishedPage() 
+22:57:26 [1]: ViewModule "finished@finished" loading complete. 
+22:57:26 [1]: STARTUP: loadModules for all modules done 
+22:57:26 [1]: STARTUP: Window now visible and ProgressTreeView populated 
+22:57:27 [8]: getting smart status failed for  "/dev/vda" :  Operation not supported
+22:57:27 [1]: Removing unsuitable devices: 1 candidates. 
+22:57:27 [1]: LIST OF DETECTED DEVICES: 
+22:57:27 [1]: node      capacity        name    prettyName 
+22:57:27 [1]: "/dev/vda" 21467980800 "Virtio Block Device" "Virtio Block Device – 19.99 GiB (/dev/vda)" 
+22:57:27 [1]: .. 1 devices detected. 
+03:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
+22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
+22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
+22:57:27 [1]: WARNING: guessLocaleConfiguration can't guess from an empty list. 
+22:57:27 [1]: Cannot open file "/etc/locale.gen" . Assuming the supported languages are already built into the locale archive. 
+22:57:27 [1]: Need at least storage bytes: 5905580032 
+22:57:27 [1]: Need at least ram bytes: 1073741824 
+22:57:27 [1]: enoughStorage, enoughRam, hasPower, hasInternet, isRoot:  true true true false true 
+No protocol specified
+22:57:27 [1]: xkbmap selection changed to:  "us" - "" 
+22:57:27 [1]: "Osprober lines, clean:\n" 
+22:57:27 [1]: Updating partitioning state widgets. 
+22:57:27 [0]: QObject::setParent: Cannot set parent, new parent is in a different thread
+22:57:27 [1]: Required  storage B: 8589934592 "(8GB)" 
+22:57:27 [1]: Available storage B: 20949517312 "(19GB)" for "/dev/vda1"    length: 41927602    sectorsUsed: 1010576    fsType: "ext4" 
+22:57:27 [1]: Partition "/dev/vda1" authorized for resize + autopartition install. 
+22:57:27 [1]: Required  storage B: 6442450944 "(6GB)" 
+22:57:27 [1]: Storage capacity  B: 21466932224 "(19GB)" for "/dev/vda1"    length: 41927602 
+22:57:27 [1]: Partition "/dev/vda1" authorized for replace install. 
+22:57:27 [1]: Updating partitioning preview widgets. 
+22:57:33 [1]: Updating partitioning preview widgets. 
+22:57:34 [1]: Updating partitioning preview widgets. 
+22:57:34 [1]: CreatePartitionTableJob::createTable trying to make table for device "/dev/vda" 
+22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
+22:57:34 [1]: Suggested swap size: 6.2356 GiB 
+22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
+22:57:34 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
+22:57:34 [1]: # Queue: 
+22:57:34 [1]: ## Device: "Virtio Block Device" 
+22:57:34 [1]: - "Create new msdos partition table on /dev/vda." 
+22:57:34 [1]: - "Create new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs." 
+22:57:34 [1]: - "Create new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap." 
+22:57:34 [1]: Updating partitioning preview widgets. 
+22:57:34 [1]: Required  storage B: 6442450944 "(6GB)" 
+22:57:34 [1]: Storage capacity  B: 21466932224 "(19GB)" for "/dev/vda1"    length: 41927602 
+22:57:34 [1]: Partition "/dev/vda1" authorized for replace install. 
+22:57:37 [1]: PCM::setBootLoaderInstallPath "/dev/vda" 
+22:57:42 [0]: QLayout: Attempting to add QLayout "" to QWidget "", which already has a layout
+22:57:42 [0]: QObject::setParent: Cannot set parent, new parent is in a different thread
+22:57:42 [1]: Creating FillGlobalStorageJob with bootLoader path "/dev/vda" 
+22:57:42 [1]: PartitionCodeModule has been asked for jobs. About to return: "Clear all temporary mounts.\nClear mounts for partitioning operations on /dev/vda\nCreate new msdos partition table on /dev/vda.\nCreate new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs.\nCreate new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap.\nSet partition information" 
+22:57:42 [1]: Gathering UUIDs for partitions that exist now. 
+22:57:42 [1]: QHash(("", "")) 
+22:57:42 [1]: Writing to GlobalStorage["partitions"] 
+22:57:42 [1]: "" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "" 
+22:57:42 [1]: "" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "" 
+22:57:42 [8]: QVariant(QString, "") "" "/" "btrfs"
+22:57:42 [8]: QVariant(QString, "") "" "" "linuxswap"
+22:57:42 [1]: Gathering UUIDs for partitions that exist now. 
+22:57:42 [1]: QHash(("", "")) 
+22:57:42 [1]: Writing to GlobalStorage["partitions"] 
+22:57:42 [1]: "" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "" 
+22:57:42 [1]: "" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "" 
+22:57:42 [8]: QVariant(QString, "") "" "/" "btrfs"
+22:57:42 [8]: QVariant(QString, "") "" "" "linuxswap"
+22:57:42 [1]: Summary widget is larger than viewport, enlarge by 27 to QSize(822, 623) 
+22:57:44 [1]: Creating FillGlobalStorageJob with bootLoader path "/dev/vda" 
+22:57:44 [1]: PartitionCodeModule has been asked for jobs. About to return: "Clear all temporary mounts.\nClear mounts for partitioning operations on /dev/vda\nCreate new msdos partition table on /dev/vda.\nCreate new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs.\nCreate new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap.\nSet partition information" 
+22:57:44 [0]: Starting job "Clear all temporary mounts." 
+22:57:44 [1]: Opened mtab. Lines: 
+22:57:44 [1]: "sysfs /sys sysfs rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "proc /proc proc rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "devtmpfs /dev devtmpfs rw,nosuid,size=1453304k,nr_inodes=363326,mode=755 0 0" 
+22:57:44 [1]: "securityfs /sys/kernel/security securityfs rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "tmpfs /dev/shm tmpfs rw,nosuid,nodev 0 0" 
+22:57:44 [1]: "devpts /dev/pts devpts rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000 0 0" 
+22:57:44 [1]: "tmpfs /run tmpfs rw,nosuid,nodev,mode=755 0 0" 
+22:57:44 [1]: "tmpfs /sys/fs/cgroup tmpfs ro,nosuid,nodev,noexec,mode=755 0 0" 
+22:57:44 [1]: "cgroup2 /sys/fs/cgroup/unified cgroup2 rw,nosuid,nodev,noexec,relatime,nsdelegate 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/systemd cgroup rw,nosuid,nodev,noexec,relatime,xattr,name=systemd 0 0" 
+22:57:44 [1]: "pstore /sys/fs/pstore pstore rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "bpf /sys/fs/bpf bpf rw,nosuid,nodev,noexec,relatime,mode=700 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/blkio cgroup rw,nosuid,nodev,noexec,relatime,blkio 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/pids cgroup rw,nosuid,nodev,noexec,relatime,pids 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/memory cgroup rw,nosuid,nodev,noexec,relatime,memory 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/net_cls,net_prio cgroup rw,nosuid,nodev,noexec,relatime,net_cls,net_prio 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/devices cgroup rw,nosuid,nodev,noexec,relatime,devices 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/cpuset cgroup rw,nosuid,nodev,noexec,relatime,cpuset 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/cpu,cpuacct cgroup rw,nosuid,nodev,noexec,relatime,cpu,cpuacct 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/freezer cgroup rw,nosuid,nodev,noexec,relatime,freezer 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/hugetlb cgroup rw,nosuid,nodev,noexec,relatime,hugetlb 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/perf_event cgroup rw,nosuid,nodev,noexec,relatime,perf_event 0 0" 
+22:57:44 [1]: "cgroup /sys/fs/cgroup/rdma cgroup rw,nosuid,nodev,noexec,relatime,rdma 0 0" 
+22:57:44 [1]: "/dev/sr0 /run/initramfs/live iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048 0 0" 
+22:57:44 [1]: "/dev/loop0 /run/initramfs/squashfs_container squashfs ro,relatime 0 0" 
+22:57:44 [1]: "/dev/loop1 /run/rootfsbase ext4 ro,relatime 0 0" 
+22:57:44 [1]: "LiveOS_rootfs / overlay rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs/rw,workdir=/run/overlayfs/work 0 0" 
+22:57:44 [1]: "rpc_pipefs /var/lib/nfs/rpc_pipefs rpc_pipefs rw,relatime 0 0" 
+22:57:44 [1]: "systemd-1 /proc/sys/fs/binfmt_misc autofs rw,relatime,fd=33,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=20446 0 0" 
+22:57:44 [1]: "debugfs /sys/kernel/debug debugfs rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "mqueue /dev/mqueue mqueue rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: "hugetlbfs /dev/hugepages hugetlbfs rw,relatime,pagesize=2M 0 0" 
+22:57:44 [1]: "tmpfs /run/user/1000 tmpfs rw,nosuid,nodev,relatime,size=297204k,mode=700,uid=1000,gid=1000 0 0" 
+22:57:44 [1]: "gvfsd-fuse /run/user/1000/gvfs fuse.gvfsd-fuse rw,nosuid,nodev,relatime,user_id=1000,group_id=1000 0 0" 
+22:57:44 [1]: "tracefs /sys/kernel/debug/tracing tracefs rw,nosuid,nodev,noexec,relatime 0 0" 
+22:57:44 [1]: ClearTempMountsJob finished. Here's what was done:
+ "" 
+22:57:44 [0]: Starting job "Clear mounts for partitioning operations on /dev/vda" 
+22:57:45 [1]: ClearMountsJob finished. Here's what was done:
+ "" 
+22:57:45 [0]: Starting job "Create new msdos partition table on /dev/vda." 
+22:57:45 [1]: CreatePartitionTableJob::createTable trying to make table for device "/dev/vda" 
+22:57:45 [1]: Creating new partition table of type "msdos" , uncommitted yet:
+ true 
+22:57:45 [1]: lsblk:
+ "NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT\nloop0    7:0    0  4.1G  1 loop /run/initramfs/squashfs_container\nloop1    7:1    0 26.1G  1 loop /run/rootfsbase\nsr0     11:0    1  4.2G  0 rom  /run/initramfs/live\nvda    253:0    0   20G  0 disk \n\xE2\x94\x94\xE2\x94\x80vda1 253:1    0   20G  0 part \n" 
+22:57:45 [1]: mount:
+ "sysfs on /sys type sysfs (rw,nosuid,nodev,noexec,relatime)\nproc on /proc type proc (rw,nosuid,nodev,noexec,relatime)\ndevtmpfs on /dev type devtmpfs (rw,nosuid,size=1453304k,nr_inodes=363326,mode=755)\nsecurityfs on /sys/kernel/security type securityfs (rw,nosuid,nodev,noexec,relatime)\ntmpfs on /dev/shm type tmpfs (rw,nosuid,nodev)\ndevpts on /dev/pts type devpts (rw,nosuid,noexec,relatime,gid=5,mode=620,ptmxmode=000)\ntmpfs on /run type tmpfs (rw,nosuid,nodev,mode=755)\ntmpfs on /sys/fs/cgroup type tmpfs (ro,nosuid,nodev,noexec,mode=755)\ncgroup2 on /sys/fs/cgroup/unified type cgroup2 (rw,nosuid,nodev,noexec,relatime,nsdelegate)\ncgroup on /sys/fs/cgroup/systemd type cgroup (rw,nosuid,nodev,noexec,relatime,xattr,name=systemd)\npstore on /sys/fs/pstore type pstore (rw,nosuid,nodev,noexec,relatime)\nbpf on /sys/fs/bpf type bpf (rw,nosuid,nodev,noexec,relatime,mode=700)\ncgroup on /sys/fs/cgroup/blkio type cgroup (rw,nosuid,nodev,noexec,relatime,blkio)\ncgroup on /sys/fs/cgroup/pids type cgroup (rw,nosuid,nodev,noexec,relatime,pids)\ncgroup on /sys/fs/cgroup/memory type cgroup (rw,nosuid,nodev,noexec,relatime,memory)\ncgroup on /sys/fs/cgroup/net_cls,net_prio type cgroup (rw,nosuid,nodev,noexec,relatime,net_cls,net_prio)\ncgroup on /sys/fs/cgroup/devices type cgroup (rw,nosuid,nodev,noexec,relatime,devices)\ncgroup on /sys/fs/cgroup/cpuset type cgroup (rw,nosuid,nodev,noexec,relatime,cpuset)\ncgroup on /sys/fs/cgroup/cpu,cpuacct type cgroup (rw,nosuid,nodev,noexec,relatime,cpu,cpuacct)\ncgroup on /sys/fs/cgroup/freezer type cgroup (rw,nosuid,nodev,noexec,relatime,freezer)\ncgroup on /sys/fs/cgroup/hugetlb type cgroup (rw,nosuid,nodev,noexec,relatime,hugetlb)\ncgroup on /sys/fs/cgroup/perf_event type cgroup (rw,nosuid,nodev,noexec,relatime,perf_event)\ncgroup on /sys/fs/cgroup/rdma type cgroup (rw,nosuid,nodev,noexec,relatime,rdma)\n/dev/sr0 on /run/initramfs/live type iso9660 (ro,relatime,nojoliet,check=s,map=n,blocksize=2048)\n/run/initramfs/live/LiveOS/squashfs.img on /run/initramfs/squashfs_container type squashfs (ro,relatime)\n/run/initramfs/squashfs_container/LiveOS/rootfs.img on /run/rootfsbase type ext4 (ro,relatime)\nLiveOS_rootfs on / type overlay (rw,relatime,lowerdir=/run/rootfsbase,upperdir=/run/overlayfs/rw,workdir=/run/overlayfs/work)\nrpc_pipefs on /var/lib/nfs/rpc_pipefs type rpc_pipefs (rw,relatime)\nsystemd-1 on /proc/sys/fs/binfmt_misc type autofs (rw,relatime,fd=33,pgrp=1,timeout=0,minproto=5,maxproto=5,direct,pipe_ino=20446)\ndebugfs on /sys/kernel/debug type debugfs (rw,nosuid,nodev,noexec,relatime)\nmqueue on /dev/mqueue type mqueue (rw,nosuid,nodev,noexec,relatime)\nhugetlbfs on /dev/hugepages type hugetlbfs (rw,relatime,pagesize=2M)\ntmpfs on /run/user/1000 type tmpfs (rw,nosuid,nodev,relatime,size=297204k,mode=700,uid=1000,gid=1000)\ngvfsd-fuse on /run/user/1000/gvfs type fuse.gvfsd-fuse (rw,nosuid,nodev,relatime,user_id=1000,group_id=1000)\ntracefs on /sys/kernel/debug/tracing type tracefs (rw,nosuid,nodev,noexec,relatime)\n" 
+22:57:45 [0]: Starting job "Create new 14087MB partition on /dev/vda (Virtio Block Device) with file system btrfs." 
+22:57:46 [0]: Starting job "Create new 6385MB partition on /dev/vda (Virtio Block Device) with file system linuxswap." 
+22:57:46 [0]: Starting job "Set partition information" 
+22:57:46 [1]: Gathering UUIDs for partitions that exist now. 
+22:57:46 [1]: QHash(("/dev/vda2", "846b894d-8cd7-46e1-a04e-c637cc8ba01a")("/dev/vda1", "6272cbb6-eaed-4c6c-816d-f2726cb9e115")) 
+22:57:46 [1]: Writing to GlobalStorage["partitions"] 
+22:57:46 [1]: "/dev/vda1" mtpoint: "/" fs: QVariant(QString, "btrfs") ( QVariant(QString, "btrfs") ) "6272cbb6-eaed-4c6c-816d-f2726cb9e115" 
+22:57:46 [1]: "/dev/vda2" mtpoint: "" fs: QVariant(QString, "linuxswap") ( QVariant(QString, "linuxswap") ) "846b894d-8cd7-46e1-a04e-c637cc8ba01a" 
+22:57:46 [1]: FillGlobalStorageJob writing bootLoader path: QVariant(QVariantMap, QMap(("installPath", QVariant(QString, "/dev/vda")))) 
+22:57:46 [0]: Starting job "Set timezone to America/New_York" 
+22:57:46 [0]: No rootMountPoint in global storage 
+22:57:46 [0]: No rootMountPoint in global storage 
+22:57:46 [0]: Installation failed: 
+22:57:46 [0]: - message: "Cannot set timezone." 
+22:57:46 [0]: - details: "Link creation failed, target: /usr/share/zoneinfo/America/New_York; link name: /etc/localtime" 
+22:57:46 [0]: Calamares will quit when the dialog closes. 
+22:57:46 [1]: FinishedPage::setUpRestart() 
+22:58:37 [8]: Shutting down Calamares... 
+22:58:37 [8]: Finished shutdown. 
+22:58:37 [0]: QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+22:58:37 [0]: QBasicTimer::start: QBasicTimer can only be used with threads started with QThread
+
+`
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/2</link>
+        <pubDate>Thu, 31 Oct 2024 05:36:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+      <item>
+        <title>Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</title>
+        <dc:creator><![CDATA[Mutaz]]></dc:creator>
+        <description><![CDATA[
+            <p>I have a problem installing the KickSecure version… Every time I reach the penultimate stage, it shows me: timezone failed. I tried my region and more than one region, but it was not resolved.<br>
+</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/7fd8400eaffb5d5db553ae8ca07c4704a6850f78" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_666x500.jpeg" alt="image" data-base62-sha1="ieXX4eL06RlzVi8U8r9DlRBfPzW" width="666" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_666x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_999x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/7fd8400eaffb5d5db553ae8ca07c4704a6850f78_2_1332x1000.jpeg 2x" data-dominant-color="9FA09D"></a></div><p></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652/1</link>
+        <pubDate>Thu, 31 Oct 2024 05:33:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-652-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-installation-cannot-set-timezone-link-creation-failed-target-usr-share-timezone-link-name-etc-localtime/652.rss">Kicksecure installation: Cannot set timezone. link creation failed, target /usr/share/timezone; link name: /etc/localtime</source>
+      </item>
+  </channel>
+</rss>
