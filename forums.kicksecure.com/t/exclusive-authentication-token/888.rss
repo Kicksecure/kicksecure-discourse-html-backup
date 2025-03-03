@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Exclusive Authentication Token</title>
+    <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888</link>
+    <description>**Proposal for** **Exclusive Authentication Token**:
+
+system multifactor auth and killswitch in one user-tethered dongle
+
+Secure boot can be implemented in Kicksecure for platform binding, but what about other hardware-engaging options like locking LUKS with a security key?
+
+* search: support nitrokey com – Unlocking LUKS with a USB key on Fedora/Qubes
+* search: Fedora forum - which dracut method (Yubikey)
+
+* What does the Kicksecure team think about measured boot (HEADS BIOS) and Anti-Evil Maid (see AEM - Qubes OS + TPM)?
+
+*BusKill* by Michael Altfield (on github) utilizes an app that triggers a hotplug removal event (in libusb) and a specific drive and port can be designated (usb: 00x , 00x) so that other USB devices do not trigger the shutdown.
+
+Therefore, **a single usb device could both** authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).
+
+Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?
+
+In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</description>
+    
+    <lastBuildDate>Thu, 30 Jan 2025 16:58:49 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[maltfield]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Quiksilver" data-post="6" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>How exactly does that work?</p>
+</blockquote>
+</aside>
+<p><a class="mention" href="https://forums.kicksecure.com/u/quiksilver">@quiksilver</a> please see:</p>
+<ul>
+<li><a href="https://humandecoded.io/qubes-os-yubikey-buskill/" class="inline-onebox" rel="noopener nofollow ugc">Qubes OS - Yubikey + BusKill</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/7</link>
+        <pubDate>Thu, 30 Jan 2025 16:58:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-7</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="maltfield" data-post="3" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/maltfield/48/113_2.png" class="avatar"> maltfield:</div>
+<blockquote>
+<p>We do have at least one BusKill user who uses a YubiKey to both unlock their computer and trigger a lockscreen when removed.</p>
+</blockquote>
+</aside>
+<p>How exactly does that work?<br>
+Would you have to have the Yubikey plugged in the whole time then unplug it when you leave the workstation?</p>
+<p>Also nice work on BusKill BTW I’m a bigly impressed.</p>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/6</link>
+        <pubDate>Wed, 22 Jan 2025 00:53:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-6</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="maltfield" data-post="3" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/maltfield/48/113_2.png" class="avatar"> maltfield:</div>
+<blockquote>
+<p>Unfortunately, we see a lot of systems (ab)using this tech as a single factor. I think it would be wise to make sure your LUKS unlocking <em>always</em> requires the user to input a something-you-know secret.</p>
+</blockquote>
+</aside>
+<p>Right.</p>
+<p>Improved chapter <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM_plus_Password">TPM plus Password</a> a bit just now.</p>
+<blockquote>
+<p>Full disk encryption password as first factor (something you know) plus a TPM as a second factor (something you have).</p>
+<p>At the time of writing, this is unavailable in any Linux distribution. See the comparison table below.</p>
+</blockquote>
+<p><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM_Encryption_Comparison_Table">TPM Encryption Comparison Table</a></p>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/5</link>
+        <pubDate>Tue, 21 Jan 2025 13:26:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-5</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>You should be able to post links now.<br>
+(<a href="https://www.kicksecure.com/wiki/Forum_Best_Practices#Posting_Links_for_New_Users">Posting Links for New Users</a>)</p>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/4</link>
+        <pubDate>Tue, 21 Jan 2025 12:41:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-4</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[maltfield]]></dc:creator>
+        <description><![CDATA[
+            <p>In general, I really like the idea of using hardware security tokens (USB, TPM, HSM, etc) for use as a <em>second</em> factor.</p>
+<p>Unfortunately, we see a lot of systems (ab)using this tech as a single factor. I think it would be wise to make sure your LUKS unlocking <em>always</em> requires the user to input a something-you-know secret.</p>
+<p>We do have at least one BusKill user who uses a YubiKey to both unlock their computer and trigger a lockscreen when removed.</p>
+<p>Edit: apparently I can’t add links to this forum, but just search for “humandecoded qubes yubikey buskill”</p>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/3</link>
+        <pubDate>Mon, 20 Jan 2025 20:07:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-3</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>TPM for <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption" class="inline-onebox">Full Disk Encryption (FDE)</a>…</p>
+<ul>
+<li>Not a priority.</li>
+<li><a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption#TPM">TPM</a></li>
+<li><a href="https://forums.kicksecure.com/t/ubiquity-lvm-tpm/585" class="inline-onebox">Ubiquity / LVM / TPM</a></li>
+</ul>
+<aside class="quote no-group" data-username="MasonicMazer" data-post="1" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/9d8465/48.png" class="avatar"> MasonicMazer:</div>
+<blockquote>
+<p>BusKill</p>
+</blockquote>
+</aside>
+<p>Planned.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/panic-button-panic-shutdown-buskill-the-usb-kill-cord-for-your-laptop/13755">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/panic-button-panic-shutdown-buskill-the-usb-kill-cord-for-your-laptop/13755" target="_blank" rel="noopener" title="11:16AM - 08 June 2022">Whonix Forum – 8 Jun 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/panic-button-panic-shutdown-buskill-the-usb-kill-cord-for-your-laptop/13755" target="_blank" rel="noopener">panic button / panic shutdown / BusKill - The USB kill cord for your laptop</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">component_security</span>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+            <span class="discourse-tag simple">milestone_whonix_17</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>"Why BusKill?  BusKill is a Dead Man Switch triggered when a magnetic breakaway is tripped, severing a USB connection. "    Has articles about qubes as well:      Sound an interesting project.  @maltfield nice stuff 😉</p>
+
+  <p>
+    <span class="label1">Reading time: 2 mins 🕑</span>
+      <span class="label2">Likes: 13 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="MasonicMazer" data-post="1" data-topic="888">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/9d8465/48.png" class="avatar"> MasonicMazer:</div>
+<blockquote>
+<p>What does the Kicksecure team think about measured boot (HEADS BIOS) and Anti-Evil Maid (see AEM - Qubes OS + TPM)?</p>
+</blockquote>
+</aside>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Verified_Boot#Boot_Block_versus_TPM">Boot Block versus TPM</a></li>
+<li><a href="https://www.kicksecure.com/wiki/Verified_Boot#Boot_Block_Based_Attacks_Against_Measured_Boot">Boot Block Based Attacks Against Measured Boot</a></li>
+<li>and that page <a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot - Kicksecure</a> generally</li>
+<li>Created forum topic <a href="https://forums.kicksecure.com/t/verified-boot/901" class="inline-onebox">Verified Boot</a>  just now.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/2</link>
+        <pubDate>Mon, 20 Jan 2025 07:43:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-2</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+      <item>
+        <title>Exclusive Authentication Token</title>
+        <dc:creator><![CDATA[MasonicMazer]]></dc:creator>
+        <description><![CDATA[
+            <p><strong>Proposal for</strong> <strong>Exclusive Authentication Token</strong>:</p>
+<p>system multifactor auth and killswitch in one user-tethered dongle</p>
+<p>Secure boot can be implemented in Kicksecure for platform binding, but what about other hardware-engaging options like locking LUKS with a security key?</p>
+<ul>
+<li>
+<p>search: support nitrokey com – Unlocking LUKS with a USB key on Fedora/Qubes</p>
+</li>
+<li>
+<p>search: Fedora forum - which dracut method (Yubikey)</p>
+</li>
+<li>
+<p>What does the Kicksecure team think about measured boot (HEADS BIOS) and Anti-Evil Maid (see AEM - Qubes OS + TPM)?</p>
+</li>
+</ul>
+<p><em>BusKill</em> by Michael Altfield (on github) utilizes an app that triggers a hotplug removal event (in libusb) and a specific drive and port can be designated (usb: 00x , 00x) so that other USB devices do not trigger the shutdown.</p>
+<p>Therefore, <strong>a single usb device could both</strong> authenticate LUKS cryptab with FIDO (biometric and/or unique physical token) and trigger a hotplug removal event in libusb on the BusKill application (python, sha256, .btz).</p>
+<p>Would Kicksecure approve of this feature or can anyone on the development team find any security flaw with this technique being implemented?</p>
+<p>In TAILS OS, all one has to do is attach a lanyard to the TAILS USB device and wrap the cord around your wrist. If the computer is forcefully removed from you, both the shutdown sequence is initiated and the RAM is cleared and persistent storage is again locked in the FDE state. However, if developer mode is and security-misc is fully enabled on Kicksecure, one has to wait for sudo shutdown and if unencumbered on the stable or testing mode, the computer could be stolen while in an unlocked state.</p>
+          <p><a href="https://forums.kicksecure.com/t/exclusive-authentication-token/888/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/exclusive-authentication-token/888/1</link>
+        <pubDate>Sat, 18 Jan 2025 13:03:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-888-1</guid>
+        <source url="https://forums.kicksecure.com/t/exclusive-authentication-token/888.rss">Exclusive Authentication Token</source>
+      </item>
+  </channel>
+</rss>
