@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Add VMs in /90overlay-root/overlay-mount.sh</title>
+    <link>https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962</link>
+    <description>Hello. in 90overlay-root creates /live/image file system for live mode
+
+```
+#!/bin/sh
+
+# make a read-only nfsroot writeable by using overlayfs
+# the nfsroot is already mounted to $NEWROOT
+# add the parameter rootovl to the kernel, to activate this feature
+
+. /lib/dracut-lib.sh
+
+if ! getargbool 0 rootovl ; then
+    return
+fi
+
+modprobe overlay
+
+# a little bit tuning
+mount -o remount,nolock,noatime $NEWROOT
+
+# Move root
+# --move does not always work. Google &gt;mount move &quot;wrong fs&quot;&lt; for
+#     details
+mkdir -p /live/image
+mount --bind $NEWROOT /live/image
+umount $NEWROOT
+
+# Create tmpfs
+mkdir /cow
+mount -n -t tmpfs -o mode=0755 tmpfs /cow
+mkdir /cow/work /cow/rw
+
+# Merge both to new Filesystem
+mount -t overlay -o noatime,lowerdir=/live/image,upperdir=/cow/rw,workdir=/cow/work,default_permissions overlay $NEWROOT
+
+# Let filesystems survive pivot
+mkdir -p $NEWROOT/live/cow
+mkdir -p $NEWROOT/live/image
+mount --bind /cow/rw $NEWROOT/live/cow
+umount /cow
+mount --bind /live/image $NEWROOT/live/image
+umount /live/image
+```
+
+is it possible to add a mount and launch virtual disk /var/lib/libvirt/images/debian.qcow2 (file itself is in /live/image) that it is launched in flows without consumption of additional memory? it will make a kicksecure a fantastically secure system (much cooler than qubes). live mode is perfectly launched by live-ISO, but how to avoid a load on memory with an already installed system, as is done with podman containers? solving this problem of memory load will help strengthen anti-forensicism. I use live mode every day, but even 32g of memory is not enough for working with VMs</description>
+    
+    <lastBuildDate>Sat, 15 Mar 2025 19:36:49 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Add VMs in /90overlay-root/overlay-mount.sh</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>I am interested in your opinion. What is safer for a disc with personal data - Qubes OS or Kicksecure Live Mode + security-misc? How is easier to hack dm0 host disk. Virtualization gives serious protection, but live mode + security-misc is protection against hacking and forensics.<br>
+I used Qubes and Secureblue. These systems are very cool, but both do nothing against forensics, but this is important. And it seems to me that Kicksecure can become the coolest OS if solve problem of virtualization without using 64g ram. I understand, live mode is more vulnerable than Tails USB. Or am I adding too much meaning and it is enough to use live VM (for example, Kicksecure live VM in Qubes) and shred a journal against forensics?</p>
+          <p><a href="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/3</link>
+        <pubDate>Sat, 15 Mar 2025 19:36:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-962-3</guid>
+        <source url="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962.rss">Add VMs in /90overlay-root/overlay-mount.sh</source>
+      </item>
+      <item>
+        <title>Add VMs in /90overlay-root/overlay-mount.sh</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Possible in theory. Linux, Debian, dracut(-ng) is great due to it’s sheer amount of features and available customization.</p>
+<p>Same as with Debian. Unspecific to Kicksecure.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1742031024" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>But unfortunately:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Too_Difficult">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1742031024" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Too_Difficult" target="_blank" rel="noopener" title="10:47AM - 22 January 2025">Kicksecure – 22 Jan 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Too_Difficult" target="_blank" rel="noopener">Too Dificult</a></h3>
+
+  <p>This request is too difficult, unlikely to get resolved through free forum discussions.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/2</link>
+        <pubDate>Sat, 15 Mar 2025 16:26:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-962-2</guid>
+        <source url="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962.rss">Add VMs in /90overlay-root/overlay-mount.sh</source>
+      </item>
+      <item>
+        <title>Add VMs in /90overlay-root/overlay-mount.sh</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello. in 90overlay-root creates /live/image file system for live mode</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+# make a read-only nfsroot writeable by using overlayfs
+# the nfsroot is already mounted to $NEWROOT
+# add the parameter rootovl to the kernel, to activate this feature
+
+. /lib/dracut-lib.sh
+
+if ! getargbool 0 rootovl ; then
+    return
+fi
+
+modprobe overlay
+
+# a little bit tuning
+mount -o remount,nolock,noatime $NEWROOT
+
+# Move root
+# --move does not always work. Google &gt;mount move "wrong fs"&lt; for
+#     details
+mkdir -p /live/image
+mount --bind $NEWROOT /live/image
+umount $NEWROOT
+
+# Create tmpfs
+mkdir /cow
+mount -n -t tmpfs -o mode=0755 tmpfs /cow
+mkdir /cow/work /cow/rw
+
+# Merge both to new Filesystem
+mount -t overlay -o noatime,lowerdir=/live/image,upperdir=/cow/rw,workdir=/cow/work,default_permissions overlay $NEWROOT
+
+# Let filesystems survive pivot
+mkdir -p $NEWROOT/live/cow
+mkdir -p $NEWROOT/live/image
+mount --bind /cow/rw $NEWROOT/live/cow
+umount /cow
+mount --bind /live/image $NEWROOT/live/image
+umount /live/image
+</code></pre>
+<p>is it possible to add a mount and launch virtual disk /var/lib/libvirt/images/debian.qcow2 (file itself is in /live/image) that it is launched in flows without consumption of additional memory? it will make a kicksecure a fantastically secure system (much cooler than qubes). live mode is perfectly launched by live-ISO, but how to avoid a load on memory with an already installed system, as is done with podman containers? solving this problem of memory load will help strengthen anti-forensicism. I use live mode every day, but even 32g of memory is not enough for working with VMs</p>
+          <p><a href="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962/1</link>
+        <pubDate>Sat, 15 Mar 2025 14:46:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-962-1</guid>
+        <source url="https://forums.kicksecure.com/t/add-vms-in-90overlay-root-overlay-mount-sh/962.rss">Add VMs in /90overlay-root/overlay-mount.sh</source>
+      </item>
+  </channel>
+</rss>
