@@ -14,9 +14,53 @@
 &gt; 2. If a config file modified by the sysadmin has been updated by the pkg maintainer, select &quot;open root shell to inspect the problem&quot;*
 &gt; 3. Congrats</description>
     
-    <lastBuildDate>Mon, 20 Jan 2025 07:32:56 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 18 Mar 2025 20:53:03 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Like last time, I don’t want to assume bad faith, but at this point I’m really suspecting blatant trolling at this point.</p>
+<p>First, a breakdown of what the screenshot is. They’re showing the output of the <code>needrestart</code> tool, which is a Perl script whose job is to find any running programs on the system that have updates on disk that require the program to be restarted for those updates to fully apply. For instance, if you have GIMP running, and the GIMP binary gets updated, you need to restart GIMP for those updates to apply. <code>needrestart</code> is intended to see that GIMP has been updated on disk, and then tell the user “hey, you should restart GIMP”. In actual use, <code>needrestart</code> is usually used on server systems so that the sysadmin knows what services they need to prepare to restart after running system updates.</p>
+<p>The screenshot shows that there is an executable running on Proudmuslim’s system called <code>frontend</code>. What <code>frontend</code> is or what it does is not elaborated on any further, all we know is that it’s running on the system and <code>needrestart</code> believes it needs to be restarted for updates to apply to it. We’re then shown the sha256sum of the <code>frontend</code> binary itself (apparently located in Proudmuslim’s home directory). We then also see the sha256sum of the version of the <code>frontend</code> binary that is actively running (retrieved via some fancy tricks using the <code>/proc</code> virtual filesystem). The sha256sums of the two files are identical. This is supposed to imply that <code>needrestart</code> is broken, because it shows a program as requiring a restart when it hasn’t been modified.</p>
+<p>So that’s what the screenshot is supposed to <em>show.</em> On the surface this sounds reasonable. If a program hasn’t been updated, why does it need restarted? In a simple world where each program was entirely self-contained, this would be a valid criticism and a bug that needed fixed. Linux isn’t simple though.</p>
+<p>Most programs are not entirely self-contained, but instead depend on libraries, which are basically bundles of code that other programs can use for various reasons. For instance, say you want to handle data in your program that is formatted as XML. You don’t want to write an XML parser, because that’s a monumental task, and at the same time there are probably 20 other programs on your computer that also need to parse XML for one reason or another. What you do then is you find a library that provides XML parsing features, and you just use that in your program. When you do this, your program <em>links</em> against the library, which is a fancy programmer term that in essence means the library is now part of your program similar to how a device plugged into your computer is essentially part of the computer now.</p>
+<p>When a program gets updated, the way to get those updates to apply to the running version of the program is pretty simple - just restart the program. So what happens when a library gets updated? Restart the library? That isn’t a thing, any more than restarting an SD card is a thing. You can’t really replace the in-memory library code with the new code either. (OK, you <em>could</em>, but… hot reload is an entire mess all of its own, let’s not go there.) The easiest solution is to restart <em>every program that depends on the library</em>. Any program you restart will load and use the current version of the library on disk, rather than the older, outdated version, and thus the library update is applied for that executable. Restart all of the executables that need the library, and now the library update is fully applied to all running programs.</p>
+<p>What this means is that a program can end up not changing at all during a system update, and <em>still</em> need to be restarted for system updates to apply to it. This happens all the time, for all sorts of reasons. It’s just how binaries on Linux work.</p>
+<p>On top of that, not all programs are binaries. Some of them are scripts, where you have a text description of a program that some <em>other</em> executable reads. That other executable (called an interpreter) then does the things the script says it should do. In this instance, if the interpreter or any of its supporting libraries are updated, the script will need restarted for the changes to apply to it in memory. <code>needrestart</code> is designed to detect when an interpreter is updated, and recomment that running scripts be restarted for the update to fully apply. (Oh, and to throw one more layer of complexity into the picture, scripts oftentimes depend on other scripts, and on top of that, <em>sometimes</em> a script can tell the interpreter to load actual libraries (not scripts) that the interpreter usually wouldn’t load. So… yeah. This is a deep rabbit hole.)</p>
+<p>Now, is this exactly what Proudmuslim is running into? We don’t know, they didn’t give nearly enough info to tell. We’d need to know:</p>
+<ul>
+<li>Where was the running <code>frontend</code> executable originally on the disk? Is the version in the home directory actually the running version, or is this an old copy and the real executable is somewhere else on the filesystem?</li>
+<li>Is <code>frontend</code> a script or a real executable?</li>
+<li>If it’s an executable, what libraries does it depend on?</li>
+<li>If it’s a script, what interpreter does it need and what libraries does that interpreter depend on?</li>
+<li>What exactly has been updated on their system? Did a dependency somewhere get updated that triggered the need for <code>frontend</code> to be restarted?</li>
+</ul>
+<p>There might be even more we’d need to know, but basically, all they’ve shown here is that the contents of the running <code>frontend</code> executable match the contents of the <code>frontend</code> executable on their home directory. This says nothing about whether <code>needrestart</code> is wrong that <code>frontend</code> needs restarted or not.</p>
+<p>Also, even if <code>needrestart</code> did get it wrong, <code>needrestart</code> isn’t a Kicksecure creation at all! It’s actually a project all of its own (<a href="https://github.com/liske/needrestart" class="inline-onebox" rel="noopener nofollow ugc">GitHub - liske/needrestart: Restart daemons after library updates.</a>), packaged for Debian (<a href="https://packages.debian.org/bookworm/needrestart" class="inline-onebox" rel="noopener nofollow ugc">Debian -- Details of package needrestart in bookworm</a>), and it’s not even installed on Kicksecure by default. So if Proudmuslim is running into a <em>real</em> bug in needrestart, they should make sure they can reproduce it in vanilla Debian, then file a bug with Debian or something. Blaming this on Kicksecure  makes no sense.</p>
+          <p><a href="https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886/7</link>
+        <pubDate>Tue, 18 Mar 2025 20:53:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-886-7</guid>
+        <source url="https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886.rss">upgrade-nonroot privilege escalation issue?</source>
+      </item>
+      <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[newcool]]></dc:creator>
+        <description><![CDATA[
+            <p>the same user posted</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/fb180ef3c902f77a9e5b1ba57404fa49338380b8" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8_2_690x253.jpeg" alt="image" data-base62-sha1="zPhob5OuGyyIkyuCBRsR1tB79Xi" width="690" height="253" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8_2_690x253.jpeg, https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg 2x" data-dominant-color="182028"></a></div><p></p>
+<p><a href="https://xcancel.com/ProudmuslimDev/status/1901711364240068816#m" class="onebox" target="_blank" rel="noopener nofollow ugc">https://xcancel.com/ProudmuslimDev/status/1901711364240068816#m</a></p>
+<p>What does he mean with that? <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p>
+          <p><a href="https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886/6</link>
+        <pubDate>Tue, 18 Mar 2025 20:13:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-886-6</guid>
+        <source url="https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886.rss">upgrade-nonroot privilege escalation issue?</source>
+      </item>
       <item>
         <title>upgrade-nonroot privilege escalation issue?</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

@@ -5,6 +5,556 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Like last time, I don’t want to assume bad faith, but at this point I’m really suspecting blatant trolling at this point.</p>
+<p>First, a breakdown of what the screenshot is. They’re showing the output of the <code>needrestart</code> tool, which is a Perl script whose job is to find any running programs on the system that have updates on disk that require the program to be restarted for those updates to fully apply. For instance, if you have GIMP running, and the GIMP binary gets updated, you need to restart GIMP for those updates to apply. <code>needrestart</code> is intended to see that GIMP has been updated on disk, and then tell the user “hey, you should restart GIMP”. In actual use, <code>needrestart</code> is usually used on server systems so that the sysadmin knows what services they need to prepare to restart after running system updates.</p>
+<p>The screenshot shows that there is an executable running on Proudmuslim’s system called <code>frontend</code>. What <code>frontend</code> is or what it does is not elaborated on any further, all we know is that it’s running on the system and <code>needrestart</code> believes it needs to be restarted for updates to apply to it. We’re then shown the sha256sum of the <code>frontend</code> binary itself (apparently located in Proudmuslim’s home directory). We then also see the sha256sum of the version of the <code>frontend</code> binary that is actively running (retrieved via some fancy tricks using the <code>/proc</code> virtual filesystem). The sha256sums of the two files are identical. This is supposed to imply that <code>needrestart</code> is broken, because it shows a program as requiring a restart when it hasn’t been modified.</p>
+<p>So that’s what the screenshot is supposed to <em>show.</em> On the surface this sounds reasonable. If a program hasn’t been updated, why does it need restarted? In a simple world where each program was entirely self-contained, this would be a valid criticism and a bug that needed fixed. Linux isn’t simple though.</p>
+<p>Most programs are not entirely self-contained, but instead depend on libraries, which are basically bundles of code that other programs can use for various reasons. For instance, say you want to handle data in your program that is formatted as XML. You don’t want to write an XML parser, because that’s a monumental task, and at the same time there are probably 20 other programs on your computer that also need to parse XML for one reason or another. What you do then is you find a library that provides XML parsing features, and you just use that in your program. When you do this, your program <em>links</em> against the library, which is a fancy programmer term that in essence means the library is now part of your program similar to how a device plugged into your computer is essentially part of the computer now.</p>
+<p>When a program gets updated, the way to get those updates to apply to the running version of the program is pretty simple - just restart the program. So what happens when a library gets updated? Restart the library? That isn’t a thing, any more than restarting an SD card is a thing. You can’t really replace the in-memory library code with the new code either. (OK, you <em>could</em>, but… hot reload is an entire mess all of its own, let’s not go there.) The easiest solution is to restart <em>every program that depends on the library</em>. Any program you restart will load and use the current version of the library on disk, rather than the older, outdated version, and thus the library update is applied for that executable. Restart all of the executables that need the library, and now the library update is fully applied to all running programs.</p>
+<p>What this means is that a program can end up not changing at all during a system update, and <em>still</em> need to be restarted for system updates to apply to it. This happens all the time, for all sorts of reasons. It’s just how binaries on Linux work.</p>
+<p>On top of that, not all programs are binaries. Some of them are scripts, where you have a text description of a program that some <em>other</em> executable reads. That other executable (called an interpreter) then does the things the script says it should do. In this instance, if the interpreter or any of its supporting libraries are updated, the script will need restarted for the changes to apply to it in memory. <code>needrestart</code> is designed to detect when an interpreter is updated, and recomment that running scripts be restarted for the update to fully apply. (Oh, and to throw one more layer of complexity into the picture, scripts oftentimes depend on other scripts, and on top of that, <em>sometimes</em> a script can tell the interpreter to load actual libraries (not scripts) that the interpreter usually wouldn’t load. So… yeah. This is a deep rabbit hole.)</p>
+<p>Now, is this exactly what Proudmuslim is running into? We don’t know, they didn’t give nearly enough info to tell. We’d need to know:</p>
+<ul>
+<li>Where was the running <code>frontend</code> executable originally on the disk? Is the version in the home directory actually the running version, or is this an old copy and the real executable is somewhere else on the filesystem?</li>
+<li>Is <code>frontend</code> a script or a real executable?</li>
+<li>If it’s an executable, what libraries does it depend on?</li>
+<li>If it’s a script, what interpreter does it need and what libraries does that interpreter depend on?</li>
+<li>What exactly has been updated on their system? Did a dependency somewhere get updated that triggered the need for <code>frontend</code> to be restarted?</li>
+</ul>
+<p>There might be even more we’d need to know, but basically, all they’ve shown here is that the contents of the running <code>frontend</code> executable match the contents of the <code>frontend</code> executable on their home directory. This says nothing about whether <code>needrestart</code> is wrong that <code>frontend</code> needs restarted or not.</p>
+<p>Also, even if <code>needrestart</code> did get it wrong, <code>needrestart</code> isn’t a Kicksecure creation at all! It’s actually a project all of its own (<a href="https://github.com/liske/needrestart" class="inline-onebox" rel="noopener nofollow ugc">GitHub - liske/needrestart: Restart daemons after library updates.</a>), packaged for Debian (<a href="https://packages.debian.org/bookworm/needrestart" class="inline-onebox" rel="noopener nofollow ugc">Debian -- Details of package needrestart in bookworm</a>), and it’s not even installed on Kicksecure by default. So if Proudmuslim is running into a <em>real</em> bug in needrestart, they should make sure they can reproduce it in vanilla Debian, then file a bug with Debian or something. Blaming this on Kicksecure  makes no sense.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_7</link>
+        <pubDate>Tue, 18 Mar 2025 20:53:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2379</guid>
+      </item>
+      <item>
+        <title>upgrade-nonroot privilege escalation issue?</title>
+        <dc:creator><![CDATA[@newcool]]></dc:creator>
+        <description><![CDATA[ <p>the same user posted</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/fb180ef3c902f77a9e5b1ba57404fa49338380b8" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8_2_690x253.jpeg" alt="image" data-base62-sha1="zPhob5OuGyyIkyuCBRsR1tB79Xi" width="690" height="253" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8_2_690x253.jpeg, https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/fb180ef3c902f77a9e5b1ba57404fa49338380b8.jpeg 2x" data-dominant-color="182028"></a></div><p></p>
+<p><a href="https://xcancel.com/ProudmuslimDev/status/1901711364240068816#m" class="onebox" target="_blank" rel="noopener nofollow ugc">https://xcancel.com/ProudmuslimDev/status/1901711364240068816#m</a></p>
+<p>What does he mean with that? <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/upgrade-nonroot-privilege-escalation-issue/886#post_6</link>
+        <pubDate>Tue, 18 Mar 2025 20:13:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2378</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Qubes is a different story. Might not work. See Qubes ticket:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/4982">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/4982" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/4982" target="_blank" rel="noopener">implement live boot by porting grub-live to Qubes - amnesia / non-persistent boot / anti-forensics</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2019-04-18" data-time="11:17:08" data-timezone="UTC">11:17AM - 18 Apr 19 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          help wanted
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          C: other
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          privacy
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">https://github.com/Kicksecure/grub-live [0] is a tiny, simple package with a few<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> dependencies (available from packages.debian.org) that can be installed on Debian [1] hosts which adds a live boot menu entry, which means, the operating system gets booted non-persistently. All changes go to RAM instead of disk.
+
+It might not be perfectly amnesic as per [1], [2] but it might be a huge step towards amnesic Qubes?
+
+Not tested for anti-forensics yet but should be doable to test. [4]
+
+Could grub-live be ported to Qubes? Am I overlooking something?
+
+//cc @Algernon-01 (original author of grub-live)
+
+* [0] https://forums.whonix.org/t/whonix-live-mode/3894/121
+* [1] And likely Debian based and other grub based distributions.
+* [2] https://github.com/QubesOS/qubes-issues/issues/1562
+* [3] https://github.com/QubesOS/qubes-issues/issues/1563
+* [4] https://www.whonix.org/wiki/Dev/Technical_Introduction#Forensics</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_14</link>
+        <pubDate>Tue, 18 Mar 2025 18:25:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2377</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <p>Thank you, Patrick. I managed to get live mode working.<br>
+And I sent a friend who uses Qubes documentation on how to launch live mode without grub-live. I saw on Qubes forum that many people like Kicksecure and want to see live mode in Qubes. This will help them run live mode on fedora, since fedora uses dracut</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_13</link>
+        <pubDate>Tue, 18 Mar 2025 18:22:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2376</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <p>Thanks! Live mode appeared in menu after the updates</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_12</link>
+        <pubDate>Tue, 18 Mar 2025 16:53:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2375</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Your <code>/boot/grub/grub.cfg</code> correctly lists:</p>
+<blockquote>
+<p>Kicksecure LIVE mode USER (For daily activities.) GNU/Linux</p>
+</blockquote>
+<p>And has a kernel command line with the more complex parameters for initramfs-tools:</p>
+<blockquote>
+<p>boot=live plainroot union=overlay ip=frommedia noeject nopersistence</p>
+</blockquote>
+<p>Any reason to use initramfs-tools?</p>
+<p>Note, that migrating to dracut might brick booting. → <a href="https://www.kicksecure.com/wiki/Grub-live#dracut">dracut</a></p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dracut">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1742290224" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dracut" target="_blank" rel="noopener" title="01:17PM - 21 January 2025">Kicksecure – 21 Jan 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dracut" target="_blank" rel="noopener">dracut</a></h3>
+
+  <p>dracut, an initrd generator</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_11</link>
+        <pubDate>Tue, 18 Mar 2025 10:42:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2374</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@sam]]></dc:creator>
+        <description><![CDATA[ <pre><code class="lang-auto">[user ~]% dpkg-query -W -f='${db:Status-Status}' initramfs-tools
+installed%                                                                      
+[user ~]% dpkg-query -W -f='${db:Status-Status}' dracut
+config-files%                                                                   
+[user ~]% dpkg -l | grep dist-base-files
+ii  dist-base-files                               3:12.5-1                               all          base files for distributions
+[user ~]% dpkg -l | grep grub-live
+ii  grub-live                                     3:6.9-1                                all          grub live boot menu entry
+ii  grub-live-initramfs-tools                     3:6.9-1                                all          grub live initramfs-tools dependencies
+[user ~]% sudo cat /boot/grub/grub.cfg
+#
+# DO NOT EDIT THIS FILE
+#
+# It is automatically generated by grub-mkconfig using templates
+# from /etc/grub.d and settings from /etc/default/grub
+#
+
+### BEGIN /etc/grub.d/00_header ###
+if [ -s $prefix/grubenv ]; then
+  set have_grubenv=true
+  load_env
+fi
+if [ "${next_entry}" ] ; then
+   set default="${next_entry}"
+   set next_entry=
+   save_env next_entry
+   set boot_once=true
+else
+   set default="0"
+fi
+
+if [ x"${feature_menuentry_id}" = xy ]; then
+  menuentry_id_option="--id"
+else
+  menuentry_id_option=""
+fi
+
+export menuentry_id_option
+
+if [ "${prev_saved_entry}" ]; then
+  set saved_entry="${prev_saved_entry}"
+  save_env saved_entry
+  set prev_saved_entry=
+  save_env prev_saved_entry
+  set boot_once=true
+fi
+
+function savedefault {
+  if [ -z "${boot_once}" ]; then
+    saved_entry="${chosen}"
+    save_env saved_entry
+  fi
+}
+function load_video {
+  if [ x$feature_all_video_module = xy ]; then
+    insmod all_video
+  else
+    insmod efi_gop
+    insmod efi_uga
+    insmod ieee1275_fb
+    insmod vbe
+    insmod vga
+    insmod video_bochs
+    insmod video_cirrus
+  fi
+}
+
+if [ x$feature_default_font_path = xy ] ; then
+   font=unicode
+else
+insmod part_gpt
+insmod ext2
+search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    font="/grub/unicode.pf2"
+fi
+
+if loadfont $font ; then
+  set gfxmode=1280x720
+  load_video
+  insmod gfxterm
+  set locale_dir=$prefix/locale
+  set lang=ru_RU
+  insmod gettext
+fi
+terminal_output gfxterm
+insmod part_gpt
+insmod ext2
+search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+insmod gfxmenu
+loadfont ($root)/grub/themes/dist-common/inter-grub_regular_17.pf2
+loadfont ($root)/grub/themes/dist-common/inter-grub_regular_20.pf2
+loadfont ($root)/grub/themes/dist-common/terminus-grub_14.pf2
+insmod png
+set theme=($root)/grub/themes/kicksecure/theme-16x9.txt
+export theme
+if [ "${recordfail}" = 1 ] ; then
+  set timeout=30
+else
+  if [ x$feature_timeout_style = xy ] ; then
+    set timeout_style=menu
+    set timeout=60
+  # Fallback normal timeout code in case the timeout_style feature is
+  # unavailable.
+  else
+    set timeout=60
+  fi
+fi
+### END /etc/grub.d/00_header ###
+
+### BEGIN /etc/grub.d/05_debian_theme ###
+insmod part_gpt
+insmod ext2
+search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+insmod png
+if background_image /grub/.background_cache.png; then
+  set color_normal=white/black
+  set color_highlight=black/white
+else
+  set menu_color_normal=cyan/blue
+  set menu_color_highlight=white/blue
+fi
+### END /etc/grub.d/05_debian_theme ###### BEGIN /etc/grub.d/10_00_linux_dist ###
+function gfxmode {
+  set gfxpayload="${1}"
+}
+set linux_gfx_mode=1024x768
+export linux_gfx_mode
+menuentry 'Kicksecure GNU/Linux' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+  load_video
+  gfxmode $linux_gfx_mode
+  insmod gzio
+  if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+  insmod part_gpt
+  insmod ext2
+  search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+  echo  'Loading Linux 6.1.0-32-amd64 ...'
+  linux  /vmlinuz-6.1.0-32-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+  echo  'Loading initial ramdisk ...'
+  initrd  /initrd.img-6.1.0-32-amd64
+}
+
+### END /etc/grub.d/10_00_linux_dist ###
+
+### BEGIN /etc/grub.d/10_01_linux_live ###
+function gfxmode {
+  set gfxpayload="${1}"
+}
+set linux_gfx_mode=1024x768
+export linux_gfx_mode
+menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+  load_video
+  gfxmode $linux_gfx_mode
+  insmod gzio
+  if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+  insmod part_gpt
+  insmod ext2
+  search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+  echo  'Loading Linux 6.1.0-32-amd64 ...'
+  linux  /vmlinuz-6.1.0-32-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+  echo  'Loading initial ramdisk ...'
+  initrd  /initrd.img-6.1.0-32-amd64
+}
+
+### END /etc/grub.d/10_01_linux_live ###
+### BEGIN /etc/grub.d/10_50_linux_dist_advanced ###
+submenu 'Advanced options for Kicksecure GNU/Linux' $menuentry_id_option 'gnulinux-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+  menuentry 'Kicksecure GNU/Linux, with Linux 6.1.0-32-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-32-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-32-amd64 ...'
+    linux  /vmlinuz-6.1.0-32-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-32-amd64
+  }
+  menuentry 'Kicksecure GNU/Linux, with Linux 6.1.0-31-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-31-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-31-amd64 ...'
+    linux  /vmlinuz-6.1.0-31-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-31-amd64
+  }
+  menuentry 'Kicksecure GNU/Linux, with Linux 6.1.0-30-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-30-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-30-amd64 ...'
+linux  /vmlinuz-6.1.0-30-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-30-amd64
+  }
+  menuentry 'Kicksecure GNU/Linux, with Linux 6.1.0-29-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-29-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-29-amd64 ...'
+    linux  /vmlinuz-6.1.0-29-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-29-amd64
+  }
+  menuentry 'Kicksecure GNU/Linux, with Linux 6.1.0-28-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-28-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-28-amd64 ...'
+    linux  /vmlinuz-6.1.0-28-amd64 root=UUID=58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-28-amd64
+  }
+}
+
+### END /etc/grub.d/10_50_linux_dist_advanced ###
+### BEGIN /etc/grub.d/10_51_linux_live_advanced ###
+submenu 'Advanced options for Kicksecure LIVE mode USER (For daily activities.) GNU/Linux' $menuentry_id_option 'gnulinux-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+  menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux, with Linux 6.1.0-32-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-32-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-32-amd64 ...'
+    linux  /vmlinuz-6.1.0-32-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-32-amd64
+  }
+  menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux, with Linux 6.1.0-31-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-31-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-31-amd64 ...'
+    linux  /vmlinuz-6.1.0-31-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-31-amd64
+  }
+  menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux, with Linux 6.1.0-30-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-30-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-30-amd64 ...'
+linux  /vmlinuz-6.1.0-30-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-30-amd64
+  }
+  menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux, with Linux 6.1.0-29-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-29-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-29-amd64 ...'
+    linux  /vmlinuz-6.1.0-29-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+    echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-29-amd64
+  }
+  menuentry 'Kicksecure LIVE mode USER (For daily activities.) GNU/Linux, with Linux 6.1.0-28-amd64' --class kicksecure --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-6.1.0-28-amd64-advanced-58dc0e04-da6f-455b-adc2-07cfe8d444c2' {
+    load_video
+    gfxmode $linux_gfx_mode
+    insmod gzio
+    if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
+    insmod part_gpt
+    insmod ext2
+    search --no-floppy --fs-uuid --set=root f04e2c53-0b40-487d-865d-e7258b39951a
+    echo  'Loading Linux 6.1.0-28-amd64 ...'
+    linux  /vmlinuz-6.1.0-28-amd64 root=/dev/disk/by-uuid/58dc0e04-da6f-455b-adc2-07cfe8d444c2 ro  mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt gather_data_sampling=force reg_file_data_sampling=on slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 pti=on randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_bootloader=off random.trust_cpu=off extra_latent_entropy boot=live plainroot union=overlay ip=frommedia noeject nopersistence  rd.luks.uuid=d7c85109-f58c-49f4-a846-e755bb9310d9 loglevel=0 quiet rd.shell=0 rd.emergency=halt
+echo  'Loading initial ramdisk ...'
+    initrd  /initrd.img-6.1.0-28-amd64
+  }
+}
+
+### END /etc/grub.d/10_51_linux_live_advanced ###
+
+### BEGIN /etc/grub.d/20_linux_xen ###
+
+### END /etc/grub.d/20_linux_xen ###
+
+### BEGIN /etc/grub.d/30_os-prober ###
+### END /etc/grub.d/30_os-prober ###
+
+### BEGIN /etc/grub.d/30_uefi-firmware ###
+menuentry 'UEFI Firmware Settings' $menuentry_id_option 'uefi-firmware' {
+  fwsetup
+}
+### END /etc/grub.d/30_uefi-firmware ###
+
+### BEGIN /etc/grub.d/35_fwupd ###
+### END /etc/grub.d/35_fwupd ###
+
+### BEGIN /etc/grub.d/40_custom ###
+# This file provides an easy way to add custom menu entries.  Simply type the
+# menu entries you want to add after this comment.  Be careful not to change
+# the 'exec tail' line above.
+### END /etc/grub.d/40_custom ###
+
+### BEGIN /etc/grub.d/41_custom ###
+if [ -f  ${config_directory}/custom.cfg ]; then
+  source ${config_directory}/custom.cfg
+elif [ -z "${config_directory}" -a -f  $prefix/custom.cfg ]; then
+  source $prefix/custom.cfg
+fi
+### END /etc/grub.d/41_custom ###
+
+### BEGIN /etc/grub.d/45_debugging ###
+### END /etc/grub.d/45_debugging ###
+[user ~]%
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_10</link>
+        <pubDate>Tue, 18 Mar 2025 08:50:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2373</guid>
+      </item>
+      <item>
+        <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="whkicks" data-post="8" data-topic="965">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/8c91f0/48.png" class="avatar"> whkicks:</div>
+<blockquote>
+<p>You probably have a this symlink <code>/etc/grub.d/11_linux_live /etc/grub.d/09_linux_live</code>.</p>
+</blockquote>
+</aside>
+<p>Did you use <a href="https://www.kicksecure.com/wiki/Grub-live#Set_grub-live_as_Default_in_GRUB_boot_menu">Set grub-live as Default in GRUB boot menu</a>?</p>
+<aside class="quote no-group" data-username="whkicks" data-post="8" data-topic="965">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/8c91f0/48.png" class="avatar"> whkicks:</div>
+<blockquote>
+<p>grub-live documentation need an update</p>
+</blockquote>
+</aside>
+<p>This wiki chapter has been updated just now.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/sudo-update-grub-disable-live-mode-timeshift-does-not-restore/965#post_9</link>
+        <pubDate>Tue, 18 Mar 2025 07:43:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2372</guid>
+      </item>
+      <item>
         <title>Sudo update-grub disable live mode! Timeshift does not restore!</title>
         <dc:creator><![CDATA[@whkicks]]></dc:creator>
         <description><![CDATA[ <p>You probably have a this symlink  <code>/etc/grub.d/11_linux_live /etc/grub.d/09_linux_live</code>. Remove it and try <code>sudo ln -s /etc/grub.d/10_01_linux_live  /etc/grub.d/09_linux_live</code>. <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> grub-live documentation need an update</p> ]]></description>
@@ -834,201 +1384,6 @@ INFO[0000] Received shutdown.Stop(), terminating!        PID=10925
         <link>https://forums.kicksecure.com/t/podman-containers-in-live-mode/945#post_2</link>
         <pubDate>Fri, 21 Feb 2025 12:08:22 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2314</guid>
-      </item>
-      <item>
-        <title>Podman containers in Live mode</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>Is it possible to start Distrobox Podman containers in Live mode?</p>
-<p>Error: unable to start container “bacd823a8e3feafeea9bac423b18b96ccaa275a22<br>
-2429b36dd8d167d8f473c2c”: crun: creating <code>/usr/bin/entrypoint</code>: openat2 <code>us r/bin</code>: No such file or directory: OCI runtime attempted to invoke a comman<br>
-d that was not found</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/podman-containers-in-live-mode/945#post_1</link>
-        <pubDate>Thu, 20 Feb 2025 21:45:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2313</guid>
-      </item>
-      <item>
-        <title>Poll: Should the Whisker Menu Be Changed? (Aesthetics)</title>
-        <dc:creator><![CDATA[@kicksecure]]></dc:creator>
-        <description><![CDATA[ <p>I like minimalism and less code = less possibilities for vulnerabilities. So, I did - apt remove xfce4-whiskermenu-plugin - and I use xfce panel’s built-in applications menu or app-launcher. It is absolutely enough for me. <img src="https://forums.kicksecure.com/images/emoji/twitter/sunglasses.png?v=12" title=":sunglasses:" class="emoji" alt=":sunglasses:" loading="lazy" width="20" height="20"> Thus I don’t need Whisker Menu at all.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/poll-should-the-whisker-menu-be-changed-aesthetics/917#post_4</link>
-        <pubDate>Wed, 12 Feb 2025 08:10:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2311</guid>
-      </item>
-      <item>
-        <title>How to delete command line history?</title>
-        <dc:creator><![CDATA[@viandi]]></dc:creator>
-        <description><![CDATA[ <p>That explains it. Thanks!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-delete-command-line-history/941#post_3</link>
-        <pubDate>Tue, 11 Feb 2025 05:38:41 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2309</guid>
-      </item>
-      <item>
-        <title>How to delete command line history?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>The relevant difference is, that Kicksecure uses <code>zsh</code> by default. (<a href="https://www.kicksecure.com/wiki/Shell#Default_Interactive_Shell">Default Interactive Shell</a>)</p>
-<p>Hence, documentation corresponding for <code>zsh</code> should be fuctional.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-delete-command-line-history/941#post_2</link>
-        <pubDate>Sun, 09 Feb 2025 10:09:47 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2308</guid>
-      </item>
-      <item>
-        <title>How to delete command line history?</title>
-        <dc:creator><![CDATA[@viandi]]></dc:creator>
-        <description><![CDATA[ <p>Hi All, I’m new here and still learning Kicksecure. On other Linux distros, if I want to delete my command line history, I can use <code>history -c &amp;&amp; history -w</code>. These command options seem to be missing from Kicksecure. What is the Kickescure way to do this? If anyone has a link about how Kicksecure handles the history command, I would be happy to read it. There are probably security and privacy concerns around the history command, so I could see why Kicksecure wouldn’t use the Linux defaults for it. Any help is greatly appreciated!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-delete-command-line-history/941#post_1</link>
-        <pubDate>Sat, 08 Feb 2025 19:31:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2306</guid>
-      </item>
-      <item>
-        <title>Why doesn&#39;t Thunderbird go through Tor by default?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Not a project goal for Kicksecure. Elaborated here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1739007026" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="10:04AM - 15 October 2024">Kicksecure – 15 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar">
-
-<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
-
-  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Using Kicksecure as a Whonix-Custom-Workstation is also not a project goal.</p>
-<p>Whonix-Workstation is already based on Kicksecure. So there is very limited need for making Kicksecure more similar to Whonix.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/why-doesnt-thunderbird-go-through-tor-by-default/939#post_2</link>
-        <pubDate>Sat, 08 Feb 2025 11:41:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2304</guid>
-      </item>
-      <item>
-        <title>Poll: Should the Whisker Menu Be Changed? (Aesthetics)</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Due to plans to <a href="https://forums.whonix.org/t/port-to-wayland/17380" class="inline-onebox">port to Wayland - Development - Whonix Forum</a>, resource constraints for running inside virtual machines, preferences of security and minimalism, choices are limited. At this time, LXQt seems the most likely next thing.</p>
-<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/lxqt-wayland-support/18178">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/lxqt-wayland-support/18178" target="_blank" rel="noopener" title="01:18AM - 10 January 2024">Whonix Forum – 10 Jan 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/lxqt-wayland-support/18178" target="_blank" rel="noopener">LXQt - Wayland support</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Development</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>Interesting discussion. Can we get the pros and cons of LXQt for posterity? Or a link to a post where you already broke it down.</p>
-
-  <p>
-    <span class="label1">Reading time: 1 mins 🕑</span>
-      <span class="label2">Likes: 4 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>GNOME is highly unlikely. See:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/GNOME">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1739007026" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/GNOME" target="_blank" rel="noopener" title="12:37PM - 30 November 2024">Kicksecure – 30 Nov 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/GNOME" target="_blank" rel="noopener">Dev/GNOME</a></h3>
-
-  <p>Kicksecure Development Notes on GNOME</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Related:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Other_Desktop_Environments">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1739007026" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Other_Desktop_Environments" target="_blank" rel="noopener" title="12:53PM - 14 September 2024">Kicksecure – 14 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/1/10/Organize-27344_640.png?version=b2802d7348d59ee2908fd2b603bd51af" class="thumbnail onebox-avatar">
-
-<h3><a href="https://www.kicksecure.com/wiki/Other_Desktop_Environments" target="_blank" rel="noopener">Other Desktop Environments</a></h3>
-
-  <p>How to use Other Desktop Environments other than Xfce with Kicksecure. Current situation. Risks. Future. (Gnome, KDE, LXDE, ...)</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="Ashwagandha" data-post="2" data-topic="917">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/2bfe46/48.png" class="avatar"> Ashwagandha:</div>
-<blockquote>
-<p>I think KDE should replace XFCE.</p>
-</blockquote>
-</aside>
-<p>History: We actually moved from KDE to Xfce. See: <a href="https://forums.whonix.org/t/user-poll-xfce-vs-kde-kde-deprecation-considered/6235" class="inline-onebox">User Poll - XFCE vs KDE - KDE Deprecation Considered! - News - Whonix Forum</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/poll-should-the-whisker-menu-be-changed-aesthetics/917#post_3</link>
-        <pubDate>Sat, 08 Feb 2025 10:51:40 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2303</guid>
-      </item>
-      <item>
-        <title>Why doesn&#39;t Thunderbird go through Tor by default?</title>
-        <dc:creator><![CDATA[@Ashwagandha]]></dc:creator>
-        <description><![CDATA[ <p>I think Thunderbird should go through Tor just like APT. While Kicksecure and Whonix both serve different design goals/purposes, I think other applications in Kicksecure should take advantage of using Tor by default like APT already is.</p>
-<p>These “Apps” should be Kicksecure specific since if the same configuration were on the same Apps on Whonix WS it would cause issues like Tor over Tor or not working etc.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/why-doesnt-thunderbird-go-through-tor-by-default/939#post_1</link>
-        <pubDate>Sat, 08 Feb 2025 02:29:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2302</guid>
       </item>
   </channel>
 </rss>
