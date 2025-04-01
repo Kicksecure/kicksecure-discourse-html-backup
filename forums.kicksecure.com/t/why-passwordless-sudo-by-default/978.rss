@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Why passwordless sudo by default?</title>
+    <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978</link>
+    <description>I tried Kicksecure for the first time. I found that the terminal gave me sudo su (superuser) access without even asking for a password. A very simple privilege escalation hat lets me access the LUKS password from system memory. WTF? I  wanted to try Kicksecure because I saw that it would eventually become Whonix-Host. Is this is a bug?</description>
+    
+    <lastBuildDate>Tue, 01 Apr 2025 00:30:23 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Root access in live mode is, for all intents and purposes, equivalent to root access in persistent mode from a security standpoint. It’s not at all difficult to mount the root filesystem read/write in one location even while it’s mounted read-only somewhere else (unless overlayfs somehow prevents that, which I highly doubt). Live mode shouldn’t be trusted to enhance one’s security (at least not by much), it’s a privacy enhancer only.</p>
+<p>That being said, maybe this is a legitimate use for <code>LIVE mode SYSMAINT</code>? Currently that feature isn’t planned, but it would be pretty easy to implement.</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/7</link>
+        <pubDate>Tue, 01 Apr 2025 00:30:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-7</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Patrick, does it make sense to limit live mode for increased isolation in user-sysmaint-split, given that disk writing is limited? Live mode is very convenient for testing packages, new programs before installing in PERSISTENT mode. Often I try to install some program, but during installation, I encounter dependency problems, library version issues… as a result, package either doesn’t work or can disappoint me. And then it is very convenient to reboot. Rather than deleting everything I just installed + no traces of such experiments are left on disk</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/6</link>
+        <pubDate>Mon, 31 Mar 2025 16:31:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-6</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>As of the stable version at time of writing (<code>17.2.8.5</code>):</p>
+<p>The primary user documentation for passwordless sudo is on the <a href="https://www.kicksecure.com/wiki/Default_Passwords" class="inline-onebox">Kicksecure Default Passwords</a> wiki page.</p>
+<p>Quote chapter <a href="https://www.kicksecure.com/wiki/Default_Passwords#Information_.2F_FAQ">Information / FAQ</a>:</p>
+<blockquote>
+<p><strong>Advantage of setting a user account password:</strong></p>
+</blockquote>
+<blockquote>
+<ul>
+<li>Administrative (“<a href="https://www.kicksecure.com/wiki/Root">root</a>”) rights authentication. (But this is a weak protection. See <a href="https://www.kicksecure.com/wiki/Root#Prevent_Malware_from_Sniffing_the_Root_Password">Prevent Malware from Sniffing the Root Password</a> for a safer procedure.)</li>
+</ul>
+</blockquote>
+<p>The full rationale, developer documentation can be found here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1743327026" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation" target="_blank" rel="noopener" title="10:38AM - 29 March 2025">Kicksecure – 29 Mar 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/430;"><img src="https://www.kicksecure.com/w/images/0/0a/Useraccountisolatiom123123.jpg?version=e416cef5dc8640671de9593ca2bf4175" class="thumbnail" width="640" height="430"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation" target="_blank" rel="noopener">Strong Linux User Account Isolation</a></h3>
+
+  <p>Protect Linux User Accounts against Brute Force Attacks, Root Account Locking, Console Lockdown, sudo password sniffing, X Windows System Password Sniffing, /proc/pid/sched spy on keystrokes, Linux user account cracking, pam_faillock, pam-tally2,...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Versions released higher than <code>17.2.8.5</code>:</p>
+<p>Huge improvement. When the <a href="https://github.com/Kicksecure/user-sysmaint-split">user-sysmaint-split</a> package is installed, account <code>user</code> will no longer have access to privilege escalation tools such as <code>sudo</code>, <code>pkexec</code> by default. Instead, the user needs to boot into sysmaint mode. (An opt-out is available. [1])</p>
+<p>User documentation:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Sysmaint">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1743327026" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Sysmaint" target="_blank" rel="noopener" title="10:25AM - 29 March 2025">Kicksecure – 29 Mar 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Sysmaint" target="_blank" rel="noopener">sysmaint - System Maintenance User</a></h3>
+
+  <p>sysmaint</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Developer documentation:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/user-sysmaint-split">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1743413424" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/user-sysmaint-split" target="_blank" rel="noopener" title="10:24AM - 29 March 2025">Kicksecure – 29 Mar 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:603/431;"><img src="https://www.kicksecure.com/w/images/d/da/Grub-boot-icon.jpg?version=8fdbc5daa071a656285f5e8da945d797" class="thumbnail" width="603" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/user-sysmaint-split" target="_blank" rel="noopener">user-sysmaint-split</a></h3>
+
+  <p>user-sysmaint-split - Role-Based Boot Modes - Persistent User / Live user / Persistent sysmaint (system maintenance)</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Written about this also here:<br>
+<a href="https://forums.whonix.org/t/replace-sudo-with-doas/17482/35" class="inline-onebox">Replace sudo with doas - #35 by Patrick - Development - Whonix Forum</a></p>
+<hr>
+<p>[1] <a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode" class="inline-onebox">Unrestricted Admin Mode</a></p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/5</link>
+        <pubDate>Mon, 31 Mar 2025 09:33:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-5</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>By the way, a new sandbox has been created and it looks very simple and secure, it works from the kernel <a href="https://github.com/Zouuup/landrun?tab=readme-ov-file" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Zouuup/landrun: Run any Linux process in a secure, unprivileged sandbox using Landlock. Think firejail, but lightweight, user-friendly, and baked into the kernel.</a> Its possible to install it by default and use it in future versions of Kicksecure to run apps with partial or full restrictions</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/4</link>
+        <pubDate>Mon, 31 Mar 2025 08:36:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-4</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello, friend. Yes, Kicksecure is almost a Whonix host. Your system has a powerful hardening. The main password in your system is disk encryption. Sudo password has weak protection (if you are using a laptop alone). If someone is standing next to you and watching you - they will see you entering your password. Without a password, you are protected from it being intercepted to gain elevated privileges by other users. I was also surprised by lack of a password at first, but its just a habit - like habit of using root. You can install necessary packages and use live mode - there you are safer, its similar to Tails. If you need a password, it’s easy to set up with just one command. Read documentation on Kicksecure website - its very simple and interesting. You will learn a lot about system protection that you did not know before</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/3</link>
+        <pubDate>Mon, 31 Mar 2025 08:12:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-3</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>See the documentation at <a href="https://www.kicksecure.com/wiki/Login" class="inline-onebox" rel="noopener nofollow ugc">Login Security</a>. This is an intentional design choice, with rationale explained there.</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/2</link>
+        <pubDate>Sun, 30 Mar 2025 21:36:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-2</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+      <item>
+        <title>Why passwordless sudo by default?</title>
+        <dc:creator><![CDATA[Penthouse]]></dc:creator>
+        <description><![CDATA[
+            <p>I tried Kicksecure for the first time. I found that the terminal gave me sudo su (superuser) access without even asking for a password. A very simple privilege escalation hat lets me access the LUKS password from system memory. WTF? I  wanted to try Kicksecure because I saw that it would eventually become Whonix-Host. Is this is a bug?</p>
+          <p><a href="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978/1</link>
+        <pubDate>Sun, 30 Mar 2025 19:31:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-978-1</guid>
+        <source url="https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978.rss">Why passwordless sudo by default?</source>
+      </item>
+  </channel>
+</rss>
