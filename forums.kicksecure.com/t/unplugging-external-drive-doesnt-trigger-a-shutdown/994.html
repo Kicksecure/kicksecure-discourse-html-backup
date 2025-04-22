@@ -390,6 +390,122 @@ buskill
             </div>
 
           </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/NTH9R6'><span itemprop='name'>NTH9R6</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-21T19:49:58Z' class='post-time'>
+                    April 21, 2025,  7:49pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-21T19:49:58Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <blockquote>
+<p>TAILS is the only OS that I know-of that is designed to trigger an emergency shutdown when the USB stick that it’s installed-on is removed</p>
+</blockquote>
+<blockquote>
+<p>but you can trivially change that to lock the screen instead, if you prefer.</p>
+</blockquote>
+<p>Yeah to be clear I’m not looking to shred the LUKS Header I don’t want to destroy my data. While I do understand that such an emergency shutdown might loose some data (like that of the given booted session) I’m okay with that.</p>
+<p>What I’m trying to achieve is that in the case of an emergency or that my SSD gets unplugged that it triggers a full shutdown meaning that the LUKS volume is in a closed state. Ideally would like to go further with something similar to Tails that clears wipes RAM also so that things like mentioned by <a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/penthouse">@Penthouse</a> would clear the LUKS password from system memory.</p>
+<p>I need to look more into all this and report back. The emergency shutdown seems like it could be implemented but the clearing of RAM due the different design (Tails vs dracut) would need to be figured out more. BTW I was not aware of the <code>ram-wipe</code> package until I made this reply.</p>
+<p>www .kicksecure.com/wiki/Dev/RAM_Wipe#Differences_of_ram-wipe_versus_Tails_Memory_Erasure</p>
+<p><a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/maltfield">@maltfield</a><br>
+Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
+If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/maltfield'><span itemprop='name'>maltfield</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-21T21:38:29Z' class='post-time'>
+                    April 21, 2025,  9:38pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-21T21:38:58Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>would clear the LUKS password from system memory.</p>
+</blockquote>
+</aside>
+<p>Take a look at <a href="../../../external.html?link=https://www.man7.org/linux/man-pages/man8/cryptsetup-luksSuspend.8.html" rel="noopener nofollow ugc">luksSuspend</a></p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
+If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p>
+</blockquote>
+</aside>
+<p>I would execute a <code>luksSuspend</code> followed by shutdown. If you want a faster shutdown, try <code>echo o &gt; /proc/sysrq-trigger &amp;</code>. See how we do this at the end of the BusKill self-destruct script:</p>
+<ul>
+<li><a href="../../../external.html?link=https://github.com/BusKill/buskill-linux/blob/c3e056251377a25e504f5bdc41b2fc17c49f8d2e/triggers/buskill-selfdestruct.sh#L154-L179" class="inline-onebox" rel="noopener nofollow ugc">buskill-linux/triggers/buskill-selfdestruct.sh at c3e056251377a25e504f5bdc41b2fc17c49f8d2e · BusKill/buskill-linux · GitHub</a></li>
+</ul>
+<pre><code class="lang-auto">#################################
+# WIPE DECRYPTION KEYS FROM RAM #
+#################################
+
+# suspend each currently-decrypted LUKS volume
+${ECHO} "INFO: removing decryption keys from memory"
+for device in $( ${LS} -1 "/dev/mapper" ); do
+
+	${ECHO} -e "\t${device}";
+	${CRYPTSETUP} luksSuspend "${device}" &amp;
+
+	# clear page caches in memory (again)
+	sync; echo 3 &gt; /proc/sys/vm/drop_caches
+
+done
+
+#############################
+# (IMMEDIATE) HARD SHUTDOWN #
+#############################
+
+# do whatever works; this is important.
+echo o &gt; /proc/sysrq-trigger &amp;
+sleep 1
+shutdown -h now &amp;
+sleep 1
+poweroff --force --no-sync &amp;
+</code></pre>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
     </div>
 
 

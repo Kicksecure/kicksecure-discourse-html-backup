@@ -5,6 +5,185 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[@maltfield]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>would clear the LUKS password from system memory.</p>
+</blockquote>
+</aside>
+<p>Take a look at <a href="https://www.man7.org/linux/man-pages/man8/cryptsetup-luksSuspend.8.html" rel="noopener nofollow ugc">luksSuspend</a></p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
+If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p>
+</blockquote>
+</aside>
+<p>I would execute a <code>luksSuspend</code> followed by shutdown. If you want a faster shutdown, try <code>echo o &gt; /proc/sysrq-trigger &amp;</code>. See how we do this at the end of the BusKill self-destruct script:</p>
+<ul>
+<li><a href="https://github.com/BusKill/buskill-linux/blob/c3e056251377a25e504f5bdc41b2fc17c49f8d2e/triggers/buskill-selfdestruct.sh#L154-L179" class="inline-onebox" rel="noopener nofollow ugc">buskill-linux/triggers/buskill-selfdestruct.sh at c3e056251377a25e504f5bdc41b2fc17c49f8d2e · BusKill/buskill-linux · GitHub</a></li>
+</ul>
+<pre><code class="lang-auto">#################################
+# WIPE DECRYPTION KEYS FROM RAM #
+#################################
+
+# suspend each currently-decrypted LUKS volume
+${ECHO} "INFO: removing decryption keys from memory"
+for device in $( ${LS} -1 "/dev/mapper" ); do
+
+	${ECHO} -e "\t${device}";
+	${CRYPTSETUP} luksSuspend "${device}" &amp;
+
+	# clear page caches in memory (again)
+	sync; echo 3 &gt; /proc/sys/vm/drop_caches
+
+done
+
+#############################
+# (IMMEDIATE) HARD SHUTDOWN #
+#############################
+
+# do whatever works; this is important.
+echo o &gt; /proc/sysrq-trigger &amp;
+sleep 1
+shutdown -h now &amp;
+sleep 1
+poweroff --force --no-sync &amp;
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994#post_7</link>
+        <pubDate>Mon, 21 Apr 2025 21:38:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2485</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>TAILS is the only OS that I know-of that is designed to trigger an emergency shutdown when the USB stick that it’s installed-on is removed</p>
+</blockquote>
+<blockquote>
+<p>but you can trivially change that to lock the screen instead, if you prefer.</p>
+</blockquote>
+<p>Yeah to be clear I’m not looking to shred the LUKS Header I don’t want to destroy my data. While I do understand that such an emergency shutdown might loose some data (like that of the given booted session) I’m okay with that.</p>
+<p>What I’m trying to achieve is that in the case of an emergency or that my SSD gets unplugged that it triggers a full shutdown meaning that the LUKS volume is in a closed state. Ideally would like to go further with something similar to Tails that clears wipes RAM also so that things like mentioned by <a class="mention" href="https://forums.kicksecure.com/u/penthouse">@Penthouse</a> would clear the LUKS password from system memory.</p>
+<p>I need to look more into all this and report back. The emergency shutdown seems like it could be implemented but the clearing of RAM due the different design (Tails vs dracut) would need to be figured out more. BTW I was not aware of the <code>ram-wipe</code> package until I made this reply.</p>
+<p>www .kicksecure.com/wiki/Dev/RAM_Wipe#Differences_of_ram-wipe_versus_Tails_Memory_Erasure</p>
+<p><a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a><br>
+Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
+If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994#post_6</link>
+        <pubDate>Mon, 21 Apr 2025 19:49:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2484</guid>
+      </item>
+      <item>
+        <title>Best and safest file format to transfer files</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Fzz" data-post="1" data-topic="1010">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/0ea827/48.png" class="avatar"> Fzz:</div>
+<blockquote>
+<p>without losing data read /write capabilities</p>
+</blockquote>
+</aside>
+<p>These should never be lost. Independent for file format and you most likely won’t choose a filesystem by chance that has no read/write capability. There are very few append-only filesystems. That is a very specialized case.</p>
+<p>What the issue might be is Linux file permissions.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/best-and-safest-file-format-to-transfer-files/1010#post_3</link>
+        <pubDate>Mon, 21 Apr 2025 16:23:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2483</guid>
+      </item>
+      <item>
+        <title>Video lag vbox guest</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>Alright,</p>
+<p>but due to weak cpu and ram i stick with host only  for youtube as it plays 1024p smoothly with silent fan, in addition with sandbox app launcher .</p>
+<p>For safer way i will consider kicksecure as host for youtube instead of debian + vbox for webtasks.</p>
+<p>If any related docs to this case feel free to post them .</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/video-lag-vbox-guest/1007#post_6</link>
+        <pubDate>Mon, 21 Apr 2025 12:23:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2482</guid>
+      </item>
+      <item>
+        <title>How to enable optical drive in kicksecure?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Documented just now:<br>
+<a href="https://www.kicksecure.com/wiki/Configuration_Files#Commenting_Syntax_and_Effects">Commenting Syntax and Effects</a></p>
+<aside class="quote no-group" data-username="motionsuspended10" data-post="1" data-topic="1009">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/9dc877/48.png" class="avatar"> motionsuspended10:</div>
+<blockquote>
+<p>currently it is written like this: install udf /usr/bin/disabled-filesys-by-security-misc</p>
+<p>idk if that means it is enabled or disabled.</p>
+</blockquote>
+</aside>
+<p>Disabled.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-enable-optical-drive-in-kicksecure/1009#post_2</link>
+        <pubDate>Mon, 21 Apr 2025 09:07:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2481</guid>
+      </item>
+      <item>
+        <title>[Feature Request] whonix gateway firewall no tor optional</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This is not a Whonix forum.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/feature-request-whonix-gateway-firewall-no-tor-optional/1012#post_2</link>
+        <pubDate>Mon, 21 Apr 2025 07:36:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2479</guid>
+      </item>
+      <item>
+        <title>Video lag vbox guest</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="1007">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>sudo apt-get install vm-config-dist on guest output</p>
+</blockquote>
+</aside>
+<p>Installed by default inside VMs. Don’t do this on the host.</p>
+<aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="1007">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>dracut: dracut module ‘nvmf’ depends on ‘network’, which can’t be installed_</p>
+</blockquote>
+</aside>
+<p>Ignore.</p>
+<aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="1007">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>I would set render but i dont know how and where to set this command .host or guest?<br>
+QMLSCENE_DEVICE=softwarecontxt</p>
+</blockquote>
+</aside>
+<p>Documentation does <strong>not</strong> say "do set <code>QMLSCENE_DEVICE=softwarecontxt</code>.</p>
+<aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="1007">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>I would set render but i dont know how and where to set this command .host or guest?</p>
+</blockquote>
+</aside>
+<p>No context change.</p>
+<ul>
+<li>If starting application inside VM, change environment variables inside VM.</li>
+<li>If starting application on host  change environment variables inside host.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/video-lag-vbox-guest/1007#post_5</link>
+        <pubDate>Mon, 21 Apr 2025 06:41:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2478</guid>
+      </item>
+      <item>
         <title>Video lag vbox guest</title>
         <dc:creator><![CDATA[@suse211213]]></dc:creator>
         <description><![CDATA[ <p>Still, nothing helped even 3d enabled<br>
@@ -47,7 +226,7 @@ thankyou.</p> ]]></description>
       <item>
         <title>How to enable optical drive in kicksecure?</title>
         <dc:creator><![CDATA[@motionsuspended10]]></dc:creator>
-        <description><![CDATA[ <p>I tried out the steps in this guide https ://forums.kicksecure.com/t/solved-are-optical-drives-disabled-in-ks/972</p>
+        <description><![CDATA[ <p>I tried out the steps in this guide <a href="https://forums.kicksecure.com/t/solved-are-optical-drives-disabled-in-ks/972" class="inline-onebox">[SOLVED] Are Optical Drives disabled in KS?</a></p>
 <p>But it didnt work, i might have disabled the UDF filesystem when editing the /etc/modprobe.d/30_security-misc_disable.conf</p>
 <p>currently it is written like this: install udf /usr/bin/disabled-filesys-by-security-misc</p>
 <p>idk if that means it is enabled or disabled. if it is disabled, is putting comments back onto the line all you have to do to enable? i have a feeling you have to remove the file “disabled-filesys-by-security-misc” but i figured i should ask here before trying anything.</p>
@@ -751,90 +930,6 @@ I boot up the second USB drive and get a message that says, “Please enter pass
         <link>https://forums.kicksecure.com/t/how-to-use-zulucrypt-in-user-session/980#post_3</link>
         <pubDate>Tue, 01 Apr 2025 14:47:05 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2416</guid>
-      </item>
-      <item>
-        <title>Why passwordless sudo by default?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I’ve just renamed <code>user mode</code> to <code>user session</code> in the wiki to avoid confusion with “kernel mode” versus “user mode”.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/why-passwordless-sudo-by-default/978#post_7</link>
-        <pubDate>Tue, 01 Apr 2025 14:43:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2415</guid>
-      </item>
-      <item>
-        <title>How to use zulucrypt in USER Session?</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>If you read recommended operating systems for journalists, for host and vm everyone recommends Qubes, Kicksecure, and Whonix. Journalists work with secret files and main gui utility for encrypting files and folders with steganography is zulucrypt</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-use-zulucrypt-in-user-session/980#post_2</link>
-        <pubDate>Tue, 01 Apr 2025 12:44:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2414</guid>
-      </item>
-      <item>
-        <title>How to use zulucrypt in USER Session?</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>Hello. How to use zulucrypt in USER mode / USER live mode? I received an important encrypted secret steganographic container in messenger, but I could not open it due to sudo restrictions. I need to reboot, decrypt file, and then load again in USER mode / live mode to respond to interlocutor. This will be inconvenient (this can be a confidential important conversation where time is crucial - for example, if it is related to investigative journalism). What would you recommend in this case? Installing zulucrypt in Podman or Distrobox?</p>
-<p>ps Live mode SYSMAINT is very good for viewing encrypted containers and do not save secret session to disk, when you are not limited by time</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-use-zulucrypt-in-user-session/980#post_1</link>
-        <pubDate>Tue, 01 Apr 2025 12:20:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2412</guid>
-      </item>
-      <item>
-        <title>LIVE mode SYSMAINT</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p><code>LIVE Mode - SYSMAINT Session (For maintenance testing.)</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-sysmaint/979#post_6</link>
-        <pubDate>Tue, 01 Apr 2025 11:15:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2411</guid>
-      </item>
-      <item>
-        <title>LIVE mode SYSMAINT</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I am implementing this.</p>
-<aside class="quote no-group" data-username="sam" data-post="4" data-topic="979">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>(for testing new packages before installed on disk)</p>
-</blockquote>
-</aside>
-<p>Space is limited. Can only be 3 or 4 words.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-sysmaint/979#post_5</link>
-        <pubDate>Tue, 01 Apr 2025 11:06:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2410</guid>
-      </item>
-      <item>
-        <title>LIVE mode SYSMAINT</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Сould look like - LIVE mode SYSMAINT (for testing new packages before installed on disk). Admin’s laboratory</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-sysmaint/979#post_4</link>
-        <pubDate>Tue, 01 Apr 2025 11:03:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2409</guid>
-      </item>
-      <item>
-        <title>LIVE mode SYSMAINT</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="979">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>It’s not at all difficult to mount the root filesystem read/write in one location even while it’s mounted read-only somewhere else</p>
-</blockquote>
-</aside>
-<p>Yes. Documented here:<br>
-<a href="https://www.kicksecure.com/wiki/Grub-live#Remount_Disk_as_Read-Write_after_booting_into_Live_Mode">Remount Disk as Read-Write after booting into Live Mode</a></p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="979">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>That being said, maybe this is a legitimate use for <code>LIVE mode SYSMAINT</code>?</p>
-</blockquote>
-</aside>
-<p>Yes.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-sysmaint/979#post_3</link>
-        <pubDate>Tue, 01 Apr 2025 07:31:48 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2407</guid>
       </item>
   </channel>
 </rss>
