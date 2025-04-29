@@ -134,6 +134,10 @@ END custom CSS / JS
 <meta name="twitter:description" content="Installed newer version of vbox 7.1.8 from from VirtualBox.org Repository  On guest  sudo apt purge virtualbox-guest-utils virtualbox-guest-x11  sudo apt install --no-install-recommends virtualbox-guest-additions-iso  outputs  virtualbox-guest-additions-iso is already the newest version (7.0.6-1)  How to update virtualbox-guest-additions-iso  to 7.1.8." />
 <meta property="og:article:section" content="Virtualbox" />
 <meta property="og:article:section:color" content="0088CC" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="1 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="3 ❤" />
 <meta property="article:published_time" content="2025-04-28T00:59:57+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -221,6 +225,171 @@ sudo apt install --no-install-recommends virtualbox-guest-additions-iso<br>
 outputs<br>
 virtualbox-guest-additions-iso is already the newest version (7.0.6-1)</p>
 <p>How to update virtualbox-guest-additions-iso  to <strong>7.1.8</strong>.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-28T02:45:10Z' class='post-time'>
+                    April 28, 2025,  2:45am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-28T02:45:10Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>The <code>virtualbox-guest-additions-iso</code> package doesn’t install guest additions in the guest, and should be removed. It has a purpose, but that purpose isn’t relevant to what you’re trying to do so I’ll skip over it.</p>
+<p><a href="../../../external.html?link=https://www.kicksecure.com/wiki/VirtualBox/Guest_Additions" class="inline-onebox" rel="noopener nofollow ugc">VirtualBox Guest Additions and Shared Folders</a> has some info that may help, a quick tl;dr is that since you’re using VirtualBox from the Oracle repository, you probably should install the Guest Additions using the Guest Additions ISO provided with VirtualBox. To do that:</p>
+<ul>
+<li>Shut down the guest.</li>
+<li>Take a VM snapshot, so if things go wrong you can recover.</li>
+<li>Open the guest’s settings, navigate to “Storage”, and ensure that a virtual CD-ROM drive is present. If it isn’t, add a new drive and choose to leave it empty.</li>
+<li>Click “OK” to save changes.</li>
+<li>Boot the guest. If you see a boot option named <code>PERSISTENT Mode - SYSMAINT Session</code>, select that option and press Enter. Otherwise, allow the VM to automatically boot into the topmost boot mode.</li>
+<li>Open a terminal in the guest, and run <code>sudo apt purge virtualbox-*</code> to remove the older, Debian-packaged Guest Additions.</li>
+<li>Run <code>sudo apt install build-essential</code> to make sure you have all of the bits needed to build and install the newer Guest Additions.</li>
+<li>In the VirtualBox UI, click <code>Devices -&gt; Insert Guest Additions CD image...</code>.</li>
+<li>Mount <code>/dev/sr0</code> to <code>/mnt</code>: <code>sudo mount /dev/sr0 /mnt</code></li>
+<li>Move to the <code>/mnt</code> directory: <code>cd /mnt</code></li>
+<li>Run the Guest Additions installer: <code>sudo ./VBoxLinuxAdditions.run</code>
+<ul>
+<li>Note, if you see an error about other Guest Additions already being installed, don’t ignore it, you probably forgot to remove the older Guest Additions that come with Kicksecure, or didn’t remove them properly. Answer “no” when prompted, then run <code>sudo apt purge virtualbox-*</code>, then try to run <code>sudo ./VBoxLInuxAdditions.run</code> again.</li>
+</ul>
+</li>
+<li>Reboot the guest.</li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/suse211213'><span itemprop='name'>suse211213</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-28T07:50:55Z' class='post-time'>
+                    April 28, 2025,  7:50am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-28T07:50:55Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Worked fine.</p>
+<p>Wanted only make a perfermamce test as kicksecure includes older version by default</p>
+<aside class="quote" data-post="1" data-topic="1007">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar">
+    <a href="../video-lag-vbox-guest/1007.html">Video lag vbox guest</a> <a class="badge-category__wrapper " href="../../c/support/6.html"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    There is video stutter when watching youtube videos. 
+On host it works fine . 
+Any workaround for this video lagging. 
+Hardend settings are used same as in doc 
+3d accel=off 
+Video ram 128= max setting
+  </blockquote>
+</aside>
+
+<p>I can say video perfermance after updated guest addition are better . but not 100% stutter free. at least same as win10 perfermance .</p>
+<p>No more fan stress.</p>
+<p>With older version of guest addition in linux<br>
+videoplay is disaster compared to win10</p>
+<p>I will go back to older version and see again</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-28T11:05:22Z' class='post-time'>
+                    April 28, 2025, 11:05am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-28T11:05:22Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Optional usablity feature: <code>vbox-guest-installer</code></p>
+<blockquote>
+<p><a href="../../../external.html?link=https://www.kicksecure.com/wiki/VirtualBox/Guest_Additions#vbox-guest-installer">vbox-guest-installer</a> is an installation helper created by Kicksecure developers. It is a helper utility for better usability that allows to install <em>VirtualBox guest additions</em> from Debian’s (<code>packages.debian.org</code> ) package <a href="../../../external.html?link=https://packages.debian.org/sid/virtualbox-guest-additions-iso"><code>virtualbox-guest-additions-iso</code></a><a href="../../../external.html?link=https://web.archive.org/web/https://packages.debian.org/sid/virtualbox-guest-additions-iso"><img src="../../../external.html?link=https://www.kicksecure.com/w/images/7/73/Internet_Archive_logo.png" alt="archive.org icon" width="14" height="16"></a><a href="../../../external.html?link=https://archive.today/https://packages.debian.org/sid/virtualbox-guest-additions-iso"><img src="../../../external.html?link=https://www.kicksecure.com/w/images/8/8f/Archive-today-logo-homage.svg" alt="archive.today icon" width="12" height="16"></a></p>
+</blockquote>
+<p>But due to the issue of VirtualBox and virtualbox-guest-additions-iso being outdated in <a href="../../../external.html?link=http://packages.debian.org/">packages.debian.org</a> at the time of writing (issue described here in detail: <a href="../../../external.html?link=https://forums.whonix.org/t/whonix-virtualbox-integration-and-upgrades/11705/39" class="inline-onebox">Whonix VirtualBox Integration and Upgrades - #39 by Patrick - Development - Whonix Forum</a>)…</p>
+<p><code>vbox-guest-installer</code> might get a feature / documentation to support installing VirtualBox guest additions using an ISO downloaded from the <a href="../../../external.html?link=http://virtualbox.org/">virtualbox.org</a> website.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/suse211213'><span itemprop='name'>suse211213</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-04-28T15:45:43Z' class='post-time'>
+                    April 28, 2025,  3:45pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-04-28T18:06:25Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>In the VirtualBox UI, click <code>Devices -&gt; Insert Guest Additions CD image</code></p>
+<p>Is this the ISO that shipped with host vbox software?</p>
+<p>There is another option in vbox<br>
+In the VirtualBox UI, click `Devices → <strong>Update</strong> Guest<br>
+Additions</p>
+<p>Will this just update the ISO or update installed additions inside guest?</p>
+<p>Its not clear on vbox user guide</p>
+<p>On host synaptic manager there is another guest addition iso .not installed. Version not known .h</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
