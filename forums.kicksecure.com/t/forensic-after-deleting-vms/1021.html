@@ -345,6 +345,73 @@ END custom CSS / JS
             </div>
 
           </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-05-02T06:02:35Z' class='post-time'>
+                    May 2, 2025,  6:02am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-05-02T06:02:35Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <blockquote>
+<ul>
+<li>Kicksecure for Qubes: For Qubes OS, the process may not work as expected. For further details, refer to the related Qubes feature request <a href="../../../external.html?link=https://github.com/QubesOS/qubes-issues/issues/4982">Implement live boot by porting grub-live to Qubes - amnesia / non-persistent boot / anti-forensics</a><a href="../../../external.html?link=https://web.archive.org/web/https://github.com/QubesOS/qubes-issues/issues/4982"><img src="../../../external.html?link=https://www.kicksecure.com/w/images/7/73/Internet_Archive_logo.png" alt="archive.org icon" width="14" height="16"></a><a href="../../../external.html?link=https://archive.today/https://github.com/QubesOS/qubes-issues/issues/4982"><img src="../../../external.html?link=https://www.kicksecure.com/w/images/8/8f/Archive-today-logo-homage.svg" alt="archive.today icon" width="12" height="16"></a></li>
+</ul>
+</blockquote>
+<aside class="quote no-group" data-username="sam" data-post="4" data-topic="1021">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
+<blockquote>
+<p>Does this mean snapshots can solve problem with amnesia?</p>
+</blockquote>
+</aside>
+<ul>
+<li>Non-persistence, yes. You can easily delete App Qubes.</li>
+<li>Anti-forensics, no. Disposable VMs, App Qubes, snapshots are not an anti-forensics features. Qubes - to my knowledge - does not make any claims about anti-forensics.</li>
+</ul>
+<aside class="quote no-group" data-username="sam" data-post="4" data-topic="1021">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
+<blockquote>
+<p>and how much can this script replace live mode for Kicksecure in Qubes?</p>
+</blockquote>
+</aside>
+<p>It’s just a simple shell script running commands. If something goes wrong, cleanup will not be done. Quote from the script source code:</p>
+<pre><code class="lang-auto">qvm-run -a "${QUBE_NAME}" "${BROWSER}"
+wait
+</code></pre>
+<p>If something happens and the script does not continue (such as power loss), data will persist and not be automatically cleaned up. Commands such as:</p>
+<pre><code class="lang-auto">qvm-remove -f "${QUBE_NAME}"
+qvm-pool rm shadowy
+sudo umount shadowy
+sudo rm -rf "${TMP_DIR}" \
+        /var/log/libvirt/1ibx1/new.log \
+</code></pre>
+<p>Will not be executed.</p>
+<p>Writing data to the disk and cleaning up later is an insecure approach to non-persistence and anti-forensics.</p>
+<p>I don’t know if there are any reviews of that script and it also seems it’s not part of Qubes and hasn’t been attempted to upstream to Qubes. Therefore I would be cautious.</p>
+<p>There are no shortcuts. The only serious solution would be for Qubes to properly implement functionality to not write data that should not persist to the disk.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
     </div>
 
 

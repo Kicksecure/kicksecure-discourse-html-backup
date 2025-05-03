@@ -5,9 +5,60 @@
     <link>https://forums.kicksecure.com/t/forensic-after-deleting-vms/1021</link>
     <description>Hello. I am using Kicksecure and Whonix on a virtual machine. Usually, I use live mode. If I delete these virtual machines, what level of danger exists in case of forensic examination? Or do these metadata not pose any danger? I understand that the best option would be to use Kicksecure-host in live mode, but I am interested in your opinion on virtual machines. Disk of course encrypted. There are many opinions on this topic. But you are the best security experts and I am very interested in your opinion. I think that the metadata in log does not pose a threat, otherwise you would not created Whonix and Kicksecure as virtual machines. But your answer is very important to me. Thank you</description>
     
-    <lastBuildDate>Thu, 01 May 2025 13:09:13 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 02 May 2025 06:02:35 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/forensic-after-deleting-vms/1021.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Forensic after deleting VMs</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<ul>
+<li>Kicksecure for Qubes: For Qubes OS, the process may not work as expected. For further details, refer to the related Qubes feature request <a href="https://github.com/QubesOS/qubes-issues/issues/4982">Implement live boot by porting grub-live to Qubes - amnesia / non-persistent boot / anti-forensics</a><a href="https://web.archive.org/web/https://github.com/QubesOS/qubes-issues/issues/4982"><img src="https://www.kicksecure.com/w/images/7/73/Internet_Archive_logo.png" alt="archive.org icon" width="14" height="16"></a><a href="https://archive.today/https://github.com/QubesOS/qubes-issues/issues/4982"><img src="https://www.kicksecure.com/w/images/8/8f/Archive-today-logo-homage.svg" alt="archive.today icon" width="12" height="16"></a></li>
+</ul>
+</blockquote>
+<aside class="quote no-group" data-username="sam" data-post="4" data-topic="1021">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
+<blockquote>
+<p>Does this mean snapshots can solve problem with amnesia?</p>
+</blockquote>
+</aside>
+<ul>
+<li>Non-persistence, yes. You can easily delete App Qubes.</li>
+<li>Anti-forensics, no. Disposable VMs, App Qubes, snapshots are not an anti-forensics features. Qubes - to my knowledge - does not make any claims about anti-forensics.</li>
+</ul>
+<aside class="quote no-group" data-username="sam" data-post="4" data-topic="1021">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
+<blockquote>
+<p>and how much can this script replace live mode for Kicksecure in Qubes?</p>
+</blockquote>
+</aside>
+<p>It’s just a simple shell script running commands. If something goes wrong, cleanup will not be done. Quote from the script source code:</p>
+<pre><code class="lang-auto">qvm-run -a "${QUBE_NAME}" "${BROWSER}"
+wait
+</code></pre>
+<p>If something happens and the script does not continue (such as power loss), data will persist and not be automatically cleaned up. Commands such as:</p>
+<pre><code class="lang-auto">qvm-remove -f "${QUBE_NAME}"
+qvm-pool rm shadowy
+sudo umount shadowy
+sudo rm -rf "${TMP_DIR}" \
+        /var/log/libvirt/1ibx1/new.log \
+</code></pre>
+<p>Will not be executed.</p>
+<p>Writing data to the disk and cleaning up later is an insecure approach to non-persistence and anti-forensics.</p>
+<p>I don’t know if there are any reviews of that script and it also seems it’s not part of Qubes and hasn’t been attempted to upstream to Qubes. Therefore I would be cautious.</p>
+<p>There are no shortcuts. The only serious solution would be for Qubes to properly implement functionality to not write data that should not persist to the disk.</p>
+          <p><a href="https://forums.kicksecure.com/t/forensic-after-deleting-vms/1021/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/forensic-after-deleting-vms/1021/5</link>
+        <pubDate>Fri, 02 May 2025 06:02:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1021-5</guid>
+        <source url="https://forums.kicksecure.com/t/forensic-after-deleting-vms/1021.rss">Forensic after deleting VMs</source>
+      </item>
       <item>
         <title>Forensic after deleting VMs</title>
         <dc:creator><![CDATA[sam]]></dc:creator>
