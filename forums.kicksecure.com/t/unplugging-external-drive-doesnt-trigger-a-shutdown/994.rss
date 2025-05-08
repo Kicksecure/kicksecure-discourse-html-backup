@@ -14,9 +14,48 @@ I do want to add that also set up LUKS when I installed Debian.
 
 Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</description>
     
-    <lastBuildDate>Mon, 21 Apr 2025 21:38:58 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 07 May 2025 05:41:14 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Won’t be able to finish this tonight, determining the block device that’s <em>actually</em> underneath the filesystem is a bit of a challenge. One of the comments I wrote in my current code reads:</p>
+<pre><code class="lang-auto">    # ... the real underlying device may be many
+    # layers deep. For instance, with the Kicksecure ISO, the root filesystem
+    # is mounted from an overlayfs which uses a lower directory mounted from a
+    # loop device backed by a squashfs located in a directory under a
+    # mountpoint backed by /dev/sr0 (when booting from a CD-ROM drive that
+    # is).
+</code></pre>
+<p>There’s also some higher-priority work for me to tackle before I finish this. I have most of the research done though, including how to find underlying devices or mountpoints in a wide variety of situations, and how to monitor the real device once you find it. Also wrote a rather thorough “force shutdown” script based partially on <a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a>’s suggestions above.</p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/9</link>
+        <pubDate>Wed, 07 May 2025 05:41:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-9</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+      </item>
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>This is definitely a good idea. I took a look at the linked video about BusKill, the idea seems good but I don’t think that’s the method we should use for Kicksecure, because it’s bound to the USB product ID. You have to custom-write the udev rule for the specific USB drive in use. We could in theory detect this on boot I guess, but that seems a bit clunky. I also don’t trust USB drive manufacturers to choose truly unique IDs, as opposed to just putting in some example ID they found in documentation somewhere. (If even AMD can make this mistake with encryption keys related to microcode security, I have no reason to trust off-brand USB drive makers to do any better.) The last thing a user needs is to have their system suddenly shut down because they removed a drive that happened to look suspiciously similar to the main drive.</p>
+<p>I looked at how Tails has this implemented, and basically:</p>
+<ul>
+<li>They have a custom C executable, <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/master/config/chroot_local-includes/usr/src/udev-watchdog.c" rel="noopener nofollow ugc">udev-watchdog</a>, which appears to watch for a specified device to be removed and send some sort of signal to whatever called it when that happens.</li>
+<li>There’s then a wrapper around it that figures out which device is the boot drive, uses udev-watchdog to watch for when it gets removed, and then triggers a hard shutdown when that happens.</li>
+</ul>
+<p>This is a somewhat better solution IMO, and the code behind it is open-source so in theory we could just integrate it directly into Kicksecure. It does have some possible downsides though, most notably I found some <a href="https://www.reddit.com/r/tails/comments/xh8njn/tails_wont_shutdown_when_i_pull_usb_stick/" rel="noopener nofollow ugc">reports that the feature didn’t always work three years ago</a>, when the last code change <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/master/config/chroot_local-includes/usr/local/lib/udev-watchdog-wrapper" rel="noopener nofollow ugc">was four years ago</a>. Maybe that was just user error though.</p>
+<p>For Kicksecure’s implementation, I’d like to avoid custom C code since Kicksecure tries to use architecture-independent code wherever possible. We can use a udev-based approach similar to Tails, but written using Python and pyudev instead. I’ll try to implement this probably tonight and see what happens.</p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/8</link>
+        <pubDate>Wed, 07 May 2025 03:23:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-8</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+      </item>
       <item>
         <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
         <dc:creator><![CDATA[maltfield]]></dc:creator>
