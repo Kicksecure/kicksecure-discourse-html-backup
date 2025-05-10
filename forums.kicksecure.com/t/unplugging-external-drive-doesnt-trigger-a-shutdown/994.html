@@ -132,9 +132,9 @@ END custom CSS / JS
 <meta property="og:article:section" content="Support" />
 <meta property="og:article:section:color" content="0088CC" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="2 mins 🕑" />
+<meta name="twitter:data1" value="4 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="7 ❤" />
+<meta name="twitter:data2" value="9 ❤" />
 <meta property="article:published_time" content="2025-04-09T10:04:29+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -574,6 +574,109 @@ poweroff --force --no-sync &amp;
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
               <meta itemprop="userInteractionCount" content="3" />
               <span class='post-likes'>3 Likes</span>
+            </div>
+
+          </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-05-09T05:15:56Z' class='post-time'>
+                    May 9, 2025,  5:15am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-05-09T05:15:56Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Did a lot of research into this, the approach I was taking technically worked but was not at all guaranteed to work. The issues (and how to work around them) I documented pretty well in a code comment in the program I’m currently writing to implement this:</p>
+<pre data-code-wrap="c"><code class="lang-c">/*
+ * This program is designed specifically to immediately and forcibly power off
+ * the system in the event the device providing the root filesystem is
+ * abruptly removed from the system. The idea is that a user can shut down
+ * a portable installation of Kicksecure by simply yanking the USB drive
+ * containing the installation from the computer. Tails provides essentially
+ * the same feature, however it is known for occasionally failing to do its
+ * job properly.
+ *
+ * The fact that we're triggering a shutdown when the device containing the
+ * root filesystem vanishes presents a number of significant challenges:
+ *
+ * - The device providing the entire operating system is gone. The only things
+ *   we will still have left are the kernel, files loaded into RAM (for
+ *   instance under /run), and anything that happens to still be in the
+ *   system's disk cache.
+ * - Virtually any process on the system may abruptly crash at any time. This
+ *   isn't just because applications may be unable to access files. The Linux
+ *   kernel's virtual memory subsystem doesn't just page out RAM contents to a
+ *   swap file, it will sometimes simply erase pages containing executable
+ *   code from memory if it can reload that code from disk later when needed.
+ *   If part of a program isn't present in memory, and then the root device
+ *   vanishes, any attempt to use code in the absent part of the application
+ *   will result in the application crashing. (Attempts to access data in RAM
+ *   that happened to be paged out will result in a similar crash.)
+ * - We have no control over what is and isn't in the disk cache, which makes
+ *   it unsafe to launch any dynamically linked executable. What happens if we
+ *   need to load a missing part of libc? What if the dynamic linker itself
+ *   needs loaded from disk?
+ * - Systemd could lock up at any time, since the init process isn't immune to
+ *   having bits of it erased from RAM to free up memory. If systemd receives
+ *   a SIGSEGV, rather than crashing (which would panic the kernel), it goes
+ *   into an "emergency mode" that tries to keep the system as operational as
+ *   possible even though PID 1 is now out of service.
+ *
+ * Circumventing this set of difficulties is not easy, and it might not even
+ * be entirely possible. To give our feature the highest chance of success:
+ *
+ * - We use memlockd to lock systemd into memory. It can holds its own pretty
+ *   well in the event of a segfault, but if its crash handler ends up
+ *   re-segfaulting, that could get ugly. For good measure, we lock libc,
+ *   libsystemd-core, and libsystemd-shared into memory too so that the crash
+ *   handler has the highest possible chance of not re-crashing.
+ * - We compile the utility at boot time, statically link it against all of
+ *   its dependencies (really only one, glibc), and load it into /run. This
+ *   allows for decent architecture independence while removing any dependency
+ *   on anything that isn't in RAM, thus (hopefully!) making the process
+ *   crash-immune.
+ * - Because we're static-linking against glibc, we cannot call anything
+ *   defined in stdio.h. This is because glibc uses dlopen() to load iconv
+ *   modules, which are used internally by glibc for locale support. Things
+ *   defined in stdio.h may use iconv, so calling anything there will
+ *   basically make our static-linked executable become dynamically linked,
+ *   which could segfault it since the root filesystem is gone. We can't call
+ *   anything that could touch Name Service Switch (NSS) either, but we have
+ *   no need to do so, so we should be safe there. See
+ *   https://stackoverflow.com/questions/57476533/why-is-statically-linking-glibc-discouraged
+ * - We can't use udev either because libudev is only available as a dynamic
+ *   library. That means we have to listen to kernel uevents directly to
+ *   determine when the root device vanishes. Thankfully this isn't as much of
+ *   a pain as it might sound like.
+ * - We don't call out to any external process, since those external processes
+ *   could segfault.
+ *
+ * This is likely superior to Tails' implementation, which uses udev (and thus
+ * dynamic linking), uses an interpreter-driven script to shut down the system
+ * when the root device vanishes, and calls out to external executables to
+ * actually shut the system down. These issues are likely why Tails'
+ * implementation of emergency shutdown occasionally fails. See
+ * https://www.reddit.com/r/tails/comments/xh8njn/tails_wont_shutdown_when_i_pull_usb_stick/
+ * (there are other similar posts as well).
+ */
+</code></pre>
+<p>The rest of my research was focused mainly on figuring out how to read kernel uevents without involving libudev. This took a while, partially because libudev itself was sticking its head in the way and confusing my program’s output, and partially because <code>man 7 netlink</code> was extraordinarily misleading (it told me the data from the kernel I was reading was going to be in one format, it turned out to be in a completely different format). However, I’ve gotten to the point where I <em>can</em> read kernel uevents, which will let me detect when the root filesystem drive is removed without needing any other libraries or executables (which is important for the reasons described above).</p>
+<p>Once this is done and working, it might be worth trying to contribute it back to Tails (or at least let them know about our work) so they can improve their implementation as well.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
             </div>
 
           </div>
