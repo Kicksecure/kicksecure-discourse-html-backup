@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Questions regarding use of tmpfs formatting and conflicts</title>
+    <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057</link>
+    <description>Hello Kicksecure Community,
+
+I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like `grub-live`, `systemd-fstab-generator`, and `swap-file-creator`.
+What lead me down this rabit hole was how someone in a &quot;group chat&quot; mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don&#39;t swap.
+
+I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see `fstab-vm` bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.
+
+Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into &quot;Live Mode&quot; but I tested that theory my booting normally and it showed both ways.
+
+`journalctl -b -p err | head -n 3`
+
+```
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file &#39;/run/systemd/generator/-.mount&#39;, as it already exists. Duplicate entry in &#39;/etc/fstab&#39;?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file &#39;/run/systemd/generator/tmp.mount&#39;, as it already exists. Duplicate entry in &#39;/etc/fstab&#39;?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+```
+
+`cat /etc/fstab`
+
+
+```
+# /etc/fstab: static file system information.
+#
+# Use &#39;blkid&#39; to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+```
+
++ **Whats better?**
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab
+
+```
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+```
+
+I distro morphed this install so I&#39;m not sure what came with debian and what came with kicksecure. 
+
+Looking at fstab-vm file in the `security-misc` repository made me look into if that this the incorrect way to mount and confusion? 
+
+Looking at line #23 doesn&#39;t seem right in formatting and why use bind in conjunction wouldn&#39;t that not align with creating a new tmpfs instance?
+
+
+```
+tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+```
+
++ **~/.cache mounted to tmpfs**
+
+What is better for mounting user cache to tmpfs?
+Is it or rather would it be better to just mount /tmp to tmpfs then `symlink ~/.cache to /temp`
+
+`sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache`
+
+Or should setting the `XDG_CACHE_HOME` variable to /tmp/$USER/.cache be better? 
+
+`export XDG_CACHE_HOME=&quot;/tmp/$USER/.cache&quot;`
+
+However don&#39;t most apps not always respect the xdg spec always?
+
++ **Can I have my cake and eat it too?**
+
+Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?
+
++ **Issues related to &quot;Live Mode&quot; and encrypted swap with tmpfs mounts?**
+
+Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with `grub-live` implementation?
+
+If I or another user have these mount points is there gonna be existing issue when the times I might boot into &quot;Live Mode&quot;?</description>
+    
+    <lastBuildDate>Mon, 19 May 2025 00:02:58 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Distribution Morphing:</p>
+<p>If non-persistent live mode is a priority, I don’t recommend <a href="https://www.kicksecure.com/wiki/Distribution_Morphing">distribution morphing</a>.</p>
+<p>Quote <a href="https://www.kicksecure.com/wiki/Debian#Distribution_Morphing_versus_ISO_-_Differences">Distribution Morphing versus ISO - Differences</a>:</p>
+<blockquote>
+<ul>
+<li><strong>Swap / mount / fstab related:</strong> Swap partition / swap files, mounts, <code>/etc/fstab</code> set up by Debian installer or the user are not disabled or modified during distribution morphing. This might be a concern for users interested in non-persistent <a href="https://www.kicksecure.com/wiki/Live_Mode">live mode</a>.</li>
+</ul>
+</blockquote>
+<p>As distribution developers, it’s hard for us to control the environment in this setup.</p>
+<hr>
+<p>ISO:</p>
+<p>When installing using the <a href="https://www.kicksecure.com/wiki/ISO">ISO</a> (or installing to hard drive by using the ISO installer), there should be no such issues. No need for any <code>/etc/fstab</code> modifications or anything.</p>
+<p>(<a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a> does not run in live mode. (<a href="https://www.kicksecure.com/wiki/Swap-file-creator#Live_Mode">swap-file-creator, Live Mode</a>))</p>
+<hr>
+<p>In any case, live mode indicator systray should be pointing out if there are any disks mounted as read-write.</p>
+<hr>
+<p>Did you perform a <a href="https://www.kicksecure.com/wiki/Live_Mode#Functionality_Test_of_Live_mode">Functionality Test of Live mode</a> and found unexpected persistence?</p>
+<hr>
+<p>Recommended reading: <a href="https://www.kicksecure.com/wiki/Grub-live#Security_Considerations">grub-live, Security Considerations</a></p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/2</link>
+        <pubDate>Mon, 19 May 2025 00:02:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-2</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello Kicksecure Community,</p>
+<p>I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like <code>grub-live</code>, <code>systemd-fstab-generator</code>, and <code>swap-file-creator</code>.<br>
+What lead me down this rabit hole was how someone in a “group chat” mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don’t swap.</p>
+<p>I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see <code>fstab-vm</code> bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.</p>
+<p>Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into “Live Mode” but I tested that theory my booting normally and it showed both ways.</p>
+<p><code>journalctl -b -p err | head -n 3</code></p>
+<pre><code class="lang-auto">May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/-.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/tmp.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+</code></pre>
+<p><code>cat /etc/fstab</code></p>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+</code></pre>
+<ul>
+<li><strong>Whats better?</strong><br>
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab</li>
+</ul>
+<pre><code class="lang-auto">tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+</code></pre>
+<p>I distro morphed this install so I’m not sure what came with debian and what came with kicksecure.</p>
+<p>Looking at fstab-vm file in the <code>security-misc</code> repository made me look into if that this the incorrect way to mount and confusion?</p>
+<p>Looking at line <span class="hashtag-raw">#23</span> doesn’t seem right in formatting and why use bind in conjunction wouldn’t that not align with creating a new tmpfs instance?</p>
+<pre><code class="lang-auto">tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+</code></pre>
+<ul>
+<li><strong>~/.cache mounted to tmpfs</strong></li>
+</ul>
+<p>What is better for mounting user cache to tmpfs?<br>
+Is it or rather would it be better to just mount /tmp to tmpfs then <code>symlink ~/.cache to /temp</code></p>
+<p><code>sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache</code></p>
+<p>Or should setting the <code>XDG_CACHE_HOME</code> variable to /tmp/$USER/.cache be better?</p>
+<p><code>export XDG_CACHE_HOME="/tmp/$USER/.cache"</code></p>
+<p>However don’t most apps not always respect the xdg spec always?</p>
+<ul>
+<li><strong>Can I have my cake and eat it too?</strong></li>
+</ul>
+<p>Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?</p>
+<ul>
+<li><strong>Issues related to “Live Mode” and encrypted swap with tmpfs mounts?</strong></li>
+</ul>
+<p>Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with <code>grub-live</code> implementation?</p>
+<p>If I or another user have these mount points is there gonna be existing issue when the times I might boot into “Live Mode”?</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/1</link>
+        <pubDate>Sun, 18 May 2025 23:35:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-1</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+  </channel>
+</rss>

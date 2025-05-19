@@ -5,6 +5,248 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Distribution Morphing:</p>
+<p>If non-persistent live mode is a priority, I don’t recommend <a href="https://www.kicksecure.com/wiki/Distribution_Morphing">distribution morphing</a>.</p>
+<p>Quote <a href="https://www.kicksecure.com/wiki/Debian#Distribution_Morphing_versus_ISO_-_Differences">Distribution Morphing versus ISO - Differences</a>:</p>
+<blockquote>
+<ul>
+<li><strong>Swap / mount / fstab related:</strong> Swap partition / swap files, mounts, <code>/etc/fstab</code> set up by Debian installer or the user are not disabled or modified during distribution morphing. This might be a concern for users interested in non-persistent <a href="https://www.kicksecure.com/wiki/Live_Mode">live mode</a>.</li>
+</ul>
+</blockquote>
+<p>As distribution developers, it’s hard for us to control the environment in this setup.</p>
+<hr>
+<p>ISO:</p>
+<p>When installing using the <a href="https://www.kicksecure.com/wiki/ISO">ISO</a> (or installing to hard drive by using the ISO installer), there should be no such issues. No need for any <code>/etc/fstab</code> modifications or anything.</p>
+<p>(<a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a> does not run in live mode. (<a href="https://www.kicksecure.com/wiki/Swap-file-creator#Live_Mode">swap-file-creator, Live Mode</a>))</p>
+<hr>
+<p>In any case, live mode indicator systray should be pointing out if there are any disks mounted as read-write.</p>
+<hr>
+<p>Did you perform a <a href="https://www.kicksecure.com/wiki/Live_Mode#Functionality_Test_of_Live_mode">Functionality Test of Live mode</a> and found unexpected persistence?</p>
+<hr>
+<p>Recommended reading: <a href="https://www.kicksecure.com/wiki/Grub-live#Security_Considerations">grub-live, Security Considerations</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057#post_2</link>
+        <pubDate>Mon, 19 May 2025 00:02:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2640</guid>
+      </item>
+      <item>
+        <title>Avoid clearnet traffic in Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>That should be the case.</p>
+<p>But, quote <a href="https://www.kicksecure.com/wiki/Fingerprint" class="inline-onebox">Network, Browser and Website Fingerprint</a></p>
+<blockquote>
+<h1>Non-Existing Network Fingerprint Research and Implementation</h1>
+<p>What does <strong>not</strong> exist according to publicly available information:</p>
+<ul>
+<li><strong>A)</strong> No phone home research: A research term that continuously verifies that no software installed by default (or usually installed) in Kicksecure exhibits any phone home activity over clearnet by default.</li>
+<li><strong>B)</strong> No fingerprint research: A research term that continuously analyzes the network fingerprints of Microsoft Windows, Debian, TBB, Tails, Whonix, Kicksecure, etc., across different hardware setups, and publishes the results.</li>
+<li><strong>C)</strong> No fingerprint emulation development team: Based on the above research, a development team aiming to emulate popular network fingerprints.</li>
+</ul>
+</blockquote>
+<p>And.</p>
+<blockquote>
+<p>Kicksecure: Might get a feature to restrict outgoing traffic to specific Linux user accounts and/or IP addresses. But it’s not yet implemented. For latest status, see ticket: <a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Kicksecure Firewall</a></p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055#post_2</link>
+        <pubDate>Sun, 18 May 2025 23:43:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2639</guid>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[@FlapJacket]]></dc:creator>
+        <description><![CDATA[ <p>Hello Kicksecure Community,</p>
+<p>I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like <code>grub-live</code>, <code>systemd-fstab-generator</code>, and <code>swap-file-creator</code>.<br>
+What lead me down this rabit hole was how someone in a “group chat” mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don’t swap.</p>
+<p>I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see <code>fstab-vm</code> bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.</p>
+<p>Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into “Live Mode” but I tested that theory my booting normally and it showed both ways.</p>
+<p><code>journalctl -b -p err | head -n 3</code></p>
+<pre><code class="lang-auto">May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/-.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/tmp.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+</code></pre>
+<p><code>cat /etc/fstab</code></p>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+</code></pre>
+<ul>
+<li><strong>Whats better?</strong><br>
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab</li>
+</ul>
+<pre><code class="lang-auto">tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+</code></pre>
+<p>I distro morphed this install so I’m not sure what came with debian and what came with kicksecure.</p>
+<p>Looking at fstab-vm file in the <code>security-misc</code> repository made me look into if that this the incorrect way to mount and confusion?</p>
+<p>Looking at line <span class="hashtag-raw">#23</span> doesn’t seem right in formatting and why use bind in conjunction wouldn’t that not align with creating a new tmpfs instance?</p>
+<pre><code class="lang-auto">tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+</code></pre>
+<ul>
+<li><strong>~/.cache mounted to tmpfs</strong></li>
+</ul>
+<p>What is better for mounting user cache to tmpfs?<br>
+Is it or rather would it be better to just mount /tmp to tmpfs then <code>symlink ~/.cache to /temp</code></p>
+<p><code>sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache</code></p>
+<p>Or should setting the <code>XDG_CACHE_HOME</code> variable to /tmp/$USER/.cache be better?</p>
+<p><code>export XDG_CACHE_HOME="/tmp/$USER/.cache"</code></p>
+<p>However don’t most apps not always respect the xdg spec always?</p>
+<ul>
+<li><strong>Can I have my cake and eat it too?</strong></li>
+</ul>
+<p>Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?</p>
+<ul>
+<li><strong>Issues related to “Live Mode” and encrypted swap with tmpfs mounts?</strong></li>
+</ul>
+<p>Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with <code>grub-live</code> implementation?</p>
+<p>If I or another user have these mount points is there gonna be existing issue when the times I might boot into “Live Mode”?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057#post_1</link>
+        <pubDate>Sun, 18 May 2025 23:35:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2637</guid>
+      </item>
+      <item>
+        <title>Avoid clearnet traffic in Kicksecure</title>
+        <dc:creator><![CDATA[@FreshStar]]></dc:creator>
+        <description><![CDATA[ <p>My aim is to avoid outgoing clearnet traffic.</p>
+<p>Is it right that in the default installation of Kicksecure only the following outgoing traffic is torified?</p>
+<ul>
+<li>automatic and manual updates from Kicksecure repository or using sudo apt-get dist-upgrade</li>
+<li>using sudo apt update</li>
+<li>using sudo apt full-upgrade</li>
+<li>installing new software with sudo apt install</li>
+</ul>
+<p>Is it correct that when not starting any apps that open a connection there won’t be any outgoing clearnet traffic, i.e. after starting Kicksecure and leave it idle or only installing and updating software there will be no outgoing clearnet traffic?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055#post_1</link>
+        <pubDate>Sun, 18 May 2025 23:12:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2635</guid>
+      </item>
+      <item>
+        <title>Kicksecure ISO - Calamares Issue - Command /usr/sbin/bootloader-config failed to finish in 600 seconds</title>
+        <dc:creator><![CDATA[@erjax]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1047">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>editing <code>/usr/lib/calamares/modules/bootloader-config/module.desc</code> and changing the timeout</p>
+</blockquote>
+</aside>
+<p>Thank you very much! After editing the timeout parameter, the system was installed. Yes, you are right, it works very slowly.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047#post_3</link>
+        <pubDate>Sun, 18 May 2025 21:40:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2633</guid>
+      </item>
+      <item>
+        <title>Update VirtualBox guest additions</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="5" data-topic="1018">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>Is this the ISO that shipped with host vbox software?</p>
+</blockquote>
+</aside>
+<p>On Windows, yes.</p>
+<p>On Linux:</p>
+<ul>
+<li>Depending on the distribution or installation method. <code>packages.debian.org</code> provides <a href="https://packages.debian.org/sid/virtualbox-guest-additions-iso"><code>virtualbox-guest-additions-iso</code></a> packaged separately.</li>
+<li>When <a href="https://www.kicksecure.com/wiki/VirtualBox/Other_Versions#Install_from_VirtualBox.org">installing from virtualbox.org</a>: Yes.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/update-virtualbox-guest-additions/1018#post_7</link>
+        <pubDate>Sun, 18 May 2025 13:17:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2631</guid>
+      </item>
+      <item>
+        <title>Struggling with the point release update - user-sysmaint-split - sudo</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Documented here:<br>
+<a href="https://www.kicksecure.com/wiki/Sysmaint#Applications_requiring_Administrative_Rights_during_User_Session">Applications requiring Administrative Rights during User Session</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051#post_3</link>
+        <pubDate>Sun, 18 May 2025 13:13:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2630</guid>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/updates-status/issues/5630">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/updates-status/issues/5630" target="_blank" rel="noopener">github.com/QubesOS/updates-status</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/updates-status/issues/5630" target="_blank" rel="noopener">qubes-template-kicksecure-17 4.2.0-202505131900 (r4.2)</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-05-13" data-time="19:00:12" data-timezone="UTC">07:00PM - 13 May 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/fepitre-bot" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/48861364?v=4" class="onebox-avatar-inline" width="20" height="20">
+          fepitre-bot
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          r4.2-testing
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Template kicksecure-17 4.2.0-202505131900 for Qubes OS r4.2, see comments below <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">for details and build status.
+
+If you're release manager, you can issue GPG-inline signed command (depending on template):
+
+* `Upload-template r4.2 kicksecure-17 4.2.0-202505131900 templates-itl` (available 5 days from now)
+* `Upload-template r4.2 kicksecure-17 4.2.0-202505131900 templates-community` (available 5 days from now)
+
+Above commands will work only if package in testing repository isn't superseded by newer version.
+
+For more information on how to test this update, please take a look at https://www.qubes-os.org/doc/testing/#updates.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development/679#post_5</link>
+        <pubDate>Sun, 18 May 2025 11:25:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2629</guid>
+      </item>
+      <item>
         <title>Kicksecure on distrowatch</title>
         <dc:creator><![CDATA[@sam]]></dc:creator>
         <description><![CDATA[ <p>When I recommended Kicksecure in various chats, people often wrote “I can’t find this distro on distrowatch. Did you send a scam?” I was even blocked for this once <img src="https://forums.kicksecure.com/images/emoji/twitter/grin.png?v=12" title=":grin:" class="emoji" alt=":grin:" loading="lazy" width="20" height="20"><br>
@@ -47,15 +289,15 @@ I wrote to Jesse Smith and asked him to add Kicksecure to distrowatch. He did it
         <guid isPermaLink="false">forums.kicksecure.com-post-2627</guid>
       </item>
       <item>
-        <title>Kicksecure 17.3.9.9 Error installing on a USB drive. </title>
+        <title>Kicksecure ISO - Calamares Issue - Command /usr/sbin/bootloader-config failed to finish in 600 seconds</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>You may have a broken or extremely slow USB drive. If you want, you can lengthen this timeout by editing <code>/usr/lib/calamares/modules/bootloader-config/module.desc</code> and changing the timeout to a higher value, but if the USB drive you’re using is so slow that this is failing, Kicksecure may run slowly on it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-17-3-9-9-error-installing-on-a-usb-drive/1047#post_2</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047#post_2</link>
         <pubDate>Sun, 18 May 2025 04:36:00 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2626</guid>
       </item>
       <item>
-        <title>Struggling with the point release update</title>
+        <title>Struggling with the point release update - user-sysmaint-split - sudo</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Shouldn’t OpenVPN things be doable via the network manager widget and not need root permissions?</p>
 <p>In general, there are a few solutions if the reboot isn’t an option:</p>
@@ -64,15 +306,15 @@ I wrote to Jesse Smith and asked him to add Kicksecure to distrowatch. He did it
 <li>You can automatically run things as root on bootup or login by creating a systemd unit for it.</li>
 <li>You can place your script under <code>/usr/local/bin</code>, then create a privleap action that runs it with the appropriate arguments. Then you can use the <code>leaprun</code> utility to run the script as root even while booted into a user session. The <code>privleap.conf.d</code> and <code>leaprun</code> manpages should give you the needed info to do that, and there are lots of existing privleap config files in <code>/etc/privleap/conf.d</code> to give you examples of what to do. You can put your new config file in <code>/etc/privleap.conf.d</code>.</li>
 </ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update/1051#post_2</link>
+        <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051#post_2</link>
         <pubDate>Sun, 18 May 2025 04:31:31 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2625</guid>
       </item>
       <item>
-        <title>Struggling with the point release update</title>
+        <title>Struggling with the point release update - user-sysmaint-split - sudo</title>
         <dc:creator><![CDATA[@Bob]]></dc:creator>
         <description><![CDATA[ <p>Hi guys, using the new updated kicksecure, but since the user and sysmaint account is seperated, I don’t know how to access files between the accounts. For instance, I have an openvpn script in user but I can’t run it if I have to reboot after using sudo. I also may have other times where I need ro run sudo on user files specificly and directories are not linked afaik. Can anyone support me here? Thanks.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update/1051#post_1</link>
+        <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051#post_1</link>
         <pubDate>Sat, 17 May 2025 21:37:11 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2624</guid>
       </item>
@@ -203,7 +445,7 @@ Thank you in advance for your help !</p> ]]></description>
         <guid isPermaLink="false">forums.kicksecure.com-post-2618</guid>
       </item>
       <item>
-        <title>Kicksecure 17.3.9.9 Error installing on a USB drive. </title>
+        <title>Kicksecure ISO - Calamares Issue - Command /usr/sbin/bootloader-config failed to finish in 600 seconds</title>
         <dc:creator><![CDATA[@erjax]]></dc:creator>
         <description><![CDATA[ <p>Command <i>/usr/sbin/bootloader-config</i> failed to finish in 600 seconds.</p>
 <pre><code class="lang-auto">/usr/bin/install-host
@@ -1134,7 +1376,7 @@ Finished shutdown.
 Feel free to close this window.
 
 </code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-17-3-9-9-error-installing-on-a-usb-drive/1047#post_1</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047#post_1</link>
         <pubDate>Sat, 17 May 2025 11:22:04 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2616</guid>
       </item>
@@ -2575,116 +2817,6 @@ Unlike Perplexity, Scira has more modes - 7 compared to 3 - and can choose betwe
         <link>https://forums.kicksecure.com/t/error-during-installation/1033#post_5</link>
         <pubDate>Thu, 08 May 2025 23:06:30 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2578</guid>
-      </item>
-      <item>
-        <title>Error during installation</title>
-        <dc:creator><![CDATA[@Bob]]></dc:creator>
-        <description><![CDATA[ <p>I am in the uk, were those locales also checked? It dosen’t seem to be mentiomed in the original post.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/error-during-installation/1033#post_4</link>
-        <pubDate>Thu, 08 May 2025 21:52:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2577</guid>
-      </item>
-      <item>
-        <title>Error during installation</title>
-        <dc:creator><![CDATA[@Bob]]></dc:creator>
-        <description><![CDATA[ <p>I installed it from the iso, latest stable xfce version on step 1 of the wiki. The link said ‘download kicksecure free’.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/error-during-installation/1033#post_3</link>
-        <pubDate>Thu, 08 May 2025 21:48:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2575</guid>
-      </item>
-      <item>
-        <title>Scira AI instead of Perplexity</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Please use the feature request forum post template:<br>
-<a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Local_Browser_Homepage_-_Search_Engine_Feature_Request">Local Browser Homepage - Search Engine Feature Request</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/scira-ai-instead-of-perplexity/1034#post_2</link>
-        <pubDate>Thu, 08 May 2025 20:56:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2574</guid>
-      </item>
-      <item>
-        <title>Scira AI instead of Perplexity</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>In another chat, we discussed adding search engines and touched on the topic of Perplexity. I propose considering replacing Perplexity with Scira AI on kicksecure-welcome-page for the following reasons:</p>
-<p>More functionality: Unlike Perplexity, Scira has more modes - 7 compared to 3 - and you can choose between chat only or internet overview only.</p>
-<p>Convenience: No registration required, no window asking to register during use, free.</p>
-<p>User safety: Scira informs about the absence of cryptocurrency and tokens and asks not to fall for any potential scams in its name on the internet</p>
-<p>Open source: This is not a criterion for a search engine, but it aligns with the Freedom Values published on the Kicksecure website</p>
-<p>Works with Tor/VPN without Captcha: Perplexity does not work with Tor and often asks to complete a Captcha for some locations with NordVPN and Mullvad VPN<br>
-</p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/d3f21cb0638a444a883e293495e0e75a6f3e9ca7.png" data-download-href="https://forums.kicksecure.com/uploads/default/d3f21cb0638a444a883e293495e0e75a6f3e9ca7" title="screen"><img src="https://forums.kicksecure.com/uploads/default/original/1X/d3f21cb0638a444a883e293495e0e75a6f3e9ca7.png" alt="screen" data-base62-sha1="ueXt4JQ6zaVrg7S3vUQKCvrDaqr" width="690" height="276" data-dominant-color="373839"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/scira-ai-instead-of-perplexity/1034#post_1</link>
-        <pubDate>Thu, 08 May 2025 20:45:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2573</guid>
-      </item>
-      <item>
-        <title>Error during installation</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Hi, friend. This issue existed in the old version and was discussed here <a href="https://forums.kicksecure.com/t/locale-layout-installation-error/611" class="inline-onebox">Locale layout installation error</a><br>
-I haven’t encountered this problem, and my friends haven’t either - we have different locales installed. Are you installing the latest version?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/error-during-installation/1033#post_2</link>
-        <pubDate>Thu, 08 May 2025 20:12:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2572</guid>
-      </item>
-      <item>
-        <title>Error during installation</title>
-        <dc:creator><![CDATA[@Bob]]></dc:creator>
-        <description><![CDATA[ <p>I have tried to install kicksecure from my laptop twice (via the iso method) and keep getting this same error</p>
-<p>Installation failed<br>
-External command finished with errors.<br>
-Details:<br>
-Command loadkeys “$(cat /dev/shm/fixcomkeys-layout)”  finished with error code 1.<br>
-Output:<br>
-loadkeys:Unable to open file: gb: No such file or directory</p>
-<p>Does anyone have a solution?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/error-during-installation/1033#post_1</link>
-        <pubDate>Thu, 08 May 2025 15:49:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2571</guid>
-      </item>
-      <item>
-        <title>Add SearXNG and Startpage buttons to kicksecure-welcome-page</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This becomes rather difficult for me to follow. Discussing multiple search engines in 1 forum thread quickly gets confusing.</p>
-<p>It <strong>might</strong> be the case that <a href="https://www.kicksecure.com/wiki/Transparency#Search_Engines_Criteria">Search Engines Criteria</a> are disregarded and search engines are only suggested to be promoted due to some other nice goal (such as being Open Source) while having no personal experiences with the search engine and while not personally using the search engine.</p>
-<p>I cannot review 10s of search engines. There is limited space on the local browser welcome page. Therefore it needs to be based on criteria and popularity.</p>
-<p>Therefore, <strong>please submit search engine related feature requests as per the following documentation / forum feature request template:</strong><br>
-<strong><a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Local_Browser_Homepage_-_Search_Engine_Feature_Request">Local Browser Homepage - Search Engine Feature Request</a></strong></p>
-<p>No further action will be taken based on comments in this forum thread.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-searxng-and-startpage-buttons-to-kicksecure-welcome-page/992#post_18</link>
-        <pubDate>Thu, 08 May 2025 11:09:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2569</guid>
-      </item>
-      <item>
-        <title>Add SearXNG and Startpage buttons to kicksecure-welcome-page</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="linuxer" data-post="14" data-topic="992">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
-<blockquote>
-<p>Patrick, I found several popular free open-source alternatives of Perplexity</p>
-</blockquote>
-</aside>
-<p>These search engines are very interesting. Scira is probably even more advanced than Perplexity. There’s also <a href="https://www.memfree.me/" rel="noopener nofollow ugc">https://www.memfree.me/</a> - it’s also open-source, also popular on GitHub, and also works with Tor.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="992">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>This one might be suitable.</p>
-</blockquote>
-</aside>
-<p>Yes, /e/ is team of developers is politically neutral</p>
-<aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="992">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>This will be included in the next version.</p>
-</blockquote>
-</aside>
-<p>Thanks!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-searxng-and-startpage-buttons-to-kicksecure-welcome-page/992#post_17</link>
-        <pubDate>Wed, 07 May 2025 12:57:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2568</guid>
       </item>
   </channel>
 </rss>

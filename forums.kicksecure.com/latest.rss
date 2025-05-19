@@ -5,8 +5,105 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Sun, 18 May 2025 08:27:11 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 18 May 2025 23:35:05 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Questions regarding use of tmpfs formatting and conflicts</title>
+          <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello Kicksecure Community,</p>
+<p>I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like <code>grub-live</code>, <code>systemd-fstab-generator</code>, and <code>swap-file-creator</code>.<br>
+What lead me down this rabit hole was how someone in a “group chat” mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don’t swap.</p>
+<p>I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see <code>fstab-vm</code> bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.</p>
+<p>Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into “Live Mode” but I tested that theory my booting normally and it showed both ways.</p>
+<p><code>journalctl -b -p err | head -n 3</code></p>
+<pre><code class="lang-auto">May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/-.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/tmp.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+</code></pre>
+<p><code>cat /etc/fstab</code></p>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+</code></pre>
+<ul>
+<li><strong>Whats better?</strong><br>
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab</li>
+</ul>
+<pre><code class="lang-auto">tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+</code></pre>
+<p>I distro morphed this install so I’m not sure what came with debian and what came with kicksecure.</p>
+<p>Looking at fstab-vm file in the <code>security-misc</code> repository made me look into if that this the incorrect way to mount and confusion?</p>
+<p>Looking at line <span class="hashtag-raw">#23</span> doesn’t seem right in formatting and why use bind in conjunction wouldn’t that not align with creating a new tmpfs instance?</p>
+<pre><code class="lang-auto">tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+</code></pre>
+<ul>
+<li><strong>~/.cache mounted to tmpfs</strong></li>
+</ul>
+<p>What is better for mounting user cache to tmpfs?<br>
+Is it or rather would it be better to just mount /tmp to tmpfs then <code>symlink ~/.cache to /temp</code></p>
+<p><code>sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache</code></p>
+<p>Or should setting the <code>XDG_CACHE_HOME</code> variable to /tmp/$USER/.cache be better?</p>
+<p><code>export XDG_CACHE_HOME="/tmp/$USER/.cache"</code></p>
+<p>However don’t most apps not always respect the xdg spec always?</p>
+<ul>
+<li><strong>Can I have my cake and eat it too?</strong></li>
+</ul>
+<p>Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?</p>
+<ul>
+<li><strong>Issues related to “Live Mode” and encrypted swap with tmpfs mounts?</strong></li>
+</ul>
+<p>Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with <code>grub-live</code> implementation?</p>
+<p>If I or another user have these mount points is there gonna be existing issue when the times I might boot into “Live Mode”?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057</link>
+          <pubDate>Sun, 18 May 2025 23:35:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1057</guid>
+          <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+        </item>
+        <item>
+          <title>Avoid clearnet traffic in Kicksecure</title>
+          <dc:creator><![CDATA[FreshStar]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>My aim is to avoid outgoing clearnet traffic.</p>
+<p>Is it right that in the default installation of Kicksecure only the following outgoing traffic is torified?</p>
+<ul>
+<li>automatic and manual updates from Kicksecure repository or using sudo apt-get dist-upgrade</li>
+<li>using sudo apt update</li>
+<li>using sudo apt full-upgrade</li>
+<li>installing new software with sudo apt install</li>
+</ul>
+<p>Is it correct that when not starting any apps that open a connection there won’t be any outgoing clearnet traffic, i.e. after starting Kicksecure and leave it idle or only installing and updating software there will be no outgoing clearnet traffic?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055</link>
+          <pubDate>Sun, 18 May 2025 23:12:25 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1055</guid>
+          <source url="https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055.rss">Avoid clearnet traffic in Kicksecure</source>
+        </item>
         <item>
           <title>Kicksecure on distrowatch</title>
           <dc:creator><![CDATA[sam]]></dc:creator>
@@ -50,21 +147,21 @@ I wrote to Jesse Smith and asked him to add Kicksecure to distrowatch. He did it
           <source url="https://forums.kicksecure.com/t/kicksecure-on-distrowatch/1052.rss">Kicksecure on distrowatch</source>
         </item>
         <item>
-          <title>Struggling with the point release update</title>
+          <title>Struggling with the point release update - user-sysmaint-split - sudo</title>
           <dc:creator><![CDATA[Bob]]></dc:creator>
           <category>Support</category>
           <description><![CDATA[
             <p>Hi guys, using the new updated kicksecure, but since the user and sysmaint account is seperated, I don’t know how to access files between the accounts. For instance, I have an openvpn script in user but I can’t run it if I have to reboot after using sudo. I also may have other times where I need ro run sudo on user files specificly and directories are not linked afaik. Can anyone support me here? Thanks.</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/struggling-with-the-point-release-update/1051">Read full topic</a></p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051">Read full topic</a></p>
           ]]></description>
-          <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update/1051</link>
+          <link>https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051</link>
           <pubDate>Sat, 17 May 2025 21:37:11 +0000</pubDate>
           <discourse:topicPinned>No</discourse:topicPinned>
           <discourse:topicClosed>No</discourse:topicClosed>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1051</guid>
-          <source url="https://forums.kicksecure.com/t/struggling-with-the-point-release-update/1051.rss">Struggling with the point release update</source>
+          <source url="https://forums.kicksecure.com/t/struggling-with-the-point-release-update-user-sysmaint-split-sudo/1051.rss">Struggling with the point release update - user-sysmaint-split - sudo</source>
         </item>
         <item>
           <title>Missing brightness slide</title>
@@ -85,7 +182,7 @@ Power manager from tray icon doesn’t have any brightness slide.</p>
           <source url="https://forums.kicksecure.com/t/missing-brightness-slide/1050.rss">Missing brightness slide</source>
         </item>
         <item>
-          <title>Kicksecure 17.3.9.9 Error installing on a USB drive. </title>
+          <title>Kicksecure ISO - Calamares Issue - Command /usr/sbin/bootloader-config failed to finish in 600 seconds</title>
           <dc:creator><![CDATA[erjax]]></dc:creator>
           <category>Support</category>
           <description><![CDATA[
@@ -1018,16 +1115,16 @@ Finished shutdown.
 Feel free to close this window.
 
 </code></pre>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/kicksecure-17-3-9-9-error-installing-on-a-usb-drive/1047">Read full topic</a></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047">Read full topic</a></p>
           ]]></description>
-          <link>https://forums.kicksecure.com/t/kicksecure-17-3-9-9-error-installing-on-a-usb-drive/1047</link>
+          <link>https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047</link>
           <pubDate>Sat, 17 May 2025 11:22:04 +0000</pubDate>
           <discourse:topicPinned>No</discourse:topicPinned>
           <discourse:topicClosed>No</discourse:topicClosed>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1047</guid>
-          <source url="https://forums.kicksecure.com/t/kicksecure-17-3-9-9-error-installing-on-a-usb-drive/1047.rss">Kicksecure 17.3.9.9 Error installing on a USB drive. </source>
+          <source url="https://forums.kicksecure.com/t/kicksecure-iso-calamares-issue-command-usr-sbin-bootloader-config-failed-to-finish-in-600-seconds/1047.rss">Kicksecure ISO - Calamares Issue - Command /usr/sbin/bootloader-config failed to finish in 600 seconds</source>
         </item>
         <item>
           <title>Privleap issue</title>
@@ -2806,7 +2903,7 @@ sudo apt install --no-install-recommends virtualbox-guest-additions-iso<br>
 outputs<br>
 virtualbox-guest-additions-iso is already the newest version (7.0.6-1)</p>
 <p>How to update virtualbox-guest-additions-iso  to <strong>7.1.8</strong>.</p>
-            <p><small>6 posts - 3 participants</small></p>
+            <p><small>7 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/update-virtualbox-guest-additions/1018">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/update-virtualbox-guest-additions/1018</link>
@@ -3064,50 +3161,6 @@ E: The list of sources could not be read.
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1000</guid>
           <source url="https://forums.kicksecure.com/t/source-list-help-required-please/1000.rss">Source list help required please</source>
-        </item>
-        <item>
-          <title>Set a gateway like whonix for kickscure</title>
-          <dc:creator><![CDATA[Noname22122]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>……</p>
-<p>Because Whonix can’t set VLESS bridge for connect VPN serverand can’t connect tor</p>
-<p>I change to Kickscure</p>
-<p>But I want to set a gateway like whonix for kicksecure , and support VPN</p>
-<p>(not like whonix block any VPN connect)</p>
-<p>Is have any idea to make it ?</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/set-a-gateway-like-whonix-for-kickscure/998">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/set-a-gateway-like-whonix-for-kickscure/998</link>
-          <pubDate>Tue, 15 Apr 2025 22:04:50 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-998</guid>
-          <source url="https://forums.kicksecure.com/t/set-a-gateway-like-whonix-for-kickscure/998.rss">Set a gateway like whonix for kickscure</source>
-        </item>
-        <item>
-          <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
-          <dc:creator><![CDATA[NTH9R6]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hello Kicksecure folks,</p>
-<p>I installed Debian on my brand new Western Digital external SSD drive. Then I proceeded to distro morph it following the guide (prob should have went with the ISO route) and everything works as intended.</p>
-<p>However when I unplug my SSD or it comes unplugged somehow (has happened before) it doesn’t trigger a full shutdown?</p>
-<p>Why doesn’t it fully shutdown when unplugged?<br>
-I do want to add that also set up LUKS when I installed Debian.</p>
-<p>Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</p>
-            <p><small>10 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994</link>
-          <pubDate>Wed, 09 Apr 2025 10:04:28 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-994</guid>
-          <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
         </item>
   </channel>
 </rss>
