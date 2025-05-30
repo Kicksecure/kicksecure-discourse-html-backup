@@ -5,6 +5,165 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Avoid clearnet traffic in Kicksecure</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>You would need to manually create a transparent Tor proxy firewall preferably with nftables (I plan to make a guide)</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.torproject.org/legacy/trac/-/wikis/doc/BlockingNonTorTraffic">
+  <header class="source">
+      <img src="https://gitlab.torproject.org/uploads/-/system/appearance/favicon/1/favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://gitlab.torproject.org/legacy/trac/-/wikis/doc/BlockingNonTorTraffic" target="_blank" rel="noopener nofollow ugc">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.torproject.org/uploads/-/system/project/avatar/414/trac.png" class="thumbnail onebox-avatar">
+
+<h3><a href="https://gitlab.torproject.org/legacy/trac/-/wikis/doc/BlockingNonTorTraffic" target="_blank" rel="noopener nofollow ugc">BlockingNonTorTraffic · Wiki · Legacy / Trac · GitLab</a></h3>
+
+  <p>Welcome to The Tor Project's Gitlab</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055#post_6</link>
+        <pubDate>Fri, 30 May 2025 01:15:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2673</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Also wrote a rather thorough “force shutdown” script based partially on <a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a>’s suggestions above.</p>
+</blockquote>
+</aside>
+<p>Does it use the existing <code>ram-wipe</code> package as <a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> mentioned?</p>
+<blockquote>
+<p>Once this is done and working</p>
+</blockquote>
+<p>Any way to donate towards this work specifically?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994#post_11</link>
+        <pubDate>Fri, 30 May 2025 01:06:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2672</guid>
+      </item>
+      <item>
+        <title>How many details are there in Kicksecure&#39;s fingerprint revealing to ISP the OS?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="NiksWho" data-post="1" data-topic="1044">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/54ee81/48.png" class="avatar"> NiksWho:</div>
+<blockquote>
+<p>But what else (or how many) is there in traffic saying to ISP that it’s Kicksecure?</p>
+</blockquote>
+</aside>
+<p>I would think this would be the standard of Networking like DHCP when connecting to a network since ISP’s (well there is a debate) indeed store all connections identifiers.</p>
+<p>In this case the things that would make you fingerprintable are the <em>hostname</em> which Kicksecure sets to a generic name “host” and the MAC Address which currently Kicksecure doesn’t randomize.</p>
+<p>Hostname and MAC Address are sent to a network and via DHCP request packets so these are necessarily Kicksecure but rather the identifier of you on a network.</p>
+<p>Things that could be fingerprintable as you mentioned are outbound connections that are sent. <br>
+Others are Linux kernel headers with things like browsers but as far as the OS I would say you just look like standard Debian with Tor when you go to update.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-many-details-are-there-in-kicksecures-fingerprint-revealing-to-isp-the-os/1044#post_3</link>
+        <pubDate>Fri, 30 May 2025 01:00:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2671</guid>
+      </item>
+      <item>
+        <title>Ephemeral Port Randomization Questions?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Should Kicksecure stick with the default that Linux defaults to?</p>
+<p><code>cat /proc/sys/net/ipv4/ip_local_port_range</code></p>
+<p>The default range is 32768 - 60999<br>
+I’m not sure why this reasoning and is the RFC-compliant recommended range outdated?</p>
+<p>RFC-compliant ephemeral port range <a href="https://datatracker.ietf.org/doc/html/rfc6335.html#section-6" rel="noopener nofollow ugc">(RFC 6335)</a></p>
+<blockquote>
+<p>The Dynamic Ports, also known as the Private or Ephemeral Ports, from 49152-65535</p>
+</blockquote>
+<p>Would changing the range to something Kicksecure specific increase Fingerprinting?</p>
+<p><strong>Should it be increased to 65535?</strong> <code>net.ipv4.ip_local_port_range = 32768    65535</code><br>
+Increased entropy equals better protection against port prediction?<br>
+More ports equals less chance of port collisions under high loads?<br>
+Does changing it increase attack surface?</p>
+<p>What are your thoughts on this since Kicksecure is also a consideration for server use?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ephemeral-port-randomization-questions/1070#post_1</link>
+        <pubDate>Fri, 30 May 2025 00:37:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2670</guid>
+      </item>
+      <item>
+        <title>Running portable application located on external drive</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="14" data-topic="825">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>only changes to a particular directory?</p>
+</blockquote>
+</aside>
+<p>Yes, though I think you need to point config to <code>/boot/grub/persistence.conf</code> in the case of the Kali example (Correct me if I’m wrong):<br>
+<code>echo -e '/home/user/.electrum source=electrum' | sudo tee -a /boot/grub/persistence.conf &gt; /dev/null</code></p>
+<p>In Kali Linux, persistence is configured by editing the persistence.conf file located at <code>/boot/grub/persistence.conf</code>. Persistent data is stored under <code>/media/persistence/</code>, which is a common location for mounting removable media.</p>
+<p>In Tails, persistence is managed within the live environment. The configuration file persistence.conf is located at <code>/live/persistence/TailsData_unlocked/persistence.conf</code>. This setup allows Tails to maintain privacy by keeping persistent data within the live system structure.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/running-portable-application-located-on-external-drive/825#post_16</link>
+        <pubDate>Fri, 30 May 2025 00:35:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2669</guid>
+      </item>
+      <item>
+        <title>Messengers in wiki</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Related recent lengthy discussion:</p><aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/recommended-private-chats-and-social-networks-for-whonix/21561">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/recommended-private-chats-and-social-networks-for-whonix/21561" target="_blank" rel="noopener" title="06:14PM - 07 May 2025">Whonix Forum – 7 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/recommended-private-chats-and-social-networks-for-whonix/21561" target="_blank" rel="noopener">Recommended private chats and social networks for Whonix</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #8C6238;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Support</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>Patrick, I’ve noticed an issue with beginners and less experienced users: they either don’t know where to communicate safely, or they install messengers with built-in Tor, resulting in Tor over Tor. Essentially, Whonix is best suited for anonymous...</p>
+
+  <p>
+    <span class="label1">Reading time: 10 mins 🕑</span>
+      <span class="label2">Likes: 41 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/messengers-in-wiki/1069#post_4</link>
+        <pubDate>Thu, 29 May 2025 13:56:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2668</guid>
+      </item>
+      <item>
         <title>Messengers in wiki</title>
         <dc:creator><![CDATA[@sam]]></dc:creator>
         <description><![CDATA[ <p>Wow, it is very interesting. I read his recent articles from 2024-2025, and he also does not recommend XMPP due to weak cryptography and outdated versions of OMEMO <a href="https://soatok.blog/2024/08/04/against-xmppomemo/" class="inline-onebox" rel="noopener nofollow ugc">Against XMPP+OMEMO - Dhole Moments</a> He writes that Cwtch has not undergone any security audits. He recommends only Signal and Simplex Chat, but he acknowledges the issue of the phone number in Signal. It seems that Simplex is currently the only messenger that does not have account registration issues, encryption problems, works with Tor and the clearnet, and has powerful security features.</p> ]]></description>
@@ -2709,110 +2868,6 @@ Of course Kicksecure is much more secure than Debian but it is definitely used b
         <link>https://forums.kicksecure.com/t/kicksecure-17-3-9-2-testers-wanted/1023#post_5</link>
         <pubDate>Tue, 13 May 2025 17:12:19 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2607</guid>
-      </item>
-      <item>
-        <title>Scira AI instead of Perplexity</title>
-        <dc:creator><![CDATA[@rico]]></dc:creator>
-        <description><![CDATA[ <p>Scira works very well, but it operates a bit differently Perplexity. You can add it to Whonix, and Whonix users will know about the AI working in Tor without a captcha</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/scira-ai-instead-of-perplexity/1034#post_9</link>
-        <pubDate>Tue, 13 May 2025 10:09:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2606</guid>
-      </item>
-      <item>
-        <title>Kicksecure 17.3.9.2 - Testers Wanted!</title>
-        <dc:creator><![CDATA[@proxs]]></dc:creator>
-        <description><![CDATA[ <p>There’s a missing green Livecheck icon when logging into SYSMAINT Xfce session (LIVE Mode)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-17-3-9-2-testers-wanted/1023#post_4</link>
-        <pubDate>Mon, 12 May 2025 14:06:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2605</guid>
-      </item>
-      <item>
-        <title>Tor bridge configuration</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Same as if using system Tor on Debian. Kicksecure uses <code>packages.debian.org/tor</code>. Same as if using <code>sudo apt install tor</code> on Debian.</p>
-<p>Unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1747056738" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can be resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1747056738" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="08:21AM - 25 October 2024">Kicksecure – 25 Oct 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/tor-bridge-configuration/1039#post_2</link>
-        <pubDate>Mon, 12 May 2025 13:56:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2604</guid>
-      </item>
-      <item>
-        <title>Tor bridge configuration</title>
-        <dc:creator><![CDATA[@proxs]]></dc:creator>
-        <description><![CDATA[ <p>How to add bridges and not connect directly to the Tor network?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/tor-bridge-configuration/1039#post_1</link>
-        <pubDate>Mon, 12 May 2025 13:04:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2603</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Desirable features:</p>
-<ul>
-<li>restrict outgoing traffic to a configurable list of Linux users accounts</li>
-<li>restrict outgoing traffic to a configurable list of IPs only</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_13</link>
-        <pubDate>Sun, 11 May 2025 09:03:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2602</guid>
-      </item>
-      <item>
-        <title>ISO - no default for encryption on/off - user should choose explicitly</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Won’t be fixed until Kicksecure is rebased on Debian 13 / trixie. (Porting will start once blessed stable by Debian.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/iso-no-default-for-encryption-on-off-user-should-choose-explicitly/567#post_11</link>
-        <pubDate>Sat, 10 May 2025 17:32:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2601</guid>
       </item>
   </channel>
 </rss>
