@@ -5,6 +5,31 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Argon2 pbkdf setup and hardening in Kicksecure</title>
+        <dc:creator><![CDATA[@ketodiet100]]></dc:creator>
+        <description><![CDATA[ <p>As of right now the time of writing the default LUKS Argon2id setup is 1GB (1048576 kb) for memory cost and the parallelism setting of 1-4 threads max.</p>
+<p>These defaults were established to provide strong resistance to brute-force attacks by requiring significant computational resources, while capping parallelism to avoid excessive load on systems with limited cores. The memory cost ensures high RAM usage during key derivation, making GPU-based attacks more difficult, and the parallelism allows for multi-threaded processing up to 4 threads by default.</p>
+<p>The iteration time is often set to around 2000 milliseconds, but memory and parallelism are the key parameters queried.</p>
+<p>To verify these defaults you can use the <code>cryptsetup luksDump</code> command to inspect the current settings.</p>
+<hr>
+<p>Anyway others places have suggested and discussed that if a user has sufficient RAM they should increase it more then the default (1GB) manually.</p>
+<p>Should Kicksecure use 1/2 or 1/3 of the total memory or have an option to in Graphical installer to set this?</p>
+<p>I think the latter since having a option for advanced installs rather then an <em>“opt-in”</em> one size fits all approach. That would provide for flexibility and user by user use case when installing Kicksecure.</p>
+<ul>
+<li>1/2 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 2}' /proc/meminfo)</code></p>
+<ul>
+<li>1/3 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 3}' /proc/meminfo)</code></p>
+<p>Typically or my understanding is that <code>cyrptsetup</code> will detect the max amount of threads available by the system and will use that when setting parallel defaults.<br>
+Documenting how to upgrade a Luks Kicksecure install manually to increase the Argon2 memory cost might be worth mentioning.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079#post_1</link>
+        <pubDate>Fri, 06 Jun 2025 18:42:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2712</guid>
+      </item>
+      <item>
         <title>Installing Kicksecure to usb stick</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>I’ve figured out the root cause of the issue and am now working on a fix. There’s some bootloader ID confusion happening behind the scenes that is causing the fallback bootloader to not get installed during system installation.</p> ]]></description>
@@ -855,64 +880,6 @@ ensuring strict adherence to the [UEFI Specification Version
         <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055#post_4</link>
         <pubDate>Wed, 21 May 2025 10:23:06 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2653</guid>
-      </item>
-      <item>
-        <title>Outbound traffic security: Kicksecure and Qubes</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="FreshStar" data-post="5" data-topic="1059">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e68b1a/48.png" class="avatar"> FreshStar:</div>
-<blockquote>
-<p>Could you please clarify if I should assume that updates will be performed via clearnet automatically if Tor connection fails?</p>
-</blockquote>
-</aside>
-<p>There is no fallback to clearnet for default APT package sources files.</p>
-<aside class="quote no-group" data-username="FreshStar" data-post="5" data-topic="1059">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e68b1a/48.png" class="avatar"> FreshStar:</div>
-<blockquote>
-<p>Is disabling DNS a general security recommendation for Kicksecure?</p>
-</blockquote>
-</aside>
-<p>No.</p>
-<aside class="quote no-group" data-username="FreshStar" data-post="5" data-topic="1059">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e68b1a/48.png" class="avatar"> FreshStar:</div>
-<blockquote>
-<p>Is it documented how to do it the right way?</p>
-</blockquote>
-</aside>
-<p>Documented just now:<br>
-<a href="https://www.kicksecure.com/wiki/DNS#Disable_DNS">Disable DNS</a></p>
-<p>If you read the documentation fully, you will see why it cannot be considered “the right way”.</p>
-<aside class="quote no-group" data-username="FreshStar" data-post="5" data-topic="1059">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/e68b1a/48.png" class="avatar"> FreshStar:</div>
-<blockquote>
-<p>Can you recommend a documentation for proper firewall configuration on Kicksecure for avoiding clearnet connections? Or do you offer assistance?</p>
-</blockquote>
-</aside>
-<p>No.</p>
-<p>Implementing a firewall that reliably allows outgoing traffic for Linux user account <code>debian-tor</code>, loads early enough, has no race conditions, a fail-closed error handling mechanism and does not leak is challenging. Users won’t be able to do this.</p>
-<p>Ticket:<br>
-<a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></p>
-<p>As said:</p>
-<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1059">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>What you would need, and what does not exist yet at time of writing:</p>
-</blockquote>
-</aside>
-<p>And you won’t be able to find a band-aid by asking in any forums either.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/outbound-traffic-security-kicksecure-and-qubes/1059#post_6</link>
-        <pubDate>Wed, 21 May 2025 10:19:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2652</guid>
       </item>
   </channel>
 </rss>

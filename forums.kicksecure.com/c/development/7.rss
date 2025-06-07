@@ -5,8 +5,42 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Tue, 03 Jun 2025 19:03:31 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 06 Jun 2025 18:42:14 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Argon2 pbkdf setup and hardening in Kicksecure</title>
+          <dc:creator><![CDATA[ketodiet100]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>As of right now the time of writing the default LUKS Argon2id setup is 1GB (1048576 kb) for memory cost and the parallelism setting of 1-4 threads max.</p>
+<p>These defaults were established to provide strong resistance to brute-force attacks by requiring significant computational resources, while capping parallelism to avoid excessive load on systems with limited cores. The memory cost ensures high RAM usage during key derivation, making GPU-based attacks more difficult, and the parallelism allows for multi-threaded processing up to 4 threads by default.</p>
+<p>The iteration time is often set to around 2000 milliseconds, but memory and parallelism are the key parameters queried.</p>
+<p>To verify these defaults you can use the <code>cryptsetup luksDump</code> command to inspect the current settings.</p>
+<hr>
+<p>Anyway others places have suggested and discussed that if a user has sufficient RAM they should increase it more then the default (1GB) manually.</p>
+<p>Should Kicksecure use 1/2 or 1/3 of the total memory or have an option to in Graphical installer to set this?</p>
+<p>I think the latter since having a option for advanced installs rather then an <em>“opt-in”</em> one size fits all approach. That would provide for flexibility and user by user use case when installing Kicksecure.</p>
+<ul>
+<li>1/2 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 2}' /proc/meminfo)</code></p>
+<ul>
+<li>1/3 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 3}' /proc/meminfo)</code></p>
+<p>Typically or my understanding is that <code>cyrptsetup</code> will detect the max amount of threads available by the system and will use that when setting parallel defaults.<br>
+Documenting how to upgrade a Luks Kicksecure install manually to increase the Argon2 memory cost might be worth mentioning.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079</link>
+          <pubDate>Fri, 06 Jun 2025 18:42:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1079</guid>
+          <source url="https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079.rss">Argon2 pbkdf setup and hardening in Kicksecure</source>
+        </item>
         <item>
           <title>Investigate security (SUID) impact of polkitd and policykit libraries</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -794,45 +828,6 @@ Update: Tested.
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-667</guid>
           <source url="https://forums.kicksecure.com/t/apt-suggestsimportant/667.rss">APT::AutoRemove::SuggestsImportant</source>
-        </item>
-        <item>
-          <title>Metapackages tweak suggestions</title>
-          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Looked through Kicksecure’s metapackages to see what depends on what, and determine if some enhancements could be made. I added a rather lengthy suggestion for restructuring the metapackages to <a href="https://www.kicksecure.com/w/index.php?title=Dev/Metapackages&amp;stable=0" class="inline-onebox" rel="noopener nofollow ugc">Dev/Metapackages - Kicksecure</a>, which would be something we could consider for Trixie. While Kicksecure is still based on Bookworm however, I came up with some possibly useful changes we could apply now:</p>
-<ul>
-<li>Add <code>apt-transport-https</code> to <code>kicksecure-dependencies-cli</code>? This will make it easier for people to use certain third-party repos, potentially.</li>
-<li>Does <code>timesanitycheck</code> need updated? It’s “expiration date” is some time in 2023.</li>
-<li>Consider adding <code>vim-tiny</code> or even <code>vim</code> to <code>kicksecure-recommended-cli</code>? <code>nano</code> is oftentimes tricky to use for me, and I spin up new VMs often enough that installing Vim later is something I have to keep redoing.</li>
-<li>Does <code>open-link-confirmation</code> still work? If so, I notice that the Git page for it (<a href="https://github.com/Kicksecure/open-link-confirmation" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/open-link-confirmation: Asks for confirmation before opening links - For better security. - Asks before a link is (accidentally) opened in a browser to avoid linking activities.</a>) states “On an Anonymity Gateway (when the <code>anon-gw-base-files</code> package is installed), it honors the <code>$EDITOR</code> environment variable (falls back to kwrite if unset), asks if a file should be opened in an editor before opening it and informs, that opening links on a Gateway is unsupported for security reasons.” Maybe the default text editor should be changed to Mousepad?</li>
-<li>Why are the following packages part of <code>kicksecure-default-applications-cli</code>, shouldn’t they be part of a GUI metapackage instead, like <code>kicksecure-desktop-applications-xfce</code>?
-<ul>
-<li><code>catfish</code> (appears to be primarily a GUI application)</li>
-<li><code>flatpak</code> (flatpaks are only supposed to be GUI applications)<br>
-Why are the following applications part of <code>kicksecure-desktop-applications-xfce</code>, shouldn’t they be part of a CLI package like <code>kicksecure-recommended-cli</code> or <code>kicksecure-default-applications-cli</code>?</li>
-<li><code>p7zip-full</code></li>
-<li><code>unar</code></li>
-<li><code>unzip</code></li>
-<li><code>xz-utils</code></li>
-<li><code>zip</code></li>
-</ul>
-</li>
-<li>CLI/TUI tools can use <code>hunspell</code> (nano for instance has spell checking functionality that uses it according to <code>apt-cache rdepends</code>), should it be moved from kicksecure-desktop-applications-recommended to <code>kicksecure-recommended-cli</code> or even <code>kicksecure-dependencies-cli</code>? (The latter has a “Do not remove.” warning similar to <code>kicksecure-desktop-applications-recommended</code>).</li>
-<li>Hexchat is officially abandoned upstream. See <a href="https://hexchat.github.io/news/2.16.2.html" class="inline-onebox" rel="noopener nofollow ugc">2.16.2, The Final Release – HexChat</a>. Might be a good idea to find a different IRC client and make an apparmor-profile package for it, since Hexchat may not be secure in the long run?</li>
-<li>tirdad may actually be useful under Qubes OS, assuming the VM runs its own kernel which I think it does (although there is a Qubes OS setting that makes me unsure there). If it is usable on Qubes, perhaps it should be moved from <code>kicksecure-cli-host-packages-recommended</code> to <code>kicksecure-recommended-cli</code> or even <code>kicksecure-dependencies-cli</code>? This needs testing.</li>
-</ul>
-<p>Assuming no one brings up any objections, I’ll be submitting some changes for review that implement some or all of the above.</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/metapackages-tweak-suggestions/663">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/metapackages-tweak-suggestions/663</link>
-          <pubDate>Sun, 03 Nov 2024 19:34:40 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-663</guid>
-          <source url="https://forums.kicksecure.com/t/metapackages-tweak-suggestions/663.rss">Metapackages tweak suggestions</source>
         </item>
   </channel>
 </rss>

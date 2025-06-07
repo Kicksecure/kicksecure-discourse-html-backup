@@ -5,8 +5,42 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Tue, 03 Jun 2025 19:03:31 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 06 Jun 2025 18:42:14 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Argon2 pbkdf setup and hardening in Kicksecure</title>
+          <dc:creator><![CDATA[ketodiet100]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>As of right now the time of writing the default LUKS Argon2id setup is 1GB (1048576 kb) for memory cost and the parallelism setting of 1-4 threads max.</p>
+<p>These defaults were established to provide strong resistance to brute-force attacks by requiring significant computational resources, while capping parallelism to avoid excessive load on systems with limited cores. The memory cost ensures high RAM usage during key derivation, making GPU-based attacks more difficult, and the parallelism allows for multi-threaded processing up to 4 threads by default.</p>
+<p>The iteration time is often set to around 2000 milliseconds, but memory and parallelism are the key parameters queried.</p>
+<p>To verify these defaults you can use the <code>cryptsetup luksDump</code> command to inspect the current settings.</p>
+<hr>
+<p>Anyway others places have suggested and discussed that if a user has sufficient RAM they should increase it more then the default (1GB) manually.</p>
+<p>Should Kicksecure use 1/2 or 1/3 of the total memory or have an option to in Graphical installer to set this?</p>
+<p>I think the latter since having a option for advanced installs rather then an <em>“opt-in”</em> one size fits all approach. That would provide for flexibility and user by user use case when installing Kicksecure.</p>
+<ul>
+<li>1/2 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 2}' /proc/meminfo)</code></p>
+<ul>
+<li>1/3 available RAM example</li>
+</ul>
+<p><code>--pbkdf-memory $(awk -F ' ' '/MemTotal/ {printf "%.0f\n", $2 / 3}' /proc/meminfo)</code></p>
+<p>Typically or my understanding is that <code>cyrptsetup</code> will detect the max amount of threads available by the system and will use that when setting parallel defaults.<br>
+Documenting how to upgrade a Luks Kicksecure install manually to increase the Argon2 memory cost might be worth mentioning.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079</link>
+          <pubDate>Fri, 06 Jun 2025 18:42:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1079</guid>
+          <source url="https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079.rss">Argon2 pbkdf setup and hardening in Kicksecure</source>
+        </item>
         <item>
           <title>Investigate security (SUID) impact of polkitd and policykit libraries</title>
           <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -3107,49 +3141,6 @@ virtualbox-guest-additions-iso is already the newest version (7.0.6-1)</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1018</guid>
           <source url="https://forums.kicksecure.com/t/update-virtualbox-guest-additions/1018.rss">Update VirtualBox guest additions</source>
-        </item>
-        <item>
-          <title>USER login - Insufficient Privileges</title>
-          <dc:creator><![CDATA[proxs]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>After a clean installation of Kicksecure 17.3.8.7 (ISO) on my hard drive, when I select PERSISTENT USER or LIVE USER from the bootloader menu, I get the following message before logging in:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.imagebam.com/view/ME11I87D">
-  <header class="source">
-      <img src="https://www.imagebam.com/favicon.ico" class="site-icon" width="16" height="16">
-
-      <a href="https://www.imagebam.com/view/ME11I87D" target="_blank" rel="noopener nofollow ugc">imagebam.com</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.imagebam.com/view/ME11I87D" target="_blank" rel="noopener nofollow ugc">ImageBam</a></h3>
-
-  <p>Image Hosting, Image Upload, Picture Hosting</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>I can only log in to SYSMAINT. What could be the problem?</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/user-login-insufficient-privileges/1016">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/user-login-insufficient-privileges/1016</link>
-          <pubDate>Sun, 27 Apr 2025 00:06:10 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1016</guid>
-          <source url="https://forums.kicksecure.com/t/user-login-insufficient-privileges/1016.rss">USER login - Insufficient Privileges</source>
         </item>
   </channel>
 </rss>
