@@ -20,9 +20,37 @@ context: https://www.kicksecure.com/wiki/SUID_Disabler_and_Permission_Hardener
 
 Originally brought up by [Hizonner](https://www.reddit.com/user/Hizonner/) on https://www.reddit.com/r/Whonix/comments/1ktc1nb/comment/mvrnj3e/</description>
     
-    <lastBuildDate>Tue, 03 Jun 2025 19:03:31 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 10 Jun 2025 22:59:31 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Investigate security (SUID) impact of polkitd and policykit libraries</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I’ve looked at polkit’s documentation in <code>man 8 polkit</code>, and while I’m not exactly thrilled with some of how it works (and how it interacts with systemd), I don’t consider it a serious threat to a system’s security, and do consider it dangerous to remove or attempt removal of.</p>
+<p>To be clear, polkitd does NOT by itself provide SUID-alike functionality. polkitd’s job is to tell other software whether it should let a user do something they’ve asked to do. It does not by itself actually grant any further access, it only helps other software decide whether to grant further access.</p>
+<p>Hizonner’s main complaint against polkitd seems to be:</p>
+<blockquote>
+<p>I know it’s popular, but trying to use a separate reference monitor to enforce an externally defined “security policy” on requests to software is a recipe for errors.</p>
+</blockquote>
+<p>I don’t really agree with this statement. He seems to be saying, as far as I can tell, that it’s dangerous to have a process that tells other processes whether they are allowed to do things or not. This is what polkitd does - there’s a central daemon that receives connections from other software, asking it “is it OK for me to allow user Y to take action Z?” polkitd then looks at its configuration, decides whether to say “yes” or “no”, and then returns that answer to the caller. What the caller does with the answer from there is entirely up to it - in the case of systemd, it might allow an unprivileged user to start and stop system units, in the case of pkexec, it allows an unprivileged user to run things as root. That’s strictly because of how systemd and pkexec are designed though, there’s nothing polkitd does that inherently grants any extra access by itself.</p>
+<p>Now, it is true that there is significant complexity in <em>how</em> polkitd decides to tell a user whether they are allowed to do something or not. polkit’s configuration is a combination of XML and JavaScript (yes, JavaScript!), which is capable of taking arbitrarily complex actions including launching external processes, as part of determining whether to authorize an action or not. This sounds pretty bad initially, but polkitd runs all of these actions in a sandboxed environment under a non-privileged user account, thus limiting the damage they can do on their own and the chances that they will be exploited. The biggest danger here is that a software package might might configure polkitd in an insecure way, and that’s a danger that’s present with any flexible authentication framework.</p>
+<p>If we were to consider polkit’s method of operation dangerous, we’d have to also consider PAM dangerous, since it also runs sysadmin-defined code from a complex configuration repo as part of determining whether to grant authorization or not. PAM just authorizes logins rather than privileged actions. There’s nothing inherently dangerous about polkit’s and PAM’s method of operation other than complexity, and the jobs polkit and PAM have to do are complex enough to warrant that complexity. I believe it would be much more worthwhile to audit polkit’s configuration than to audit polkit itself.</p>
+<p>Another complaint Hizonner made was:</p>
+<blockquote>
+<p>It only gets worse when that policy is defined by a patchwork of separately installable bits from who-knows-where. Basically any package installed in the system can include polkit rules, which means that any maintaner who’s frustrated that something doesn’t have automatic access to some service can make that “problem” go away.</p>
+</blockquote>
+<p>This also doesn’t seem like a problem to me. Sure, a package maintainer <em>could</em> use polkit as part of hacking around some privilege barrier. There are plenty of ways to do that though, including installing a SUID executable, dropping a sudoers config file into <code>/etc/sudoers.d</code>, or just installing a systemd service that does things on behalf of some other application. Getting rid of polkit wouldn’t prevent this, or even make it particularly harder.</p>
+<p>I believe the concerns raised in this Reddit thread are a matter of opinion and not concrete security issues. Is it technically safer to live without polkit, udisksd, accounts-daemon, and the like? Maybe. It’s technically safer to live without a GUI, Bluetooth, WiFi, and USB too. Getting rid of Ethernet would also be helpful. Does that mean we should get rid of all of the above in the name of security? No, because that would render the system unusable to most people. There are systems where configurations like this make sense, a Kicksecure or Whonix desktop is not one of them.</p>
+<hr>
+<p>It is worth noting, polkitd is a security-sensitive component of the system and must <em>not</em> be compromised for the system to remain secure. Access to polkitd or the polkitd user account is equivalent to root access, as the polkitd process can use systemd APIs to escalate to root, authorizing its own request when systemd asks it if that request is permissible or not. polkitd’s sandboxing is not intended to prevent it from talking to systemd and requesting root access, and in my testing a process sandboxed as tightly as polkitd was able to gain access to an unsandboxed root shell using <code>run0</code> on Fedora 42. So despite the fact that polkitd doesn’t provide additional privileges to applicatiosn that call it, it can gain additional privileges itself.</p>
+          <p><a href="https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075/2</link>
+        <pubDate>Tue, 10 Jun 2025 22:59:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1075-2</guid>
+        <source url="https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075.rss">Investigate security (SUID) impact of polkitd and policykit libraries</source>
+      </item>
       <item>
         <title>Investigate security (SUID) impact of polkitd and policykit libraries</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
