@@ -5,6 +5,226 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Bug: Calamares installer, uncheck disk encryption can&#39;t press next</title>
+        <dc:creator><![CDATA[@nOrphf]]></dc:creator>
+        <description><![CDATA[ <p>Hi</p>
+<p>Thank you for the answer.<br>
+Have tried to look for existing info, but couldn’t find it.</p>
+<p>Regards nOrphf</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/bug-calamares-installer-uncheck-disk-encryption-cant-press-next/1100#post_3</link>
+        <pubDate>Sun, 22 Jun 2025 20:15:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2804</guid>
+      </item>
+      <item>
+        <title>Bug: Calamares installer, uncheck disk encryption can&#39;t press next</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This is unfortunately a known bug, we fixed it in upstream Calamares but were unable to get the fixed version of Calamares into Debian’s bookworm-backports repository (and thus into Kicksecure). You can work around it by editing <code>/etc/calamares/modules/partition.conf</code> and setting <code>preCheckEncryption</code> to <code>false</code>. Then run the installer.</p>
+<p>Once Kicksecure is ported to Debian Trixie, this should no longer be an issue.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/bug-calamares-installer-uncheck-disk-encryption-cant-press-next/1100#post_2</link>
+        <pubDate>Sun, 22 Jun 2025 19:56:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2803</guid>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[@FlapJacket]]></dc:creator>
+        <description><![CDATA[ <p>Many messaging applications stores files/avatars in .cache or follow the XDG env specifications. I will put this here but feel free to keep it or move it to another thread or use for wiki. Also if anything is incorrect though I researched this pretty well also feel free to correct it.</p>
+<hr>
+<ul>
+<li><strong>XMPP</strong></li>
+</ul>
+<p><em>Gajim</em> client handles avatars and cached files shared or opened chats in <code>~/.cache/gajim/</code> following XDG Base Directory Specification</p>
+<p><em>Dino</em> (version 0.4.5 or later) client only caches avatars in <code>~/.cache/dino</code> partially following XDG specifications.</p>
+<p>Both Gajim and Dino have automatic previews turned off meaning that files shared in public chats are not automatically downloaded by the client simply by being in a public chat room. <br>
+The user has to specifically click on them to or prompt to download them. <br>
+Dino will auto download shared files in private chats, Gajim on the other hand does not.</p>
+<hr>
+<ul>
+<li><strong>IRC</strong></li>
+</ul>
+<p><em>Hexchat</em> saves shared files in local Downloads folder typically.</p>
+<p>Hexchat does not have auto downloads for shared images in IRC chats by default. However below is a defense in depth config to download files in RAM following the theme of this thread. Though its better advised to rely on <em>“Live-Mode”</em>:</p>
+<pre><code class="lang-auto"># Directory for initial file downloads
+## Default download location is ~/Downloads
+# Save to .tmp if mounted to tmpfs
+dcc_dir = ./tmp
+## Save to ~/.cache
+## Not needed if tmp is mounted to tmpfs or also cache is mounted to tmp and tmp is mounted to tmpfs
+#dcc_dir = ~/.cache
+## Toggles automatic removal of finished/failed transfers when set to 1
+#dcc_remove = 1 
+# Disable automatic opening for received files
+## Asks for confirmation before downloading (default behavior).
+dcc_auto_recv = 0
+## Disables auto-opening for incoming file transfers.
+#gui_autoopen_recv =0 
+</code></pre>
+<hr>
+<ul>
+<li><strong>Matrix</strong></li>
+</ul>
+<p><em>Element</em> client follows XDG specifications for caching shared files and avatars in <code>~/.cache/Element/</code></p>
+<p><em>Nheko</em> client typically caches shared images and avatars in the <code>~/.cache/nheko/</code> adhering to the XDG Base Directory Specification however I’m not sure if that is correct since its been ahile since I used this client.</p>
+<hr>
+<ul>
+<li><strong>SimpleX Chat</strong></li>
+</ul>
+<p><em>SimpleX</em> Sends link previews by default and auto accept images is enabled by default as of v6.3.5 release.</p>
+<p>It also appears they don’t follow XDG specification (atleast for the AppImage version)</p>
+<p>Files shared/opened are stored here: <code>~/.local/share/simplex/simplex_v1_files</code></p>
+<p>To make turn these settings off make sure you go to config <code>~/.config/simplex/properties</code> check these lines are set:</p>
+<pre><code class="lang-auto">PrivacyAcceptImages=false
+PrivacyLinkPreviews=false
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057#post_6</link>
+        <pubDate>Sun, 22 Jun 2025 19:17:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2801</guid>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[@FlapJacket]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>First let me ask what is your use case for wanting to mount .cache to RAM?</p>
+</blockquote>
+</aside>
+<p>My use case is having certain applications like messaging apps and browsers store cache in RAM even when not in live mode so I things I’m working on still their while maintaining protection when communicating with randoms and online communities in public chats on messaging apps.</p>
+<p>Really trying to not have to worry about people spamming weirdo sh*t or malware and my device saving these files just cause I joined a group chat or clicked open preview of something that someone shared in a chat.</p>
+<p>Most applications are pretty good now in regards to not having auto previews turned on since its a security risk. Not all applications are made equally though. iMessage on iOS was exploited many times via auto-previews or links previews since it would auto download a image/file or a url link that would exploit a zero day. Not to mention someone could send you something illegal and it would be downloaded to your phone automatically, though this has been patched its still a concern with open source privacy based communications.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>The other method you mentioned you would prob have to rm and recreate the directory before you syslink it</p>
+</blockquote>
+</aside>
+<p>Thanks thats what I was thinking also. Syslinks might get corrupted or overided by updates too right?</p>
+<p>Like when updating applications for example.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057#post_5</link>
+        <pubDate>Sun, 22 Jun 2025 19:12:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2800</guid>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[@FlapJacket]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>As distribution developers, it’s hard for us to control the environment in this setup.</p>
+</blockquote>
+</aside>
+<p>Makes sense I understand that. To further clarify what I mean and what I’m trying to understand is if I have <code>XDG_CACHE_HOME=/tmp</code> set and .cache mounted to tmpfs/tmp will there be any gotchas footguns or bottlenecks with Live Mode also?</p>
+<p>It appears that grub-live dracut mounts half the system memory for system &amp; home folders /run etc. then the rest of free space is the other half of RAM. If I boot into live mode and look at download directory it says somewhere around 5GB of free space and my total RAM is roughly around 12GB. <em>I don’t think many users might know this about live mode.</em></p>
+<p>This is also the same with Tails given you can’t download anything bigger then the free RAM available, around half is used in there implementation. Otherwise you have to select the persistent directory if you have it enabled to save files bigger since that directory is not in memory.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>No need for any <code>/etc/fstab</code> modifications or anything.</p>
+</blockquote>
+</aside>
+<p>But onto the <code>fstab-vm</code> file line L23 that line doesn’t seem correct the line commited out below (L24) does look correct?</p>
+<p>I also am no way implying that Kicksecure should mount or syslink .cache to tmpfs/tmp by default configuration.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Did you perform a Functionality Test of Live mode and found unexpected persistence?</p>
+</blockquote>
+</aside>
+<p>Yes, and no I have not found any unexpected persistence with tests.<br>
+I will be installing via the ISO here though to look at defaults that are separate from distro morphing.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057#post_4</link>
+        <pubDate>Sun, 22 Jun 2025 19:09:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2799</guid>
+      </item>
+      <item>
+        <title>Bug: Calamares installer, uncheck disk encryption can&#39;t press next</title>
+        <dc:creator><![CDATA[@nOrphf]]></dc:creator>
+        <description><![CDATA[ <p>Hi</p>
+<p>When installing Kicksecure, if you select to erase disk and unselect encryption the two password box but encrypt is still selected.<br>
+If you press the tick mark again, the tick mark disappears, but you can’t press next, the button isn’t made clickable.</p>
+<p>See more here:<br>
+https ://streamable.com/p8jnkd</p>
+<p>Doing manual disk partitioning is the only way I have found to get past without disk encryption.</p>
+<p>This is happening for both a Hyper-V, VirtualBox and Physical PC installation.<br>
+Selected language: English GB<br>
+selected timezone: Copenhagen (Locale en-GB, formats DK)<br>
+Selected keyboard: Danish (No dead keys)</p>
+<p>Regards Lars.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/bug-calamares-installer-uncheck-disk-encryption-cant-press-next/1100#post_1</link>
+        <pubDate>Sun, 22 Jun 2025 17:36:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2798</guid>
+      </item>
+      <item>
+        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="31" data-topic="1095">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
+<blockquote>
+<p>Is there a better way to get a log file?</p>
+</blockquote>
+</aside>
+<p>Open a terminal. Run</p>
+<pre><code>install-host
+</code></pre>
+<p>The extensive output there includes the installer log.</p>
+<aside class="quote no-group" data-username="xianhua" data-post="31" data-topic="1095">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
+<blockquote>
+<p>The log file is extensive, is there any specific error to look for?</p>
+</blockquote>
+</aside>
+<p>No. Calamares isn’t in its entirety isn’t developed by Kicksecure. Nor are most of the tools included. It’s Open Source. Based on thousands of people developing software.</p>
+<p>The way it works:</p>
+<ol>
+<li>there is an issue</li>
+<li>log is provided</li>
+<li>developer reads, searches logs</li>
+</ol>
+<p>What probably does not exist: Developers memorizing the debug output so well that they can tell you selectively what to copy and what to leave out. Requires too much time to think about and explain.</p>
+<aside class="quote no-group" data-username="xianhua" data-post="31" data-topic="1095">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
+<blockquote>
+<p>In general with kick, there appears to be a problem with the installation of</p>
+<p>bootloaders onto the USB stick, because when attempting to boot, it doesn’t</p>
+<p>recognize an OS.</p>
+</blockquote>
+</aside>
+<p>There might be a bug on some hardware, which we’ll fix in the next release:</p>
+<aside class="quote" data-post="1" data-topic="1074">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/df788c/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074">Installing Kicksecure to usb stick</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    I keep getting this error when trying to install onto a usb . Thanks. 
+Failed to unpack image "/run/initramfs/live/live/filesystem.squashfs* 
+Details: 
+rsync failed with error code 11!
+  </blockquote>
+</aside>
+
+<p>But that bug isn’t installation of the bootloader to the wrong device.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_32</link>
+        <pubDate>Sun, 22 Jun 2025 03:38:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2796</guid>
+      </item>
+      <item>
         <title>Kicksecure/Whonix LiveUSB distromorph</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Couple of issues getting calamares installer logs; when you select “toggle log”</p>
@@ -806,105 +1026,6 @@ kicksecure dot com/wiki/Dev/Default_Browser#Mullvad_Browser</p>
         <link>https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075#post_2</link>
         <pubDate>Tue, 10 Jun 2025 22:59:31 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2741</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@MITSIS]]></dc:creator>
-        <description><![CDATA[ <p>Ok thanks is broken just for install to usb or all instances ?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074?page=2#post_24</link>
-        <pubDate>Tue, 10 Jun 2025 07:13:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2740</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>17.3.9.2 is unfortunately broken (tested just now), and it’s the only stable release that could have had this working. So unfortunately this will have to wait until the next stable release is out.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074?page=2#post_23</link>
-        <pubDate>Mon, 09 Jun 2025 23:34:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2739</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@MITSIS]]></dc:creator>
-        <description><![CDATA[ <p>Tried to install [17.3.9.2/] but it comes up with this error</p>
-<p>The bootloader could not be installed. The installation command </p><pre>grub-install --target=i386-pc --recheck --force /dev/sda</pre> returned error code 1.<p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074?page=2#post_21</link>
-        <pubDate>Mon, 09 Jun 2025 18:11:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2737</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@MITSIS]]></dc:creator>
-        <description><![CDATA[ <p>Extraextra thanks I was just replying to the offer that arraybolt3 made to find the iso that works , I am fully aware of how the internet works . Thanks again and have a lovely evening .</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074#post_20</link>
-        <pubDate>Sun, 08 Jun 2025 19:42:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2736</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <p>It’s not so difficult to find. You shouldn’t view the internet and shiny collection of fancy buttons or a link as a giant blob of unintelligible gibberish. Just look at it and try to find the pattern.</p>
-<p>You can explore the website based on the current download link. Then modify that link.</p>
-<p><code>https://www.kicksecure.com/download/iso/17.3.9.9/Kicksecure-Xfce-17.3.9.9.Intel_AMD64.iso</code></p>
-<p>You could try to simply replace the version numbers with a past release.</p>
-<p>Or why not remove everything after the slash?</p>
-<p><code>https://www.kicksecure.com/download/iso/17.3.9.9/</code></p>
-<p>Why not remove everything after one more slash?</p>
-<p><code>https://www.kicksecure.com/download/iso/</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074#post_19</link>
-        <pubDate>Sun, 08 Jun 2025 18:48:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2735</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@MITSIS]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the update , I totally understand these things are never simple , if you have the time and can find an older ISO that would be wonderful . Thanks for your help .</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074#post_18</link>
-        <pubDate>Sun, 08 Jun 2025 16:29:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2734</guid>
-      </item>
-      <item>
-        <title>Argon2 pbkdf setup and hardening in Kicksecure</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Due to this, we don’t have any plans to work on this.</p>
-<p>However, note, that the Kicksecure project is not the final decision maker in this case. You don’t have to necessarily convince Kicksecure.</p>
-<p>This is mostly unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1749375025" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Feel free to discuss this with other upstream projects such as for example:</p>
-<ul>
-<li>Calamares</li>
-<li>libkpmcore</li>
-<li>cryptsetup</li>
-<li>Debian</li>
-</ul>
-<p>Should other projects, upstreams agree with this proposal, their improvements, if any are ever made, would likely flow down to downstream, Kicksecure.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/argon2-pbkdf-setup-and-hardening-in-kicksecure/1079#post_4</link>
-        <pubDate>Sun, 08 Jun 2025 15:09:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2733</guid>
       </item>
   </channel>
 </rss>
