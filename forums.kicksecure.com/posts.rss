@@ -5,6 +5,152 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Set Mousepad to Launch in New Windows instead of Tabs by Default</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Sounds reasonable and probably easy enough to do. Thanks for the suggestion and the research, I’ll look into implementing it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/set-mousepad-to-launch-in-new-windows-instead-of-tabs-by-default/1107#post_2</link>
+        <pubDate>Sun, 29 Jun 2025 17:03:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2878</guid>
+      </item>
+      <item>
+        <title>Installing Kicksecure to usb stick</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Just for installation to USB, and only in situations where you’re booting one USB on multiple computers, or where your system has buggy firmware.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074?page=2#post_25</link>
+        <pubDate>Sun, 29 Jun 2025 15:20:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2877</guid>
+      </item>
+      <item>
+        <title>Panel items missing [feedback]</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>The missing power manager icon is weird, I’ll double-check on my end but I think that’s supposed to be there by default. If it’s not, it’s possible the OS isn’t detecting your system’s battery. Will investigate.</p>
+<hr>
+<p>On the sysmaint session, just from a standpoint of what is or isn’t good to implement:</p>
+<p>Adding a clock to the sysmaint session sounds like a good idea, especially since time can be security-related due to its effect on things like SSL.</p>
+<p>I don’t think adding window buttons is a good idea, as much as they would be convenient. The sysmaint session is intentionally designed to be a bit annoying to use as a general-purpose session because using it as a general-purpose session is a security hazard. This is why we have a separate sysmaint session, so that it’s hard to get to Firefox or other complex apps that interact with the network.</p>
+<hr>
+<p>From a standpoint of implementation difficulty:</p>
+<p>Right now the sysmaint session panel is implemented using <a href="https://packages.debian.org/bookworm/trayer" rel="noopener nofollow ugc">trayer</a>, which only supports system tray icons, not other widgets like clocks, power indicators, or window buttons. We’d have to use a more complete panel implementation (maybe xfce4-panel could be configured to work right somehow?) to introduce those elements, and I don’t really want us to use a panel implementation that’s <em>too</em> complete or easily reconfigured in order to keep the sysmaint session from being used for general-purpose tasks. It may be possible to pull in a good power manager applet from the Debian repos, and there might be a clock applet that could work in a similar way. (If a clock applet proves to be impossible, that could be worked into the system maintenance panel itself.) Window buttons are probably not going to be possible. It might be possible to get xfwm4 to minimize windows in such a way that they remain partially visible, we could look into that.</p>
+<p>If the permissions limitations in a user session and the functionality limitations in a sysmaint session are too limiting for your use case, you can revert back to “unrestricted admin mode” by booting into the <code>REMOVE user-sysmaint-split | enable unrestricted admin mode</code> boot option. This will get rid of the sysmaint session and bring back <code>sudo</code> access in normal user sessions. See <a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode" class="inline-onebox" rel="noopener nofollow ugc">Unrestricted Admin Mode</a> for details.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/panel-items-missing-feedback/1108#post_3</link>
+        <pubDate>Sun, 29 Jun 2025 15:17:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2876</guid>
+      </item>
+      <item>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>You need a to install using Calamares <em><strong>or</strong></em> use distribution morphing.</p>
+<p>install using Calamares:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/ISO">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener" title="12:46AM - 25 May 2025">Kicksecure – 25 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener">Kicksecure Live ISO (via USB) and Installation</a></h3>
+
+  <p>Kicksecure Installation Guide. This guide will help you download the ISO image, create your bootable media, and install Kicksecure on your computer.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>*<strong>See step: Install Kicksecure (Optional)</strong></p>
+<hr>
+<p>Persistent mode:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Persistent_Mode">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Persistent_Mode" target="_blank" rel="noopener" title="12:46PM - 14 May 2025">Kicksecure – 14 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" width="690" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Persistent_Mode" target="_blank" rel="noopener">Persistent Mode for Kicksecure</a></h3>
+
+  <p>Persistent mode for Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Distribution morphing:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener" title="11:49PM - 18 May 2025">Kicksecure – 18 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/d/d1/Download-debian.jpg?version=0f5a9307bc5f0ca052752efec6830baf" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener">Install Kicksecure inside Debian</a></h3>
+
+  <p>Kicksecure can be installed on top of an existing Debian installation.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_9</link>
+        <pubDate>Sun, 29 Jun 2025 14:41:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2875</guid>
+      </item>
+      <item>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
+        <dc:creator><![CDATA[@xianhua]]></dc:creator>
+        <description><![CDATA[ <p>it was installed to a USB, is that sufficient?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_8</link>
+        <pubDate>Sun, 29 Jun 2025 14:29:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2874</guid>
+      </item>
+      <item>
+        <title>Enterprise Laptop style WiFi Switch causes Permanent freeze</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This does sound like a driver issue or similar to me. If you want a possible quick solution, you can try to install a newer kernel from the backports repository using <code>sudo apt install -t bookworm-backports linux-image-amd64</code>, and see if that fixes it. (See <a href="https://wiki.debian.org/Backports" class="inline-onebox" rel="noopener nofollow ugc">Backports - Debian Wiki</a> for more info on Debian backports.) This isn’t guaranteed to work, but if it is a driver issue, this has a decent chance of solving it.</p>
+<p>You could also try other distros to see if they have the same problem. Kicksecure 17 is based on Debian 12, so testing Debian 12 would help you determine if it’s a Kicksecure-specific issue or if it’s just a Debian problem.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/enterprise-laptop-style-wifi-switch-causes-permanent-freeze/1105#post_5</link>
+        <pubDate>Sun, 29 Jun 2025 14:12:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2873</guid>
+      </item>
+      <item>
+        <title>Panel items missing [feedback]</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>USERMAINT? You mean sysmaint? Please edit.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/panel-items-missing-feedback/1108#post_2</link>
+        <pubDate>Sun, 29 Jun 2025 08:00:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2872</guid>
+      </item>
+      <item>
         <title>Panel items missing [feedback]</title>
         <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
         <description><![CDATA[ <p>I am reaching out to share some observations regarding missing panel items in the desktop settings for the two users (boot sessions), USER and USERMAINT. These issues were noticed while booting in Live Mode USB, and I believe it would be beneficial to me to provide my feedback.</p>
@@ -82,48 +228,48 @@ zsh: exit 255   iw wlan0 set power_save off
         <guid isPermaLink="false">forums.kicksecure.com-post-2857</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Can you explain this further? The issue is a lack of disk space on a fairly large USB drive, or it is a RAM limitation?</p>
 <p>This could be a permissions limitation?</p>
 <p>When this script is run with ‘sudo’ it returns error about not running as root.</p>
 <p>It is a circular logic problem? You need root permissions, but can’t run</p>
 <p>the script as root.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103?page=2#post_23</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_6</link>
         <pubDate>Sat, 28 Jun 2025 21:32:23 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2856</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>By the way, the systemcheck command failing is what prompted the</p>
 <p>output “–set-home clock-random-manual-gui”</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103?page=2#post_22</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_5</link>
         <pubDate>Sat, 28 Jun 2025 21:29:34 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2855</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@extraextra]]></dc:creator>
         <description><![CDATA[ <p>ISO live mode?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103?page=2#post_21</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_4</link>
         <pubDate>Sat, 28 Jun 2025 20:36:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2854</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>64 G drive, how large are these VMs?</p>
 <p>What is size of Whonix install? could be RAM limitation?</p>
 <p>what are disk space and RAM requirements?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_20</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_3</link>
         <pubDate>Sat, 28 Jun 2025 20:25:59 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2853</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="18" data-topic="1103">
+        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1114">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
@@ -133,12 +279,12 @@ zsh: exit 255   iw wlan0 set power_save off
 </aside>
 <p>Let me google that for you. <img src="https://forums.kicksecure.com/images/emoji/twitter/roll_eyes.png?v=12" title=":roll_eyes:" class="emoji" alt=":roll_eyes:" loading="lazy" width="20" height="20"></p>
 <p>Insufficient disk space.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_19</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_2</link>
         <pubDate>Sat, 28 Jun 2025 20:15:36 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2852</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Yeah the manual timezone input was correct.</p>
 <p>Now having an error when attempting the “whonix-xfce-installer-cli”:</p>
@@ -150,29 +296,9 @@ VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057) - Invalid<br>
 argument value (extended info not available)<br>
 VBoxManage: error: Context: "RTEXITCODE handleImportAppliance(HandlerArg*)<br>
 at line 1440 of file VBoxManageAppliance.cpp</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_18</link>
+        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_1</link>
         <pubDate>Sat, 28 Jun 2025 20:06:46 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2851</guid>
-      </item>
-      <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="10" data-topic="1103">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>E: Release file for tor+https://fasttrack.debian.net/debian-fasttrack/dists/bookworm-</p>
-<p>fasttrack/InRelease is not valid yet (invalid for another 4h 25min 51s). Updates for</p>
-</blockquote>
-</aside>
-<p>Separate topic.<br>
-1 topic = 1 forum thread please.</p>
-<p>See:<br>
-<a href="https://www.kicksecure.com/wiki/Network_Time_Synchronization#Manually_Set_Clock_Time_and_Date">Manually Set Clock Time and Date</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_17</link>
-        <pubDate>Sat, 28 Jun 2025 18:55:11 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2850</guid>
       </item>
       <item>
         <title>Questions regarding use of tmpfs formatting and conflicts</title>
@@ -214,7 +340,7 @@ Reason being I can’t say for sure if a application stores files in .cache and 
         <guid isPermaLink="false">forums.kicksecure.com-post-2848</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>InRelease is not valid yet (invalid for another 4h 25min 51s)</title>
         <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
         <description><![CDATA[ <p>Oh wait sorry I read that wrong…<br>
 I like to bet on or however say to check your system time cause I have this issue before and it was related to my system time being off causing the repository’s InRelease file to appear invalid.<br>
@@ -246,25 +372,9 @@ NTP is disabled on Kicksecure/Whonix, so I would first check that Tor is working
 <p>If that is not the case check that your BIOS clock is holding time between restarts, your CMOS battery might be dead or missing.<br>
 In that case replace the CMOS battery or you will have to set the time to UTC manually before booting every time likely.</p>
 <p>Two instances I know of this personally was 1 on my Pi that has NTP disabled and I had a power surge and it reset the date. The second was CMOS battery dead on laptop that didn’t have a battery requiring it to plugged in to use. meaning that once the main power was lost all BIOS setting were set to manufacturer reset so it was displaying the time and date as it being the year it was made.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_16</link>
+        <link>https://forums.kicksecure.com/t/inrelease-is-not-valid-yet-invalid-for-another-4h-25min-51s/1113#post_2</link>
         <pubDate>Sat, 28 Jun 2025 18:35:40 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2847</guid>
-      </item>
-      <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="13" data-topic="1103">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>Any ideas on the release file?</p>
-</blockquote>
-</aside>
-<p>I have no idea I’m not a dev</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_15</link>
-        <pubDate>Sat, 28 Jun 2025 18:20:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2846</guid>
       </item>
       <item>
         <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
@@ -348,15 +458,6 @@ I’m sensing this this related to DMA (Direct Memory Access) concerns?</p><asid
         <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_14</link>
         <pubDate>Sat, 28 Jun 2025 18:20:06 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2845</guid>
-      </item>
-      <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
-        <dc:creator><![CDATA[@xianhua]]></dc:creator>
-        <description><![CDATA[ <p>This is helpful, thanks.</p>
-<p>Any ideas on the release file?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_13</link>
-        <pubDate>Sat, 28 Jun 2025 18:14:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2844</guid>
       </item>
       <item>
         <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
@@ -456,7 +557,7 @@ I’m sensing this this related to DMA (Direct Memory Access) concerns?</p><asid
         <guid isPermaLink="false">forums.kicksecure.com-post-2839</guid>
       </item>
       <item>
-        <title>Could UEFI/BIOS exploits/rootkits be a potential source of compromise?</title>
+        <title>InRelease is not valid yet (invalid for another 4h 25min 51s)</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>In order to make a persistent kicksecure USB, it required a separate</p>
 <p>clean device, and it required an airgap also.</p>
@@ -465,15 +566,15 @@ I’m sensing this this related to DMA (Direct Memory Access) concerns?</p><asid
 <p>fasttrack/InRelease is not valid yet (invalid for another 4h 25min 51s). Updates for</p>
 <p>this repository will not be applied. Not sure if this is due to updates</p>
 <p>to the code repo, but it returned the same error message 4h ago also.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_10</link>
+        <link>https://forums.kicksecure.com/t/inrelease-is-not-valid-yet-invalid-for-another-4h-25min-51s/1113#post_1</link>
         <pubDate>Sat, 28 Jun 2025 14:41:06 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2838</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Already answered above:</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="45" data-topic="1095">
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1109">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
@@ -481,22 +582,22 @@ I’m sensing this this related to DMA (Direct Memory Access) concerns?</p><asid
 <p>Morphing Raspberry Pi OS into Kicksecure is untested and not recommended, RPiOS is a Debian derivative that departs from Debian in some substantial ways, morphing it into Kicksecure may cause issues.</p>
 </blockquote>
 </aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_51</link>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_4</link>
         <pubDate>Fri, 27 Jun 2025 20:16:43 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2837</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Could Raspbian or Pi OS be used?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_50</link>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_3</link>
         <pubDate>Fri, 27 Jun 2025 20:09:34 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2836</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Could an persistent Kicksecure .img be made using TailsOS live USB?</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="48" data-topic="1095">
+        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1110">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
@@ -507,26 +608,26 @@ I’m sensing this this related to DMA (Direct Memory Access) concerns?</p><asid
 <p>In theory, yes.<br>
 In practice, won’t happen.<br>
 Please don’t ask for technical details as it will lead nowhere.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_49</link>
+        <link>https://forums.kicksecure.com/t/could-an-persistent-kicksecure-img-be-made-using-tailsos-live-usb/1110#post_2</link>
         <pubDate>Fri, 27 Jun 2025 17:58:49 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2835</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Could an persistent Kicksecure .img be made using TailsOS live USB?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>could an persistent Kicksecure .img be made using TailsOS live USB? How about</p>
 <p>on a Pi? is it more desirable to do this using debian on a persistent disk?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_48</link>
+        <link>https://forums.kicksecure.com/t/could-an-persistent-kicksecure-img-be-made-using-tailsos-live-usb/1110#post_1</link>
         <pubDate>Fri, 27 Jun 2025 17:34:56 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2834</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Why .img image format?</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>You can build raw images as per:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Build_Documentation/images">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751016626" class="site-icon" width="40" height="40">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Dev/Build_Documentation/images" target="_blank" rel="noopener" title="03:27PM - 18 May 2025">Kicksecure – 18 May 25</a>
   </header>
@@ -552,7 +653,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>See also:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/image_formats">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751016626" class="site-icon" width="40" height="40">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Dev/image_formats" target="_blank" rel="noopener" title="10:12AM - 18 May 2025">Kicksecure – 18 May 25</a>
   </header>
@@ -575,25 +676,25 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
   <div style="clear: both"></div>
 </aside>
  ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_47</link>
+        <link>https://forums.kicksecure.com/t/why-img-image-format/1112#post_3</link>
         <pubDate>Fri, 27 Jun 2025 16:48:02 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2833</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Why .img image format?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>could you summarize the technical challenges for creating an kick .img file?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_46</link>
+        <link>https://forums.kicksecure.com/t/why-img-image-format/1112#post_2</link>
         <pubDate>Fri, 27 Jun 2025 16:42:20 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2832</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="43" data-topic="1095" data-full="true">
+        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1112" data-full="true">
 <div class="title">
 <div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"><a href="https://forums.kicksecure.com/t/why-img-image-format/1112/1">Why .img image format?</a></div>
 <blockquote>
 <p>So you prefer using the .img format for persistence and ease of file creation.</p>
 <p>Is it possible that a persistent Kick image is available.</p>
@@ -603,7 +704,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <aside class="quote no-group quote-modified" data-username="Patrick" data-post="15" data-topic="1095" data-full="true">
 <div class="title">
 <div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"><a href="https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095/15">Kicksecure/Whonix LiveUSB distromorph</a></div>
 <blockquote>
 <p>Easier, yes.</p>
 <p>Desirable, yes.</p>
@@ -613,7 +714,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 </blockquote>
 </blockquote>
 </aside>
-<aside class="quote no-group" data-username="xianhua" data-post="44" data-topic="1095">
+<aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1109">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
@@ -624,25 +725,25 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>Morphing Raspberry Pi OS into Kicksecure is untested and not recommended, RPiOS is a Debian derivative that departs from Debian in some substantial ways, morphing it into Kicksecure may cause issues.</p>
 <p>You may be able to morph Debian 12 into Kicksecure on the Raspberry Pi 4B with decent results if you have sufficient technical skill. The boot process on the RPi is different enough from a traditional PC that it will cause some difficulties (for instance, hardening kernel parameters used by Kicksecure won’t be applied by default), and this isn’t explicitly tested or supported yet. It would be best to try following the <a href="https://www.kicksecure.com/wiki/Debian" rel="noopener nofollow ugc">existing Kicksecure distribution morphing documentation</a> to start. This is not something we can support yet, so if you run into issues, you may be more-or-less on your own.</p>
 <p>Official Raspberry Pi support is <a href="https://www.kicksecure.com/wiki/Raspberry_Pi" rel="noopener nofollow ugc">planned but not yet present</a>. There isn’t an ETA on it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_45</link>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_2</link>
         <pubDate>Fri, 27 Jun 2025 16:13:12 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2831</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Is it possible to distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</p>
 <p>Can this be done using a script?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_44</link>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_1</link>
         <pubDate>Fri, 27 Jun 2025 16:02:41 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2830</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Why .img image format?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>So you prefer using the .img format for persistence and ease of file creation.</p>
 <p>Is it possible that a persistent Kick image is available.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_43</link>
+        <link>https://forums.kicksecure.com/t/why-img-image-format/1112#post_1</link>
         <pubDate>Fri, 27 Jun 2025 15:54:17 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2829</guid>
       </item>
@@ -655,9 +756,9 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
         <guid isPermaLink="false">forums.kicksecure.com-post-2828</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Why .img image format?</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="41" data-topic="1095">
+        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="4" data-topic="1112">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
@@ -668,7 +769,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 </aside>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Disaster_Recovery">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751016626" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Disaster_Recovery" target="_blank" rel="noopener" title="04:07PM - 29 November 2024">Kicksecure – 29 Nov 24</a>
   </header>
@@ -691,7 +792,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
   <div style="clear: both"></div>
 </aside>
 
-<aside class="quote no-group" data-username="xianhua" data-post="41" data-topic="1095">
+<aside class="quote no-group" data-username="xianhua" data-post="4" data-topic="1112">
 <div class="title">
 <div class="quote-controls"></div>
 <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
@@ -702,7 +803,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>It’s a technical necessity. I am not a huge fan of ISO images.</p>
 <p>(Why? → <a href="https://www.kicksecure.com/wiki/Dev/image_formats" class="inline-onebox">Image Formats Development Considerations</a>)</p>
 <p>We don’t refer to it as “persistent ISO”. That’s a contradiction as per our definition.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_42</link>
+        <link>https://forums.kicksecure.com/t/why-img-image-format/1112#post_5</link>
         <pubDate>Fri, 27 Jun 2025 15:04:08 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2827</guid>
       </item>
@@ -715,14 +816,14 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
         <guid isPermaLink="false">forums.kicksecure.com-post-2826</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Why .img image format?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>How should a kick user proceed to create a persistent USB if there is an indication</p>
 <p>of a system compromise?</p>
 <p>Isn’t that a reason to have an persistent .iso available as a download?</p>
 <p>It’s possible a user could have a compromised machine.</p>
 <p>Some kind of documentation that assumes the machine is compromised.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_41</link>
+        <link>https://forums.kicksecure.com/t/why-img-image-format/1112#post_4</link>
         <pubDate>Fri, 27 Jun 2025 14:54:47 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2825</guid>
       </item>
@@ -900,7 +1001,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
         <description><![CDATA[ <p>Unspecific to Kicksecure.</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
   </header>
@@ -926,7 +1027,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>Can be resolved as per:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="12:01PM - 18 May 2025">Kicksecure – 18 May 25</a>
   </header>
@@ -960,7 +1061,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>It is. Related wiki pages:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Firmware_Security_and_Updates">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Firmware_Security_and_Updates" target="_blank" rel="noopener" title="11:57AM - 18 May 2025">Kicksecure – 18 May 25</a>
   </header>
@@ -985,7 +1086,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Boot_firmware">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Boot_firmware" target="_blank" rel="noopener" title="12:52PM - 19 May 2025">Kicksecure – 19 May 25</a>
   </header>
@@ -1019,7 +1120,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>Probably. See:</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Open-source_Hardware">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Open-source_Hardware" target="_blank" rel="noopener" title="10:14AM - 22 May 2025">Kicksecure – 22 May 25</a>
   </header>
@@ -1055,7 +1156,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>You can also copy and paste that question into search engines and AI search tools.</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First">
   <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="151" height="151">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751103025" class="site-icon" width="40" height="40">
 
       <a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" target="_blank" rel="noopener" title="10:17PM - 28 May 2025">Kicksecure – 28 May 25</a>
   </header>
@@ -1098,7 +1199,7 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
 <p>That doesn’t really matter if wired or wireless. Exploits can be chained, called the exploit chain. There will not be an answer such as:</p>
 <ul>
 <li>“use only wired and you’re safe”; or</li>
-<li>"use only wireless and you’re save</li>
+<li>“use only wireless and you’re save”</li>
 </ul>
 <p>Wiki page <a href="https://www.kicksecure.com/wiki/Open-source_Hardware" class="inline-onebox">Open Source Hardware</a> has many facinating links such as about hypothetical CPU backdoors.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/could-uefi-bios-exploits-rootkits-be-a-potential-source-of-compromise/1103#post_2</link>
@@ -1121,264 +1222,21 @@ Please don’t ask for technical details as it will lead nowhere.</p> ]]></descr
         <guid isPermaLink="false">forums.kicksecure.com-post-2813</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Are bootloader / MBR issues an indicator of malware compromise?</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>See:<br>
 <a href="https://www.kicksecure.com/wiki/Malware_and_Firmware_Trojans#Valid_Compromise_Indicators_versus_Invalid_Compromise_Indicators">Valid Compromise Indicators versus Invalid Compromise Indicators</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_39</link>
+        <link>https://forums.kicksecure.com/t/are-bootloader-mbr-issues-an-indicator-of-malware-compromise/1111#post_2</link>
         <pubDate>Thu, 26 Jun 2025 19:32:05 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2812</guid>
       </item>
       <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
+        <title>Are bootloader / MBR issues an indicator of malware compromise?</title>
         <dc:creator><![CDATA[@xianhua]]></dc:creator>
         <description><![CDATA[ <p>Could a mucked MBR created by Calamares installer indicate a compromised host OS? If we assume there was no user error.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_38</link>
+        <link>https://forums.kicksecure.com/t/are-bootloader-mbr-issues-an-indicator-of-malware-compromise/1111#post_1</link>
         <pubDate>Thu, 26 Jun 2025 19:28:02 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2811</guid>
-      </item>
-      <item>
-        <title>AI chatbot for Kicksecure</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1102">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>Is it actually possible to include an LLM AI chatbot into the Kicksecure forum?</p>
-</blockquote>
-</aside>
-<aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1102">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>Can it be trained on all of the forum post text?</p>
-</blockquote>
-</aside>
-<p>Most likely, yes. Not deemed useful productive use of developer time and money at this point.</p>
-<p>Many AI (text generator) companies are independently scraping wiki and forum contents including this website. So contents here are already used for training by many AI companies.</p>
-<p>How do I know that? Because I wrote lots of contents and I’ll ask AI tools. Then it’s interesting to see what they make of it.</p>
-<p>At time of writing, AI cannot solve operating system issues that haven’t been answered elsewhere already. It doesn’t “understand” the issue (there’s no way to input the actual result and expected result in a way that’s not just only text). And there’s no infrastructure in place so the AI can brute force trying solutions until it finds one that is verified to be the expected result.</p>
-<p>“AI” is actually a marketing hype word. The more neutral term is “text generator”. This makes it more clear what to expect and what not to expect.</p>
-<p>Such as in this case, I am almost certain, a text generator couldn’t have provided any helpful answer for your question as it’s a unique question asked for the first time on the internet, most likely. It however would have generated lots of unhelpful, confusing text.</p>
-<p>Text generators is at this point just a search engine on steroids. For things discussed in writing anywhere (internet, books) before, a text generator can remix and maybe provided good inspiration to help. But unique questions (asking something really new, not just using different words) the text generator cannot provide any helpful response.</p>
-<p>Maybe a text generator would be useful as a better search engine to reply some repetitive inquiries. But people asking questions that could be answered using search engines or AI are told to read the this wiki page: <a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" class="inline-onebox">Utilize Search Engines, Documentation and AI</a></p>
-<p>The strategy is to have a polished wiki with correct information rather than a smooth babbling text generator spewing out unverified information. In the wiki, we care about correctness but a text generator doesn’t understand what truth is and only generates a stream of words based on probability.</p>
-<p>Working on any AI integration would require a massive shift in development focus. It cannot be a side project.</p>
-<p>Related:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Artificial_intelligence">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750930224" class="site-icon" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Artificial_intelligence" target="_blank" rel="noopener" title="01:22PM - 09 May 2025">Kicksecure – 9 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Artificial_intelligence" target="_blank" rel="noopener">Artificial Intelligence (AI)</a></h3>
-
-  <p>Artificial Intelligence is an Euphemism. / AI is often called Open Source but is actually only non-freedom software.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1102">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>Is there a Discourse plugin</p>
-<p>for an LLM chatbot?</p>
-</blockquote>
-</aside>
-<p>There’s some stuff:</p><aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/discourse-integration-change-whonix-forum-software-to-discourse/1181/43">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/discourse-integration-change-whonix-forum-software-to-discourse/1181/43" target="_blank" rel="noopener" title="12:47PM - 23 November 2023">Whonix Forum – 23 Nov 23</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/discourse-integration-change-whonix-forum-software-to-discourse/1181/43" target="_blank" rel="noopener">discourse integration - Change Whonix forum software to discourse</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #0E76BD;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Website</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>Needs research what kind of data is sent to the AI.  Typing pattern? Bad.  Only public information? Maybe OK.  Or maybe only suitable if using local AI only instead of remote (API) based AI.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/ai-chatbot-for-kicksecure/1102#post_2</link>
-        <pubDate>Thu, 26 Jun 2025 18:57:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2810</guid>
-      </item>
-      <item>
-        <title>AI chatbot for Kicksecure</title>
-        <dc:creator><![CDATA[@xianhua]]></dc:creator>
-        <description><![CDATA[ <p>Is it actually possible to include an LLM AI chatbot into the Kicksecure forum?</p>
-<p>Can it be trained on all of the forum post text? Is there a Discourse plugin</p>
-<p>for an LLM chatbot?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ai-chatbot-for-kicksecure/1102#post_1</link>
-        <pubDate>Wed, 25 Jun 2025 22:10:41 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2809</guid>
-      </item>
-      <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="33" data-topic="1095">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>Kicksecure is release under which software license?</p>
-</blockquote>
-</aside>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750843825" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" target="_blank" rel="noopener" title="10:17PM - 28 May 2025">Kicksecure – 28 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/436;"><img src="https://www.kicksecure.com/w/images/1/1a/Usesearchengine.jpg?version=5e9554ee776455694f21fc054f14be65" class="thumbnail" width="640" height="436"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" target="_blank" rel="noopener">Utilize Search Engines, Documentation and AI</a></h3>
-
-  <p>Avoid basic questions. Effective use of forum search, search engines and AI (Artificial Intelligence). Utilizing extensive Kicksecure documentation.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="xianhua" data-post="34" data-topic="1095" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>when is the next scheduled release of kicksecure?</p>
-</blockquote>
-</aside>
-<p>There is no ETA (estimated time of arrival).</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stay_Tuned">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750843825" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Stay_Tuned" target="_blank" rel="noopener" title="09:35PM - 28 May 2025">Kicksecure – 28 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:240/160;"><img src="https://www.kicksecure.com/w/images/0/04/Carriage-clock-797833640.jpg?version=15a18faccbb15e38b3c30d56354d7e11" class="thumbnail" width="240" height="160"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Stay_Tuned" target="_blank" rel="noopener">Follow Kicksecure Developments</a></h3>
-
-  <p>It is absolutely crucial to subscribe to and read the latest Kicksecure news category 'important-news' to stay in touch with ongoing developments. This way users benefit from notifications concerning important security advisories, potential upgrade...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="quote no-group" data-username="xianhua" data-post="33" data-topic="1095">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>“install-host” simply launches the Calamares installer tool again, this</p>
-</blockquote>
-</aside>
-<p>Detailed instructions added here just now:<br>
-<a href="https://www.kicksecure.com/wiki/Troubleshooting#Calamares_ISO_Installer_-_Logs_Access">Calamares ISO Installer - Logs Access</a></p>
-<aside class="quote no-group" data-username="xianhua" data-post="33" data-topic="1095">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>I can appreciate that there is finite resources to fix these issues, I wonder what</p>
-<p>could improve this.</p>
-</blockquote>
-</aside>
-<p>Many answers are possible. I am not sure I can provide any better answer than any AI chat bot.</p>
-<p>One answer is money and/or volunteers</p>
-<p>That is a highly complex complex question that are probably most projects asking themselves. Also highly speculative, opinionated, with the potential of lots of distracting discussion with no action.</p>
-<p>Related:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Open_Source_Business_Models">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1750843825" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Dev/Open_Source_Business_Models" target="_blank" rel="noopener" title="12:43PM - 18 May 2025">Kicksecure – 18 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/412;"><img src="https://www.kicksecure.com/w/images/0/02/Business_Model.jpg?version=707ff03ed77977f33e7e88418781a063" class="thumbnail" width="640" height="412"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Dev/Open_Source_Business_Models" target="_blank" rel="noopener">Open Source Business Models</a></h3>
-
-  <p>Overview of Open Source Business Models, their issues, common misconceptions.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_35</link>
-        <pubDate>Wed, 25 Jun 2025 19:11:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2808</guid>
-      </item>
-      <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
-        <dc:creator><![CDATA[@xianhua]]></dc:creator>
-        <description><![CDATA[ <p>when is the next scheduled release of kicksecure?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=2#post_34</link>
-        <pubDate>Tue, 24 Jun 2025 23:48:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2807</guid>
       </item>
   </channel>
 </rss>
