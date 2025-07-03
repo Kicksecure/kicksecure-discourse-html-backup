@@ -5,8 +5,40 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Sat, 28 Jun 2025 23:52:11 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 02 Jul 2025 03:21:55 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Separate (some) user applications from the operating system</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Android, iOS, macOS, and Chrome OS all provide a level of separation between user-installed applications and the operating system. The operating system may provide certain applications to the user, but those applications are not installed by the user and generally cannot be uninstalled or replaced. User-controllable applications are separated from the rest of the system, and generally are sandboxed to prevent them from doing damage if they turn out to be malicious or become compromised.</p>
+<p>Debian (and by extension, Kicksecure) doesn’t do this so well. All packages in the repositories are essentially operating system components, with full permissions to do anything the user account the application is launched as allows. Core components like udev and systemd are installed directly alongside productivity apps like image viewers and web browsers. This is a bit messy from the standpoint of system organization, but it also poses a significant security hazard for obvious reasons (<a href="https://xkcd.com/1200/" rel="noopener nofollow ugc">XKCD 1200</a> sums up the issue nicely).</p>
+<p>Users should be able to install arbitrary applications as OS components and give them elevated permissions, as they’ve always been able to do on Kicksecure and Whonix. But users should also be able to wall off applications into a sandbox of sorts if they don’t trust those applications or may have to process untrusted data with those applications.</p>
+<p>Flatpak and Snap are relatively well-known attempts at bringing sandboxing and application isolation to Linux. Both of these are not exactly awesome solutions, because:</p>
+<ul>
+<li>Sandboxing controls under Linux can be somewhat flimsy without putting a great deal of work into doing things like whitelisting syscalls and the like. In some instances, Linux’s sandboxing features actually worsen security (user namespaces in particular allow access to kernel facilities that aren’t usually available to unprivileged users, exposing additional attack surface; this has been the source of numerous CVEs, but user namespaces are also required by applications that do sandboxing internally, like Chromium).</li>
+<li>Users can loosen sandboxing very easily with Flatpak, and without too much effort with Snap, defeating the purpose of the sandbox.</li>
+<li>Flatpak and Snap sandboxing oftentimes causes application malfunctions due to restricting resources that applications legitimately need access to.</li>
+<li>Applications from the Flathub repository and Snap Store can be uploaded by arbitrary users. This is in contrast to the Debian archive, which requires some level of skill and trust for a packager to gain upload access to it, and where policies help to ensure better packaging quality in general. As a result, Flatpaks and Snaps are oftentimes more broken than apt packages, and it is easy to upload malware to the repositories.
+<ul>
+<li>Malware actually has been uploaded to the Snap Store and has caused severe damage in the past, with at least one person <a href="https://blog.popey.com/2024/02/exodus-bitcoin-wallet-490k-swindle/" rel="noopener nofollow ugc">losing the equivalent of $490,000</a> after plugging in cryptocurrency recovery data into a malicious Exodus Wallet snap. This particular incident underscores the fact that sandboxing apps isn’t really enough, apps can still be malicious without having to break out of a sandbox at all. <a href="https://blog.popey.com/2024/03/exodus-wallet-part-three/" rel="noopener nofollow ugc">This same kind of attack happened on the Snap Store multiple times.</a> This is why getting apps from a trusted repository is a good idea.</li>
+</ul>
+</li>
+</ul>
+<p>What we really want is some sort of virtual machine that is integrated with the host <em>enough</em> to allow apps in the VM to feel native or close to native, but sufficiently walled off so that applications cannot do damage to the host system or escape the VM. This would allow running “user applications” in a very tight yet highly compatible sandbox, and would allow pulling those applications from trusted repositories like the Debian repos. It would also allow users to install applications without having to boot into a sysmaint session.</p>
+<p>Chrome OS has something similar to this with <a href="https://chromeos.dev/en/linux" rel="noopener nofollow ugc">Crostini</a>, and Windows has something similar to this with <a href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps" rel="noopener nofollow ugc">WSLg</a>. Something with a vaguely similar user experience would likely be acceptable, especially if an “app store” frontend of some sort was available so the user didn’t have to use a terminal to install sandboxed applications.</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120</link>
+          <pubDate>Wed, 02 Jul 2025 03:21:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1120</guid>
+          <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+        </item>
         <item>
           <title>Panel items missing [feedback]</title>
           <dc:creator><![CDATA[desi_fubu]]></dc:creator>
@@ -696,147 +728,6 @@ After extensive testing, it would appear that the MAC control and permission har
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-723</guid>
           <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
-        </item>
-        <item>
-          <title>Kicksecure Qubes Template Development - Qubes Integration</title>
-          <dc:creator><![CDATA[Patrick]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/9573">
-  <header class="source">
-
-      <a href="https://github.com/QubesOS/qubes-issues/issues/9573" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/QubesOS/qubes-issues/issues/9573" target="_blank" rel="noopener">Kicksecure template</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-11-11" data-time="20:07:07" data-timezone="UTC">08:07PM - 11 Nov 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          P: default
-        </span>
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          C: Kicksecure
-        </span>
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          community template
-        </span>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">### The problem you're addressing (if any)
-
-A Kicksecure Qubes Template is unava<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ilable.
-
-The only way to use Kicksecure in Qubes is [Distribution Morphing](https://www.kicksecure.com/wiki/Qubes#Distribution_Morphing).
-
-### The solution you'd like
-
-Provide a Kicksecure Qubes template that can be installed using:
-
-    qvm-template install --enablerepo=qubes-templates-community kicksecure-17
-
-### The value to a user, and who that user might be
-
-Easily installable Kicksecure Template that does not come with issue https://github.com/QubesOS/qubes-issues/issues/7447, requires no lengthy distribution morphing instructions, comes security hardened by default. 
-
-(Should also come with in-VM kernel enabled by default. (https://github.com/QubesOS/qubes-issues/issues/9570))
-
-Users that indicated interest for a Kicksecure Qubes Template:
-
-* https://forum.qubes-os.org/search?q=kicksecure%20in%3Atitle
-* https://github.com/QubesOS/qubes-issues/issues?q=is%3Aissue+kicksecure+in%3Atitle
-* https://forums.kicksecure.com/search?q=qubes%20in%3Atitle
-
-### Qubes Template source code
-
-https://github.com/Kicksecure/qubes-template-kicksecure
-
-&lt;s&gt;Untested.&lt;/s&gt;
-
-Update: Tested.
-
-### Related non-duplicates
-
-* https://github.com/QubesOS/qubes-issues/issues/9332 (ticket isn't about Kicksecure) (is a ticket about default use of a hardened Template)
-
-### Completion criteria checklist
-
-(This section is for developer use only. Please do not modify it.)</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/qubes-template-kicksecure">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/qubes-template-kicksecure" target="_blank" rel="noopener">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-  <img width="690" height="344" src="https://opengraph.githubassets.com/ad97911f57248edcb00951b24ab680af/Kicksecure/qubes-template-kicksecure" class="thumbnail">
-
-  <h3><a href="https://github.com/Kicksecure/qubes-template-kicksecure" target="_blank" rel="noopener">GitHub - Kicksecure/qubes-template-kicksecure</a></h3>
-
-    <p><span class="github-repo-description">Contribute to Kicksecure/qubes-template-kicksecure development by creating an account on GitHub.</span></p>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<ul>
-<li><a href="https://www.kicksecure.com/wiki/Qubes#Template">Qubes Template</a></li>
-</ul>
-            <p><small>6 posts - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679</link>
-          <pubDate>Mon, 11 Nov 2024 20:15:39 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-679</guid>
-          <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
         </item>
   </channel>
 </rss>

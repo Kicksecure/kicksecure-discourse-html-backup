@@ -5,8 +5,40 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Tue, 01 Jul 2025 11:12:49 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 02 Jul 2025 03:21:55 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Separate (some) user applications from the operating system</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Android, iOS, macOS, and Chrome OS all provide a level of separation between user-installed applications and the operating system. The operating system may provide certain applications to the user, but those applications are not installed by the user and generally cannot be uninstalled or replaced. User-controllable applications are separated from the rest of the system, and generally are sandboxed to prevent them from doing damage if they turn out to be malicious or become compromised.</p>
+<p>Debian (and by extension, Kicksecure) doesn’t do this so well. All packages in the repositories are essentially operating system components, with full permissions to do anything the user account the application is launched as allows. Core components like udev and systemd are installed directly alongside productivity apps like image viewers and web browsers. This is a bit messy from the standpoint of system organization, but it also poses a significant security hazard for obvious reasons (<a href="https://xkcd.com/1200/" rel="noopener nofollow ugc">XKCD 1200</a> sums up the issue nicely).</p>
+<p>Users should be able to install arbitrary applications as OS components and give them elevated permissions, as they’ve always been able to do on Kicksecure and Whonix. But users should also be able to wall off applications into a sandbox of sorts if they don’t trust those applications or may have to process untrusted data with those applications.</p>
+<p>Flatpak and Snap are relatively well-known attempts at bringing sandboxing and application isolation to Linux. Both of these are not exactly awesome solutions, because:</p>
+<ul>
+<li>Sandboxing controls under Linux can be somewhat flimsy without putting a great deal of work into doing things like whitelisting syscalls and the like. In some instances, Linux’s sandboxing features actually worsen security (user namespaces in particular allow access to kernel facilities that aren’t usually available to unprivileged users, exposing additional attack surface; this has been the source of numerous CVEs, but user namespaces are also required by applications that do sandboxing internally, like Chromium).</li>
+<li>Users can loosen sandboxing very easily with Flatpak, and without too much effort with Snap, defeating the purpose of the sandbox.</li>
+<li>Flatpak and Snap sandboxing oftentimes causes application malfunctions due to restricting resources that applications legitimately need access to.</li>
+<li>Applications from the Flathub repository and Snap Store can be uploaded by arbitrary users. This is in contrast to the Debian archive, which requires some level of skill and trust for a packager to gain upload access to it, and where policies help to ensure better packaging quality in general. As a result, Flatpaks and Snaps are oftentimes more broken than apt packages, and it is easy to upload malware to the repositories.
+<ul>
+<li>Malware actually has been uploaded to the Snap Store and has caused severe damage in the past, with at least one person <a href="https://blog.popey.com/2024/02/exodus-bitcoin-wallet-490k-swindle/" rel="noopener nofollow ugc">losing the equivalent of $490,000</a> after plugging in cryptocurrency recovery data into a malicious Exodus Wallet snap. This particular incident underscores the fact that sandboxing apps isn’t really enough, apps can still be malicious without having to break out of a sandbox at all. <a href="https://blog.popey.com/2024/03/exodus-wallet-part-three/" rel="noopener nofollow ugc">This same kind of attack happened on the Snap Store multiple times.</a> This is why getting apps from a trusted repository is a good idea.</li>
+</ul>
+</li>
+</ul>
+<p>What we really want is some sort of virtual machine that is integrated with the host <em>enough</em> to allow apps in the VM to feel native or close to native, but sufficiently walled off so that applications cannot do damage to the host system or escape the VM. This would allow running “user applications” in a very tight yet highly compatible sandbox, and would allow pulling those applications from trusted repositories like the Debian repos. It would also allow users to install applications without having to boot into a sysmaint session.</p>
+<p>Chrome OS has something similar to this with <a href="https://chromeos.dev/en/linux" rel="noopener nofollow ugc">Crostini</a>, and Windows has something similar to this with <a href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps" rel="noopener nofollow ugc">WSLg</a>. Something with a vaguely similar user experience would likely be acceptable, especially if an “app store” frontend of some sort was available so the user didn’t have to use a terminal to install sandboxed applications.</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120</link>
+          <pubDate>Wed, 02 Jul 2025 03:21:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1120</guid>
+          <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+        </item>
         <item>
           <title>Use sdwdate without Tor Control port</title>
           <dc:creator><![CDATA[UniksKorn25]]></dc:creator>
@@ -37,7 +69,7 @@ Jul 01 12:19:37 localhost sdwdate[291586]: 2025-07-01 09:19:37 - sdwdate - INFO 
 Or i could keep using my good old bash script for time synchronization behind a proxy as a temporary forced alternative?: <a href="https://forums.kicksecure.com/t/use-sdwdate-without-tor-control-port/1116/1">(click for more details)</a>
 
 Modified it for use with kicksecure: <a href="https://forums.kicksecure.com/t/use-sdwdate-without-tor-control-port/1116/1">(click for more details)</a>
-            <p><small>1 post - 1 participant</small></p>
+            <p><small>2 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/use-sdwdate-without-tor-control-port/1116">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/use-sdwdate-without-tor-control-port/1116</link>
@@ -127,7 +159,7 @@ VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057) - Invalid<br>
 argument value (extended info not available)<br>
 VBoxManage: error: Context: "RTEXITCODE handleImportAppliance(HandlerArg*)<br>
 at line 1440 of file VBoxManageAppliance.cpp</p>
-            <p><small>11 posts - 3 participants</small></p>
+            <p><small>10 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114</link>
@@ -170,7 +202,7 @@ at line 1440 of file VBoxManageAppliance.cpp</p>
 <p>fasttrack/InRelease is not valid yet (invalid for another 4h 25min 51s). Updates for</p>
 <p>this repository will not be applied. Not sure if this is due to updates</p>
 <p>to the code repo, but it returned the same error message 4h ago also.</p>
-            <p><small>3 posts - 3 participants</small></p>
+            <p><small>5 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/inrelease-is-not-valid-yet-invalid-for-another-4h-25min-51s/1113">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/inrelease-is-not-valid-yet-invalid-for-another-4h-25min-51s/1113</link>
@@ -331,7 +363,7 @@ Selected keyboard: Danish (No dead keys)</p>
 <p>whonix-xfce-installer-cli this script is causing an error when run on USB drive.</p>
 <p>Available space 1G, required 5G. USB has 64GB space, but script doesn’t</p>
 <p>see. Format is FAT32 default linux filesystem format.</p>
-            <p><small>45 posts - 4 participants</small></p>
+            <p><small>46 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095</link>
@@ -816,31 +848,6 @@ Is it or rather would it be better to just mount /tmp to tmpfs then <code>symlin
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1057</guid>
           <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
-        </item>
-        <item>
-          <title>Avoid clearnet traffic in Kicksecure</title>
-          <dc:creator><![CDATA[FreshStar]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>My aim is to avoid outgoing clearnet traffic.</p>
-<p>Is it right that in the default installation of Kicksecure only the following outgoing traffic is torified?</p>
-<ul>
-<li>automatic and manual updates from Kicksecure repository or using sudo apt-get dist-upgrade</li>
-<li>using sudo apt update</li>
-<li>using sudo apt full-upgrade</li>
-<li>installing new software with sudo apt install</li>
-</ul>
-<p>Is it correct that when not starting any apps that open a connection there won’t be any outgoing clearnet traffic, i.e. after starting Kicksecure and leave it idle or only installing and updating software there will be no outgoing clearnet traffic?</p>
-            <p><small>6 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055</link>
-          <pubDate>Sun, 18 May 2025 23:12:25 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1055</guid>
-          <source url="https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055.rss">Avoid clearnet traffic in Kicksecure</source>
         </item>
   </channel>
 </rss>
