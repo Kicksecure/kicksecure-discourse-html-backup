@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Dracut compression research - Development - Kicksecure Forums</title>
+    <meta name="description" content="Patrick asked me to look into the compression options offered by Dracut for initramfs compression. This is the results of that research, written here since the results are a bit lengthy and require the ability to post im&amp;hellip;">
+    <meta name="generator" content="Discourse 3.4.6 - https://github.com/discourse/discourse version 3d149ba8244585f4bcb41db77aa8825e72468bdb">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1131.html" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    <link href="../../stylesheets/color_definitions_base__3_58d3e6a62bbcfd837d27bf50c11c162268923430.css_%3b%20filename_%3dUTF-8%27%27color_definitions_base__3_58d3e6a62bbcfd837d27bf50c11c1622689234306?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+  <link href="../../stylesheets/desktop_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27desktop_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop"  />
+
+
+
+  <link href="../../stylesheets/checklist_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27checklist_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+  <link href="../../stylesheets/discourse-details_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27discourse-details_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+  <link href="../../stylesheets/discourse-lazy-videos_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+  <link href="../../stylesheets/discourse-local-dates_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+  <link href="../../stylesheets/discourse-narrative-bot_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_27a873e6f6411872159c8df0158556932392cab261cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+  <link href="../../stylesheets/discourse-presence_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+  <link href="../../stylesheets/docker_manager_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27docker_manager_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+  <link href="../../stylesheets/footnote_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27footnote_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+  <link href="../../stylesheets/poll_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27poll_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+  <link href="../../stylesheets/poll_desktop_27a873e6f6411872159c8df0158556932392cab2.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_27a873e6f6411872159c8df0158556932392cab261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/desktop_theme_3_a6149e272e30d7f0925ea74416c90af282eea4c8.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_a6149e272e30d7f0925ea74416c90af282eea4c861cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/desktop_theme_2_f12616e0ab837bd2681302351e35914a09eb0a92.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_2_f12616e0ab837bd2681302351e35914a09eb0a9261cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="2" data-theme-name="header"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;Dracut compression research&#39;" href="1131.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/dracut-compression-research/1131" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/dracut-compression-research/1131" />
+<meta property="og:title" content="Dracut compression research" />
+<meta name="twitter:title" content="Dracut compression research" />
+<meta property="og:description" content="Patrick asked me to look into the compression options offered by Dracut for initramfs compression. This is the results of that research, written here since the results are a bit lengthy and require the ability to post images for sharing the charts I made.  tl;dr: I think we should use xz compression. It’s acceptably fast, it compresses way better, and there doesn’t seem to be any compelling reason to avoid it.  The initramfs has to be decompressed by the kernel on boot, so I only researched comp..." />
+<meta name="twitter:description" content="Patrick asked me to look into the compression options offered by Dracut for initramfs compression. This is the results of that research, written here since the results are a bit lengthy and require the ability to post images for sharing the charts I made.  tl;dr: I think we should use xz compression. It’s acceptably fast, it compresses way better, and there doesn’t seem to be any compelling reason to avoid it.  The initramfs has to be decompressed by the kernel on boot, so I only researched comp..." />
+<meta property="og:article:section" content="Development" />
+<meta property="og:article:section:color" content="25AAE2" />
+<meta property="article:published_time" content="2025-07-08T00:48:15+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">
+    Kicksecure Forums
+  </a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1131.html">Dracut compression research</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='Dracut compression research'>
+      <link itemprop='url' href='1131.html'>
+      <meta itemprop='datePublished' content='2025-07-08T00:48:15Z'>
+        <meta itemprop='articleSection' content='Development'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1131.html">
+
+                <link itemprop="image" href="../../uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png">
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2025-07-08T00:48:15Z' class='post-time'>
+                    July 8, 2025, 12:48am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-08T00:48:15Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Patrick asked me to look into the compression options offered by Dracut for initramfs compression. This is the results of that research, written here since the results are a bit lengthy and require the ability to post images for sharing the charts I made.</p>
+<p><strong>tl;dr: I think we should use xz compression. It’s acceptably fast, it compresses way better, and there doesn’t seem to be any compelling reason to avoid it.</strong></p>
+<p>The initramfs has to be decompressed by the kernel on boot, so I only researched compression algorithms supported by the kernel in Debian Bookworm. (Trixie supports the exact same compression algorithms, so this research should apply to Trixie as well, assuming the compression utilities perform similarly in Trixie to how they perform in Bookworm, which I find likely given the age of these utilities.)</p>
+<p>Bookworm’s kernel and Dracut both support the following compression algorithms:</p>
+<ul>
+<li>gzip (this is what we’re using now)</li>
+<li>lz4</li>
+<li>lzma</li>
+<li>lzo</li>
+<li>xz</li>
+<li>zstd</li>
+<li>cat (uncompressed, taken into consideration to provide a best-case scenario for time and a worst-case scenario for size)</li>
+</ul>
+<p>Dracut also supports bzip2, but Bookworm’s and Trixie’s kernels both did not appear to support that.</p>
+<p>To determine which algorithm was most likely desirable, I benchmarked them against each other. The following testing methodology was used:</p>
+<ul>
+<li>Create a file, <code>/etc/dracut.conf.d/99-compress.conf</code> to set the compression algorithm in.</li>
+<li>For each compression algorithm, change <code>99-compress.conf</code> to specify the desired algorithm, then run <code>time sudo dracut --force</code> three times.</li>
+<li>Record the output of <code>time</code> after each dracut invocation.</li>
+<li>Record the size of the output initramfs after each dracut invocation.</li>
+</ul>
+<p>In all instances, the file size of the output initramfs was identical (to within a kilobyte at least) across all three runs of Dracut when using a single compression algorithm, so I only recorded file size once per algorithm. All tests were run in a KVM/QEMU virtual machine with 4 virtual CPUs, 4 GB RAM, and all host CPU features passed through to the guest (<code>-cpu host</code>). The host system has an i9-14900HX processor. The raw results of the benchmarks are as follows:</p>
+<ul>
+<li>gzip
+<ul>
+<li>run 1: <code>0.06s user 0.10s system 1% cpu 12.240 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 10.907 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 10.912 total</code></li>
+<li>file size: <code>39724K</code></li>
+</ul>
+</li>
+<li>lz4
+<ul>
+<li>run 1: <code>0.02s user 0.01s system 0% cpu 7.476 total</code></li>
+<li>run 2: <code>0.02s user 0.01s system 0% cpu 7.408 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 7.541 total</code></li>
+<li>file size: <code>48064K</code></li>
+</ul>
+</li>
+<li>lzma
+<ul>
+<li>run 1: <code>0.09s user 0.07s system 0% cpu 46.595 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 45.677 total</code></li>
+<li>run 3: <code>0.02s user 0.01s system 0% cpu 45.339 total</code></li>
+<li>file size: <code>26292K</code></li>
+</ul>
+</li>
+<li>lzop
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 0% cpu 38.810 total</code></li>
+<li>run 2: <code>0.02s user 0.01s system 0% cpu 37.862 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 37.837 total</code></li>
+<li>file size: <code>44880K</code></li>
+</ul>
+</li>
+<li>xz
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 1% cpu 11.655 total</code></li>
+<li>run 2: <code>0.01s user 0.01s system 0% cpu 10.542 total</code></li>
+<li>run 3: <code>0.02s user 0.01s system 0% cpu 10.571 total</code></li>
+<li>file size: <code>28288K</code></li>
+</ul>
+</li>
+<li>zstd
+<ul>
+<li>run 1: <code>0.10s user 0.07s system 1% cpu 8.676 total</code></li>
+<li>run 2: <code>0.08s user 0.09s system 2% cpu 7.680 total</code></li>
+<li>run 3: <code>0.01s user 0.01s system 0% cpu 7.404 total</code></li>
+<li>file size: <code>33248K</code></li>
+</ul>
+</li>
+<li>cat (no compression, baseline)
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 3% cpu 5.279 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 4.189 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 4.252 total</code></li>
+<li>file size: <code>136088K</code></li>
+</ul>
+</li>
+</ul>
+<p>I did not benchmark boot speed with each of the different algorithms used, although I did verify that the virtual machine booted with an initramfs made with each algorithm. The boot speed seemed pretty much the same to me with each algorithm, and would have been difficult to measure in an objective, reliable fashion. I will note, I may have noticed a very slight speedup during boot with the zstd algorithm.</p>
+<p>The following two graphs are provided to visualize the data above (created using LibreOffice):</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" data-download-href="https://forums.kicksecure.com/uploads/default/e92324d818d85c5e818003116c0999d6539ad7a6" title="initramfs-gen-speed"><img src="../../uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" alt="initramfs-gen-speed" data-base62-sha1="xgqxRhWowoHkhwQKDySGIr6PCzI" width="605" height="340"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">initramfs-gen-speed</span><span class="informations">605×340 17.8 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/2bd2414d9be6f209da5f48a7de40331332b64632.png" data-download-href="https://forums.kicksecure.com/uploads/default/2bd2414d9be6f209da5f48a7de40331332b64632" title="initramfs-gen-efficiency"><img src="../../uploads/default/original/1X/2bd2414d9be6f209da5f48a7de40331332b64632.png" alt="initramfs-gen-efficiency" data-base62-sha1="6fF02CNFpWuQxjjDkTxl0imYZz4" width="605" height="340"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">initramfs-gen-efficiency</span><span class="informations">605×340 19.7 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+<p>Takeaways from the above data:</p>
+<ul>
+<li>From a size standpoint, lzma performed the best, lz4 performed the worst.</li>
+<li>From a speed standpoint, zstd and lz4 are about tied for best speed, while lzma is the worst for speed.</li>
+<li>lzo/lzop is certainly a bad choice - it approaches lzma in slowness while also making a file larger than gzip and almost as large as lz4. It’s the worst of all worlds combined.</li>
+<li>xz is probably the most compelling as far as a balance between good speed and good compression - it’s almost as good as lzma as far as size, while being just a hair faster than gzip.</li>
+<li>zstd is a bit of an improvement over gzip in size, while also being very very fast.</li>
+</ul>
+<p>I am of the opinion that xz is the best choice here based on this data, as our existing compression speed has been acceptable and shaving off 2-3 seconds per initramfs generation doesn’t seem that compelling except perhaps when doing ARM builds of Kicksecure on x86_64 hardware.</p>
+<p>It is worth noting, people who know much more about compression tools under the hood than I do have complaints about design flaws in xz, which are documented <a href="../../../external.html?link=https://www.nongnu.org/lzip/xz_inadequate.html" rel="noopener nofollow ugc">here</a>. I do not believe the issues mentioned in this article are of concern for the following reasons:</p>
+<ul>
+<li>The article primarily relates to xz’s suitability for long-term archival. Kernel initramfs files aren’t really something where “long-term archival” is a concern.</li>
+<li>Most of the article focuses on xz’s lack of resiliency in the face of partial archive corruption. But we don’t care about this at all, we assume the initramfs is bit-for-bit identical to when it was created, and indeed in the future we will likely be signing the initramfs as part of Verified Boot (which will mandate that the initramfs be bit-for-bit idential to when it was created).</li>
+<li>Other parts of the article focus on compatibility issues with different versions of xz. This also is not a concern - as long as dracut produces an initramfs that the Linux kernel can read and boot with, things are compatible enough for us.</li>
+<li>The rest of the article appears to focus on various design decisions in xz that could have been made better. None of that is relevant for us though, since whatever feature set Dracut is using in xz is good enough to give it a very acceptable compression speed while also providing the second-smallest file size of any of the compression algorithms documented here. Even if xz could be better than it is, right now it’s better than everything else except maybe zstd if you really care about speed.</li>
+</ul>
+<p>Someone else I saw did <a href="../../../external.html?link=https://linuxreviews.org/Comparison_of_Compression_Algorithms" rel="noopener nofollow ugc">similar compression performance benchmarking</a> and concluded that <code>zstd</code> was the best general-purpose algorithm, though the data they present shows that parallel xz actually performed better than zstd’s best compression in both compression size and speed. One concerning thing this article does point out though is that xz can use a lot of RAM. For this reason, I tried generating a dracut initramfs using xz compression in a Kicksecure-CLI VirtualBox VM with only 512 MB RAM. Memory consumption during the initramfs generation rose to a maximum of 318M according to htop, and went down to 263M once the initramfs was generated, meaning that dracut and whatever tools it ran (including xz) used about 55M of memory during the generation process. Only about 1.97M of swap ended up used. This is much more than both gzip and zstd (which both only require about 5M of memory), but seems acceptable to me. 55M is not that much, especially given that <code>fwupd</code> is just sitting there eating 97M while doing basically nothing.</p>
+<p>As a final note, I checked <a href="../../../external.html?link=http://cve.org/" rel="noopener nofollow ugc">cve.org</a> to see if security vulnerabilities were found in either the xz or zstd compressors in the Linux kernel. I found no vulnerabilities for either algorithm (using the search terms “linuz kernel xz” and “linux kernel zstd”).</p>
+<p>In conclusion, I believe xz is the best compression method for us to use with dracut, due to its slightly better performance and much better compression compared to our current default, gzip. zstd is my second choice, and may be what we want to use if we have problems with xz’s speed or memory consumption.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>

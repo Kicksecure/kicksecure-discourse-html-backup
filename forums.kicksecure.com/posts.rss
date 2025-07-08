@@ -5,6 +5,116 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Patrick asked me to look into the compression options offered by Dracut for initramfs compression. This is the results of that research, written here since the results are a bit lengthy and require the ability to post images for sharing the charts I made.</p>
+<p><strong>tl;dr: I think we should use xz compression. It’s acceptably fast, it compresses way better, and there doesn’t seem to be any compelling reason to avoid it.</strong></p>
+<p>The initramfs has to be decompressed by the kernel on boot, so I only researched compression algorithms supported by the kernel in Debian Bookworm. (Trixie supports the exact same compression algorithms, so this research should apply to Trixie as well, assuming the compression utilities perform similarly in Trixie to how they perform in Bookworm, which I find likely given the age of these utilities.)</p>
+<p>Bookworm’s kernel and Dracut both support the following compression algorithms:</p>
+<ul>
+<li>gzip (this is what we’re using now)</li>
+<li>lz4</li>
+<li>lzma</li>
+<li>lzo</li>
+<li>xz</li>
+<li>zstd</li>
+<li>cat (uncompressed, taken into consideration to provide a best-case scenario for time and a worst-case scenario for size)</li>
+</ul>
+<p>Dracut also supports bzip2, but Bookworm’s and Trixie’s kernels both did not appear to support that.</p>
+<p>To determine which algorithm was most likely desirable, I benchmarked them against each other. The following testing methodology was used:</p>
+<ul>
+<li>Create a file, <code>/etc/dracut.conf.d/99-compress.conf</code> to set the compression algorithm in.</li>
+<li>For each compression algorithm, change <code>99-compress.conf</code> to specify the desired algorithm, then run <code>time sudo dracut --force</code> three times.</li>
+<li>Record the output of <code>time</code> after each dracut invocation.</li>
+<li>Record the size of the output initramfs after each dracut invocation.</li>
+</ul>
+<p>In all instances, the file size of the output initramfs was identical (to within a kilobyte at least) across all three runs of Dracut when using a single compression algorithm, so I only recorded file size once per algorithm. All tests were run in a KVM/QEMU virtual machine with 4 virtual CPUs, 4 GB RAM, and all host CPU features passed through to the guest (<code>-cpu host</code>). The host system has an i9-14900HX processor. The raw results of the benchmarks are as follows:</p>
+<ul>
+<li>gzip
+<ul>
+<li>run 1: <code>0.06s user 0.10s system 1% cpu 12.240 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 10.907 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 10.912 total</code></li>
+<li>file size: <code>39724K</code></li>
+</ul>
+</li>
+<li>lz4
+<ul>
+<li>run 1: <code>0.02s user 0.01s system 0% cpu 7.476 total</code></li>
+<li>run 2: <code>0.02s user 0.01s system 0% cpu 7.408 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 7.541 total</code></li>
+<li>file size: <code>48064K</code></li>
+</ul>
+</li>
+<li>lzma
+<ul>
+<li>run 1: <code>0.09s user 0.07s system 0% cpu 46.595 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 45.677 total</code></li>
+<li>run 3: <code>0.02s user 0.01s system 0% cpu 45.339 total</code></li>
+<li>file size: <code>26292K</code></li>
+</ul>
+</li>
+<li>lzop
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 0% cpu 38.810 total</code></li>
+<li>run 2: <code>0.02s user 0.01s system 0% cpu 37.862 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 37.837 total</code></li>
+<li>file size: <code>44880K</code></li>
+</ul>
+</li>
+<li>xz
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 1% cpu 11.655 total</code></li>
+<li>run 2: <code>0.01s user 0.01s system 0% cpu 10.542 total</code></li>
+<li>run 3: <code>0.02s user 0.01s system 0% cpu 10.571 total</code></li>
+<li>file size: <code>28288K</code></li>
+</ul>
+</li>
+<li>zstd
+<ul>
+<li>run 1: <code>0.10s user 0.07s system 1% cpu 8.676 total</code></li>
+<li>run 2: <code>0.08s user 0.09s system 2% cpu 7.680 total</code></li>
+<li>run 3: <code>0.01s user 0.01s system 0% cpu 7.404 total</code></li>
+<li>file size: <code>33248K</code></li>
+</ul>
+</li>
+<li>cat (no compression, baseline)
+<ul>
+<li>run 1: <code>0.09s user 0.08s system 3% cpu 5.279 total</code></li>
+<li>run 2: <code>0.01s user 0.02s system 0% cpu 4.189 total</code></li>
+<li>run 3: <code>0.01s user 0.02s system 0% cpu 4.252 total</code></li>
+<li>file size: <code>136088K</code></li>
+</ul>
+</li>
+</ul>
+<p>I did not benchmark boot speed with each of the different algorithms used, although I did verify that the virtual machine booted with an initramfs made with each algorithm. The boot speed seemed pretty much the same to me with each algorithm, and would have been difficult to measure in an objective, reliable fashion. I will note, I may have noticed a very slight speedup during boot with the zstd algorithm.</p>
+<p>The following two graphs are provided to visualize the data above (created using LibreOffice):</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" data-download-href="https://forums.kicksecure.com/uploads/default/e92324d818d85c5e818003116c0999d6539ad7a6" title="initramfs-gen-speed"><img src="https://forums.kicksecure.com/uploads/default/original/1X/e92324d818d85c5e818003116c0999d6539ad7a6.png" alt="initramfs-gen-speed" data-base62-sha1="xgqxRhWowoHkhwQKDySGIr6PCzI" width="605" height="340"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/2bd2414d9be6f209da5f48a7de40331332b64632.png" data-download-href="https://forums.kicksecure.com/uploads/default/2bd2414d9be6f209da5f48a7de40331332b64632" title="initramfs-gen-efficiency"><img src="https://forums.kicksecure.com/uploads/default/original/1X/2bd2414d9be6f209da5f48a7de40331332b64632.png" alt="initramfs-gen-efficiency" data-base62-sha1="6fF02CNFpWuQxjjDkTxl0imYZz4" width="605" height="340"></a></div><p></p>
+<p>Takeaways from the above data:</p>
+<ul>
+<li>From a size standpoint, lzma performed the best, lz4 performed the worst.</li>
+<li>From a speed standpoint, zstd and lz4 are about tied for best speed, while lzma is the worst for speed.</li>
+<li>lzo/lzop is certainly a bad choice - it approaches lzma in slowness while also making a file larger than gzip and almost as large as lz4. It’s the worst of all worlds combined.</li>
+<li>xz is probably the most compelling as far as a balance between good speed and good compression - it’s almost as good as lzma as far as size, while being just a hair faster than gzip.</li>
+<li>zstd is a bit of an improvement over gzip in size, while also being very very fast.</li>
+</ul>
+<p>I am of the opinion that xz is the best choice here based on this data, as our existing compression speed has been acceptable and shaving off 2-3 seconds per initramfs generation doesn’t seem that compelling except perhaps when doing ARM builds of Kicksecure on x86_64 hardware.</p>
+<p>It is worth noting, people who know much more about compression tools under the hood than I do have complaints about design flaws in xz, which are documented <a href="https://www.nongnu.org/lzip/xz_inadequate.html" rel="noopener nofollow ugc">here</a>. I do not believe the issues mentioned in this article are of concern for the following reasons:</p>
+<ul>
+<li>The article primarily relates to xz’s suitability for long-term archival. Kernel initramfs files aren’t really something where “long-term archival” is a concern.</li>
+<li>Most of the article focuses on xz’s lack of resiliency in the face of partial archive corruption. But we don’t care about this at all, we assume the initramfs is bit-for-bit identical to when it was created, and indeed in the future we will likely be signing the initramfs as part of Verified Boot (which will mandate that the initramfs be bit-for-bit idential to when it was created).</li>
+<li>Other parts of the article focus on compatibility issues with different versions of xz. This also is not a concern - as long as dracut produces an initramfs that the Linux kernel can read and boot with, things are compatible enough for us.</li>
+<li>The rest of the article appears to focus on various design decisions in xz that could have been made better. None of that is relevant for us though, since whatever feature set Dracut is using in xz is good enough to give it a very acceptable compression speed while also providing the second-smallest file size of any of the compression algorithms documented here. Even if xz could be better than it is, right now it’s better than everything else except maybe zstd if you really care about speed.</li>
+</ul>
+<p>Someone else I saw did <a href="https://linuxreviews.org/Comparison_of_Compression_Algorithms" rel="noopener nofollow ugc">similar compression performance benchmarking</a> and concluded that <code>zstd</code> was the best general-purpose algorithm, though the data they present shows that parallel xz actually performed better than zstd’s best compression in both compression size and speed. One concerning thing this article does point out though is that xz can use a lot of RAM. For this reason, I tried generating a dracut initramfs using xz compression in a Kicksecure-CLI VirtualBox VM with only 512 MB RAM. Memory consumption during the initramfs generation rose to a maximum of 318M according to htop, and went down to 263M once the initramfs was generated, meaning that dracut and whatever tools it ran (including xz) used about 55M of memory during the generation process. Only about 1.97M of swap ended up used. This is much more than both gzip and zstd (which both only require about 5M of memory), but seems acceptable to me. 55M is not that much, especially given that <code>fwupd</code> is just sitting there eating 97M while doing basically nothing.</p>
+<p>As a final note, I checked <a href="http://cve.org" rel="noopener nofollow ugc">cve.org</a> to see if security vulnerabilities were found in either the xz or zstd compressors in the Linux kernel. I found no vulnerabilities for either algorithm (using the search terms “linuz kernel xz” and “linux kernel zstd”).</p>
+<p>In conclusion, I believe xz is the best compression method for us to use with dracut, due to its slightly better performance and much better compression compared to our current default, gzip. zstd is my second choice, and may be what we want to use if we have problems with xz’s speed or memory consumption.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_1</link>
+        <pubDate>Tue, 08 Jul 2025 00:48:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2934</guid>
+      </item>
+      <item>
         <title>Verified Boot</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <ul>
@@ -958,23 +1068,6 @@ zsh: exit 255   iw wlan0 set power_save off
         <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_3</link>
         <pubDate>Sat, 28 Jun 2025 20:25:59 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2853</guid>
-      </item>
-      <item>
-        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="1" data-topic="1114">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>0x80070057</p>
-</blockquote>
-</aside>
-<p>Let me google that for you. <img src="https://forums.kicksecure.com/images/emoji/twitter/roll_eyes.png?v=12" title=":roll_eyes:" class="emoji" alt=":roll_eyes:" loading="lazy" width="20" height="20"></p>
-<p>Insufficient disk space.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_2</link>
-        <pubDate>Sat, 28 Jun 2025 20:15:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2852</guid>
       </item>
   </channel>
 </rss>
