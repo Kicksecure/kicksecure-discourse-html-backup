@@ -97,9 +97,271 @@ As a final note, I checked cve.org to see if security vulnerabilities were found
 
 In conclusion, I believe xz is the best compression method for us to use with dracut, due to its slightly better performance and much better compression compared to our current default, gzip. zstd is my second choice, and may be what we want to use if we have problems with xz&#39;s speed or memory consumption.</description>
     
-    <lastBuildDate>Tue, 08 Jul 2025 00:48:15 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 11 Jul 2025 23:22:07 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/dracut-compression-research/1131.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="4" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>It was done as change everything to zstd:</p>
+</blockquote>
+</aside>
+<p>OK, good to know.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="4" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Lol yeah thought about that from this perspective, but if we come to the linux kernel itself, these companies hands already there anyway (intel,nvidia…etc). So we go with the free software or not (and reliably secure) regardless the source from where, otherwise its a lost case.</p>
+</blockquote>
+</aside>
+<p>Indeed, I made that comment mostly as a joke, thus the “:P”.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="4" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Yeah guess who discovered xz backdoor? not a debian maintainer or so, but a microsoft engineer…</p>
+</blockquote>
+</aside>
+<p>The XZ backdoor never affected any stable release of Debian, because Debian doesn’t introduce new versions of software into older releases. So while the backdoor was not discovered by Debian, Debian did a very good job of defending the vast majority of their users from it even before it was known to be a thing.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="4" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>So if there are no big issues with zstd + debian, i dont see it a bad choice imho.</p>
+</blockquote>
+</aside>
+<p>I believe I pointed out a potential issue when mentioning overly large initramfs files causing boot failures on some machines. Is it a <em>big</em> issue? I guess that depends, but I know from experience that there are systems that, when faced with certain kernel drivers, will fail to boot with an initramfs compressed with a less efficient algorithm, and will succeed booting when that same initramfs is compressed with xz.</p>
+          <p><a href="https://forums.kicksecure.com/t/dracut-compression-research/1131/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131/5</link>
+        <pubDate>Fri, 11 Jul 2025 23:22:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1131-5</guid>
+        <source url="https://forums.kicksecure.com/t/dracut-compression-research/1131.rss">Dracut compression research</source>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The initramfs use case is substantially different - size is<br>
+more important than speed (to a point) because a too-big initramfs might<br>
+fail to boot entirely.</p>
+</blockquote>
+</aside>
+<p>It was done as change everything to zstd:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.phoronix.com/news/Fedora-43-Initrd-Zstd-Compress">
+  <header class="source">
+      <img src="https://www.phoronix.com/favicon.ico" class="site-icon" width="48" height="48">
+
+      <a href="https://www.phoronix.com/news/Fedora-43-Initrd-Zstd-Compress" target="_blank" rel="noopener">phoronix.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:554/185;"><img src="https://www.phoronix.net/image.php?id=2025&amp;image=initrd_zstd" class="thumbnail" width="554" height="185"></div>
+
+<h3><a href="https://www.phoronix.com/news/Fedora-43-Initrd-Zstd-Compress" target="_blank" rel="noopener">Fedora 43 Looks To Zstd-Compressed Initrd By Default For Space Savings &amp;...</a></h3>
+
+  <p>A change proposal has been raised to compress the initrd by default using Zstd compression rather than XZ</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(Arguably it’s in a good position to be backdoored by a<br>
+nation-state too, but that depends on how much you trust Meta I guess :P)</p>
+</blockquote>
+</aside>
+<p>Lol yeah thought about that from this perspective, but if we come to the linux kernel itself, these companies hands already there anyway (intel,nvidia…etc). So we go with the free software or not (and reliably secure) regardless the source from where, otherwise its a lost case.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Debian will be<br>
+responsible for keeping it safe and maintained at that point</p>
+</blockquote>
+</aside>
+<p>Yeah guess who discovered xz backdoor? not a debian maintainer or so, but a microsoft engineer…</p>
+<p>So if there are no big issues with zstd + debian, i dont see it a bad choice imho.</p>
+          <p><a href="https://forums.kicksecure.com/t/dracut-compression-research/1131/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131/4</link>
+        <pubDate>Fri, 11 Jul 2025 23:07:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1131-4</guid>
+        <source url="https://forums.kicksecure.com/t/dracut-compression-research/1131.rss">Dracut compression research</source>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>It’s worth noting that Fedora switched to zstd specifically for RPM<br>
+compression. The initramfs use case is substantially different - size is<br>
+more important than speed (to a point) because a too-big initramfs might<br>
+fail to boot entirely. This may become a real risk once we start using<br>
+Dracut’s “sloppy hostonly” improvements, which include a lot more kernel<br>
+modules and thus increase the size of the initramfs. The performance impact<br>
+of zstd is benchmarked for initramfs compression above, and the impact is<br>
+arguably negligible.</p>
+<p>We shouldn’t let XZ’s reputation be tarnished after the xz-utils backdoor,<br>
+in my opinion. The attack’s level of sophistication was high enough that I<br>
+doubt most people would have handled things any better than the primary<br>
+maintainer did, and after this experience I don’t believe he’ll make the<br>
+same mistakes again. XZ’s source code is, to the best of our knowledge,<br>
+clean currently, so I don’t believe the attack is a good reason to avoid it.</p>
+<p>As for the Nebraska issue, that is a real problem. Zstd has the full force<br>
+of Facebook backing it up, so it’s in a much better position to remain<br>
+maintained. (Arguably it’s in a good position to be backdoored by a<br>
+nation-state too, but that depends on how much you trust Meta I guess :P)<br>
+That being said, as long as xz works reliably for initramfs compression<br>
+when Debian 13 rolls around, I don’t see an issue - Debian will be<br>
+responsible for keeping it safe and maintained at that point, and we can<br>
+change our minds for a future release of Kicksecure. If we were using a<br>
+rolling form of Debian, I’d probably pick zstd due to this concern, but<br>
+since we’re using stable releases, I don’t see any substantial danger in<br>
+using xz.</p>
+          <p><a href="https://forums.kicksecure.com/t/dracut-compression-research/1131/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131/3</link>
+        <pubDate>Fri, 11 Jul 2025 18:10:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1131-3</guid>
+        <source url="https://forums.kicksecure.com/t/dracut-compression-research/1131.rss">Dracut compression research</source>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Fedora were using xz and done the comparison of xz VS zstd, the conclusion reached is that zstd overall will give better performance for the users:</p>
+<p><a href="https://fedoraproject.org/wiki/Changes/Switch_RPMs_to_zstd_compression#Use_case:_Firefox_installation" class="onebox" target="_blank" rel="noopener">https://fedoraproject.org/wiki/Changes/Switch_RPMs_to_zstd_compression#Use_case:_Firefox_installation</a></p>
+<p>Another comparison by different project (not against xz but useful):</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://peazip.github.io/fast-compression-benchmark-brotli-zstandard.html#brotli_vs_zstd_compressor">
+  <header class="source">
+
+      <a href="https://peazip.github.io/fast-compression-benchmark-brotli-zstandard.html#brotli_vs_zstd_compressor" target="_blank" rel="noopener">PeaZip file archiver utility, free RAR ZIP software</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://peazip.github.io/fast-compression-benchmark-brotli-zstandard.html#brotli_vs_zstd_compressor" target="_blank" rel="noopener">Fast compression: Brotli Zstandard comparative speed performances test</a></h3>
+
+  <p>Fast compression benchmark. Comparison of Brotli, Zstandard formats performances, br vs zst compression and extraction speed, comparative test with 7Z LZMA2, RAR PPMd, ZIP Deflate algorithms.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Second issue of xz is the Nebraska issue (too much work for very important software for single or very few devs over long time):</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://discussion.fedoraproject.org/t/switch-to-zstd-from-xz/110789/16">
+  <header class="source">
+      <img src="https://us1.discourse-cdn.com/fedoraproject/optimized/2X/4/4a936c14d6cd5d29d6b7baf2511e406eeabed12c_2_32x32.png" class="site-icon" width="32" height="32">
+
+      <a href="https://discussion.fedoraproject.org/t/switch-to-zstd-from-xz/110789/16" target="_blank" rel="noopener" title="04:00AM - 01 April 2024">Fedora Discussion – 1 Apr 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <img src="https://us1.discourse-cdn.com/fedoraproject/original/2X/4/4701afb8ed62770e56cfd748606abe1c0d616b84.png" class="thumbnail onebox-avatar" width="500" height="500">
+
+<div class="title-wrapper">
+  <h3><a href="https://discussion.fedoraproject.org/t/switch-to-zstd-from-xz/110789/16" target="_blank" rel="noopener">Switch to zstd from xz</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #51A2DA;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Project Discussion</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">silverblue-team</span>
+            <span class="discourse-tag simple">workstation-wg</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>You won’t find much disagreement that zstd is a better algorithm, in most cases.  This is pretty well understood by this point.  Again though, it’s kind of beside the point.  Things that currently use XZ, cannot necessarily just switch out of the...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>The XZ maintainer experienced burnout and consequently scaled back some of the contribution reviews, which led to the XZ issue. GNOME discussed this issue as well:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.gnome.org/GNOME/nautilus/-/issues/1936#note_2090670">
+  <header class="source">
+      <img src="https://gitlab.gnome.org/uploads/-/system/appearance/favicon/1/GnomeLogoVertical.svg.png" class="site-icon" width="32" height="32">
+
+      <a href="https://gitlab.gnome.org/GNOME/nautilus/-/issues/1936#note_2090670" target="_blank" rel="noopener">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.gnome.org/uploads/-/system/project/avatar/1/bitmap.png" class="thumbnail onebox-avatar">
+
+<h3><a href="https://gitlab.gnome.org/GNOME/nautilus/-/issues/1936#note_2090670" target="_blank" rel="noopener">Use zst compression instead of xz (#1936) · Issues · GNOME / Files · GitLab</a></h3>
+
+  <p>Use cases ZStandard is a new file compression algorithm, the reference implementation of which, zstd, greatly outperforms every other compression method...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Bottom line is that zstd is the way to go.</p>
+<p>Good thing that you reached to the conclusion second best choice.</p>
+          <p><a href="https://forums.kicksecure.com/t/dracut-compression-research/1131/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131/2</link>
+        <pubDate>Fri, 11 Jul 2025 17:12:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1131-2</guid>
+        <source url="https://forums.kicksecure.com/t/dracut-compression-research/1131.rss">Dracut compression research</source>
+      </item>
       <item>
         <title>Dracut compression research</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
