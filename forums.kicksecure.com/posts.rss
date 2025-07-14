@@ -5,7 +5,194 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
-        <title>Update errors after disabling systemsplit and vpn install</title>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Testing the settings from Fedora CoreOS:</p>
+<ul>
+<li>zstd with max compression:
+<ul>
+<li>run 1: <code>0.01s user 0.03s system 0% cpu 18.719 total</code></li>
+<li>run 2: <code>0.02s user 0.02s system 0% cpu 17.553 total</code></li>
+<li>run 3: <code>0.01s user 0.03s system 0% cpu 17.478 total</code></li>
+<li>file size: <code>29628K</code></li>
+</ul>
+</li>
+</ul>
+<p>We get a slightly (though only very slightly) larger file than <code>xz</code> would produce, and it takes about 7 seconds longer to produce it than <code>xz</code> or <code>gzip</code> would have taken. <code>xz</code> wins for both size and performance.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_9</link>
+        <pubDate>Sun, 13 Jul 2025 16:02:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2947</guid>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Keeping the default, uncompressed, also remains an option.</p>
+</blockquote>
+</aside>
+<p>The default is gzip-compressed, not uncompressed. Dracut will indicate that it is using an automatically detected compression method (“pigz”, which is parallel gzip as I understand it) when the compression method is not set. So right now we’re using gzip compression in all instances.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>D) best boot compatibility for low RAM systems?</p>
+</blockquote>
+</aside>
+<p>Systems with multiple tens of gigabytes of RAM can error out with “no available memory” if trying to boot with an initramfs that is too large. The issue is not “total amount of memory”, the issue is “total amount of contiguous memory that GRUB can see” (if I’m understanding correctly), and on some hardware, GRUB can’t find a very large contiguous block.</p>
+<p>xz isn’t the fastest, but it’s faster than gzip, and much more efficient size-wise. I didn’t notice any impact on boot speed, and smaller size provides better compatibility, so that’s why I think xz strikes a good balance between all four points above. zstd sacrifices size (and therefore possibly compatibility) in favor of speed.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_8</link>
+        <pubDate>Sun, 13 Jul 2025 14:07:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2946</guid>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>I was wondering what should be the priority here. These are the choices that I could identify:</p>
+<ul>
+<li>A) small size: optimize Kicksecure images for the smallest possible size?</li>
+<li>B) fastest initrd creation time: The smallest amount of time spent on initrd creat during upgrades?</li>
+<li>C) boot speed?</li>
+<li>D) best boot compatibility for low RAM systems?</li>
+</ul>
+<p>The C) and D) seem more important than A) and B).</p>
+<p>This probably means, for a brief moment during decompression, both the compressed image and the uncompressed (expanded) contents may reside in RAM at the same time. On systems with very limited memory, one might have a RAM usage spike and need enough RAM to hold both the compressed image and the fully decompressed contents simultaneously, at least during the extraction phase.</p>
+<p>But I don’t know if that is a realistic consideration as user space might need more memory than this spike.</p>
+<p>Keeping the default, uncompressed, also remains an option.</p>
+<hr>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://cj.rs/blog/should-i-compress-my-initramfs/">
+  <header class="source">
+      <img src="https://cj.rs/favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://cj.rs/blog/should-i-compress-my-initramfs/" target="_blank" rel="noopener" title="06:47AM - 31 August 2022">Clément Joly – Open-Source, Rust &amp; SQLite – 31 Aug 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/219;"><img src="https://cj.rs/blog/should-i-compress-my-initramfs/trade-off.png" class="thumbnail" width="690" height="219"></div>
+
+<h3><a href="https://cj.rs/blog/should-i-compress-my-initramfs/" target="_blank" rel="noopener">Should I Compress My Initramfs?</a></h3>
+
+  <p>When decompressing is faster than reading from the disk.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><a href="https://www.reddit.com/r/archlinux/comments/ytk6t3/blog_should_i_compress_my_initramfs/" class="onebox" target="_blank" rel="noopener">https://www.reddit.com/r/archlinux/comments/ytk6t3/blog_should_i_compress_my_initramfs/</a></p>
+<hr>
+<p>Debian:<br>
+Quote Debian bug report: <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=976054">initramfs-tools: [RFC] Compress initramfs file with zstd</a></p>
+<blockquote>
+<ul>
+<li>[742c8ee] Use zstd as default compression for initramfs (Closes: #<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=976054">976054</a>)</li>
+</ul>
+</blockquote>
+<p>But we’re not getting this change because we’re using dracut instead of initramfs-tools.<br>
+(<a href="https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487" class="inline-onebox">replacing initramfs-tools with dracut - Development - Whonix Forum</a>)</p>
+<p>related:</p><aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32" target="_blank" rel="noopener" title="06:06PM - 04 January 2024">Whonix Forum – 4 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32" target="_blank" rel="noopener">replacing initramfs-tools with dracut</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">milestone_whonix_17</span>
+            <span class="discourse-tag simple">status_closed_issue_implemented</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Summary why Kicksecure was ported from initramfs-tools to dracut:  From the initrd generators I was aware of at the time, only dracut has an exitrd feature. Which means the system drops back into the initrd at shutdown time. It then (hopefully)...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>dracut allegedly according to the following configuration file uses zstd by default. I wonder why ours is uncompressed by default.</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf">
+  <header class="source">
+
+      <a href="https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" target="_blank" rel="noopener">github.com/coreos/fedora-coreos-config</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" target="_blank" rel="noopener">overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" rel="noopener"><code>stable</code></a>
+</div>
+
+
+      <pre><code class="lang-conf"># Compress initrd with zstd.  dracut defaults to -15, but we want the
+# maximum reasonable compression, so override the command line to use
+# dracut's defaults along with -19.
+compress="zstd -19 -q -T0"
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_7</link>
+        <pubDate>Sun, 13 Jul 2025 13:30:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2945</guid>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>I am not worried about xz. What happen to xz can happen to any project. After the xz backdoor has been spotted, there have been a lot eyes on xz. Therefore xz is now one of the projects that has received extensive code review.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_6</link>
+        <pubDate>Sun, 13 Jul 2025 12:49:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2944</guid>
+      </item>
+      <item>
+        <title>Update errors after disabling user-sysmaint-split and vpn install</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>Unrelated to user-sysmaint-split.</p>
 <p>Highly unlikely related to user-sysmaint-split, which does not touch APT / sources list configurations / clock.</p>
@@ -19,7 +206,7 @@
 </aside>
 <p>See:<br>
 <a href="https://www.kicksecure.com/wiki/Operating_System_Software_and_Updates#InRelease_is_not_valid_yet_error">InRelease is not valid yet error</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/update-errors-after-disabling-systemsplit-and-vpn-install/1134#post_2</link>
+        <link>https://forums.kicksecure.com/t/update-errors-after-disabling-user-sysmaint-split-and-vpn-install/1134#post_2</link>
         <pubDate>Sat, 12 Jul 2025 05:53:14 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2943</guid>
       </item>
@@ -270,7 +457,7 @@ using xz.</p> ]]></description>
         <guid isPermaLink="false">forums.kicksecure.com-post-2939</guid>
       </item>
       <item>
-        <title>Update errors after disabling systemsplit and vpn install</title>
+        <title>Update errors after disabling user-sysmaint-split and vpn install</title>
         <dc:creator><![CDATA[@farukar]]></dc:creator>
         <description><![CDATA[ <p>In order to hide the obvious use of TOR from my isp after install i disable the system split and install VPN.<br>
 but after i try to upgrade nonroot it spits out the following errors:</p>
@@ -280,7 +467,7 @@ E: Release file for tor+https://fasttrack.debian.net/debian-fasttrack/dists/book
 E: Release file for tor+https://fasttrack.debian.net/debian-fasttrack/dists/bookworm-backports-staging/InRelease is not valid yet (invalid for another 6h 48min 2s). Updates for this repository will not be applied.<br>
 zsh: exit 100   sudo apt update</p>
 <p>when i do sudo apt update and upgrade it upgrades about 250mb of data witholding what i assume is the files that fail with the nonroot method</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/update-errors-after-disabling-systemsplit-and-vpn-install/1134#post_1</link>
+        <link>https://forums.kicksecure.com/t/update-errors-after-disabling-user-sysmaint-split-and-vpn-install/1134#post_1</link>
         <pubDate>Fri, 11 Jul 2025 11:44:50 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2938</guid>
       </item>
@@ -1154,120 +1341,6 @@ Modified it for use with kicksecure: <a href="https://forums.kicksecure.com/t/us
         <link>https://forums.kicksecure.com/t/panel-items-missing-feedback/1108#post_3</link>
         <pubDate>Sun, 29 Jun 2025 15:17:43 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2876</guid>
-      </item>
-      <item>
-        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>You need a to install using Calamares <em><strong>or</strong></em> use distribution morphing.</p>
-<p>install using Calamares:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/ISO">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener" title="12:46AM - 25 May 2025">Kicksecure – 25 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener">Kicksecure Live ISO (via USB) and Installation</a></h3>
-
-  <p>Kicksecure Installation Guide. This guide will help you download the ISO image, create your bootable media, and install Kicksecure on your computer.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>*<strong>See step: Install Kicksecure (Optional)</strong></p>
-<hr>
-<p>Persistent mode:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Persistent_Mode">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Persistent_Mode" target="_blank" rel="noopener" title="12:46PM - 14 May 2025">Kicksecure – 14 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" width="690" height="431"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Persistent_Mode" target="_blank" rel="noopener">Persistent Mode for Kicksecure</a></h3>
-
-  <p>Persistent mode for Kicksecure.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<p>Distribution morphing:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751189425" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener" title="11:49PM - 18 May 2025">Kicksecure – 18 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/d/d1/Download-debian.jpg?version=0f5a9307bc5f0ca052752efec6830baf" class="thumbnail" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener">Install Kicksecure inside Debian</a></h3>
-
-  <p>Kicksecure can be installed on top of an existing Debian installation.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_9</link>
-        <pubDate>Sun, 29 Jun 2025 14:41:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2875</guid>
-      </item>
-      <item>
-        <title>VBoxManage error: Code NS_ERROR_INVALID_ARG (0x80070057)</title>
-        <dc:creator><![CDATA[@xianhua]]></dc:creator>
-        <description><![CDATA[ <p>it was installed to a USB, is that sufficient?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/vboxmanage-error-code-ns-error-invalid-arg-0x80070057/1114#post_8</link>
-        <pubDate>Sun, 29 Jun 2025 14:29:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2874</guid>
-      </item>
-      <item>
-        <title>Enterprise Laptop style WiFi Switch causes Permanent freeze</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>This does sound like a driver issue or similar to me. If you want a possible quick solution, you can try to install a newer kernel from the backports repository using <code>sudo apt install -t bookworm-backports linux-image-amd64</code>, and see if that fixes it. (See <a href="https://wiki.debian.org/Backports" class="inline-onebox" rel="noopener nofollow ugc">Backports - Debian Wiki</a> for more info on Debian backports.) This isn’t guaranteed to work, but if it is a driver issue, this has a decent chance of solving it.</p>
-<p>You could also try other distros to see if they have the same problem. Kicksecure 17 is based on Debian 12, so testing Debian 12 would help you determine if it’s a Kicksecure-specific issue or if it’s just a Debian problem.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/enterprise-laptop-style-wifi-switch-causes-permanent-freeze/1105#post_5</link>
-        <pubDate>Sun, 29 Jun 2025 14:12:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2873</guid>
-      </item>
-      <item>
-        <title>Panel items missing [feedback]</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>USERMAINT? You mean sysmaint? Please edit.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/panel-items-missing-feedback/1108#post_2</link>
-        <pubDate>Sun, 29 Jun 2025 08:00:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2872</guid>
       </item>
   </channel>
 </rss>

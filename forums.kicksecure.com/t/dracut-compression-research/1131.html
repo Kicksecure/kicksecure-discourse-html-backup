@@ -131,9 +131,9 @@ END custom CSS / JS
 <meta property="og:article:section" content="Development" />
 <meta property="og:article:section:color" content="25AAE2" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="4 mins 🕑" />
+<meta name="twitter:data1" value="6 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="2 ❤" />
+<meta name="twitter:data2" value="6 ❤" />
 <meta property="article:published_time" content="2025-07-08T00:48:15+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -449,8 +449,8 @@ END custom CSS / JS
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="0" />
-              <span class='post-likes'></span>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
             </div>
 
           </div>
@@ -501,8 +501,8 @@ using xz.</p>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="0" />
-              <span class='post-likes'></span>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
             </div>
 
           </div>
@@ -585,8 +585,8 @@ responsible for keeping it safe and maintained at that point</p>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="0" />
-              <span class='post-likes'></span>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
             </div>
 
           </div>
@@ -644,6 +644,273 @@ responsible for keeping it safe and maintained at that point</p>
 </blockquote>
 </aside>
 <p>I believe I pointed out a potential issue when mentioning overly large initramfs files causing boot failures on some machines. Is it a <em>big</em> issue? I guess that depends, but I know from experience that there are systems that, when faced with certain kernel drivers, will fail to boot with an initramfs compressed with a less efficient algorithm, and will succeed booting when that same initramfs is compressed with xz.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-13T12:49:26Z' class='post-time'>
+                    July 13, 2025, 12:49pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-13T12:49:26Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I am not worried about xz. What happen to xz can happen to any project. After the xz backdoor has been spotted, there have been a lot eyes on xz. Therefore xz is now one of the projects that has received extensive code review.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-13T13:30:52Z' class='post-time'>
+                    July 13, 2025,  1:30pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-13T13:30:52Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I was wondering what should be the priority here. These are the choices that I could identify:</p>
+<ul>
+<li>A) small size: optimize Kicksecure images for the smallest possible size?</li>
+<li>B) fastest initrd creation time: The smallest amount of time spent on initrd creat during upgrades?</li>
+<li>C) boot speed?</li>
+<li>D) best boot compatibility for low RAM systems?</li>
+</ul>
+<p>The C) and D) seem more important than A) and B).</p>
+<p>This probably means, for a brief moment during decompression, both the compressed image and the uncompressed (expanded) contents may reside in RAM at the same time. On systems with very limited memory, one might have a RAM usage spike and need enough RAM to hold both the compressed image and the fully decompressed contents simultaneously, at least during the extraction phase.</p>
+<p>But I don’t know if that is a realistic consideration as user space might need more memory than this spike.</p>
+<p>Keeping the default, uncompressed, also remains an option.</p>
+<hr>
+<aside class="onebox allowlistedgeneric" data-onebox-src="../../../external.html?link=https://cj.rs/blog/should-i-compress-my-initramfs/">
+  <header class="source">
+      <img src="../../../external.html?link=https://cj.rs/favicon.ico" class="site-icon" width="32" height="32">
+
+      <a href="../../../external.html?link=https://cj.rs/blog/should-i-compress-my-initramfs/" target="_blank" rel="noopener" title="06:47AM - 31 August 2022">Clément Joly – Open-Source, Rust &amp; SQLite – 31 Aug 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/219;"><img src="../../../external.html?link=https://cj.rs/blog/should-i-compress-my-initramfs/trade-off.png" class="thumbnail" width="690" height="219"></div>
+
+<h3><a href="../../../external.html?link=https://cj.rs/blog/should-i-compress-my-initramfs/" target="_blank" rel="noopener">Should I Compress My Initramfs?</a></h3>
+
+  <p>When decompressing is faster than reading from the disk.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><a href="../../../external.html?link=https://www.reddit.com/r/archlinux/comments/ytk6t3/blog_should_i_compress_my_initramfs/" class="onebox" target="_blank" rel="noopener">https://www.reddit.com/r/archlinux/comments/ytk6t3/blog_should_i_compress_my_initramfs/</a></p>
+<hr>
+<p>Debian:<br>
+Quote Debian bug report: <a href="../../../external.html?link=https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=976054">initramfs-tools: [RFC] Compress initramfs file with zstd</a></p>
+<blockquote>
+<ul>
+<li>[742c8ee] Use zstd as default compression for initramfs (Closes: #<a href="../../../external.html?link=https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=976054">976054</a>)</li>
+</ul>
+</blockquote>
+<p>But we’re not getting this change because we’re using dracut instead of initramfs-tools.<br>
+(<a href="../../../external.html?link=https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487" class="inline-onebox">replacing initramfs-tools with dracut - Development - Whonix Forum</a>)</p>
+<p>related:</p><aside class="onebox discoursetopic" data-onebox-src="../../../external.html?link=https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32">
+  <header class="source">
+      <img src="../../../external.html?link=https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="../../../external.html?link=https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32" target="_blank" rel="noopener" title="06:06PM - 04 January 2024">Whonix Forum – 4 Jan 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="../../../external.html?link=https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="../../../external.html?link=https://forums.whonix.org/t/replacing-initramfs-tools-with-dracut/4487/32" target="_blank" rel="noopener">replacing initramfs-tools with dracut</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">milestone_whonix_17</span>
+            <span class="discourse-tag simple">status_closed_issue_implemented</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Summary why Kicksecure was ported from initramfs-tools to dracut:  From the initrd generators I was aware of at the time, only dracut has an exitrd feature. Which means the system drops back into the initrd at shutdown time. It then (hopefully)...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>dracut allegedly according to the following configuration file uses zstd by default. I wonder why ours is uncompressed by default.</p>
+<aside class="onebox githubblob" data-onebox-src="../../../external.html?link=https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" target="_blank" rel="noopener">github.com/coreos/fedora-coreos-config</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="../../../external.html?link=https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" target="_blank" rel="noopener">overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf</a></h4>
+
+<div class="git-blob-info">
+  <a href="../../../external.html?link=https://github.com/coreos/fedora-coreos-config/blob/stable/overlay.d/05core/usr/lib/dracut/dracut.conf.d/60-coreos-zstd.conf" rel="noopener"><code>stable</code></a>
+</div>
+
+
+      <pre><code class="lang-conf"># Compress initrd with zstd.  dracut defaults to -15, but we want the
+# maximum reasonable compression, so override the command line to use
+# dracut's defaults along with -19.
+compress="zstd -19 -q -T0"
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-13T14:07:57Z' class='post-time'>
+                    July 13, 2025,  2:07pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-13T14:07:57Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Keeping the default, uncompressed, also remains an option.</p>
+</blockquote>
+</aside>
+<p>The default is gzip-compressed, not uncompressed. Dracut will indicate that it is using an automatically detected compression method (“pigz”, which is parallel gzip as I understand it) when the compression method is not set. So right now we’re using gzip compression in all instances.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1131">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>D) best boot compatibility for low RAM systems?</p>
+</blockquote>
+</aside>
+<p>Systems with multiple tens of gigabytes of RAM can error out with “no available memory” if trying to boot with an initramfs that is too large. The issue is not “total amount of memory”, the issue is “total amount of contiguous memory that GRUB can see” (if I’m understanding correctly), and on some hardware, GRUB can’t find a very large contiguous block.</p>
+<p>xz isn’t the fastest, but it’s faster than gzip, and much more efficient size-wise. I didn’t notice any impact on boot speed, and smaller size provides better compatibility, so that’s why I think xz strikes a good balance between all four points above. zstd sacrifices size (and therefore possibly compatibility) in favor of speed.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_9' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-13T16:02:56Z' class='post-time'>
+                    July 13, 2025,  4:02pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-13T16:02:56Z'>
+              <span itemprop='position'>9</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Testing the settings from Fedora CoreOS:</p>
+<ul>
+<li>zstd with max compression:
+<ul>
+<li>run 1: <code>0.01s user 0.03s system 0% cpu 18.719 total</code></li>
+<li>run 2: <code>0.02s user 0.02s system 0% cpu 17.553 total</code></li>
+<li>run 3: <code>0.01s user 0.03s system 0% cpu 17.478 total</code></li>
+<li>file size: <code>29628K</code></li>
+</ul>
+</li>
+</ul>
+<p>We get a slightly (though only very slightly) larger file than <code>xz</code> would produce, and it takes about 7 seconds longer to produce it than <code>xz</code> or <code>gzip</code> would have taken. <code>xz</code> wins for both size and performance.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
