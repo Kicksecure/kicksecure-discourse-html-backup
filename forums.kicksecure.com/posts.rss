@@ -5,6 +5,34 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>PureOS instead of Debian</title>
+        <dc:creator><![CDATA[@Vitaly]]></dc:creator>
+        <description><![CDATA[ <p>Dear developers,</p>
+<p>Debian, of course, is a very good OS.<br>
+But unfortunately, it and its core contain blobs and proprietary firmwares.</p>
+<p>Why don’t you switch to PureOS instead of Debian to improve the security of Kicksecure?<br>
+Project PureOS has an exceptionally clean kernel and no proprietary firmwares and drivers (and even an open BIOS).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/pureos-instead-of-debian/1137#post_1</link>
+        <pubDate>Mon, 14 Jul 2025 21:14:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2952</guid>
+      </item>
+      <item>
+        <title>Dracut compression research</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Alright. Please implement <code>xz</code>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_10</link>
+        <pubDate>Mon, 14 Jul 2025 04:48:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2949</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I’ve added panic key handling to the current emergency shutdown implementation. This will make it so that not only can you trigger an instant shutdown by removing a drive, but you can also do so by pressing a key combo. This is still only in my in-development security-misc and helper-scripts branches, but it’s coming along quite well. Thought I should give an update since it’s been a while since I worked on this <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994#post_17</link>
+        <pubDate>Mon, 14 Jul 2025 01:58:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2948</guid>
+      </item>
+      <item>
         <title>Dracut compression research</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Testing the settings from Fedora CoreOS:</p>
@@ -1309,38 +1337,6 @@ Modified it for use with kicksecure: <a href="https://forums.kicksecure.com/t/us
         <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_52</link>
         <pubDate>Mon, 30 Jun 2025 17:44:30 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2880</guid>
-      </item>
-      <item>
-        <title>Set Mousepad to Launch in New Windows instead of Tabs by Default</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Sounds reasonable and probably easy enough to do. Thanks for the suggestion and the research, I’ll look into implementing it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/set-mousepad-to-launch-in-new-windows-instead-of-tabs-by-default/1107#post_2</link>
-        <pubDate>Sun, 29 Jun 2025 17:03:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2878</guid>
-      </item>
-      <item>
-        <title>Installing Kicksecure to usb stick</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Just for installation to USB, and only in situations where you’re booting one USB on multiple computers, or where your system has buggy firmware.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/installing-kicksecure-to-usb-stick/1074?page=2#post_25</link>
-        <pubDate>Sun, 29 Jun 2025 15:20:44 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2877</guid>
-      </item>
-      <item>
-        <title>Panel items missing [feedback]</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>The missing power manager icon is weird, I’ll double-check on my end but I think that’s supposed to be there by default. If it’s not, it’s possible the OS isn’t detecting your system’s battery. Will investigate.</p>
-<hr>
-<p>On the sysmaint session, just from a standpoint of what is or isn’t good to implement:</p>
-<p>Adding a clock to the sysmaint session sounds like a good idea, especially since time can be security-related due to its effect on things like SSL.</p>
-<p>I don’t think adding window buttons is a good idea, as much as they would be convenient. The sysmaint session is intentionally designed to be a bit annoying to use as a general-purpose session because using it as a general-purpose session is a security hazard. This is why we have a separate sysmaint session, so that it’s hard to get to Firefox or other complex apps that interact with the network.</p>
-<hr>
-<p>From a standpoint of implementation difficulty:</p>
-<p>Right now the sysmaint session panel is implemented using <a href="https://packages.debian.org/bookworm/trayer" rel="noopener nofollow ugc">trayer</a>, which only supports system tray icons, not other widgets like clocks, power indicators, or window buttons. We’d have to use a more complete panel implementation (maybe xfce4-panel could be configured to work right somehow?) to introduce those elements, and I don’t really want us to use a panel implementation that’s <em>too</em> complete or easily reconfigured in order to keep the sysmaint session from being used for general-purpose tasks. It may be possible to pull in a good power manager applet from the Debian repos, and there might be a clock applet that could work in a similar way. (If a clock applet proves to be impossible, that could be worked into the system maintenance panel itself.) Window buttons are probably not going to be possible. It might be possible to get xfwm4 to minimize windows in such a way that they remain partially visible, we could look into that.</p>
-<p>If the permissions limitations in a user session and the functionality limitations in a sysmaint session are too limiting for your use case, you can revert back to “unrestricted admin mode” by booting into the <code>REMOVE user-sysmaint-split | enable unrestricted admin mode</code> boot option. This will get rid of the sysmaint session and bring back <code>sudo</code> access in normal user sessions. See <a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode" class="inline-onebox" rel="noopener nofollow ugc">Unrestricted Admin Mode</a> for details.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/panel-items-missing-feedback/1108#post_3</link>
-        <pubDate>Sun, 29 Jun 2025 15:17:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2876</guid>
       </item>
   </channel>
 </rss>
