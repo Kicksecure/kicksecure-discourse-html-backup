@@ -5,8 +5,39 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Mon, 14 Jul 2025 21:14:22 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 18 Jul 2025 01:30:18 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Rolling vs. Stable release brainstorming</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Detailed overview of the issues with stable and rolling release distributions: <a href="https://www.kicksecure.com/wiki/Dev/Stable_vs_Rolling_Distributions" class="inline-onebox" rel="noopener nofollow ugc">Stable vs Rolling Distributions - Security Analysis</a></p>
+<p>Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:</p>
+<ul>
+<li>Critical, extremely complicated software like Firefox ESR and Thunderbird can sometimes get stuck with a known-vulnerable version in the latest version of Debian Stable for as long as a month.</li>
+<li>Software that isn’t well-maintained may be left in a vulnerable state for long after the vulnerability is made public. (This happened with the zuluCrypt vulnerability discovered in Debian’s zuluCrypt packaging a couple weeks ago or so.)</li>
+<li>Tangential to the above, bugs that aren’t considered to be that big of a deal may not be fixed in a stable release of Debian ever. This isn’t really a security issue necessarily, but it is a problem from a usability standpoint.</li>
+</ul>
+<p>These things would be more-or-less resolved if Kicksecure was a rolling-release distro, for instance by rebasing our code onto a rolling-release variant of Debian (if one were to exist - we sort of almost have one with Debian Testing, but it doesn’t quite serve the desired purpose perfectly). This however is not necessarily more secure:</p>
+<ul>
+<li>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release.</li>
+<li>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.) For software that isn’t so complex as to be riddled with unknown vulnerabilities like web browsers, this is a potentially increased danger.</li>
+<li>Rolling releases can break a lot. An experienced user can go years or even over a decade without breaking a rolling release install beyond repair, but an inexperienced user can end up with a broken system within a few weeks if they accidentally do something like upgrade their system without checking what packages will be removed in the process. (I’d like to think I’m an experienced user, and I’ve nuked Debian Sid virtual machines multiple times doing this. Not fun.)</li>
+</ul>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc. Anything that has to handle highly complex untrusted data would be a good candidate for this sort of thing, especially software with a rapid-release cycle. We’re already moving in this direction to some decree with <a>Browser Choice</a>, which is in active development.</p>
+<p>What are everyone’s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139</link>
+          <pubDate>Fri, 18 Jul 2025 01:30:18 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1139</guid>
+          <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+        </item>
         <item>
           <title>PureOS instead of Debian</title>
           <dc:creator><![CDATA[Vitaly]]></dc:creator>
@@ -211,7 +242,7 @@ Also today i installed it in a new hard drive and the option to remove systemspl
 </ul>
 <p>What we really want is some sort of virtual machine that is integrated with the host <em>enough</em> to allow apps in the VM to feel native or close to native, but sufficiently walled off so that applications cannot do damage to the host system or escape the VM. This would allow running “user applications” in a very tight yet highly compatible sandbox, and would allow pulling those applications from trusted repositories like the Debian repos. It would also allow users to install applications without having to boot into a sysmaint session.</p>
 <p>Chrome OS has something similar to this with <a href="https://chromeos.dev/en/linux" rel="noopener nofollow ugc">Crostini</a>, and Windows has something similar to this with <a href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps" rel="noopener nofollow ugc">WSLg</a>. Something with a vaguely similar user experience would likely be acceptable, especially if an “app store” frontend of some sort was available so the user didn’t have to use a terminal to install sandboxed applications.</p>
-            <p><small>13 posts - 3 participants</small></p>
+            <p><small>15 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120</link>
@@ -874,31 +905,6 @@ Does changing it increase attack surface?</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1070</guid>
           <source url="https://forums.kicksecure.com/t/ephemeral-port-randomization-questions/1070.rss">Ephemeral Port Randomization Questions?</source>
-        </item>
-        <item>
-          <title>Messengers in wiki</title>
-          <dc:creator><![CDATA[sam]]></dc:creator>
-          <category>Website</category>
-          <description><![CDATA[
-            <p>I studied all popular secure messengers and found that only Simplex provides not only high anonymity but also high protection (encrypted local storage and  self-destruct passcode). This is great for Kicksecure. I think you can copy this page to the Kicksecure wiki <a href="https://www.whonix.org/wiki/SimpleX" class="inline-onebox" rel="noopener nofollow ugc">SimpleX</a> and add Simplex and Session <a href="https://www.kicksecure.com/wiki/Session" class="inline-onebox" rel="noopener nofollow ugc">Use Session Session Private Messenger Chat with Kicksecure ™</a> to section of recommended messengers <a href="https://www.kicksecure.com/wiki/Software#Instant_Messengers" class="inline-onebox" rel="noopener nofollow ugc">Software Recommendations</a></p>
-<p>Or I can add links to the websites of these messengers in the wiki:<br>
-[<a href="https://simplex.chat/" rel="noopener nofollow ugc">https://simplex.chat/</a> SimpleX]<br>
-[<a href="https://getsession.org/" rel="noopener nofollow ugc">https://getsession.org/</a> Session]<br>
-and maybe:<br>
-[<a href="https://docs.cwtch.im/" rel="noopener nofollow ugc">https://docs.cwtch.im/</a> Cwtch]</p>
-<h2><a name="p-2665-xmppjabber-client-1" class="anchor" href="https://forums.kicksecure.com#p-2665-xmppjabber-client-1"></a>XMPP/Jabber Client</h2>
-<p>[<a href="https://dino.im/" rel="noopener nofollow ugc">https://dino.im/</a> Dino IM]<br>
-[<a href="https://gajim.org/" rel="noopener nofollow ugc">https://gajim.org/</a> Gajim]</p>
-            <p><small>7 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/messengers-in-wiki/1069">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/messengers-in-wiki/1069</link>
-          <pubDate>Tue, 27 May 2025 19:33:17 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1069</guid>
-          <source url="https://forums.kicksecure.com/t/messengers-in-wiki/1069.rss">Messengers in wiki</source>
         </item>
   </channel>
 </rss>

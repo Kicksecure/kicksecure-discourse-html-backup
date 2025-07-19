@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Rolling vs. Stable release brainstorming</title>
+    <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139</link>
+    <description>Detailed overview of the issues with stable and rolling release distributions: https://www.kicksecure.com/wiki/Dev/Stable_vs_Rolling_Distributions
+
+Kicksecure&#39;s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:
+
+* Critical, extremely complicated software like Firefox ESR and Thunderbird can sometimes get stuck with a known-vulnerable version in the latest version of Debian Stable for as long as a month.
+* Software that isn&#39;t well-maintained may be left in a vulnerable state for long after the vulnerability is made public. (This happened with the zuluCrypt vulnerability discovered in Debian&#39;s zuluCrypt packaging a couple weeks ago or so.)
+* Tangential to the above, bugs that aren&#39;t considered to be that big of a deal may not be fixed in a stable release of Debian ever. This isn&#39;t really a security issue necessarily, but it is a problem from a usability standpoint.
+
+These things would be more-or-less resolved if Kicksecure was a rolling-release distro, for instance by rebasing our code onto a rolling-release variant of Debian (if one were to exist - we sort of almost have one with Debian Testing, but it doesn&#39;t quite serve the desired purpose perfectly). This however is not necessarily more secure:
+
+* Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don&#39;t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release.
+* Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn&#39;t really any way around this, this isn&#39;t a criticism half so much of a statement of fact.) For software that isn&#39;t so complex as to be riddled with unknown vulnerabilities like web browsers, this is a potentially increased danger.
+* Rolling releases can break a lot. An experienced user can go years or even over a decade without breaking a rolling release install beyond repair, but an inexperienced user can end up with a broken system within a few weeks if they accidentally do something like upgrade their system without checking what packages will be removed in the process. (I&#39;d like to think I&#39;m an experienced user, and I&#39;ve nuked Debian Sid virtual machines multiple times doing this. Not fun.)
+
+It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure&#39;s stable base, but offering &quot;rolling&quot; versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc. Anything that has to handle highly complex untrusted data would be a good candidate for this sort of thing, especially software with a rapid-release cycle. We&#39;re already moving in this direction to some decree with [Browser Choice](), which is in active development.
+
+What are everyone&#39;s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</description>
+    
+    <lastBuildDate>Fri, 18 Jul 2025 01:30:18 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Detailed overview of the issues with stable and rolling release distributions: <a href="https://www.kicksecure.com/wiki/Dev/Stable_vs_Rolling_Distributions" class="inline-onebox" rel="noopener nofollow ugc">Stable vs Rolling Distributions - Security Analysis</a></p>
+<p>Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:</p>
+<ul>
+<li>Critical, extremely complicated software like Firefox ESR and Thunderbird can sometimes get stuck with a known-vulnerable version in the latest version of Debian Stable for as long as a month.</li>
+<li>Software that isn’t well-maintained may be left in a vulnerable state for long after the vulnerability is made public. (This happened with the zuluCrypt vulnerability discovered in Debian’s zuluCrypt packaging a couple weeks ago or so.)</li>
+<li>Tangential to the above, bugs that aren’t considered to be that big of a deal may not be fixed in a stable release of Debian ever. This isn’t really a security issue necessarily, but it is a problem from a usability standpoint.</li>
+</ul>
+<p>These things would be more-or-less resolved if Kicksecure was a rolling-release distro, for instance by rebasing our code onto a rolling-release variant of Debian (if one were to exist - we sort of almost have one with Debian Testing, but it doesn’t quite serve the desired purpose perfectly). This however is not necessarily more secure:</p>
+<ul>
+<li>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release.</li>
+<li>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.) For software that isn’t so complex as to be riddled with unknown vulnerabilities like web browsers, this is a potentially increased danger.</li>
+<li>Rolling releases can break a lot. An experienced user can go years or even over a decade without breaking a rolling release install beyond repair, but an inexperienced user can end up with a broken system within a few weeks if they accidentally do something like upgrade their system without checking what packages will be removed in the process. (I’d like to think I’m an experienced user, and I’ve nuked Debian Sid virtual machines multiple times doing this. Not fun.)</li>
+</ul>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc. Anything that has to handle highly complex untrusted data would be a good candidate for this sort of thing, especially software with a rapid-release cycle. We’re already moving in this direction to some decree with <a>Browser Choice</a>, which is in active development.</p>
+<p>What are everyone’s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</p>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/1</link>
+        <pubDate>Fri, 18 Jul 2025 01:30:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-1</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+  </channel>
+</rss>

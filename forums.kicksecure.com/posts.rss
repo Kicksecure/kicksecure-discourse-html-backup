@@ -5,6 +5,67 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="14" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Google dictates how apps must be built, packaged, and behave if they want to be distributed through the Play Store. Google can reject apps that don’t comply with sandboxing or violate permissions. Google Android developers have to use SDK and libraries dictated by Google.</p>
+</blockquote>
+</aside>
+<p>Right, and beyond that the Android operating system is designed in such a way where you fundamentally can’t just “do whatever you want”. The way in which the typical Linux desktop works, if someone needs root access and doesn’t want to prompt for it, they can just install a polkit configuration snippet or similar as part of the installation process, and get that access. With Android, not only can you not do that by policy, you can’t do that by design. Furthermore, we have to work with an already-existing app ecosystem with Kicksecure, whereas Android was free to make their own ecosystem from scratch. They don’t need to retain compatibility with anything if they don’t want to, whereas we do have to do that.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_15</link>
+        <pubDate>Fri, 18 Jul 2025 20:23:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2961</guid>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Android can get away with it because Google can enforce rules about how Android apps are written and we can’t do that with Linux apps.</p>
+</blockquote>
+</aside>
+<p>Could you elaborate a bit on that please?</p>
+<p>I guess…</p>
+<p>Google dictates how apps must be built, packaged, and behave if they want to be distributed through the Play Store. Google can reject apps that don’t comply with sandboxing or violate permissions. Google Android developers have to use SDK and libraries dictated by Google.</p>
+<p>Why we cannot do that on general purpose Linux distributions?</p>
+<ul>
+<li>There is no central authority. Anyone can write and distribute a Linux application however they want. No organization (like Google on Android) can enforce mandatory sandboxing or privilege separation. More on organizational background: <a href="https://www.kicksecure.com/wiki/Linux_User_Experience_versus_Commercial_Operating_Systems" class="inline-onebox">Linux User Experience versus Commercial Operating Systems</a></li>
+<li>Most Linux applications weren’t designed with sandboxing in mind. → <a href="https://www.kicksecure.com/wiki/Dev/About_Computer_(In)Security#Security_Mindset_of_Open_Source_Software_Ecosystem">Security Mindset of Open Source Software Ecosystem</a></li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_14</link>
+        <pubDate>Fri, 18 Jul 2025 16:41:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2960</guid>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Detailed overview of the issues with stable and rolling release distributions: <a href="https://www.kicksecure.com/wiki/Dev/Stable_vs_Rolling_Distributions" class="inline-onebox" rel="noopener nofollow ugc">Stable vs Rolling Distributions - Security Analysis</a></p>
+<p>Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:</p>
+<ul>
+<li>Critical, extremely complicated software like Firefox ESR and Thunderbird can sometimes get stuck with a known-vulnerable version in the latest version of Debian Stable for as long as a month.</li>
+<li>Software that isn’t well-maintained may be left in a vulnerable state for long after the vulnerability is made public. (This happened with the zuluCrypt vulnerability discovered in Debian’s zuluCrypt packaging a couple weeks ago or so.)</li>
+<li>Tangential to the above, bugs that aren’t considered to be that big of a deal may not be fixed in a stable release of Debian ever. This isn’t really a security issue necessarily, but it is a problem from a usability standpoint.</li>
+</ul>
+<p>These things would be more-or-less resolved if Kicksecure was a rolling-release distro, for instance by rebasing our code onto a rolling-release variant of Debian (if one were to exist - we sort of almost have one with Debian Testing, but it doesn’t quite serve the desired purpose perfectly). This however is not necessarily more secure:</p>
+<ul>
+<li>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release.</li>
+<li>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.) For software that isn’t so complex as to be riddled with unknown vulnerabilities like web browsers, this is a potentially increased danger.</li>
+<li>Rolling releases can break a lot. An experienced user can go years or even over a decade without breaking a rolling release install beyond repair, but an inexperienced user can end up with a broken system within a few weeks if they accidentally do something like upgrade their system without checking what packages will be removed in the process. (I’d like to think I’m an experienced user, and I’ve nuked Debian Sid virtual machines multiple times doing this. Not fun.)</li>
+</ul>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc. Anything that has to handle highly complex untrusted data would be a good candidate for this sort of thing, especially software with a rapid-release cycle. We’re already moving in this direction to some decree with <a>Browser Choice</a>, which is in active development.</p>
+<p>What are everyone’s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139#post_1</link>
+        <pubDate>Fri, 18 Jul 2025 01:30:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2959</guid>
+      </item>
+      <item>
         <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Unfortunately, despite having developed this feature to the point where I would almost consider it ready to deploy, I have been unable to get it to work reliably on Kicksecure. It works just fine on plain Debian 12, but under Kicksecure it malfunctions in a very strange way that I have yet to figure out. I’ll most likely try to resume work on this for Trixie, in the hopes that things “just work” there.</p> ]]></description>
@@ -1288,82 +1349,6 @@ amnesia@amnesia:~$
         <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_3</link>
         <pubDate>Wed, 02 Jul 2025 09:44:36 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2897</guid>
-      </item>
-      <item>
-        <title>Kicksecure/Whonix LiveUSB distromorph</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="xianhua" data-post="52" data-topic="1095">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>What amount of donations are we talking about here?</p>
-</blockquote>
-</aside>
-<p>You would need to an IT support company how much they charge for fix these bugs to find out.</p>
-<aside class="quote no-group" data-username="xianhua" data-post="52" data-topic="1095">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/x/c57346/48.png" class="avatar"> xianhua:</div>
-<blockquote>
-<p>s Kickstarter and</p>
-<p>these kinds of crowd sourcing tools option?</p>
-</blockquote>
-</aside>
-<p>There are many options but what’s worthwhile is refer to my previous post.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-whonix-liveusb-distromorph/1095?page=3#post_53</link>
-        <pubDate>Wed, 02 Jul 2025 09:33:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2895</guid>
-      </item>
-      <item>
-        <title>Use sdwdate without Tor Control port</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Unsupported.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1751448625" class="site-icon" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="06:18PM - 26 June 2025">Kicksecure – 26 Jun 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" width="640" height="426"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
-
-  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/use-sdwdate-without-tor-control-port/1116#post_2</link>
-        <pubDate>Wed, 02 Jul 2025 09:30:39 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2894</guid>
-      </item>
-      <item>
-        <title>InRelease is not valid yet (invalid for another 4h 25min 51s)</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1113">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>See:<br>
-<a href="https://www.kicksecure.com/wiki/Network_Time_Synchronization#Manually_Set_Clock_Time_and_Date" rel="noopener nofollow ugc">Manually Set Clock Time and Date</a></p>
-</blockquote>
-</aside>
-<p>Hello. My friend and I bought new laptops. The date and time reset every day, and we have to fix it by changing the time in sysmaint mode, rebooting the system, and then everything works. However, after turning off the laptops, the problem returns, and we cannot receive updates or see the correct time on the taskbar. The laptops are from different brands</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/inrelease-is-not-valid-yet-invalid-for-another-4h-25min-51s/1113#post_4</link>
-        <pubDate>Wed, 02 Jul 2025 06:40:37 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2892</guid>
       </item>
   </channel>
 </rss>
