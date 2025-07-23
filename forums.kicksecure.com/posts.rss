@@ -5,6 +5,127 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Operating System from Heaven</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Could you elaborate on how this is particularly more secure than Qubes OS? I don’t think seL4 will be very suitable for this because of its likely very lacking hardware support (unless there’s an army of developers making networking and graphics drivers for seL4 that I don’t know about). Xen + a Linux dom0 seems like it probably gives similar levels of security to this.</p>
+<p>Genode looks really cool, I didn’t know about it before. (Edit: Heh, looks like they’re using separate Linux VMs as both hardware and an application compatibility layers. Clever.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/operating-system-from-heaven/1153#post_2</link>
+        <pubDate>Tue, 22 Jul 2025 23:15:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2981</guid>
+      </item>
+      <item>
+        <title>Operating System from Heaven</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>Based on my past experience with operating systems and software, there is still no great secure operating system developed, especially one based on free software. Most of the necessary software exists, but the challenge lies in integrating it all into a cohesive whole to produce the most secure operating system.</p>
+<p>What I will add here are software that already exist in reality, not theoretical ones.</p>
+<h1><a name="p-2980-kernel-system-1" class="anchor" href="https://forums.kicksecure.com#p-2980-kernel-system-1"></a>Kernel (system)</h1>
+<p>Sadly, there is no reliable or usable freedom operating system based on a microkernel design. What we have are only monolithic ones, based on the Linux kernel.</p>
+<p>Linux, by design, does not offer the same level of security as a microkernel. <a href="https://en.wikipedia.org/wiki/Tanenbaum%E2%80%93Torvalds_debate#Continued_dialogue">It is considered obsolete</a>; nobody would want to build an operating system from scratch based on a monolithic design in nowadays.</p>
+<p>Alternatives?</p>
+<ul>
+<li><a href="https://sel4.systems/">Sel4</a></li>
+<li><a href="https://doc.redox-os.org/book/microkernels.html">Redox</a></li>
+<li><a href="https://fuchsia.dev/fuchsia-src/concepts/kernel">Zircon</a></li>
+</ul>
+<p>All mentioned are in active development and free software (sel4 is copyleft).</p>
+<p>What i would avoid for sure is Zircon, because its google based.</p>
+<p>What’s left are seL4 and Redox. Both are good, and if I had to choose one, I would choose seL4 due to its maturity.</p>
+<p>Note (1): Minix and GNUmach are inactive.<br>
+Note (2): Hybrid kernel is not an option.</p>
+<h1><a name="p-2980-packages-policy-2" class="anchor" href="https://forums.kicksecure.com#p-2980-packages-policy-2"></a>Packages Policy</h1>
+<p>The package is only going to be as secure and up-to-date as the upstream developers made it. There must be no interference or external involvement in adding or removing code from any package (no package maintainer).</p>
+<h3><a name="p-2980-why-3" class="anchor" href="https://forums.kicksecure.com#p-2980-why-3"></a>Why</h3>
+<p>We have the Debian design, and we’ve seen how flawed it is when it comes to security and feature fixes. It’s horrible in every aspect. What we get from Debian is, at best, working software, but that doesn’t mean it’s secure, up-to-date, or even stable. Issues like packages crashing on shutdown when clicking X or freezing on specific Y action, are common, and such bugs when occurs are unlikely to be addressed in a timely manner.</p>
+<p>A major security flaw in Debian and Debian-like philosophies is that if the upstream of a package fixes a security issue and pushes it to their users, Debian often remains unaware of it and will not include the fix in their own package unless it is documented or assigned a CVE. As a result, users remain vulnerable for up to maybe entire five years.</p>
+<p>Another issue is the increased complexity in the chain of delivery. The more people who can add, remove, or manipulate the code, the more trust becomes a concern. If the code goes from developer X to intermediary Y (or even more intermediaries) before reaching the user, then the user must trust not only X but also Y and anyone else in the chain. Moreover, X doesn’t know Y or their practices, so X must also trust Y not to tamper with the code. This design introduces unnecessary trust assumptions. Code must be delivered directly from X to the user.</p>
+<p>Note: Operating system developers should only interact with core/system-level packages, such as the kernel or desktop environment or VM configs or so.</p>
+<h1><a name="p-2980-system-vs-user-packages-4" class="anchor" href="https://forums.kicksecure.com#p-2980-system-vs-user-packages-4"></a>System VS User Packages</h1>
+<p>System packages: Are going to be immutable, meaning read-only, no ability to modify with any rights (This helps as well with <a href="https://www.kicksecure.com/wiki/Verified_Boot">Verified Boot</a>).</p>
+<p>User packages: Will always be kept up to date.</p>
+<h1><a name="p-2980-kernel-userapp-per-vm-apv-5" class="anchor" href="https://forums.kicksecure.com#p-2980-kernel-userapp-per-vm-apv-5"></a>Kernel (user)/App-per-VM (ApV)</h1>
+<p>Realistically, having pure packages working directly with seL4 is not practical. It could take 10 to 20 years or even longer. (Linux has been around for over 30 years, and there are still packages that are Windows-only.)</p>
+<p>So to solve this issue, we gonna use an already functional kernel which is linux!.. ok hold on a second didnt we just say that linux is a bad design? Thats correct if its used as the main operating system kernel, but if its used in a VM and that VM runs only a single application like firefox or thunderbird…etc the danger drastically decreased/minimized.</p>
+<p>Note: AppArmor, SELinux, Firejail, Containers… all are flawed designs when it comes to relying on them for security with packages running on Linux directly on hardware.</p>
+<h1><a name="p-2980-vm-per-package-per-user-compartmentalization-6" class="anchor" href="https://forums.kicksecure.com#p-2980-vm-per-package-per-user-compartmentalization-6"></a>VM per Package per User (compartmentalization)</h1>
+<p>Each VM will run at the user level, and every VM will have its own dedicated user account. This isolation ensures that if a VM is compromised, it won’t lead to the compromise of all user packages or affect other VMs.</p>
+<h1><a name="p-2980-default-block-all-7" class="anchor" href="https://forums.kicksecure.com#p-2980-default-block-all-7"></a>Default Block All</h1>
+<p>By default, when any app is installed in the VM, nothing is allowed automatically. Every permission including internet access must be explicitly granted by the user. This approach prevents any unwanted permissions from being applied silently without the user’s notice or consent.</p>
+<h1><a name="p-2980-no-backward-nor-sideward-compatibility-8" class="anchor" href="https://forums.kicksecure.com#p-2980-no-backward-nor-sideward-compatibility-8"></a>No Backward Nor Sideward compatibility</h1>
+<p>No Backward: The operating system will continue updating itself for supported XYZ hardware. Once any hardware becomes obsolete, it will no longer be compatible, no legacy support.</p>
+<p>No Sideward: There will be no compatibility for Linux, Windows, or BSD software at the system level. Compatibility may exist in App-per-VM. By default, only Linux apps are supported.</p>
+<p>Additionally, if any app running in a VM does not work with a specific Linux version or hardware architecture, it is not the operating system’s responsibility to ensure compatibility (upstream issue).</p>
+<h1><a name="p-2980-packages-source-app-per-vm-9" class="anchor" href="https://forums.kicksecure.com#p-2980-packages-source-app-per-vm-9"></a>Packages Source (App-per-VM)</h1>
+<p>One might say that hosting our own packages on our own servers would be the ideal solution, and that’s true. However, with a small team and limited resources, that’s not currently feasible (though it remains the long-term goal).</p>
+<p>What we can do instead is source packages from existing systems, whether Gentoo, Arch, Nix, or others as long as we can obtain pure, upstream, patchless packages. Reproducibility is essential here to ensure that the packages have not been tampered with.</p>
+<p>Note: We can also support App(per-VM) rollback, or install older version directly, since these packages already exists in these OSs repository.</p>
+<p>This approach doesn’t conflict with the core philosophy of keep it updated, as the primary focus remains on using updated software, not rollbacks.</p>
+<h1><a name="p-2980-app-per-vm-hypervisor-type-10" class="anchor" href="https://forums.kicksecure.com#p-2980-app-per-vm-hypervisor-type-10"></a>App-per-VM Hypervisor type</h1>
+<p>Type 1 (bare-metal) hypervisors will be used for minimalism, reduced attack surface, and better performance.</p>
+<p>seL4 provides <a href="https://docs.sel4.systems/projects/virtualization/docs/libsel4vm.html">libsel4vm</a>, which fits well with this design.</p>
+<h1><a name="p-2980-package-manager-security-11" class="anchor" href="https://forums.kicksecure.com#p-2980-package-manager-security-11"></a>Package Manager Security</h1>
+<p>All package delivery must comply with <a href="https://theupdateframework.io/docs/overview/">TUF</a>, meaning delivery path of the packages must be secured without the depends on TLS to do that.</p>
+<p>Note: This level of security is not fully implemented by any existing package manager that I’m aware of. However, it can be enforced when using our own packages, especially in the App-per-VM model.</p>
+<h1><a name="p-2980-bootstrappability-12" class="anchor" href="https://forums.kicksecure.com#p-2980-bootstrappability-12"></a>Bootstrappability</h1>
+<p>I think this is possible, since the OS will be with minimal packages (as a system level). [<a href="https://www.kicksecure.com/wiki/Dev/bootstrappable_builds">ref</a>]</p>
+<h1><a name="p-2980-wayland-only-13" class="anchor" href="https://forums.kicksecure.com#p-2980-wayland-only-13"></a>Wayland only</h1>
+<p>There wont be x11/xorg nor xwayland, either wayland or no land.</p>
+<h1><a name="p-2980-no-rescue-mode-14" class="anchor" href="https://forums.kicksecure.com#p-2980-no-rescue-mode-14"></a>No Rescue mode</h1>
+<p>Rescue mode is like giving a backdoor to your own OS or software. If you break your system or forget your password, it’s your responsibility, no one else’s and no help will be provided, because there’s nothing anyone can do.</p>
+<p>This also encourages users to maintain proper backups of their data, whether on their own hardware or in the cloud.</p>
+<p>(Rollback and Snapshots helps as well)</p>
+<h1><a name="p-2980-architecture-cpu-support-15" class="anchor" href="https://forums.kicksecure.com#p-2980-architecture-cpu-support-15"></a>Architecture &amp; CPU Support</h1>
+<p>Only x86 will be supported, due to its widespread use (Intel or AMD CPUs). Support may be extended in the future to other freedom (or almost freedom) based architectures, such as RISC-V.</p>
+<p>ARM or similar proprietary architectures will not be supported—there’s no reason to waste time on them. Supporting the most common proprietary architecture (x86) is sufficient. (Though seL4 supports ARM).</p>
+<h1><a name="p-2980-no-stupid-or-old-devices-support-16" class="anchor" href="https://forums.kicksecure.com#p-2980-no-stupid-or-old-devices-support-16"></a>No Stupid or OLD Devices Support</h1>
+<p>There wont be any old or nonsense software support in the system level (like IRC in the kernel?! or Floppy Disk Support…)</p>
+<p>If necessary, such support may be possible within the App-per-VM (ApV) model, since it’s based on Linux and already includes support for these kinds of legacy features. However, this will never be a priority.</p>
+<h1><a name="p-2980-only-latestbest-encryption-used-17" class="anchor" href="https://forums.kicksecure.com#p-2980-only-latestbest-encryption-used-17"></a>Only Latest/Best Encryption Used</h1>
+<p>Since there will be no backward compatibility, only the best and most secure options available will be used, whether in TLS versions, cipher suites, OS-level encryption, or any other security-related components.</p>
+<h1><a name="p-2980-offline-installation-18" class="anchor" href="https://forums.kicksecure.com#p-2980-offline-installation-18"></a>Offline Installation</h1>
+<p>It is more secure to avoid installing the operating system while connected to the internet, as also advised in <a href="https://www.debian.org/doc/manuals/securing-debian-manual/ch03s03.en.html">Debian’s security manual</a>.</p>
+<h1><a name="p-2980-offline-system-core-19" class="anchor" href="https://forums.kicksecure.com#p-2980-offline-system-core-19"></a>Offline System Core</h1>
+<p>Similar to Qubes OS, the system core/base will not be connected to the internet (essential for security purposes).</p>
+<h1><a name="p-2980-non-systemd-init-20" class="anchor" href="https://forums.kicksecure.com#p-2980-non-systemd-init-20"></a>Non-Systemd Init</h1>
+<p>Although not a direct security issue on its own, systemd is a bulky piece of software and has been <a href="https://without-systemd.org/wiki/index_php/Arguments_against_systemd/">heavily criticized</a> for numerous things. The good news is that Genode OS has developed its own lightweight <a href="https://genode.org/documentation/genode-foundations/21.05/system_configuration/The_init_component.html">init component</a> that works with seL4.</p>
+<h1><a name="p-2980-optional-preferable-21" class="anchor" href="https://forums.kicksecure.com#p-2980-optional-preferable-21"></a>Optional Preferable</h1>
+<h3><a name="p-2980-btrfssnapshotstimeshift-like-22" class="anchor" href="https://forums.kicksecure.com#p-2980-btrfssnapshotstimeshift-like-22"></a>Btrfs/Snapshots/Timeshift like</h3>
+<p>It should be easily to achieve this with immutable upgrades (you can rollback to the previous state).</p>
+<h3><a name="p-2980-server-support-23" class="anchor" href="https://forums.kicksecure.com#p-2980-server-support-23"></a>Server Support</h3>
+<p>Finding a way to make ApV able to manage server/s.</p>
+<h3><a name="p-2980-fsdg-consideration-24" class="anchor" href="https://forums.kicksecure.com#p-2980-fsdg-consideration-24"></a>FSDG Consideration</h3>
+<p>This all can go through only supporting freedom software (software for the ApV must be taken from FSDG distro repository in this case).</p>
+<h3><a name="p-2980-secureboot-25" class="anchor" href="https://forums.kicksecure.com#p-2980-secureboot-25"></a>Secureboot</h3>
+<p>Only makes sense when it doesnt depend on microsoft keys.</p>
+<h3><a name="p-2980-onion-repository-26" class="anchor" href="https://forums.kicksecure.com#p-2980-onion-repository-26"></a>Onion Repository</h3>
+<p>Will harden the avoidance of targeted attack (<a href="https://www.kicksecure.com/wiki/Onionizing_Repositories#Introduction">explained here</a>).</p>
+<h3><a name="p-2980-nested-virtualization-27" class="anchor" href="https://forums.kicksecure.com#p-2980-nested-virtualization-27"></a>Nested Virtualization</h3>
+<p>This feature will be the responsibility of the seL4 team, whether they implement it correctly and securely or not. It’s particularly relevant in scenarios involving running an OS + VM inside another VM, or using a virtualizer/hypervisor within a VM (e.g. VirtualBox-in-VM).</p>
+<h1><a name="p-2980-competitors-28" class="anchor" href="https://forums.kicksecure.com#p-2980-competitors-28"></a>Competitors</h1>
+<p>Proprietary competitors are on the rise. HarmonyOS, for example, is arguably the most mature general-purpose microkernel-based OS developed in China. Google’s Fuchsia is another example. If we don’t stay ahead of these developments, control over security will slip from our hands, placing it instead in the hands of large corporations or state-backed entities.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/operating-system-from-heaven/1153#post_1</link>
+        <pubDate>Tue, 22 Jul 2025 20:51:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2980</guid>
+      </item>
+      <item>
+        <title>Whonix / Oracle Security</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Wrong forum.</p>
+<p>This is not a Whonix forum.</p>
+<p>This is the Kicksecure forum.</p>
+<p>Therefore closing.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/whonix-oracle-security/1152#post_3</link>
+        <pubDate>Tue, 22 Jul 2025 17:48:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2979</guid>
+      </item>
+      <item>
+        <title>Whonix / Oracle Security</title>
+        <dc:creator><![CDATA[@jashep]]></dc:creator>
+        <description><![CDATA[ <p>I’ve used only Windows since the 80s, so my experience is limited. As I’ve learned about security I’ve become aware of the “Lack” thereof. Last couple of years I’ve been wanting to learn about Whonix which has a reputation for being Secure. However, I don’t know if I should keep the installation of Whonix as a goal in light of the interview with a Whistleblower US Gov’t IT specialist I heard the other night on a Podcast? He worded for US Gov’t in 2016 to a latter date. He became high ranking, and knowledgeable. He reports Microsoft as having the contract with all systems across the Federal Gov’t. He also reports he witnessed Microsoft Tech were ordered to act as “Escorts” to Chinese IT Tech personnel who were stationed in China. These “Escorts” supposedly acted as guides to allow access to the Chinese Tech on all levels? This will become very controversial since the President at the time (Obama) reportedly signed off on it. This is the background to my question since the Whistleblower also reported the “Escorts” also were used with Oracle! So, my question is was or is your Whonix product compromised, and/or is it now secure?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/whonix-oracle-security/1152#post_1</link>
+        <pubDate>Tue, 22 Jul 2025 17:45:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-2977</guid>
+      </item>
+      <item>
         <title>Kicksecure distro specific keyboard shortcuts</title>
         <dc:creator><![CDATA[@init38]]></dc:creator>
         <description><![CDATA[ <p>Well I wanted to give some feedback on accessibility/productivity via keyboard shortcuts that would be nice to have in Kicksecure. Xfce is a little different then others but I recall that the Xfce version of Manjaro had shortcuts specific to that OS even on Xfce. In fact I’m more then sure there was another distro that was discontinued but specifically had keymaps set for Chromebook hardware but I don’t member the name? It did however use Xfce as desktop env is what I’m getting at.</p>
@@ -1224,58 +1345,6 @@ amnesia@amnesia:~$
         <link>https://forums.kicksecure.com/t/enterprise-laptop-style-wifi-switch-causes-permanent-freeze/1105#post_6</link>
         <pubDate>Thu, 03 Jul 2025 22:40:33 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-2910</guid>
-      </item>
-      <item>
-        <title>Separate (some) user applications from the operating system</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1120">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>We can’t really not consider VirtualBox - it’s the primary supported platform for Kicksecure and Whonix, and the automated installer will install VirtualBox and a Kicksecure appliance by default.</p>
-</blockquote>
-</aside>
-<p>These were periodic time choices, meaning in 2013~ there wasnt much of choices for new project growing up, coming 2025 this is can be considered from the past.</p>
-<p>Switching to VM per app, this idea can even merge whonix into kicksecure, how? because what is whonix doing is taking OS in VM connecting it through another VM, what can be done on VM per App is that X app in VM can use Y anonymization app/s in VM or even GW in VM.</p>
-<p>To have these genius futuristic ideas coming to true without having virtualbox on the other hand = Be it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_10</link>
-        <pubDate>Thu, 03 Jul 2025 22:23:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2908</guid>
-      </item>
-      <item>
-        <title>Separate (some) user applications from the operating system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>My first thought looking at this is that user account isolation sounds neat but will probably be difficult to implement. Lots of file ownership changes would be required in order to allow the user to get files into and out of applications. AppArmor doesn’t have a sandboxing feature like SELinux appears to, though it does allow enforcing MAC. Seccomp is unsafe, Android can get away with it because Google can enforce rules about how Android apps are written and we can’t do that with Linux apps. It also sounds like Android is using some sort of chroot variant possibly (or some fancy feature of SELinux) to limit host file visibility, which would further complicate things.</p>
-<p>I guess it would be better than nothing though. I’m not sure if it would be easier to implement than using a containerization engine, maybe it would be.</p>
-<p>(I don’t like sandboxing approaches in general especially without seccomp, since any LPE vuln in the kernel will allow a sandbox escape, and there have been many LPE vulns in the kernel as I understand it. Virtualization would make that much, much harder.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_9</link>
-        <pubDate>Thu, 03 Jul 2025 15:54:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2907</guid>
-      </item>
-      <item>
-        <title>Separate (some) user applications from the operating system</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Would “do it similar to how Android is doing it” be an option?</p>
-<ul>
-<li>Separate Linux user account name.</li>
-<li>Separate folder.</li>
-<li>Mandatory access control.</li>
-<li>Secomp (optional, as feasible).</li>
-</ul>
-<p>Though, Android might be starting to use Android Virtualization Framework (AVF) for some apps.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_8</link>
-        <pubDate>Thu, 03 Jul 2025 13:16:11 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2906</guid>
-      </item>
-      <item>
-        <title>Separate (some) user applications from the operating system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>We can’t really not consider VirtualBox - it’s the primary supported platform for Kicksecure and Whonix, and the automated installer will install VirtualBox and a Kicksecure appliance by default. It’s <em>the</em> Kicksecure platform. This is probably part of why the restrictions are a dealbreaker because of nested virtualization concerns (it will technically work but it will be painfully slow in many circumstances).</p>
-<p>Containers using the same system kernel won’t be a problem if the same OS is being used both on the host and in the container, which we can do. The security concerns of containerization are still there, but if we use a mature containerization platform like Incus rather than trying to roll our own (which is what I think we were doing with sandbox-app-launcher in the past), that might not be so bad.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_7</link>
-        <pubDate>Wed, 02 Jul 2025 18:44:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-2905</guid>
       </item>
   </channel>
 </rss>
