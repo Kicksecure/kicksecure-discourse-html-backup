@@ -21,9 +21,343 @@ It might be possible to combine the advantages of both stable and rolling releas
 
 What are everyone&#39;s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</description>
     
-    <lastBuildDate>Fri, 18 Jul 2025 01:30:18 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Jul 2025 17:02:48 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>And when an RCE discovered in an app and the developers say oh sorry this is a bad bug, i should assume this wasnt a backdoor because they phrased it nicely?</p>
+</blockquote>
+</aside>
+<p>Not a malicious backdoor because it looks similar to this:<br>
+<a href="https://www.kicksecure.com/wiki/Backdoor#Vulnerability_Example">Vulnerability Example</a></p>
+<p><a href="https://www.kicksecure.com/wiki/Backdoor#Malicious_Backdoor">Malicious Backdoor</a> is much worse.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>It looks more of a wording/phrasing to me,</p>
+</blockquote>
+</aside>
+<p>Wiki table improved just now to explain the differences better.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Sandbox every software since its bad.</li>
+</ul>
+</blockquote>
+</aside>
+<p>Sandboxing is great, but also not a magic bullet fixing all issues, even if functional.</p>
+<p>In case of SSH:</p>
+<ul>
+<li>(1) vulnerability “regreSSHion”</li>
+<li>(2) malicious backdoor “xz backdoor”</li>
+</ul>
+<p>sandboxing did not help. SSH is sandboxed.</p>
+<p>SSH is very popular and its security very important. Therefore unsurprisnig, sandboxing has already been implemented.<br>
+(<a href="https://jfrog.com/blog/examining-openssh-sandboxing-and-privilege-separation-attack-surface-analysis/" class="inline-onebox">OpenSSH Privilege Separation and Sandbox - Attack Surface Analysis</a>)</p>
+<p>Sandboxing:</p>
+<ul>
+<li>Sandboxing protects the system from the application.</li>
+<li>Sandbox can prevent exploitation of some types of vulnerabilities. (Such as when using a seccomp sandbox and any exploitation attempt requiring a disallowed seccomp syscall.)</li>
+<li>Sandboxing (at least upstream/distribution default sandboxing) cannot prevent backdoor exploitation. For example, I don’t see how any sandboxing could have stopped the <a href="https://www.kicksecure.com/wiki/Backdoor#Bitpay_Wallet_Malicious_Backdoor">Bitpay Wallet Malicious Backdoor</a>.</li>
+</ul>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Find an automated mechanism to examine the code whether in the repository or when its installed (with scanner searching for malicious patterns or so)</li>
+</ul>
+</blockquote>
+</aside>
+<p>Also nice but wouldn’t have found above 2 examples. In fact, it didn’t find it fast enough.</p>
+<p>Static Analysis and what not. But it produces false-positives. Static analysis output often requires manual review to confirm true positives.</p>
+<p>So that cannot be fully automated either. Nice to perhaps find vulnerabilities but not backdoors.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Add policies which prevent bad apps with certain behaviors like using unicodes in suspicious ways or xyz, or at least flagging them (similar to flatpak package flags).</li>
+</ul>
+</blockquote>
+</aside>
+<p><a href="https://www.kicksecure.com/wiki/Unicode" class="inline-onebox">Invisible Malicious Unicode Risks</a> - Then we can flag large percentage (guesstimated, could be easily 50-90%) of all source code files and packages.</p>
+<ul>
+<li>Some letter such as <code>ó</code> in a developers name in the source code file?</li>
+<li>That’s unicode. Applications with mulit-language support? A ton of unicode.</li>
+</ul>
+<p>Unfortunately, these are hard engineering problems.</p>
+<p>If it was easy to fix, projects would have taken action. Bug reports:</p>
+<ul>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1014029">invisible malicious unicode in source code - detection and prevention</a></li>
+<li><a href="https://github.com/QubesOS/qubes-issues/issues/7556" class="inline-onebox">audit and protect from Qubes source code for malicious unicode - CVE-2021-42574 · Issue #7556 · QubesOS/qubes-issues · GitHub</a></li>
+<li>more here: <a href="https://forums.whonix.org/t/detecting-malicious-unicode-in-source-code-and-pull-requests/13754" class="inline-onebox">Detecting Malicious Unicode in Source Code and Pull Requests - Development - Whonix Forum</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/7</link>
+        <pubDate>Thu, 24 Jul 2025 17:02:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-7</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>And when an RCE discovered in an app and the developers say oh sorry this is a bad bug, i should assume this wasnt a backdoor because they phrased it nicely? It looks more of a wording/phrasing to me, yes i would believe their claim if there is no bad history or any reason to believe otherwise, but technically speaking i cant verify their claim.</p>
+<p>What we should do instead is:</p>
+<ul>
+<li>Assume every software is bad, except the few software that we either develop or we know its unlikely to be backdoored.</li>
+<li>Sandbox every software since its bad.</li>
+<li>Find an automated mechanism to examine the code whether in the repository or when its installed (with scanner searching for malicious patterns or so)</li>
+<li>Add policies which prevent bad apps with certain behaviors like using unicodes in suspicious ways or xyz, or at least flagging them (similar to flatpak package flags).</li>
+</ul>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling release users got the backdoored version.</p>
+</blockquote>
+</aside>
+<p>Thats correct and the stable release got the backdoors which are not discovered yet. e.g:</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>regreSSHion</p>
+</blockquote>
+</aside>
+<p>Which effected <a href="https://security-tracker.debian.org/tracker/source-package/openssh">bookworm</a> when it was stable.</p>
+<p>And if you look into this example they removed a crucial directive that had mitigated an earlier vulnerability. If you tell me this isnt backdoor because of xyz, from technical point view this doesnt differ from xz issue.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>do I really want to always pull in the latest shiny new thing</p>
+</blockquote>
+</aside>
+<p>Future answer to this question: Yes, there is no better way around.</p>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/6</link>
+        <pubDate>Thu, 24 Jul 2025 15:39:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-6</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+</blockquote>
+</aside>
+<p>I think you’re confusing bugs and backdoors here. It’s true that vulns that end up in software with Debian or other stable releases are liable to remain unpatched in various ways, and I explicitly list this as a downside of stable releases in the linked document. But the xz-utils “vuln” wasn’t a vuln, it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>The difference between these two is a bit difficult to explain. Therefore explained, documented, compared here:<br>
+<a href="https://www.kicksecure.com/wiki/Backdoor#Vulnerability_versus_Malicious_Backdoor">Vulnerability versus Malicious Backdoor</a></p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>regreSSHion</p>
+</blockquote>
+</aside>
+<p>For reference:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/RegreSSHion" class="inline-onebox">RegreSSHion - Wikipedia</a></li>
+<li><a href="https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server" class="inline-onebox">OpenSSH CVE-2024-6387 RCE Vulnerability: Risk &amp; Mitigation | Qualys</a></li>
+<li><a href="https://www.qualys.com/2024/07/01/cve-2024-6387/regresshion.txt">https://www.qualys.com/2024/07/01/cve-2024-6387/regresshion.txt</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/5</link>
+        <pubDate>Thu, 24 Jul 2025 15:16:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-5</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+</blockquote>
+</aside>
+<p>I think you’re confusing bugs and backdoors here. It’s true that vulns that end up in software with Debian or other stable releases are liable to remain unpatched in various ways, and I explicitly list this as a downside of stable releases in the linked document. But the xz-utils “vuln” wasn’t a vuln, it was deliberate malware introduced to cause harm. Debian and other stable-release distros didn’t update to it immediately, so there was time for the security community to notice and raise alerts about the backdoor before it trickled down the pipeline to stable release users. Rolling release users got the backdoored version.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>So is having stable prevent security issues? no. prevent bugs? no. actually it introduces a new dilemma which is frozen software with bugs (graphical or so) will not be fixed even if its fixed upstream.</p>
+</blockquote>
+</aside>
+<p>True, and again, I point that out in the linked document.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Bottom line is that the software you are using either good or a mess, and this is only to blame the upstream developer with. on the edge fixes of features and vulnerability is better than sitting old and dirty waiting for fixes (which some released for years already).</p>
+</blockquote>
+</aside>
+<p>This is a very valid argument (more-or-less the same one I’m making) for some software like Firefox. But for, say, SSH, do I really want to always pull in the latest shiny new thing, complete with new vulns like regreSSHion? Probably not. The codebase doesn’t move nearly as fast, and so it’s practical to just backport fixes as necessary.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Note about Debian: Debian even modify the software and makes it act stupidly/introduce new bug</p>
+</blockquote>
+</aside>
+<p>Indeed. Virtually all distros do that, including rolling and semi-rolling releases.</p>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/4</link>
+        <pubDate>Thu, 24 Jul 2025 14:44:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-4</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release</p>
+</blockquote>
+</aside>
+<p>There is an issue with this assumption:</p>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.)</p>
+</blockquote>
+</aside>
+<p>Yep this is the reality but how this point is not against stable as well? because what is stable? stable software (specially in debian context) is a bunch of code which likely still have vulnerabilities/bugs frozen at certain state. So is having stable prevent security issues? no. prevent bugs? no. actually it introduces a new dilemma which is frozen software with bugs (graphical or so) will not be fixed even if its fixed upstream.</p>
+<p>Bottom line is that the software you are using either good or a mess, and this is only to blame the upstream developer with. on the edge fixes of features and vulnerability is better than sitting old and dirty waiting for fixes (which some released for years already).</p>
+<p>Note about Debian: Debian even modify the software and makes it act stupidly/introduce new bug that the upstream of the package has no idea why its doing what is doing e.g <a href="https://gitlab.com/libvirt/libvirt/-/issues/406#note_1176654618">KVM + Debian with nftable</a> (debian modified it to worse/backward solely for its own desire).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc.</p>
+</blockquote>
+</aside>
+<p>Stable base system with rolling software for the user is the industry level technology (Android, IOS, Almost Windows…), even Fedora and Opensuse went into this direction.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>other than just a stable base with specific rolling apps?</p>
+</blockquote>
+</aside>
+<p>Probably having a microkernel + native apps like harmonyos, but this isnt achievable by small development circle or community or hobbyists.</p>
+<p>(Although even with this design, separating base from user apps can still give better security specially if they are in VM)</p>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/3</link>
+        <pubDate>Thu, 24 Jul 2025 14:26:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-3</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related prerequisite knowledge:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/About_Debian_Packaging#Purpose_of_Packaging">Purpose of Packaging</a></p>
+<hr>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stable_Version_User_Experience">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1753349424" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener" title="10:41AM - 28 April 2025">Kicksecure – 28 Apr 25</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener">Kicksecure Stable Version User Experience</a></h3>
+
+  <p>Aims for a seamless and robust user experience in the stable release of Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/2</link>
+        <pubDate>Thu, 24 Jul 2025 11:00:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-2</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
       <item>
         <title>Rolling vs. Stable release brainstorming</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
