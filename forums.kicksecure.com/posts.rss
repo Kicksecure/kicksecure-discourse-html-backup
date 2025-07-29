@@ -5,6 +5,107 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>HELP - Error in ca-certificates don&#39;t allow update or install any package</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="doxasoj302" data-post="1" data-topic="1195">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/41988e/48.png" class="avatar"> doxasoj302:</div>
+<blockquote>
+<p><code>Illegal instruction (core dumped)</code></p>
+</blockquote>
+</aside>
+<p>Probably same issue as this:</p><aside class="quote quote-modified" data-post="5" data-topic="556">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556/5">Illegal instruction (core dumped)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+  </div>
+  <blockquote>
+    kernel parameter gather_data_sampling=force is likely causing this on some CPUs on Debian bookworm based operating systems. 
+Solution: Comment out gather_data_sampling=force in the /etc/default/grub.d/40_cpu_mitigations.cfg configuration file and reboot. 
+Comment out explanation: <a href="https://www.kicksecure.com/wiki/Configuration_Files#Commenting_Syntax_and_Effects">Commenting Syntax and Effects</a> 
+sudo str_replace 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' '#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' /etc/default/grub.d/40_cpu_mit…
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/help-error-in-ca-certificates-dont-allow-update-or-install-any-package/1195#post_3</link>
+        <pubDate>Tue, 29 Jul 2025 08:26:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3121</guid>
+      </item>
+      <item>
+        <title>Illegal instruction (core dumped)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>kernel parameter <code>gather_data_sampling=force</code> is likely causing this on some CPUs on Debian bookworm based operating systems.</p>
+<p>Solution: Comment out <code>gather_data_sampling=force</code> in the <code>/etc/default/grub.d/40_cpu_mitigations.cfg</code> configuration file and reboot.</p>
+<p>Comment out explanation: <a href="https://www.kicksecure.com/wiki/Configuration_Files#Commenting_Syntax_and_Effects">Commenting Syntax and Effects</a></p>
+<pre><code>sudo str_replace 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' '#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' /etc/default/grub.d/40_cpu_mitigations.cfg
+</code></pre>
+<hr>
+<p>For reference: <a href="https://github.com/Kicksecure/security-misc/pull/218" class="inline-onebox">`gather_data_sampling=force` - Enable Gather Data Sampling (GDS) mitigation - related to CPU `AVX` instruction; More CPU Mitigations and Additional References by raja-grewal · Pull Request #218 · Kicksecure/security-misc · GitHub</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556#post_5</link>
+        <pubDate>Tue, 29 Jul 2025 08:26:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3120</guid>
+      </item>
+      <item>
+        <title>HELP - Error in ca-certificates don&#39;t allow update or install any package</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>What hardware are you attempting to run Kicksecure on? Also, are you sure that the OS image you downloaded is good? It might be worth doing GPG signature checks to make very sure the image you’re using is not corrupted.</p>
+<p>“Illegal instruction” means that something in the system tried to tell the CPU to do something it doesn’t understand how to do. This should in theory never happen.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-error-in-ca-certificates-dont-allow-update-or-install-any-package/1195#post_2</link>
+        <pubDate>Tue, 29 Jul 2025 02:26:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3119</guid>
+      </item>
+      <item>
+        <title>HELP - Error in ca-certificates don&#39;t allow update or install any package</title>
+        <dc:creator><![CDATA[@doxasoj302]]></dc:creator>
+        <description><![CDATA[ <p>The principal error is:</p>
+<pre><code class="lang-auto">installed ca-certificates package post-installation script subprocess returned error exit status 132
+</code></pre>
+<p>I have tried to install Kicksecure 4 times yet. All time I get the same issue. Just after installation, I reboot, then select the second option of the grub, check for updates and then install updates.</p>
+<p>In the process of upgrade certificates module throw errors in certifications of a lots packets, for example:</p>
+<pre><code class="lang-auto">W: tor+https://deb.debian.org/debian/pool/main/m/miscfiles/miscfiles_1.5%2bdfsg-4_all.deb: No system certificates available. Try installing ca-certificates.
+E: Failed to fetch tor+https://deb.debian.org/debian/pool/main/libh/libhttp-date-perl/libhttp-date-perl_6.05-2_all.deb  Certificate verification failed: The certificate is NOT trusted. The certificate issuer is unknown.  Could not handshake: Error in the certificate verification. [IP: 127.0.0.1 9050]
+</code></pre>
+<p>I have tried to reinstall ca-certificates, reconfigure dpkg, fix broken dependencies, install ca-certificates manually from debian website.</p>
+<p>Nothing works…</p>
+<p>I don’t have an old PC, I have been using Ubuntu in the same PC with the same hardware for 2 years.</p>
+<p>I have tried to debug the issue and reinstall some packages but I can’t for the problem with certificates…</p>
+<pre><code class="lang-auto">sudo apt install ca-certificates
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20230311+deb12u1).
+0 upgraded, 0 newly installed, 0 to remove and 28 not upgraded.
+1 not fully installed or removed.
+After this operation, 0 B of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Setting up ca-certificates (20230311+deb12u1) ...
+Updating certificates in /etc/ssl/certs...
+Illegal instruction (core dumped)
+dpkg: error processing package ca-certificates (--configure):
+ installed ca-certificates package post-installation script subprocess returned 
+error exit status 132
+Errors were encountered while processing:
+ ca-certificates
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+zsh: exit 100   sudo apt install ca-certificates
+</code></pre>
+<p>Anyone know which could be the problem?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-error-in-ca-certificates-dont-allow-update-or-install-any-package/1195#post_1</link>
+        <pubDate>Tue, 29 Jul 2025 02:09:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3118</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Ended up changing my mind about not implementing it until Trixie. The same bug that was tripping up emerg-shutdown was also tripping up a different feature we wanted, which was making it possible to guarantee a normal shutdown would eventually work. Ironically, guaranteeing normal shutdown functionality appears to be impossible (<a href="https://github.com/systemd/systemd/issues/38261#issuecomment-3130259046" class="inline-onebox" rel="noopener nofollow ugc">Provide a timeout that will always unconditionally succeed at shutting down or rebooting the system · Issue #38261 · systemd/systemd · GitHub</a>), but I managed to get emerg-shutdown working on Kicksecure 17!</p>
+<p>The bug turned out to be an Intel i915 graphics driver issue. If emerg-shutdown tries to bring down the machine while X11 has control of the screen, the i915 driver will sometimes trigger a kernel warn during shutdown. This turns into a kernel panic because of <code>panic-on-oops.service</code>. To prevent this, all that needs to be done is to simply disable the kernel’s <code>panic_on_warn</code> and <code>panic_on_oops</code> options before shutting down. To further attempt to keep the driver from throwing a kernel warning at all, I also added code that switches to an unopened (and therefore non-graphical) TTY before shutdown. In my testing this kept the driver happy.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994#post_19</link>
+        <pubDate>Tue, 29 Jul 2025 01:52:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3116</guid>
+      </item>
+      <item>
         <title>No Rescue Mode</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="Patrick" data-post="11" data-topic="1171">
@@ -2128,117 +2229,6 @@ The gigantic <a href="https://www.kicksecure.com/wiki/Verified_Boot">verified bo
         <link>https://forums.kicksecure.com/t/microkernel-archetecture-is-the-future/1156#post_7</link>
         <pubDate>Fri, 25 Jul 2025 20:34:07 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3049</guid>
-      </item>
-      <item>
-        <title>No Stupid or OLD Devices Support</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>So some of the results are:</p>
-<ul>
-<li>Obsolete machines which no one can have at this time if it doesnt work with the OS for a user or couple of users you should fix the issue, because if you dont fix it then why you have the code for the machine to begin with? (no upstream even to help for this)</li>
-<li>If obsolete driver wants nonsense privileges to work and not fitting with the OS security measurements, will you lower the security bar to make it work? if not, why do you have the driver to begin with?</li>
-<li>Old means unfixed bugs or vulnerabilities or even to have both just not yet examined well until someone figure out a way to breach (or already there are 0-days stored or sold and not yet exposed).</li>
-<li>Including Old means the overall code will be bulkier/bigger which will give hardness to impossible for auditing/examining it.</li>
-<li>Old mean most likely written in insecure language or wont fit into new methods like reproducibility or bootstrappability thus reduce code quality and assurity.</li>
-<li>Adding complexity to the code because it needs to be always on backward support ability.</li>
-</ul>
-<p>…whereas the future should be clean, secure, no nonsense code or adding it in the wrong/dangerous places…etc.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-stupid-or-old-devices-support/1173#post_3</link>
-        <pubDate>Fri, 25 Jul 2025 19:43:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3048</guid>
-      </item>
-      <item>
-        <title>Secure and Trustless/Trust Minimal Package Policy</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1157">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>DMs can and do sometimes add:</p>
-<ul>
-<li>Mandatory access control</li>
-<li>systemd hardening (capabilities… some introduction found here: <a href="https://github.com/alegrey91/systemd-service-hardening">GitHub - alegrey91/systemd-service-hardening: Basic guide to harden systemd services</a>)</li>
-</ul>
-</blockquote>
-</aside>
-<ul>
-<li><a href="https://www.theregister.com/2025/07/22/arch_aur_browsers_compromised/">Injecting a malware</a> or <a href="https://github.blog/news-insights/ssh-keys-generated-on-debian-ubuntu-compromised/">corrupt a security library</a>.</li>
-<li>Can add stupid configurations and lower good features, but upstream doing it right and dont know the solution e.g <a href="https://gitlab.com/libvirt/libvirt/-/issues/406#note_1176654618">kvm + nftable in bookworm</a>.</li>
-<li>Or surrender and do nothing, cant solve adding a package which is not on the keep it old and patch small, rather its continuously updated and comes with many features at once e.g virtualbox.</li>
-</ul>
-<p>…So someone has the ability to modify the upstream code before reaching the user, he can do it for good or for bad, and thats wrong to leave this hanging on blind trust in people. Good or bad code is the responsibility of the main/upstream developer not the distro/OS. This is followed in windows, google, apple…etc if they find an app having issue/s they will notify upstream or just remove it and thats it.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1157">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>A) non-reproducible and no patch, or</p>
-</blockquote>
-</aside>
-<p>upstream issue, if not fixed then flagged as non-reproducible due to upstream 123 issues. tickets for upstream if they dont fix then it is what it is.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1157">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Don’t want any intermediaries? Use Linux From Scratch.</p>
-</blockquote>
-</aside>
-<p>If you want to have your pure own distro, you should have the original kernel code and add your own configs to follow the project policy:</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="1157">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>Note: Operating system developers should only interact with core/system-level packages, such as the kernel or desktop environment or VM configs or so.</p>
-</blockquote>
-</aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/secure-and-trustless-trust-minimal-package-policy/1157#post_3</link>
-        <pubDate>Fri, 25 Jul 2025 18:55:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3047</guid>
-      </item>
-      <item>
-        <title>No Drivers for Intel Alder Lake-P PCH CNVi WiFi in Kicksecure Template</title>
-        <dc:creator><![CDATA[@marcos-morar43]]></dc:creator>
-        <description><![CDATA[ <p>Sorry, I didn’t upgrade the wifi firmware after installing the linux kernel from bookworm-backports. Now that I’ve upgraded the firmware, the card is working fine.</p>
-<p>Thanks a lot.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-drivers-for-intel-alder-lake-p-pch-cnvi-wifi-in-kicksecure-template/1160#post_5</link>
-        <pubDate>Fri, 25 Jul 2025 16:26:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3046</guid>
-      </item>
-      <item>
-        <title>No Drivers for Intel Alder Lake-P PCH CNVi WiFi in Kicksecure Template</title>
-        <dc:creator><![CDATA[@marcos-morar43]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1160" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>You might be able to install a Linux kernel from bookworm-backports to get the card working.</p>
-</blockquote>
-</aside>
-<p>I tried that, but it didn’t resolve the issue.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1160">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Can you make it work on Debian?</p>
-</blockquote>
-</aside>
-<p>The card works fine on Fedora, Arch Linux, Ubuntu, and Mint, but not on Debian or Debian-based Kicksecure. Ubuntu has the package, but I have no idea how to manually install it on Debian.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-drivers-for-intel-alder-lake-p-pch-cnvi-wifi-in-kicksecure-template/1160#post_4</link>
-        <pubDate>Fri, 25 Jul 2025 15:33:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3045</guid>
-      </item>
-      <item>
-        <title>Support Only Worthy Architecture &amp; CPU</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Yeah but it doesnt defy the waste of time on supporting multiple proprietary architectures which all give the same result = dealing with a blackbox, it has vulnerabilities which may not get patched and we dont know how many others still uncovered, requires blobs…etc.</p>
-<p>For me i wouldnt bother with this, its similar if i choose bitcoin because its famous/highest in value not because its private or the greatest, but on the same time i wouldnt value other coins having the same issues.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/support-only-worthy-architecture-cpu/1172#post_3</link>
-        <pubDate>Fri, 25 Jul 2025 15:14:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3044</guid>
       </item>
   </channel>
 </rss>
