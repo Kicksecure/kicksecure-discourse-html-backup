@@ -14,9 +14,22 @@ I do want to add that also set up LUKS when I installed Debian.
 
 Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</description>
     
-    <lastBuildDate>Thu, 17 Jul 2025 03:09:13 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Jul 2025 01:52:26 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Ended up changing my mind about not implementing it until Trixie. The same bug that was tripping up emerg-shutdown was also tripping up a different feature we wanted, which was making it possible to guarantee a normal shutdown would eventually work. Ironically, guaranteeing normal shutdown functionality appears to be impossible (<a href="https://github.com/systemd/systemd/issues/38261#issuecomment-3130259046" class="inline-onebox" rel="noopener nofollow ugc">Provide a timeout that will always unconditionally succeed at shutting down or rebooting the system · Issue #38261 · systemd/systemd · GitHub</a>), but I managed to get emerg-shutdown working on Kicksecure 17!</p>
+<p>The bug turned out to be an Intel i915 graphics driver issue. If emerg-shutdown tries to bring down the machine while X11 has control of the screen, the i915 driver will sometimes trigger a kernel warn during shutdown. This turns into a kernel panic because of <code>panic-on-oops.service</code>. To prevent this, all that needs to be done is to simply disable the kernel’s <code>panic_on_warn</code> and <code>panic_on_oops</code> options before shutting down. To further attempt to keep the driver from throwing a kernel warning at all, I also added code that switches to an unopened (and therefore non-graphical) TTY before shutdown. In my testing this kept the driver happy.</p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/19">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/19</link>
+        <pubDate>Tue, 29 Jul 2025 01:52:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-19</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+      </item>
       <item>
         <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
