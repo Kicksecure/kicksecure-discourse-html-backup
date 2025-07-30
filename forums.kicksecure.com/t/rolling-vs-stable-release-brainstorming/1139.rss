@@ -21,9 +21,98 @@ It might be possible to combine the advantages of both stable and rolling releas
 
 What are everyone&#39;s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</description>
     
-    <lastBuildDate>Mon, 28 Jul 2025 17:58:07 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 29 Jul 2025 19:38:52 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="16" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>And now one could go to 1000s of other projects and report CVEs because they’re using a similar more rowhammer vulnerable coding style.</p>
+</blockquote>
+</aside>
+<p>It should be if possible.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="16" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Wrong interpretation.</p>
+<p>Because you don’t know what this means:</p>
+<blockquote>
+<p>part of the code in the fix commit are not built because debian use PAM: plugins/sudoers/auth/sudo_auth.[ch]</p>
+</blockquote>
+</blockquote>
+</aside>
+<p>Read the research paper, the study done by attacking Ubuntu 20.04.01 LTS (yeah with PAM…), they gained root access, period. (the Y intermediary/package manager can BS whatever they want)</p>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/17</link>
+        <pubDate>Tue, 29 Jul 2025 19:38:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-17</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
+      <item>
+        <title>Rolling vs. Stable release brainstorming</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p><a href="https://arxiv.org/pdf/2309.02545">POC</a> submitted, upstream <a href="https://github.com/sudo-project/sudo/commit/7873f8334c8d31031f8cfa83bd97ac6029309e4f">addressed it</a>.</p>
+</blockquote>
+</aside>
+<p>And now one could go to 1000s of other projects and report CVEs because they’re using a similar more rowhammer vulnerable coding style.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Debian can say whatever they want, its minor or not, unrelated to the concept (though they didnt say like debian is immune to this or so, its <a href="https://security-tracker.debian.org/tracker/source-package/sudo">vulnerable (no DSA)</a>, its like saying yeah, not a big deal… ok… LulzSec).</p>
+</blockquote>
+</aside>
+<p>Wrong interpretation.</p>
+<p>Because you don’t know what this means:</p>
+<blockquote>
+<p>part of the code in the fix commit are not built because debian use PAM: plugins/sudoers/auth/sudo_auth.[ch]</p>
+</blockquote>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Focus on the concept, concept is flawed, unrelated to the impact.</p>
+</blockquote>
+</aside>
+<p>It’s going to be difficult to find a real CVE that doesn’t get addressed by Debian security team without knowing how.</p>
+<p><code>check-support-status</code> can do. See:<br>
+<a href="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default-check-support-status/19262" class="inline-onebox">Find packages without security support / consider installation of debian-security-support by default / `check-support-status` - Phabricator Tickets - Whonix Forum</a></p>
+<hr>
+<p>As for exploitable security issues in Debian stable but unfixed because no CVE has been issued, I couldn’t find any examples.</p>
+<p>Quote <a href="https://security-team.debian.org/security_tracker.html" class="inline-onebox">Debian Security Team</a></p>
+<blockquote>
+<p>Vulnerabilities without an assigned CVE id</p>
+<p>If you learn of a vulnerability to which no CVE id has been assigned yet, you can request one. In the meantime, you can add an entry of the form</p>
+<p>CVE-2009-XXXX [optipng array overflow]<br>
+- optipng 0.6.2.1-1 (low)<br>
+NOTE: <a href="https://secunia.com/advisories/34035/" class="inline-onebox">About Secunia Research | Flexera</a></p>
+<p>It is desirable to include references which uniquely identify the issue, such as a permanent link to an entry in the upstream bug tracker, or a bug in the Debian BTS. If the issue is likely present in unstable, a bug should be filed to help the maintainer to track it.</p>
+<p>Lack of CVE entries should not block advisory publication which are otherwise ready, but we should strive to release fully cross-referenced advisories nevertheless.</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139/16</link>
+        <pubDate>Tue, 29 Jul 2025 12:35:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1139-16</guid>
+        <source url="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139.rss">Rolling vs. Stable release brainstorming</source>
+      </item>
       <item>
         <title>Rolling vs. Stable release brainstorming</title>
         <dc:creator><![CDATA[nurmagoz]]></dc:creator>
