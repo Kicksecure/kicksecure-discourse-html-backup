@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
-    <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
-    <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994</link>
+    <title>Unplugging external drive should trigger a shutdown</title>
+    <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994</link>
     <description>Hello Kicksecure folks,
 
 I installed Debian on my brand new Western Digital external SSD drive. Then I proceeded to distro morph it following the guide (prob should have went with the ISO route) and everything works as intended.
@@ -14,74 +14,90 @@ I do want to add that also set up LUKS when I installed Debian.
 
 Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</description>
     
-    <lastBuildDate>Tue, 05 Aug 2025 10:21:26 +0000</lastBuildDate>
-    <category>Support</category>
-    <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 06 Aug 2025 07:23:07 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related:</p>
+<ul>
+<li><a href="https://forums.kicksecure.com/t/emergency-key-press-shutdown-sequence/1199" class="inline-onebox">Emergency key press shutdown sequence</a></li>
+<li><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197" class="inline-onebox">Ctrl+Alt+Del (three-finger salute) action</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/21">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/21</link>
+        <pubDate>Wed, 06 Aug 2025 07:23:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-21</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
+      </item>
+      <item>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
             <p>Unplugging external drive → shutdown: This feature has been implemented in packages security-misc, helper-scripts and user-sysmaint-split by <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>. This feature will most likely become available in Kicksecure 18.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/20">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/20">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/20</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/20</link>
         <pubDate>Tue, 05 Aug 2025 10:21:26 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-20</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>Ended up changing my mind about not implementing it until Trixie. The same bug that was tripping up emerg-shutdown was also tripping up a different feature we wanted, which was making it possible to guarantee a normal shutdown would eventually work. Ironically, guaranteeing normal shutdown functionality appears to be impossible (<a href="https://github.com/systemd/systemd/issues/38261#issuecomment-3130259046" class="inline-onebox" rel="noopener nofollow ugc">Provide a timeout that will always unconditionally succeed at shutting down or rebooting the system · Issue #38261 · systemd/systemd · GitHub</a>), but I managed to get emerg-shutdown working on Kicksecure 17!</p>
 <p>The bug turned out to be an Intel i915 graphics driver issue. If emerg-shutdown tries to bring down the machine while X11 has control of the screen, the i915 driver will sometimes trigger a kernel warn during shutdown. This turns into a kernel panic because of <code>panic-on-oops.service</code>. To prevent this, all that needs to be done is to simply disable the kernel’s <code>panic_on_warn</code> and <code>panic_on_oops</code> options before shutting down. To further attempt to keep the driver from throwing a kernel warning at all, I also added code that switches to an unopened (and therefore non-graphical) TTY before shutdown. In my testing this kept the driver happy.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/19">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/19">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/19</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/19</link>
         <pubDate>Tue, 29 Jul 2025 01:52:26 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-19</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>Unfortunately, despite having developed this feature to the point where I would almost consider it ready to deploy, I have been unable to get it to work reliably on Kicksecure. It works just fine on plain Debian 12, but under Kicksecure it malfunctions in a very strange way that I have yet to figure out. I’ll most likely try to resume work on this for Trixie, in the hopes that things “just work” there.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/18">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/18">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/18</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/18</link>
         <pubDate>Thu, 17 Jul 2025 03:09:13 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-18</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>I’ve added panic key handling to the current emergency shutdown implementation. This will make it so that not only can you trigger an instant shutdown by removing a drive, but you can also do so by pressing a key combo. This is still only in my in-development security-misc and helper-scripts branches, but it’s coming along quite well. Thought I should give an update since it’s been a while since I worked on this <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=12" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/17">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/17">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/17</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/17</link>
         <pubDate>Mon, 14 Jul 2025 01:58:16 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-17</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
             <p>See:<br>
 <a href="https://www.kicksecure.com/wiki/Ram-wipe#Unmount_Encrypted_Root_Disk_to_Wipe_Full_Disk_Encryption_Key">Unmount Encrypted Root Disk to Wipe Full Disk Encryption Key</a><br>
 (written just now)</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/16">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/16">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/16</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/16</link>
         <pubDate>Tue, 17 Jun 2025 15:23:25 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-16</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
         <description><![CDATA[
             <p>Now onto closing LUKS volumes followed clearing memory and then shutting down.</p>
@@ -108,15 +124,15 @@ suspend_luks_volumes() {
 <p>The system locks up and doesn’t go to a black screen and show anything?<br>
 I’m not sure if this cause the root filesystem is the luks volume (FDE) or what?</p>
 <p>Do I need to kill x &amp; lightdm or switch over to a minimal env or a tty to switch over to a black screen?</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/15">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/15">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/15</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/15</link>
         <pubDate>Mon, 16 Jun 2025 02:26:29 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-15</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
         <description><![CDATA[
             <p>Sorry for the late reply to the post but I wanted to follow up with what I did and what I’m trying to troubleshoot at the moment.</p>
@@ -138,28 +154,28 @@ Prob might have to re-edit this when I double check on my other system I’m tes
 <p>So I’m not sure if its my device (External Samsung SSD) or since I’m running it off the external SSD, but it appears that <code>ATTRS{idVendor}</code> <code>ATTRS{idProduct}</code> only worked but I need to double check again.<br>
 Samsung has been known for issues like with things like SMART support so that something to take into account maybe related.</p>
 <p>I used <code>lsusb</code> do get the ID_VENDOR (first hexadecimal number) and the ID_PRODUCT (:second hexadecimal number).</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/14">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/14">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/14</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/14</link>
         <pubDate>Mon, 16 Jun 2025 02:20:35 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-14</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>It doesn’t use ram-wipe at the moment. It may be desirable for something like that to be done, but given the limitations we’re operating under to avoid crashes, it might not be possible or practical. Good TODO for me to research.</p>
 <p>I currently have some higher-priority tasks in my queue that are keeping me from getting back to this, but it’s definitely not dropped off my radar and I’m looking forward to finishing this when I can.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/13">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/13">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/13</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/13</link>
         <pubDate>Sat, 31 May 2025 01:19:24 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-13</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
             <aside class="quote no-group" data-username="Quiksilver" data-post="11" data-topic="994">
@@ -184,15 +200,15 @@ Samsung has been known for issues like with things like SMART support so that so
 </blockquote>
 </aside>
 <p>Goal specific donations are unsupported.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/12">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/12">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/12</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/12</link>
         <pubDate>Fri, 30 May 2025 12:59:55 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-12</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Quiksilver]]></dc:creator>
         <description><![CDATA[
             <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="994">
@@ -208,15 +224,15 @@ Samsung has been known for issues like with things like SMART support so that so
 <p>Once this is done and working</p>
 </blockquote>
 <p>Any way to donate towards this work specifically?</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/11">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/11">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/11</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/11</link>
         <pubDate>Fri, 30 May 2025 01:06:24 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-11</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>Did a lot of research into this, the approach I was taking technically worked but was not at all guaranteed to work. The issues (and how to work around them) I documented pretty well in a code comment in the program I’m currently writing to implement this:</p>
@@ -295,15 +311,15 @@ Samsung has been known for issues like with things like SMART support so that so
 </code></pre>
 <p>The rest of my research was focused mainly on figuring out how to read kernel uevents without involving libudev. This took a while, partially because libudev itself was sticking its head in the way and confusing my program’s output, and partially because <code>man 7 netlink</code> was extraordinarily misleading (it told me the data from the kernel I was reading was going to be in one format, it turned out to be in a completely different format). However, I’ve gotten to the point where I <em>can</em> read kernel uevents, which will let me detect when the root filesystem drive is removed without needing any other libraries or executables (which is important for the reasons described above).</p>
 <p>Once this is done and working, it might be worth trying to contribute it back to Tails (or at least let them know about our work) so they can improve their implementation as well.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/10">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/10">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/10</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/10</link>
         <pubDate>Fri, 09 May 2025 05:15:56 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-10</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>Won’t be able to finish this tonight, determining the block device that’s <em>actually</em> underneath the filesystem is a bit of a challenge. One of the comments I wrote in my current code reads:</p>
@@ -315,15 +331,15 @@ Samsung has been known for issues like with things like SMART support so that so
     # is).
 </code></pre>
 <p>There’s also some higher-priority work for me to tackle before I finish this. I have most of the research done though, including how to find underlying devices or mountpoints in a wide variety of situations, and how to monitor the real device once you find it. Also wrote a rather thorough “force shutdown” script based partially on <a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a>’s suggestions above.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/9">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/9">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/9</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/9</link>
         <pubDate>Wed, 07 May 2025 05:41:14 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-9</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
         <description><![CDATA[
             <p>This is definitely a good idea. I took a look at the linked video about BusKill, the idea seems good but I don’t think that’s the method we should use for Kicksecure, because it’s bound to the USB product ID. You have to custom-write the udev rule for the specific USB drive in use. We could in theory detect this on boot I guess, but that seems a bit clunky. I also don’t trust USB drive manufacturers to choose truly unique IDs, as opposed to just putting in some example ID they found in documentation somewhere. (If even AMD can make this mistake with encryption keys related to microcode security, I have no reason to trust off-brand USB drive makers to do any better.) The last thing a user needs is to have their system suddenly shut down because they removed a drive that happened to look suspiciously similar to the main drive.</p>
@@ -334,15 +350,15 @@ Samsung has been known for issues like with things like SMART support so that so
 </ul>
 <p>This is a somewhat better solution IMO, and the code behind it is open-source so in theory we could just integrate it directly into Kicksecure. It does have some possible downsides though, most notably I found some <a href="https://www.reddit.com/r/tails/comments/xh8njn/tails_wont_shutdown_when_i_pull_usb_stick/" rel="noopener nofollow ugc">reports that the feature didn’t always work three years ago</a>, when the last code change <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/master/config/chroot_local-includes/usr/local/lib/udev-watchdog-wrapper" rel="noopener nofollow ugc">was four years ago</a>. Maybe that was just user error though.</p>
 <p>For Kicksecure’s implementation, I’d like to avoid custom C code since Kicksecure tries to use architecture-independent code wherever possible. We can use a udev-based approach similar to Tails, but written using Python and pyudev instead. I’ll try to implement this probably tonight and see what happens.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/8">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/8">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/8</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/8</link>
         <pubDate>Wed, 07 May 2025 03:23:46 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-8</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[maltfield]]></dc:creator>
         <description><![CDATA[
             <aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
@@ -394,15 +410,15 @@ shutdown -h now &amp;
 sleep 1
 poweroff --force --no-sync &amp;
 </code></pre>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/7">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/7">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/7</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/7</link>
         <pubDate>Mon, 21 Apr 2025 21:38:29 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-7</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
         <description><![CDATA[
             <blockquote>
@@ -418,15 +434,15 @@ poweroff --force --no-sync &amp;
 <p><a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a><br>
 Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
 If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/6">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/6">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/6</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/6</link>
         <pubDate>Mon, 21 Apr 2025 19:49:58 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-6</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
             <aside class="quote no-group" data-username="NTH9R6" data-post="3" data-topic="994">
@@ -438,15 +454,15 @@ If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of 
 </blockquote>
 </aside>
 <p>Feel free to experiment with this.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/5">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/5">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/5</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/5</link>
         <pubDate>Mon, 14 Apr 2025 10:14:15 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-5</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[maltfield]]></dc:creator>
         <description><![CDATA[
             <p><a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> I think you might be confusing TAILS and kicksecure. TAILS is the only OS that I know-of that is designed to trigger an emergency shutdown when the USB stick that it’s installed-on is removed:</p>
@@ -488,41 +504,41 @@ buskill
 </aside>
 
 <p>They show how to do the self-destruct trigger, but you can trivially change that to lock the screen instead, if you prefer.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/4">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/4">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/4</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/4</link>
         <pubDate>Sun, 13 Apr 2025 18:02:08 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-4</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
         <description><![CDATA[
             <p>Ok, in the meantime though is there a udev starting point I could try to test?</p>
 <p>I’d be willing to test anything related to implementation of such a feature.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/3">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/3">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/3</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/3</link>
         <pubDate>Fri, 11 Apr 2025 18:32:54 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-3</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
         <description><![CDATA[
             <p><a href="https://forums.whonix.org/t/panic-button-panic-shutdown-buskill-the-usb-kill-cord-for-your-laptop/13755" class="inline-onebox">panic button / panic shutdown / BusKill - The USB kill cord for your laptop - Development - Whonix Forum</a> alike functionality is not a standard, default functionality of Debian (or any operating system that I am aware of).</p>
 <p>Adding such a feature is planned but will take time.</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/2">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/2">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/2</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/2</link>
         <pubDate>Wed, 09 Apr 2025 10:06:45 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-2</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
       <item>
-        <title>Unplugging external drive doesn&#39;t trigger a shutdown</title>
+        <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
         <description><![CDATA[
             <p>Hello Kicksecure folks,</p>
@@ -531,12 +547,12 @@ buskill
 <p>Why doesn’t it fully shutdown when unplugged?<br>
 I do want to add that also set up LUKS when I installed Debian.</p>
 <p>Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</p>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/1">Read full topic</a></p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/1">Read full topic</a></p>
         ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994/1</link>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/1</link>
         <pubDate>Wed, 09 Apr 2025 10:04:29 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-1</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994.rss">Unplugging external drive doesn&#39;t trigger a shutdown</source>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
   </channel>
 </rss>
