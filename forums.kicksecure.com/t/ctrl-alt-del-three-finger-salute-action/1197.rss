@@ -23,9 +23,141 @@ On Kicksecure, we could also provide similar options such as:
 * Regular shutdown
 * Emergency shutdown</description>
     
-    <lastBuildDate>Thu, 07 Aug 2025 03:31:30 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 08 Aug 2025 00:13:36 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="9" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks" rel="noopener nofollow ugc">Console Login Attacks</a>.</p>
+</blockquote>
+</aside>
+<p>I don’t believe so. That documentation explicitly warns that one way to be able to switch virtual terminals is to:</p>
+<blockquote>
+<p>…be running under a user account that has logged in at a virtual terminal already. In this … instance, software running as the logged-in user could <em>switch</em> to a different virtual terminal, but it would not be able to attempt to login at that terminal. That would require read/write access to the virtual terminal that was switched to. Virtual terminals that have a login prompt are only able to be read from and written to by root or a person with physical access to the machine.</p>
+</blockquote>
+<p>The reason this is a problem in the context of a SAK is that even if we switch to a TTY presenting an authentic login screen, malware could immediately switch us back to the TTY it was on a second ago and display a fake login screen. It’s not a danger when it comes to logging into other accounts, it is a problem when it comes to stealing user data.</p>
+<p>(Worthy of note, once we switch to Wayland, the compositor will almost certainly run as a user other than root, and thus the TTY it runs on will have its permissions set to a non-root user. Thus this issue will start affecting graphical sessions as well, not just text-only VT logins. I think though that’s a small price to pay, especially since there’s a mitigation.)</p>
+          <p><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/10</link>
+        <pubDate>Fri, 08 Aug 2025 00:13:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1197-10</guid>
+        <source url="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197.rss">Ctrl+Alt+Del (three-finger salute) action</source>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it would be fairly trivial for malware running as a user in a graphical session to simply force the user back to the original TTY, using a console file descriptor.</p>
+</blockquote>
+</aside>
+<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks">Console Login Attacks</a>.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>SIGSTOP</p>
+</blockquote>
+</aside>
+<p>Another advantage of this might be that misbehaving processes (such as clogging up all CPU due to a bug) would stop doing that so the user has system resources available to investigate this and to terminate misbehaving processes.</p>
+          <p><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/9</link>
+        <pubDate>Thu, 07 Aug 2025 09:13:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1197-9</guid>
+        <source url="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197.rss">Ctrl+Alt+Del (three-finger salute) action</source>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Based on some quick testing using the fsfreeze technique described in an earlier shared link, it looks like it is <em>not</em> possible to immunize a process to SIGKILL or SIGSTOP by using a stuck thread.</p>
+<pre><code class="lang-auto"># Set up
+mkdir stickyfs
+fallocate -l 8M sticky.img
+mkfs.ext4 sticky.img
+sudo mount sticky.img stickyfs
+sudo chmod 777 stickyfs
+
+# Write a simple multithreaded C program that will get one thread stuck
+cat &lt;&lt;EOF &gt; test.c
+#include &lt;pthread.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+
+void *sticky_func(void *arg) {
+  const char *stuckstr = "I'm stuck, help!\n";
+  int stuckfd = open("stickyfs/sticky.txt", O_RDWR | O_CREAT);
+  write(stuckfd, stuckstr, strlen(stuckstr));
+}
+
+int main() {
+  pthread_t sticky;
+  pthread_create(&amp;sticky, NULL, sticky_func, NULL);
+  int i = 0;
+  while (1) {
+    printf("%d\n", i++);
+  }
+}
+EOF
+
+gcc test.c
+
+# Lock the stickyfs filesystem
+sudo fsfreeze -f stickyfs
+
+# Run the newly created application
+./a.out
+
+# Numbers will scroll down the screen indicating that the process is doing something. Open another terminal to do other work in.
+
+# Look at the contents of stickyfs, verify sticky.txt does not exist there
+ls stickyfs
+
+# Find the PID of the sticky process
+pgrep a.out
+
+# SIGSTOP it
+kill -s SIGSTOP PID
+
+# Observe the numbers stop scrolling down the screen
+# Resume the process
+kill -s SIGCONT PID
+
+# Observe the numbers start scrolling again
+# Kill the process with SIGKILL
+kill -s SIGKILL PID
+
+# Observe the numbers stop scroling, but the process does not fully exit, confirming that it is stuck in a kernel thread
+# Unfreeze the stickyfs dir
+sudo fsfreeze -u stickyfs
+
+# Observe the process exits now
+</code></pre>
+<p>So it looks like SIGSTOP is usable here. Even though the stuck thread isn’t responding to the signals, the unstuck threads that could actually be dangerous are still affected by those signals.</p>
+          <p><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/8</link>
+        <pubDate>Thu, 07 Aug 2025 04:26:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1197-8</guid>
+        <source url="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197.rss">Ctrl+Alt+Del (three-finger salute) action</source>
+      </item>
       <item>
         <title>Ctrl+Alt+Del (three-finger salute) action</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -78,7 +210,7 @@ Some compromise existed already, since Victim failed to lock, but this attack pr
 <li>systemd’s watchdog mechanism can and probably will restart a service that is SIGSTOP’d as a result</li>
 </ul>
 <p>However, “freezing” all logged-in user accounts should still be feasible in theory. This would prevent any running malware from doing anything while the user is in the emergency session, thus it would be unable to force the user to a different TTY. Any malware on the system that wasn’t running as a logged-in user would have to be running as root or be able to elevate its privileges to that of a logged-in user in order to gain access to a console and thus change TTYs.</p>
-<p>One thing that is still uncertain about SIGSTOP is how it behaves when dealing with stuck kernel threads. If a thread calls into the kernel and then gets stuck there (such as can happen when dealing with flaky I/O devices), it cannot be SIGKILL’d or SIGSTOP’d. What’s unclear is whether the process’s <em>other</em> threads can be SIGKILL’d or SIGSTOP’d in this situation. If the answer is “yes”, then using SIGSTOP should be an effective freezing mechanism, but if the answer is “no”, then malware may be able to circumvent a SIGSTOP by launching a thread that then does something to get stuck in the kernel. Getting a thread stuck in kernel mode is hard though (I believe it should be impossible without either buggy hardware, a buggy kernel, or root access, and even with root access you’d have to do something convoluted like set up a VM with an NFS share, mount the NFS share on the host, kill the VM abruptly, and then attempt I/O on the mounted share), so this might not be an issue.</p>
+<p>One thing that is still uncertain about SIGSTOP is how it behaves when dealing with stuck kernel threads. If a thread calls into the kernel and then gets stuck there (such as can happen when dealing with flaky I/O devices), it cannot be SIGKILL’d or SIGSTOP’d. What’s unclear is whether the process’s <em>other</em> threads can be SIGKILL’d or SIGSTOP’d in this situation. If the answer is “yes”, then using SIGSTOP should be an effective freezing mechanism, but if the answer is “no”, then malware may be able to circumvent a SIGSTOP by launching a thread that then does something to get stuck in the kernel. Getting a thread stuck in kernel mode is hard though (I believe it should be impossible without either buggy hardware, a buggy kernel, or root access, <s>and even with root access you’d have to do something convoluted like set up a VM with an NFS share, mount the NFS share on the host, kill the VM abruptly, and then attempt I/O on the mounted share</s> edit: just tried something like this, even this doesn’t result in a stuck kernel thread, <a href="https://chrisdown.name/2024/02/05/reliably-creating-d-state-processes-on-demand.html" class="inline-onebox" rel="noopener nofollow ugc">Creating controllable D state (uninterruptible sleep) processes</a> has better instructions for getting a process stuck in a kernel thread), so this might not be an issue.</p>
 <p>Another difficulty is that we most likely are not going to go through a display manager., As a result, the “session” we will end up in will be rather limited and things that one might expect to work (like systemd user units, DBus, some xdg-related things, etc.) probably won’t work. Thus the functionality within the emergency session will need to be limited to cope with this. (This will also prevent us from simply switching to a sysmaint session when the salute is registered - the sysmaint session has features that depend on a full login session running. It most likely will not behave itself well if it doesn’t have all of the infrastructure usually set up by a display manager working right. We also can’t just switch to the sysmaint session because some of the features of the sysmaint session, like software updates, are not things that can be safely done when booted into a user session. Even if they work now, they won’t work once we implement Verified Boot.)</p>
 <p>Obviously, some form of authorization will be needed in order to access the features of this emergency session. Otherwise any attacker with physical access to the system could use this to take the system over entirely. It shouldn’t be too difficult to implement an authorization prompt of some sort to make this work. Because of the need for authorization, the graphical session MUST NOT run as root, since then any arbitrary code execution vulnerability in a used graphical toolkit or Wayland compositor could allow an attacker with physical access to gain unauthorized root access. The sysmaint account would be ideal to use instead, since then if the user has set a password, they will have to provide it in order to run any privileged operations.</p>
           <p><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197/6">Read full topic</a></p>

@@ -5,6 +5,196 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="9" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks" rel="noopener nofollow ugc">Console Login Attacks</a>.</p>
+</blockquote>
+</aside>
+<p>I don’t believe so. That documentation explicitly warns that one way to be able to switch virtual terminals is to:</p>
+<blockquote>
+<p>…be running under a user account that has logged in at a virtual terminal already. In this … instance, software running as the logged-in user could <em>switch</em> to a different virtual terminal, but it would not be able to attempt to login at that terminal. That would require read/write access to the virtual terminal that was switched to. Virtual terminals that have a login prompt are only able to be read from and written to by root or a person with physical access to the machine.</p>
+</blockquote>
+<p>The reason this is a problem in the context of a SAK is that even if we switch to a TTY presenting an authentic login screen, malware could immediately switch us back to the TTY it was on a second ago and display a fake login screen. It’s not a danger when it comes to logging into other accounts, it is a problem when it comes to stealing user data.</p>
+<p>(Worthy of note, once we switch to Wayland, the compositor will almost certainly run as a user other than root, and thus the TTY it runs on will have its permissions set to a non-root user. Thus this issue will start affecting graphical sessions as well, not just text-only VT logins. I think though that’s a small price to pay, especially since there’s a mitigation.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_10</link>
+        <pubDate>Fri, 08 Aug 2025 00:13:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3166</guid>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it would be fairly trivial for malware running as a user in a graphical session to simply force the user back to the original TTY, using a console file descriptor.</p>
+</blockquote>
+</aside>
+<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks">Console Login Attacks</a>.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>SIGSTOP</p>
+</blockquote>
+</aside>
+<p>Another advantage of this might be that misbehaving processes (such as clogging up all CPU due to a bug) would stop doing that so the user has system resources available to investigate this and to terminate misbehaving processes.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_9</link>
+        <pubDate>Thu, 07 Aug 2025 09:13:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3165</guid>
+      </item>
+      <item>
+        <title>Kicksecure distro specific keyboard shortcuts</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1147">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>here’s a good chance we will switch desktops from Xfce to LXQt when we port to Trixie (which we’re working on), since Xfce’s Wayland support is rather lacking, LXQt’s is more mature, and switching to Wayland is a goal for Kicksecure 18.</p>
+</blockquote>
+</aside>
+<p>related: <a href="https://forums.whonix.org/t/port-to-wayland/17380" class="inline-onebox">port to Wayland - Development - Whonix Forum</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-distro-specific-keyboard-shortcuts/1147#post_3</link>
+        <pubDate>Thu, 07 Aug 2025 08:49:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3164</guid>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Based on some quick testing using the fsfreeze technique described in an earlier shared link, it looks like it is <em>not</em> possible to immunize a process to SIGKILL or SIGSTOP by using a stuck thread.</p>
+<pre><code class="lang-auto"># Set up
+mkdir stickyfs
+fallocate -l 8M sticky.img
+mkfs.ext4 sticky.img
+sudo mount sticky.img stickyfs
+sudo chmod 777 stickyfs
+
+# Write a simple multithreaded C program that will get one thread stuck
+cat &lt;&lt;EOF &gt; test.c
+#include &lt;pthread.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;unistd.h&gt;
+#include &lt;string.h&gt;
+#include &lt;errno.h&gt;
+
+void *sticky_func(void *arg) {
+  const char *stuckstr = "I'm stuck, help!\n";
+  int stuckfd = open("stickyfs/sticky.txt", O_RDWR | O_CREAT);
+  write(stuckfd, stuckstr, strlen(stuckstr));
+}
+
+int main() {
+  pthread_t sticky;
+  pthread_create(&amp;sticky, NULL, sticky_func, NULL);
+  int i = 0;
+  while (1) {
+    printf("%d\n", i++);
+  }
+}
+EOF
+
+gcc test.c
+
+# Lock the stickyfs filesystem
+sudo fsfreeze -f stickyfs
+
+# Run the newly created application
+./a.out
+
+# Numbers will scroll down the screen indicating that the process is doing something. Open another terminal to do other work in.
+
+# Look at the contents of stickyfs, verify sticky.txt does not exist there
+ls stickyfs
+
+# Find the PID of the sticky process
+pgrep a.out
+
+# SIGSTOP it
+kill -s SIGSTOP PID
+
+# Observe the numbers stop scrolling down the screen
+# Resume the process
+kill -s SIGCONT PID
+
+# Observe the numbers start scrolling again
+# Kill the process with SIGKILL
+kill -s SIGKILL PID
+
+# Observe the numbers stop scroling, but the process does not fully exit, confirming that it is stuck in a kernel thread
+# Unfreeze the stickyfs dir
+sudo fsfreeze -u stickyfs
+
+# Observe the process exits now
+</code></pre>
+<p>So it looks like SIGSTOP is usable here. Even though the stuck thread isn’t responding to the signals, the unstuck threads that could actually be dangerous are still affected by those signals.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_8</link>
+        <pubDate>Thu, 07 Aug 2025 04:26:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3162</guid>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>On the topic of a secure attention key, someone in 2016 posted a really nice overview of attack scenarios where a SAK is very useful: <a href="https://arstechnica.com/civis/threads/sak-sas-secure-attention-key-sequence-on-linux.1325235/#post-31739583" class="inline-onebox" rel="noopener nofollow ugc">SAK/SAS - Secure attention key sequence on Linux | Ars OpenForum</a> Quoting the post:</p>
+<blockquote>
+<p>It’s not about a machine we don’t trust; that’s a separate but valid concern. It’s about a computer that multiple people have access to, e.g. libraries, computer labs, workplaces. Many people may be allowed on that machine, but each having their own accounts and passwords.</p>
+<p>Attack type number 1:<br>
+Attacker logs into his account and starts up a full-screen program that looks and acts identical to the login screen. (Program designed to collect the username/password data and store it or send it somewhere, then shows a fictitious error screen or simply logs out or reboots or hangs so that someone forces a restart.)<br>
+Victim finds an apparently unused workstation. Logs in. Game over.</p>
+<p>Attack type number 2:<br>
+Victim logs in, starts up some programs, opens some files, then locks the screen and goes for a coffee break.<br>
+Attacker hard-resets the machine, logs in and runs a similar program that looks/behaves like the screenlocker instead.<br>
+Victim returns and attempts to unlock the screen. Game over.</p>
+<p>Attack type number 3:<br>
+Victim forgets to lock screen on going to the john. (When you gotta go…)<br>
+Attacker runs fake screenlocker on the Victim’s own acct.<br>
+Victim returns and either forgot that he didn’t lock it or figures it timed out from inactivity. Unlocks screen. Game over. (program simply terminates itself putting him back at his desktop after having sent the password over the internet and deleting its tracks)<br>
+Some compromise existed already, since Victim failed to lock, but this attack provides stealthy expansion of that gap, allowing future log on, not just a one time access, and also gives you any sudo privileges the account has.</p>
+<p>Having a SAK that users are trained to ALWAYS enter before passwords eliminates the risk.</p>
+</blockquote>
+<p>One of the features Windows has bound to the three finger salute is triggering the lock screen or login screen to function (the screen displays even before that, but the SAK signals it to prompt for the password), which conveniently solves all of these issues. To implement something like this on Linux, we could probably do something like this:</p>
+<ul>
+<li>The screen locker itself doesn’t accept a password, it simply listens for a privileged process to give it an “unlock the screen” signal and unlocks the screen upon receipt of that signal.</li>
+<li>Pressing Ctrl+Alt+Del causes emerg-shutdown (which probably needs renamed at this point) to freeze all user accounts on the system, send the user to an unused TTY, and display a greetd+wlgreet window. The user can then log in with their user name and password.</li>
+<li>The script that runs on login signals emerg-shutdown to unfreeze the system, then looks to see if the user is already logged in (and if so, on which TTY). If the user is already logged in, the script instructs emerg-shutdown to unlock that user’s TTY, then it switches to that user’s TTY and is done. If the user is not already logged in, a new login is created.</li>
+</ul>
+<p>This mitigates all three attack scenarios. As for how to implement this and the emergency session at the same time, we just need emerg-shutdown to be able to tell whether or not the active TTY is locked (this can be done most likely with the help of the custom screen locker). If the TTY is locked, the salute will trigger a login/unlock action like described above, otherwise it will trigger an emergency session like described earlier.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_7</link>
+        <pubDate>Thu, 07 Aug 2025 03:31:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3161</guid>
+      </item>
+      <item>
+        <title>Ctrl+Alt+Del (three-finger salute) action</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Had a conversation about how this could work with Patrick, this is my current set of ideas/plans after that conversation.</p>
+<p>We have the <code>emerg-shutdown</code> background process now, which among other things monitors all keystrokes on the system by grabbing the /dev/input/event* devices on startup. This is done so that if the user presses a panic key combination (user configurable, the default is yet to be determined, see <a href="https://forums.kicksecure.com/t/emergency-key-press-shutdown-sequence/1199" class="inline-onebox">Emergency key press shutdown sequence</a>), the system can be immediately and forcibly shut down, without any possibility of malicious interference or accidental overriding. That same mechanism could be used in theory to listen for any key combination though, allowing us to define keyboard shortcuts that talk to a privileged component of the system (similar to the Secure Attention Key in other operating systems). Another advantage of this is that it’s not possible for malware to access this interface unless it is running as root, because emulated input mechanisms allow communicating with the display server, not the kernel’s evdev driver. Injecting key events into the kernel’s evdev subsystem requires using uinput, which requires root privileges to access, thus unprivileged malware can’t send keystroke combinations in order to trigger whatever privileged actions are configured here.</p>
+<p>Since shortcuts configured in emerg-shutdown require either root privileges or physical access to the machine to trigger, this makes it seem like the perfect place to implement a Ctrl+Alt+Delete handler. The question then becomes, what should this handler do?</p>
+<p>There are two possible directions we could take this. One is the simple route - register the salute in emerg-shutdown, and send a DBus message to whatever user session is on an active TTY in response. Those messages would then instruct an agent running as the user to do something like start a task manager or lock the screen. This would be useful, but it would only be marginally better than just defining a keyboard shortcut in the user session. It wouldn’t allow the user to kill applications that are running as root or as a different user (something they may have a legitimate reason to do even in a user session), and it wouldn’t prevent anything “going wrong” in the user session (a malicious or runaway process, for instance) from being able to interfere with the salute’s functionality in some way.</p>
+<p>The other, more complex route, would be to switch to an “emergency session” of sorts, moving the user to an unused TTY and launching a graphical session in that TTY where they can do things as root or another privileged user. This is far more powerful, <em>and</em> possibly far more secure if done right.</p>
+<p>The more complex solution is unsafe under X11 because of the world-writable UNIX sockets created by X11, exposing attack surface that could result in exploitable escalation of privilege vulnerabilities. Under Wayland however, the display server’s socket is generally under /run/user/UID, which has strict permissions to prevent access by other users, so as long as the kernel’s permission subsystem holds up, this shouldn’t be an issue. We can thus run a separate Wayland server as a privileged user (such as <code>sysmaint</code>) alongside an unprivileged and untrusted user session, without as much fear of vulnerabilities. (If running a full Wayland server sounds like too much risk, we could also use a raw framebuffer. Qt supports rendering directly to a framebuffer, it’s very slow at least under a virtual machine, but it works. I think this is overkill though, and it will also make it hard to work with multiple programs at once, which would almost certainly be desirable.)</p>
+<p>One danger of an emergency UI such as this is that it’s not impossible for a malicious application to prevent the user from escaping to the emergency session. The emergency session would simply run in a TTY (since that’s the only feature Linux has for this sort of thing), and it would be fairly trivial for malware running as a user in a graphical session to simply force the user back to the original TTY, using a console file descriptor. (One can switch the active TTY to any other TTY if they have write access to any one TTY. In other words, if the user is logged in graphically and thus /dev/tty7 is writable by them, malware running as that user can open /dev/tty7 and then switch the user to any desired TTY.) To prevent this, one solution would be to SIGSTOP potentially malicious processes, specifically those which run as a logged-in user. This cannot be done to every process in the system though, since:</p>
+<ul>
+<li>PID 1 cannot be SIGSTOP’d (I tried, the signal was silently ignored)</li>
+<li>A SIGSTOP’d program can be SIGKILL’d without receiving a SIGCONT first</li>
+<li>systemd’s watchdog mechanism can and probably will restart a service that is SIGSTOP’d as a result</li>
+</ul>
+<p>However, “freezing” all logged-in user accounts should still be feasible in theory. This would prevent any running malware from doing anything while the user is in the emergency session, thus it would be unable to force the user to a different TTY. Any malware on the system that wasn’t running as a logged-in user would have to be running as root or be able to elevate its privileges to that of a logged-in user in order to gain access to a console and thus change TTYs.</p>
+<p>One thing that is still uncertain about SIGSTOP is how it behaves when dealing with stuck kernel threads. If a thread calls into the kernel and then gets stuck there (such as can happen when dealing with flaky I/O devices), it cannot be SIGKILL’d or SIGSTOP’d. What’s unclear is whether the process’s <em>other</em> threads can be SIGKILL’d or SIGSTOP’d in this situation. If the answer is “yes”, then using SIGSTOP should be an effective freezing mechanism, but if the answer is “no”, then malware may be able to circumvent a SIGSTOP by launching a thread that then does something to get stuck in the kernel. Getting a thread stuck in kernel mode is hard though (I believe it should be impossible without either buggy hardware, a buggy kernel, or root access, <s>and even with root access you’d have to do something convoluted like set up a VM with an NFS share, mount the NFS share on the host, kill the VM abruptly, and then attempt I/O on the mounted share</s> edit: just tried something like this, even this doesn’t result in a stuck kernel thread, <a href="https://chrisdown.name/2024/02/05/reliably-creating-d-state-processes-on-demand.html" class="inline-onebox" rel="noopener nofollow ugc">Creating controllable D state (uninterruptible sleep) processes</a> has better instructions for getting a process stuck in a kernel thread), so this might not be an issue.</p>
+<p>Another difficulty is that we most likely are not going to go through a display manager., As a result, the “session” we will end up in will be rather limited and things that one might expect to work (like systemd user units, DBus, some xdg-related things, etc.) probably won’t work. Thus the functionality within the emergency session will need to be limited to cope with this. (This will also prevent us from simply switching to a sysmaint session when the salute is registered - the sysmaint session has features that depend on a full login session running. It most likely will not behave itself well if it doesn’t have all of the infrastructure usually set up by a display manager working right. We also can’t just switch to the sysmaint session because some of the features of the sysmaint session, like software updates, are not things that can be safely done when booted into a user session. Even if they work now, they won’t work once we implement Verified Boot.)</p>
+<p>Obviously, some form of authorization will be needed in order to access the features of this emergency session. Otherwise any attacker with physical access to the system could use this to take the system over entirely. It shouldn’t be too difficult to implement an authorization prompt of some sort to make this work. Because of the need for authorization, the graphical session MUST NOT run as root, since then any arbitrary code execution vulnerability in a used graphical toolkit or Wayland compositor could allow an attacker with physical access to gain unauthorized root access. The sysmaint account would be ideal to use instead, since then if the user has set a password, they will have to provide it in order to run any privileged operations.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_6</link>
+        <pubDate>Thu, 07 Aug 2025 02:48:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3160</guid>
+      </item>
+      <item>
         <title>Emergency key press shutdown sequence</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Ctrl+*+Esc combos slightly scare me since Ctrl+Esc is the shortcut for bringing up the task manager under KDE, and I believe Ctrl+Shift+Esc does so on Windows.</p>
@@ -2205,210 +2395,6 @@ part of the code in the fix commit are not built because debian use PAM: plugins
         <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139#post_12</link>
         <pubDate>Mon, 28 Jul 2025 16:02:16 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3110</guid>
-      </item>
-      <item>
-        <title>Rolling vs. Stable release brainstorming</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Sudo as an example of Upstream VS Debian security:</p>
-<h2><a name="p-3109-sudo-in-debian-stable-1" class="anchor" href="https://forums.kicksecure.com#p-3109-sudo-in-debian-stable-1"></a>sudo in debian stable</h2>
-<p>sudo version <a href="https://packages.debian.org/bookworm/sudo">1.9.13</a> used which is vulnerable to <a href="https://security-tracker.debian.org/tracker/CVE-2023-42465">CVE-2023-42465</a> (cve since 22/12/2023 and we are now in 2025).</p>
-<h2><a name="p-3109-sudo-in-debian-not-stable-2" class="anchor" href="https://forums.kicksecure.com#p-3109-sudo-in-debian-not-stable-2"></a>sudo in debian not stable</h2>
-<p>sudo has released 2 security fixes (one of them is critical) with version 1.9.17p1 released in <a href="https://www.sudo.ws/pipermail/sudo-announce/2025-June/000222.html">30 of june</a> effecting 1.9.14 to 19.17.</p>
-<p>Debian still using <a href="https://tracker.debian.org/pkg/sudo">outdated version</a> and we are now at the end of july (<a href="https://packages.debian.org/sid/sudo">not even in sid</a> yet).</p>
-<h2><a name="p-3109-sudo-in-rolling-distros-3" class="anchor" href="https://forums.kicksecure.com#p-3109-sudo-in-rolling-distros-3"></a>sudo in rolling distros</h2>
-<p><a href="https://search.nixos.org/packages?channel=25.05&amp;show=sudo&amp;from=0&amp;size=50&amp;sort=relevance&amp;type=packages&amp;query=sudo">Nix</a>, <a href="https://packages.guix.gnu.org/packages/sudo/">Guix</a>, <a href="https://archlinux.org/packages/core/x86_64/sudo/">Arch</a>, <a href="https://gitweb.gentoo.org/repo/gentoo.git/tree/app-admin/sudo/sudo-1.9.17_p1.ebuild">Gentoo</a> has sudo 1.9.17p1.</p>
-<p>Though im not a fan of sudo/su/root, this stupid tool and concept should be removed altogether. But is this is just critical tiny example, which can ruin many users life because they are depending on this obsolete stable concept.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139#post_11</link>
-        <pubDate>Mon, 28 Jul 2025 14:24:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3109</guid>
-      </item>
-      <item>
-        <title>MicroKernel Archetecture is the Future</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="5" data-topic="1156">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>but the concept itself is flawed.</p>
-</blockquote>
-</aside>
-<p>Already explained, realistically can happen.</p>
-<p>But this is <a href="https://github.com/QubesOS/qubes-issues/issues/9342">an example</a> anyway.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/microkernel-archetecture-is-the-future/1156#post_11</link>
-        <pubDate>Mon, 28 Jul 2025 13:47:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3108</guid>
-      </item>
-      <item>
-        <title>MicroKernel Archetecture is the Future</title>
-        <dc:creator><![CDATA[@extraextra]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="extraextra" data-post="6" data-topic="1156">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/8edcca/48.png" class="avatar"> extraextra:</div>
-<blockquote>
-<aside class="quote no-group" data-username="nurmagoz" data-post="5" data-topic="1156">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>Qubes based itself on even deprecated versions of fedora, not even stable packages. Yes they upgrade xen,kernel and some other packages to mitigate some security issues or hardware compatibilities, but the concept itself is flawed.</p>
-</blockquote>
-</aside>
-<p>Qubes argues it’s not part or the TCB. Can you show a vulnerability that affected the security of Qubes as a result of old dom0?</p>
-</blockquote>
-</aside>
-<aside class="quote no-group" data-username="nurmagoz" data-post="7" data-topic="1156" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>To not increase the subject into lengthy repetitive explanations, your questions are answered and can be found with search engine or AI or more reading.</p>
-</blockquote>
-</aside>
-<p>AI couldn’t show any issues other than xen or kernel. So the answer is old dom0 doesn’t affect the security of Qubes until evidence otherwise.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/microkernel-archetecture-is-the-future/1156#post_10</link>
-        <pubDate>Mon, 28 Jul 2025 12:38:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3107</guid>
-      </item>
-      <item>
-        <title>No Rescue Mode</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Forgotten password: blame user.</p>
-</blockquote>
-</aside>
-<p>Roll the dice one more time: blame the developers who can’t open an encrypted hard disk with a forgotten password.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Implementation of an operating system that allows for <a href="https://www.kicksecure.com/wiki/Backdoor#The_Perfect_Malicious_Backdoor">The Perfect Malicious Backdoor</a>: blame the developers.</p>
-</blockquote>
-</aside>
-<p>This article contradicts realistic evidence:</p>
-<ul>
-<li>
-<p>Researchers and analysts have always been able to investigate malware or vulnerabilities in highly restricted environments like iOS, macOS, Android, or even at the CPU level. They discovered Spectre &amp; Meltdown, BIOS/UEFI rootkits, firmware attacks, etc. There are dozens of techniques to extract firmware, perform reverse engineering, conduct memory dumps, and more (known as forensic tools).</p>
-</li>
-<li>
-<p>If the article claims this will prevent OS developers (like those at Google, Debian, Apple, Fedora…etc) from pushing malware, that’s not correct. With or without this restriction, such behavior won’t be stopped. In fact, these actions are often dismissed as “innocent mistakes” even when they are deliberate backdoors (but nobody can confirm it).</p>
-</li>
-<li>
-<p>Freedom respecting firmware or hardware may ease analysis, but whether this or that it does not guarantee prevention of such threats and experts techniques needed to do the investigations.</p>
-</li>
-</ul>
-<p>So, what’s being described as “perfect” is far from it.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<ul>
-<li>ransomware: There will be obvious signs that there is malware. Ransomware is easily detected because it will be asking for a ransom. Easily detected: Yes. <img src="https://forums.kicksecure.com/images/emoji/twitter/white_check_mark.png?v=12" title=":white_check_mark:" class="emoji" alt=":white_check_mark:" loading="lazy" width="20" height="20"></li>
-<li>malicious backdoor in vendor image or vendor over the air update on vendor locked hardware: Detection possible: No. <img src="https://forums.kicksecure.com/images/emoji/twitter/no_entry.png?v=12" title=":no_entry:" class="emoji" alt=":no_entry:" loading="lazy" width="20" height="20"></li>
-</ul>
-</blockquote>
-</aside>
-<p>In case of ransomware the malware itself making itself visible to make the user pay the ransom. Malware makers if they want it for persistent it will be stealthy in a code with millions of lines like the kernel or so (specially linux kernel), vendor or no vendor lock is unrelated.</p>
-<p>Though my example was just because ransomware is using encryption, we should not remove encryption because the ransomware is using it wrongly.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>No, vendor lock reduces security. <img src="https://forums.kicksecure.com/images/emoji/twitter/no_entry.png?v=12" title=":no_entry:" class="emoji" alt=":no_entry:" loading="lazy" width="20" height="20"></p>
-</blockquote>
-</aside>
-<p>Prove that when the OS is locked to a hardware for the benefit of preventing device manipulation, this will reduce security.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Not possible on locked hardware that support no user unlock/relock.</p>
-</blockquote>
-</aside>
-<p>I didnt say necessarily on my hardware that i will sell, he can build/port it to his own hardware or install it in a VM or so (similar to AOSP variants example).</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>It’s a mockery of Free Software. Hence, Free Software invented GPLv3 to contain the spread of tivoization.</p>
-</blockquote>
-</aside>
-<p>Its security feature, its unrelated to software freedom because the software is free (so as the hardware in the future).</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Not going to happen by default. This tivoization feature request is declined.</p>
-</blockquote>
-</aside>
-<p>Yeah this discussion mostly about the security behind tiding the OS with the hardware while using freedom software. tivoization is bad with only a certain license type for a freedom software, but its not against the freedom of the software.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Pixel supports bootloader unlocking at least so alternative operating systems can be installed.</p>
-</blockquote>
-</aside>
-<p>True, but can be as samsung anytime. We can use the same approach, still better than the chaotic hardware and OS that we have now.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Irrelevant.</p>
-</blockquote>
-</aside>
-<p>Relevant in away that one of the most core component of the system is already accepting hardware secure restrictions, Linus has <a href="https://www.youtube.com/watch?v=bw58LZTuZjA">pretty good points</a> talking about V3 &amp; tivo.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Why can GrapheneOS exist? Because Google [1] was nice enough to allow bootloader unlock and relock with user custom key on Pixel devices.</p>
-<p>[1] And theoretically other devices, if bootloader unlockable and OS ported to that device.</p>
-</blockquote>
-</aside>
-<p>GrapheneOS can exist on a different hardware locked on grapheneos, can exist in a VM or USB…etc, It has nothing to do with the software, there is no restrictions imposed on the software level.</p>
-<p>Bottom line is that, hardware+OS merging into one piece while using freedom license/s is not against software freedom, rather is software freedom developer rights, he want it this way or not. Also proven to be more secure to build devices like this to avoid manipulations.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-rescue-mode/1171#post_12</link>
-        <pubDate>Mon, 28 Jul 2025 12:34:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3106</guid>
-      </item>
-      <item>
-        <title>MicroKernel Archetecture is the Future</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Im not sure whats your question/s specifically.</p>
-<p>Nevertheless, qubes is good for now, qubes done pretty well in containing the operating systems (specially debian and fedora).</p>
-<p>Futuristically this is not enough, it needs to be taken one step further, which is securing the packages within its own VMs. So instead of entire OS in a VM, it will be an app within a VM.</p>
-<p>Full vision can be viewed <a href="https://forums.kicksecure.com/t/operating-system-from-heaven/1153">here</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/microkernel-archetecture-is-the-future/1156#post_9</link>
-        <pubDate>Mon, 28 Jul 2025 11:05:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3105</guid>
-      </item>
-      <item>
-        <title>MicroKernel Archetecture is the Future</title>
-        <dc:creator><![CDATA[@awr_d]]></dc:creator>
-        <description><![CDATA[ <p>I just signed up to ask to actually reply for this.<br>
-I’ve been reading kicksecure forum and other related things for about half an hour now and none of these answers it.</p>
-<p>I personally use Qubes, but I’m not an expert and I’m trying to dig as I can in order to understand the nature of the things as they are now, what is being done currently, what are the possibilities for the future development, and finally what is in my power to do right here and right now in order to harden as much as possible my setup/s.</p>
-<p>I currently have Qubes and being not so much of an expert, couldn’t figure out microkernels and just left it for later, same with openBSD for sys-net, as there’s no drivers for my networking card there.<br>
-So I’m using Kicksecure for all of my templates(each per app whenever possible) and I try to, as I said earlier, mitigate what I can, but I still have high doubts my setup is secure.</p>
-<p>I honestly don’t know neither of you, but you seem like some dudes who know stuff. I know Patrick from Qubes forum and I have huge respect for him for what he’s doing and how he does it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/microkernel-archetecture-is-the-future/1156#post_8</link>
-        <pubDate>Mon, 28 Jul 2025 05:19:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3104</guid>
       </item>
   </channel>
 </rss>
