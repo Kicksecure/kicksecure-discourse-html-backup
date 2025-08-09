@@ -5,8 +5,48 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Wed, 06 Aug 2025 06:50:53 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 08 Aug 2025 19:24:55 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Sdwdate design enhancements</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Not sure there’s much to discuss here, this is just me doing a brain-dump of my research so that it’s not lost and so that others can comment on it as desirable.</p>
+<p>The current iteration of sdwdate does a pretty good job of keeping the system’s clock accurate but skewed just enough to provide better anonymity under Whonix. However, it has a few shortcomings we’d like to resolve:</p>
+<ul>
+<li>It only sets the time for the (virtual) machine it runs on, it isn’t able to act as a server for helping other virtual machines running on the same system to also synchronize their time securely. This is something that would be nice to fix in Qubes OS, allowing sys-whonix (or more likely, sys-ops-whonix once that exists) to act as a master time-keeper for all VMs.</li>
+<li>The current way it adjusts the clock is somewhat awful - it does a large clock jump or two to get the time close enough to accurate to allow connecting to Tor, then does a large number of small clock jumps to get the time to a final “good” value. Clock jump confuse software in multiple ways, and the small clock jumps we do currently can result in systemd journal being flooded, so they’re best avoided, and if they’re needed, it’s best to do one clock jump and then slew the clock to the correct time using something like <code>adjtimex</code>.</li>
+</ul>
+<p>The core sdwdate code is good and should probably not change too much. What should probably change is the <code>sclockadj</code> tool that is used for doing small clock jumps, and we need a way to allow sdwdate to provide time values for other VMs to sync themselves to.</p>
+<hr>
+<p>The below is my research into using adjtimex, The tl;dr: is that <strong>we probably should not use adjtimex for initial clock synchronization after boot, but it may be usable to keep the clock in sync thereafter.</strong></p>
+<p>Properly adjusting a clock using <code>adjtime</code> or <code>adjtimex</code> (slewing it to the correct value using in-kernel support) is very, very slow. According to <a href="https://unix.stackexchange.com/a/188620/535873" class="inline-onebox" rel="noopener nofollow ugc">time - How long will NTP take to adjust the clock if it doesn't immediately set it? - Unix &amp; Linux Stack Exchange</a> it takes approximately 4.17 minutes to adjust the clock by 128 milliseconds, or at least it did in 2015. In my testing with adjtimex, this is still approximately correct - it appears that adjtimex adjusts the clock by 500 microseconds per second. This means it takes a little over 33 minutes to adjust the clock by one second.</p>
+<p>The problem with this is that Tor (and therefore sdwdate) only allow us to resolve time to within a second at best because that’s the resolution of the HTTP headers we get. On top of that, we get the time from three different servers at once when using sdwdate and then go with the median value of those three times, meaning that in practice we’re not going to be within a second of accuracy because of network lag and all sorts of other things NTP is designed to work around and Tor isn’t. On top of that, we also randomize the clock a bit for greater anonymity, meaning that we might change the clock several seconds on each invocation of sdwdate. When it takes over half an hour to move the clock by one second, making a multi-second change will take <em>hours</em>. Now if we assume that the system’s clock is fairly accurate, and we only ever have <em>one</em> time randomization offset per session (generated randomly each session but never changed until the next reboot, I guess), we can probably skew the clock by a second or two on each sdwdate invocation without too much trouble. But if the network is shaky (for instance, the user is using cellular internet in bad conditions), it’s likely sdwdate will be trying to make much larger changes.</p>
+<p>(Note, anecdotally it seems that sdwdate doesn’t see any particular need to change the clock in my KVM virtual machine when I restart sdwdate, at least while my network is working well. The median time difference keeps being 0. That being said, other time differences were frequently reported that were not the median, so I assume that users won’t always get this lucky.)</p>
+<p>The current <code>sclockadj</code> code adjusts the clock by 5 million nanoseconds per second. This is <em>ten times</em> faster than adjtimex, which adjusts by 5 hundred thousand nanoseconds per second. Thus sclockadj can handle multi-second adjustments without too much grief, but only by doing clock jumps. Switching to clock slewing with adjtimex will slow down our time adjustments very much.</p>
+<p>The 500 microseconds per second adjustment rate is not configurable, it is unfortunately hardcoded in the kernel’s NTP code, which the <code>adjtimex</code> system call uses to do its work of slewing the clock. There isn’t any way to do a “fast slew” to my awareness, unless we want to try to contribute a feature for this to the kernel (which… might be possible?).</p>
+<p>Based on the above, I think we might get away with using adjtimex to keep the clock in sync once it is initially synchronized. For making an adjustment of a second or two, it’s probably enough. But on first boot, when the clock is most likely to be several seconds slow or fast (especially on machines with no BIOS battery or a broken battery), we probably need to just use a clock jump. This is similar to the behavior of ntpd.</p>
+<hr>
+<p>For making sdwdate able to act as a server under Qubes OS, there are a couple of issues to deal with:</p>
+<ul>
+<li>Qubes OS currently synchronizes all VMs to dom0’s time, at least when resuming after suspend. But we would like for dom0 to be able to synchronize itself to sys-(ops-)whonix also.</li>
+<li>Every VM on the system should ideally have slightly different time, and should get their time values from a different sdwdate time sync invocation (to avoid one bad sync affecting all VMs on the system).</li>
+</ul>
+<p>To work with the first issue, we can simply have all VMs (including sys-(ops-)whonix) blindly trust dom0’s time to begin with. Once a successful sdwdate sync is done however, the VM should record how its time differs from dom0’s time. Then, on resume-from-suspend, the VM can take the time given to it by dom0, and adjust it by the offset before syncing the clock. Any time dom0’s clock changed, it would have to announce this to all running VMs so they could recalculate their offsets from dom0.</p>
+<p>To work around the second issue, we need some way for a virtual machine to get “whatever the current time is +/- some fixed offset” each time they synchronize their clock with the ClockVM. The fixed offset should be unique per-machine and per-boot, but should be constant between boots to avoid needing lots of clock jumps forward and backward. To acheive this, the client process that gets the time from the ClockVM should create a random identifier on launch, and present that identifier to sdwdate every time it syncs the clock. When sdwdate sees an identifier it hasn’t seen previously, it should generate a new random offset, but if it sees an identifier it’s seen previously, it should use the same offset it presented last time. This way each VM can have its time a little bit different, but that “little bit different” will be static for each virtual machine (until the client VM or ClockVM is rebooted, at least).</p>
+<p>We don’t have to tack a bunch of code onto the existing sdwdate code base in order to make it able to act like a server. We should just create a new server process that serves whatever the ClockVM’s current time is (+/- the fixed offset described earlier) to clients. This probably won’t be very difficult to do at all. We will need this server process to NOT serve time until after sdwdate has synced the clock, but thankfully sdwdate already reports its status to other processes on the same VM, so we can rely on that.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sdwdate-design-enhancements/1203">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sdwdate-design-enhancements/1203</link>
+          <pubDate>Fri, 08 Aug 2025 19:24:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1203</guid>
+          <source url="https://forums.kicksecure.com/t/sdwdate-design-enhancements/1203.rss">Sdwdate design enhancements</source>
+        </item>
         <item>
           <title>No Accessibility Support</title>
           <dc:creator><![CDATA[nurmagoz]]></dc:creator>
@@ -499,25 +539,6 @@
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1167</guid>
           <source url="https://forums.kicksecure.com/t/packages-source-for-app-per-vm/1167.rss">Packages Source for App-per-VM</source>
-        </item>
-        <item>
-          <title>Package &amp; System Policy: No Backward Nor Sideward compatibility</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>No Backward: The operating system will continue updating itself for supported XYZ hardware. Once any hardware becomes obsolete, it will no longer be compatible, no legacy support.</p>
-<p>No Sideward: There will be no compatibility for Linux, Windows, or BSD software at the system level. Compatibility may exist in App-per-VM. By default, only Linux apps are supported in the VM (This case if the system using different kernel like seL4 or so, but if its using Linux then no other OS should be given/cared for compatibility, only the pure/original kernel with the main OS components)</p>
-<p>Additionally, if any app running in a VM does not work with a specific Linux version or hardware architecture, it is not the operating system’s responsibility to ensure compatibility (upstream issue).</p>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166</link>
-          <pubDate>Thu, 24 Jul 2025 16:48:00 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1166</guid>
-          <source url="https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166.rss">Package &amp; System Policy: No Backward Nor Sideward compatibility</source>
         </item>
   </channel>
 </rss>
