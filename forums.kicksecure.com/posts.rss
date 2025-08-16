@@ -5,6 +5,186 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>That’s weird then… if live-hardener ran, /boot/efi should not be writable when booted in live mode. I’d see if the problem automatically goes away after a reboot (if you haven’t already). If it doesn’t, there’s probably a bug in live-hardener.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_6</link>
+        <pubDate>Fri, 15 Aug 2025 22:48:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3227</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@Jac]]></dc:creator>
+        <description><![CDATA[ <p>[root ~]# systemctl status live-hardener.service<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only &gt;<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset&gt;<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, &gt;<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point no&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more in&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
+lines 1-18/18 (END)…skipping…<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_re&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on t&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
+~</p>
+<p>~<br>
+lines 1-18/18 (END)…skipping…<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/ove&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
+~</p>
+<p>~<br>
+lines 1-18/18 (END)…skipping…<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o wor&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
+~<br>
+~<br>
+~<br>
+lines 1-18/18 (END)…skipping…<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o workdir=/var/lib/grub-live/overlay_tmpfs_repo&gt;<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
+~</p>
+<p>~<br>
+lines 1-18/18 (END)…skipping…<br>
+● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
+Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
+Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
+Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
+Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
+Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
+CPU: 107ms</p>
+<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o workdir=/var/lib/grub-live/overlay_tmpfs_repo/2/work – /boot<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
+Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
+Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
+Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
+~</p>
+<p>~<br>
+lines 1-18/18 (END)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_5</link>
+        <pubDate>Fri, 15 Aug 2025 04:37:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3225</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Can you share the output of <code>systemctl status live-hardener.service</code>?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_4</link>
+        <pubDate>Fri, 15 Aug 2025 03:35:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3224</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@Jac]]></dc:creator>
+        <description><![CDATA[ <p>Hello, I have a similar problem, after installing the new version of KickSecure, in live mode, I get a red icon in the upper right part of the screen. How to solve this problem? (The system is installed on the main hard drive). I am a newbie and I do not understand how to fix this</p>
+<p>Live Mode Active: Yes (grub-live semi-persistent)<br>
+Persistent Mode Active: Yes (writable filesystems are mounted)</p>
+<p>Changes to the system should be lost after a reboot, but this is not guaranteed.</p>
+<ul>
+<li>The following removable media directories have a writable filesystem mounted to them:<br>
+*none</li>
+<li>The following directories have an unexpected writable filesystem mounted to them:</li>
+</ul>
+<ul>
+<li>/boot/efi<br>
+You should unmount all of the above listed directories to ensure changes made will not persist through a reboot.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_3</link>
+        <pubDate>Fri, 15 Aug 2025 03:22:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3223</guid>
+      </item>
+      <item>
+        <title>Question about IPv6</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="ricardo.martinez" data-post="1" data-topic="1231">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/8baadc/48.png" class="avatar"> ricardo.martinez:</div>
+<blockquote>
+<p>When I checked if IPv6 was enabled in Kicksecure, it says it is not.</p>
+</blockquote>
+</aside>
+<p>How exactly did you check? On my end, IPv6 is enabled by default. Your network needs to support it for it to work obviously, but if your network supports IPv6, Kicksecure should just use IPv6 by default.</p>
+<p>(Note that if you’re using Kicksecure in KVM, it’s very possibly IPv6 won’t be working for you. It looks like however libvirt/QEMU handles networking, IPv6 doesn’t work out of the box, at least not on an Ubuntu host. That’s and example the network not supporting IPv6.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_2</link>
+        <pubDate>Fri, 15 Aug 2025 02:59:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3220</guid>
+      </item>
+      <item>
         <title>Question about IPv6</title>
         <dc:creator><![CDATA[@ricardo.martinez]]></dc:creator>
         <description><![CDATA[ <p>Hey everyone! I am not sure if this the best place to post this, so if it is not, sorry in advance.</p>
@@ -1687,163 +1867,6 @@ Some compromise existed already, since Victim failed to lock, but this attack pr
         <link>https://forums.kicksecure.com/t/no-accessibility-support/1201#post_1</link>
         <pubDate>Wed, 06 Aug 2025 06:50:53 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3150</guid>
-      </item>
-      <item>
-        <title>Ctrl+Alt+Del (three-finger salute) action</title>
-        <dc:creator><![CDATA[@init38]]></dc:creator>
-        <description><![CDATA[ <p>What about other default shortcuts like <em>super key</em> for whisker menu for easy searching for applications like “windows task bar”. Many distros already set super key for application menu like Ubuntu and Mint.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_4</link>
-        <pubDate>Tue, 05 Aug 2025 16:39:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3149</guid>
-      </item>
-      <item>
-        <title>Is zsh the default shell globally for useradd?</title>
-        <dc:creator><![CDATA[@init38]]></dc:creator>
-        <description><![CDATA[ <p>When I create new users will it default to setting the shell as zsh?<br>
-Or do I have to manually edit passwd to set it?</p>
-<p>Just curious as when I morphed a VM it would still default to sh when i created a new user.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/is-zsh-the-default-shell-globally-for-useradd/1200#post_1</link>
-        <pubDate>Tue, 05 Aug 2025 16:36:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3148</guid>
-      </item>
-      <item>
-        <title>Ctrl+Alt+Del (three-finger salute) action</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>My idea was to use the existing emerg-shutdown framework (which monitors for a “panic” key combo already) to also act as the Ctrl+Alt+Delete handler. That would make it work anywhere in the system, and could also (if handled carefully) prevent malware running as a local user from being able to interfere with the key handler and associated features.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_3</link>
-        <pubDate>Tue, 05 Aug 2025 16:36:14 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3147</guid>
-      </item>
-      <item>
-        <title>Ctrl+Alt+Del (three-finger salute) action</title>
-        <dc:creator><![CDATA[@init38]]></dc:creator>
-        <description><![CDATA[ <p>Please see my thread 1147 about this.</p>
-<p>My question is what route should be the go to?</p>
-<p>Set a local shortcuts config for user and sysmaint? Downside would be these keyboard shortcuts would not populate if user uses sysmaint to create more users. Unless there is something specific to xfce4’s xconf for globally setting shortcuts it seems like the only route is dconf?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_2</link>
-        <pubDate>Tue, 05 Aug 2025 16:23:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3146</guid>
-      </item>
-      <item>
-        <title>No Rescue Mode</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<aside class="quote no-group" data-username="Patrick" data-post="17" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>The best and only thing hardware buyers can do is purchase devices that support user unlock/relock. Every purchase of a device that does not support unlock is a vote towards the end of general purpose computing access for mere morals.</p>
-</blockquote>
-</aside>
-<p>General-purpose computers are fun but insecure, a sad reality, but true. The wind does not blow as the ships desire, as they say.</p>
-</blockquote>
-</aside>
-<p>Once general-purpose computers are no longer available, that’s the end of small Linux distributions such as this one.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>…Legal barriers.</p>
-</blockquote>
-</aside>
-<p>None of the following quotes seem to be a legal barrier.</p>
-<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>“Though the lawsuit was filed in California, NSO Group made its source code available to view only in Israel by an Israeli citizen, which the judge called “simply impracticable”, according to the ruling.”</p>
-<p><a href="https://www.theguardian.com/technology/2024/feb/29/pegasus-surveillance-code-whatsapp-meta-lawsuit-nso-group" class="inline-onebox">Court orders maker of Pegasus spyware to hand over code to WhatsApp | WhatsApp | The Guardian</a></p>
-</blockquote>
-</aside>
-<aside class="quote no-group" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>“NSO’s Pegasus code, and code for other surveillance products it sells, is seen as a closely and highly sought state secret. NSO is closely regulated by the Israeli ministry of defence, which must review and approve the sale of all licences to foreign governments.”</p>
-</blockquote>
-</aside>
-<p>…these quotes do not imply that security researchers are prohibited from or scared to release malware artifacts such as disassembles due to fear of copyright laws. Specifically not in the case of Pegasus. Malware samples are shared and analyzed in public all the time.</p>
-<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<aside class="quote no-group" data-username="Patrick" data-post="17" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>It may not be impossible to secure that either.</p>
-</blockquote>
-</aside>
-<p>Yeah sadly i dont see how that can be secure.</p>
-</blockquote>
-</aside>
-<p>This isn’t easy for sure. You’d probably need to be able to at least:</p>
-<ul>
-<li>understand/write for example the following documents:
-<ul>
-<li><a href="https://github.com/3mdeb/verified-boot/blob/master/measured_boot.md" class="inline-onebox">verified-boot/measured_boot.md at master · 3mdeb/verified-boot · GitHub</a></li>
-<li><a href="https://github.com/3mdeb/verified-boot/blob/master/verified_boot_app_spec.md" class="inline-onebox">verified-boot/verified_boot_app_spec.md at master · 3mdeb/verified-boot · GitHub</a></li>
-<li><a href="https://github.com/3mdeb/verified-boot/blob/master/verified_boot_main.md" class="inline-onebox">verified-boot/verified_boot_main.md at master · 3mdeb/verified-boot · GitHub</a></li>
-<li><a href="https://github.com/3mdeb/verified-boot/blob/master/threat-model.md" class="inline-onebox">verified-boot/threat-model.md at master · 3mdeb/verified-boot · GitHub</a></li>
-<li><a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot</a></li>
-</ul>
-</li>
-<li>understand code flows</li>
-<li>basic programming</li>
-</ul>
-<aside class="quote no-group" data-username="Patrick" data-post="17" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>How does one now they got an original iPhone from Apple or one that has been tampered with?</p>
-</blockquote>
-</aside>
-<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p><a href="https://checkcoverage.apple.com/">https://checkcoverage.apple.com/</a></p>
-</blockquote>
-</aside>
-<p>Might be some sort of remote attestation. Not easy and maybe even impossible to come up with a perfect implementation. Refer to the same wiki page <a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot</a>.</p>
-<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p><a href="https://support.apple.com/guide/security/secure-enclave-sec59b0b31ff/web" class="inline-onebox">Secure Enclave - Apple Support</a></p>
-</blockquote>
-</aside>
-<p>That might be like Intel ME on steroids.</p>
-<p>I may also not be the best idea to come up with more and more complex hardware designs. They’ll forget (or “forget”?) to disable some debugging feature. (<a href="https://www.kicksecure.com/wiki/IOS" class="inline-onebox">Apple iOS - Malicious Backdoor or Debugging Feature? The Debate Over Operation Triangulation</a>) → <a href="https://www.kicksecure.com/wiki/Dev/About_Computer_(In)Security#Too_Much_Complexity">Too much complexity, etc.</a></p>
-<p>As for end-user, desktop computers and notebooks, there does not seem to be any hardware vendors on Intel/AMD64 interested to provide such functionality. This might be due to lack of customer interest. The x86 market is shrinking.</p>
-<p>On Intel/AMD64 we can be glad if we get at least <a href="https://github.com/openSIL/openSIL">OpenSIL</a>. That might be the next realistic step after <a href="https://forums.kicksecure.com/t/verified-boot/901/5">Sovereign Boot</a>.</p>
-<p>And if we’re really fortunate, maybe one day we’ll have <a href="https://www.kicksecure.com/wiki/Open-source_Hardware" class="inline-onebox">Open Source Hardware</a>. I’d prefer that any day about any proprietary co-processor.</p>
-<p>The security co-processor design is to be considered in 10 to 20 years. That’s far away from anything realistic we’ll be working on anytime soon.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="18" data-topic="1171">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>The question is: shall we have purely burned/fixed firmware where they are irreplaceable, non-upgradable which will be impossible to change by design (<a href="https://www.otomasyonavm.com/en/what-is-mask-rom">Mask ROM</a>, <a href="https://semiengineering.com/knowledge_centers/memory/one-time-programmable-memory/">OTP</a>…), or upgradable with signed mechanism (more complexity, more attack surface to protect, but better usability).</p>
-</blockquote>
-</aside>
-<p>Due to lack of hardware vendor interest… And due to no decent performance fully Open Source Hardware RISC-V being available yet… And due to Kicksecure not being a hardware development project… This is too far fetched for now.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-rescue-mode/1171#post_19</link>
-        <pubDate>Tue, 05 Aug 2025 11:40:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3145</guid>
       </item>
   </channel>
 </rss>
