@@ -5,6 +5,41 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Reproduced issue on Kicksecure 17.4.4.6 using VirtualBox with EFI enabled.</p>
+<p>Looks like the issue is that live-hardener tries to remount <code>/boot/efi</code> read-only after it mounts a read-write overlay on <code>/boot</code>. Mounts don’t “show through” an overlayfs, so <code>/boot/efi</code> isn’t even accessible in live mode, and remounting <code>/boot/efi</code> doesn’t do anything in this situation.</p>
+<p>Created a fix at <a href="https://github.com/ArrayBolt3/grub-live/tree/arraybolt3/live-hardener-fix" class="inline-onebox" rel="noopener nofollow ugc">GitHub - ArrayBolt3/grub-live at arraybolt3/live-hardener-fix</a> which is pending review. I’m unsure if this will end up in Kicksecure 17 or if it will have to wait until Kicksecure 18, but there’s a known fix now.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_9</link>
+        <pubDate>Sun, 17 Aug 2025 16:00:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3246</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>You should be able to keep using live mode without issues. The warning you see isn’t because something broke that wasn’t broken before, but because hardening features we added to make live mode more effective aren’t fully working. At worst, live mode should be at least as effective as how it used to work (assuming the only directory livecheck warns about is /boot/efi).</p>
+<p>I’ll continue looking into this to see if I can find the bug.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_8</link>
+        <pubDate>Sun, 17 Aug 2025 02:23:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3244</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@Jac]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1221">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>live-hardener</p>
+</blockquote>
+</aside>
+<p>Thanks for your reply. Rebooting does not solve the problem. I don’t know what to do. Real-time mode is very important for me. Version 17.3.9.9. worked without problems on my computer.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_7</link>
+        <pubDate>Sun, 17 Aug 2025 02:07:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3243</guid>
+      </item>
+      <item>
         <title>Kicksecure distro specific keyboard shortcuts</title>
         <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
         <description><![CDATA[ <p>I just wanted to say I like these ideas very much.<br>
@@ -1712,83 +1747,6 @@ echo -e '\n# Use ZSH as the default shell for newly created users\nSHELL=/bin/zs
         <link>https://forums.kicksecure.com/t/is-zsh-the-default-shell-globally-for-useradd/1200#post_3</link>
         <pubDate>Fri, 08 Aug 2025 22:04:59 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3168</guid>
-      </item>
-      <item>
-        <title>Sdwdate design enhancements</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Not sure there’s much to discuss here, this is just me doing a brain-dump of my research so that it’s not lost and so that others can comment on it as desirable.</p>
-<p>The current iteration of sdwdate does a pretty good job of keeping the system’s clock accurate but skewed just enough to provide better anonymity under Whonix. However, it has a few shortcomings we’d like to resolve:</p>
-<ul>
-<li>It only sets the time for the (virtual) machine it runs on, it isn’t able to act as a server for helping other virtual machines running on the same system to also synchronize their time securely. This is something that would be nice to fix in Qubes OS, allowing sys-whonix (or more likely, sys-ops-whonix once that exists) to act as a master time-keeper for all VMs.</li>
-<li>The current way it adjusts the clock is somewhat awful - it does a large clock jump or two to get the time close enough to accurate to allow connecting to Tor, then does a large number of small clock jumps to get the time to a final “good” value. Clock jump confuse software in multiple ways, and the small clock jumps we do currently can result in systemd journal being flooded, so they’re best avoided, and if they’re needed, it’s best to do one clock jump and then slew the clock to the correct time using something like <code>adjtimex</code>.</li>
-</ul>
-<p>The core sdwdate code is good and should probably not change too much. What should probably change is the <code>sclockadj</code> tool that is used for doing small clock jumps, and we need a way to allow sdwdate to provide time values for other VMs to sync themselves to.</p>
-<hr>
-<p>The below is my research into using adjtimex, The tl;dr: is that <strong>we probably should not use adjtimex for initial clock synchronization after boot, but it may be usable to keep the clock in sync thereafter.</strong></p>
-<p>Properly adjusting a clock using <code>adjtime</code> or <code>adjtimex</code> (slewing it to the correct value using in-kernel support) is very, very slow. According to <a href="https://unix.stackexchange.com/a/188620/535873" class="inline-onebox" rel="noopener nofollow ugc">time - How long will NTP take to adjust the clock if it doesn't immediately set it? - Unix &amp; Linux Stack Exchange</a> it takes approximately 4.17 minutes to adjust the clock by 128 milliseconds, or at least it did in 2015. In my testing with adjtimex, this is still approximately correct - it appears that adjtimex adjusts the clock by 500 microseconds per second. This means it takes a little over 33 minutes to adjust the clock by one second.</p>
-<p>The problem with this is that Tor (and therefore sdwdate) only allow us to resolve time to within a second at best because that’s the resolution of the HTTP headers we get. On top of that, we get the time from three different servers at once when using sdwdate and then go with the median value of those three times, meaning that in practice we’re not going to be within a second of accuracy because of network lag and all sorts of other things NTP is designed to work around and Tor isn’t. On top of that, we also randomize the clock a bit for greater anonymity, meaning that we might change the clock several seconds on each invocation of sdwdate. When it takes over half an hour to move the clock by one second, making a multi-second change will take <em>hours</em>. Now if we assume that the system’s clock is fairly accurate, and we only ever have <em>one</em> time randomization offset per session (generated randomly each session but never changed until the next reboot, I guess), we can probably skew the clock by a second or two on each sdwdate invocation without too much trouble. But if the network is shaky (for instance, the user is using cellular internet in bad conditions), it’s likely sdwdate will be trying to make much larger changes.</p>
-<p>(Note, anecdotally it seems that sdwdate doesn’t see any particular need to change the clock in my KVM virtual machine when I restart sdwdate, at least while my network is working well. The median time difference keeps being 0. That being said, other time differences were frequently reported that were not the median, so I assume that users won’t always get this lucky.)</p>
-<p>The current <code>sclockadj</code> code adjusts the clock by 5 million nanoseconds per second. This is <em>ten times</em> faster than adjtimex, which adjusts by 5 hundred thousand nanoseconds per second. Thus sclockadj can handle multi-second adjustments without too much grief, but only by doing clock jumps. Switching to clock slewing with adjtimex will slow down our time adjustments very much.</p>
-<p>The 500 microseconds per second adjustment rate is not configurable, it is unfortunately hardcoded in the kernel’s NTP code, which the <code>adjtimex</code> system call uses to do its work of slewing the clock. There isn’t any way to do a “fast slew” to my awareness, unless we want to try to contribute a feature for this to the kernel (which… might be possible?).</p>
-<p>Based on the above, I think we might get away with using adjtimex to keep the clock in sync once it is initially synchronized. For making an adjustment of a second or two, it’s probably enough. But on first boot, when the clock is most likely to be several seconds slow or fast (especially on machines with no BIOS battery or a broken battery), we probably need to just use a clock jump. This is similar to the behavior of ntpd.</p>
-<hr>
-<p>For making sdwdate able to act as a server under Qubes OS, there are a couple of issues to deal with:</p>
-<ul>
-<li>Qubes OS currently synchronizes all VMs to dom0’s time, at least when resuming after suspend. But we would like for dom0 to be able to synchronize itself to sys-(ops-)whonix also.</li>
-<li>Every VM on the system should ideally have slightly different time, and should get their time values from a different sdwdate time sync invocation (to avoid one bad sync affecting all VMs on the system).</li>
-</ul>
-<p>To work with the first issue, we can simply have all VMs (including sys-(ops-)whonix) blindly trust dom0’s time to begin with. Once a successful sdwdate sync is done however, the VM should record how its time differs from dom0’s time. Then, on resume-from-suspend, the VM can take the time given to it by dom0, and adjust it by the offset before syncing the clock. Any time dom0’s clock changed, it would have to announce this to all running VMs so they could recalculate their offsets from dom0.</p>
-<p>To work around the second issue, we need some way for a virtual machine to get “whatever the current time is +/- some fixed offset” each time they synchronize their clock with the ClockVM. The fixed offset should be unique per-machine and per-boot, but should be constant between boots to avoid needing lots of clock jumps forward and backward. To acheive this, the client process that gets the time from the ClockVM should create a random identifier on launch, and present that identifier to sdwdate every time it syncs the clock. When sdwdate sees an identifier it hasn’t seen previously, it should generate a new random offset, but if it sees an identifier it’s seen previously, it should use the same offset it presented last time. This way each VM can have its time a little bit different, but that “little bit different” will be static for each virtual machine (until the client VM or ClockVM is rebooted, at least).</p>
-<p>We don’t have to tack a bunch of code onto the existing sdwdate code base in order to make it able to act like a server. We should just create a new server process that serves whatever the ClockVM’s current time is (+/- the fixed offset described earlier) to clients. This probably won’t be very difficult to do at all. We will need this server process to NOT serve time until after sdwdate has synced the clock, but thankfully sdwdate already reports its status to other processes on the same VM, so we can rely on that.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/sdwdate-design-enhancements/1203#post_1</link>
-        <pubDate>Fri, 08 Aug 2025 19:24:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3167</guid>
-      </item>
-      <item>
-        <title>Ctrl+Alt+Del (three-finger salute) action</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="9" data-topic="1197">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks" rel="noopener nofollow ugc">Console Login Attacks</a>.</p>
-</blockquote>
-</aside>
-<p>I don’t believe so. That documentation explicitly warns that one way to be able to switch virtual terminals is to:</p>
-<blockquote>
-<p>…be running under a user account that has logged in at a virtual terminal already. In this … instance, software running as the logged-in user could <em>switch</em> to a different virtual terminal, but it would not be able to attempt to login at that terminal. That would require read/write access to the virtual terminal that was switched to. Virtual terminals that have a login prompt are only able to be read from and written to by root or a person with physical access to the machine.</p>
-</blockquote>
-<p>The reason this is a problem in the context of a SAK is that even if we switch to a TTY presenting an authentic login screen, malware could immediately switch us back to the TTY it was on a second ago and display a fake login screen. It’s not a danger when it comes to logging into other accounts, it is a problem when it comes to stealing user data.</p>
-<p>(Worthy of note, once we switch to Wayland, the compositor will almost certainly run as a user other than root, and thus the TTY it runs on will have its permissions set to a non-root user. Thus this issue will start affecting graphical sessions as well, not just text-only VT logins. I think though that’s a small price to pay, especially since there’s a mitigation.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_10</link>
-        <pubDate>Fri, 08 Aug 2025 00:13:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3166</guid>
-      </item>
-      <item>
-        <title>Ctrl+Alt+Del (three-finger salute) action</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>it would be fairly trivial for malware running as a user in a graphical session to simply force the user back to the original TTY, using a console file descriptor.</p>
-</blockquote>
-</aside>
-<p>Sure? This contradicts what we’re currently writing in chapter <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks">Console Login Attacks</a>.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1197">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>SIGSTOP</p>
-</blockquote>
-</aside>
-<p>Another advantage of this might be that misbehaving processes (such as clogging up all CPU due to a bug) would stop doing that so the user has system resources available to investigate this and to terminate misbehaving processes.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197#post_9</link>
-        <pubDate>Thu, 07 Aug 2025 09:13:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3165</guid>
       </item>
   </channel>
 </rss>
