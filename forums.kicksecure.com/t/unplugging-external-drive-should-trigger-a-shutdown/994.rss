@@ -14,9 +14,103 @@ I do want to add that also set up LUKS when I installed Debian.
 
 Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</description>
     
-    <lastBuildDate>Sat, 16 Aug 2025 18:03:30 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 23 Aug 2025 10:08:25 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Unplugging external drive should trigger a shutdown</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10174">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10174" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10174" target="_blank" rel="noopener">Consider the impact of USBGuard in sys-usb</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-08-22" data-time="18:22:07" data-timezone="UTC">06:22PM - 22 Aug 25 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2025-08-23" data-time="00:42:19" data-timezone="UTC">12:42AM - 23 Aug 25 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          R: not applicable
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+I a<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">pologize in advance if this isn't really the right spot for this, I couldn't find a "development" category on the forums so this is the closest I could figure out.
+
+### The problem you're addressing (if any)
+
+In Kicksecure 18 and higher, we're going to be shipping USBGuard, enabled by default, with a configuration that allows all devices that are present in the system on bootup, and blocks all non-whitelisted devices that are plugged in after bootup. By default, the whitelist in Kicksecure will allow USB mass storage devices, and will allow a single mouse and keyboard at a time (additional keyboards are rejected). All other devices are rejected, including devices that combine a USB mass storage interface with anything else, and devices that combine a keyboard or mouse interface with anything (except for "unified" keyboard/mouse devices like are common with some wireless receivers). The goal is to allow a limited subset of common USB devices to work out of the box, while also thwarting devices like the USB "rubber ducky".
+
+This feature set makes good sense for Kicksecure on the desktop, but we're unsure if it makes sense in Qubes OS, if a user chooses to use Kicksecure on sys-usb. On the one hand, USBGuard in sys-usb could substantially increase the security of users who have to pass through USB keyboards and mice to dom0 (only one keyboard and mouse would be allowed, a keystroke injection device would be rejected so long as it was not present when sys-usb booted and a legitimate USB keyboard was already plugged in). On the other hand, USBGuard could frustrate users who need to work with things such as USB headsets, webcams, touchscreens, and other "advanced" devices. In theory a user could reboot sys-usb to get these devices to work (assuming our configuration actually does trust everything present on bootup), but maybe that's too much hassle?
+
+The USBGuard configuration we intend to ship in Kicksecure 18 can be seen [here](https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf).
+
+### The solution you'd like
+
+Determine if USBGuard in a Kicksecure-based sys-usb makes sense, and if any configuration changes are needed in the event it is useful in Qubes OS.
+
+### The value to a user and who that user might be
+
+If we choose to leave it enabled, users will be able to pass through input devices to dom0 with less risk of malicious devices being able to take over the system.
+
+If we choose to disable it, users won't end up facing new issues with USB device passthrough.
+
+### Completion criteria checklist
+
+(This section is for developer use only. Please do not modify it.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/25">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/25</link>
+        <pubDate>Sat, 23 Aug 2025 10:08:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-25</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
+      </item>
       <item>
         <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[Quiksilver]]></dc:creator>
