@@ -5,8 +5,102 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code.</description>
     
-      <lastBuildDate>Fri, 08 Aug 2025 19:24:55 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 24 Aug 2025 17:29:19 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Unsupported Multi/Dual Boot</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Its not only can cause a usability issue as <a href="https://www.kicksecure.com/wiki/Troubleshooting#Dual_Boot">mentioned here</a>, but its a <a href="https://forum.qubes-os.org/t/multibooting-qubes/18988">security issue</a> as well:</p>
+<blockquote>
+<p>One problem is that when you dual or multiboot, even if you are using encryption on your Qubes installation, /boot is still unprotected and could be maliciously modified by the other OS, possibly leading to Qubes itself being maliciously modified.</p>
+<p>The other problem is firmware security - for example the other system could infect the BIOS firmware, which might enable compromise or spying on the Qubes system.</p>
+</blockquote>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249</link>
+          <pubDate>Sun, 24 Aug 2025 17:29:19 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1249</guid>
+          <source url="https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249.rss">Unsupported Multi/Dual Boot</source>
+        </item>
+        <item>
+          <title>USBGuard - what should we allow or disallow by default?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Kicksecure 18 is intended to ship USBGuard by default, with a configuration that should block likely-malicious, unknown, and unusual devices. The hope is that it won’t block so much as to significantly increase the difficulty of using Kicksecure, while also making it more difficult to use devices such as the Hak5 rubber ducky or O.MG plug (popular keystroke injection devices).</p>
+<p>Our current USBGuard configuration is visible at <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf" class="inline-onebox" rel="noopener nofollow ugc">security-misc/etc/usbguard/rules.d/30_security-misc.conf at master · Kicksecure/security-misc · GitHub</a>. The original intent was to allow everything connected at boot, and then disallow everything other than mass storage devices, keyboards, and mice, while also not allowing keyboards or mice to be combined with other interfaces, and not allowing additional keyboards and mice to be attached if one is already present. However, as pointed out by Marek (the lead Qubes OS developer), this is going to cause <em>tons</em> of legitimate devices to be blocked: <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164474977" class="inline-onebox" rel="noopener nofollow ugc">Polish USBGuard configuration · Kicksecure/security-misc@cba1687 · GitHub</a></p>
+<p>We have a pretty classic security vs. usability tradeoff here. We don’t want to block so much that users disable USBGuard because they can’t live with it, but we also don’t want to allow so much that malicious devices work in common configurations. It’s already risky enough allowing keyboards and mice to be attached after bootup, since if the only keyboard and mouse present on bootup is non-USB (as is the case with most laptops if you don’t plug additional devices into them), keystroke injection devices that present themselves as only a keyboard will be able to attack the system and succeed. But blocking <em>everything</em> other than keyboards, mice, and storage devices may be overkill also.</p>
+<p>Does anyone have input on what should be blocked or not blocked by default? Some USB devices to think about here are:</p>
+<ul>
+<li>Webcams
+<ul>
+<li>On its own, a webcam probably can’t cause too much trouble… the worst it could do is video the user on the user’s own machine, it would probably be much more useful for an attacker to record the user with an <em>attacker-controlled</em> machine, which of course USBGuard can’t do anything about.</li>
+</ul>
+</li>
+<li>Microphones
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Headsets/speakers/miscellaneous other USB audio devices
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Printers
+<ul>
+<li>Could introduce attack surface that we don’t want, see <a href="https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/" class="inline-onebox" rel="noopener nofollow ugc">Attacking UNIX Systems via CUPS, Part I</a></li>
+</ul>
+</li>
+<li>MIDI interfaces
+<ul>
+<li>Probably pretty rare, no idea what the risks are of allowing these to be used by default, would probably block them just in case.</li>
+</ul>
+</li>
+<li>Touchscreens
+<ul>
+<li>Input device, similar to a mouse, might even be handled already by allowing mice in the system. Dangers are similar or identical to allowing mice.</li>
+</ul>
+</li>
+<li>Android devices
+<ul>
+<li>Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.</li>
+</ul>
+</li>
+<li>USB Ethernet
+<ul>
+<li>Oftentimes uses RNDIS, which the Linux kernel maintainer Greg Kroah-Hartman has tried to get disabled in Linux at least <em>three times</em> due to supposedly unfixable security issues. (<a href="https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024</a>) I would consider this very high-risk and would NOT enable it.</li>
+</ul>
+</li>
+<li>Bluetooth dongles
+<ul>
+<li>Could be used to attach arbitrary devices to systems remotely, but this would require some user interaction. Unsure what the implications of a malicious Bluetooth dongle would be. Internal Bluetooth cards actually use the USB bus, but they’ll be present on boot and thus allowed, if everything works as expected.</li>
+</ul>
+</li>
+<li>2FA keys
+<ul>
+<li>I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it’s feasible to allow it by default.</li>
+</ul>
+</li>
+<li>Anything else we should consider allowing or not allowing by default?</li>
+</ul>
+            <p><small>2 posts - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248</link>
+          <pubDate>Sun, 24 Aug 2025 02:33:02 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1248</guid>
+          <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+        </item>
         <item>
           <title>Sdwdate design enhancements</title>
           <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -495,49 +589,6 @@
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1168</guid>
           <source url="https://forums.kicksecure.com/t/app-per-vm-hypervisor-type/1168.rss">App-per-VM Hypervisor Type</source>
-        </item>
-        <item>
-          <title>Packages Source for App-per-VM</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Note: This is written with the assumption of having a separation between the packages for the system differ from the packages for ApV.</p>
-<p>Hosting our own packages on our own servers would be the ideal solution, and that’s true. However, with a small team and limited resources, that’s not currently feasible (though it should remains the long-term goal).</p>
-<p>What we can do instead is source packages from existing systems, whether Nix, Arch, Gentoo, or others as long as we can obtain pure, upstream, patchless packages. Reproducibility is essential here to ensure that the packages have not been tampered with in the path of delivery.</p>
-<ul>
-<li>FSDG Consideration: This all can go through only supporting freedom software (software for the ApV must be taken from FSDG distro repository in this case).</li>
-<li>Upstream package purity discussion can be found <a href="https://forums.kicksecure.com/t/secure-and-trustless-trust-minimal-package-policy/1157">here</a>.</li>
-<li>Keep always things updated can be found <a href="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139">here</a>.</li>
-</ul>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/packages-source-for-app-per-vm/1167">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/packages-source-for-app-per-vm/1167</link>
-          <pubDate>Thu, 24 Jul 2025 18:21:50 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1167</guid>
-          <source url="https://forums.kicksecure.com/t/packages-source-for-app-per-vm/1167.rss">Packages Source for App-per-VM</source>
-        </item>
-        <item>
-          <title>Package &amp; System Policy: No Backward Nor Sideward compatibility</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>No Backward: The operating system will continue updating itself for supported XYZ hardware. Once any hardware becomes obsolete, it will no longer be compatible, no legacy support.</p>
-<p>No Sideward: There will be no compatibility for Linux, Windows, or BSD software at the system level. Compatibility may exist in App-per-VM. By default, only Linux apps are supported in the VM (This case if the system using different kernel like seL4 or so, but if its using Linux then no other OS should be given/cared for compatibility, only the pure/original kernel with the main OS components)</p>
-<p>Additionally, if any app running in a VM does not work with a specific Linux version or hardware architecture, it is not the operating system’s responsibility to ensure compatibility (upstream issue).</p>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166</link>
-          <pubDate>Thu, 24 Jul 2025 16:48:00 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1166</guid>
-          <source url="https://forums.kicksecure.com/t/package-system-policy-no-backward-nor-sideward-compatibility/1166.rss">Package &amp; System Policy: No Backward Nor Sideward compatibility</source>
         </item>
   </channel>
 </rss>

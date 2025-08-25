@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>USBGuard - what should we allow or disallow by default?</title>
+    <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248</link>
+    <description>Kicksecure 18 is intended to ship USBGuard by default, with a configuration that should block likely-malicious, unknown, and unusual devices. The hope is that it won’t block so much as to significantly increase the difficulty of using Kicksecure, while also making it more difficult to use devices such as the Hak5 rubber ducky or O.MG plug (popular keystroke injection devices).
+
+Our current USBGuard configuration is visible at https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf. The original intent was to allow everything connected at boot, and then disallow everything other than mass storage devices, keyboards, and mice, while also not allowing keyboards or mice to be combined with other interfaces, and not allowing additional keyboards and mice to be attached if one is already present. However, as pointed out by Marek (the lead Qubes OS developer), this is going to cause *tons* of legitimate devices to be blocked: https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164474977
+
+We have a pretty classic security vs. usability tradeoff here. We don&#39;t want to block so much that users disable USBGuard because they can&#39;t live with it, but we also don&#39;t want to allow so much that malicious devices work in common configurations. It&#39;s already risky enough allowing keyboards and mice to be attached after bootup, since if the only keyboard and mouse present on bootup is non-USB (as is the case with most laptops if you don&#39;t plug additional devices into them), keystroke injection devices that present themselves as only a keyboard will be able to attack the system and succeed. But blocking *everything* other than keyboards, mice, and storage devices may be overkill also.
+
+Does anyone have input on what should be blocked or not blocked by default? Some USB devices to think about here are:
+
+* Webcams
+  * On its own, a webcam probably can&#39;t cause too much trouble... the worst it could do is video the user on the user&#39;s own machine, it would probably be much more useful for an attacker to record the user with an *attacker-controlled* machine, which of course USBGuard can&#39;t do anything about.
+* Microphones
+  * Similar situation as webcams.
+* Headsets/speakers/miscellaneous other USB audio devices
+  * Similar situation as webcams.
+* Printers
+  * Could introduce attack surface that we don&#39;t want, see https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/
+* MIDI interfaces
+  * Probably pretty rare, no idea what the risks are of allowing these to be used by default, would probably block them just in case.
+* Touchscreens
+  * Input device, similar to a mouse, might even be handled already by allowing mice in the system. Dangers are similar or identical to allowing mice.
+* Android devices
+  * Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.
+* USB Ethernet
+  * Oftentimes uses RNDIS, which the Linux kernel maintainer Greg Kroah-Hartman has tried to get disabled in Linux at least *three times* due to supposedly unfixable security issues. (https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers, https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers, https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024) I would consider this very high-risk and would NOT enable it.
+* Bluetooth dongles
+  * Could be used to attach arbitrary devices to systems remotely, but this would require some user interaction. Unsure what the implications of a malicious Bluetooth dongle would be. Internal Bluetooth cards actually use the USB bus, but they&#39;ll be present on boot and thus allowed, if everything works as expected.
+* 2FA keys
+  * I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it&#39;s feasible to allow it by default.
+* Anything else we should consider allowing or not allowing by default?</description>
+    
+    <lastBuildDate>Sun, 24 Aug 2025 02:44:07 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html">
+  <header class="source">
+      <img src="https://www.mail-archive.com/favicon.ico" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html" target="_blank" rel="noopener nofollow ugc">mail-archive.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html" target="_blank" rel="noopener nofollow ugc">[qubes-devel] USBGuard in Kicksecure-based sys-usb?</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/2</link>
+        <pubDate>Sun, 24 Aug 2025 02:44:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-2</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure 18 is intended to ship USBGuard by default, with a configuration that should block likely-malicious, unknown, and unusual devices. The hope is that it won’t block so much as to significantly increase the difficulty of using Kicksecure, while also making it more difficult to use devices such as the Hak5 rubber ducky or O.MG plug (popular keystroke injection devices).</p>
+<p>Our current USBGuard configuration is visible at <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf" class="inline-onebox" rel="noopener nofollow ugc">security-misc/etc/usbguard/rules.d/30_security-misc.conf at master · Kicksecure/security-misc · GitHub</a>. The original intent was to allow everything connected at boot, and then disallow everything other than mass storage devices, keyboards, and mice, while also not allowing keyboards or mice to be combined with other interfaces, and not allowing additional keyboards and mice to be attached if one is already present. However, as pointed out by Marek (the lead Qubes OS developer), this is going to cause <em>tons</em> of legitimate devices to be blocked: <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164474977" class="inline-onebox" rel="noopener nofollow ugc">Polish USBGuard configuration · Kicksecure/security-misc@cba1687 · GitHub</a></p>
+<p>We have a pretty classic security vs. usability tradeoff here. We don’t want to block so much that users disable USBGuard because they can’t live with it, but we also don’t want to allow so much that malicious devices work in common configurations. It’s already risky enough allowing keyboards and mice to be attached after bootup, since if the only keyboard and mouse present on bootup is non-USB (as is the case with most laptops if you don’t plug additional devices into them), keystroke injection devices that present themselves as only a keyboard will be able to attack the system and succeed. But blocking <em>everything</em> other than keyboards, mice, and storage devices may be overkill also.</p>
+<p>Does anyone have input on what should be blocked or not blocked by default? Some USB devices to think about here are:</p>
+<ul>
+<li>Webcams
+<ul>
+<li>On its own, a webcam probably can’t cause too much trouble… the worst it could do is video the user on the user’s own machine, it would probably be much more useful for an attacker to record the user with an <em>attacker-controlled</em> machine, which of course USBGuard can’t do anything about.</li>
+</ul>
+</li>
+<li>Microphones
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Headsets/speakers/miscellaneous other USB audio devices
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Printers
+<ul>
+<li>Could introduce attack surface that we don’t want, see <a href="https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/" class="inline-onebox" rel="noopener nofollow ugc">Attacking UNIX Systems via CUPS, Part I</a></li>
+</ul>
+</li>
+<li>MIDI interfaces
+<ul>
+<li>Probably pretty rare, no idea what the risks are of allowing these to be used by default, would probably block them just in case.</li>
+</ul>
+</li>
+<li>Touchscreens
+<ul>
+<li>Input device, similar to a mouse, might even be handled already by allowing mice in the system. Dangers are similar or identical to allowing mice.</li>
+</ul>
+</li>
+<li>Android devices
+<ul>
+<li>Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.</li>
+</ul>
+</li>
+<li>USB Ethernet
+<ul>
+<li>Oftentimes uses RNDIS, which the Linux kernel maintainer Greg Kroah-Hartman has tried to get disabled in Linux at least <em>three times</em> due to supposedly unfixable security issues. (<a href="https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024</a>) I would consider this very high-risk and would NOT enable it.</li>
+</ul>
+</li>
+<li>Bluetooth dongles
+<ul>
+<li>Could be used to attach arbitrary devices to systems remotely, but this would require some user interaction. Unsure what the implications of a malicious Bluetooth dongle would be. Internal Bluetooth cards actually use the USB bus, but they’ll be present on boot and thus allowed, if everything works as expected.</li>
+</ul>
+</li>
+<li>2FA keys
+<ul>
+<li>I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it’s feasible to allow it by default.</li>
+</ul>
+</li>
+<li>Anything else we should consider allowing or not allowing by default?</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/1</link>
+        <pubDate>Sun, 24 Aug 2025 02:33:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-1</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+  </channel>
+</rss>

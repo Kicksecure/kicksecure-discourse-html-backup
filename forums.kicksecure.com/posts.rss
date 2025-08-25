@@ -5,6 +5,135 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Unsupported Multi/Dual Boot</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Might be worth drawing a line between “security support” and “technical support” here - multiboot may be very valuable for developer use cases (where all operating systems on the system are trusted equally). Such a setup may be discouraged from a security standpoint, but essential for development. I for instance run a multiboot setup on my test laptop, Kubuntu/Lubuntu/Qubes OS/Debian/Arch.</p>
+<p>Qubes OS doesn’t <em>support</em> multiboot, but in practice it can be multibooted pretty easily.</p>
+<p>Also, how would this interact with portable installations? They have some of the same risks, but may be very valuable because they can provide enhanced security even when a user has to use a machine that runs less secure operating systems other times.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_2</link>
+        <pubDate>Sun, 24 Aug 2025 17:56:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3264</guid>
+      </item>
+      <item>
+        <title>Unsupported Multi/Dual Boot</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>Its not only can cause a usability issue as <a href="https://www.kicksecure.com/wiki/Troubleshooting#Dual_Boot">mentioned here</a>, but its a <a href="https://forum.qubes-os.org/t/multibooting-qubes/18988">security issue</a> as well:</p>
+<blockquote>
+<p>One problem is that when you dual or multiboot, even if you are using encryption on your Qubes installation, /boot is still unprotected and could be maliciously modified by the other OS, possibly leading to Qubes itself being maliciously modified.</p>
+<p>The other problem is firmware security - for example the other system could infect the BIOS firmware, which might enable compromise or spying on the Qubes system.</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_1</link>
+        <pubDate>Sun, 24 Aug 2025 17:29:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3263</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html">
+  <header class="source">
+      <img src="https://www.mail-archive.com/favicon.ico" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html" target="_blank" rel="noopener nofollow ugc">mail-archive.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.mail-archive.com/qubes-devel@googlegroups.com/msg05626.html" target="_blank" rel="noopener nofollow ugc">[qubes-devel] USBGuard in Kicksecure-based sys-usb?</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_2</link>
+        <pubDate>Sun, 24 Aug 2025 02:44:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3262</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Kicksecure 18 is intended to ship USBGuard by default, with a configuration that should block likely-malicious, unknown, and unusual devices. The hope is that it won’t block so much as to significantly increase the difficulty of using Kicksecure, while also making it more difficult to use devices such as the Hak5 rubber ducky or O.MG plug (popular keystroke injection devices).</p>
+<p>Our current USBGuard configuration is visible at <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf" class="inline-onebox" rel="noopener nofollow ugc">security-misc/etc/usbguard/rules.d/30_security-misc.conf at master · Kicksecure/security-misc · GitHub</a>. The original intent was to allow everything connected at boot, and then disallow everything other than mass storage devices, keyboards, and mice, while also not allowing keyboards or mice to be combined with other interfaces, and not allowing additional keyboards and mice to be attached if one is already present. However, as pointed out by Marek (the lead Qubes OS developer), this is going to cause <em>tons</em> of legitimate devices to be blocked: <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164474977" class="inline-onebox" rel="noopener nofollow ugc">Polish USBGuard configuration · Kicksecure/security-misc@cba1687 · GitHub</a></p>
+<p>We have a pretty classic security vs. usability tradeoff here. We don’t want to block so much that users disable USBGuard because they can’t live with it, but we also don’t want to allow so much that malicious devices work in common configurations. It’s already risky enough allowing keyboards and mice to be attached after bootup, since if the only keyboard and mouse present on bootup is non-USB (as is the case with most laptops if you don’t plug additional devices into them), keystroke injection devices that present themselves as only a keyboard will be able to attack the system and succeed. But blocking <em>everything</em> other than keyboards, mice, and storage devices may be overkill also.</p>
+<p>Does anyone have input on what should be blocked or not blocked by default? Some USB devices to think about here are:</p>
+<ul>
+<li>Webcams
+<ul>
+<li>On its own, a webcam probably can’t cause too much trouble… the worst it could do is video the user on the user’s own machine, it would probably be much more useful for an attacker to record the user with an <em>attacker-controlled</em> machine, which of course USBGuard can’t do anything about.</li>
+</ul>
+</li>
+<li>Microphones
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Headsets/speakers/miscellaneous other USB audio devices
+<ul>
+<li>Similar situation as webcams.</li>
+</ul>
+</li>
+<li>Printers
+<ul>
+<li>Could introduce attack surface that we don’t want, see <a href="https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/" class="inline-onebox" rel="noopener nofollow ugc">Attacking UNIX Systems via CUPS, Part I</a></li>
+</ul>
+</li>
+<li>MIDI interfaces
+<ul>
+<li>Probably pretty rare, no idea what the risks are of allowing these to be used by default, would probably block them just in case.</li>
+</ul>
+</li>
+<li>Touchscreens
+<ul>
+<li>Input device, similar to a mouse, might even be handled already by allowing mice in the system. Dangers are similar or identical to allowing mice.</li>
+</ul>
+</li>
+<li>Android devices
+<ul>
+<li>Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.</li>
+</ul>
+</li>
+<li>USB Ethernet
+<ul>
+<li>Oftentimes uses RNDIS, which the Linux kernel maintainer Greg Kroah-Hartman has tried to get disabled in Linux at least <em>three times</em> due to supposedly unfixable security issues. (<a href="https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers</a>, <a href="https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024" rel="noopener nofollow ugc">https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024</a>) I would consider this very high-risk and would NOT enable it.</li>
+</ul>
+</li>
+<li>Bluetooth dongles
+<ul>
+<li>Could be used to attach arbitrary devices to systems remotely, but this would require some user interaction. Unsure what the implications of a malicious Bluetooth dongle would be. Internal Bluetooth cards actually use the USB bus, but they’ll be present on boot and thus allowed, if everything works as expected.</li>
+</ul>
+</li>
+<li>2FA keys
+<ul>
+<li>I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it’s feasible to allow it by default.</li>
+</ul>
+</li>
+<li>Anything else we should consider allowing or not allowing by default?</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_1</link>
+        <pubDate>Sun, 24 Aug 2025 02:33:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3261</guid>
+      </item>
+      <item>
+        <title>The workstation has stopped booting.</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p><code>Failed to start systemd-fsck-root.service</code></p>
+</blockquote>
+<p>That sounds like the filesystem was corrupted by an improper shutdown (which would happen if the power went out). On the bright side, It’s very unlikely the filesystem is so corrupted that the data on it is inaccessible.</p>
+<p>Probably the best course of action is to create a new virtual machine, then attach the old virtual machine’s disk to the new virtual machine. Then you can open the drive and copy your files to the new VM.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-workstation-has-stopped-booting/1246#post_2</link>
+        <pubDate>Sun, 24 Aug 2025 01:45:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3260</guid>
+      </item>
+      <item>
         <title>The workstation has stopped booting.</title>
         <dc:creator><![CDATA[@amnez]]></dc:creator>
         <description><![CDATA[ <p>Hello everyone, after my power went out, I can’t log into WorkStation. When loading the system, the following errors are shown, which are visible on my screenshot. The data inside the system is very important to me, is there a way to extract it somehow?</p>
@@ -1592,403 +1721,6 @@ _No response_</span></p>
         <link>https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206#post_4</link>
         <pubDate>Sun, 10 Aug 2025 16:24:03 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3182</guid>
-      </item>
-      <item>
-        <title>Harden DRACUT initramfs-generator by disabling Recovery Console?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This has been implemented a while ago.</p>
-<p>Documented just now. Quote <a href="https://www.kicksecure.com/wiki/Recovery#Dracut_Emergency_Shell">Dracut Emergency Shell</a>:</p>
-<blockquote>
-<p><a href="https://www.kicksecure.com/wiki/Dracut">dracut</a> <a href="https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724">emergency shell is disabled by default in Kicksecure for security reasons.</a> This is implemented in file <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/default/grub.d/41_recovery_restrict.cfg"><code>/etc/default/grub.d/41_recovery_restrict.cfg</code></a>.</p>
-<p>To re-enable the dracut emergency shell, which can be useful for debugging, see wiki chapter <a href="https://www.kicksecure.com/wiki/Recovery#Recovery_Mode">Recovery Mode</a>.</p>
-<p>related forum discussion:</p>
-<ul>
-<li><a href="https://forums.kicksecure.com/t/no-rescue-mode/1171" class="inline-onebox">No Rescue Mode</a></li>
-</ul>
-</blockquote>
-<p>One could say, it’s easy for a physical attacker to re-enable dracut recovery console using a kernel parameter change - which is even documented - hence defeating the purpose. That is correct - at time of writing. Protecting the kernel command line is the job of verified boot. Related:</p>
-<ul>
-<li>wiki: <a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot</a></li>
-<li>forum: <a href="https://forums.kicksecure.com/t/verified-boot/901" class="inline-onebox">Verified Boot</a></li>
-</ul>
-<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="6" data-topic="724">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="724">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>We should make sure this doesn’t break Recovery Mode, that’s the only thing wrong I can think of with that.</p>
-</blockquote>
-</aside>
-<p>Actually i would argue against that, why do we need to rely on recovery mode?</p>
-</blockquote>
-</aside>
-<p>Developers need it sometimes to debug boot issues, unbootable systems or instruct users on how to do that.</p>
-<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="724">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
-<blockquote>
-<p>I think of recovery mode ability is like backdooring your own OS,</p>
-</blockquote>
-</aside>
-<p>Once verified boot is implemented, only the device owner shall have this capability.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/harden-dracut-initramfs-generator-by-disabling-recovery-console/724#post_8</link>
-        <pubDate>Sun, 10 Aug 2025 12:40:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3181</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside KVM/qemu,Linux mint HOST OS</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Which KVM libvirt XML file did you use?</p>
-<p>Can be a KVM configuration issue on the host operating system.</p>
-<p>Try running Debian or some other non-Kicksecure based operating system inside the VM - same issue?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206#post_3</link>
-        <pubDate>Sun, 10 Aug 2025 09:24:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3180</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside KVM/qemu,Linux mint HOST OS</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>kicksecure as ISO installed or the libvirt version?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206#post_2</link>
-        <pubDate>Sun, 10 Aug 2025 02:43:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3179</guid>
-      </item>
-      <item>
-        <title>Kicksecure inside KVM/qemu,Linux mint HOST OS</title>
-        <dc:creator><![CDATA[@nolimit]]></dc:creator>
-        <description><![CDATA[ <p>hey I cant configure to get a network connection with KVM even tho It says I have a active connection and an ip but when starting the browser no internet at all… , When i run system check this error comes up</p>
-<pre><code class="lang-auto"> "ERROR: check network interfaces Result: No external network interface found.
-
-Debugging information:
-Command
-ip -o addr show scope global
-did not show any output
-
-If this error happens only during upgrading or is transient this error can be safely ignored. 
-If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: " 
-
-
-And when i run systemctl this is what I get --
-
-UNIT FILE                                                                           STATE           PRESET  
-proc-sys-fs-binfmt_misc.automount                                                   static          -       
--.mount                                                                             generated       -       
-boot.mount                                                                          generated       -       
-dev-hugepages.mount                                                                 static          -       
-dev-mqueue.mount                                                                    static          -       
-proc-sys-fs-binfmt_misc.mount                                                       disabled        disabled
-sys-fs-fuse-connections.mount                                                       static          -       
-sys-kernel-config.mount                                                             static          -       
-sys-kernel-debug.mount                                                              static          -       
-sys-kernel-tracing.mount                                                            static          -       
-acpid.path                                                                          enabled         enabled 
-systemd-ask-password-console.path                                                   static          -       
-systemd-ask-password-wall.path                                                      static          -       
-session-1.scope                                                                     transient       -       
-accounts-daemon.service                                                             enabled         enabled 
-acpi-support.service                                                                enabled         enabled 
-acpid.service                                                                       disabled        enabled 
-apparmor.service                                                                    enabled         enabled 
-apt-daily-upgrade.service                                                           static          -       
-apt-daily.service                                                                   static          -       
-autovt@.service                                                                     alias           -       
-blk-availability.service                                                            enabled         enabled 
-bootclockrandomization.service                                                      enabled         enabled 
-canary.service                                                                      enabled         enabled 
-console-getty.service                                                               disabled        disabled
-console-setup.service                                                               enabled         enabled 
-container-getty@.service                                                            static          -       
-cryptdisks-early.service                                                            masked          enabled 
-cryptdisks.service                                                                  masked          enabled 
-dbus-fi.w1.wpa_supplicant1.service                                                  alias           -       
-dbus-org.freedesktop.hostname1.service                                              alias           -       
-dbus-org.freedesktop.locale1.service                                                alias           -       
-dbus-org.freedesktop.login1.service                                                 alias           -       
-dbus-org.freedesktop.nm-dispatcher.service                                          alias           -       
-dbus-org.freedesktop.timedate1.service                                              alias           -       
-dbus.service                                                                        static          -       
-debug-shell.service                                                                 disabled        disabled
-display-manager.service                                                             alias           -       
-dist-skel-first-boot.service                                                        enabled         enabled 
-dm-event.service                                                                    static          -       
-dpkg-db-backup.service                                                              static          -       
-dracut-cmdline.service                                                              static          -       
-dracut-initqueue.service                                                            static          -       
-dracut-mount.service                                                                static          -       
-dracut-pre-mount.service                                                            static          -       
-dracut-pre-pivot.service                                                            static          -       
-dracut-pre-trigger.service                                                          static          -       
-dracut-pre-udev.service                                                             static          -       
-dracut-shutdown-onfailure.service                                                   static          -       
-dracut-shutdown.service                                                             static          -       
-e2scrub@.service                                                                    static          -       
-e2scrub_all.service                                                                 static          -       
-e2scrub_fail@.service                                                               static          -       
-e2scrub_reap.service                                                                enabled         enabled 
-emergency.service                                                                   static          -       
-flatpak-system-helper.service                                                       static          -       
-fstrim.service                                                                      static          -       
-fwupd-offline-update.service                                                        static          -       
-fwupd-refresh.service                                                               static          -       
-fwupd.service                                                                       static          -       
-gdomap.service                                                                      generated       -       
-getty-static.service                                                                static          -       
-getty@.service                                                                      enabled         enabled 
-harden-module-loading.service                                                       disabled        disabled
-haveged.service                                                                     enabled         enabled 
-hide-hardware-info.service                                                          disabled        disabled
-hwclock.service                                                                     masked          enabled 
-initrd-cleanup.service                                                              static          -       
-initrd-parse-etc.service                                                            static          -       
-initrd-switch-root.service                                                          static          -       
-initrd-udevadm-cleanup-db.service                                                   static          -       
-jitterentropy-rngd.service                                                          alias           -       
-jitterentropy.service                                                               enabled         enabled 
-keyboard-setup.service                                                              enabled         enabled 
-kmod-static-nodes.service                                                           static          -       
-kmod.service                                                                        alias           -       
-leapctl@.service                                                                    enabled         enabled 
-legacy-dist.service                                                                 enabled         enabled 
-lightdm.service                                                                     enabled         enabled 
-live-config.service                                                                 enabled         enabled 
-live-mode-apparmor.service                                                          enabled         enabled 
-livecheck-lsblk.service                                                             enabled         enabled 
-lm-sensors.service                                                                  enabled         enabled 
-lvm2-lvmpolld.service                                                               static          -       
-lvm2-monitor.service                                                                enabled         enabled 
-man-db.service                                                                      static          -       
-modprobe@.service                                                                   static          -       
-NetworkManager-dispatcher.service                                                   enabled         enabled 
-NetworkManager-wait-online.service                                                  enabled         enabled 
-NetworkManager.service                                                              enabled         enabled 
-nm-priv-helper.service                                                              static          -       
-nvmefc-boot-connections.service                                                     enabled         enabled 
-nvmf-autoconnect.service                                                            enabled         enabled 
-nvmf-connect@.service                                                               static          -       
-openvpn-client@.service                                                             disabled        enabled 
-openvpn-server@.service                                                             disabled        enabled 
-openvpn.service                                                                     enabled         enabled 
-openvpn@.service                                                                    disabled        enabled 
-orca-kill-at-shutdown.service                                                       disabled        disabled
-pam_namespace.service                                                               static          -       
-panic-on-oops.service                                                               enabled         enabled 
-permission-hardener.service                                                         disabled        disabled
-polkit.service                                                                      static          -       
-privleapd.service                                                                   enabled         enabled 
-proc-hidepid.service                                                                disabled        disabled
-procps.service                                                                      alias           -       
-quotaon.service                                                                     static          -       
-rads-block-display-manger.service                                                   enabled         enabled 
-rads.service                                                                        enabled         enabled 
-rc-local.service                                                                    static          -       
-rc.service                                                                          masked          enabled 
-rcS.service                                                                         masked          enabled 
-remount-secure.service                                                              disabled        disabled
-remove-system-map.service                                                           enabled         enabled 
-repository-dist-initializer.service                                                 enabled         enabled 
-rescue.service                                                                      static          -       
-rtkit-daemon.service                                                                disabled        enabled 
-sdwdate-gui-shutdown-notify.service                                                 enabled         enabled 
-sdwdate-pre.service                                                                 enabled         enabled 
-sdwdate-start-anondate-set-file-watcher.service                                     enabled         enabled 
-sdwdate.service                                                                     enabled         enabled 
-serial-getty@.service                                                               disabled        enabled 
-smartd.service                                                                      alias           -       
-smartmontools.service                                                               enabled         enabled 
-spice-vdagent.service                                                               alias           -       
-spice-vdagentd.service                                                              indirect        enabled 
-sudo.service                                                                        masked          enabled 
-swap-file-creator.service                                                           enabled         enabled 
-sysfsconf.service                                                                   alias           -       
-sysfsutils.service                                                                  generated       -       
-system-update-cleanup.service                                                       static          -       
-systemd-ask-password-console.service                                                static          -       
-systemd-ask-password-wall.service                                                   static          -       
-systemd-backlight@.service                                                          static          -       
-systemd-binfmt.service                                                              static          -       
-systemd-boot-check-no-failures.service                                              disabled        disabled
-systemd-cryptsetup@luks\x2d1e928d4d\x2d106e\x2d42ab\x2db638\x2d220de0196d7c.service generated       -       
-systemd-exit.service                                                                static          -       
-systemd-firstboot.service                                                           static          -       
-systemd-fsck-root.service                                                           enabled-runtime enabled 
-systemd-fsck@.service                                                               static          -       
-systemd-fsckd.service                                                               static          -       
-systemd-halt.service                                                                static          -       
-systemd-hibernate-resume@.service                                                   static          -       
-systemd-hibernate.service                                                           static          -       
-systemd-hostnamed.service                                                           static          -       
-systemd-hybrid-sleep.service                                                        static          -       
-systemd-initctl.service                                                             static          -       
-systemd-journal-flush.service                                                       static          -       
-systemd-journald.service                                                            static          -       
-systemd-journald@.service                                                           static          -       
-systemd-kexec.service                                                               static          -       
-systemd-localed.service                                                             static          -       
-systemd-logind.service                                                              static          -       
-systemd-machine-id-commit.service                                                   static          -       
-systemd-modules-load.service                                                        static          -       
-systemd-network-generator.service                                                   disabled        enabled 
-systemd-networkd-wait-online.service                                                disabled        disabled
-systemd-networkd-wait-online@.service                                               disabled        enabled 
-systemd-networkd.service                                                            disabled        enabled 
-systemd-pcrphase-initrd.service                                                     static          -       
-systemd-pcrphase-sysinit.service                                                    static          -       
-systemd-pcrphase.service                                                            static          -       
-systemd-poweroff.service                                                            static          -       
-systemd-pstore.service                                                              enabled         enabled 
-systemd-quotacheck.service                                                          static          -       
-systemd-random-seed.service                                                         static          -       
-systemd-reboot.service                                                              static          -       
-systemd-remount-fs.service                                                          enabled-runtime enabled 
-systemd-repart.service                                                              static          -       
-systemd-rfkill.service                                                              static          -       
-systemd-suspend-then-hibernate.service                                              static          -       
-systemd-suspend.service                                                             static          -       
-systemd-sysctl.service                                                              static          -       
-systemd-sysext.service                                                              disabled        enabled 
-systemd-sysusers.service                                                            static          -       
-systemd-time-wait-sync.service                                                      disabled        disabled
-systemd-timedated.service                                                           static          -       
-systemd-tmpfiles-clean.service                                                      static          -       
-systemd-tmpfiles-setup-dev.service                                                  static          -       
-systemd-tmpfiles-setup.service                                                      static          -       
-systemd-udev-settle.service                                                         static          -       
-systemd-udev-trigger.service                                                        static          -       
-systemd-udevd.service                                                               static          -       
-systemd-update-utmp-runlevel.service                                                static          -       
-systemd-update-utmp.service                                                         static          -       
-systemd-user-sessions.service                                                       static          -       
-systemd-volatile-root.service                                                       static          -       
-timesanitycheck.service                                                             enabled         enabled 
-tor.service                                                                         enabled         enabled 
-tor@.service                                                                        indirect        enabled 
-tor@default.service                                                                 enabled-runtime enabled 
-udev.service                                                                        alias           -       
-udisks2.service                                                                     enabled         enabled 
-upower.service                                                                      disabled        enabled 
-user-runtime-dir@.service                                                           static          -       
-user@.service                                                                       static          -       
-uuidd.service                                                                       indirect        enabled 
-virtualbox-guest-utils.service                                                      enabled         enabled 
-wpa_supplicant-nl80211@.service                                                     disabled        enabled 
-wpa_supplicant-wired@.service                                                       disabled        enabled 
-wpa_supplicant.service                                                              enabled         enabled 
-wpa_supplicant@.service                                                             disabled        enabled 
-x11-common.service                                                                  masked          enabled 
-machine.slice                                                                       static          -       
-system-systemd\x2dcryptsetup.slice                                                  static          -       
-user.slice                                                                          static          -       
-acpid.socket                                                                        enabled         enabled 
-dbus.socket                                                                         static          -       
-dm-event.socket                                                                     enabled         enabled 
-lvm2-lvmpolld.socket                                                                enabled         enabled 
-spice-vdagentd.socket                                                               static          -       
-syslog.socket                                                                       static          -       
-systemd-fsckd.socket                                                                static          -       
-systemd-initctl.socket                                                              static          -       
-systemd-journald-audit.socket                                                       static          -       
-systemd-journald-dev-log.socket                                                     static          -       
-systemd-journald-varlink@.socket                                                    static          -       
-systemd-journald.socket                                                             static          -       
-systemd-journald@.socket                                                            static          -       
-systemd-networkd.socket                                                             disabled        enabled 
-systemd-rfkill.socket                                                               static          -       
-systemd-udevd-control.socket                                                        static          -       
-systemd-udevd-kernel.socket                                                         static          -       
-uuidd.socket                                                                        enabled         enabled 
-basic.target                                                                        static          -       
-blockdev@.target                                                                    static          -       
-bluetooth.target                                                                    static          -       
-boot-complete.target                                                                static          -       
-cryptsetup-pre.target                                                               static          -       
-cryptsetup.target                                                                   static          -       
-ctrl-alt-del.target                                                                 alias           -       
-default.target                                                                      alias           -       
-emergency.target                                                                    static          -       
-exit.target                                                                         disabled        disabled
-factory-reset.target                                                                static          -       
-final.target                                                                        static          -       
-first-boot-complete.target                                                          static          -       
-getty-pre.target                                                                    static          -       
-getty.target                                                                        static          -       
-graphical.target                                                                    static          -       
-halt.target                                                                         disabled        disabled
-hibernate.target                                                                    static          -       
-hybrid-sleep.target                                                                 static          -       
-initrd-fs.target                                                                    static          -       
-initrd-root-device.target                                                           static          -       
-initrd-root-fs.target                                                               static          -       
-initrd-switch-root.target                                                           static          -       
-initrd-usr-fs.target                                                                static          -       
-initrd.target                                                                       static          -       
-initrd.target                                                                       static          -       
-integritysetup-pre.target                                                           static          -       
-integritysetup.target                                                               static          -       
-kexec.target                                                                        disabled        disabled
-local-fs-pre.target                                                                 static          -       
-local-fs.target                                                                     static          -       
-multi-user.target                                                                   static          -       
-network-online.target                                                               static          -       
-network-pre.target                                                                  static          -       
-network.target                                                                      static          -       
-nss-lookup.target                                                                   static          -       
-nss-user-lookup.target                                                              static          -       
-nvmf-connect.target                                                                 static          -       
-paths.target                                                                        static          -       
-poweroff.target                                                                     disabled        disabled
-printer.target                                                                      static          -       
-reboot.target                                                                       disabled        enabled 
-remote-cryptsetup.target                                                            disabled        enabled 
-remote-fs-pre.target                                                                static          -       
-remote-fs.target                                                                    enabled         enabled 
-remote-veritysetup.target                                                           disabled        enabled 
-rescue.target                                                                       static          -       
-rpcbind.target                                                                      static          -       
-runlevel0.target                                                                    alias           -       
-runlevel1.target                                                                    alias           -       
-runlevel2.target                                                                    alias           -       
-runlevel3.target                                                                    alias           -       
-runlevel4.target                                                                    alias           -       
-runlevel5.target                                                                    alias           -       
-runlevel6.target                                                                    alias           -       
-shutdown.target                                                                     static          -       
-sigpwr.target                                                                       static          -       
-sleep.target                                                                        static          -       
-slices.target                                                                       static          -       
-smartcard.target                                                                    static          -       
-sockets.target                                                                      static          -       
-sound.target                                                                        static          -       
-suspend-then-hibernate.target                                                       static          -       
-suspend.target                                                                      static          -       
-swap.target                                                                         static          -       
-sysinit-post.target                                                                 enabled         enabled 
-sysinit.target                                                                      static          -       
-system-update-pre.target                                                            static          -       
-system-update.target                                                                static          -       
-time-set.target                                                                     static          -       
-time-sync.target                                                                    static          -       
-timers.target                                                                       static          -       
-umount.target                                                                       static          -       
-usb-gadget.target                                                                   static          -       
-veritysetup-pre.target                                                              static          -
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206#post_1</link>
-        <pubDate>Sun, 10 Aug 2025 00:43:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3178</guid>
-      </item>
-      <item>
-        <title>Is zsh the default shell globally for useradd?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>See <a href="https://www.kicksecure.com/wiki/Dev/About_Debian_Packaging#Modifying_Default_Configuration_of_Third_Party_Packages">Modifying Default Configuration of Third Party Packages</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/is-zsh-the-default-shell-globally-for-useradd/1200#post_5</link>
-        <pubDate>Sat, 09 Aug 2025 05:08:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3175</guid>
       </item>
   </channel>
 </rss>
