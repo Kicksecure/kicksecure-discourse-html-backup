@@ -7,6 +7,458 @@
       <item>
         <title>How is Mullvad Browser supposed to be used in Qubes</title>
         <dc:creator><![CDATA[@cough]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for response but I already tried to create a desktop file like that. When you launch in a disposable you get this error:</p>
+<pre data-code-wrap="bash"><code class="lang-bash">Mullvad Browser is currently not installed. 
+(Folder /home/user/.mullvadbrowser/mullvad-browser does not exist.)
+Start Mullvad Browser Downloader (by Kicksecure developers)?
+</code></pre>
+<p>You need to launch in the appvm (disposable) template first where it links from /var/cache/tb-binary to $HOME. And when updating it becomes a pain because you also always have to launch the appvm first.</p>
+<p>Currently I just copy at startup from /var/cache to $HOME and use the “normal” desktop file that looks like this</p>
+<pre><code class="lang-auto">[Desktop Entry]
+Type=Application
+Name=Mullvad Browser
+GenericName=Web Browser
+Comment=Mullvad Browser  is +1 for privacy and −1 for mass surveillance
+Categories=Network;WebBrowser;Security;
+Exec=sh -c '"/home/user/.mullvadbrowser/mullvad-browser/Browser/start-mullvad-browser" || ([ !  -x "/home/user/.mullvadbrowser/mullvad-browser/Browser/start-mullvad-browser" ] &amp;&amp; "$(dirname "$*")"/Browser/start-mullvad-browser)' dummy %k
+X-MullvadBrowser-ExecShell=./Browser/start-mullvad-browser --detach
+Icon=/home/user/.mullvadbrowser/mullvad-browser/Browser/browser/chrome/icons/default/default128.png
+StartupNotify=true
+StartupWMClass=Mullvad Browser
+
+</code></pre>
+<p>I guess that kinda makes a unique fingerprint?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_5</link>
+        <pubDate>Tue, 26 Aug 2025 22:30:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3302</guid>
+      </item>
+      <item>
+        <title>How is Mullvad Browser supposed to be used in Qubes</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Mullvad Browser Downloader by Kicksecure developers doesn’t create a <code>.desktop</code> file at time of writing (yet) at time of writing indeed.</p>
+<p>I added a new chapter just now on how to create a <code>.desktop</code> file.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Mullvad_Browser">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1756200625" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener" title="05:24PM - 26 August 2025">Kicksecure – 26 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener">Mullvad Browser</a></h3>
+
+  <p>How to install Mullvad Browser in Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>We’re not yet on Qubes R4.3 yet either. Still on R4.2 at time of writing.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_4</link>
+        <pubDate>Tue, 26 Aug 2025 17:48:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3301</guid>
+      </item>
+      <item>
+        <title>How is Mullvad Browser supposed to be used in Qubes</title>
+        <dc:creator><![CDATA[@cough]]></dc:creator>
+        <description><![CDATA[ <p>I installed kicksecure using the community template in qubes.</p>
+<p>And installed the mullvadbrowser with tb-updater</p>
+<p>I never knew about browser-choice will try it</p>
+<p>EDIT: Can’t use it I am not on 4.3 yet</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_3</link>
+        <pubDate>Tue, 26 Aug 2025 10:35:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3299</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<blockquote>
+<p>Webcams</p>
+</blockquote>
+<p><a href="https://thehackernews.com/2025/08/linux-based-lenovo-webcams-flaw-can-be.html">https://thehackernews.com/2025/08/linux-based-lenovo-webcams-flaw-can-be.html</a></p>
+</blockquote>
+</aside>
+<p>I am not sure this is something we can address in context of the threat model of USBGuard.</p>
+<p>It is not an issue specific to webcams. We need to read the original source, not the news report. From the original report…</p>
+<p>Quote <a href="https://eclypsium.com/blog/badcam-now-weaponizing-linux-webcams/" class="inline-onebox">BadCam: Turning Linux Webcams Into BadUSB Attack Tools - Eclypsium | Supply Chain Security for the Modern Enterprise</a></p>
+<blockquote>
+<ul>
+<li>Two attack paths are possible: 1) An attacker can send someone a backdoored webcam (or, with physical access, attach a weaponized webcam to a computer) or 2) remotely compromise a computer and infect the Linux-based webcam to perform attacks.</li>
+</ul>
+</blockquote>
+<p>There is nothing very specific about webcams in this report. Yes, it happened with a webcam. But it could also been a different class of devices.</p>
+<p>For instance, the firmware of a hard drive has also been compromised. See <a href="https://www.kicksecure.com/wiki/Backdoor#Hard_Drive_Firmware_Trojan">Hard Drive Firmware Trojan</a>.</p>
+<p>eclypsium is providing a nice illustrative image <a href="https://eclypsium.com/wp-content/uploads/badcam-diagram.png">badcam-diagram.png</a>. Their first step starts with “initial compromise”.</p>
+<blockquote>
+<p>attacker gains remote access to victim’s PC through phising, malware or software exploit</p>
+</blockquote>
+<p>They then discover a vulnerable device, that supports firmware update but does not verify firmware signature (webcam) and then starts abusing that device.</p>
+<p>The threat model of USBGuard is a different one: The PC is not compromised and an attacker attaches a malicious USB device such as a USB Rubber Ducky.</p>
+<hr>
+<p><a href="https://github.com/Kicksecure/security-misc?tab=readme-ov-file#bluetooth-hardening">Bluetooth Hardening</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_13</link>
+        <pubDate>Tue, 26 Aug 2025 08:04:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3298</guid>
+      </item>
+      <item>
+        <title>NetworkManager: Disable automatic connection to wired networks?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t know if wired connections get notifications or not, my “network” (alright, it’s a cellular hotspot with some laptops connected to it) is purely wireless so I don’t really work with wired connections much. I would kind of hope NetworkManager would allow “trust on first use” with wired networks if at all possible though, similar to how it treats WiFi. Then you could explicitly connect the first time but not subsequent times, thus avoiding things like a USB device pretending to be Ethernet in order to hack things.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260#post_3</link>
+        <pubDate>Tue, 26 Aug 2025 03:49:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3297</guid>
+      </item>
+      <item>
+        <title>Protecting the Kernel Command Line</title>
+        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
+        <description><![CDATA[ <p>I was not aware of “Sovereign Boot” sounds much needed since UEFI is literally the devil</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/protecting-the-kernel-command-line/1251#post_2</link>
+        <pubDate>Tue, 26 Aug 2025 03:47:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3296</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Is this correct for the classifications?</p>
+</blockquote>
+</aside>
+<p>That looks correct to me at first glance.</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>If so is this format correct and would it only block RNDIS based devices such as Ethernet USB adapters?</p>
+</blockquote>
+</aside>
+<p>I don’t think the <code>0x</code> at the start of <code>0xef</code> is correct, and <code>with-interface-type</code> should just be <code>with-interface</code> according to <a href="https://usbguard.github.io/documentation/rule-language" class="inline-onebox" rel="noopener nofollow ugc">Rule Language | USBGuard</a>. You’d probably want:</p>
+<pre><code class="lang-auto">reject with-interface ef:04:01
+</code></pre>
+<p>Or, better yet since RNDIS in general is dangerous I believe:</p>
+<pre><code class="lang-auto">reject with-interface ef:04:*
+</code></pre>
+<p>(Or should that be <code>reject with-interface one-of { ef:04:* }</code>? The documentation doesn’t make it entirely clear to me…)</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Well does that mean that adapters aimed at cross‑platform use (Linux/macOS, embedded boards, Android) often implement CDC‑ECM or vendor‑specific classes instead of RNDIS?<br>
+Is it safe to say that the standard is CDC‑ECM in most Ethernet USB adapters rather then RDNIS?</p>
+</blockquote>
+</aside>
+<p>I have no idea. I know Linux has supported RNDIS for a while and that every Android device I’ve ever tethered to uses it for USB Ethernet.</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>However I also read this though from 2023 so I dont know?</p>
+</blockquote>
+</aside>
+<p>This is about using USB Ethernet adapters <em>on</em> Android. I’m talking about Android phones presenting themselves as Ethernet devices to laptops (this weird-sounding feature is called USB tethering). That’s what uses RNDIS all the times I’ve seen.</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="11" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Couldn’t you just harden CUPS to disable remote printing and turn off printer sharing among other hardening or you talking the CUPS service in general?</p>
+</blockquote>
+</aside>
+<p>Hardening CUPS might be possible, but I don’t know how much I trust it. I linked an article by a security research about CUPS above, he has an <em>extremely</em> low opinion of it, and given that he just woke up one day, decided to hunt for a CVE in CUPS, and was rewarded with a severity 9.9 CVE after a couple days of research, I’d argue his opinion is probably well-supported.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_12</link>
+        <pubDate>Tue, 26 Aug 2025 03:44:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3295</guid>
+      </item>
+      <item>
+        <title>NetworkManager: Disable automatic connection to wired networks?</title>
+        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
+        <description><![CDATA[ <p>Let me ask you this though if you set it to manual connection for NetworkManager or what ever equivalent setting. Would a device that is already wired in before the machine starts still require manual connecting or would it get loaded. Honestly I would find it annoying if I plugged in ethernet to my device to my router then booted up my system to then have to manual connect. You would have to see test this to see how that works.</p>
+<p>Besides <code>xfce4-notifyd</code> or whatever the desktop nofication popup for telling you wifi networks available I don’t think it will notify that a new wired is available?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260#post_2</link>
+        <pubDate>Tue, 26 Aug 2025 03:37:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3294</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>RNDIS aside, one could argue that if a device presented itself as something normal <em>and</em> a USB Ethernet device, that could be used to mount an attack against running services on the system. Assuming Kicksecure has no open ports by default (I wouldn’t expect it to, but haven’t actually checked), this probably isn’t much of a concern, but if someone’s running something like CUPS on their machine, LAN access to the machine could be enough to take it over completely</p>
+</blockquote>
+</aside>
+<p>Couldn’t you just harden CUPS to disable remote printing and turn off printer sharing among other hardening or you talking the CUPS service in general?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_11</link>
+        <pubDate>Tue, 26 Aug 2025 03:25:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3293</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>There are other USB Ethernet protocols besides RNDIS, I don’t have as much of a problem with the protocols there</p>
+</blockquote>
+</aside>
+<p>Ok, so I wanted to chime in on this discussion. I saw this and it made me do some digging into this.<br>
+Is this correct for the classifications?</p>
+<blockquote>
+<p><a href="https://www.usb.org/defined-class-codes#anchor_BaseClassEFh" class="inline-onebox" rel="noopener nofollow ugc">Defined Class Codes | USB-IF</a></p>
+</blockquote>
+<pre><code class="lang-auto">    USB‑IF class  0xEF (Miscellaneous)
+    Subclass    0x04 (RNDIS)
+    Protocol    0x01 (RNDIS‑over‑Ethernet)
+</code></pre>
+<p>If so is this format correct and would it only block RNDIS based devices such as Ethernet USB adapters?</p>
+<pre><code class="lang-auto"># Block any USB device that advertises the RNDIS Ethernet interface
+reject with-interface-type 0xef:04:01
+</code></pre>
+<p>Or would you need a wildcard if the device has its interface not as interface <span class="hashtag-raw">#0</span> or presents the class/subclass further down the descriptor?<br>
+<code>reject interface all-of { 0xef 0x04 0x01 }</code></p>
+<p><strong>How common is RNDIS for USB‑Ethernet adapters?</strong></p>
+<p>Wikipedia states RNDIS is “a Microsoft proprietary protocol used mostly on top of USB”. What I also read is that inexpensive adapters sold for Windows PCs expose the RNDIS class because Windows already includes a built‑in RNDIS driver, making the device “plug and play”.</p>
+<p>Well does that mean that adapters aimed at cross‑platform use (Linux/macOS, embedded boards, Android) often implement CDC‑ECM or vendor‑specific classes instead of RNDIS?<br>
+Is it safe to say that the standard is CDC‑ECM in most Ethernet USB adapters rather then RDNIS?</p>
+<blockquote>
+<p><a href="https://old.reddit.com/r/embedded/comments/aeqxbl/which_usbethernet_standard_should_i_implement/edrrd03/" rel="noopener nofollow ugc">https://old.reddit.com/r/embedded/comments/aeqxbl/which_usbethernet_standard_should_i_implement/edrrd03/</a></p>
+</blockquote>
+<p>However I also read this though from 2023 so I dont know?</p>
+<blockquote>
+<p><a href="https://jordemort.dev/blog/why-android-cant-use-cdc-ethernet/" class="inline-onebox" rel="noopener nofollow ugc">Why Android can't use CDC Ethernet</a></p>
+</blockquote>
+<p>You would need see what the standard that is found commonly on the market? My guess is in cheap Chinese brands or adapters use RDNIS?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_10</link>
+        <pubDate>Tue, 26 Aug 2025 03:23:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3292</guid>
+      </item>
+      <item>
+        <title>NetworkManager: Disable automatic connection to wired networks?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Random idea that hit me while writing <a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/7:">https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/7:</a> one potential threat vector for USB devices is if they provide a virtual Ethernet interface. This would allow the device to attack arbitrary services with open ports on the host. A firewall would help here (maybe, depends on whether it blocked the LAN or not), but what might help even more is if NetworkManager didn’t automatically connect the system to any wired network interfaces it sees.</p>
+<p>Would it be desirable to turn off this wired autoconnect feature by default? Users could still use wired networks, they would just have to explicitly connect to them using the network management widget.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260#post_1</link>
+        <pubDate>Tue, 26 Aug 2025 03:20:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3291</guid>
+      </item>
+      <item>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1249">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>We should not have a single concern about what xyz wants to have on his laptop. Our concern is to deliver the best security possible for the end user while he’s using our OS/products. If something doesn’t work unless you allow insecurities, it is unsupported.</p>
+</blockquote>
+</aside>
+<p>In general I understand this sentiment, but in practice these kinds of capabilities are needed to develop Kicksecure itself. It’s difficult to say “XYZ should not be supported on Kicksecure” when Kicksecure depends somewhat on XYZ to exist.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1249">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>The user is going to need to play with those on bare metal VM or emulator. Or buy insecure, testing purpose hardware (secure OS/hardware doesn’t support this).</p>
+</blockquote>
+</aside>
+<p>Neither is an option for many Kicksecure development workflows because the developer must test specifically how the OS behaves on specific physical hardware platforms. Virtualization isn’t useful here. For example, <code>emerg-shutdown</code>, which is intended to be a component of Kicksecure 18, was triggering a bug that caused physical hardware with an Intel GPU to panic rather than shutting down when the emergency condition was triggered. This didn’t occur in a VM because the VM did not have an Intel GPU. Being able to discover and fix this bug is a vital part of why <code>emerg-shutdown</code> will actually be usable once development is finished.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_7</link>
+        <pubDate>Tue, 26 Aug 2025 02:27:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3290</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t think we harden specific “third-party” services yet, but we definitely use these kinds of things for applicable services in Kicksecure and Whonix. See <a href="https://github.com/Kicksecure/sdwdate/blob/master/usr/lib/systemd/system/sdwdate.service" class="inline-onebox" rel="noopener nofollow ugc">sdwdate/usr/lib/systemd/system/sdwdate.service at master · Kicksecure/sdwdate · GitHub</a> for instance, there’s a whole battery of hardening options enabled here, including a syscall filter.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_2</link>
+        <pubDate>Tue, 26 Aug 2025 02:21:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3289</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>USB to VGA?</p>
+</blockquote>
+</aside>
+<p>This requires third-party kernel drivers (DisplayLink), so it would be a pain to get this sort of thing to work anyway. I don’t see a problem with leaving this disabled by default.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>USB joysticks?</p>
+</blockquote>
+</aside>
+<p>Agreed, leave disabled by default.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Consider to allow only 3 and above USB version?</p>
+</blockquote>
+</aside>
+<p>Not sure if this even can be done with USBGuard, but it’s an interesting question to think about. USB 2, as I understand it, simulcasts data packets to <em>all</em> USB 2 ports on the system, then expects devices to ignore packets that aren’t addressed to them. This allows passively stealing data from the system by logging packets that weren’t addressed to the logging device. USB 3 only sends data to the individual devices it is intended for, thus this potentially reduces risk a bit. But at the same time, <em>lots</em> of devices are USB 2 only (I don’t think I’ve seen a USB 3 keyboard in my life), so this would probably break way too much. If we were to offer it, it should be something that is opt-in, not opt-out, in my opinion.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_9</link>
+        <pubDate>Tue, 26 Aug 2025 02:18:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3288</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="MetalMoxie" data-post="6" data-topic="1248" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/51bf81/48.png" class="avatar"> MetalMoxie:</div>
+<blockquote>
+<p>Allow us to chose just like with the web browsers.</p>
+</blockquote>
+</aside>
+<p>Agreed. If users can’t choose what to use or not use on their own systems, something is badly wrong. We’re discussing what to allow or disallow <em>by default</em>, the user will have free reign to override the defaults however they want.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_8</link>
+        <pubDate>Tue, 26 Aug 2025 02:02:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3287</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p><a href="https://thehackernews.com/2025/08/linux-based-lenovo-webcams-flaw-can-be.html" rel="noopener nofollow ugc">https://thehackernews.com/2025/08/linux-based-lenovo-webcams-flaw-can-be.html</a></p>
+</blockquote>
+</aside>
+<p>I’m not really concerned about this because:</p>
+<ul>
+<li>You have to compromise the system to overwrite the camera’s firmware and turn it malicious. By the time you’ve compromised the system enough to do that, it’s already “game over”.</li>
+<li>The camera has to present itself as a keyboard device in order to attack the system. If the camera is plugged into the system after boot, USBGuard will see one of two things, depending on how the camera presents itself:
+<ul>
+<li>Either, it will see a camera and a keyboard together, and will thus reject the camera because it combines a human interface device with some other device.</li>
+<li>Or, it will see just a keyboard, in which case if the user has any other USB keyboard already attached, it will reject the keyboard. (If the user doesn’t have a USB keyboard already attached, then it’s “game over”, but if the camera is <em>only</em> presenting itself as a keyboard and not as a camera, it would be able to evade even the current highly strict settings.</li>
+</ul>
+</li>
+<li>If the camera is already plugged into the system at bootup, then it’s “game over”, but again, that would be the case even with the current highly strict settings, and if an attacker is able to compromise a system enough to flash a camera with non-standard firmware, they can probably also control USBGuard and allow the camera to be used so it can be attacked.
+<ul>
+<li>A counter-argument to this is that USBGuard makes an attacker have to take one more step to attack the camera (maybe - does this exploit work even if the system doesn’t the camera? It probably doesn’t…), and that one more step may be enough to thwart an attacker that doesn’t know they need to take that step.</li>
+</ul>
+</li>
+</ul>
+<aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Same as webcams they can be used to record passwords and text via acoustic keyboard eavesdropping with tools like <a href="https://github.com/ggerganov/kbd-audio" rel="noopener nofollow ugc">Keytap2</a>. The best thing if someone was concerned would be to unplug these ribbon cables from their computer or de-solder them if its a newer (landfill device) where everything is soldered in.</p>
+</blockquote>
+</aside>
+<p>I’m not sure how I see how this applies to the threat model USBGuard is intended to help with - Keytap-style attacks require either compromising the user’s computer (in which case, why bother with Keytap, just install a keylogger and be done), or requires the attacker to be able to place their own microphone physically close to the victim (in which case the victim’s computer isn’t the one the microphone is plugged into).</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Arduinos can indeed be used as MIDI interfaces and are used in hacking peripheral devices</p>
+</blockquote>
+</aside>
+<p>I don’t really understand how that would work but it sounds neat, maybe you can share a link?</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>No brainer here Bluetooth is unsafe</p>
+</blockquote>
+</aside>
+<p>I don’t think it’s quite that cut-and-dried, but I agree in general that individual Bluetooth devices can have questionable security (as is true with wireless devices in general sadly) and I would not rely on them in a high-risk situation. That being said, I personally use a Bluetooth mouse and keyboard with my workstation, but I also don’t have a threat model that includes nearby skilled attackers with radio equipment.</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>I don’t get it considering there’s good amount of people that use them to get around Intel ME. Many people including myself would remove the WiFi card and us an external Ethernet USB Adapter as a mitigation technique.</p>
+</blockquote>
+</aside>
+<p>I’m not referencing the idea of USB Ethernet <em>in general</em> when calling it very high-risk, though I do consider it a risk as I’ll explain in a bit. The main problem with USB Ethernet is the implementation - RNDIS (which is used for most Android USB tethering sadly) reportedly has serious protocol-level vulnerabilities, so bad that the kernel maintainer who is arguably second-in-command to Linux Torvalds has tried to remove support for the protocol from Linux entirely, three times. He hasn’t shared <em>what</em> the vulnerabilities are yet, but I think he probably knows what he’s talking about and wouldn’t try to do this if the protocol wasn’t legitimately unsafe. There are other USB Ethernet protocols besides RNDIS, I don’t have as much of a problem with the protocols there.</p>
+<p>RNDIS aside, one could argue that if a device presented itself as something normal <em>and</em> a USB Ethernet device, that could be used to mount an attack against running services on the system. Assuming Kicksecure has no open ports by default (I wouldn’t expect it to, but haven’t actually checked), this probably isn’t much of a concern, but if someone’s running something like CUPS on their machine, LAN access to the machine could be enough to take it over completely, if one security researcher is to be believed. See the link about CUPS vulnerabilities in the original post. A device could present itself as USB Ethernet to gain LAN access to the machine, assuming the machine automatically connected to the “network” presented by the device (I believe NetworkManager does this by default).</p>
+<p>I do not deny the very good usability benefits of USB Ethernet, but I think in general it presents a significant attack vector from the standpoint of USB devices mounting attacks against a system. I’d prefer if we documented how users can manually allow USB Ethernet, instead of allowing it in general.</p>
+<p>This brings up a potential hardening idea I’ll save for another post, it might be possible to mitigate this risk such that we can allow USB Ethernet by default. (Edit: I filed the post, for those who are interested: <a href="https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260" class="inline-onebox">NetworkManager: Disable automatic connection to wired networks?</a></p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="5" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Malicious USB ethernet devices exist but the general rule of thumb in this manner is don’t buy online and only buy locally from a trusted vendor (brand). Supply chain attack is a real threat but atleast is wouldn’t be targeted to you specifically unlike buying online.</p>
+</blockquote>
+</aside>
+<p>Keep in mind that one threat vector we have to be ready for is a device that looks like one thing to the user but presents itself as something else to the computer. For instance, a malicious pair of USB headphones may present itself to the computer as a USB Ethernet device as well as a USB audio device. Sometimes the malicious device will be one an attacker walks by and plugs in, so the user’s choice of what to buy may not protect them, and the user’s understanding of what they’re plugging into their system may be wrong.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_7</link>
+        <pubDate>Tue, 26 Aug 2025 02:00:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3286</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>So I was learning about the options for Systemd services for restricting or in another word “hardening” services.</p>
+<p>This made me question does Kicksecure deploy certain hardening for it’s services or certain Kicksecure specific services?</p>
+<p>These are some interesting options I will note here:</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateNetwork=" rel="noopener nofollow ugc"><code>PrivateNetwork=yes/no</code></a><br>
+Gives the service its own network namespace. It can’t see or use the host’s network interfaces unless you explicitly bind sockets. Seems useful to prevent leaks or prevent services from being ran without networking?</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivatePIDs=" rel="noopener nofollow ugc"><code>PrivatePIDs=yes/no</code></a><br>
+Gives a service an isolated view of the process table, which is a useful “defense in depth” measure, especially for daemons that don’t need to inspect or manage other system processes.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateTmp=" rel="noopener nofollow ugc"><code>PrivateTmp=yes/no</code></a><br>
+Provides a private /tmp and /var/tmp for the service, isolating it from the host’s temporary directories. One service can’t read temporary files left by another service, which mitigates attacks that rely on guessing or stealing temp‑file names.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#MemoryDenyWriteExecute=" rel="noopener nofollow ugc"><code>MemoryDenyWriteExecute=yes/no</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service. (helps mitigate code‑injection attacks).</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ProtectSystem=" rel="noopener nofollow ugc"><code>ProtectSystem=full/strict/yes</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service.</p>
+<p>There is many others but these few caught my eye.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_1</link>
+        <pubDate>Tue, 26 Aug 2025 01:47:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3284</guid>
+      </item>
+      <item>
+        <title>How is Mullvad Browser supposed to be used in Qubes</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>How are you installing Mullvad Browser? If you install it into a template using Mullvad’s deb repository, it should create a desktop file like most other applications and will be updated along with normal template updates. If you install Mullvad Browser using the <code>browser-choice</code> utility in Kicksecure, it will install the deb repository for you, so that’s probably the easiest way to do it. You can launch it from a template by running <code>browser-choice</code> in a terminal.</p>
+<p>(Note that there is a wiki page for browser-choice at <a href="https://www.kicksecure.com/wiki/Browser-choice" class="inline-onebox" rel="noopener nofollow ugc">Browser Choice - Browser Selection Installer Dialog</a>, but it is very incomplete. Most of the info about it is in the development planning page at <a href="https://www.kicksecure.com/wiki/Dev/browser-choice#criteria_for_inclusion_into_browser_choice" class="inline-onebox" rel="noopener nofollow ugc">Browser Choice</a> which focuses more on how browser-choice works internally.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_2</link>
+        <pubDate>Tue, 26 Aug 2025 01:33:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3283</guid>
+      </item>
+      <item>
+        <title>How is Mullvad Browser supposed to be used in Qubes</title>
+        <dc:creator><![CDATA[@cough]]></dc:creator>
         <description><![CDATA[ <p>There is no .desktop file provided and putting /usr/bin/mulvadbrowser into a .desktop file also does not seem to work properly.</p>
 <p>Only usable way is launching it in a terminal first then basing a dispvm on top of that appvm to use the generated .desktop file. But updating like that is a pain.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_1</link>
@@ -29,15 +481,6 @@
         <link>https://forums.kicksecure.com/t/packages-source-for-app-per-vm/1167#post_2</link>
         <pubDate>Mon, 25 Aug 2025 21:33:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3275</guid>
-      </item>
-      <item>
-        <title>Unsupported Multi/Dual Boot</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <p>Dual boot is not a good idea. If you want Kicksecure seperate from your OS <em>1.</em> use it in a VM or <em>2.</em> Install in on a external drive and boot into when you need to.</p>
-<p>I dont know how you could go about stoping someone from installing a Duel Boot here?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_6</link>
-        <pubDate>Mon, 25 Aug 2025 21:23:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3274</guid>
       </item>
       <item>
         <title>USBGuard - what should we allow or disallow by default?</title>
@@ -310,7 +753,7 @@ As by default passwordless root is enabled in VMs, whitelisting devices in sys-u
         <guid isPermaLink="false">forums.kicksecure.com-post-3271</guid>
       </item>
       <item>
-        <title>Unsupported Multi/Dual Boot</title>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <ul>
 <li><strong>User documentation recommending against dual-boot / multi-boot:</strong> Wiki chapter <a href="https://www.kicksecure.com/wiki/System_Configuration_and_Access#Use_a_Dedicated_Host_Operating_System_and_Computer">Use a Dedicated Host Operating System and Computer</a>.</li>
@@ -321,7 +764,7 @@ As by default passwordless root is enabled in VMs, whitelisting devices in sys-u
 <li><strong>Future:</strong> As we make more progress towards <a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot</a> (<a href="https://forums.kicksecure.com/t/verified-boot-development-discussion/901" class="inline-onebox">Verified Boot - Development Discussion</a>), the issues discussed in <a href="https://forums.kicksecure.com/t/protecting-the-kernel-command-line/1251" class="inline-onebox">Protecting the Kernel Command Line</a> and <a href="https://forums.kicksecure.com/t/no-rescue-mode/1171" class="inline-onebox">No Rescue Mode</a> and this forum thread will organically be considered.</li>
 <li><strong>Solution:</strong> Once hardware becomes available that supports <a href="https://www.kicksecure.com/wiki/Sovereign_Boot" class="inline-onebox">Sovereign Boot</a>, dual/multi boot security concerns can be addressed.</li>
 </ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_5</link>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_5</link>
         <pubDate>Mon, 25 Aug 2025 14:38:20 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3270</guid>
       </item>
@@ -374,7 +817,7 @@ As by default passwordless root is enabled in VMs, whitelisting devices in sys-u
         <guid isPermaLink="false">forums.kicksecure.com-post-3267</guid>
       </item>
       <item>
-        <title>Unsupported Multi/Dual Boot</title>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <p>This aligns with the OS/hardware relation, as I have pointed out (in “Operating System from Heaven”) the insecurity of having a separation between OS and hardware. There is another threat, which is having multiboot, as it poses stability and security issues.</p>
 <p>So it’s like a path of a consistent, homogeneous methodology for security.</p>
@@ -396,29 +839,29 @@ As by default passwordless root is enabled in VMs, whitelisting devices in sys-u
 </blockquote>
 </aside>
 <p>The user is going to need to play with those on bare metal VM or emulator. Or buy insecure, testing purpose hardware (secure OS/hardware doesn’t support this).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_3</link>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_3</link>
         <pubDate>Mon, 25 Aug 2025 07:42:16 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3266</guid>
       </item>
       <item>
-        <title>Unsupported Multi/Dual Boot</title>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Might be worth drawing a line between “security support” and “technical support” here - multiboot may be very valuable for developer use cases (where all operating systems on the system are trusted equally). Such a setup may be discouraged from a security standpoint, but essential for development. I for instance run a multiboot setup on my test laptop, Kubuntu/Lubuntu/Qubes OS/Debian/Arch.</p>
 <p>Qubes OS doesn’t <em>support</em> multiboot, but in practice it can be multibooted pretty easily.</p>
 <p>Also, how would this interact with portable installations? They have some of the same risks, but may be very valuable because they can provide enhanced security even when a user has to use a machine that runs less secure operating systems other times.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_2</link>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_2</link>
         <pubDate>Sun, 24 Aug 2025 17:56:37 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3264</guid>
       </item>
       <item>
-        <title>Unsupported Multi/Dual Boot</title>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
         <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
         <description><![CDATA[ <p>Its not only can cause a usability issue as <a href="https://www.kicksecure.com/wiki/Troubleshooting#Dual_Boot">mentioned here</a>, but its a <a href="https://forum.qubes-os.org/t/multibooting-qubes/18988">security issue</a> as well:</p>
 <blockquote>
 <p>One problem is that when you dual or multiboot, even if you are using encryption on your Qubes installation, /boot is still unprotected and could be maliciously modified by the other OS, possibly leading to Qubes itself being maliciously modified.</p>
 <p>The other problem is firmware security - for example the other system could infect the BIOS firmware, which might enable compromise or spying on the Qubes system.</p>
 </blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot/1249#post_1</link>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_1</link>
         <pubDate>Sun, 24 Aug 2025 17:29:19 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3263</guid>
       </item>
@@ -1055,329 +1498,6 @@ table inet filter {
         <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_15</link>
         <pubDate>Sat, 16 Aug 2025 16:53:11 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3235</guid>
-      </item>
-      <item>
-        <title>Illegal instruction (core dumped)</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>Thank you!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556#post_7</link>
-        <pubDate>Sat, 16 Aug 2025 14:17:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3234</guid>
-      </item>
-      <item>
-        <title>Illegal instruction (core dumped)</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>I used * because I forgot the name of the file. And comment everyline that may disable SMT/AVX/AES with #, save it, exit. Then execute <code>update-grub</code> command, then reboot.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556#post_6</link>
-        <pubDate>Sat, 16 Aug 2025 14:17:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3233</guid>
-      </item>
-      <item>
-        <title>Avoid clearnet traffic in Kicksecure</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>I recommend you to have a dedicated machine as gateway or just use Whonix</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/avoid-clearnet-traffic-in-kicksecure/1055#post_7</link>
-        <pubDate>Sat, 16 Aug 2025 14:14:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3232</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>We can have per-application level firewall control. I am currently using Kicksecure as virtual machines. I don’t think Tor is necessary for Kicksecure. We can have everything Tor into a separate package and allow user to not install it by default.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_14</link>
-        <pubDate>Sat, 16 Aug 2025 14:12:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3230</guid>
-      </item>
-      <item>
-        <title>OpenBSD’s malloc as hardened malloc alternative?</title>
-        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
-        <description><![CDATA[ <p>Thank you!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/openbsd-s-malloc-as-hardened-malloc-alternative/386#post_4</link>
-        <pubDate>Sat, 16 Aug 2025 14:08:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3229</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>That’s weird then… if live-hardener ran, /boot/efi should not be writable when booted in live mode. I’d see if the problem automatically goes away after a reboot (if you haven’t already). If it doesn’t, there’s probably a bug in live-hardener.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_6</link>
-        <pubDate>Fri, 15 Aug 2025 22:48:40 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3227</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@Jac]]></dc:creator>
-        <description><![CDATA[ <p>[root ~]# systemctl status live-hardener.service<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only &gt;<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset&gt;<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, &gt;<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point no&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more in&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hard&gt;<br>
-lines 1-18/18 (END)…skipping…<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_re&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on t&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
-~</p>
-<p>~<br>
-lines 1-18/18 (END)…skipping…<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/ove&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
-~</p>
-<p>~<br>
-lines 1-18/18 (END)…skipping…<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o wor&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
-~<br>
-~<br>
-~<br>
-lines 1-18/18 (END)…skipping…<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o workdir=/var/lib/grub-live/overlay_tmpfs_repo&gt;<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
-~</p>
-<p>~<br>
-lines 1-18/18 (END)…skipping…<br>
-● live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them<br>
-Loaded: loaded (/lib/systemd/system/live-hardener.service; enabled; preset: enabled)<br>
-Active: active (exited) since Fri 2025-08-15 00:30:18 EDT; 23min ago<br>
-Docs: <a href="https://github.com/Kicksecure/grub-live" class="inline-onebox" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</a><br>
-Process: 1137 ExecStart=/usr/libexec/grub-live/live-hardener (code=exited, status=0/SUCCESS)<br>
-Main PID: 1137 (code=exited, status=0/SUCCESS)<br>
-CPU: 107ms</p>
-<p>Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mkdir --parents – /var/lib/grub-live/overlay_tmpfs_repo/2/work<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -t overlay overlay -o lowerdir=/boot -o upperdir=/var/lib/grub-live/overlay_tmpfs_repo/2/upper -o workdir=/var/lib/grub-live/overlay_tmpfs_repo/2/work – /boot<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Success.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: executing: mount -o remount,ro – /boot/efi<br>
-Aug 15 00:30:18 localhost systemd[1]: Finished live-hardener.service - Remounts auxiliary writable filesystems as read-only and applies a tmpfs overlay on them.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]: mount: /boot/efi: mount point not mounted or bad option.<br>
-Aug 15 00:30:18 localhost live-hardener[1369]:        dmesg(1) may have more information after failed mount system call.<br>
-Aug 15 00:30:18 localhost live-hardener[1137]: /usr/libexec/grub-live/live-hardener: INFO: Non-zero exit code.<br>
-~</p>
-<p>~<br>
-lines 1-18/18 (END)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_5</link>
-        <pubDate>Fri, 15 Aug 2025 04:37:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3225</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Can you share the output of <code>systemctl status live-hardener.service</code>?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_4</link>
-        <pubDate>Fri, 15 Aug 2025 03:35:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3224</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@Jac]]></dc:creator>
-        <description><![CDATA[ <p>Hello, I have a similar problem, after installing the new version of KickSecure, in live mode, I get a red icon in the upper right part of the screen. How to solve this problem? (The system is installed on the main hard drive). I am a newbie and I do not understand how to fix this</p>
-<p>Live Mode Active: Yes (grub-live semi-persistent)<br>
-Persistent Mode Active: Yes (writable filesystems are mounted)</p>
-<p>Changes to the system should be lost after a reboot, but this is not guaranteed.</p>
-<ul>
-<li>The following removable media directories have a writable filesystem mounted to them:<br>
-*none</li>
-<li>The following directories have an unexpected writable filesystem mounted to them:</li>
-</ul>
-<ul>
-<li>/boot/efi<br>
-You should unmount all of the above listed directories to ensure changes made will not persist through a reboot.</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_3</link>
-        <pubDate>Fri, 15 Aug 2025 03:22:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3223</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="ricardo.martinez" data-post="1" data-topic="1231">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/8baadc/48.png" class="avatar"> ricardo.martinez:</div>
-<blockquote>
-<p>When I checked if IPv6 was enabled in Kicksecure, it says it is not.</p>
-</blockquote>
-</aside>
-<p>How exactly did you check? On my end, IPv6 is enabled by default. Your network needs to support it for it to work obviously, but if your network supports IPv6, Kicksecure should just use IPv6 by default.</p>
-<p>(Note that if you’re using Kicksecure in KVM, it’s very possibly IPv6 won’t be working for you. It looks like however libvirt/QEMU handles networking, IPv6 doesn’t work out of the box, at least not on an Ubuntu host. That’s and example the network not supporting IPv6.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_2</link>
-        <pubDate>Fri, 15 Aug 2025 02:59:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3220</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@ricardo.martinez]]></dc:creator>
-        <description><![CDATA[ <p>Hey everyone! I am not sure if this the best place to post this, so if it is not, sorry in advance.</p>
-<p>I am trying to configure reticulum which is a new kind of decentralized network and it auto connects over IPv6 to other nodes on the network.</p>
-<p>When I checked if IPv6 was enabled in Kicksecure, it says it is not.</p>
-<p>Reading the docs, I found this on the DNS security page:<br>
-/wiki/DNS_Security</p>
-<p>" * The user’s computer has a local IPv6 but no actual IPv6 connectivity which might confuse DNS resolvers such as <code>unbound</code>."</p>
-<p>My question is: is it safe to enable IPv6?</p>
-<p>Why is turned off by default, and should I take any additional security/privacy measures if I decide to enable it?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_1</link>
-        <pubDate>Fri, 15 Aug 2025 00:51:04 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3217</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>The current live mode detection code isn’t Veracrypt-volume aware, so it can’t tell the difference between a container located on an ephemeral live filesystem, and a container located on a writable disk device. It just sees that you have a writable mounted device and warns you about it.</p>
-<p>It might be possible to add code that is aware of Veracrypt volumes, but that would only make it work with Veracrypt specifically. There are a lot of applications that may mount a writable container that our code would have to be aware of, so in general this isn’t an easy problem to solve.</p>
-<p>If the container itself is located on an ephemeral filesystem, then your writes to it should disappear on reboot, just like with any file on the ephemeral filesystem.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_2</link>
-        <pubDate>Wed, 13 Aug 2025 22:33:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3207</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@whkicks]]></dc:creator>
-        <description><![CDATA[ <p>When I mount a Veracrypt container inside a grub-live session. The I get the red warning that there is a writable file system mounted.</p>
-<p>Is there a chance that traces are left on my disk now? How does this work? The whole veracrypt container is written to disk? The files are? Are there no traces. Please clarify</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_1</link>
-        <pubDate>Wed, 13 Aug 2025 22:20:24 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3206</guid>
-      </item>
-      <item>
-        <title>About new Kernel</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="InTheAir" data-post="1" data-topic="1219">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/278dde/48.png" class="avatar"> InTheAir:</div>
-<blockquote>
-<p>Is this system secure or is more vulnerable?</p>
-</blockquote>
-</aside>
-<p>It depends on how promptly the Debian kernel backporters update the kernel. The backported kernel doesn’t get official security support from Debian to my awareness like the stable kernel does, but people use backports kernels to I assume they’re maintained.</p>
-<aside class="quote no-group" data-username="InTheAir" data-post="1" data-topic="1219">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/278dde/48.png" class="avatar"> InTheAir:</div>
-<blockquote>
-<p>When kicksecure will use this kernel in the stable repository?</p>
-</blockquote>
-</aside>
-<p>It probably won’t. We’re using kernels directly from Debian’s repository, and Debian won’t be upgrading past Linux 6.1 in Bookworm (instead, they will backporting bug and security fixes to the older kernel as appropriate). However, a significantly newer kernel will be present by default in Kicksecure 18, which will be based on Debian Trixie.</p>
-<aside class="quote no-group" data-username="InTheAir" data-post="1" data-topic="1219">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/278dde/48.png" class="avatar"> InTheAir:</div>
-<blockquote>
-<p>Should I now remove this file: /etc/apt/sources.list.d/backports.list ?</p>
-</blockquote>
-</aside>
-<p>No, you need that to get kernel updates for the backported kernel.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/about-new-kernel/1219#post_2</link>
-        <pubDate>Wed, 13 Aug 2025 20:00:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3205</guid>
-      </item>
-      <item>
-        <title>About new Kernel</title>
-        <dc:creator><![CDATA[@InTheAir]]></dc:creator>
-        <description><![CDATA[ <p>Hi.</p>
-<p>I’m installing kicksecure in a new laptop. The network wasn’t working and I’ve tried installing drivers but no luck. The only thing that has worked is installing a different version of the kernel and now the wifi is working fine.</p>
-<p>For the installation of the new kernel I’ve followed this:<br>
-kicksecure(.)com/wiki/Kernel#Package_Installation</p>
-<p>Now this command <code>uname -r</code> give me this: <code>6.12.38+deb12-amd64</code></p>
-<p>The questions:<br>
-Is this system secure or is more vulnerable?<br>
-When kicksecure will use this kernel in the stable repository?<br>
-Should I now remove this file: /etc/apt/sources.list.d/backports.list ?<br>
-I think not, but I guess that I should remove it only when the kernel I need is in the stable repository…</p>
-<p>Thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/about-new-kernel/1219#post_1</link>
-        <pubDate>Wed, 13 Aug 2025 19:40:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3203</guid>
-      </item>
-      <item>
-        <title>Live mode option boots into persistent sysmaint</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>No problem, it is a significant departure from the old behavior and I can definitely see how it can be confusing. (We changed how the live indicator worked too since the old one was Xfce-specific and we wanted a desktop-agnostic indicator instead, so that’s why the indicator moved.) Glad I was able to help!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-option-boots-into-persistent-sysmaint/1216#post_6</link>
-        <pubDate>Tue, 12 Aug 2025 23:01:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3201</guid>
-      </item>
-      <item>
-        <title>Live mode option boots into persistent sysmaint</title>
-        <dc:creator><![CDATA[@jma197]]></dc:creator>
-        <description><![CDATA[ <p>Ah, my bad, so I was confused! Clicking the green indicator in the top right shows that is in Live mode and not persistent.</p>
-<p>I’m so sorry to have wasted your time with this, I didn’t read into the update much at all and was going off past indicators. Thank you again for explaining the changes!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/live-mode-option-boots-into-persistent-sysmaint/1216#post_5</link>
-        <pubDate>Tue, 12 Aug 2025 22:18:37 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3200</guid>
       </item>
   </channel>
 </rss>

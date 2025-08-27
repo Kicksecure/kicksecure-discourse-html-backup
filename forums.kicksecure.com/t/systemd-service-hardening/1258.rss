@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Systemd Service Hardening?</title>
+    <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258</link>
+    <description>So I was learning about the options for Systemd services for restricting or in another word “hardening” services.
+
+This made me question does Kicksecure deploy certain hardening for it’s services or certain Kicksecure specific services?
+
+These are some interesting options I will note here:
+
+[`PrivateNetwork=yes/no`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateNetwork=) 
+Gives the service its own network namespace. It can’t see or use the host’s network interfaces unless you explicitly bind sockets. Seems useful to prevent leaks or prevent services from being ran without networking?
+
+[`PrivatePIDs=yes/no`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivatePIDs=) 
+Gives a service an isolated view of the process table, which is a useful “defense in depth” measure, especially for daemons that don’t need to inspect or manage other system processes.
+
+[`PrivateTmp=yes/no`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateTmp=) 
+Provides a private /tmp and /var/tmp for the service, isolating it from the host’s temporary directories. One service can’t read temporary files left by another service, which mitigates attacks that rely on guessing or stealing temp‑file names.
+
+[`MemoryDenyWriteExecute=yes/no`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#MemoryDenyWriteExecute=) 
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service. (helps mitigate code‑injection attacks).
+
+[`ProtectSystem=full/strict/yes`](https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ProtectSystem=) 
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service.
+
+There is many others but these few caught my eye.</description>
+    
+    <lastBuildDate>Tue, 26 Aug 2025 02:21:16 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I don’t think we harden specific “third-party” services yet, but we definitely use these kinds of things for applicable services in Kicksecure and Whonix. See <a href="https://github.com/Kicksecure/sdwdate/blob/master/usr/lib/systemd/system/sdwdate.service" class="inline-onebox" rel="noopener nofollow ugc">sdwdate/usr/lib/systemd/system/sdwdate.service at master · Kicksecure/sdwdate · GitHub</a> for instance, there’s a whole battery of hardening options enabled here, including a syscall filter.</p>
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/2</link>
+        <pubDate>Tue, 26 Aug 2025 02:21:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-2</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>So I was learning about the options for Systemd services for restricting or in another word “hardening” services.</p>
+<p>This made me question does Kicksecure deploy certain hardening for it’s services or certain Kicksecure specific services?</p>
+<p>These are some interesting options I will note here:</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateNetwork=" rel="noopener nofollow ugc"><code>PrivateNetwork=yes/no</code></a><br>
+Gives the service its own network namespace. It can’t see or use the host’s network interfaces unless you explicitly bind sockets. Seems useful to prevent leaks or prevent services from being ran without networking?</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivatePIDs=" rel="noopener nofollow ugc"><code>PrivatePIDs=yes/no</code></a><br>
+Gives a service an isolated view of the process table, which is a useful “defense in depth” measure, especially for daemons that don’t need to inspect or manage other system processes.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateTmp=" rel="noopener nofollow ugc"><code>PrivateTmp=yes/no</code></a><br>
+Provides a private /tmp and /var/tmp for the service, isolating it from the host’s temporary directories. One service can’t read temporary files left by another service, which mitigates attacks that rely on guessing or stealing temp‑file names.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#MemoryDenyWriteExecute=" rel="noopener nofollow ugc"><code>MemoryDenyWriteExecute=yes/no</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service. (helps mitigate code‑injection attacks).</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ProtectSystem=" rel="noopener nofollow ugc"><code>ProtectSystem=full/strict/yes</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service.</p>
+<p>There is many others but these few caught my eye.</p>
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/1</link>
+        <pubDate>Tue, 26 Aug 2025 01:47:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-1</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
+  </channel>
+</rss>
