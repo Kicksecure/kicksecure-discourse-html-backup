@@ -5,6 +5,717 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="16" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>While the current rules look like they will broadly cover rejecting device with HID interfaces. Would it be good to block specific vendor ids that are used for such products like rubber ducky and other hacker sold products?</p>
+</blockquote>
+</aside>
+<p>That spooks me a bit. Atmel is a reputable microcontroller production company, do we want to block every keyboard or mouse that uses their controllers? I wouldn’t expect so. The Hak5 rubber ducky presents itself as an Atmel device by default (according to information from <a href="https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/" rel="noopener nofollow ugc">https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/</a> and <a href="https://devicehunt.com/all-usb-vendors" class="inline-onebox" rel="noopener nofollow ugc">All USB Vendors | Device Hunt</a> anyway), but a lot of other devices might do the same.</p>
+<p>Also, bear in mind that the vendor ID and product ID of the Rubber Ducky can be changed by the attacker according to <a href="https://github.com/cypher2048/ducky-decode-wiki/blob/master/Guide_Change_USB_VID_PID.wiki" class="inline-onebox" rel="noopener nofollow ugc">ducky-decode-wiki/Guide_Change_USB_VID_PID.wiki at master · cypher2048/ducky-decode-wiki · GitHub</a>, so at best, vendor ID rejection would only protect against attackers who didn’t really know what they were doing. I’m sure there’s a lot of those kinds of attackers out there, but I don’t really the benefits outweigh the costs here.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="17" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Not trying to get off topic but rndis is kernel driver:</p>
+</blockquote>
+</aside>
+<p>If we don’t block that already in security-misc, we really should. We have modprobe config for disabling things…</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Android devices should be blocked by default</p>
+</blockquote>
+</aside>
+<p>Yeah, that’s the sort of thing I was afraid of. Then I think probably leaving MTP off is better.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
+</blockquote>
+</aside>
+<p>Hmm, I like that idea!</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Also USB A-to-B or USB C-to-B “printer cables” that come with or in my case had to buy to plug into the the “printer port” (USB B) and into my PC via (USB A) would not be able to bypass this rule correct?</p>
+</blockquote>
+</aside>
+<p>It shouldn’t, at the end of the day the cable isn’t anything more than an electrical connector that gets four (or nine, in the case of USB 3) pins from the device attached to your computer. Unless the cable is itself malicious (which is a thing), it shouldn’t present any extra danger as opposed to usual USB devices. Of course, if you were unlucky enough to use <a href="https://hak5.org/collections/homepage-collection-grid/products/omg-cable" rel="noopener nofollow ugc">one of these</a> then there would be a problem, but USBGuard should protect you in that instance, again, assuming you have a normal USB keyboard already connected and the cable wasn’t plugged in at boot time.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Would or could some printers come up as Mass Storage Class (0x08) or Communication and CDC Class (0x02 or 0x0A) and bypass it?</p>
+</blockquote>
+</aside>
+<p>I don’t know enough about how the USB protocol works under the hood to give a definitive answer there. I would hope the USB protocol isn’t so poorly designed as to allow a flash drive to call itself a flash drive but then act like a printer (which is the kind of think that would be enabled if a printer could still work as a printer even if it called itself a flash drive).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_20</link>
+        <pubDate>Wed, 27 Aug 2025 23:55:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3321</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>FWIW, CUPS doesn’t even appear to be installed on Kicksecure 17 by default, unless I accidentally uninstalled it in my development VM during other work:</p>
+<pre><code class="lang-auto">[sysmaint ~]% apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+libcups2/oldstable,oldstable-security,now 2.4.2-3+deb12u8 amd64 [installed,automatic]
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_7</link>
+        <pubDate>Wed, 27 Aug 2025 20:47:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3320</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Printers</p>
+<ul>
+<li>Could introduce attack surface that we don’t want, see <a href="https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/" rel="noopener nofollow ugc">Attacking UNIX Systems via CUPS, Part I</a></li>
+</ul>
+</blockquote>
+</aside>
+<p>Occasionally do use my printer myself to print sometimes but I wouldn’t mind if you rejected printers (class 0x07) with <code>reject with-interface 07</code> by default.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>and <code>with-interface-type</code> should just be <code>with-interface</code> according to <a href="https://usbguard.github.io/documentation/rule-language" rel="noopener nofollow ugc">Rule Language | USBGuard</a>.</p>
+</blockquote>
+</aside>
+<p>Looking at that both <code>reject with-interface interface-type="07"</code> or <code>reject with-interface 07</code> syntax’s seem to be correct but I would stick with whatever matches the style of the rest of your USBGuard policy so in this case <code>reject with-interface 07</code></p>
+<p>Also USB A-to-B or  USB C-to-B “printer cables” that come with or in my case had to buy to plug into the the “printer port” (USB B) and into my PC via (USB A) would not be able to bypass this rule correct?</p>
+<p>Would or could some printers come up as Mass Storage Class (0x08) or Communication and CDC Class (0x02 or 0x0A) and bypass it?</p>
+<p><strong>HP</strong> Printers and scanners:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756">
+  <header class="source">
+
+      <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">github.com/usbids/usbids</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">usb.ids</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+  This file is binary. <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>Epson</strong> Printers and scanners:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953">
+  <header class="source">
+
+      <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">github.com/usbids/usbids</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">usb.ids</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+  This file is binary. <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Two other common vendors are Cannon and Brother when it comes to printers and scanners.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_19</link>
+        <pubDate>Wed, 27 Aug 2025 20:38:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3319</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Honestly I really doubt upstream or Debian would add anything that disables network and LAN printing such as:</p>
+<pre><code class="lang-auto">CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+PrivateNetwork=yes
+</code></pre>
+<p>However they might be accepting to <code>NoNewPrivileges=yes</code> and others.</p>
+<p>People do indeed use network printing or LAN printing (I don’t do either personally) but maybe a new thread regarding CUPS should be made like “should CUPS even come disabled by default” or the ideas mentioned here.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_6</link>
+        <pubDate>Wed, 27 Aug 2025 20:34:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3318</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Yes, systemd configuration snippet drop-in support is amazing.</p>
+<p>(As a distribution we should use folder <code>/usr/lib/systemd/system</code> rather than <code>/etc</code>.)</p>
+<p>Any systemd hardening options:</p>
+<ol>
+<li>Please try to submit them upstream. (Such as to cups.) If that does not work,</li>
+<li>Submit them to Debian.</li>
+<li>Only then consider submitting these to Kicksecure.</li>
+</ol>
+<p>This is for the purpose of maintainability.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/maintainability">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1756287028" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener" title="01:34PM - 25 August 2025">Kicksecure – 25 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/maintainability" target="_blank" rel="noopener">Maintainability</a></h3>
+
+  <p>Exploring the challenges of maintainability in the Kicksecure project and Open Source development.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>See also:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1756287028" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener" title="02:18PM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener">Relationship With Upstream</a></h3>
+
+  <p>Kicksecure Relationship with Upstream Projects.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>This is not on our immediate roadmap: <a href="https://www.kicksecure.com/wiki/Security_Roadmap" class="inline-onebox">Kicksecure Security Roadmap</a></p>
+<p>But anyone feel free to work on this.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_5</link>
+        <pubDate>Wed, 27 Aug 2025 18:46:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3317</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive should trigger a shutdown</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>The status is still the same:</p><aside class="quote" data-post="20" data-topic="994">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
+    <div class="quote-title__text-content">
+      <a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/20">Unplugging external drive should trigger a shutdown</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category --style-square " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+    </div>
+  </div>
+  <blockquote>
+    Unplugging external drive → shutdown: This feature has been implemented in packages security-misc, helper-scripts and user-sysmaint-split by <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>. This feature will most likely become available in Kicksecure 18.
+  </blockquote>
+</aside>
+
+<p>Distribution morphing won’t be special in this regard. Will be the same the “regular” version.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994?page=2#post_27</link>
+        <pubDate>Wed, 27 Aug 2025 18:35:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3316</guid>
+      </item>
+      <item>
+        <title>Unsupported Multi/Dual Boot [Developers-Only Discussion]</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Allowing “X system” to be booted alongside Kicksecure aids Kicksecure<br>
+development because a surprising amount of the time, “X system” provides an<br>
+environment for developing some component for an OS that cannot be easily<br>
+developed or tested on that OS. Examples:</p>
+<ul>
+<li>Kloak version 2, intended for Kicksecure 18, could not be developed on<br>
+Kicksecure 17 as the needed Wayland compositor (labwc) was not present in<br>
+Debian 12’s repos. I had to install Debian 13 in a multiboot scenario to<br>
+develop and test it properly, and physical hardware was needed to get<br>
+touchpad support working</li>
+<li>Xen kernel command line support in GRUB, intended for Qubes OS R4.3 (or<br>
+maybe R4.4 at this point), could not be developed on Qubes OS R4.3 because<br>
+contributing the feature to upstream GRUB was necessary, requiring the<br>
+compilation of both Xen and GRUB from upstream sources on a very up-to-date<br>
+distribution. I had to install Arch Linux in a multiboot scenario to<br>
+develop and test this feature properly, and physical hardware was needed to<br>
+properly test virtualization-related functions.</li>
+</ul>
+<p>Now in both situations you could argue I should just get another computer<br>
+in that instance, or swap hard drives. But that requires purchasing<br>
+additional drives and/or computers, and while a world where all developers<br>
+have infinite resources, that would be great, but that isn’t the world most<br>
+open-source devs live in. It’s within my means to buy another computer or<br>
+NVMe drive, but I’d rather not.</p>
+<p>It costs us nothing to not go out of our way to break multiboot. It saves<br>
+me and others time and money. If we really are worried about multiboot, we<br>
+could pop up a warning, but that’s the most I’d be comfortable with.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unsupported-multi-dual-boot-developers-only-discussion/1249#post_9</link>
+        <pubDate>Wed, 27 Aug 2025 18:14:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3315</guid>
+      </item>
+      <item>
+        <title>Unplugging external drive should trigger a shutdown</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="20" data-topic="994">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>This feature has been implemented in packages security-misc, helper-scripts and user-sysmaint-split</p>
+</blockquote>
+</aside>
+<p>Should it be added to disro morphs now when you go to upgrade?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994?page=2#post_26</link>
+        <pubDate>Wed, 27 Aug 2025 18:16:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3314</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Thanks for sharing this info I was not aware of this. <code>PrivateNetwork=yes/no</code> looks like a good option for CUPS and others we don’t need network access.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_4</link>
+        <pubDate>Wed, 27 Aug 2025 18:13:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3313</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a><br>
+On the USBGuard thread you mentioned CUPS, does systemd support a drop in file? it looks like documentation states it does?</p>
+<blockquote>
+<p>Along with a unit file foo.service, a “drop-in” directory foo.service.d/ may exist. All files with the suffix “.conf” from this directory will be merged in the alphanumeric order and parsed after the main unit file itself has been parsed. This is useful to alter or add configuration settings for a unit, without having to modify unit files. Each drop-in file must contain appropriate section headers. For instantiated units, this logic will first look for the instance “.d/” subdirectory (e.g. “foo@bar.service.d/”) and read its “.conf” files, followed by the template “.d/” subdirectory (e.g. “foo@.service.d/”) and the “.conf” files there. Moreover, for unit names containing dashes (“-”), the set of directories generated by repeatedly truncating the unit name after all dashes is searched too. Specifically, for a unit name foo-bar-baz.service not only the regular drop-in directory foo-bar-baz.service.d/ is searched but also both foo-bar-.service.d/ and foo-.service.d/. This is useful for defining common drop-ins for a set of related units, whose names begin with a common prefix. This scheme is particularly useful for mount, automount and slice units, whose systematic naming structure is built around dashes as component separators. Note that equally named drop-in files further down the prefix hierarchy override those further up, i.e. foo-bar-.service.d/10-override.conf overrides foo-.service.d/10-override.conf.</p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.unit.html" class="inline-onebox" rel="noopener nofollow ugc">systemd.unit</a></p>
+</blockquote>
+<p>Couldn’t we create a CUPS drop in <code>/etc/systemd/system/cups.service.d/hardening.conf</code> that would apply some hardened options that would essentially mitigate:</p>
+<blockquote>
+<p>WAN / public internet: a remote attacker sends an UDP packet to port 631. No authentication whatsoever.<br>
+LAN: a local attacker can spoof zeroconf / mDNS / DNS-SD advertisements (we will talk more about this in the next writeup ) and achieve the same code path leading to RCE.</p>
+</blockquote>
+<p>I don’t think the package manager would ever touch it either with upgrades to CUPS?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_3</link>
+        <pubDate>Wed, 27 Aug 2025 18:12:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3312</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.</p>
+</blockquote>
+</aside>
+<p>Android devices should be blocked by default</p>
+<blockquote>
+<p>An attacker can manipulate filenames or directory paths sent over MTP to read or write files outside the intended media storage area.<br>
+Flaws in the MTP driver’s handling of buffers can lead to crashes or remote code execution if crafted packets trigger invalid memory accesses.<br>
+On systems where the MTP service runs with elevated rights, exploiting a driver bug may allow an attacker to gain higher privileges.<br>
+Improper validation of MTP commands can expose private media or metadata to a malicious host.</p>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://nvd.nist.gov/vuln/detail/CVE-2018-16872">
+  <header class="source">
+      <img src="https://nvd.nist.gov/site-media/images/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2018-16872" target="_blank" rel="noopener nofollow ugc">nvd.nist.gov</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-16872" target="_blank" rel="noopener nofollow ugc">NVD - CVE-2018-16872</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://nvd.nist.gov/vuln/detail/CVE-2022-36847">
+  <header class="source">
+      <img src="https://nvd.nist.gov/site-media/images/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-36847" target="_blank" rel="noopener nofollow ugc">nvd.nist.gov</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://nvd.nist.gov/vuln/detail/CVE-2022-36847" target="_blank" rel="noopener nofollow ugc">NVD - CVE-2022-36847</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
+<blockquote>
+<p>Consider to allow only 3 and above USB version?</p>
+</blockquote>
+<p>This is too restrictive and blocking USB 2.0 only devices does not eliminate DMA or the BadUSB exploits. It would simply break a heap of legacy peripherals while giving a false sense of security.<br>
+Best defense is allow listing devices by vid/pid (as rejecting devices that have HID), enabled IOMMU enforcement and disabling autorun/auto-mount features which I believe Kicksecure already does right?</p>
+<p>Blocking USB 2.0 devices for security is impractical due to their widespread use, despite potential security risks.<br>
+USB 3.0 does reduce passive sniffing but both USB 2.0 and USB 3.0 can be used for BadUSB, or DMA based memory corruption.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_18</link>
+        <pubDate>Wed, 27 Aug 2025 17:59:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3311</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Not trying to get off topic but rndis is kernel driver:</p>
+<p><code>find /lib/modules/$(uname -r) -type f -name '*.ko*' | grep -E 'rndis'</code></p>
+<pre><code class="lang-auto">/lib/modules/6.1.0-38-amd64/kernel/drivers/net/usb/rndis_host.ko
+/lib/modules/6.1.0-38-amd64/kernel/drivers/net/wireless/rndis_wlan.ko
+/lib/modules/6.1.0-38-amd64/kernel/drivers/usb/gadget/function/usb_f_rndis.ko
+</code></pre>
+<p>On the topic of USB WiFI (rndis_wlan) I want to put in my voice here I dont think we should block USB WiFi adapters only USB WiFi devices with HID if that’s possible.<br>
+I dont know of Adapters that use <code>rndis_wlan</code> and think it would have to look into this like <a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> mentioned like USB Ethernet adapters on whats common on the market.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_17</link>
+        <pubDate>Wed, 27 Aug 2025 17:56:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3310</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
+        <description><![CDATA[ <p>Disabled USB joysticks?</p>
+<p>That would be good to to promote nofap among Kicksecure users lol</p>
+<p>Joking aside I think Kicksecure should reject USB Webcams honestly and agree with <a class="mention" href="https://forums.kicksecure.com/u/desi_fubu">@desi_fubu</a> in relation to Keytap2. While also realistically agreeing with what <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> about how if they want to get your keystrokes an attacker would try to go with installing a software keylogger on your system as it’s less work. However since AI is becoming more and more relevant I can see Keytap2 based malware or attacks as a probability in the future.</p>
+<p>The only thing is modeprobe also doesn’t disable the driver uvcvideo so if you were to you need to un comment that part in the conf also.</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" target="_blank" rel="noopener nofollow ugc">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" target="_blank" rel="noopener nofollow ugc">etc/modprobe.d/30_security-misc_disable.conf</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+
+    <pre class="onebox"><code class="lang-conf">
+      <ol class="start lines" start="294" style="counter-reset: li-counter 293 ;">
+          <li>## USB Video Device Class:</li>
+          <li>## Disables the USB-based video streaming driver for devices like some webcams and digital camcorders.</li>
+          <li>##</li>
+          <li>#install uvcvideo /usr/bin/disabled-miscellaneous-by-security-misc</li>
+      </ol>
+    </code></pre>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I really like the addition of USBGuard I think it will bolster and draw more users in to Kicksecure.</p>
+<p>While the current rules look like they will broadly cover rejecting device with HID interfaces. Would it be good to block specific vendor ids that are used for such products like rubber ducky and other hacker sold products?</p>
+<p><a href="https://forums.hak5.org/topic/16696-version-1-usb-vendor-idproduct-id/" class="onebox" target="_blank" rel="noopener nofollow ugc">https://forums.hak5.org/topic/16696-version-1-usb-vendor-idproduct-id/</a></p>
+<p>USB vendor ID that OpenMoko released (0x1D50) has become a popular building HID keyboard emulator style rubber ducky projects:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv">
+  <header class="source">
+
+      <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">github.com/openmoko/openmoko-usb-oui</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">usb_product_ids.psv</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-psv">Vendor ID | Product ID | Description
+0x1d50 | 0x1db5 | [http://www.almesberger.net/misc/idbg/ IDBG] in DFU mode
+0x1d50 | 0x1db6 | [http://www.almesberger.net/misc/idbg/ IDBG] in normal mode
+0x1d50 | 0x4xxx | Reserved for the [http://osmocom.org/ Osmocom] project
+0x1457 / 0x1d50 | 0x5117 | Neo1973/FreeRunner kernel usbnet (g_ether, CDC Ethernet) Mode
+0x1457 / 0x1d50 | 0x5118 | Debug Board (FT2232D) for Neo1973/FreeRunner
+0x1457 / 0x1d50 | 0x5119 | Neo1973/FreeRunner u-boot usbtty CDC ACM Mode
+0x1457 / 0x1d50 | 0x511a | HXD8 u-boot usbtty CDC ACM Mode
+0x1457 / 0x1d50 | 0x511b | SMDK2440 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511c | SMDK2443 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511d | QT2410 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511e | Reserved
+0x1457 / 0x1d50 | 0x511f | Reserved
+0x1457 / 0x1d50 | 0x5120 | Neo1973/FreeRunner u-boot generic serial Mode
+0x1457 / 0x1d50 | 0x5121 | Neo1973/FreeRunner kernel mass storage (g_storage) Mode
+0x1457 / 0x1d50 | 0x5122 | Neo1973/FreeRunner kernel usbnet (g_ether, RNDIS) Mode
+0x1457 / 0x1d50 | 0x5123 | Neo1973/FreeRunner internal USB Bluetooth CSR4 module
+0x1457 / 0x1d50 | 0x5124 | Neo1973/FreeRunner Bluetooth Device ID service
+0x1457 / 0x1d50 | 0x5125 | TBD *R!*
+0x1457 / 0x1d50 | 0x5126 | TBD *R!*
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Another one that comes up is the vendor <em>Amtel</em> when it comes to “Rubber Ducky” type clones.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_16</link>
+        <pubDate>Wed, 27 Aug 2025 17:45:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3309</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Some discussion here:</p><aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164468290">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164468290" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc" target="_blank" rel="noopener">Polish USBGuard configuration</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-08-15" data-time="22:16:42" data-timezone="UTC">10:16PM - 15 Aug 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 26 additions and 18 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc" target="_blank" rel="noopener">
+          <span class="added">+26</span>
+          <span class="removed">-18</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_15</link>
+        <pubDate>Wed, 27 Aug 2025 17:36:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3308</guid>
+      </item>
+      <item>
+        <title>ISO - Development</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Kicksecure 18 and above (based on Debian 13 / trixie) will be even better.</p>
+<p>Calamares installer can run as <code>root</code> without <code>Xwayland</code>, yet has a functional graphical user interface (GUI).</p>
+<p>(According to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> who tested that.)</p>
+<p>As for tickets about calamares running without root (rootless), i.e. splitting the frontend graphical user interface (GUI from the backend command line interface (CLI):</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://codeberg.org/Calamares/calamares/issues/2268">
+  <header class="source">
+      <img src="https://codeberg.org/assets/img/favicon.svg" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://codeberg.org/Calamares/calamares/issues/2268" target="_blank" rel="noopener">Codeberg.org</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://codeberg.org/Calamares/calamares/issues/2268/summary-card" class="thumbnail" alt="" width="690" height="345"></div>
+
+<h3><a href="https://codeberg.org/Calamares/calamares/issues/2268" target="_blank" rel="noopener">Rootless Calamares, native Wayland support without Xwayland</a></h3>
+
+  <p>If calamares is started without root rights, it shows:
+
+&gt; the installer is not running with administrative rights
+
+Quote Jan 4, 2018 https://calamares.io/calamares-3.2-plan-revised/
+
+&gt; Rootless Calamares (e.g. not running as root) has not been...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p> → </p>
+<blockquote>
+<p>This is, admittedly, a non-obvious place for it.</p>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://codeberg.org/Calamares/calamares/issues/1294">
+  <header class="source">
+      <img src="https://codeberg.org/assets/img/favicon.svg" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://codeberg.org/Calamares/calamares/issues/1294" target="_blank" rel="noopener">Codeberg.org</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://codeberg.org/Calamares/calamares/issues/1294/summary-card" class="thumbnail" alt="" width="690" height="345"></div>
+
+<h3><a href="https://codeberg.org/Calamares/calamares/issues/1294" target="_blank" rel="noopener">Accessibility issue with Orca screen reader</a></h3>
+
+  <p>Dear C++ specialists,
+As I have read, you are using Qt5.9. Please would you have some time to analyse yours source code and other program parts if you have set all stuff so resulting GUI of this installer will be accessible?
+Many visually impaired...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/iso-development/371#post_12</link>
+        <pubDate>Wed, 27 Aug 2025 15:25:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3307</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But at the same time, <em>lots</em> of devices are USB 2 only (I don’t think I’ve seen a USB 3 keyboard in my life), so this would probably break way too much. If we were to offer it, it should be something that is opt-in, not opt-out, in my opinion.</p>
+</blockquote>
+</aside>
+<p>Keyboard with USB 3.0: search Kensington K72357FR. But yeah would be nice to have the ability to disable old/backward compatibility as an option for the users.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_14</link>
+        <pubDate>Wed, 27 Aug 2025 10:25:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3306</guid>
+      </item>
+      <item>
+        <title>Question about grub-live and writable file system</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="1221">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it will have to wait until Kicksecure 18, but there’s a known fix now.</p>
+</blockquote>
+</aside>
+<p>Yes.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_12</link>
+        <pubDate>Wed, 27 Aug 2025 08:44:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3304</guid>
+      </item>
+      <item>
+        <title>How is Mullvad Browser supposed to be used in Qubes</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>The problem is that <a href="https://github.com/Kicksecure/tb-updater/blob/master/usr/libexec/tb-updater/dispvm"><code>/usr/libexec/tb-updater/dispvm</code></a> does not support yet Mullvad Browser at time of writing.</p>
+<p>Instead of only considering folder <code>.tb</code> it would require a loop to also consider folder <code>.mullvadbrowser</code>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-is-mullvad-browser-supposed-to-be-used-in-qubes/1256#post_6</link>
+        <pubDate>Wed, 27 Aug 2025 07:50:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3303</guid>
+      </item>
+      <item>
         <title>How is Mullvad Browser supposed to be used in Qubes</title>
         <dc:creator><![CDATA[@cough]]></dc:creator>
         <description><![CDATA[ <p>Thanks for response but I already tried to create a desktop file like that. When you launch in a disposable you get this error:</p>
@@ -959,545 +1670,6 @@ As by default passwordless root is enabled in VMs, whitelisting devices in sys-u
         <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_1</link>
         <pubDate>Sun, 24 Aug 2025 02:33:02 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3261</guid>
-      </item>
-      <item>
-        <title>The workstation has stopped booting.</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p><code>Failed to start systemd-fsck-root.service</code></p>
-</blockquote>
-<p>That sounds like the filesystem was corrupted by an improper shutdown (which would happen if the power went out). On the bright side, It’s very unlikely the filesystem is so corrupted that the data on it is inaccessible.</p>
-<p>Probably the best course of action is to create a new virtual machine, then attach the old virtual machine’s disk to the new virtual machine. Then you can open the drive and copy your files to the new VM.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/the-workstation-has-stopped-booting/1246#post_2</link>
-        <pubDate>Sun, 24 Aug 2025 01:45:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3260</guid>
-      </item>
-      <item>
-        <title>The workstation has stopped booting.</title>
-        <dc:creator><![CDATA[@amnez]]></dc:creator>
-        <description><![CDATA[ <p>Hello everyone, after my power went out, I can’t log into WorkStation. When loading the system, the following errors are shown, which are visible on my screenshot. The data inside the system is very important to me, is there a way to extract it somehow?</p>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/51d831ab6ec5ecd6b31b769d27cd3765cf0e2708.png" data-download-href="https://forums.kicksecure.com/uploads/default/51d831ab6ec5ecd6b31b769d27cd3765cf0e2708" title="{E32631A9-4D75-4B88-8006-F86712D9EFE1}"><img src="https://forums.kicksecure.com/uploads/default/original/1X/51d831ab6ec5ecd6b31b769d27cd3765cf0e2708.png" alt="{E32631A9-4D75-4B88-8006-F86712D9EFE1}" data-base62-sha1="bG1RR8B644GIhqk3BB8RZlY6jgI" width="690" height="169" data-dominant-color="120D0D"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/the-workstation-has-stopped-booting/1246#post_1</link>
-        <pubDate>Sat, 23 Aug 2025 17:16:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3258</guid>
-      </item>
-      <item>
-        <title>Unplugging external drive should trigger a shutdown</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10174">
-  <header class="source">
-
-      <a href="https://github.com/QubesOS/qubes-issues/issues/10174" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/QubesOS/qubes-issues/issues/10174" target="_blank" rel="noopener">Consider the impact of USBGuard in sys-usb</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2025-08-22" data-time="18:22:07" data-timezone="UTC">06:22PM - 22 Aug 25 UTC</span>
-      </div>
-
-        <div class="date">
-          closed <span class="discourse-local-date" data-format="ll" data-date="2025-08-23" data-time="00:42:19" data-timezone="UTC">12:42AM - 23 Aug 25 UTC</span>
-        </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          R: not applicable
-        </span>
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          P: default
-        </span>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
-
-I a<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">pologize in advance if this isn't really the right spot for this, I couldn't find a "development" category on the forums so this is the closest I could figure out.
-
-### The problem you're addressing (if any)
-
-In Kicksecure 18 and higher, we're going to be shipping USBGuard, enabled by default, with a configuration that allows all devices that are present in the system on bootup, and blocks all non-whitelisted devices that are plugged in after bootup. By default, the whitelist in Kicksecure will allow USB mass storage devices, and will allow a single mouse and keyboard at a time (additional keyboards are rejected). All other devices are rejected, including devices that combine a USB mass storage interface with anything else, and devices that combine a keyboard or mouse interface with anything (except for "unified" keyboard/mouse devices like are common with some wireless receivers). The goal is to allow a limited subset of common USB devices to work out of the box, while also thwarting devices like the USB "rubber ducky".
-
-This feature set makes good sense for Kicksecure on the desktop, but we're unsure if it makes sense in Qubes OS, if a user chooses to use Kicksecure on sys-usb. On the one hand, USBGuard in sys-usb could substantially increase the security of users who have to pass through USB keyboards and mice to dom0 (only one keyboard and mouse would be allowed, a keystroke injection device would be rejected so long as it was not present when sys-usb booted and a legitimate USB keyboard was already plugged in). On the other hand, USBGuard could frustrate users who need to work with things such as USB headsets, webcams, touchscreens, and other "advanced" devices. In theory a user could reboot sys-usb to get these devices to work (assuming our configuration actually does trust everything present on bootup), but maybe that's too much hassle?
-
-The USBGuard configuration we intend to ship in Kicksecure 18 can be seen [here](https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf).
-
-### The solution you'd like
-
-Determine if USBGuard in a Kicksecure-based sys-usb makes sense, and if any configuration changes are needed in the event it is useful in Qubes OS.
-
-### The value to a user and who that user might be
-
-If we choose to leave it enabled, users will be able to pass through input devices to dom0 with less risk of malicious devices being able to take over the system.
-
-If we choose to disable it, users won't end up facing new issues with USB device passthrough.
-
-### Completion criteria checklist
-
-(This section is for developer use only. Please do not modify it.)</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994?page=2#post_25</link>
-        <pubDate>Sat, 23 Aug 2025 10:08:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3254</guid>
-      </item>
-      <item>
-        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/updates-status/issues/5920">
-  <header class="source">
-
-      <a href="https://github.com/QubesOS/updates-status/issues/5920" target="_blank" rel="noopener">github.com/QubesOS/updates-status</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/QubesOS/updates-status/issues/5920" target="_blank" rel="noopener">qubes-template-kicksecure-17 4.2.0-202508121120 (r4.2)</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2025-08-12" data-time="11:20:53" data-timezone="UTC">11:20AM - 12 Aug 25 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/fepitre-bot" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/48861364?v=4" class="onebox-avatar-inline" width="20" height="20">
-          fepitre-bot
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          r4.2-testing
-        </span>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Template kicksecure-17 4.2.0-202508121120 for Qubes OS r4.2, see comments below <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">for details and build status.
-
-If you're release manager, you can issue GPG-inline signed command (depending on template):
-
-* `Upload-template r4.2 kicksecure-17 4.2.0-202508121120 templates-itl` (available 5 days from now)
-* `Upload-template r4.2 kicksecure-17 4.2.0-202508121120 templates-community` (available 5 days from now)
-
-Above commands will work only if package in testing repository isn't superseded by newer version.
-
-For more information on how to test this update, please take a look at https://www.qubes-os.org/doc/testing/#updates.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679#post_7</link>
-        <pubDate>Tue, 19 Aug 2025 08:51:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3251</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/184">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/security-misc/issues/184" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/security-misc/issues/184" target="_blank" rel="noopener">MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2024-01-06" data-time="13:11:20" data-timezone="UTC">01:11PM - 06 Jan 24 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">https://github.com/Kicksecure/security-misc/blob/master/usr/lib/NetworkManager/c<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">onf.d/80_randomize-mac.conf
-
-```
-[device-mac-randomization]
-wifi.scan-rand-mac-address=yes
-
-[connection-mac-randomization]
-ethernet.cloned-mac-address=random
-wifi.cloned-mac-address=random
-```
-
-1) Breaks root servers, namely broke kicksecure.com. This is what the server provide sent by e-mail.
-
-```
-We have detected that your server is using different MAC addresses from those allowed by your Robot account.
-
-Please take all necessary measures to avoid this in the future and to solve the issue.
-We also request that you send a short response to us. This response should contain information about how this could have happened and what you intend to do about it.
-In the event that the following steps are not completed successfully, your server can be locked at any time after 2024-01-17 16:51:11 +0100.
-
-How to proceed:
-- Solve the issue
-- Please note, in case you have fixed the problem, please wait at least 10 minutes before rechecking: ...
-- After successfully testing that the issue is resolved, send us a statement by using the following link:...
-
-Please visit our FAQ here, if you are unsure how to proceed:
-https://docs.hetzner.com/robot/dedicated-server/faq/error-faq/#mac-errors
-
-Important note:
-When replying to us, please leave the abuse ID [...] unchanged in the subject line. Manual replies will only be handled in the event of a lock.
-Please note that we do not provide telephone support in our department. If you have any questions, please send them to us by responding to this email.
-
-Kind regards
-
-Network department
-```
-
-2) Breaks VirtualBox DHCP when using Network Manger (in Kicksecure) after VM reboot (`sudo reboot`). It is functional for the first start after powering off and powering on the VM. [1]
-
-Might be related:
-https://forums.virtualbox.org/viewtopic.php?t=86753
-
-Could be a Network Manager issue:
-https://bugs.launchpad.net/ubuntu/+source/network-manager/+bug/1116421
-https://askubuntu.com/questions/307717/networkmanager-problem-with-cloned-mac-address
-
-----
-
-[1] Before someone says that's a VirtualBox issue, no, I mean, maybe, but that doesn't matter.
-VirtualBox is a valid environment. If that breaks, other environments will break as well.
-Broken networking is extremely frustrating. MAC randomization would be suitable for Kicksecure, but only if stable.
-
-It's not important enough to break common network configurations in common environments.
-
-----
-
-TODO: This bug has to be reported to Network Manager (NM) as above bug reports apparently never have reached upstream NM.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_6</link>
-        <pubDate>Tue, 19 Aug 2025 05:31:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3250</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Could you share a screenshot of the livecheck window so I can see the message you’re getting?</p>
-<p>Yes, I am sure it works either the same or better than previously. The previous live mode implementation simply used a Dracut module to mount the root filesystem read-only, then put an in-memory overlay on it. That meant that any filesystem mounted thereafter (like /boot, /boot/efi, /home if you installed it on a separate partition, etc.) would still be read-write. The thing that changed is that livecheck now detects these other writable filesystems and reports about them, and a new service (live-hardener) attempts to remount more filesystems read-only and then mounts in-memory overlays on them. The original, dracut-based root overlay is still in place, so worst-case-scenario, live mode works as good or better than it used to.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_11</link>
-        <pubDate>Tue, 19 Aug 2025 02:34:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3249</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@Jac]]></dc:creator>
-        <description><![CDATA[ <p>Previously it was Persistent Mode Active: no, but now it shows<br>
-Persistent Mode Active: Yes (writable filesystems are mounted). Are you sure it works the same as before?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_10</link>
-        <pubDate>Tue, 19 Aug 2025 00:26:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3248</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@ricardo.martinez]]></dc:creator>
-        <description><![CDATA[ <p>After reading your response, and quicksilver’s response, I checked again with</p>
-<p>[ -f /proc/net/if_inet6 ] &amp;&amp; echo ‘IPv6 ready system!’ || echo ‘No IPv6 support found!’</p>
-<p>Apparently ipv6 is enabled, so now I think the issue I am having with reticulum may be related to apparmor blocking access to my wifi/ethernet for the app.</p>
-<p>I think I may need to create an apparmor profile for reticulum</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_5</link>
-        <pubDate>Mon, 18 Aug 2025 14:41:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3247</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Reproduced issue on Kicksecure 17.4.4.6 using VirtualBox with EFI enabled.</p>
-<p>Looks like the issue is that live-hardener tries to remount <code>/boot/efi</code> read-only after it mounts a read-write overlay on <code>/boot</code>. Mounts don’t “show through” an overlayfs, so <code>/boot/efi</code> isn’t even accessible in live mode, and remounting <code>/boot/efi</code> doesn’t do anything in this situation.</p>
-<p>Created a fix at <a href="https://github.com/ArrayBolt3/grub-live/tree/arraybolt3/live-hardener-fix" class="inline-onebox" rel="noopener nofollow ugc">GitHub - ArrayBolt3/grub-live at arraybolt3/live-hardener-fix</a> which is pending review. I’m unsure if this will end up in Kicksecure 17 or if it will have to wait until Kicksecure 18, but there’s a known fix now.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_9</link>
-        <pubDate>Sun, 17 Aug 2025 16:00:08 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3246</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>You should be able to keep using live mode without issues. The warning you see isn’t because something broke that wasn’t broken before, but because hardening features we added to make live mode more effective aren’t fully working. At worst, live mode should be at least as effective as how it used to work (assuming the only directory livecheck warns about is /boot/efi).</p>
-<p>I’ll continue looking into this to see if I can find the bug.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_8</link>
-        <pubDate>Sun, 17 Aug 2025 02:23:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3244</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@Jac]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="6" data-topic="1221">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>live-hardener</p>
-</blockquote>
-</aside>
-<p>Thanks for your reply. Rebooting does not solve the problem. I don’t know what to do. Real-time mode is very important for me. Version 17.3.9.9. worked without problems on my computer.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_7</link>
-        <pubDate>Sun, 17 Aug 2025 02:07:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3243</guid>
-      </item>
-      <item>
-        <title>Kicksecure distro specific keyboard shortcuts</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>I just wanted to say I like these ideas very much.<br>
-The windows superkey for menu and lockscreen shortcut being the ones I like the most.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-distro-specific-keyboard-shortcuts/1147#post_5</link>
-        <pubDate>Sat, 16 Aug 2025 18:06:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3241</guid>
-      </item>
-      <item>
-        <title>Unplugging external drive should trigger a shutdown</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>Very nice work arraybolt3</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994?page=2#post_24</link>
-        <pubDate>Sat, 16 Aug 2025 18:03:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3240</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>The only issue from research is I’m not sure how you would go about enabling the custom ruleset by default?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_17</link>
-        <pubDate>Sat, 16 Aug 2025 18:01:26 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3239</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <ul>
-<li>Add Firewall option to sysmaint pannel</li>
-</ul>
-<p>I think the best way would be to add nftables rules sets for different usecases but the default being blocking incoming and forwarding and allow outgoing by default.</p>
-<p>Another menu in sysmaint panel for firewalls could be added to select or manage firewall rulesets.</p>
-<p><code>/etc/nftables/kicksecure_default.nft</code></p>
-<pre><code class="lang-auto">#!/usr/sbin/nft -f
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0;
-        policy drop;
-    }
-
-    chain forward {
-        type filter hook forward priority 0;
-        policy drop;
-    }
-
-    chain output {
-        type filter hook output priority 0;
-        policy accept;
-    }
-}
-</code></pre>
-<p>Another example these rules Blocks all incoming and forwarding traffic and allows HTTP, HTTPS, DNS, and limited SSH traffic. Also allows Tor port to ensure it continues to work correctly for torified apt and time sync via sdwdate.</p>
-<p><code>/etc/nftables/kicksecure_restrictive.nft</code></p>
-<pre><code class="lang-auto">#!/usr/sbin/nft -f
-
-table inet filter {
-    chain input {
-        type filter hook input priority 0;
-        policy drop;
-
-        # Allow loopback interface
-        iif "lo" accept
-
-        # Allow established connections
-        ct state {established, related} accept
-    }
-
-    chain forward {
-        type filter hook forward priority 0;
-        policy drop;
-
-        # Allow established connections
-        ct state {established, related} accept
-    }
-
-    chain output {
-        type filter hook output priority 0;
-        policy drop;
-
-        # Allow loopback interface
-        oif "lo" accept
-
-        # Allow HTTP (port 80)
-        tcp dport 80 accept
-
-        # Allow HTTPS (port 443)
-        tcp dport 443 accept
-
-        # Allow DNS (port 53)
-        udp dport 53 accept
-        tcp dport 53 accept
-
-        # Allow SSH (port 22) but limit it to a specific number of connections per minute
-        tcp dport 22 limit rate 5/minute accept
-
-        # Allow Tor (port 9050)
-        tcp dport 9050 accept
-    }
-}
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_16</link>
-        <pubDate>Sat, 16 Aug 2025 17:59:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3238</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1231">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>On my end, IPv6 is enabled by default.</p>
-</blockquote>
-</aside>
-<p>As far as I can tell IPv6 isn’t disabled in 40_kernel_hardnening.cfg (commented out) so it should be enabled? If it is not specifically disabled then IPv6 Privacy should be enabled by default by Kicksecure in my opinion I’m not quite sure why its not (maybe something related to virtual box)?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_4</link>
-        <pubDate>Sat, 16 Aug 2025 17:56:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3237</guid>
-      </item>
-      <item>
-        <title>Question about IPv6</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="ricardo.martinez" data-post="1" data-topic="1231">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/8baadc/48.png" class="avatar"> ricardo.martinez:</div>
-<blockquote>
-<p>should I take any additional security/privacy measures if I decide to enable it?</p>
-</blockquote>
-</aside>
-<p>Yes, you should enable IPv6 privacy extensions these aren’t enabled by default but are optional for you to un-comment if you need them. <a href="https://www.theregister.com/2022/03/22/legacy_ipv6_addressing_standard_enables/" rel="noopener nofollow ugc">IPv6 has privacy issues by default as it relates to MAC Address in the addresses it uses</a></p>
-<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/security-misc?tab=readme-ov-file#network-hardening">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/security-misc?tab=readme-ov-file#network-hardening" target="_blank" rel="noopener nofollow ugc">github.com</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row" data-github-private-repo="false">
-  <img width="690" height="344" src="https://opengraph.githubassets.com/b327564ef54f3f145ee509c167ab4dca/Kicksecure/security-misc?tab=readme-ov-file#network-hardening" class="thumbnail">
-
-  <h3><a href="https://github.com/Kicksecure/security-misc?tab=readme-ov-file#network-hardening" target="_blank" rel="noopener nofollow ugc">GitHub - Kicksecure/security-misc: Kernel Hardening; Protect Linux User Accounts...</a></h3>
-
-    <p><span class="github-repo-description">Kernel Hardening; Protect Linux User Accounts against Brute Force Attacks; Improve Entropy Collection; Strong Linux User Account Separation; Enhances Misc Security Settings - https://www.kicksecure.com/wiki/Security-misc</span></p>
-</div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>What you need to do to enable is you need to un-comment # <code>ipv6.ip6-privacy=2</code> in <code>/usr/lib/NetworkManager/conf.d/80_ipv6-privacy.conf</code></p>
-<p>and <code>IPv6PrivacyExtensions=kernel</code> and <code>/usr/lib/systemd/networkd.conf.d/80_ipv6-privacy-extensions.conf</code> to enable “Privacy Extensions”.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-ipv6/1231#post_3</link>
-        <pubDate>Sat, 16 Aug 2025 17:55:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3236</guid>
-      </item>
-      <item>
-        <title>Kicksecure Firewall</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="SteveK1978" data-post="14" data-topic="378" data-full="true">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
-<blockquote>
-<p>I don’t think Tor is necessary for Kicksecure. We can have everything Tor into a separate package and allow user to not install it by default.</p>
-</blockquote>
-</aside>
-<p>Not planned due to:<br>
-<a href="https://www.kicksecure.com/wiki/About#torified_updates">Protection from Targeted Malicious Updates</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378#post_15</link>
-        <pubDate>Sat, 16 Aug 2025 16:53:11 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3235</guid>
       </item>
   </channel>
 </rss>

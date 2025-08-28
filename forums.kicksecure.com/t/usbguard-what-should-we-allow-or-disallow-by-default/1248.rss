@@ -33,9 +33,454 @@ Does anyone have input on what should be blocked or not blocked by default? Some
   * I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it&#39;s feasible to allow it by default.
 * Anything else we should consider allowing or not allowing by default?</description>
     
-    <lastBuildDate>Tue, 26 Aug 2025 08:04:32 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 28 Aug 2025 00:00:05 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Quiksilver" data-post="16" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>While the current rules look like they will broadly cover rejecting device with HID interfaces. Would it be good to block specific vendor ids that are used for such products like rubber ducky and other hacker sold products?</p>
+</blockquote>
+</aside>
+<p>That spooks me a bit. Atmel is a reputable microcontroller production company, do we want to block every keyboard or mouse that uses their controllers? I wouldn’t expect so. The Hak5 rubber ducky presents itself as an Atmel device by default (according to information from <a href="https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/" rel="noopener nofollow ugc">https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/</a> and <a href="https://devicehunt.com/all-usb-vendors" class="inline-onebox" rel="noopener nofollow ugc">All USB Vendors | Device Hunt</a> anyway), but a lot of other devices might do the same.</p>
+<p>Also, bear in mind that the vendor ID and product ID of the Rubber Ducky can be changed by the attacker according to <a href="https://github.com/cypher2048/ducky-decode-wiki/blob/master/Guide_Change_USB_VID_PID.wiki" class="inline-onebox" rel="noopener nofollow ugc">ducky-decode-wiki/Guide_Change_USB_VID_PID.wiki at master · cypher2048/ducky-decode-wiki · GitHub</a>, so at best, vendor ID rejection would only protect against attackers who didn’t really know what they were doing. I’m sure there’s a lot of those kinds of attackers out there, but I don’t really the benefits outweigh the costs here.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="17" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Not trying to get off topic but rndis is kernel driver:</p>
+</blockquote>
+</aside>
+<p>If we don’t block that already in security-misc, we really should. We have modprobe config for disabling things…</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Android devices should be blocked by default</p>
+</blockquote>
+</aside>
+<p>Yeah, that’s the sort of thing I was afraid of. Then I think probably leaving MTP off is better.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
+</blockquote>
+</aside>
+<p>Hmm, I like that idea!</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Also USB A-to-B or USB C-to-B “printer cables” that come with or in my case had to buy to plug into the the “printer port” (USB B) and into my PC via (USB A) would not be able to bypass this rule correct?</p>
+</blockquote>
+</aside>
+<p>It shouldn’t, at the end of the day the cable isn’t anything more than an electrical connector that gets four (or nine, in the case of USB 3) pins from the device attached to your computer. Unless the cable is itself malicious (which is a thing), it shouldn’t present any extra danger as opposed to usual USB devices. Of course, if you were unlucky enough to use <a href="https://hak5.org/collections/homepage-collection-grid/products/omg-cable" rel="noopener nofollow ugc">one of these</a> then there would be a problem, but USBGuard should protect you in that instance, again, assuming you have a normal USB keyboard already connected and the cable wasn’t plugged in at boot time.</p>
+<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Would or could some printers come up as Mass Storage Class (0x08) or Communication and CDC Class (0x02 or 0x0A) and bypass it?</p>
+</blockquote>
+</aside>
+<p>I don’t know enough about how the USB protocol works under the hood to give a definitive answer there. I would hope the USB protocol isn’t so poorly designed as to allow a flash drive to call itself a flash drive but then act like a printer (which is the kind of think that would be enabled if a printer could still work as a printer even if it called itself a flash drive).</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/20">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/20</link>
+        <pubDate>Wed, 27 Aug 2025 23:55:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-20</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Printers</p>
+<ul>
+<li>Could introduce attack surface that we don’t want, see <a href="https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/" rel="noopener nofollow ugc">Attacking UNIX Systems via CUPS, Part I</a></li>
+</ul>
+</blockquote>
+</aside>
+<p>Occasionally do use my printer myself to print sometimes but I wouldn’t mind if you rejected printers (class 0x07) with <code>reject with-interface 07</code> by default.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>and <code>with-interface-type</code> should just be <code>with-interface</code> according to <a href="https://usbguard.github.io/documentation/rule-language" rel="noopener nofollow ugc">Rule Language | USBGuard</a>.</p>
+</blockquote>
+</aside>
+<p>Looking at that both <code>reject with-interface interface-type="07"</code> or <code>reject with-interface 07</code> syntax’s seem to be correct but I would stick with whatever matches the style of the rest of your USBGuard policy so in this case <code>reject with-interface 07</code></p>
+<p>Also USB A-to-B or  USB C-to-B “printer cables” that come with or in my case had to buy to plug into the the “printer port” (USB B) and into my PC via (USB A) would not be able to bypass this rule correct?</p>
+<p>Would or could some printers come up as Mass Storage Class (0x08) or Communication and CDC Class (0x02 or 0x0A) and bypass it?</p>
+<p><strong>HP</strong> Printers and scanners:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756">
+  <header class="source">
+
+      <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">github.com/usbids/usbids</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">usb.ids</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+  This file is binary. <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L211-L756" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>Epson</strong> Printers and scanners:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953">
+  <header class="source">
+
+      <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">github.com/usbids/usbids</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">usb.ids</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+  This file is binary. <a href="https://github.com/usbids/usbids/blob/master/usb.ids#L4761-L4953" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Two other common vendors are Cannon and Brother when it comes to printers and scanners.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/19">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/19</link>
+        <pubDate>Wed, 27 Aug 2025 20:38:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-19</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.</p>
+</blockquote>
+</aside>
+<p>Android devices should be blocked by default</p>
+<blockquote>
+<p>An attacker can manipulate filenames or directory paths sent over MTP to read or write files outside the intended media storage area.<br>
+Flaws in the MTP driver’s handling of buffers can lead to crashes or remote code execution if crafted packets trigger invalid memory accesses.<br>
+On systems where the MTP service runs with elevated rights, exploiting a driver bug may allow an attacker to gain higher privileges.<br>
+Improper validation of MTP commands can expose private media or metadata to a malicious host.</p>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://nvd.nist.gov/vuln/detail/CVE-2018-16872">
+  <header class="source">
+      <img src="https://nvd.nist.gov/site-media/images/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2018-16872" target="_blank" rel="noopener nofollow ugc">nvd.nist.gov</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://nvd.nist.gov/vuln/detail/CVE-2018-16872" target="_blank" rel="noopener nofollow ugc">NVD - CVE-2018-16872</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://nvd.nist.gov/vuln/detail/CVE-2022-36847">
+  <header class="source">
+      <img src="https://nvd.nist.gov/site-media/images/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://nvd.nist.gov/vuln/detail/CVE-2022-36847" target="_blank" rel="noopener nofollow ugc">nvd.nist.gov</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://nvd.nist.gov/vuln/detail/CVE-2022-36847" target="_blank" rel="noopener nofollow ugc">NVD - CVE-2022-36847</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
+<blockquote>
+<p>Consider to allow only 3 and above USB version?</p>
+</blockquote>
+<p>This is too restrictive and blocking USB 2.0 only devices does not eliminate DMA or the BadUSB exploits. It would simply break a heap of legacy peripherals while giving a false sense of security.<br>
+Best defense is allow listing devices by vid/pid (as rejecting devices that have HID), enabled IOMMU enforcement and disabling autorun/auto-mount features which I believe Kicksecure already does right?</p>
+<p>Blocking USB 2.0 devices for security is impractical due to their widespread use, despite potential security risks.<br>
+USB 3.0 does reduce passive sniffing but both USB 2.0 and USB 3.0 can be used for BadUSB, or DMA based memory corruption.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/18">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/18</link>
+        <pubDate>Wed, 27 Aug 2025 17:59:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-18</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>Not trying to get off topic but rndis is kernel driver:</p>
+<p><code>find /lib/modules/$(uname -r) -type f -name '*.ko*' | grep -E 'rndis'</code></p>
+<pre><code class="lang-auto">/lib/modules/6.1.0-38-amd64/kernel/drivers/net/usb/rndis_host.ko
+/lib/modules/6.1.0-38-amd64/kernel/drivers/net/wireless/rndis_wlan.ko
+/lib/modules/6.1.0-38-amd64/kernel/drivers/usb/gadget/function/usb_f_rndis.ko
+</code></pre>
+<p>On the topic of USB WiFI (rndis_wlan) I want to put in my voice here I dont think we should block USB WiFi adapters only USB WiFi devices with HID if that’s possible.<br>
+I dont know of Adapters that use <code>rndis_wlan</code> and think it would have to look into this like <a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> mentioned like USB Ethernet adapters on whats common on the market.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/17</link>
+        <pubDate>Wed, 27 Aug 2025 17:56:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-17</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>Disabled USB joysticks?</p>
+<p>That would be good to to promote nofap among Kicksecure users lol</p>
+<p>Joking aside I think Kicksecure should reject USB Webcams honestly and agree with <a class="mention" href="https://forums.kicksecure.com/u/desi_fubu">@desi_fubu</a> in relation to Keytap2. While also realistically agreeing with what <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> about how if they want to get your keystrokes an attacker would try to go with installing a software keylogger on your system as it’s less work. However since AI is becoming more and more relevant I can see Keytap2 based malware or attacks as a probability in the future.</p>
+<p>The only thing is modeprobe also doesn’t disable the driver uvcvideo so if you were to you need to un comment that part in the conf also.</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" target="_blank" rel="noopener nofollow ugc">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" target="_blank" rel="noopener nofollow ugc">etc/modprobe.d/30_security-misc_disable.conf</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/modprobe.d/30_security-misc_disable.conf#L294-L297" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+
+    <pre class="onebox"><code class="lang-conf">
+      <ol class="start lines" start="294" style="counter-reset: li-counter 293 ;">
+          <li>## USB Video Device Class:</li>
+          <li>## Disables the USB-based video streaming driver for devices like some webcams and digital camcorders.</li>
+          <li>##</li>
+          <li>#install uvcvideo /usr/bin/disabled-miscellaneous-by-security-misc</li>
+      </ol>
+    </code></pre>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I really like the addition of USBGuard I think it will bolster and draw more users in to Kicksecure.</p>
+<p>While the current rules look like they will broadly cover rejecting device with HID interfaces. Would it be good to block specific vendor ids that are used for such products like rubber ducky and other hacker sold products?</p>
+<p><a href="https://forums.hak5.org/topic/16696-version-1-usb-vendor-idproduct-id/" class="onebox" target="_blank" rel="noopener nofollow ugc">https://forums.hak5.org/topic/16696-version-1-usb-vendor-idproduct-id/</a></p>
+<p>USB vendor ID that OpenMoko released (0x1D50) has become a popular building HID keyboard emulator style rubber ducky projects:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv">
+  <header class="source">
+
+      <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">github.com/openmoko/openmoko-usb-oui</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">usb_product_ids.psv</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-psv">Vendor ID | Product ID | Description
+0x1d50 | 0x1db5 | [http://www.almesberger.net/misc/idbg/ IDBG] in DFU mode
+0x1d50 | 0x1db6 | [http://www.almesberger.net/misc/idbg/ IDBG] in normal mode
+0x1d50 | 0x4xxx | Reserved for the [http://osmocom.org/ Osmocom] project
+0x1457 / 0x1d50 | 0x5117 | Neo1973/FreeRunner kernel usbnet (g_ether, CDC Ethernet) Mode
+0x1457 / 0x1d50 | 0x5118 | Debug Board (FT2232D) for Neo1973/FreeRunner
+0x1457 / 0x1d50 | 0x5119 | Neo1973/FreeRunner u-boot usbtty CDC ACM Mode
+0x1457 / 0x1d50 | 0x511a | HXD8 u-boot usbtty CDC ACM Mode
+0x1457 / 0x1d50 | 0x511b | SMDK2440 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511c | SMDK2443 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511d | QT2410 u-boot usbtty CDC ACM mode
+0x1457 / 0x1d50 | 0x511e | Reserved
+0x1457 / 0x1d50 | 0x511f | Reserved
+0x1457 / 0x1d50 | 0x5120 | Neo1973/FreeRunner u-boot generic serial Mode
+0x1457 / 0x1d50 | 0x5121 | Neo1973/FreeRunner kernel mass storage (g_storage) Mode
+0x1457 / 0x1d50 | 0x5122 | Neo1973/FreeRunner kernel usbnet (g_ether, RNDIS) Mode
+0x1457 / 0x1d50 | 0x5123 | Neo1973/FreeRunner internal USB Bluetooth CSR4 module
+0x1457 / 0x1d50 | 0x5124 | Neo1973/FreeRunner Bluetooth Device ID service
+0x1457 / 0x1d50 | 0x5125 | TBD *R!*
+0x1457 / 0x1d50 | 0x5126 | TBD *R!*
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/openmoko/openmoko-usb-oui/blob/master/usb_product_ids.psv" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Another one that comes up is the vendor <em>Amtel</em> when it comes to “Rubber Ducky” type clones.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/16</link>
+        <pubDate>Wed, 27 Aug 2025 17:45:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-16</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Some discussion here:</p><aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164468290">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164468290" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc" target="_blank" rel="noopener">Polish USBGuard configuration</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-08-15" data-time="22:16:42" data-timezone="UTC">10:16PM - 15 Aug 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 26 additions and 18 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc" target="_blank" rel="noopener">
+          <span class="added">+26</span>
+          <span class="removed">-18</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/15</link>
+        <pubDate>Wed, 27 Aug 2025 17:36:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-15</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But at the same time, <em>lots</em> of devices are USB 2 only (I don’t think I’ve seen a USB 3 keyboard in my life), so this would probably break way too much. If we were to offer it, it should be something that is opt-in, not opt-out, in my opinion.</p>
+</blockquote>
+</aside>
+<p>Keyboard with USB 3.0: search Kensington K72357FR. But yeah would be nice to have the ability to disable old/backward compatibility as an option for the users.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/14</link>
+        <pubDate>Wed, 27 Aug 2025 10:25:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-14</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
       <item>
         <title>USBGuard - what should we allow or disallow by default?</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
