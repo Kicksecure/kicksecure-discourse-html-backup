@@ -33,9 +33,160 @@ Does anyone have input on what should be blocked or not blocked by default? Some
   * I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it&#39;s feasible to allow it by default.
 * Anything else we should consider allowing or not allowing by default?</description>
     
-    <lastBuildDate>Thu, 28 Aug 2025 00:00:05 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 Aug 2025 05:02:22 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>Doesn’t <code>with‑interface</code> expect an attribute name aka <code>interface-type</code> or subclass or else the parser will reject it?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/25">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/25</link>
+        <pubDate>Fri, 29 Aug 2025 05:02:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-25</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="arraybolt3" data-post="20" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
+</blockquote>
+</aside>
+<p>Hmm, I like that idea!</p>
+</blockquote>
+</aside>
+<p>How about something along the lines like this?</p>
+<pre><code class="lang-auto"># --------------------------------------------------------------
+# Block USB video devices (webcams)
+#   USB‑Video Class = 0x0E (class) – any subclass / protocol
+# --------------------------------------------------------------
+reject with-interface equals { 0e:*:* }
+
+# --------------------------------------------------------------
+# Block stand‑alone microphones 
+#   Audio class = 0x01, subclass = 0x02 (Audio Streaming)
+#   (Headsets usually also expose a HID interface)
+# --------------------------------------------------------------
+#reject with-interface equals { 01:02:* }
+
+# --------------------------------------------------------------
+# Block all USB printers (Printers and Scanners)
+#   Printer class = (class 0x07)
+# --------------------------------------------------------------
+#reject with-interface equals { 07:*:* }
+
+# --------------------------------------------------------------
+# Block pure MIDI devices
+#   Audio class = 0x01, subclass = 0x03 (MIDI Streaming)
+# --------------------------------------------------------------
+#reject with-interface equals { 01:03:* }
+
+# --------------------------------------------------------------
+# Block Bluetooth dongles (Wireless Controller)
+#   Wireless Controller class = 0xE0
+# --------------------------------------------------------------
+#reject with-interface equals { e0:*:* }
+</code></pre>
+<p>Edit: I’m getting confused operators and attributes here for the rules?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/24">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/24</link>
+        <pubDate>Fri, 29 Aug 2025 05:01:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-24</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>For instance, the firmware of a hard drive has also been compromised. See <a href="https://www.kicksecure.com/wiki/Backdoor#Hard_Drive_Firmware_Trojan" rel="noopener nofollow ugc">Hard Drive Firmware Trojan</a>.</p>
+</blockquote>
+</aside>
+<p>I’m fully aware of the threat posed by the Equation APT actor.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>For instance, the firmware of a hard drive has also been compromised. See <a href="https://www.kicksecure.com/wiki/Backdoor#Hard_Drive_Firmware_Trojan" rel="noopener nofollow ugc">Hard Drive Firmware Trojan</a>.</p>
+</blockquote>
+</aside>
+<p>Apologies for the scattered remarks about mixing up internal versus external webcams while referencing Keytap 2.</p>
+<p>The more I read this thread, the greater the impact on my tranquil mindset of each presumed certainty only reveals further unknowns of what I thought I knew.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/23">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/23</link>
+        <pubDate>Fri, 29 Aug 2025 04:56:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-23</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>It would be nice to enable USB Ethernet that doesn’t use RNDIS… but looking at <a href="https://www.usb.org/defined-class-codes" class="inline-onebox" rel="noopener nofollow ugc">Defined Class Codes | USB-IF</a> I don’t immediately see anything about USB and Ethernet that isn’t RNDIS, so I’m not sure an interface rule (like the rules we’ve been using) will work. More investigation is needed there, if it turns out to be possible I’ll try to enable it.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/22">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/22</link>
+        <pubDate>Fri, 29 Aug 2025 04:53:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-22</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I’m not really concerned about this because:</p>
+<ul>
+<li>You have to compromise the system to overwrite the camera’s firmware and turn it malicious. By the time you’ve compromised the system enough to do that, it’s already “game over”.</li>
+</ul>
+</blockquote>
+</aside>
+<p>Fair and good points I still think external USB webcams should be rejected but you know that’s just like my opinion man</p>
+<blockquote>
+<p>it might be possible to mitigate this risk such that we can allow USB Ethernet by default.</p>
+</blockquote>
+<p>I’d be in in favor for this preferably, could a rule to block like <a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> stated work?</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<pre><code class="lang-auto"># Block any USB device that advertises the RNDIS Ethernet interface
+reject with-interface-type 0xef:04:01
+</code></pre>
+</blockquote>
+</aside>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/21">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/21</link>
+        <pubDate>Fri, 29 Aug 2025 04:50:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-21</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
       <item>
         <title>USBGuard - what should we allow or disallow by default?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -731,7 +882,7 @@ Is it safe to say that the standard is CDC‑ECM in most Ethernet USB adapters r
 </li>
 <li>If the camera is already plugged into the system at bootup, then it’s “game over”, but again, that would be the case even with the current highly strict settings, and if an attacker is able to compromise a system enough to flash a camera with non-standard firmware, they can probably also control USBGuard and allow the camera to be used so it can be attacked.
 <ul>
-<li>A counter-argument to this is that USBGuard makes an attacker have to take one more step to attack the camera (maybe - does this exploit work even if the system doesn’t the camera? It probably doesn’t…), and that one more step may be enough to thwart an attacker that doesn’t know they need to take that step.</li>
+<li>A counter-argument to this is that USBGuard makes an attacker have to take one more step to attack the camera (maybe - does this exploit work even if the system rejects the camera? It probably doesn’t…), and that one more step may be enough to thwart an attacker that doesn’t know they need to take that step.</li>
 </ul>
 </li>
 </ul>
