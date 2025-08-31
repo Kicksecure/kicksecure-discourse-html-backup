@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Recommendation for anonymous Kicksecure usage</title>
+    <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262</link>
+    <description>Kicksecure initates Tor connections by default to check for updates and download updates etc.
+
+Is it dangerous to have Kicksecure active 24/7 even when not using it actively as state actors could potentially correlate connection patterns to deanonymize you?
+
+Or is it even more dangerous to shutdown your Kicksecure device when not actively using it as they could correlate your Tor connections with your real life patterns, e.g. you shut down Kicksecure when leaving your physical location with your personal mobile device which is linked to your identity?
+
+I am aware of this is an anoymity question and this is not a target of Kicksecure but related to Kicksecure.</description>
+    
+    <lastBuildDate>Sat, 30 Aug 2025 18:50:21 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="dreaml3zz" data-post="1" data-topic="1262">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/a4c791/48.png" class="avatar"> dreaml3zz:</div>
+<blockquote>
+<p>Is it dangerous to have Kicksecure active 24/7 even when not using it actively as state actors could potentially correlate connection patterns to deanonymize you?</p>
+</blockquote>
+</aside>
+<p>You mean the Tor Daemon active 24/7?</p>
+<p>If so I don’t think so but idk why you would unless you are using Kicksecure as a server of sorts?</p>
+<aside class="quote no-group" data-username="dreaml3zz" data-post="1" data-topic="1262">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/a4c791/48.png" class="avatar"> dreaml3zz:</div>
+<blockquote>
+<p>Or is it even more dangerous to shutdown your Kicksecure device when not actively using it as they could correlate your Tor connections with your real life patterns, e.g. you shut down Kicksecure when leaving your physical location with your personal mobile device which is linked to your identity?</p>
+</blockquote>
+</aside>
+<p>Again you mean kill the Tor daemon connection?<br>
+The only thing a ISP or someone monitoring your network could see is when you bootstraped (connected to Tor) and when you disconnected from Tor.</p>
+<p>In relation to your mobile device I would say as long as you are using mac address spoofing and not using a obvious or unique hostname (eg. Your first name). Then I would say you are fine if you are connecting to the same network you are using Kicksecure on. Realistically if you phone is turned on when you leave they can track your location. They can also see if you phone is turned off. If whatever you are doing requires a high threat model, I would leave your phone turned on and at home or turn it off and put it faraday bag. <a href="https://www.anarsec.guide/posts/nophones/" rel="noopener nofollow ugc">Phones are basically the cop in your pocket.</a></p>
+          <p><a href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/3</link>
+        <pubDate>Sat, 30 Aug 2025 18:50:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1262-3</guid>
+        <source url="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss">Recommendation for anonymous Kicksecure usage</source>
+      </item>
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>Honestly I think the worst thing that could deanonimize you is the fact that I’m pretty darn sure the default handling or the tor state (Tails doesn’t persist the Tor state only saved bridges).</p>
+<p>This means that you connect to your home WiFi SSID and then connect to a public WiFi network. You will have the same entry guards on both networks or really all saved network connections actually.</p>
+<p><em>If I’m wrong about this someone correct my reply cause last I checked tor daemon config with be used for all saved connection.</em></p>
+<p>What I think Kicksecure and (would be good for Whonix host) is to set different guards for each saved connection. I’m not sure how you implement this but here are some approaches worth looking at.</p>
+<p>Two approachs would require some scripting:</p>
+<p><strong>1st Approach:</strong> One torrc template + different DataDirectory per SSID</p>
+<blockquote>
+<p>The DataDirectory directive tells Tor to keep its cached-descriptors, state, and therefore its guard list in that directory. The first time it runs it will build a fresh set of guards.</p>
+</blockquote>
+<pre><code class="lang-auto">- Create a torrc template (~/tor-templates/torrc.template). Leave out the two lines that change per SSID – DataDirectory and UseEntryGuards – inject them later.
+
+- Write a small wrapper script that Network Manager will call from /etc/NetworkManager/dispatcher.d. It receives the SSID as $1:
+</code></pre>
+<p><strong>Approach 2</strong> – A completely separate torrc file per SSID</p>
+<ul>
+<li>Create a directory ~/nm-tor/ and drop as many torrc files as you like. Essentially a process that listens for saved network-manager names and saves the name for each torrc file. This makes the dispatching tor simpler for scripting.</li>
+</ul>
+<p>A completely new DataDirectory means Tor will bootstrap from an empty cache and discover its own, isolated set of entry guards:</p>
+<ul>
+<li>Same torrc file, different directory → different guards</li>
+<li>Different torrc files pointing at different directories → also different guards</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/2</link>
+        <pubDate>Sat, 30 Aug 2025 18:37:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1262-2</guid>
+        <source url="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss">Recommendation for anonymous Kicksecure usage</source>
+      </item>
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[dreaml3zz]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure initates Tor connections by default to check for updates and download updates etc.</p>
+<p>Is it dangerous to have Kicksecure active 24/7 even when not using it actively as state actors could potentially correlate connection patterns to deanonymize you?</p>
+<p>Or is it even more dangerous to shutdown your Kicksecure device when not actively using it as they could correlate your Tor connections with your real life patterns, e.g. you shut down Kicksecure when leaving your physical location with your personal mobile device which is linked to your identity?</p>
+<p>I am aware of this is an anoymity question and this is not a target of Kicksecure but related to Kicksecure.</p>
+          <p><a href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/1</link>
+        <pubDate>Sat, 30 Aug 2025 09:00:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1262-1</guid>
+        <source url="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss">Recommendation for anonymous Kicksecure usage</source>
+      </item>
+  </channel>
+</rss>
