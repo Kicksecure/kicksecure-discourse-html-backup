@@ -11,9 +11,39 @@ Or is it even more dangerous to shutdown your Kicksecure device when not activel
 
 I am aware of this is an anoymity question and this is not a target of Kicksecure but related to Kicksecure.</description>
     
-    <lastBuildDate>Thu, 04 Sep 2025 10:03:54 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Sep 2025 20:52:54 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Tor only runs as a system-level service to my awareness, there is no file matching the pattern <code>/usr/lib/systemd/user/*tor*</code> that is actually Tor-related.</p>
+<p>The only users in the <code>debian-tor</code> group are <code>canary</code>, <code>systemcheck</code>, and <code>sdwdate</code>. Removing users from that group will probably break things and leave Tor enabled. I’m not quite sure that the “polkit route” is, but it’s worth bearing in mind that things that usually would pop up polkit prompts probably will not work except in sysmaint mode due to SUID stripping. (This isn’t that much of a problem usually since you’re not supposed to run privileged things in a user session.)</p>
+<p>Kicksecure isn’t really designed to work without Tor enabled and running. Not only will disabling it break apt and sdwdate, there is code in Kicksecure specifically designed to start Tor if it isn’t running so that things like apt and sdwdate will function. If you have to disable Tor for some reason, then you would need to mask it system-wide, which will break it for both user and sysmaint sessions, require that you un-torify apt sources, leave you without clock synchronization, disable the automatic warrant canary checks, and will potentially make you more vulnerable to some sophisticated attacks. If you’re in an area where Tor is censored, maybe that’s a risk you’re willing to take, but in that instance, masking Tor system-wide is the right thing to do.</p>
+          <p><a href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/7</link>
+        <pubDate>Sun, 07 Sep 2025 20:52:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1262-7</guid>
+        <source url="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss">Recommendation for anonymous Kicksecure usage</source>
+      </item>
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
+        <description><![CDATA[
+            <p>Hmmm well, if you don’t need the Tor service to run for user you may be able to restrict it for user and only have it enabled for sysmaint for updates/upgrades. Take in mind the sdwdate relies on Tor for time sync also which is imperative for certain things to work correctly like certificates and 2fa applications etc.</p>
+<p>If this is the case for you, I wanted to suggest <code>systemctl --user disable tor.service &amp;&amp; systemctl --user mask tor.service</code> if you don’t want the tor daemon running for user <em>user</em> but the tor.service is system wide not a user level service so tha wont work I’m sure? hmmm…</p>
+<p>I’m not sure if its a simple thing of removing user from the debian-tor group so you would be best to go the polkit route <span class="mention">@adrelanos</span> <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> what do you think?</p>
+<p>This use case could documented in the wiki but I personally like the Tor service to load for user since I like to route certain applications through the socks port 9050 like Electrum and Feather wallet.<br>
+Please don’t remove or change how Tor is implemented please. I personally think the Tor service should not change as it’s one of the main reasons people may choose to use Kicksecure since its shipped with it making it great for running hidden services on a server.</p>
+          <p><a href="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262/6</link>
+        <pubDate>Sun, 07 Sep 2025 19:47:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1262-6</guid>
+        <source url="https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262.rss">Recommendation for anonymous Kicksecure usage</source>
+      </item>
       <item>
         <title>Recommendation for anonymous Kicksecure usage</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

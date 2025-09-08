@@ -115,7 +115,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="qB918GmdSnIJgrh89ktD13Uwf"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="7OTxKvkcEeLPOmgc9m4qjxGH5"></script>
 
 <!-- END End of Year Banner -->
 
@@ -139,7 +139,7 @@ END custom CSS / JS
 <meta property="og:article:section" content="Support" />
 <meta property="og:article:section:color" content="0088CC" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="2 mins 🕑" />
+<meta name="twitter:data1" value="3 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
 <meta name="twitter:data2" value="1 ❤" />
 <meta property="article:published_time" content="2025-08-30T09:00:48+00:00" />
@@ -442,6 +442,68 @@ The only thing a ISP or someone monitoring your network could see is when you bo
   <div style="clear: both"></div>
 </aside>
 
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/0x506c61746f'><span itemprop='name'>0x506c61746f</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-07T19:47:06Z' class='post-time'>
+                    September 7, 2025,  7:47pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-07T19:47:06Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Hmmm well, if you don’t need the Tor service to run for user you may be able to restrict it for user and only have it enabled for sysmaint for updates/upgrades. Take in mind the sdwdate relies on Tor for time sync also which is imperative for certain things to work correctly like certificates and 2fa applications etc.</p>
+<p>If this is the case for you, I wanted to suggest <code>systemctl --user disable tor.service &amp;&amp; systemctl --user mask tor.service</code> if you don’t want the tor daemon running for user <em>user</em> but the tor.service is system wide not a user level service so tha wont work I’m sure? hmmm…</p>
+<p>I’m not sure if its a simple thing of removing user from the debian-tor group so you would be best to go the polkit route <span class="mention">@adrelanos</span> <a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> what do you think?</p>
+<p>This use case could documented in the wiki but I personally like the Tor service to load for user since I like to route certain applications through the socks port 9050 like Electrum and Feather wallet.<br>
+Please don’t remove or change how Tor is implemented please. I personally think the Tor service should not change as it’s one of the main reasons people may choose to use Kicksecure since its shipped with it making it great for running hidden services on a server.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-07T20:52:54Z' class='post-time'>
+                    September 7, 2025,  8:52pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-07T20:52:54Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Tor only runs as a system-level service to my awareness, there is no file matching the pattern <code>/usr/lib/systemd/user/*tor*</code> that is actually Tor-related.</p>
+<p>The only users in the <code>debian-tor</code> group are <code>canary</code>, <code>systemcheck</code>, and <code>sdwdate</code>. Removing users from that group will probably break things and leave Tor enabled. I’m not quite sure that the “polkit route” is, but it’s worth bearing in mind that things that usually would pop up polkit prompts probably will not work except in sysmaint mode due to SUID stripping. (This isn’t that much of a problem usually since you’re not supposed to run privileged things in a user session.)</p>
+<p>Kicksecure isn’t really designed to work without Tor enabled and running. Not only will disabling it break apt and sdwdate, there is code in Kicksecure specifically designed to start Tor if it isn’t running so that things like apt and sdwdate will function. If you have to disable Tor for some reason, then you would need to mask it system-wide, which will break it for both user and sysmaint sessions, require that you un-torify apt sources, leave you without clock synchronization, disable the automatic warrant canary checks, and will potentially make you more vulnerable to some sophisticated attacks. If you’re in an area where Tor is censored, maybe that’s a risk you’re willing to take, but in that instance, masking Tor system-wide is the right thing to do.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">

@@ -5,6 +5,347 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Permission-hardener failed</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <p>Hi! I am trying to upgrade my server, but permission hardener failed. Here is the error message:</p>
+<pre><code class="lang-auto">permission-hardener: [ERROR]: File has unexpected hardlinks, cannot handle.
+File name: '/etc/group'
+File name from stat: '/etc/group'
+line: '/usr/sbin/ nosuid'
+
+/var/lib/dpkg/info/security-misc.postinst: ERROR: Permission hardening failed.
+
+</code></pre>
+<p>What should I do?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/permission-hardener-failed/1280#post_1</link>
+        <pubDate>Mon, 08 Sep 2025 01:21:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3392</guid>
+      </item>
+      <item>
+        <title>Dpkg: error while processing a package libreoffice-common installed post-installation script returned error code 10</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I think you missed the part of the logs that actually shows the problem. The libreoffice package probably printed what went wrong immediately above the <code>subprocess from package libreoffice-common post-installation script returned error code 10</code> line. Can you share the full output you get from apt? There’s no need to omit parts for the sake of brevity.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dpkg-error-while-processing-a-package-libreoffice-common-installed-post-installation-script-returned-error-code-10/1279#post_2</link>
+        <pubDate>Sun, 07 Sep 2025 20:54:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3391</guid>
+      </item>
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Tor only runs as a system-level service to my awareness, there is no file matching the pattern <code>/usr/lib/systemd/user/*tor*</code> that is actually Tor-related.</p>
+<p>The only users in the <code>debian-tor</code> group are <code>canary</code>, <code>systemcheck</code>, and <code>sdwdate</code>. Removing users from that group will probably break things and leave Tor enabled. I’m not quite sure that the “polkit route” is, but it’s worth bearing in mind that things that usually would pop up polkit prompts probably will not work except in sysmaint mode due to SUID stripping. (This isn’t that much of a problem usually since you’re not supposed to run privileged things in a user session.)</p>
+<p>Kicksecure isn’t really designed to work without Tor enabled and running. Not only will disabling it break apt and sdwdate, there is code in Kicksecure specifically designed to start Tor if it isn’t running so that things like apt and sdwdate will function. If you have to disable Tor for some reason, then you would need to mask it system-wide, which will break it for both user and sysmaint sessions, require that you un-torify apt sources, leave you without clock synchronization, disable the automatic warrant canary checks, and will potentially make you more vulnerable to some sophisticated attacks. If you’re in an area where Tor is censored, maybe that’s a risk you’re willing to take, but in that instance, masking Tor system-wide is the right thing to do.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262#post_7</link>
+        <pubDate>Sun, 07 Sep 2025 20:52:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3390</guid>
+      </item>
+      <item>
+        <title>Dpkg: error while processing a package libreoffice-common installed post-installation script returned error code 10</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>Errors when installing libreoffice</p>
+<p>sudo apt-get update<br>
+sudo apt-get install --no-install-recommends libreoffice-writer libreoffice-calc</p>
+<pre><code class="lang-auto">dpkg: error processing package libreoffice-common (--configure):
+ subprocess from package libreoffice-common post-installation script returned error code 10
+dpkg: dependencies prevent packages from being configured
+
+dpkg: error processing package libreoffice-core (--configure):
+ dependency problems – leaving unconfigured
+dpkg: dependencies prevent package libreoffice-calc from being configured:
+ libreoffice-calc depends on libreoffice-common (&gt;= 1:7.0.0~alpha~), but:
+   The package libreoffice-common is not yet configured.
+ libreoffice-calc depends on libreoffice-core (= 4:7.4.7-1+deb12u9), but:
+   The package libreoffice-core is not yet configured.
+
+dpkg: error processing package libreoffice-calc (--configure):
+ dependency problems – leaving unconfigured
+dpkg: dependencies prevent package libreoffice-writer from being configured:
+ libreoffice-writer depends on libreoffice-common (&gt;= 1:7.0.0~alpha~), but:
+   The package libreoffice-common is not yet configured.
+ libreoffice-writer depends on libreoffice-core (= 4:7.4.7-1+deb12u9), but:
+   The package libreoffice-core is not yet configured.
+
+dpkg: error processing package libreoffice-writer (--configure):
+ dependency problems – leaving unconfigured
+dpkg: dependencies prevent package libreoffice-base-core from being configured:
+ libreoffice-base-core depends on libreoffice-core-nogui (= 4:7.4.7-1+deb12u9) | libreoffice-core (= 4:7.4.7-1+deb12u9), but:
+   The package libreoffice-core-nogui is not installed.
+   The package libreoffice-core is not yet configured.
+
+dpkg: error processing package libreoffice-base-core (--configure):
+ dependency problems – leaving unconfigured
+Processing triggers for fontconfig (2.14.1-4) …
+Processing triggers for desktop-file-utils (0.26-1) …
+Processing triggers for hicolor-icon-theme (0.17-2) …
+Processing triggers for gnome-menus (3.36.0-1.1) …
+Processing triggers for libc-bin (2.36-9+deb12u13) …
+Processing triggers for man-db (2.11.2-2) …
+Processing triggers for shared-mime-info (2.2-1) …
+Processing triggers for security-misc (3:47.0-1) …
+INFO: triggered security-misc: 'security-misc' security-misc DPKG_MAINTSCRIPT_NAME: 'postinst' $*: 'triggered /usr' 2: '/usr'
+/usr/libexec/security-misc/mmap-rnd-bits: INFO: Successfully written ASLR map config file:
+/etc/sysctl.d/30_security-misc_aslr-mmap.conf
+Running SUID Disabler and Permission Hardener... See also:
+https://www.kicksecure.com/wiki/SUID_Disabler_and_Permission_Hardener
+/var/lib/dpkg/info/security-misc.postinst: INFO: running: permission-hardener enable
+permission-hardener: [NOTICE]: Executing: setcap -r /bin/ping
+permission-hardener: [NOTICE]: To compare the current and previous permission modes, install 'meld' (or preferred diff tool) for comparison of file mode changes:
+    sudo apt install --no-install-recommends meld
+    meld /var/lib/permission-hardener-v2/existing_mode/statoverride /var/lib/permission-hardener-v2/new_mode/statoverride
+/var/lib/dpkg/info/security-misc.postinst: INFO: Permission hardening success.
+Processing triggers for mailcap (3.70+nmu1) …
+Errors occurred while processing the following packages:
+ libreoffice-common
+ libreoffice-core
+ libreoffice-calc
+ libreoffice-writer
+ libreoffice-base-core
+
+</code></pre>
+<p>sudo dpkg --configure -a</p>
+<p>sudo apt --fix-broken install</p>
+<p>the same error appears when entering these commands.</p>
+<p>I cannot install libreoffice on a working system</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dpkg-error-while-processing-a-package-libreoffice-common-installed-post-installation-script-returned-error-code-10/1279#post_1</link>
+        <pubDate>Sun, 07 Sep 2025 20:03:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3389</guid>
+      </item>
+      <item>
+        <title>Recommendation for anonymous Kicksecure usage</title>
+        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
+        <description><![CDATA[ <p>Hmmm well, if you don’t need the Tor service to run for user you may be able to restrict it for user and only have it enabled for sysmaint for updates/upgrades. Take in mind the sdwdate relies on Tor for time sync also which is imperative for certain things to work correctly like certificates and 2fa applications etc.</p>
+<p>If this is the case for you, I wanted to suggest <code>systemctl --user disable tor.service &amp;&amp; systemctl --user mask tor.service</code> if you don’t want the tor daemon running for user <em>user</em> but the tor.service is system wide not a user level service so tha wont work I’m sure? hmmm…</p>
+<p>I’m not sure if its a simple thing of removing user from the debian-tor group so you would be best to go the polkit route <span class="mention">@adrelanos</span> <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> what do you think?</p>
+<p>This use case could documented in the wiki but I personally like the Tor service to load for user since I like to route certain applications through the socks port 9050 like Electrum and Feather wallet.<br>
+Please don’t remove or change how Tor is implemented please. I personally think the Tor service should not change as it’s one of the main reasons people may choose to use Kicksecure since its shipped with it making it great for running hidden services on a server.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262#post_6</link>
+        <pubDate>Sun, 07 Sep 2025 19:47:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3388</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
+        <description><![CDATA[ <p>There is seven 0x04 – 0x0A protocals for RNDIS the rule looks like it only is RNDIS over Ethernet?</p>
+<pre><code class="lang-auto">reject with-interface one-of { ef:05:* }  # RNDIS over Wi‑Fi
+reject with-interface one-of { ef:06:* }  # RNDIS over WiMAX
+reject with-interface one-of { ef:07:* }  # RNDIS over WWAN
+reject with-interface one-of { ef:08:* }  # RNDIS for Raw IPv4
+reject with-interface one-of { ef:09:* }  # RNDIS for Raw IPv6
+reject with-interface one-of { ef:0a:* }  # RNDIS for GPRS
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_33</link>
+        <pubDate>Sun, 07 Sep 2025 19:36:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3386</guid>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
+        <description><![CDATA[ <p>My Alfa wireless USB WiFi adapter is blocked after I plug it in.</p>
+<p>This is the output of my Alfa wireless adapter for lsusb: <code>ID 0e8d:7612</code><br>
+Could you add a rule that allows WiFi protocals?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_32</link>
+        <pubDate>Sun, 07 Sep 2025 19:36:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3385</guid>
+      </item>
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
+        <description><![CDATA[ <p>This idea was inspired by this users post:</p>
+<blockquote>
+<p>forums . kicksecure. com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057</p>
+</blockquote>
+<p>Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a <code>/etc/profile.d/</code> drop in to set the <code>XDG_CACHE_HOME=/tmp/.cache</code> variable for all users shell.</p>
+<h2><a name="p-3384-idea-for-etcprofiledxdg-cachesh-1" class="anchor" href="https://forums.kicksecure.com#p-3384-idea-for-etcprofiledxdg-cachesh-1"></a>Idea for /etc/profile.d/xdg-cache.sh</h2>
+<pre><code class="lang-auto">#!/bin/sh
+
+## Set XDG_CACHE_HOME to a per-user cache directory.
+#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
+#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
+#
+## Detect whether /tmp is a mount point (i.e. a separate filesystem).
+#    On most modern distros this will be a tmpfs, but on some it may
+#    be a regular disk partition.
+if grep -q "^tmpfs.*/tmp.*tmpfs" /proc/mounts || mountpoint -q /tmp; then
+
+    # /tmp is a mount point - assume it is a tmpfs.
+    BASE_ROOT="/tmp/${USER}"
+else
+    # /tmp is part of the root filesystem (disk based).
+    # Use the traditional default users /home based cache location instead.
+    BASE_ROOT="${HOME}"
+fi
+
+## Build the final cache directory path.
+#    We always put the cache in a ".cache" sub-folder so that tools
+#    that follow the XDG spec find what they expect.
+CACHE_DIR="${BASE_ROOT}/.cache"
+
+## Ensure the directory exists and is private to the user.
+#    /tmp is world-writable (drwxrwxrwt), so we must create a
+#    private subtree and lock it down with chmod 700.
+#
+# Create the parent directory (only needed when we are using /tmp)
+if [ "${BASE_ROOT}" != "${HOME}" ] &amp;&amp; [ ! -d "${BASE_ROOT}" ]; then
+    mkdir -p "${BASE_ROOT}"
+    chmod 700 "${BASE_ROOT}"          
+fi
+
+# Now create the .cache directory itself
+mkdir -p "${CACHE_DIR}"
+chmod 700 "${CACHE_DIR}"
+
+## Export the variable so the rest of the session sees it.
+export XDG_CACHE_HOME="${CACHE_DIR}"
+</code></pre>
+<p>For the above To make it more bullet‑proof, you could tighten the /tmp detection for the <code>export XDG_CAHCE_HOME="/tmp/${USER}/.cache</code> creation</p>
+<p>Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.<br>
+In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.<br>
+Either the package should detect this and not interfere. otherwise a more robust way would be to ship <code>/etc/fstab</code> to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?</p>
+<h2><a name="p-3384-package-structure-summary-idea-2" class="anchor" href="https://forums.kicksecure.com#p-3384-package-structure-summary-idea-2"></a>Package Structure Summary Idea</h2>
+<pre><code class="lang-auto">tmpfs-setup package/
+├── DEBIAN/
+│   ├── control
+│   ├── postinst
+|   └── prerm (depending on implementation)
+├── etc/
+│   ├── default/
+│   │   └── tmpfs-config
+│   └── profile.d/
+│       └── xdg-cache-home.sh
+└── usr/
+    └── share/doc/your-package/
+        └── README.Debian
+</code></pre>
+<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
+<blockquote>
+<p>fedoraproject . org/wiki/Features/tmp-on-tmpfs</p>
+<blockquote>
+<p>Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs</p>
+<blockquote>
+<p>From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</p>
+</blockquote>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277#post_1</link>
+        <pubDate>Sun, 07 Sep 2025 19:00:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3384</guid>
+      </item>
+      <item>
+        <title>Is anonbox no longer relevant and not in the repository?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Anbox is no longer maintained, as shown on <a href="https://github.com/anbox" class="inline-onebox" rel="noopener nofollow ugc">Anbox · GitHub</a>. It does appear to be absent from the repositories of Debian 12 and 13 (which the existing Kicksecure 17 and future Kicksecure 18 are based on, respectively).</p>
+<p>Kicksecure 18 will use Wayland, which means it will most likely work with Waydroid. In the mean time, it may be possible to get Waydroid to work on Kicksecure 17 by using a windowed Wayland compositor such as Weston, however this is undocumented and last time I did it, it was very tricky to get working.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275#post_2</link>
+        <pubDate>Sun, 07 Sep 2025 14:47:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3382</guid>
+      </item>
+      <item>
+        <title>Is anonbox no longer relevant and not in the repository?</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>When I try to install anonbox following the instructions from the wiki on a clean whonix machine, it says it’s not in the repository.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Anbox">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1757237425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc" title="11:54AM - 17 August 2025">Kicksecure – 17 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://www.kicksecure.com/w/images/1/1e/Anbox_apps_short.png?version=8b0ad69f34c1c8f95e203577dfa9f351" class="thumbnail" alt="" width="690" height="255"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc">Anbox - Run Android Applications and Games</a></h3>
+
+  <p>Anbox allows Android applications and mobile games to run inside Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Unable to locate package anbox<br>
+zsh: exit 100   sudo apt install --no-install-recommends linux-image-amd64 linux-headers-amd6</p>
+<p>Also the documentation says to install anonbox version 2018, is this project abandoned and no longer recommended?</p>
+<p>I was planning to repeat the above instructions</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account">
+  <header class="source">
+      <img src="https://web.archive.org/web/20230603151721im_/https://agorism.blog/favicon.ico" class="site-icon" alt="" width="32" height="37">
+
+      <a href="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account" target="_blank" rel="noopener nofollow ugc" title="01:03AM - 03 September 2022">anarkio – 3 Sep 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="" height="" src="https://web.archive.org/web/20230603151721im_/https://agorism.blog/img/avatars/a.png" class="thumbnail" alt="">
+
+<h3><a href="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account" target="_blank" rel="noopener nofollow ugc">[Tech] How to create anonymous Telegram and Signal accounts without a phone</a></h3>
+
+  <p>Tags: #tech #privacy #anonymity #telegram #signal #whonix  This guide (Whonix + Anbox) also works for other apps, such as Signal, Samoura...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275#post_1</link>
+        <pubDate>Sun, 07 Sep 2025 14:31:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3381</guid>
+      </item>
+      <item>
+        <title>Wayland only or Noland</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This is the development sub-forum.</p>
+<p>Before participating in a development discussion, please ensure you have thoroughly reviewed the entire thread. For example, a link to <a href="https://forums.whonix.org/t/port-to-wayland/17380">https://forums.whonix.org/t/port-to-wayland/17380</a> was already provided, where the topic of GNOME/KDE is explicitly discussed.</p>
+<p>From that thread:</p>
+<blockquote>
+<p>It’s probably not a port to GNOME. Reasons: <a href="https://www.whonix.org/wiki/Dev/GNOME">Dev/GNOME - Whonix</a></p>
+</blockquote>
+<p>That link now redirects to:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/GNOME">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1757151024" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/GNOME" target="_blank" rel="noopener" title="11:30AM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/GNOME" target="_blank" rel="noopener">Dev/GNOME</a></h3>
+
+  <p>Kicksecure Development Notes on GNOME</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Reading that page alone should make it clear why GNOME is not being considered.</p>
+<p>This will be formalized here:<br>
+<a href="https://www.kicksecure.com/wiki/Development_Discussion_Policy#Development_Discussion_Expectations">Development Discussion Expectations</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/wayland-only-or-noland/1170#post_9</link>
+        <pubDate>Sun, 07 Sep 2025 06:52:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3380</guid>
+      </item>
+      <item>
         <title>USBGuard - what should we allow or disallow by default?</title>
         <dc:creator><![CDATA[@MetalMoxie]]></dc:creator>
         <description><![CDATA[ <p>4 those that cant wait this guide is good</p>
@@ -784,260 +1125,6 @@ allow with-interface equals { 03:01:02 } if !allowed-matches(with-interface equa
         <link>https://forums.kicksecure.com/t/wayland-only-or-noland/1170#post_5</link>
         <pubDate>Sat, 30 Aug 2025 00:42:51 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3332</guid>
-      </item>
-      <item>
-        <title>Rollback to older version (if available)</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://www.openkylin.top/index-en.html">Open Kylin OS</a>: Has a rollback feature, it use <a href="https://archive.kylinos.cn/kylin/KYLIN-ALL/pool/ostree/">ostree-pkgs</a> (similar to fedora-silverblue, but this is a debian version).</p>
-<p><a href="https://vanillaos.org/">Vanilla OS</a>: Has a rollback feature by using <a href="https://github.com/Vanilla-OS/ABRoot">ABRoot</a> (also debian based).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/rollback-to-older-version-if-available/1178#post_3</link>
-        <pubDate>Sat, 30 Aug 2025 00:36:04 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3331</guid>
-      </item>
-      <item>
-        <title>Wayland only or Noland</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>For the Trixie port, removing Xwayland does not look possible without switching to a resource-heavy desktop environment or using hacks:</p>
-<ul>
-<li>There seem to be very few desktops that are fully ready for Wayland in Debian Trixie. GNOME is ready, KDE is ready, LXQt is ready <em>enough</em> (still some rough edges but they can mostly be papered over). XFCE is missing critical functionality and is too buggy. Cinnamon and Budgie are likely too immature and are potentially resource-heavy anyway. So in practical terms, it’s LXQt or nothing if we want to port to Wayland for Trixie.</li>
-<li>LXQt supports quite a few compositors (Labwc, KWin, Wayfire, Hyprland, Sway, River and Niri), but of those, KWin is a resource-heavy KDE component, and everything other than labwc and wayfire are beginner-unfriendly tiling compositors. Wayfire does not appear to support software rendering in Trixie, making it unusable in VirtualBox at least in my initial testing, so we’re limited to labwc (which is the recommended compositor for LXQt anyway).</li>
-<li>labwc in Trixie is unable to start without XWayland installed: <a href="https://github.com/labwc/labwc/issues/434" class="inline-onebox" rel="noopener nofollow ugc">Degrade gracefully when built with xwayland support but it isn't available during runtime · Issue #434 · labwc/labwc · GitHub</a> Attempting to remove Xwayland and start labwc results in:</li>
-</ul>
-<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/4aced3694cd5e9999a8d2f9e2b7f11f011607660.png" data-download-href="https://forums.kicksecure.com/uploads/default/4aced3694cd5e9999a8d2f9e2b7f11f011607660" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/4aced3694cd5e9999a8d2f9e2b7f11f011607660_2_690x494.png" alt="image" data-base62-sha1="aFMsdpf1omlIHaHf8DmEcxHPt84" width="690" height="494" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/4aced3694cd5e9999a8d2f9e2b7f11f011607660_2_690x494.png, https://forums.kicksecure.com/uploads/default/optimized/1X/4aced3694cd5e9999a8d2f9e2b7f11f011607660_2_1035x741.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/4aced3694cd5e9999a8d2f9e2b7f11f011607660_2_1380x988.png 2x" data-dominant-color="121213"></a></div><p></p>
-<p>The only options I can see moving forward are:</p>
-<ul>
-<li>Allow XWayland but attempt to restrict all apps to using Wayland instead of X if possible</li>
-<li>Attempt to kill XWayland after session start and hope it doesn’t come back</li>
-<li>Replace XWayland with some dummy binary that can fool labwc into thinking it’s there</li>
-</ul>
-<p>Further research into making a fake XWayland binary will probably occur, but we should be ready for this to not work.</p>
-<p>Also, spice-vdagent (which provides clipboard sharing and mouse integration under KVM) requires XWayland to be running in order to function. Theoretically we could document how to enable XWayland for users who depend on those features, but in general, not having them is a serious usability issue. (We’re facing similar issues with VirtualBox, which still needs investigation.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/wayland-only-or-noland/1170#post_3</link>
-        <pubDate>Fri, 29 Aug 2025 22:08:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3329</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <p>Doesn’t <code>with‑interface</code> expect an attribute name aka <code>interface-type</code> or subclass or else the parser will reject it?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_25</link>
-        <pubDate>Fri, 29 Aug 2025 05:02:22 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3328</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="arraybolt3" data-post="20" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
-</blockquote>
-</aside>
-<p>Hmm, I like that idea!</p>
-</blockquote>
-</aside>
-<p>How about something along the lines like this?</p>
-<pre><code class="lang-auto"># --------------------------------------------------------------
-# Block USB video devices (webcams)
-#   USB‑Video Class = 0x0E (class) – any subclass / protocol
-# --------------------------------------------------------------
-reject with-interface equals { 0e:*:* }
-
-# --------------------------------------------------------------
-# Block stand‑alone microphones 
-#   Audio class = 0x01, subclass = 0x02 (Audio Streaming)
-#   (Headsets usually also expose a HID interface)
-# --------------------------------------------------------------
-#reject with-interface equals { 01:02:* }
-
-# --------------------------------------------------------------
-# Block all USB printers (Printers and Scanners)
-#   Printer class = (class 0x07)
-# --------------------------------------------------------------
-#reject with-interface equals { 07:*:* }
-
-# --------------------------------------------------------------
-# Block pure MIDI devices
-#   Audio class = 0x01, subclass = 0x03 (MIDI Streaming)
-# --------------------------------------------------------------
-#reject with-interface equals { 01:03:* }
-
-# --------------------------------------------------------------
-# Block Bluetooth dongles (Wireless Controller)
-#   Wireless Controller class = 0xE0
-# --------------------------------------------------------------
-#reject with-interface equals { e0:*:* }
-</code></pre>
-<p>Edit: I’m getting confused operators and attributes here for the rules?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_24</link>
-        <pubDate>Fri, 29 Aug 2025 05:01:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3327</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick Schleizer:</div>
-<blockquote>
-<p>For instance, the firmware of a hard drive has also been compromised. See <a href="https://www.kicksecure.com/wiki/Backdoor#Hard_Drive_Firmware_Trojan" rel="noopener nofollow ugc">Hard Drive Firmware Trojan</a>.</p>
-</blockquote>
-</aside>
-<p>I’m fully aware of the threat posed by the Equation APT actor.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick Schleizer:</div>
-<blockquote>
-<p>For instance, the firmware of a hard drive has also been compromised. See <a href="https://www.kicksecure.com/wiki/Backdoor#Hard_Drive_Firmware_Trojan" rel="noopener nofollow ugc">Hard Drive Firmware Trojan</a>.</p>
-</blockquote>
-</aside>
-<p>Apologies for the scattered remarks about mixing up internal versus external webcams while referencing Keytap 2.</p>
-<p>The more I read this thread, the greater the impact on my tranquil mindset of each presumed certainty only reveals further unknowns of what I thought I knew.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_23</link>
-        <pubDate>Fri, 29 Aug 2025 04:56:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3326</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>It would be nice to enable USB Ethernet that doesn’t use RNDIS… but looking at <a href="https://www.usb.org/defined-class-codes" class="inline-onebox" rel="noopener nofollow ugc">Defined Class Codes | USB-IF</a> I don’t immediately see anything about USB and Ethernet that isn’t RNDIS, so I’m not sure an interface rule (like the rules we’ve been using) will work. More investigation is needed there, if it turns out to be possible I’ll try to enable it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_22</link>
-        <pubDate>Fri, 29 Aug 2025 04:53:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3325</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>I’m not really concerned about this because:</p>
-<ul>
-<li>You have to compromise the system to overwrite the camera’s firmware and turn it malicious. By the time you’ve compromised the system enough to do that, it’s already “game over”.</li>
-</ul>
-</blockquote>
-</aside>
-<p>Fair and good points I still think external USB webcams should be rejected but you know that’s just like my opinion man</p>
-<blockquote>
-<p>it might be possible to mitigate this risk such that we can allow USB Ethernet by default.</p>
-</blockquote>
-<p>I’d be in in favor for this preferably, could a rule to block like <a class="mention" href="https://forums.kicksecure.com/u/nth9r6">@NTH9R6</a> stated work?</p>
-<aside class="quote no-group" data-username="NTH9R6" data-post="10" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
-<blockquote>
-<pre><code class="lang-auto"># Block any USB device that advertises the RNDIS Ethernet interface
-reject with-interface-type 0xef:04:01
-</code></pre>
-</blockquote>
-</aside> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_21</link>
-        <pubDate>Fri, 29 Aug 2025 04:50:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3324</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>That looks OK to me. As long as it’s <em>only</em> /boot/efi that hasn’t been mounted read-only (as the dialog shows), then you’re no worse off than before.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_14</link>
-        <pubDate>Thu, 28 Aug 2025 21:06:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3323</guid>
-      </item>
-      <item>
-        <title>Question about grub-live and writable file system</title>
-        <dc:creator><![CDATA[@Jac]]></dc:creator>
-        <description><![CDATA[ <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/01c5091cd40533c5e9d5d82834d2f37ca3d9479e.png" data-download-href="https://forums.kicksecure.com/uploads/default/01c5091cd40533c5e9d5d82834d2f37ca3d9479e" title="4-50"><img src="https://forums.kicksecure.com/uploads/default/original/1X/01c5091cd40533c5e9d5d82834d2f37ca3d9479e.png" alt="4-50" data-base62-sha1="fECHLmRImLoddQvzUhyBxp3QKi" width="690" height="395" data-dominant-color="96999F"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/question-about-grub-live-and-writable-file-system/1221#post_13</link>
-        <pubDate>Thu, 28 Aug 2025 07:27:32 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3322</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="16" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>While the current rules look like they will broadly cover rejecting device with HID interfaces. Would it be good to block specific vendor ids that are used for such products like rubber ducky and other hacker sold products?</p>
-</blockquote>
-</aside>
-<p>That spooks me a bit. Atmel is a reputable microcontroller production company, do we want to block every keyboard or mouse that uses their controllers? I wouldn’t expect so. The Hak5 rubber ducky presents itself as an Atmel device by default (according to information from <a href="https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/" rel="noopener nofollow ugc">https://forums.hak5.org/topic/25510-question-vendor-id-and-product-id-of-the-duck/</a> and <a href="https://devicehunt.com/all-usb-vendors" class="inline-onebox" rel="noopener nofollow ugc">All USB Vendors | Device Hunt</a> anyway), but a lot of other devices might do the same.</p>
-<p>Also, bear in mind that the vendor ID and product ID of the Rubber Ducky can be changed by the attacker according to <a href="https://github.com/cypher2048/ducky-decode-wiki/blob/master/Guide_Change_USB_VID_PID.wiki" class="inline-onebox" rel="noopener nofollow ugc">ducky-decode-wiki/Guide_Change_USB_VID_PID.wiki at master · cypher2048/ducky-decode-wiki · GitHub</a>, so at best, vendor ID rejection would only protect against attackers who didn’t really know what they were doing. I’m sure there’s a lot of those kinds of attackers out there, but I don’t really the benefits outweigh the costs here.</p>
-<aside class="quote no-group" data-username="Quiksilver" data-post="17" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>Not trying to get off topic but rndis is kernel driver:</p>
-</blockquote>
-</aside>
-<p>If we don’t block that already in security-misc, we really should. We have modprobe config for disabling things…</p>
-<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>Android devices should be blocked by default</p>
-</blockquote>
-</aside>
-<p>Yeah, that’s the sort of thing I was afraid of. Then I think probably leaving MTP off is better.</p>
-<aside class="quote no-group" data-username="Quiksilver" data-post="18" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>For easy usability and user choice I think a USBGuard element/button part on the sysmaint panel should open the <code>30_security-misc.conf</code> in nano so users can comment or un comment out what they need.</p>
-</blockquote>
-</aside>
-<p>Hmm, I like that idea!</p>
-<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>Also USB A-to-B or USB C-to-B “printer cables” that come with or in my case had to buy to plug into the the “printer port” (USB B) and into my PC via (USB A) would not be able to bypass this rule correct?</p>
-</blockquote>
-</aside>
-<p>It shouldn’t, at the end of the day the cable isn’t anything more than an electrical connector that gets four (or nine, in the case of USB 3) pins from the device attached to your computer. Unless the cable is itself malicious (which is a thing), it shouldn’t present any extra danger as opposed to usual USB devices. Of course, if you were unlucky enough to use <a href="https://hak5.org/collections/homepage-collection-grid/products/omg-cable" rel="noopener nofollow ugc">one of these</a> then there would be a problem, but USBGuard should protect you in that instance, again, assuming you have a normal USB keyboard already connected and the cable wasn’t plugged in at boot time.</p>
-<aside class="quote no-group" data-username="Quiksilver" data-post="19" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>Would or could some printers come up as Mass Storage Class (0x08) or Communication and CDC Class (0x02 or 0x0A) and bypass it?</p>
-</blockquote>
-</aside>
-<p>I don’t know enough about how the USB protocol works under the hood to give a definitive answer there. I would hope the USB protocol isn’t so poorly designed as to allow a flash drive to call itself a flash drive but then act like a printer (which is the kind of think that would be enabled if a printer could still work as a printer even if it called itself a flash drive).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248#post_20</link>
-        <pubDate>Wed, 27 Aug 2025 23:55:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3321</guid>
-      </item>
-      <item>
-        <title>Systemd Service Hardening?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>FWIW, CUPS doesn’t even appear to be installed on Kicksecure 17 by default, unless I accidentally uninstalled it in my development VM during other work:</p>
-<pre><code class="lang-auto">[sysmaint ~]% apt list --installed | grep cups
-
-WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
-
-libcups2/oldstable,oldstable-security,now 2.4.2-3+deb12u8 amd64 [installed,automatic]
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_7</link>
-        <pubDate>Wed, 27 Aug 2025 20:47:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3320</guid>
       </item>
   </channel>
 </rss>
