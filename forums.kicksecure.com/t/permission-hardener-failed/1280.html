@@ -117,7 +117,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="VfZ9eIsivVCdZaCFkF0KT2Yhe"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="ebYoTgTmnrwdg65jo1mIqnuCw"></script>
 
 <!-- END End of Year Banner -->
 
@@ -229,6 +229,202 @@ line: '/usr/sbin/ nosuid'
 
 </code></pre>
 <p>What should I do?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-08T09:11:42Z' class='post-time'>
+                    September 8, 2025,  9:11am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-08T09:11:42Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Something uncommon about your file <code>/etc/group</code>.</p>
+<p>For debugging:</p>
+<pre><code>ls -la /etc/group
+</code></pre>
+<p>And.</p>
+<pre><code>realpath /etc/group
+</code></pre>
+<p>And.</p>
+<pre><code>chmod-calc /etc/group
+</code></pre>
+<p>(<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Chmod-calc" class="inline-onebox">chmod-calc</a>)</p>
+<p>Ideally, compare that to system without that issue.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/SteveK1978'><span itemprop='name'>SteveK1978</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-08T15:25:29Z' class='post-time'>
+                    September 8, 2025,  3:25pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-08T15:25:29Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1280">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><code>chmod-calc /etc/group</code></p>
+</blockquote>
+</aside>
+<p>The result of the server with problem:</p>
+<pre><code class="lang-auto"># chmod-calc /etc/group
+Permissions for: '/etc/group'
+Type: Hardlink
+Owner: root
+Group: root
+Octal Permissions: 644
+File Size: 815 bytes
+Link Count: 2
+Hidden File: No
+ACLs: none
+Extended Attributes: none
+Capabilities: None
+Immutable (chattr +i): No
+
+Symlink: No
+
+Parent Folder Symlink: No
+
+Category   Read   Write  Execute 
+Owner      Yes    Yes    No      
+Group      Yes    No     No      
+Public     Yes    No     No      
+
+Special Attributes:
+SUID: Not Set
+SGID: Not Set
+Sticky Bit: Not Set
+
+</code></pre>
+<p>After I did:</p>
+<pre><code class="lang-auto"># cp -ra /etc/group ~ &amp;&amp; rm -rf /etc/group &amp;&amp; cp -ra ~/group /etc/group
+</code></pre>
+<p>The `chmod-calc` output between the problematic server and normal server are the same:</p>
+<pre><code class="lang-auto"># chmod-calc /etc/group
+Permissions for: '/etc/group'
+Type: Regular File
+Owner: root
+Group: root
+Octal Permissions: 644
+File Size: 815 bytes
+Link Count: 1
+Hidden File: No
+ACLs: none
+Extended Attributes: none
+Capabilities: None
+Immutable (chattr +i): No
+
+Symlink: No
+
+Parent Folder Symlink: No
+
+Category   Read   Write  Execute 
+Owner      Yes    Yes    No      
+Group      Yes    No     No      
+Public     Yes    No     No      
+
+Special Attributes:
+SUID: Not Set
+SGID: Not Set
+Sticky Bit: Not Set
+</code></pre>
+<p>But after I install a random package with apt, the old issue pops up and /etc/group become a hardlink again.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-08T15:39:18Z' class='post-time'>
+                    September 8, 2025,  3:39pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-08T15:39:18Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>What’s the <code>realpath</code>?</p>
+<p><code>/etc/group</code> normally isn’t a hard link. And without knowing the realpath, I have no idea how to investigate what’s causing that.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/SteveK1978'><span itemprop='name'>SteveK1978</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-09-08T17:58:35Z' class='post-time'>
+                    September 8, 2025,  5:58pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-09-08T17:58:35Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <pre><code class="lang-auto"># realpath /etc/group
+/etc/group
+</code></pre>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
