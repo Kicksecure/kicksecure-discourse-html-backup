@@ -26,9 +26,99 @@ Remounts parts of the filesystem read‑only (or makes the whole tree read‑onl
 
 There is many others but these few caught my eye.</description>
     
-    <lastBuildDate>Wed, 27 Aug 2025 20:47:30 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 15 Sep 2025 20:34:05 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="1258">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
+<blockquote>
+<p>Couldn’t we create a CUPS drop in <code>/etc/systemd/system/cups.service.d/hardening.conf</code> that would apply some hardened options that would essentially mitigate:</p>
+</blockquote>
+</aside>
+<p>As Patrick mentioned <code>/usr/lib/systemd/system</code> is better for distribution to ship.</p>
+<p>Heres an idea here that looks like it would mitigate that</p>
+<blockquote>
+<p>By default, it is listed on UDP port 631 and is open to the world</p>
+</blockquote>
+<ul>
+<li>Example service conf</li>
+</ul>
+<p><code>/usr/lib/systemd/system/cups.service.d/99-cups-harden.conf</code></p>
+<pre><code class="lang-auto">[Service]
+# Minimal capabilities – only needed to bind to privileged ports (631)
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+
+# Give CUPS its own network namespace – no external network access
+PrivateNetwork=yes
+
+# Prevent the service from gaining new privileges (setuid, etc.)
+NoNewPrivileges=yes
+
+# Restrict network families – only IPv4/IPv6 TCP, no UDP
+RestrictAddressFamilies=AF_INET AF_INET6
+
+# Bind only to the loopback interface (change to a specific IP if you need LAN access)
+# The ExecStart line in the original unit already runs /usr/sbin/cupsd
+# If you want to force a bind address at the service level uncomment
+# ExecStart=
+# ExecStart=/usr/sbin/cupsd -o Listen=127.0.0.1:631
+
+# Filesystem protection – keep CUPS from touching the rest of the system
+ProtectSystem=full
+PrivateTmp=yes
+ReadOnlyPaths=/etc/cups
+ReadWritePaths=/var/spool/cups /var/log/cups
+
+# Drop any unnecessary privileges
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/10</link>
+        <pubDate>Mon, 15 Sep 2025 20:34:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-10</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="5" data-topic="1258">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>/usr/lib/systemd/system</p>
+</blockquote>
+</aside>
+<p>I was not even thinking about CUPS cause I even have a printer nor print anything. Might be something to look into <img src="https://forums.kicksecure.com/images/emoji/twitter/+1.png?v=14" title=":+1:" class="emoji" alt=":+1:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/9</link>
+        <pubDate>Mon, 15 Sep 2025 20:27:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-9</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks for pointing that out</p>
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/8</link>
+        <pubDate>Mon, 15 Sep 2025 20:21:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-8</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
       <item>
         <title>Systemd Service Hardening?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>

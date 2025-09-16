@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Disabling eBPF functionality completely for container software?</title>
+    <link>https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287</link>
+    <description>So I was wondering if Kicksecure should disable eBPF altogether for containers?
+
+Security-Misc already addresses 2 related BPF settings for the kernel hardening
+
+1. \[Restrict usage of bpf() to CAP_BPF to prevent the loading of BPF programs by unprivileged users.\]
+
+&gt; `net.core.bpf_jit_harden=2`
+
+2. \[Enable hardening of the BPF JIT compiler for all users.\]
+
+&gt; `kernel.unprivileged_bpf_disabled=1`
+
+So I was wondering if some kind of drop in for container software like Podman and Docker could be made to disable eBPF altogether or certain aspects?
+
+Was looking at `/etc/containers/containers.conf.d/` for a drop in but I see no options that address them or are universally applied for all container software?
+
+&gt; `/etc/containers` is a standard configuration directory used by several container‑related tools on Linux systems, most notably Podman, Buildah, Skopeo, and the CRI‑O runtime.
+
+Then when it comes to Docker the only idea I came up with is `/etc/systemd/system/docker.service.d/disable-bpf.conf` with `ExecStart=/usr/bin/dockerd --no-bpf`
+
+What got me thinking about this was this proof on concept here:
+
+github. com/hackerschoice/bpfhacks
+
+Besides the two kernel related hardening is there really any other ways to mitigate this type of attack or is it a moot point since it requires attacker to gain root.
+
+These are just some thoughts that came to mind sorry if this post looks like security cosplay at first glance.</description>
+    
+    <lastBuildDate>Mon, 15 Sep 2025 20:15:15 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Disabling eBPF functionality completely for container software?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>So I was wondering if Kicksecure should disable eBPF altogether for containers?</p>
+<p>Security-Misc already addresses 2 related BPF settings for the kernel hardening</p>
+<ol>
+<li>[Restrict usage of bpf() to CAP_BPF to prevent the loading of BPF programs by unprivileged users.]</li>
+</ol>
+<blockquote>
+<p><code>net.core.bpf_jit_harden=2</code></p>
+</blockquote>
+<ol start="2">
+<li>[Enable hardening of the BPF JIT compiler for all users.]</li>
+</ol>
+<blockquote>
+<p><code>kernel.unprivileged_bpf_disabled=1</code></p>
+</blockquote>
+<p>So I was wondering if some kind of drop in for container software like Podman and Docker could be made to disable eBPF altogether or certain aspects?</p>
+<p>Was looking at <code>/etc/containers/containers.conf.d/</code> for a drop in but I see no options that address them or are universally applied for all container software?</p>
+<blockquote>
+<p><code>/etc/containers</code> is a standard configuration directory used by several container‑related tools on Linux systems, most notably Podman, Buildah, Skopeo, and the CRI‑O runtime.</p>
+</blockquote>
+<p>Then when it comes to Docker the only idea I came up with is <code>/etc/systemd/system/docker.service.d/disable-bpf.conf</code> with <code>ExecStart=/usr/bin/dockerd --no-bpf</code></p>
+<p>What got me thinking about this was this proof on concept here:</p>
+<p>github. com/hackerschoice/bpfhacks</p>
+<p>Besides the two kernel related hardening is there really any other ways to mitigate this type of attack or is it a moot point since it requires attacker to gain root.</p>
+<p>These are just some thoughts that came to mind sorry if this post looks like security cosplay at first glance.</p>
+          <p><a href="https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287/1</link>
+        <pubDate>Mon, 15 Sep 2025 20:15:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1287-1</guid>
+        <source url="https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287.rss">Disabling eBPF functionality completely for container software?</source>
+      </item>
+  </channel>
+</rss>
