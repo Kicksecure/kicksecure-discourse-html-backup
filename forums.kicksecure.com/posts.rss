@@ -5,6 +5,471 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/213">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">Harden all system services by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="11:41:00" data-timezone="UTC">11:41AM - 17 Mar 24 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2025-09-16" data-time="12:36:43" data-timezone="UTC">12:36PM - 16 Sep 25 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/monsieuremre" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/130907164?v=4" class="onebox-avatar-inline" width="20" height="20">
+          monsieuremre
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Let's make use of systemd sandboxing mechanisms to harden all services by defaul<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t, whitelisting any services where necessary.
+
+* Big time advantage: not bothering to sandbox single services one by one, we sandbox everything as much as we can by default and exempt services where applicable. We can do this only for very obvious privileges that are only required by a very limited number of known services. It will still bring a lot of value in hardening.
+
+* Step 1: Create a global hardened drop in for all services
+
+Under ```/etc/systemd/system/service.d``` create ```25_security-misc.conf```, with the content:
+```
+[Service]
+ProtectProc=invisible
+ProcSubset=pid
+NoNewPrivileges=true
+SecureBits=noroot-locked
+ProtectClock=true
+ProtectHostname=true
+RestrictNamespaces=true
+LockPersonality=true
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+RemoveIPC=true
+UMask=0077
+# InaccessiblePaths=/sys
+NoExecPaths=/
+ExecPaths=/usr/sbin/ /usr/lib /usr/lib64 /usr/bin
+PrivateDevices=true
+```
+* Step 2: Whitelist vital system components so that we don't actually die
+
+* For common and used time synchronization daemons, such as systemd-timesyncd, create the following drop-in:
+```
+[Service]
+ProtectClock=false
+```
+* For the systemd-login daemon, the following drop-in:
+```
+[Service]
+ProcSubset=all
+ProtectProc=false
+```
+
+* For systemd-modules-load and quite possibly other services, we need enable sticking modules to the kernel and stuff:
+```
+[Service]
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+```
+
+* For systemd-journald and auditd and if applicable other known logging daemons, the following drop in:
+```
+[Service]
+ProtectKernelLogs=no
+```
+
+* This is an extensive list. ```RestrictNamespaces=true``` probably needs exemption for apt and possibly some other privileged things. 
+* ```LockPersonality=true``` might break random virtual box things, so that might be left out if necessary.
+* ```MemoryDenyWriteExecute=true``` might need exemption for desktop environments especially when using xorg, and probably some other things, for now not clear without testing.
+* ```RemoveIPC=true``` will most certainly break xorg, so DE components that rely on xorg will need drop-ins.
+* ```ProtectHostname``` needs an exception for services that need that for sure, what those are yet to be cleared.
+* PrivateDevices need exemption for services that do mounting and unmounting, only a few of them are there. Mount units need no exception, only services do.
+* Other things should not break anything given the exception drop-ins. Not tested this except for ProtectProc, which works as I intended. One exception drop-in does the job. So they might break more, and more exception drop-ins might be required. Will create a pull when I find the time to write a test version and actually test it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/systemd/systemd/issues/31833">
+  <header class="source">
+
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">github.com/systemd/systemd</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">Feature Request: Conditional Application of systemd Drop-In Files</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="17:04:38" data-timezone="UTC">05:04PM - 17 Mar 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          needs-discussion 🤔
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          pid1
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Component
+
+systemd
+
+### Is your feature request related to a problem? Please<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> describe
+
+Currently, systemd supports the use of drop-in files to extend or override configuration settings for unit files. While systemd provides the `ConditionPathExists` directive to conditionally start a service based on the existence of a file or directory, there is no built-in mechanism to conditionally apply drop-in files based on custom conditions within those files.
+
+It would be highly beneficial to have a feature in systemd that allows for the conditional application of drop-in files based on custom conditions. This would provide users with greater flexibility and control over the configuration of systemd units.
+
+A specific example would be the following one:
+
+* https://github.com/Kicksecure/security-misc/issues/213
+
+Complex hardening would be enabled by default. But to easily opt-in/out the additional hardening, to simplify testing, a status file would be helpful.
+
+### Describe the solution you'd like
+
+Introduce a new directive, such as `ConditionDropIn`, that allows users to specify custom conditions within drop-in files themselves. This directive could accept a condition expression similar to other systemd directives, enabling users to define conditions based on various factors such as the existence of specific files, system properties, environment variables, or other runtime conditions.
+
+Example:
+
+`/lib/systemd/system/myservice.service.d/50_drop-in.conf`
+
+```
+[Service]
+ConditionDropIn=Exists:/path/to/status/file
+
+# Additional configuration specific to the condition, which is disregarded if the status file does not exist.
+```
+
+In this example, the drop-in file `50_user.conf` would only be applied if the file `/path/to/status/file` exists.
+
+
+### Describe alternatives you've considered
+
+Packaging, scripting.
+
+### The systemd version you checked that didn't have the feature you are asking for
+
+_No response_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_12</link>
+        <pubDate>Tue, 16 Sep 2025 12:37:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3442</guid>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/213">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">Harden all system services by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="11:41:00" data-timezone="UTC">11:41AM - 17 Mar 24 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2025-09-16" data-time="12:36:43" data-timezone="UTC">12:36PM - 16 Sep 25 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/monsieuremre" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/130907164?v=4" class="onebox-avatar-inline" width="20" height="20">
+          monsieuremre
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Let's make use of systemd sandboxing mechanisms to harden all services by defaul<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t, whitelisting any services where necessary.
+
+* Big time advantage: not bothering to sandbox single services one by one, we sandbox everything as much as we can by default and exempt services where applicable. We can do this only for very obvious privileges that are only required by a very limited number of known services. It will still bring a lot of value in hardening.
+
+* Step 1: Create a global hardened drop in for all services
+
+Under ```/etc/systemd/system/service.d``` create ```25_security-misc.conf```, with the content:
+```
+[Service]
+ProtectProc=invisible
+ProcSubset=pid
+NoNewPrivileges=true
+SecureBits=noroot-locked
+ProtectClock=true
+ProtectHostname=true
+RestrictNamespaces=true
+LockPersonality=true
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+RemoveIPC=true
+UMask=0077
+# InaccessiblePaths=/sys
+NoExecPaths=/
+ExecPaths=/usr/sbin/ /usr/lib /usr/lib64 /usr/bin
+PrivateDevices=true
+```
+* Step 2: Whitelist vital system components so that we don't actually die
+
+* For common and used time synchronization daemons, such as systemd-timesyncd, create the following drop-in:
+```
+[Service]
+ProtectClock=false
+```
+* For the systemd-login daemon, the following drop-in:
+```
+[Service]
+ProcSubset=all
+ProtectProc=false
+```
+
+* For systemd-modules-load and quite possibly other services, we need enable sticking modules to the kernel and stuff:
+```
+[Service]
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+```
+
+* For systemd-journald and auditd and if applicable other known logging daemons, the following drop in:
+```
+[Service]
+ProtectKernelLogs=no
+```
+
+* This is an extensive list. ```RestrictNamespaces=true``` probably needs exemption for apt and possibly some other privileged things. 
+* ```LockPersonality=true``` might break random virtual box things, so that might be left out if necessary.
+* ```MemoryDenyWriteExecute=true``` might need exemption for desktop environments especially when using xorg, and probably some other things, for now not clear without testing.
+* ```RemoveIPC=true``` will most certainly break xorg, so DE components that rely on xorg will need drop-ins.
+* ```ProtectHostname``` needs an exception for services that need that for sure, what those are yet to be cleared.
+* PrivateDevices need exemption for services that do mounting and unmounting, only a few of them are there. Mount units need no exception, only services do.
+* Other things should not break anything given the exception drop-ins. Not tested this except for ProtectProc, which works as I intended. One exception drop-in does the job. So they might break more, and more exception drop-ins might be required. Will create a pull when I find the time to write a test version and actually test it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/systemd/systemd/issues/31833">
+  <header class="source">
+
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">github.com/systemd/systemd</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">Feature Request: Conditional Application of systemd Drop-In Files</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="17:04:38" data-timezone="UTC">05:04PM - 17 Mar 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          needs-discussion 🤔
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          pid1
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Component
+
+systemd
+
+### Is your feature request related to a problem? Please<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> describe
+
+Currently, systemd supports the use of drop-in files to extend or override configuration settings for unit files. While systemd provides the `ConditionPathExists` directive to conditionally start a service based on the existence of a file or directory, there is no built-in mechanism to conditionally apply drop-in files based on custom conditions within those files.
+
+It would be highly beneficial to have a feature in systemd that allows for the conditional application of drop-in files based on custom conditions. This would provide users with greater flexibility and control over the configuration of systemd units.
+
+A specific example would be the following one:
+
+* https://github.com/Kicksecure/security-misc/issues/213
+
+Complex hardening would be enabled by default. But to easily opt-in/out the additional hardening, to simplify testing, a status file would be helpful.
+
+### Describe the solution you'd like
+
+Introduce a new directive, such as `ConditionDropIn`, that allows users to specify custom conditions within drop-in files themselves. This directive could accept a condition expression similar to other systemd directives, enabling users to define conditions based on various factors such as the existence of specific files, system properties, environment variables, or other runtime conditions.
+
+Example:
+
+`/lib/systemd/system/myservice.service.d/50_drop-in.conf`
+
+```
+[Service]
+ConditionDropIn=Exists:/path/to/status/file
+
+# Additional configuration specific to the condition, which is disregarded if the status file does not exist.
+```
+
+In this example, the drop-in file `50_user.conf` would only be applied if the file `/path/to/status/file` exists.
+
+
+### Describe alternatives you've considered
+
+Packaging, scripting.
+
+### The systemd version you checked that didn't have the feature you are asking for
+
+_No response_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_11</link>
+        <pubDate>Tue, 16 Sep 2025 12:37:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3441</guid>
+      </item>
+      <item>
+        <title>Browser choice</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>Does browser choice depend on it or is it separated from it?</p>
+</blockquote>
+<p>browser-choice <code>debian/control</code> file currently <code>Depends:</code> on<br>
+<code>tb-updater</code> and <code>tb-starter</code>. Maybe not ideal.</p>
+<blockquote>
+<p>The only caveat is if you like to have multiple Tor Browser instances there is no way to set the folder path to download it to other then <code>.tb</code> folder in home folder in regards to <code>tb-updater</code>.</p>
+</blockquote>
+<p>These variables are all configurable. If that interests you, please<br>
+create a separate forum thread for support.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/browser-choice/1025?page=2#post_21</link>
+        <pubDate>Tue, 16 Sep 2025 05:06:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3440</guid>
+      </item>
+      <item>
+        <title>Firefox ESR versus Librewolf</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Personally, I don’t have much of an opinion either way. Haven’t done an in-depth comparison of the two, and I don’t know how Librewolf’s version lag behind Firefox upstream is.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/firefox-esr-versus-librewolf/1286#post_2</link>
+        <pubDate>Tue, 16 Sep 2025 01:55:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3439</guid>
+      </item>
+      <item>
         <title>Browser choice</title>
         <dc:creator><![CDATA[@goose4]]></dc:creator>
         <description><![CDATA[ <p>Librewolf, Mullvad, and Brave all have their own repositories and I think are best choices in my opinion just by that fact alone. Firefox and Chromium are both in the debian Apt. These five make the most sense and I would add or suggest <code>tb-updater</code> for downloading Tor Browser.</p>
@@ -1166,126 +1631,6 @@ Please don’t remove or change how Tor is implemented please. I personally thin
         <link>https://forums.kicksecure.com/t/recommendation-for-anonymous-kicksecure-usage/1262#post_6</link>
         <pubDate>Sun, 07 Sep 2025 19:47:06 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3388</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
-        <description><![CDATA[ <p>There is seven 0x04 – 0x0A protocals for RNDIS the rule looks like it only is RNDIS over Ethernet?</p>
-<pre><code class="lang-auto">reject with-interface one-of { ef:05:* }  # RNDIS over Wi‑Fi
-reject with-interface one-of { ef:06:* }  # RNDIS over WiMAX
-reject with-interface one-of { ef:07:* }  # RNDIS over WWAN
-reject with-interface one-of { ef:08:* }  # RNDIS for Raw IPv4
-reject with-interface one-of { ef:09:* }  # RNDIS for Raw IPv6
-reject with-interface one-of { ef:0a:* }  # RNDIS for GPRS
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_33</link>
-        <pubDate>Sun, 07 Sep 2025 19:36:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3386</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
-        <description><![CDATA[ <p>My Alfa wireless USB WiFi adapter is blocked after I plug it in.</p>
-<p>This is the output of my Alfa wireless adapter for lsusb: <code>ID 0e8d:7612</code><br>
-Could you add a rule that allows WiFi protocals?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=2#post_32</link>
-        <pubDate>Sun, 07 Sep 2025 19:36:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3385</guid>
-      </item>
-      <item>
-        <title>Request and Idea for including a tmpfs-setup package?</title>
-        <dc:creator><![CDATA[@0x506c61746f]]></dc:creator>
-        <description><![CDATA[ <p>This idea was inspired by this users post:</p>
-<blockquote>
-<p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057" class="inline-onebox">Questions regarding use of tmpfs formatting and conflicts</a></p>
-</blockquote>
-<p>Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a <code>/etc/profile.d/</code> drop in to set the <code>XDG_CACHE_HOME=/tmp/.cache</code> variable for all users shell.</p>
-<h2><a name="p-3384-idea-for-etcprofiledxdg-cachesh-1" class="anchor" href="https://forums.kicksecure.com#p-3384-idea-for-etcprofiledxdg-cachesh-1"></a>Idea for /etc/profile.d/xdg-cache.sh</h2>
-<pre><code class="lang-auto">#!/bin/sh
-
-## Set XDG_CACHE_HOME to a per-user cache directory.
-#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
-#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
-#
-## Detect whether /tmp is a mount point (i.e. a separate filesystem).
-#    On most modern distros this will be a tmpfs, but on some it may
-#    be a regular disk partition.
-if grep -q "^tmpfs.*/tmp.*tmpfs" /proc/mounts || mountpoint -q /tmp; then
-
-    # /tmp is a mount point - assume it is a tmpfs.
-    BASE_ROOT="/tmp/${USER}"
-else
-    # /tmp is part of the root filesystem (disk based).
-    # Use the traditional default users /home based cache location instead.
-    BASE_ROOT="${HOME}"
-fi
-
-## Build the final cache directory path.
-#    We always put the cache in a ".cache" sub-folder so that tools
-#    that follow the XDG spec find what they expect.
-CACHE_DIR="${BASE_ROOT}/.cache"
-
-## Ensure the directory exists and is private to the user.
-#    /tmp is world-writable (drwxrwxrwt), so we must create a
-#    private subtree and lock it down with chmod 700.
-#
-# Create the parent directory (only needed when we are using /tmp)
-if [ "${BASE_ROOT}" != "${HOME}" ] &amp;&amp; [ ! -d "${BASE_ROOT}" ]; then
-    mkdir -p "${BASE_ROOT}"
-    chmod 700 "${BASE_ROOT}"          
-fi
-
-# Now create the .cache directory itself
-mkdir -p "${CACHE_DIR}"
-chmod 700 "${CACHE_DIR}"
-
-## Export the variable so the rest of the session sees it.
-export XDG_CACHE_HOME="${CACHE_DIR}"
-</code></pre>
-<p>For the above To make it more bullet‑proof, you could tighten the /tmp detection for the <code>export XDG_CAHCE_HOME="/tmp/${USER}/.cache</code> creation</p>
-<p>Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.<br>
-In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.<br>
-Either the package should detect this and not interfere. otherwise a more robust way would be to ship <code>/etc/fstab</code> to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?</p>
-<h2><a name="p-3384-package-structure-summary-idea-2" class="anchor" href="https://forums.kicksecure.com#p-3384-package-structure-summary-idea-2"></a>Package Structure Summary Idea</h2>
-<pre><code class="lang-auto">tmpfs-setup package/
-├── DEBIAN/
-│   ├── control
-│   ├── postinst
-|   └── prerm (depending on implementation)
-├── etc/
-│   ├── default/
-│   │   └── tmpfs-config
-│   └── profile.d/
-│       └── xdg-cache-home.sh
-└── usr/
-    └── share/doc/your-package/
-        └── README.Debian
-</code></pre>
-<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
-<blockquote>
-<p>fedoraproject . org/wiki/Features/tmp-on-tmpfs</p>
-<blockquote>
-<p>Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs</p>
-<blockquote>
-<p>From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</p>
-</blockquote>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277#post_1</link>
-        <pubDate>Sun, 07 Sep 2025 19:00:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3384</guid>
-      </item>
-      <item>
-        <title>Is anonbox no longer relevant and not in the repository?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Anbox is no longer maintained, as shown on <a href="https://github.com/anbox" class="inline-onebox" rel="noopener nofollow ugc">Anbox · GitHub</a>. It does appear to be absent from the repositories of Debian 12 and 13 (which the existing Kicksecure 17 and future Kicksecure 18 are based on, respectively).</p>
-<p>Kicksecure 18 will use Wayland, which means it will most likely work with Waydroid. In the mean time, it may be possible to get Waydroid to work on Kicksecure 17 by using a windowed Wayland compositor such as Weston, however this is undocumented and last time I did it, it was very tricky to get working.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275#post_2</link>
-        <pubDate>Sun, 07 Sep 2025 14:47:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3382</guid>
       </item>
   </channel>
 </rss>

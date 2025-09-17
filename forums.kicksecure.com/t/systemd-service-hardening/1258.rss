@@ -26,9 +26,457 @@ Remounts parts of the filesystem read‑only (or makes the whole tree read‑onl
 
 There is many others but these few caught my eye.</description>
     
-    <lastBuildDate>Mon, 15 Sep 2025 20:34:05 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 16 Sep 2025 12:37:37 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/213">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">Harden all system services by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="11:41:00" data-timezone="UTC">11:41AM - 17 Mar 24 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2025-09-16" data-time="12:36:43" data-timezone="UTC">12:36PM - 16 Sep 25 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/monsieuremre" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/130907164?v=4" class="onebox-avatar-inline" width="20" height="20">
+          monsieuremre
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Let's make use of systemd sandboxing mechanisms to harden all services by defaul<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t, whitelisting any services where necessary.
+
+* Big time advantage: not bothering to sandbox single services one by one, we sandbox everything as much as we can by default and exempt services where applicable. We can do this only for very obvious privileges that are only required by a very limited number of known services. It will still bring a lot of value in hardening.
+
+* Step 1: Create a global hardened drop in for all services
+
+Under ```/etc/systemd/system/service.d``` create ```25_security-misc.conf```, with the content:
+```
+[Service]
+ProtectProc=invisible
+ProcSubset=pid
+NoNewPrivileges=true
+SecureBits=noroot-locked
+ProtectClock=true
+ProtectHostname=true
+RestrictNamespaces=true
+LockPersonality=true
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+RemoveIPC=true
+UMask=0077
+# InaccessiblePaths=/sys
+NoExecPaths=/
+ExecPaths=/usr/sbin/ /usr/lib /usr/lib64 /usr/bin
+PrivateDevices=true
+```
+* Step 2: Whitelist vital system components so that we don't actually die
+
+* For common and used time synchronization daemons, such as systemd-timesyncd, create the following drop-in:
+```
+[Service]
+ProtectClock=false
+```
+* For the systemd-login daemon, the following drop-in:
+```
+[Service]
+ProcSubset=all
+ProtectProc=false
+```
+
+* For systemd-modules-load and quite possibly other services, we need enable sticking modules to the kernel and stuff:
+```
+[Service]
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+```
+
+* For systemd-journald and auditd and if applicable other known logging daemons, the following drop in:
+```
+[Service]
+ProtectKernelLogs=no
+```
+
+* This is an extensive list. ```RestrictNamespaces=true``` probably needs exemption for apt and possibly some other privileged things. 
+* ```LockPersonality=true``` might break random virtual box things, so that might be left out if necessary.
+* ```MemoryDenyWriteExecute=true``` might need exemption for desktop environments especially when using xorg, and probably some other things, for now not clear without testing.
+* ```RemoveIPC=true``` will most certainly break xorg, so DE components that rely on xorg will need drop-ins.
+* ```ProtectHostname``` needs an exception for services that need that for sure, what those are yet to be cleared.
+* PrivateDevices need exemption for services that do mounting and unmounting, only a few of them are there. Mount units need no exception, only services do.
+* Other things should not break anything given the exception drop-ins. Not tested this except for ProtectProc, which works as I intended. One exception drop-in does the job. So they might break more, and more exception drop-ins might be required. Will create a pull when I find the time to write a test version and actually test it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/systemd/systemd/issues/31833">
+  <header class="source">
+
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">github.com/systemd/systemd</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">Feature Request: Conditional Application of systemd Drop-In Files</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="17:04:38" data-timezone="UTC">05:04PM - 17 Mar 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          needs-discussion 🤔
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          pid1
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Component
+
+systemd
+
+### Is your feature request related to a problem? Please<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> describe
+
+Currently, systemd supports the use of drop-in files to extend or override configuration settings for unit files. While systemd provides the `ConditionPathExists` directive to conditionally start a service based on the existence of a file or directory, there is no built-in mechanism to conditionally apply drop-in files based on custom conditions within those files.
+
+It would be highly beneficial to have a feature in systemd that allows for the conditional application of drop-in files based on custom conditions. This would provide users with greater flexibility and control over the configuration of systemd units.
+
+A specific example would be the following one:
+
+* https://github.com/Kicksecure/security-misc/issues/213
+
+Complex hardening would be enabled by default. But to easily opt-in/out the additional hardening, to simplify testing, a status file would be helpful.
+
+### Describe the solution you'd like
+
+Introduce a new directive, such as `ConditionDropIn`, that allows users to specify custom conditions within drop-in files themselves. This directive could accept a condition expression similar to other systemd directives, enabling users to define conditions based on various factors such as the existence of specific files, system properties, environment variables, or other runtime conditions.
+
+Example:
+
+`/lib/systemd/system/myservice.service.d/50_drop-in.conf`
+
+```
+[Service]
+ConditionDropIn=Exists:/path/to/status/file
+
+# Additional configuration specific to the condition, which is disregarded if the status file does not exist.
+```
+
+In this example, the drop-in file `50_user.conf` would only be applied if the file `/path/to/status/file` exists.
+
+
+### Describe alternatives you've considered
+
+Packaging, scripting.
+
+### The systemd version you checked that didn't have the feature you are asking for
+
+_No response_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/12</link>
+        <pubDate>Tue, 16 Sep 2025 12:37:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-12</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
+      <item>
+        <title>Systemd Service Hardening?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/213">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/213" target="_blank" rel="noopener">Harden all system services by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="11:41:00" data-timezone="UTC">11:41AM - 17 Mar 24 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2025-09-16" data-time="12:36:43" data-timezone="UTC">12:36PM - 16 Sep 25 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/monsieuremre" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/130907164?v=4" class="onebox-avatar-inline" width="20" height="20">
+          monsieuremre
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Let's make use of systemd sandboxing mechanisms to harden all services by defaul<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t, whitelisting any services where necessary.
+
+* Big time advantage: not bothering to sandbox single services one by one, we sandbox everything as much as we can by default and exempt services where applicable. We can do this only for very obvious privileges that are only required by a very limited number of known services. It will still bring a lot of value in hardening.
+
+* Step 1: Create a global hardened drop in for all services
+
+Under ```/etc/systemd/system/service.d``` create ```25_security-misc.conf```, with the content:
+```
+[Service]
+ProtectProc=invisible
+ProcSubset=pid
+NoNewPrivileges=true
+SecureBits=noroot-locked
+ProtectClock=true
+ProtectHostname=true
+RestrictNamespaces=true
+LockPersonality=true
+PrivateTmp=yes
+ProtectHome=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+RestrictSUIDSGID=true
+MemoryDenyWriteExecute=true
+RemoveIPC=true
+UMask=0077
+# InaccessiblePaths=/sys
+NoExecPaths=/
+ExecPaths=/usr/sbin/ /usr/lib /usr/lib64 /usr/bin
+PrivateDevices=true
+```
+* Step 2: Whitelist vital system components so that we don't actually die
+
+* For common and used time synchronization daemons, such as systemd-timesyncd, create the following drop-in:
+```
+[Service]
+ProtectClock=false
+```
+* For the systemd-login daemon, the following drop-in:
+```
+[Service]
+ProcSubset=all
+ProtectProc=false
+```
+
+* For systemd-modules-load and quite possibly other services, we need enable sticking modules to the kernel and stuff:
+```
+[Service]
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+```
+
+* For systemd-journald and auditd and if applicable other known logging daemons, the following drop in:
+```
+[Service]
+ProtectKernelLogs=no
+```
+
+* This is an extensive list. ```RestrictNamespaces=true``` probably needs exemption for apt and possibly some other privileged things. 
+* ```LockPersonality=true``` might break random virtual box things, so that might be left out if necessary.
+* ```MemoryDenyWriteExecute=true``` might need exemption for desktop environments especially when using xorg, and probably some other things, for now not clear without testing.
+* ```RemoveIPC=true``` will most certainly break xorg, so DE components that rely on xorg will need drop-ins.
+* ```ProtectHostname``` needs an exception for services that need that for sure, what those are yet to be cleared.
+* PrivateDevices need exemption for services that do mounting and unmounting, only a few of them are there. Mount units need no exception, only services do.
+* Other things should not break anything given the exception drop-ins. Not tested this except for ProtectProc, which works as I intended. One exception drop-in does the job. So they might break more, and more exception drop-ins might be required. Will create a pull when I find the time to write a test version and actually test it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/systemd/systemd/issues/31833">
+  <header class="source">
+
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">github.com/systemd/systemd</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/systemd/systemd/issues/31833" target="_blank" rel="noopener">Feature Request: Conditional Application of systemd Drop-In Files</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-03-17" data-time="17:04:38" data-timezone="UTC">05:04PM - 17 Mar 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          needs-discussion 🤔
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          pid1
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Component
+
+systemd
+
+### Is your feature request related to a problem? Please<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> describe
+
+Currently, systemd supports the use of drop-in files to extend or override configuration settings for unit files. While systemd provides the `ConditionPathExists` directive to conditionally start a service based on the existence of a file or directory, there is no built-in mechanism to conditionally apply drop-in files based on custom conditions within those files.
+
+It would be highly beneficial to have a feature in systemd that allows for the conditional application of drop-in files based on custom conditions. This would provide users with greater flexibility and control over the configuration of systemd units.
+
+A specific example would be the following one:
+
+* https://github.com/Kicksecure/security-misc/issues/213
+
+Complex hardening would be enabled by default. But to easily opt-in/out the additional hardening, to simplify testing, a status file would be helpful.
+
+### Describe the solution you'd like
+
+Introduce a new directive, such as `ConditionDropIn`, that allows users to specify custom conditions within drop-in files themselves. This directive could accept a condition expression similar to other systemd directives, enabling users to define conditions based on various factors such as the existence of specific files, system properties, environment variables, or other runtime conditions.
+
+Example:
+
+`/lib/systemd/system/myservice.service.d/50_drop-in.conf`
+
+```
+[Service]
+ConditionDropIn=Exists:/path/to/status/file
+
+# Additional configuration specific to the condition, which is disregarded if the status file does not exist.
+```
+
+In this example, the drop-in file `50_user.conf` would only be applied if the file `/path/to/status/file` exists.
+
+
+### Describe alternatives you've considered
+
+Packaging, scripting.
+
+### The systemd version you checked that didn't have the feature you are asking for
+
+_No response_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258/11</link>
+        <pubDate>Tue, 16 Sep 2025 12:37:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1258-11</guid>
+        <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+      </item>
       <item>
         <title>Systemd Service Hardening?</title>
         <dc:creator><![CDATA[goose4]]></dc:creator>
