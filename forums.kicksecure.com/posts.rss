@@ -5,6 +5,22 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Debian 13 morphing release date?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Distribution morphing from Debian 13 to Kicksecure 18 will most likely be made available at the same time as the first release-ready Kicksecure 18 VM and ISO images are made available.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_2</link>
+        <pubDate>Sat, 18 Oct 2025 23:47:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3510</guid>
+      </item>
+      <item>
+        <title>Debian 13 morphing release date?</title>
+        <dc:creator><![CDATA[@geller]]></dc:creator>
+        <description><![CDATA[ <p>Any ideas when we can expect morphing for debian 13 please?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_1</link>
+        <pubDate>Sat, 18 Oct 2025 10:00:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3509</guid>
+      </item>
+      <item>
         <title>USBGuard - what should we allow or disallow by default?</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
@@ -1777,68 +1793,6 @@ create a separate forum thread for support.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_45</link>
         <pubDate>Mon, 15 Sep 2025 21:05:01 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3435</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@goose4]]></dc:creator>
-        <description><![CDATA[ <p>lol no disrespect but you can also do <code>sudo usbguard list-devices -v</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_44</link>
-        <pubDate>Mon, 15 Sep 2025 20:58:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3434</guid>
-      </item>
-      <item>
-        <title>Systemd Service Hardening?</title>
-        <dc:creator><![CDATA[@goose4]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Quiksilver" data-post="3" data-topic="1258">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/quiksilver/48/110_2.png" class="avatar"> Quiksilver:</div>
-<blockquote>
-<p>Couldn’t we create a CUPS drop in <code>/etc/systemd/system/cups.service.d/hardening.conf</code> that would apply some hardened options that would essentially mitigate:</p>
-</blockquote>
-</aside>
-<p>As Patrick mentioned <code>/usr/lib/systemd/system</code> is better for distribution to ship.</p>
-<p>Heres an idea here that looks like it would mitigate that</p>
-<blockquote>
-<p>By default, it is listed on UDP port 631 and is open to the world</p>
-</blockquote>
-<ul>
-<li>Example service conf</li>
-</ul>
-<p><code>/usr/lib/systemd/system/cups.service.d/99-cups-harden.conf</code></p>
-<pre><code class="lang-auto">[Service]
-# Minimal capabilities – only needed to bind to privileged ports (631)
-CapabilityBoundingSet=CAP_NET_BIND_SERVICE
-
-# Give CUPS its own network namespace – no external network access
-PrivateNetwork=yes
-
-# Prevent the service from gaining new privileges (setuid, etc.)
-NoNewPrivileges=yes
-
-# Restrict network families – only IPv4/IPv6 TCP, no UDP
-RestrictAddressFamilies=AF_INET AF_INET6
-
-# Bind only to the loopback interface (change to a specific IP if you need LAN access)
-# The ExecStart line in the original unit already runs /usr/sbin/cupsd
-# If you want to force a bind address at the service level uncomment
-# ExecStart=
-# ExecStart=/usr/sbin/cupsd -o Listen=127.0.0.1:631
-
-# Filesystem protection – keep CUPS from touching the rest of the system
-ProtectSystem=full
-PrivateTmp=yes
-ReadOnlyPaths=/etc/cups
-ReadWritePaths=/var/spool/cups /var/log/cups
-
-# Drop any unnecessary privileges
-ProtectKernelTunables=yes
-ProtectKernelModules=yes
-ProtectControlGroups=yes
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258#post_10</link>
-        <pubDate>Mon, 15 Sep 2025 20:34:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3433</guid>
       </item>
   </channel>
 </rss>
