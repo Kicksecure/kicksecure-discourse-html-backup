@@ -114,7 +114,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="0n8bJA9jrCQeYuF1FDNrjMSKL"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="h9zD9Inw2mkSfp8wD5Af3RK34"></script>
 
 <!-- END End of Year Banner -->
 
@@ -138,9 +138,9 @@ END custom CSS / JS
 <meta property="og:article:section" content="Development" />
 <meta property="og:article:section:color" content="25AAE2" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="15 mins 🕑" />
+<meta name="twitter:data1" value="16 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="46 ❤" />
+<meta name="twitter:data2" value="49 ❤" />
 <meta property="article:published_time" content="2025-09-09T20:25:24+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -672,6 +672,382 @@ Is the goal to have USBGuard protect the system only while the screen is locked,
 </blockquote>
 </aside>
 <p>Slight correction, the buttons are labeled <code>accept</code> and <code>reject</code>, and clicking <code>reject</code> is not a no-op. When a device is denied access, it still is “seen” by USBGuard and the kernel, but it isn’t used. When a user clicks <code>reject</code>, the kernel actually disconnects the USB device (not sure if that’s a purely software thing or if it involves hardware also, but a message appears in dmesg stating <code>USB disconnect, device number X</code> upon pressing the <code>reject</code> button). In theory a fully rejected device might be less of a threat than a recognized but unauthorized device?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_51' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T08:24:52Z' class='post-time'>
+                    October 19, 2025,  8:24am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T08:24:52Z'>
+              <span itemprop='position'>51</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Upon reflection, our current USBGuard already attempts to strike a balance, i.e. <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience" class="inline-onebox">Kicksecure Stable Version User Experience</a> / <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reasonable_Security" class="inline-onebox">Reasonable Security</a>.</p>
+<blockquote>
+<ul>
+<li>Boot time devices allowed: Any devices attached before system boot are accepted.</li>
+</ul>
+</blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Scenario 2: trusted user with unlocked screen:<br>
+Or is the assumption that if the screen is unlocked, the logged-in user is trusted and should be allowed to authorize new USB devices by clicking <code>yes</code>? This would align more with a personal computer context, where only trusted users can unlock the screen.</p>
+</blockquote>
+</aside>
+<p>This seems to be the most appropriate threat model.</p>
+<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Scenario 1: untrusted user with unlocked screen:<br>
+Is someone physically present at the computer with an unlocked screen considered a threat? For example, in a corporate environment, an untrusted employee might insert a malicious USB device.</p>
+</blockquote>
+</aside>
+<p>For this scenario, a custom USBGuard configuration and uninstallation USBGuard-Notifier might be appropriate. (<code>sudo dummy-dependency usbguard-notifier</code>)</p>
+<hr>
+<aside class="onebox githubcommit" data-onebox-src="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">Allow listing USB devices via usbguard</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-15" data-time="22:53:26" data-timezone="UTC">10:53PM - 15 Oct 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 2 additions and 2 deletions">
+        <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">
+          <span class="added">+2</span>
+          <span class="removed">-2</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">Set USBGuard settings to permit USB hubs and Qubes USB passthrough</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-17" data-time="20:49:42" data-timezone="UTC">08:49PM - 17 Oct 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 3 additions and 0 deletions">
+        <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">
+          <span class="added">+3</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_52' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/geller'><span itemprop='name'>geller</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T14:06:07Z' class='post-time'>
+                    October 19, 2025,  2:06pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T14:06:07Z'>
+              <span itemprop='position'>52</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Sorry to interrupt but is usbguard implemented in kicksecure if I do debian morphing for a template in Qubes OS?</p>
+<p>It seems like I don’t have it. I checked the<br>
+dpkg -l | grep usbguard - nothing<br>
+systemctl status usbguard - not found<br>
+/etc/usbguard/ - non existen</p>
+<p>I currently use debian 12 xfce template morphed to kicksecure for my sys-usb and I really like it</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_53' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T14:40:42Z' class='post-time'>
+                    October 19, 2025,  2:40pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T14:40:42Z'>
+              <span itemprop='position'>53</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>USBGuard is only going to be a feature in Kicksecure 18 and higher. Kicksecure 17 does not have it and it isn’t planned to be added to Kicksecure 17.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_54' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/geller'><span itemprop='name'>geller</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T14:56:23Z' class='post-time'>
+                    October 19, 2025,  2:56pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T14:56:23Z'>
+              <span itemprop='position'>54</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Got it, thanks</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_55' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Quiksilver'><span itemprop='name'>Quiksilver</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T15:41:03Z' class='post-time'>
+                    October 19, 2025,  3:41pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T15:41:03Z'>
+              <span itemprop='position'>55</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Main use case for USBGuard?<br>
+Is the goal to have USBGuard protect the system only while the screen is locked, relying on users not to authorize unexpected USB devices when logged in?</p>
+</blockquote>
+</aside>
+<p>Main use should be to mitigate possible Bad USB cables/peripherals which almost always have HID. The other use should be like redhat corporate where only trusted USB peripherals allowed. Just like a DoD skiff where a narrow, well monitored entry point for personnel and equipment, keeping the interior protected from anything that shouldn’t be there.</p>
+<p>Also wanted to chime in about I think allowing only devices plugged in USB peripherals before starting the OS is enough I don’t think <code>sudo</code> should be granted to user to override this.</p>
+<p>If a user needs to allow a device other then a mass storage they should 1. reboot with plugged in device or 2. use sysmaint to allow the USB device so that the system applies to the config to explicitly allow said device when they use “user” account.</p>
+<p>The only hole in this is mass storage devices with infected or altered firmware. This isn’t a USBGuard issue though. This could be covered in another thread but two things come to mind The F3 (Fight Flash Fraud) Utility <code>f3</code> that detects if drive really is the amount of space it claims (fake advertised storage devices sold on Amazon, Aliexpress, Etc.). The second is <code>hdparm</code> and <code>smartctl</code> which can I believe  can SHA256 hash the firmware on a drive.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_56' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Quiksilver'><span itemprop='name'>Quiksilver</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T15:44:19Z' class='post-time'>
+                    October 19, 2025,  3:44pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T15:44:19Z'>
+              <span itemprop='position'>56</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="51" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
+</blockquote>
+</aside>
+<p>USBGuard-Notifier is great but I dont think <code>user</code> account should have ability to accept / reject in all do respect.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_57' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Quiksilver'><span itemprop='name'>Quiksilver</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T15:48:21Z' class='post-time'>
+                    October 19, 2025,  3:48pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T15:48:21Z'>
+              <span itemprop='position'>57</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Also what happened to the config file in the <code>security-misc</code> repo and whats this change about “Split the security-misc into security-misc-shared”? I’m quite confused here can you explain the changes?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_58' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-10-19T16:16:01Z' class='post-time'>
+                    October 19, 2025,  4:16pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-19T16:16:02Z'>
+              <span itemprop='position'>58</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Some of the configuration in security-misc is only suitable for some installations for one reason or another (for instance MAC randomization is unsuitable for servers, see <a href="../../../external.html?link=https://github.com/Kicksecure/security-misc/issues/184" class="inline-onebox" rel="noopener nofollow ugc">MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic · Issue #184 · Kicksecure/security-misc · GitHub</a>). We split the security-misc package up into “shared”, “desktop”, and “server” packages so that we can add hardening config that is applicable to some scenarios while omitting it from others where it doesn’t work.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
