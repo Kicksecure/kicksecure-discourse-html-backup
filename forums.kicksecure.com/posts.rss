@@ -5,6 +5,332 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Power management for physical hardware in Kicksecure 18</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware.</p>
+<p>First off, a lot of the power management features of LXQt include the ability to suspend or hibernate the machine. Hibernation obviously has security risks because RAM contents are dumped to the disk, but hibernation likely doesn’t work out of the box on Kicksecure anyway, and LUKS can mitigate most of the concerns. What is more concerning is suspend, because LXQt unfortunately puts the system into suspend <em>before</em> locking the screen. This means if one wakes the system, they will be shown a flash of the user’s desktop before the screen locks. It’s extremely brief, but it’s more than long enough to capture a snapshot of the user’s screen with a camera (and depending on the speed of the system it might be enough to deploy a malware payload via a rubber ducky or similar before the screen locks).</p>
+<p>LXQt has a lot of power management features; going through each of them:</p>
+<ul>
+<li>Battery watcher. Allows the user to lock their screen, suspend, hibernate, shutdown, turn off external monitors, and/or receive a notification when the system’s power gets too low. Can warn users for some period of time before taking a power management action in response to a low battery. Also shows a battery level icon.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Battery level icon: Very little concerns. An attacker who gets access to an encrypted but unlocked system might use the charge level to decide whether or not they want to keep the system powered on while moving it to a more convenient attack location, or if they want to attempt an attack right where they’re at, but in all likelihood hiding this info likely won’t defend against most realistic attack scenarios.</li>
+<li>Battery low notifications: Same concerns as for battery level, this is probably even less worrisome.</li>
+<li>Warning (timeout before taking power management action): Same concerns as battery low notifications.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Security impact identical to battery low notifications.</li>
+<li>Lock screen: Minor positive security impact, though most users would be better served by automatically locking the screen after some duration of idle time.</li>
+<li>Suspend: Minor negative security impact (could be problematic if the battery reaches a low power level before the screen locks due to idleness, due to screen locking prevention discussed above).</li>
+<li>Hibernate: Security impact dependent upon setup. Usually not a concern because it doesn’t work out of the box.</li>
+<li>Shutdown: Minor positive security impact, though again this would be better handled by an idle timeout.</li>
+<li>Turn Off monitor(s): Very minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Battery level icon: Very useful for laptop users. Mobile users could run out of power mid-work without this.</li>
+<li>Battery low notifications: Useful for the same reason as the battery level icon.</li>
+<li>Warning (timeout before taking power management action): Positive usability impact. Mitigates issues introduced by automatic power management actions.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Annoying because it suddenly creates a popup window like so: <div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png" data-download-href="https://forums.kicksecure.com/uploads/default/d9fbf60da81a866fe3d4e66001491e061c3857cd" title="Screenshot_20251031_162822"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png" alt="Screenshot_20251031_162822" data-base62-sha1="v6nqZuM6SBVxaI1P7Qsp42TiPk9" width="568" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png, https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_852x750.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png 2x" data-dominant-color="9DA3C1"></a></div> Possibly dangerous, users could lose work if they tried to click inside a window right where the shutdown, reboot, or logout button appeared just as the window popped up. The power management warning is only a partial mitigation for this.</li>
+<li>Lock screen: Rather useless for preserving battery life, mildly annoying even with the warning timer.</li>
+<li>Suspend: Mildly annoying, but may prevent loss of work by preserving battery power. The warning timeout mitigates this. Overall, positive usability impact.</li>
+<li>Hibernate: Same usability impact as suspend, except it takes longer to enter and exit hibernate. Overall, possibly positive usability impact.</li>
+<li>Shutdown: Very annoying and dangerous, user will lose all unsaved work when the power level gets too low unless they are able to immediately plug in a source of power when the warning notification appears. Not sufficiently mitigated by the warning timeout, unless the timeout is made very long.</li>
+<li>Turn Off monitor(s): Possibly somewhat useful for avoiding data loss since powering off monitors may improve battery life, but this isn’t that useful. Mildly annoying. Attempts to use xset to power off monitors, thus it doesn’t even work under Wayland.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lid watcher. Controls what happens when the user closes the lid of the system. Can lock the screen, suspend, hibernate, shutdown, or turn off monitors when the lid is closed. Supports separate settings for when on battery and when on AC power, and also support separate settings for when an external monitor isn’t attached and when it is.
+<ul>
+<li>Security concerns:
+<ul>
+<li>No difference in security concerns between the different customization possibilities (on battery / on AC / with external monitor connected / without external monitor connected) except in as much as each option applies to individual user threat models. For instance, a user might only plug their system in while at a location safe from physical attackers, thus their threat model would permit more convenient settings while plugged in and require more safe settings while unplugged.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive security impact. User can close lid to render whatever they were actively working on inaccessible to a physically present attacker, barring a screen lock bypass or vulnerability in another component of their installation.</li>
+<li>Suspend: Negative security impact. Closing the lid will indefinitely prevent the screen lock and allow a physically present attacker to capture a screenshot of their work as explained above.</li>
+<li>Hibernate: Security impact dependent upon setup. If user has unencrypted swap, this is virtually fatal when defending against a physically present attacker, as they can capture not only everything that was on the screen, but the full memory contents of everything on the system. If swap is encrypted and requires a passphrase to unlock, this probably won’t suffer from the indefinite screen lock pause issue because a password will be required to resume. If swap is encrypted but a TPM can unlock it, then this suffers from the same issues as suspend. (Note to readers: This is all theoretical, Kicksecure lacks features that would be needed to do things like unlocking an encrypted hibernation volume with a passphrase or TPM with a vanilla Kicksecure configuration.)</li>
+<li>Shutdown: Positive security impact. User can close lid to render everything they were doing inaccessible to a physically present attacker, even if their system contains vulnerable components. However, shutdown may be slow, giving an attacker a window of opportunity to extract useful data before the system shuts down (most attackers probably will not be able to act fast enough for this to be of any use to them). Would be better if there was a way to trigger emerg-shutdown when the lid was closed.</li>
+<li>Turn Off monitor(s): Extremely minor positive security impact, maybe, but so negligible as to call it nonexistent unless dealing with an attacker in possession of technology that can reconstruct screen contents based on the light coming from the screen’s reflection off the laptop chassis. Even then, some laptops turn off their screen in hardware when the lid is closed. Might have more of a positive impact if external monitors can be turned off also.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>The different customization possibilities have different usability concerns based on the action in question.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive usability impact. Most users used to WIndows will expect that closing the lid will result in the screen being locked. (They would also expect the system to suspend, but at least this fulfills some of the expectation.)</li>
+<li>Suspend: Debatable usability impact. On one hand, most users used to Windows will expect taht closing the lid will result in the system going into suspend. On the other hand, suspend may interrupt actions such as software updates, downloads, long running processes, etc., and thus be undesirable for some users.</li>
+<li>Hibernate: Debatable but probably negative usability impact. User has to wait for RAM contents to be reloaded from swap upon resume, and may need to authenticate before the system fully resumes.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they or someone else (usually a pet) closes the lid unintentionally.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Idleness Watcher: Controls what happens when the system has been idle for some duration of time. Has the same set of power management actions as the lid watcher. Supports separate settings for when on battery and when on AC, and allows configuring the time before the system is considered idle. Can disable idleness checks when a fullscreen app is in use. Also offers backlight change settings, but these will almost certainly not work for users with user-sysmaint-split installed.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive security impact. Users who forget to lock their screen before walking away from their machine will be protected from a physically present attacker, if that attacker doesn’t manage to see the screen contents of the user’s system before the lock screen activates.</li>
+<li>Suspend: Negative security impact due to the locking issue described at the top of the post.</li>
+<li>Hibernate: Security impact dependent upon setup. Identical concerns as for the hibernate lid close action.</li>
+<li>Shutdown: Positive security impact for the same reasons as the lock screen idleness action. Protections against exploits are stronger.</li>
+<li>Turn Off monitor(s): Minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+<li>Brightness controls: Same security impact as the “Turn Off monitor(s)” idleness action, but likely less effective than truly turning off the monitor.</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive usability impact. Users used to Windows will not expect their system to be accessible to an adversary who shows up and looks at the system after some amount of time has passed.</li>
+<li>Suspend: Debatable usability impact. May improve battery life, but can also interrupt long-running processes, see usability concerns for suspend lid close action.</li>
+<li>Hibernate: Debatable but probably negative usability impact, see usability concerns for hibernate lid close action.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they have to step away from the system for longer than the configured idle time.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+<li>Brightness controls: Positive usability impact due to power savings, but usually this won’t work as mentioned above.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Power keys: Allows configuring what to do when the user presses a power, suspend, or hibernate key. These options do nothing under Wayland, power keys are configured by the compositor instead, thus skipping this section.</li>
+</ul>
+<p>Personally, I’d recommend the following settings for physical hardware installations based on the above analysis:</p>
+<ul>
+<li>Battery Watcher:
+<ul>
+<li>Low power action: Nothing</li>
+<li>Warning timeout: 30 seconds</li>
+<li>Level is low at: 10%</li>
+<li>Show icon: Yes</li>
+<li>Icon for the icon: Whatever the default is</li>
+</ul>
+</li>
+<li>Lid Watcher:
+<ul>
+<li>When lid is closed on battery: Lock screen</li>
+<li>When lid is closed on AC power: Lock screen</li>
+<li>Disable the extra settings for when using external monitors</li>
+</ul>
+</li>
+<li>Idleness watcher:
+<ul>
+<li>When idle on AC: Lock screen</li>
+<li>AC idle time: Unsure. For paranoid setups, a very short time might be preferable (30 seconds is the shortest supported timeout), but IMO people should not be relying on the idle timeout for security anyway because it is by nature unreliable. Thus we can probably favor usability here since security is better obtained by other means. Maybe just accept the default of 15 minutes?</li>
+<li>When idle on battery: Lock screen</li>
+<li>Battery idle time: Unsure, maybe just accept the default of 15 minutes?</li>
+<li>Disable backlight change</li>
+<li>Do not disable idleness checks when fullscreen</li>
+</ul>
+</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344#post_1</link>
+        <pubDate>Fri, 31 Oct 2025 22:34:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3589</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="pigeon" data-post="5" data-topic="1339">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/41988e/48.png" class="avatar"> pigeon:</div>
+<blockquote>
+<p>simple-framebuffer simpler-framebuffer.0: Unable to register simpl</p>
+</blockquote>
+</aside>
+<p>Probably benign, could be the result of using Heads.</p>
+<aside class="quote no-group" data-username="pigeon" data-post="5" data-topic="1339">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/41988e/48.png" class="avatar"> pigeon:</div>
+<blockquote>
+<p>[FAILED] Failed to mount sysroot.mount - /sysroot</p>
+</blockquote>
+</aside>
+<p>Known issue, due to a Dracut bug. This is benign and can be ignored. I believe this will be resolved in Kicksecure 18, but it’s just cosmetic.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_6</link>
+        <pubDate>Fri, 31 Oct 2025 17:49:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3588</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@pigeon]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="pigeon" data-post="4" data-topic="1339">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/41988e/48.png" class="avatar"> pigeon:</div>
+<blockquote>
+<p>Yes, it is possible with the following commands in HEADS recovery shell:</p>
+</blockquote>
+</aside>
+<p>I should add that while this allows to boot Kicksecure in HEADS (from recovery shell), and all seems to work fine, there is an error printed during the boot process:</p>
+<p><code>simple-framebuffer simpler-framebuffer.0: Unable to register simpl [FAILED] Failed to mount sysroot.mount - /sysroot</code></p>
+<p>I am not dure if this is a separate issue or not.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_5</link>
+        <pubDate>Fri, 31 Oct 2025 17:22:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3587</guid>
+      </item>
+      <item>
+        <title>My android phone not showing (USB connection)</title>
+        <dc:creator><![CDATA[@nearkick]]></dc:creator>
+        <description><![CDATA[ <p>I successed in interfacing the phone to the OS, and thunar is now showing the phone automatically.</p>
+<p>Many sites were wrong with the packages.</p>
+<p>I finally found the good combination, combining various sites infos :</p>
+<ol>
+<li><code>sudo apt install gvfs-backends gfvs-fuse</code></li>
+<li>disconnect from the kicksecure session, then reconnect to it so that changes are taken in account</li>
+<li>plug the phone</li>
+<li>on the phone select “file transfer”</li>
+<li>it’s done (for me) : the phone appears in thunar and is now browsable</li>
+</ol> ]]></description>
+        <link>https://forums.kicksecure.com/t/my-android-phone-not-showing-usb-connection/1341#post_4</link>
+        <pubDate>Fri, 31 Oct 2025 17:01:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3586</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@pigeon]]></dc:creator>
+        <description><![CDATA[ <p>Thank you for your quick reply <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> !</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1339">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>You might be able to mount the disk itself (not a subpartition) in the recovery shell, then manually boot from that mounted device, but I don’t know if Heads supports that.</p>
+</blockquote>
+</aside>
+<p>Yes, it is possible with the following commands in HEADS recovery shell:</p>
+<p>``<br>
+<code>mount /dev/sdb /media </code><br>
+<code>kexec-select-boot -b /media</code><br>
+``</p>
+<p>Would you be so kind to spell out what HEADS developers need to fix/develop in order to boot Kicksecure without issues? I will report the requirements to the Github issue.<br>
+Thanks !</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_4</link>
+        <pubDate>Fri, 31 Oct 2025 16:43:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3585</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Replied on github just now.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_3</link>
+        <pubDate>Fri, 31 Oct 2025 16:41:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3584</guid>
+      </item>
+      <item>
+        <title>My android phone not showing (USB connection)</title>
+        <dc:creator><![CDATA[@nearkick]]></dc:creator>
+        <description><![CDATA[ <p>hi,</p>
+<p>thanks for reply,</p>
+<p>Yes I choosed a transfer mode (the same as on other OS, “file transfer”).</p>
+<p>I tried to install mtpfs and gvfs-mtp as stated on the following site but apt tells me there are no such packages… : <a href="https://linuxvox.com/blog/mount-android-device-linux/#using-mtp-media-transfer-protocol" class="inline-onebox" rel="noopener nofollow ugc">Mount Android Device on Linux: A Comprehensive Guide — linuxvox.com</a></p>
+<p>(I prefer not using the other solution, with ADB).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/my-android-phone-not-showing-usb-connection/1341#post_3</link>
+        <pubDate>Fri, 31 Oct 2025 16:23:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3583</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Quoting from the linked issue:</p>
+<blockquote>
+<p>Replicated. This is an hybrid ISO.<br>
+The disk needs to be mounted (sda here) not a subpartition to discover rootfs and its boot related files).</p>
+</blockquote>
+<p>At least to me this sounds like a limitation of Heads itself and not something Kicksecure can work around. You might be able to mount the disk itself (not a subpartition) in the recovery shell, then manually boot from that mounted device, but I don’t know if Heads supports that. Until Heads gains support for this, we’d need to have a Heads-specific ISO, which I don’t think it feasible (especially since our ISO creation tooling is handled by live-build right now, and we don’t customize how it does the generation of the ISO itself to my awareness).</p>
+<p>I did have a slightly crazy idea for getting this to work anyway… quoting a slightly modified version of my messages from the Heads room:</p>
+<blockquote>
+<p>This might be a kind of crazy idea, but what if there were a fourth partition on the USB, which encompassed the whole entire disk, such that /dev/sda4 was then essentially an alias of /dev/sda?<br>
+would Heads then be able to boot from /dev/sda4, and then the initramfs of Kicksecure be able to find the live OS at /dev/sda?<br>
+I’m not sure we could work something like that into Kicksecure’s build system, but it might be possible to document it as a workaround.<br>
+I don’t have any device running Heads here to test on, but if that sounds plausible and it works when someone tries it, it might be something we could document.</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_2</link>
+        <pubDate>Fri, 31 Oct 2025 16:23:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3582</guid>
+      </item>
+      <item>
+        <title>My android phone not showing (USB connection)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Did you choose a transfer mode when prompted? I think you need to choose “MTP” (or similar) in order to get the device to show up. (There might be packages for MTP support that are missing from Kicksecure by default, you might have to search for and install those from the Debian archives.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/my-android-phone-not-showing-usb-connection/1341#post_2</link>
+        <pubDate>Fri, 31 Oct 2025 16:16:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3580</guid>
+      </item>
+      <item>
+        <title>My Firefox Snowflake extension seems not to work</title>
+        <dc:creator><![CDATA[@nearkick]]></dc:creator>
+        <description><![CDATA[ <p>Hi,</p>
+<p>The Snowflake extension in my firefox browser never show any counter, as it usually does in other OSs I use. It remains purple instead of being green. It’s like it is not working (whereas I activated it).</p>
+<p>Is there some rule to give to my firewall ? Something I missed ?</p>
+<p>Thanks for your help,</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/my-firefox-snowflake-extension-seems-not-to-work/1342#post_1</link>
+        <pubDate>Fri, 31 Oct 2025 16:01:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3579</guid>
+      </item>
+      <item>
+        <title>My android phone not showing (USB connection)</title>
+        <dc:creator><![CDATA[@nearkick]]></dc:creator>
+        <description><![CDATA[ <p>Hi,</p>
+<p>I’m new to kicksecure, and I have questions to get it fit my everyday needs.</p>
+<p>I can’t connect my android phone to the computer. Once plugged via USB wire, nothing happens, and nothing in Thunar nor in Gnome Disks.</p>
+<p>Once plugged, my phone reacts :</p>
+<ul>
+<li>it charges</li>
+<li>and asks me to choose a transfer mode</li>
+</ul>
+<p>Is there some packet missing on my install ? Or a config I didn’t do ?</p>
+<p>Looking on the forum and on the internet didn’t give any help.</p>
+<p>Thanks for your help</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/my-android-phone-not-showing-usb-connection/1341#post_1</link>
+        <pubDate>Fri, 31 Oct 2025 15:55:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3578</guid>
+      </item>
+      <item>
+        <title>Help with booting Kicksecure on HEADS (coreboot) bios</title>
+        <dc:creator><![CDATA[@pigeon]]></dc:creator>
+        <description><![CDATA[ <p>Hello, this is my first post! <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>After playing with Kicksecure (template) on Qubes OS I tried to download the live iso and run it.</p>
+<p>My computer has HEADS/coreboot as bios and Qubes OS as main OS.</p>
+<p>Unfortunately HEADS does not “see” Kicksecure and cannot launch it.</p>
+<p>The following github issue tracks the problem: <a href="https://github.com/linuxboot/heads/issues/2008" class="inline-onebox" rel="noopener nofollow ugc">"kicksecure iso doesn't boot under Heads · Issue #2008 · linuxboot/heads · GitHub</a> .<br>
+The main developer of HEADS ( <a href="https://github.com/tlaurion" class="inline-onebox" rel="noopener nofollow ugc">tlaurion (Thierry Laurion) · GitHub</a> ) has replicated the issue. If you have any suggestion on how to fix it (or debug it), it would be very much appreciated.</p>
+<p>thank you in advance</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-with-booting-kicksecure-on-heads-coreboot-bios/1339#post_1</link>
+        <pubDate>Fri, 31 Oct 2025 15:47:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3576</guid>
+      </item>
+      <item>
+        <title>APT sources.list One-Line Format versus DEB822-Style Format</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>APT sources.list DEB822-Style Format is implemented in version 18 and above.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/apt-sources-list-one-line-format-versus-deb822-style-format/267#post_5</link>
+        <pubDate>Fri, 31 Oct 2025 04:35:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3575</guid>
+      </item>
+      <item>
         <title>Make the taskbar on the bottom not at the top</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Worth remembering the original reason for putting the panel at the top:</p>
@@ -1182,271 +1508,6 @@ Linux Mint → Super = Start menu style panel</p>
         <link>https://forums.kicksecure.com/t/which-setup-will-be-most-secure-and-anonymous/1299#post_11</link>
         <pubDate>Sun, 19 Oct 2025 16:05:06 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3524</guid>
-      </item>
-      <item>
-        <title>Dracut compression research</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p><a href="https://tails.net/news/version_7.0/" rel="noopener nofollow ugc">I just wanted to put this here:</a></p>
-<blockquote>
-<blockquote>
-<p>Tails 7.0 starts 10–15 seconds faster on most computers.</p>
-<p>We achieve this by changing the compression algorithm of the Tails USB and ISO images from xz to zstd. As a consequence, the image is 10% bigger than it would be with the previous algorithm.</p>
-<p>While testing this change, we noticed that Tails on USB sticks of poor quality can also start 20 seconds slower than on quality USB sticks.</p>
-</blockquote>
-</blockquote>
-<p>Neither do I agree or disagree with the decision.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dracut-compression-research/1131#post_12</link>
-        <pubDate>Sun, 19 Oct 2025 15:55:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3523</guid>
-      </item>
-      <item>
-        <title>Disabling eBPF functionality completely for container software?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>I don’t think this is a good idea but more so a might be a good idea to include a hardened default for docker to use so that when users install docker if they choose so. eBPF is used for monitoring statistics like bandwidth I believe.</p>
-<p>The real question is the default docker config secure or could it be improved. Personally i don’t have much experience per say with docker so I can’t say.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287#post_2</link>
-        <pubDate>Sun, 19 Oct 2025 15:51:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3522</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>Also what happened to the config file in the <code>security-misc</code> repo and whats this change about “Split the security-misc into security-misc-shared”? I’m quite confused here can you explain the changes?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_57</link>
-        <pubDate>Sun, 19 Oct 2025 15:48:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3521</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="51" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
-</blockquote>
-</aside>
-<p>USBGuard-Notifier is great but I dont think <code>user</code> account should have ability to accept / reject in all do respect.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_56</link>
-        <pubDate>Sun, 19 Oct 2025 15:44:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3520</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Main use case for USBGuard?<br>
-Is the goal to have USBGuard protect the system only while the screen is locked, relying on users not to authorize unexpected USB devices when logged in?</p>
-</blockquote>
-</aside>
-<p>Main use should be to mitigate possible Bad USB cables/peripherals which almost always have HID. The other use should be like redhat corporate where only trusted USB peripherals allowed. Just like a DoD skiff where a narrow, well monitored entry point for personnel and equipment, keeping the interior protected from anything that shouldn’t be there.</p>
-<p>Also wanted to chime in about I think allowing only devices plugged in USB peripherals before starting the OS is enough I don’t think <code>sudo</code> should be granted to user to override this.</p>
-<p>If a user needs to allow a device other then a mass storage they should 1. reboot with plugged in device or 2. use sysmaint to allow the USB device so that the system applies to the config to explicitly allow said device when they use “user” account.</p>
-<p>The only hole in this is mass storage devices with infected or altered firmware. This isn’t a USBGuard issue though. This could be covered in another thread but two things come to mind The F3 (Fight Flash Fraud) Utility <code>f3</code> that detects if drive really is the amount of space it claims (fake advertised storage devices sold on Amazon, Aliexpress, Etc.). The second is <code>hdparm</code> and <code>smartctl</code> which can I believe  can SHA256 hash the firmware on a drive.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_55</link>
-        <pubDate>Sun, 19 Oct 2025 15:41:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3519</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@geller]]></dc:creator>
-        <description><![CDATA[ <p>Got it, thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_54</link>
-        <pubDate>Sun, 19 Oct 2025 14:56:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3518</guid>
-      </item>
-      <item>
-        <title>Debian 13 morphing release date?</title>
-        <dc:creator><![CDATA[@geller]]></dc:creator>
-        <description><![CDATA[ <p>Alright, thank you</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_5</link>
-        <pubDate>Sun, 19 Oct 2025 14:55:48 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3517</guid>
-      </item>
-      <item>
-        <title>Debian 13 morphing release date?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>There isn’t a specific ETA, but I would expect a beta-quality release sometime soon.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_4</link>
-        <pubDate>Sun, 19 Oct 2025 14:41:39 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3515</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>USBGuard is only going to be a feature in Kicksecure 18 and higher. Kicksecure 17 does not have it and it isn’t planned to be added to Kicksecure 17.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_53</link>
-        <pubDate>Sun, 19 Oct 2025 14:40:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3514</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@geller]]></dc:creator>
-        <description><![CDATA[ <p>Sorry to interrupt but is usbguard implemented in kicksecure if I do debian morphing for a template in Qubes OS?</p>
-<p>It seems like I don’t have it. I checked the<br>
-dpkg -l | grep usbguard - nothing<br>
-systemctl status usbguard - not found<br>
-/etc/usbguard/ - non existen</p>
-<p>I currently use debian 12 xfce template morphed to kicksecure for my sys-usb and I really like it</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_52</link>
-        <pubDate>Sun, 19 Oct 2025 14:06:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3513</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Upon reflection, our current USBGuard already attempts to strike a balance, i.e. <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" class="inline-onebox">Kicksecure Stable Version User Experience</a> / <a href="https://www.kicksecure.com/wiki/Reasonable_Security" class="inline-onebox">Reasonable Security</a>.</p>
-<blockquote>
-<ul>
-<li>Boot time devices allowed: Any devices attached before system boot are accepted.</li>
-</ul>
-</blockquote>
-<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Scenario 2: trusted user with unlocked screen:<br>
-Or is the assumption that if the screen is unlocked, the logged-in user is trusted and should be allowed to authorize new USB devices by clicking <code>yes</code>? This would align more with a personal computer context, where only trusted users can unlock the screen.</p>
-</blockquote>
-</aside>
-<p>This seems to be the most appropriate threat model.</p>
-<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Scenario 1: untrusted user with unlocked screen:<br>
-Is someone physically present at the computer with an unlocked screen considered a threat? For example, in a corporate environment, an untrusted employee might insert a malicious USB device.</p>
-</blockquote>
-</aside>
-<p>For this scenario, a custom USBGuard configuration and uninstallation USBGuard-Notifier might be appropriate. (<code>sudo dummy-dependency usbguard-notifier</code>)</p>
-<hr>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">Allow listing USB devices via usbguard</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-15" data-time="22:53:26" data-timezone="UTC">10:53PM - 15 Oct 25 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 2 files with 2 additions and 2 deletions">
-        <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">
-          <span class="added">+2</span>
-          <span class="removed">-2</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">Set USBGuard settings to permit USB hubs and Qubes USB passthrough</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-17" data-time="20:49:42" data-timezone="UTC">08:49PM - 17 Oct 25 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 3 additions and 0 deletions">
-        <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">
-          <span class="added">+3</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_51</link>
-        <pubDate>Sun, 19 Oct 2025 08:24:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3512</guid>
-      </item>
-      <item>
-        <title>Debian 13 morphing release date?</title>
-        <dc:creator><![CDATA[@geller]]></dc:creator>
-        <description><![CDATA[ <p>OK but is there any approx timeline for that please?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_3</link>
-        <pubDate>Sun, 19 Oct 2025 05:31:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3511</guid>
-      </item>
-      <item>
-        <title>Debian 13 morphing release date?</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Distribution morphing from Debian 13 to Kicksecure 18 will most likely be made available at the same time as the first release-ready Kicksecure 18 VM and ISO images are made available.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/debian-13-morphing-release-date/1318#post_2</link>
-        <pubDate>Sat, 18 Oct 2025 23:47:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3510</guid>
       </item>
   </channel>
 </rss>

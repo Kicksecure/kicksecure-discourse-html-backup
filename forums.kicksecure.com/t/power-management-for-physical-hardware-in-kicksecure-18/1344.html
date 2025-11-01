@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Power management for physical hardware in Kicksecure 18 - Development - Kicksecure Forums</title>
+    <meta name="description" content="Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware. 
+First off&amp;hellip;">
+    <meta name="generator" content="Discourse 3.5.1 - https://github.com/discourse/discourse version c5bd7cb8be7247421c1e827beedaa25de68012cf">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1344.html" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_2c1626636f3f5aaff75766544c851eee81e55ad7.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_2c1626636f3f5aaff75?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27common_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="../../stylesheets/desktop_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27desktop_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="../../stylesheets/checklist_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27checklist_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="../../stylesheets/discourse-details_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-details_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="../../stylesheets/discourse-lazy-videos_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="../../stylesheets/discourse-local-dates_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="../../stylesheets/discourse-narrative-bot_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_f542729a384918dcec5f32ded73748d607c3d74561cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="../../stylesheets/discourse-presence_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="../../stylesheets/discourse-solved_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="../../stylesheets/discourse-templates_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="../../stylesheets/discourse-topic-voting_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_f542729a384918dcec5f32ded73748d607c3d74561cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="../../stylesheets/docker_manager_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27docker_manager_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="../../stylesheets/footnote_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27footnote_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="../../stylesheets/poll_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27poll_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="../../stylesheets/discourse-topic-voting_desktop_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_desktop_f542729a384918dcec5f32ded73748d?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="../../stylesheets/poll_desktop_f542729a384918dcec5f32ded73748d607c3d745.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_f542729a384918dcec5f32ded73748d607c3d74561cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_b24c9ea0701224d1723ad2ce5e875d6b57f47b4d.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_b24c9ea0701224d1723ad2ce5e875d6b57f47b4d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_8d1379f43b77095158da24b921c07e477b71cc09.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_8d1379f43b77095158da24b921c07e477b71cc0961cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+    <link href="../../stylesheets/desktop_theme_3_b05eca228216d843567e8f7b589602d228a0429c.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_b05eca228216d843567e8f7b589602d228a0429c61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="CKjimsOsyMMEKbkBVKCZ5bT1V"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;Power management for physical hardware in Kicksecure 18&#39;" href="1344.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344" />
+<meta property="og:title" content="Power management for physical hardware in Kicksecure 18" />
+<meta name="twitter:title" content="Power management for physical hardware in Kicksecure 18" />
+<meta property="og:description" content="Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware.  First off, a lot of the power management features of LXQt include the ability to suspend or hibernate the machine. Hibernation obviously has security risks because RAM contents are dumped to the disk, but hibernation likely doesn’t work out of the box on Kicksecure anyway, and LUKS can mi..." />
+<meta name="twitter:description" content="Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware.  First off, a lot of the power management features of LXQt include the ability to suspend or hibernate the machine. Hibernation obviously has security risks because RAM contents are dumped to the disk, but hibernation likely doesn’t work out of the box on Kicksecure anyway, and LUKS can mi..." />
+<meta property="og:article:section" content="Development" />
+<meta property="og:article:section:color" content="25AAE2" />
+<meta property="article:published_time" content="2025-10-31T22:34:25+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1344.html">Power management for physical hardware in Kicksecure 18</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='Power management for physical hardware in Kicksecure 18'>
+      <link itemprop='url' href='1344.html'>
+      <meta itemprop='datePublished' content='2025-10-31T22:34:24Z'>
+        <meta itemprop='articleSection' content='Development'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1344.html">
+
+                <link itemprop="image" href="../../uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png">
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2025-10-31T22:34:25Z' class='post-time'>
+                    October 31, 2025, 10:34pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-10-31T22:34:25Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware.</p>
+<p>First off, a lot of the power management features of LXQt include the ability to suspend or hibernate the machine. Hibernation obviously has security risks because RAM contents are dumped to the disk, but hibernation likely doesn’t work out of the box on Kicksecure anyway, and LUKS can mitigate most of the concerns. What is more concerning is suspend, because LXQt unfortunately puts the system into suspend <em>before</em> locking the screen. This means if one wakes the system, they will be shown a flash of the user’s desktop before the screen locks. It’s extremely brief, but it’s more than long enough to capture a snapshot of the user’s screen with a camera (and depending on the speed of the system it might be enough to deploy a malware payload via a rubber ducky or similar before the screen locks).</p>
+<p>LXQt has a lot of power management features; going through each of them:</p>
+<ul>
+<li>Battery watcher. Allows the user to lock their screen, suspend, hibernate, shutdown, turn off external monitors, and/or receive a notification when the system’s power gets too low. Can warn users for some period of time before taking a power management action in response to a low battery. Also shows a battery level icon.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Battery level icon: Very little concerns. An attacker who gets access to an encrypted but unlocked system might use the charge level to decide whether or not they want to keep the system powered on while moving it to a more convenient attack location, or if they want to attempt an attack right where they’re at, but in all likelihood hiding this info likely won’t defend against most realistic attack scenarios.</li>
+<li>Battery low notifications: Same concerns as for battery level, this is probably even less worrisome.</li>
+<li>Warning (timeout before taking power management action): Same concerns as battery low notifications.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Security impact identical to battery low notifications.</li>
+<li>Lock screen: Minor positive security impact, though most users would be better served by automatically locking the screen after some duration of idle time.</li>
+<li>Suspend: Minor negative security impact (could be problematic if the battery reaches a low power level before the screen locks due to idleness, due to screen locking prevention discussed above).</li>
+<li>Hibernate: Security impact dependent upon setup. Usually not a concern because it doesn’t work out of the box.</li>
+<li>Shutdown: Minor positive security impact, though again this would be better handled by an idle timeout.</li>
+<li>Turn Off monitor(s): Very minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Battery level icon: Very useful for laptop users. Mobile users could run out of power mid-work without this.</li>
+<li>Battery low notifications: Useful for the same reason as the battery level icon.</li>
+<li>Warning (timeout before taking power management action): Positive usability impact. Mitigates issues introduced by automatic power management actions.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Annoying because it suddenly creates a popup window like so: <div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png" data-download-href="https://forums.kicksecure.com/uploads/default/d9fbf60da81a866fe3d4e66001491e061c3857cd" title="Screenshot_20251031_162822"><img src="../../uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png" alt="Screenshot_20251031_162822" data-base62-sha1="v6nqZuM6SBVxaI1P7Qsp42TiPk9" width="568" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png, https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_852x750.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png 2x" data-dominant-color="9DA3C1"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">Screenshot_20251031_162822</span><span class="informations">959×843 129 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div> Possibly dangerous, users could lose work if they tried to click inside a window right where the shutdown, reboot, or logout button appeared just as the window popped up. The power management warning is only a partial mitigation for this.</li>
+<li>Lock screen: Rather useless for preserving battery life, mildly annoying even with the warning timer.</li>
+<li>Suspend: Mildly annoying, but may prevent loss of work by preserving battery power. The warning timeout mitigates this. Overall, positive usability impact.</li>
+<li>Hibernate: Same usability impact as suspend, except it takes longer to enter and exit hibernate. Overall, possibly positive usability impact.</li>
+<li>Shutdown: Very annoying and dangerous, user will lose all unsaved work when the power level gets too low unless they are able to immediately plug in a source of power when the warning notification appears. Not sufficiently mitigated by the warning timeout, unless the timeout is made very long.</li>
+<li>Turn Off monitor(s): Possibly somewhat useful for avoiding data loss since powering off monitors may improve battery life, but this isn’t that useful. Mildly annoying. Attempts to use xset to power off monitors, thus it doesn’t even work under Wayland.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lid watcher. Controls what happens when the user closes the lid of the system. Can lock the screen, suspend, hibernate, shutdown, or turn off monitors when the lid is closed. Supports separate settings for when on battery and when on AC power, and also support separate settings for when an external monitor isn’t attached and when it is.
+<ul>
+<li>Security concerns:
+<ul>
+<li>No difference in security concerns between the different customization possibilities (on battery / on AC / with external monitor connected / without external monitor connected) except in as much as each option applies to individual user threat models. For instance, a user might only plug their system in while at a location safe from physical attackers, thus their threat model would permit more convenient settings while plugged in and require more safe settings while unplugged.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive security impact. User can close lid to render whatever they were actively working on inaccessible to a physically present attacker, barring a screen lock bypass or vulnerability in another component of their installation.</li>
+<li>Suspend: Negative security impact. Closing the lid will indefinitely prevent the screen lock and allow a physically present attacker to capture a screenshot of their work as explained above.</li>
+<li>Hibernate: Security impact dependent upon setup. If user has unencrypted swap, this is virtually fatal when defending against a physically present attacker, as they can capture not only everything that was on the screen, but the full memory contents of everything on the system. If swap is encrypted and requires a passphrase to unlock, this probably won’t suffer from the indefinite screen lock pause issue because a password will be required to resume. If swap is encrypted but a TPM can unlock it, then this suffers from the same issues as suspend. (Note to readers: This is all theoretical, Kicksecure lacks features that would be needed to do things like unlocking an encrypted hibernation volume with a passphrase or TPM with a vanilla Kicksecure configuration.)</li>
+<li>Shutdown: Positive security impact. User can close lid to render everything they were doing inaccessible to a physically present attacker, even if their system contains vulnerable components. However, shutdown may be slow, giving an attacker a window of opportunity to extract useful data before the system shuts down (most attackers probably will not be able to act fast enough for this to be of any use to them). Would be better if there was a way to trigger emerg-shutdown when the lid was closed.</li>
+<li>Turn Off monitor(s): Extremely minor positive security impact, maybe, but so negligible as to call it nonexistent unless dealing with an attacker in possession of technology that can reconstruct screen contents based on the light coming from the screen’s reflection off the laptop chassis. Even then, some laptops turn off their screen in hardware when the lid is closed. Might have more of a positive impact if external monitors can be turned off also.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>The different customization possibilities have different usability concerns based on the action in question.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive usability impact. Most users used to WIndows will expect that closing the lid will result in the screen being locked. (They would also expect the system to suspend, but at least this fulfills some of the expectation.)</li>
+<li>Suspend: Debatable usability impact. On one hand, most users used to Windows will expect taht closing the lid will result in the system going into suspend. On the other hand, suspend may interrupt actions such as software updates, downloads, long running processes, etc., and thus be undesirable for some users.</li>
+<li>Hibernate: Debatable but probably negative usability impact. User has to wait for RAM contents to be reloaded from swap upon resume, and may need to authenticate before the system fully resumes.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they or someone else (usually a pet) closes the lid unintentionally.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Idleness Watcher: Controls what happens when the system has been idle for some duration of time. Has the same set of power management actions as the lid watcher. Supports separate settings for when on battery and when on AC, and allows configuring the time before the system is considered idle. Can disable idleness checks when a fullscreen app is in use. Also offers backlight change settings, but these will almost certainly not work for users with user-sysmaint-split installed.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive security impact. Users who forget to lock their screen before walking away from their machine will be protected from a physically present attacker, if that attacker doesn’t manage to see the screen contents of the user’s system before the lock screen activates.</li>
+<li>Suspend: Negative security impact due to the locking issue described at the top of the post.</li>
+<li>Hibernate: Security impact dependent upon setup. Identical concerns as for the hibernate lid close action.</li>
+<li>Shutdown: Positive security impact for the same reasons as the lock screen idleness action. Protections against exploits are stronger.</li>
+<li>Turn Off monitor(s): Minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+<li>Brightness controls: Same security impact as the “Turn Off monitor(s)” idleness action, but likely less effective than truly turning off the monitor.</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive usability impact. Users used to Windows will not expect their system to be accessible to an adversary who shows up and looks at the system after some amount of time has passed.</li>
+<li>Suspend: Debatable usability impact. May improve battery life, but can also interrupt long-running processes, see usability concerns for suspend lid close action.</li>
+<li>Hibernate: Debatable but probably negative usability impact, see usability concerns for hibernate lid close action.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they have to step away from the system for longer than the configured idle time.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+<li>Brightness controls: Positive usability impact due to power savings, but usually this won’t work as mentioned above.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Power keys: Allows configuring what to do when the user presses a power, suspend, or hibernate key. These options do nothing under Wayland, power keys are configured by the compositor instead, thus skipping this section.</li>
+</ul>
+<p>Personally, I’d recommend the following settings for physical hardware installations based on the above analysis:</p>
+<ul>
+<li>Battery Watcher:
+<ul>
+<li>Low power action: Nothing</li>
+<li>Warning timeout: 30 seconds</li>
+<li>Level is low at: 10%</li>
+<li>Show icon: Yes</li>
+<li>Icon for the icon: Whatever the default is</li>
+</ul>
+</li>
+<li>Lid Watcher:
+<ul>
+<li>When lid is closed on battery: Lock screen</li>
+<li>When lid is closed on AC power: Lock screen</li>
+<li>Disable the extra settings for when using external monitors</li>
+</ul>
+</li>
+<li>Idleness watcher:
+<ul>
+<li>When idle on AC: Lock screen</li>
+<li>AC idle time: Unsure. For paranoid setups, a very short time might be preferable (30 seconds is the shortest supported timeout), but IMO people should not be relying on the idle timeout for security anyway because it is by nature unreliable. Thus we can probably favor usability here since security is better obtained by other means. Maybe just accept the default of 15 minutes?</li>
+<li>When idle on battery: Lock screen</li>
+<li>Battery idle time: Unsure, maybe just accept the default of 15 minutes?</li>
+<li>Disable backlight change</li>
+<li>Do not disable idleness checks when fullscreen</li>
+</ul>
+</li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>
