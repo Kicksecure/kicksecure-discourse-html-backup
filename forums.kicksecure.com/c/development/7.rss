@@ -5,8 +5,41 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code. &lt;a href=&quot;https://www.kicksecure.com/wiki/Development_Discussion_Policy&quot;&gt;Development Discussion Policy&lt;/a&gt; and &lt;a href=&quot;https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy&quot;&gt;First-Time Source Code Contributor Policy&lt;/a&gt; apply.</description>
     
-      <lastBuildDate>Fri, 31 Oct 2025 22:34:24 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 02 Nov 2025 20:33:05 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Support for hibernation?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>We need to decide what we’re doing with hibernation. Either we should determine how to set it up in a secure fashion and implement that, or we should remove hibernation-related documentation from the wiki and disable the hibernation button in LXQt.</p>
+<p>Hardware support challenges:</p>
+<ul>
+<li>Hibernation may or may not work properly on Linux. Many users seem to have it working without issues, I have yet to get it working on a machine here. From what I’ve heard, SteamOS supports hibernation and has it working reliably, so maybe it’s robust enough to deploy in general now.</li>
+</ul>
+<p>Security challenges:</p>
+<ul>
+<li>Hibernation takes data that is intended to be ephemeral, and makes it persistent. Any secrets, unsaved work, live-booted virtual machines, etc., are all dumped to a swapfile or swap partition when the system is hibernated, making them much easier for an attacker to access if they can get access to the volume containing the swap file/partition.</li>
+<li>This can be mitigated somewhat by using full disk encryption, however this is vulnerable to the possibility that the user will choose a weak encryption passphrase, and of course there’s always the <a href="https://xkcd.com/538/">$5 wrench problem</a>.</li>
+</ul>
+<p>Technical challenges:</p>
+<ul>
+<li>swap-file-creator would probably need to change in order to support hibernation. Right now we use an encrypted swapfile with an ephemeral encryption key, allowing swap to be used safely but also making it impossible to recover after a reboot. We may also need to do something with the way in which the swapfile is managed, since we need to have a single, static swapfile, we can’t be dynamically creating a new one on every boot or similar.</li>
+<li>Hibernation is not reliable if you are trying to hibernate into an existing swapfile. If memory is filled and swap is partially filled, there won’t be enough space left in the swapfile to save the remaining contents of RAM into. SteamOS reportedly gets around this by using a dedicated hibernation file (which I guess means they probably somehow give the resume mechanism multiple swapfiles?).</li>
+<li>Hibernation would need to be disabled when FDE was not in use, unless we want to implement something where the user is prompted for a one-time-use passphrase for securing the hibernation file, which is then prompted for upon resume. (Actually, that could be really neat, even with FDE, since it would mean an attacker would have to break both the FDE key and the hibernation key in order to get access to RAM contents. This would require the user to have a very good memory though.)</li>
+<li>Related: <a href="https://packages.debian.org/trixie/cryptsetup-suspend" class="inline-onebox">Debian -- Details of package cryptsetup-suspend in trixie</a> Unsure whether we’d want to use this with hibernation or not, or if it works with dracut.</li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/support-for-hibernation/1349">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/support-for-hibernation/1349</link>
+          <pubDate>Sun, 02 Nov 2025 20:33:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1349</guid>
+          <source url="https://forums.kicksecure.com/t/support-for-hibernation/1349.rss">Support for hibernation?</source>
+        </item>
         <item>
           <title>Power management for physical hardware in Kicksecure 18</title>
           <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -149,7 +182,7 @@
 </ul>
 </li>
 </ul>
-            <p><small>1 post - 1 participant</small></p>
+            <p><small>3 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344</link>
@@ -166,7 +199,7 @@
           <category>Development</category>
           <description><![CDATA[
             <p>The default position of the lxqt taskbar on the bottom not top, preferable to have the same for ks/whonix.</p>
-            <p><small>4 posts - 3 participants</small></p>
+            <p><small>9 posts - 4 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338</link>
@@ -470,7 +503,7 @@ Either the package should detect this and not interfere. otherwise a more robust
 </li>
 <li>Anything else we should consider allowing or not allowing by default?</li>
 </ul>
-            <p><small>61 posts - 11 participants</small></p>
+            <p><small>62 posts - 11 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248</link>
@@ -800,23 +833,6 @@ Either the package should detect this and not interfere. otherwise a more robust
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1176</guid>
           <source url="https://forums.kicksecure.com/t/offline-no-internet-accessible-for-system-base-core/1176.rss">Offline/No Internet Accessible for System Base/Core</source>
-        </item>
-        <item>
-          <title>Offline Installation (preferable)</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>It is more secure to avoid installing the operating system while connected to the internet, as also advised in <a href="https://www.debian.org/doc/manuals/securing-debian-manual/ch03s03.en.html">Debian’s security manual</a>.</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/offline-installation-preferable/1175">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/offline-installation-preferable/1175</link>
-          <pubDate>Thu, 24 Jul 2025 19:34:30 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1175</guid>
-          <source url="https://forums.kicksecure.com/t/offline-installation-preferable/1175.rss">Offline Installation (preferable)</source>
         </item>
   </channel>
 </rss>

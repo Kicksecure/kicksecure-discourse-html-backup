@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Support for hibernation?</title>
+    <link>https://forums.kicksecure.com/t/support-for-hibernation/1349</link>
+    <description>We need to decide what we&#39;re doing with hibernation. Either we should determine how to set it up in a secure fashion and implement that, or we should remove hibernation-related documentation from the wiki and disable the hibernation button in LXQt.
+
+Hardware support challenges:
+
+* Hibernation may or may not work properly on Linux. Many users seem to have it working without issues, I have yet to get it working on a machine here. From what I&#39;ve heard, SteamOS supports hibernation and has it working reliably, so maybe it&#39;s robust enough to deploy in general now.
+
+Security challenges:
+
+* Hibernation takes data that is intended to be ephemeral, and makes it persistent. Any secrets, unsaved work, live-booted virtual machines, etc., are all dumped to a swapfile or swap partition when the system is hibernated, making them much easier for an attacker to access if they can get access to the volume containing the swap file/partition.
+* This can be mitigated somewhat by using full disk encryption, however this is vulnerable to the possibility that the user will choose a weak encryption passphrase, and of course there&#39;s always the [$5 wrench problem](https://xkcd.com/538/).
+
+Technical challenges:
+
+* swap-file-creator would probably need to change in order to support hibernation. Right now we use an encrypted swapfile with an ephemeral encryption key, allowing swap to be used safely but also making it impossible to recover after a reboot. We may also need to do something with the way in which the swapfile is managed, since we need to have a single, static swapfile, we can&#39;t be dynamically creating a new one on every boot or similar.
+* Hibernation is not reliable if you are trying to hibernate into an existing swapfile. If memory is filled and swap is partially filled, there won&#39;t be enough space left in the swapfile to save the remaining contents of RAM into. SteamOS reportedly gets around this by using a dedicated hibernation file (which I guess means they probably somehow give the resume mechanism multiple swapfiles?).
+* Hibernation would need to be disabled when FDE was not in use, unless we want to implement something where the user is prompted for a one-time-use passphrase for securing the hibernation file, which is then prompted for upon resume. (Actually, that could be really neat, even with FDE, since it would mean an attacker would have to break both the FDE key and the hibernation key in order to get access to RAM contents. This would require the user to have a very good memory though.)
+* Related: https://packages.debian.org/trixie/cryptsetup-suspend Unsure whether we&#39;d want to use this with hibernation or not, or if it works with dracut.</description>
+    
+    <lastBuildDate>Sun, 02 Nov 2025 20:33:05 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/support-for-hibernation/1349.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Support for hibernation?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>We need to decide what we’re doing with hibernation. Either we should determine how to set it up in a secure fashion and implement that, or we should remove hibernation-related documentation from the wiki and disable the hibernation button in LXQt.</p>
+<p>Hardware support challenges:</p>
+<ul>
+<li>Hibernation may or may not work properly on Linux. Many users seem to have it working without issues, I have yet to get it working on a machine here. From what I’ve heard, SteamOS supports hibernation and has it working reliably, so maybe it’s robust enough to deploy in general now.</li>
+</ul>
+<p>Security challenges:</p>
+<ul>
+<li>Hibernation takes data that is intended to be ephemeral, and makes it persistent. Any secrets, unsaved work, live-booted virtual machines, etc., are all dumped to a swapfile or swap partition when the system is hibernated, making them much easier for an attacker to access if they can get access to the volume containing the swap file/partition.</li>
+<li>This can be mitigated somewhat by using full disk encryption, however this is vulnerable to the possibility that the user will choose a weak encryption passphrase, and of course there’s always the <a href="https://xkcd.com/538/">$5 wrench problem</a>.</li>
+</ul>
+<p>Technical challenges:</p>
+<ul>
+<li>swap-file-creator would probably need to change in order to support hibernation. Right now we use an encrypted swapfile with an ephemeral encryption key, allowing swap to be used safely but also making it impossible to recover after a reboot. We may also need to do something with the way in which the swapfile is managed, since we need to have a single, static swapfile, we can’t be dynamically creating a new one on every boot or similar.</li>
+<li>Hibernation is not reliable if you are trying to hibernate into an existing swapfile. If memory is filled and swap is partially filled, there won’t be enough space left in the swapfile to save the remaining contents of RAM into. SteamOS reportedly gets around this by using a dedicated hibernation file (which I guess means they probably somehow give the resume mechanism multiple swapfiles?).</li>
+<li>Hibernation would need to be disabled when FDE was not in use, unless we want to implement something where the user is prompted for a one-time-use passphrase for securing the hibernation file, which is then prompted for upon resume. (Actually, that could be really neat, even with FDE, since it would mean an attacker would have to break both the FDE key and the hibernation key in order to get access to RAM contents. This would require the user to have a very good memory though.)</li>
+<li>Related: <a href="https://packages.debian.org/trixie/cryptsetup-suspend" class="inline-onebox">Debian -- Details of package cryptsetup-suspend in trixie</a> Unsure whether we’d want to use this with hibernation or not, or if it works with dracut.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/support-for-hibernation/1349/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/support-for-hibernation/1349/1</link>
+        <pubDate>Sun, 02 Nov 2025 20:33:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1349-1</guid>
+        <source url="https://forums.kicksecure.com/t/support-for-hibernation/1349.rss">Support for hibernation?</source>
+      </item>
+  </channel>
+</rss>
