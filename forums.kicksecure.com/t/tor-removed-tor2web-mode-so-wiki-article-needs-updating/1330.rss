@@ -9,9 +9,35 @@
 
 I don’t know how to update this article because I don’t understand how to change this. Does having to jump through 4 hops instead of 6 still delivers the purpose of being faster/lower latency NAT traversal? Or is it preferred we remove this article as a whole?</description>
     
-    <lastBuildDate>Wed, 29 Oct 2025 16:16:03 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 04 Nov 2025 06:01:31 +0000</lastBuildDate>
     <category>Website</category>
     <atom:link href="https://forums.kicksecure.com/t/tor-removed-tor2web-mode-so-wiki-article-needs-updating/1330.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Tor removed Tor2Web mode so wiki article needs updating</title>
+        <dc:creator><![CDATA[SashaGoldman]]></dc:creator>
+        <description><![CDATA[
+            <p>I have attempted to modify the source code but I can only reduce the hops needed to construct a circuit to 2 instead of 1 in field testing, even with default route length changed to 1:</p>
+<pre><code class="lang-auto">in src/core/or/or.h
+-#define DEFAULT_ROUTE_LEN 3
++#define DEFAULT_ROUTE_LEN 1
+</code></pre>
+<p>More googling told me that single-hop connection has already been disabled by relays in default configuration. One of the shared relay log shows relays are rejecting single hop clients.</p>
+<pre><code class="lang-auto">[notice] DoS mitigation since startup: 0 circuits killed with too many 
+cells. 232704 circuits rejected, 15 marked addresses. 2939 connections 
+closed. 1534 single hop clients refused.
+</code></pre>
+<p>Link:</p>
+<pre><code class="lang-auto">https://archive.torproject.org/websites/lists.torproject.org/pipermail/tor-relays/2018-June/015514.html
+https://archive.torproject.org/websites/lists.torproject.org/pipermail/tor-relays/2018-June/015515.html
+</code></pre>
+<p>So this left us with 3 hops connection instead of 6. Not bad, but non-ideal either.</p>
+          <p><a href="https://forums.kicksecure.com/t/tor-removed-tor2web-mode-so-wiki-article-needs-updating/1330/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/tor-removed-tor2web-mode-so-wiki-article-needs-updating/1330/3</link>
+        <pubDate>Tue, 04 Nov 2025 06:01:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1330-3</guid>
+        <source url="https://forums.kicksecure.com/t/tor-removed-tor2web-mode-so-wiki-article-needs-updating/1330.rss">Tor removed Tor2Web mode so wiki article needs updating</source>
+      </item>
       <item>
         <title>Tor removed Tor2Web mode so wiki article needs updating</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

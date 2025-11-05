@@ -9,9 +9,148 @@ https://github.com/Kicksecure/qubes-template-kicksecure
 
 * [Qubes Template](https://www.kicksecure.com/wiki/Qubes#Template)</description>
     
-    <lastBuildDate>Fri, 24 Oct 2025 04:06:42 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 05 Nov 2025 02:48:18 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10384">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10384" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10384" target="_blank" rel="noopener">qubes.WaitForSession emits an error `Failed to connect to user scope bus via local transport: $DBUS_SESSION_BUS_ADDRESS and $XDG_RUNTIME_DIR not defined`</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-11-04" data-time="01:40:52" data-timezone="UTC">01:40AM - 04 Nov 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          C: core
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          needs diagnosis
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          affects-4.3
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+###<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> Qubes OS release
+
+R4.3
+
+### Brief summary
+
+In all templates (at least the ones I've tried; debian-13-xfce, fedora-42-xfce, and whonix-gateway-18), there is an error message in the output of `sudo journalctl --boot` matching the title. This appears to be coming from `/etc/qubes-rpc/qubes.WaitForSession`.
+
+### Steps to reproduce
+
+1. Boot `fedora-42-xfce`.
+2. Run `sudo journalctl --boot`
+3. Search for `Failed to connect to user scope bus`
+4. See error
+5. Run `sudo vim /etc/qubes-rpc/qubes.WaitForSession`
+6. Replace the line `systemctl --user --wait --quiet is-system-running` with the following:
+
+```
+logger "$$: $(id)"
+systemctl --user --wait --quiet is-system-running || {
+  logger '$$: failed here'
+}
+logger "$$: made it"
+```
+
+7. Reboot the template.
+8. Run `sudo journalctl --boot` in the template.
+9. Search for `failed here`, and observe that the service is failing when called as `root`, but succeeds when called as `user`, based on the logger output from earlier.
+
+### Expected behavior
+
+`qubes.WaitForSession` should never emit any errors.
+
+### Actual behavior
+
+`qubes.WaitForSession` is emitting the aforementioned error when called as `root`.
+
+### Additional information
+
+I tried making the following modification to `qubes.WaitForSession` in `whonis-gateway-18`, but while this did fix the error message, it also made it so that if one attempts to launch a GUI app in the qube while it is not yet booted, the qube will boot without issues, but the app will never launch. Subsequent attempts to launch GUI apps succeed.
+
+```
+logger "$(id)"
+
+logger "trying... $$"
+if [ "$(id -u)" = '0' ]; then
+  systemctl --wait --quiet is-system-running
+else
+  systemctl --user --wait --quiet is-system-running
+fi
+
+logger "made it! $$"
+```
+
+This showed that it took about 9 or 10 seconds from the time that `root` showed a `trying: PID` message to the time that `root` showed a `made it! PID` message (with the PID values matching in both locations). The first GUI app I attempted to launch never showed up, not even after twenty seconds.
+
+The following modification seems to get rid of the error message *and* keep the previous behavior, but I'm not sure if it's correct since it means that `qubes.WaitForSession` may return before the system is "fully booted" (which is what the current, unmodified code does also):
+
+```
+if [ "$(id -u)" = '0' ]; then
+  exit 0
+else
+  systemctl --user --wait --quiet is-system-running
+fi
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/18">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/18</link>
+        <pubDate>Wed, 05 Nov 2025 02:48:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-679-18</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
+      </item>
       <item>
         <title>Kicksecure Qubes Template Development - Qubes Integration</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
