@@ -88,9 +88,38 @@ Would this be a good idea to implement or do you think its a waste of time since
 &gt;
 &gt; &gt; From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</description>
     
-    <lastBuildDate>Thu, 06 Nov 2025 17:41:10 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Nov 2025 15:13:35 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>Um…last I checked bwrap has <code>bwrap --tmpfs</code> but requires more arguments or flags to do this correctly. This could be a good starting point if you where to make a bwrap wrapper for this.</p>
+<pre data-code-wrap="sh"><code class="lang-sh">bwrap \
+  --unshare-all \
+  --die-with-parent \
+  --proc /proc \
+  --dev /dev \
+  --tmpfs /tmp \
+  --tmpfs /run \
+  --tmpfs /home \
+  --tmpfs /root \
+  --tmpfs /var/tmp \
+  --tmpfs /var/cache \
+  --tmpfs /var/lib \
+  --setenv HOME /home/user \
+  --setenv XDG_CACHE_HOME /home/user/.cache \
+  --setenv XDG_CONFIG_HOME /home/user/.config \
+</code></pre>
+<p>The problem I see among others would be creating logic to detect the needed runtime dependencies to have exposed to bwrap. <code>--ro-bind /usr /usr</code> might help with automatic with having to know which libs are required. The other issue I could think of is if the application needs internet access and access to ca-certificates and ssl. Thoughts on using bwrap for a wrapper for launching apps in RAM?</p>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/4</link>
+        <pubDate>Fri, 07 Nov 2025 15:13:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-4</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
       <item>
         <title>Request and Idea for including a tmpfs-setup package?</title>
         <dc:creator><![CDATA[NTH9R6]]></dc:creator>
