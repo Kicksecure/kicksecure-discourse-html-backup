@@ -5,6 +5,69 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="CodeLurker" data-post="6" data-topic="1359">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/76d3ee/48.png" class="avatar"> CodeLurker:</div>
+<blockquote>
+<p>In each failure this time, and most of the previous ones, it gave the error about bootloader_config not finishing after 600 secs.</p>
+</blockquote>
+</aside>
+<p>That sounds like the drives you’re using are so slow that the default timeout value isn’t long enough; I’ve seen these errors when installing to some USB 3 TeamGroup drives in the past. Many USB flash drives have decent read speed but horrible write speed, even USB 3 drives.</p>
+<p>The <em>good</em> solution would be to use faster drives, but if you need to use the drives you have, you can lengthen the timeout:</p>
+<ul>
+<li>Boot the live ISO, and select <code>LIVE Mode | SYSMAINT Session | system maintenance, install</code>.</li>
+<li>Click <code>Open Terminal</code>.</li>
+<li>Run <code>sudo nano /usr/lib/calamares/modules/bootloader-config/module.desc</code>.</li>
+<li>Adjust the <code>timeout:     600</code> line to something longer, like <code>timeout:     5000</code>.</li>
+<li>Save with Ctrl+S, exit with Ctrl+X.</li>
+<li>Close the terminal window.</li>
+<li>Click <code>Install System</code>.</li>
+<li>Install like normal.</li>
+</ul>
+<p>Because USB installations like you’re doing are explicitly supported, and USB drives are so frequently slow, we should probably lengthen some of these timeouts.</p>
+<aside class="quote no-group" data-username="CodeLurker" data-post="5" data-topic="1359">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/76d3ee/48.png" class="avatar"> CodeLurker:</div>
+<blockquote>
+<p>If I installed in ISO mode, I had two boot choices in the BIOS: USB &amp; GPT. The USB choice resulted in “542: Index out of bounds” in a console window; but no maint mode.</p>
+</blockquote>
+</aside>
+<p>This sounds like Rufus is buggy to me. That message is most likely from GRUB. Etcher exists and probably would work better, but I didn’t mention it since like you mentioned, it does phone home. I don’t know of any other good ISO burning tools for Windows unfortunately. Thankfully, it looks like <code>dd</code> in Linux is doing the trick, so hopefully you won’t need to use Windows for this sort of thing <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_7</link>
+        <pubDate>Thu, 13 Nov 2025 01:10:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3652</guid>
+      </item>
+      <item>
+        <title>Support for hibernation?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="desi_fubu" data-post="6" data-topic="1349">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Does grub-live disable hibernation and if it doesn’t would the<a href="https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/kernel-parameters.txt#L1883-L1891"><code>hibernate=no</code></a> or <a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html"><code>nohibernate</code></a> flag/parameter be fine to add and should it be be added?</p>
+</blockquote>
+</aside>
+<p>Good idea. Should be added to grub-live at minimum. Maybe should also be added globally until/if hibernation is supported.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/support-for-hibernation/1349#post_7</link>
+        <pubDate>Wed, 12 Nov 2025 11:00:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3651</guid>
+      </item>
+      <item>
+        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
+        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
+        <description><![CDATA[ <p>I thought I was getting somewhere by finding a portable vers. of a prog. to run in Tails, but they are dead-set against Internet access in it outside of Tor.  A supposed method to allow it in a vid on YT, no longer works.  I did take the opportunity to burn a Live disk in Linux from it, using the dd command above.  It burnt a LOT faster than in Rufus.</p>
+<p>The first time I tried to install Kicksecure in it, it worked!  This was even burning onto one of the SeaGlass drives I’d had probs. with before.  Kicksecure looks very promising, IF there’s a way to disable Tor and/or allow third-party apps internet access.  With a presumably good Live disk on a USB, and full of something (perhaps enthusiasm?), I proceeded to spend lots of time trying to install it to other USB drives.  It failed on two yet different 32 GB SeaGlass drives, and to make it complete, it failed to install on the original ancient SanDisk it originally worked on.  <strong>That makes it four fresh tries, using the Live ISO burnt with with dd: One of them a success, and three more failures - including a non-Verbatim drive which had previously worked.</strong>  In each failure this time, and most of the previous ones, it gave the error about bootloader_config not finishing after 600 secs.  Failures occurred burning from at least two different USB drives that had worked for the Live ISO on other occasions.</p>
+<p>This seems like an uninitialized variable problem in the installation from the Live disk; or a timing problem.  It manifested if I booted up the Live USB with the GUID partition entry, or with its USB boot menu entry.  It looks like the problem isn’t Rufus, nor is it the SeaGlass drives.  One of the SeaGlass drives had been triggered to go into a Read-Only mode.  I couldn’t even format it until I went into Windows and did “DISKPART”.  I navigated to the drive, and did “CLEAN”.  This erases it, but makes it it writable.  I think you have a problem in your “bootloader_config” script, causing installing it to be a mostly hit or miss process (mostly miss).  It looks quite nice, from the two times the installer completed successfully..</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_6</link>
+        <pubDate>Wed, 12 Nov 2025 08:14:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3650</guid>
+      </item>
+      <item>
         <title>Support for hibernation?</title>
         <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
         <description><![CDATA[ <p>Does grub-live disable hibernation and if it doesn’t would the<a href="https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/kernel-parameters.txt#L1883-L1891" rel="noopener nofollow ugc"><code>hibernate=no</code></a> or <a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html" rel="noopener nofollow ugc"><code>nohibernate</code></a> flag/parameter be fine to add and should it be be added?</p>
@@ -1224,80 +1287,6 @@ for.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626#post_10</link>
         <pubDate>Sat, 01 Nov 2025 17:22:27 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3593</guid>
-      </item>
-      <item>
-        <title>USBGuard - what should we allow or disallow by default?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="59" data-topic="1248">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>What’s your threat model?</p>
-</blockquote>
-</aside>
-<p>Ok so here me out my threat model is a targeted attack via a Bad USB charging cable or USB type adapter that gets around the rules somehow. Since Kicksecure is one of the few projects that does ship USB guard that I know of next to <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/12-usbguard" rel="noopener nofollow ugc">Tails</a> (Theirs only protects against Scenario 1), I feel woried an advanced adversary could target this towards Kicksecure (rejecting HID is honestly the strongest protection <img src="https://forums.kicksecure.com/images/emoji/twitter/+1.png?v=14" title=":+1:" class="emoji" alt=":+1:" loading="lazy" width="20" height="20"> )</p>
-<p>Scenario Targeted: user buys USB peripheral online (ie. charging cable, adapter, or mass storage). The USB is swapped with a malicious one in via mail tampering and is swapped for a BadUSB. The user then logs in as USER not SYSMAINT. They then precede to plug in USB device. Since user can now allow/deny, the device in theory could load code that auto allows since it now has sudo privlages via the change to allow sudo privalges to user for usbguard?</p>
-<p>Is my understanding correct that Bad USB could therefore persist across reboots if the attacker manages to get the user to run the allow (whitelists device) command once via some BadUSB that get around the rules? Then user goes logs into SYSMAINT the root account with a now malicious USB whitelisted could do more damage?</p>
-<p><em>potential for silent whitelisting</em>?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=3#post_60</link>
-        <pubDate>Sat, 01 Nov 2025 17:15:03 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3592</guid>
-      </item>
-      <item>
-        <title>Total Newby question</title>
-        <dc:creator><![CDATA[@ambiancemonday]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for all the advice fellas.</p>
-<p>I was able to get the persistent USB easy enough after following the directions.</p>
-<p>One more question. Are there any resources of documentation that you can point me to for a beginner? Just some of the basics like updates, file management, basic terminal commands for downloading/updating the system &amp; files.</p>
-<p>Once again, thanks for the advice.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/total-newby-question/1333#post_11</link>
-        <pubDate>Sat, 01 Nov 2025 16:04:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3591</guid>
-      </item>
-      <item>
-        <title>My Firefox Snowflake extension seems not to work</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>No idea. This might be too difficult.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Too_Difficult">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1761903025" class="site-icon" alt="" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Too_Difficult" target="_blank" rel="noopener" title="05:40AM - 20 July 2025">Kicksecure – 20 Jul 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/3/31/Too_difficult.png?version=61202e63bbbdec61197463664da87d40" class="thumbnail onebox-avatar" alt="">
-
-<h3><a href="https://www.kicksecure.com/wiki/Too_Difficult" target="_blank" rel="noopener">Too Difficult</a></h3>
-
-  <p>This request is too difficult, unlikely to get resolved through free forum discussions anywhere on the internet including but not limited to Kicksecure forums.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Try seeking support from upstream snowflake.</p>
-<aside class="quote no-group" data-username="nearkick" data-post="1" data-topic="1342">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/34f0e0/48.png" class="avatar"> nearkick:</div>
-<blockquote>
-<p>Is there some rule to give to my firewall ?</p>
-</blockquote>
-</aside>
-<p>No such issue at time of writing: <a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a><br>
-(does not exist at the time of writing)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/my-firefox-snowflake-extension-seems-not-to-work/1342#post_2</link>
-        <pubDate>Sat, 01 Nov 2025 05:27:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3590</guid>
       </item>
   </channel>
 </rss>
