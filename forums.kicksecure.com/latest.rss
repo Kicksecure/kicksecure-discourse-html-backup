@@ -5,8 +5,69 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Sun, 09 Nov 2025 09:08:25 +0000</lastBuildDate>
+      <lastBuildDate>Fri, 14 Nov 2025 06:52:55 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>`sudo sgdisk -v /dev/sda` - `Caution: Partition 3 doesn&#39;t end on a 2048-sector boundary. This may result in problems with some disk encryption tools.`</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Minor issue.</p>
+<pre><code>sudo sgdisk -v /dev/sda
+</code></pre>
+<pre><code class="lang-auto">Caution: Partition 3 doesn't end on a 2048-sector boundary. This may
+result in problems with some disk encryption tools.
+
+No problems found. 2021 free sectors (1010.5 KiB) available in 2
+segments, the largest of which is 2014 (1007.0 KiB) in size.
+</code></pre>
+<p>Scary warning but no actual issue.</p>
+<p>Quote <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a></p>
+<blockquote>
+<ul>
+<li>Aaron: May be difficult to fix. grml-debootstrap uses parted for partition creation, and according to parted, partition 3 is optimally aligned. I find it somewhat unlikely grml-debootstrap would want to port to sgdisk.
+<ul>
+<li>Sent an email to the GPT fdisk mailing list to see if there’s a good way to fix the discrepancy between the behavior of GPT fdisk and Parted.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/">
+  <header class="source">
+      <img src="https://a.fsdn.com/con/img/sandiego/logo-180x180.png" class="site-icon" alt="" width="180" height="180">
+
+      <a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">sourceforge.net</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">[Gptfdisk-general] Partition end sector alignment concerns with
+ partition...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363</link>
+          <pubDate>Fri, 14 Nov 2025 06:52:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1363</guid>
+          <source url="https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363.rss">`sudo sgdisk -v /dev/sda` - `Caution: Partition 3 doesn&#39;t end on a 2048-sector boundary. This may result in problems with some disk encryption tools.`</source>
+        </item>
         <item>
           <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
           <dc:creator><![CDATA[CodeLurker]]></dc:creator>
@@ -928,101 +989,6 @@ Errors occurred while processing the following packages:
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1279</guid>
           <source url="https://forums.kicksecure.com/t/dpkg-error-while-processing-a-package-libreoffice-common-installed-post-installation-script-returned-error-code-10/1279.rss">Dpkg: error while processing a package libreoffice-common installed post-installation script returned error code 10</source>
-        </item>
-        <item>
-          <title>Request and Idea for including a tmpfs-setup package?</title>
-          <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>This idea was inspired by this users post:</p>
-<blockquote>
-<p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057" class="inline-onebox">Questions regarding use of tmpfs formatting and conflicts</a></p>
-</blockquote>
-<p>Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a <code>/etc/profile.d/</code> drop in to set the <code>XDG_CACHE_HOME=/tmp/.cache</code> variable for all users shell.</p>
-<h2><a name="p-3384-idea-for-etcprofiledxdg-cachesh-1" class="anchor" href="https://forums.kicksecure.com#p-3384-idea-for-etcprofiledxdg-cachesh-1"></a>Idea for /etc/profile.d/xdg-cache.sh</h2>
-<pre><code class="lang-auto">#!/bin/sh
-
-## Set XDG_CACHE_HOME to a per-user cache directory.
-#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
-#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
-#
-## Detect whether /tmp is a mount point (i.e. a separate filesystem).
-#    On most modern distros this will be a tmpfs, but on some it may
-#    be a regular disk partition.
-if grep -q "^tmpfs.*/tmp.*tmpfs" /proc/mounts || mountpoint -q /tmp; then
-
-    # /tmp is a mount point - assume it is a tmpfs.
-    BASE_ROOT="/tmp/${USER}"
-else
-    # /tmp is part of the root filesystem (disk based).
-    # Use the traditional default users /home based cache location instead.
-    BASE_ROOT="${HOME}"
-fi
-
-## Build the final cache directory path.
-#    We always put the cache in a ".cache" sub-folder so that tools
-#    that follow the XDG spec find what they expect.
-CACHE_DIR="${BASE_ROOT}/.cache"
-
-## Ensure the directory exists and is private to the user.
-#    /tmp is world-writable (drwxrwxrwt), so we must create a
-#    private subtree and lock it down with chmod 700.
-#
-# Create the parent directory (only needed when we are using /tmp)
-if [ "${BASE_ROOT}" != "${HOME}" ] &amp;&amp; [ ! -d "${BASE_ROOT}" ]; then
-    mkdir -p "${BASE_ROOT}"
-    chmod 700 "${BASE_ROOT}"          
-fi
-
-# Now create the .cache directory itself
-mkdir -p "${CACHE_DIR}"
-chmod 700 "${CACHE_DIR}"
-
-## Export the variable so the rest of the session sees it.
-export XDG_CACHE_HOME="${CACHE_DIR}"
-</code></pre>
-<p>For the above To make it more bullet‑proof, you could tighten the /tmp detection for the <code>export XDG_CAHCE_HOME="/tmp/${USER}/.cache</code> creation</p>
-<p>Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.<br>
-In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.<br>
-Either the package should detect this and not interfere. otherwise a more robust way would be to ship <code>/etc/fstab</code> to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?</p>
-<h2><a name="p-3384-package-structure-summary-idea-2" class="anchor" href="https://forums.kicksecure.com#p-3384-package-structure-summary-idea-2"></a>Package Structure Summary Idea</h2>
-<pre><code class="lang-auto">tmpfs-setup package/
-├── DEBIAN/
-│   ├── control
-│   ├── postinst
-|   └── prerm (depending on implementation)
-├── etc/
-│   ├── default/
-│   │   └── tmpfs-config
-│   └── profile.d/
-│       └── xdg-cache-home.sh
-└── usr/
-    └── share/doc/your-package/
-        └── README.Debian
-</code></pre>
-<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
-<blockquote>
-<p>fedoraproject . org/wiki/Features/tmp-on-tmpfs</p>
-<blockquote>
-<p>Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs</p>
-<blockquote>
-<p>From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</p>
-</blockquote>
-</blockquote>
-            <p><small>4 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277</link>
-          <pubDate>Sun, 07 Sep 2025 19:00:52 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1277</guid>
-          <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
         </item>
   </channel>
 </rss>
