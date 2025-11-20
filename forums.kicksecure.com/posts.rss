@@ -5,6 +5,42 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This might be a better question for Mullvad’s support. What you’re trying to do basically is start Mullvad as a systemd service before any other network traffic occurs (at least that’s what it looks like you’re doing), so it would probably be best to ask them how to do that. user-sysmaint-split shouldn’t affect how (or if) this works, at least in user sessions. Whatever solution you find may or may not automatically work in sysmaint sessions, depending on which unit you’re overriding.</p>
+<p>You shouldn’t worry about this part until you have a solution that works in a user session, but once you have that working, you <em>might</em> end up needing to add a <code>WantedBy=sysmaint-boot.target</code> to whatever unit you’re overriding (see <code>/usr/lib/systemd/system/mullvad-daemon.service.d/99_sysmaint.conf</code> for an example of how to do this). If you do this, you’ll need to use <code>sudo systemctl daemon-reload; sudo systemctl disable whatever.service; sudo systemctl enable whatever.service</code> to get that override to fully apply.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367#post_2</link>
+        <pubDate>Thu, 20 Nov 2025 00:05:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3660</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[@JustPassinThru]]></dc:creator>
+        <description><![CDATA[ <p>First post, genuine question</p>
+<p>I come from Fedora and heard about KickSecure. It definitely piqued my curiosity. So I did a bare metal installation on an old Toshiba Satellite AMD4, UEFI &amp; Btrfs</p>
+<p>I am trying to button down the sysmaint profile but keep finding obstacles. So I have reinstalled it twice. I’ve been using ChatGPT for help…. works 50% of the time when it’s not hallucinating</p>
+<p>My question (and I have hundreds) can I get Mullvad VPN on Lockdown mode to connect before the ISP connects?</p>
+<p>Just one idea I had</p>
+<p>[Unit]<br>
+Description=Override to enforce early Mullvad lockdown<br>
+Before=network-pre.target network.target network-online.target<br>
+Wants=network-pre.target</p>
+<p>[Service]<br>
+ExecStartPost=/usr/bin/mullvad connect</p>
+<p>But it failed</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367#post_1</link>
+        <pubDate>Wed, 19 Nov 2025 23:31:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3659</guid>
+      </item>
+      <item>
+        <title>On Debian morphed to Kicksecure is it possible to create privleap group?</title>
+        <dc:creator><![CDATA[@jnd]]></dc:creator>
+        <description><![CDATA[ <p>(topic deleted by author)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/on-debian-morphed-to-kicksecure-is-it-possible-to-create-privleap-group/1364#post_1</link>
+        <pubDate>Wed, 19 Nov 2025 09:21:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3656</guid>
+      </item>
+      <item>
         <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
         <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
         <description><![CDATA[ <p>Thanks for the instructions.</p>
@@ -1381,31 +1417,6 @@ for.</p> ]]></description>
         <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=4#post_61</link>
         <pubDate>Sat, 01 Nov 2025 19:24:11 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3599</guid>
-      </item>
-      <item>
-        <title>Onionize The Repositories</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Yeah thats a critical, cc <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/onionize-the-repositories/1181#post_4</link>
-        <pubDate>Sat, 01 Nov 2025 17:40:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3598</guid>
-      </item>
-      <item>
-        <title>Make the taskbar on the bottom not at the top</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>You can try it from <a href="https://download.kicksecure.com/iso/18.0.4.1/Kicksecure-LXQt-18.0.4.1.Intel_AMD64.iso">here</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338#post_4</link>
-        <pubDate>Sat, 01 Nov 2025 17:37:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3597</guid>
-      </item>
-      <item>
-        <title>My Firefox Snowflake extension seems not to work</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>Welcome nearkick, What browser are you using?</p>
-<p>Last I checked Snowflake’s core transport is built on WebRTC data channels. So if your using something like Librewolf or did some kind of hardening to your browser good chance this is related to WebRTC being disabled in the browser. The other might be some kind of sandboxing issue?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/my-firefox-snowflake-extension-seems-not-to-work/1342#post_3</link>
-        <pubDate>Sat, 01 Nov 2025 17:33:31 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3596</guid>
       </item>
   </channel>
 </rss>
