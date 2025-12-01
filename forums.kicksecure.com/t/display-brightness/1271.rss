@@ -7,9 +7,44 @@
 
 Its adjustable only on second boot option system maintenance tasks.</description>
     
-    <lastBuildDate>Sat, 29 Nov 2025 06:31:34 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 30 Nov 2025 20:52:04 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/display-brightness/1271.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Untested, but if xbacklight works by telling the X server to modify the brightness values itself, <em>and X is running as root</em>, it will likely work.</p>
+<p>The core reason things broke in this area in the first place is that modifying files under /sys/class/backlight requires root access. We previously had sudoers config in place that allowed Xfce utilities to modify the backlight files by running <code>sudo</code> without needing a password, but when we introduced user-sysmaint-split that broke. In Kicksecure 18, backlight-tool-dist uses privleap (a simpler, more restrictive privilege escalation framework) to do backlight changes, which is a lot safer than when we were doing it with sudo and still works. That tool isn’t available for Kicksecure 17 though.</p>
+<p>Any tool that requires direct root access to modify the backlight brightness will not work on Kicksecure 17. Tools that are able to circumvent this requirement (by, for instance, running a privileged systemd service that listens for backlight change requests from unprivileged processes) will likely work. (This is also why backlight tools work normally in sysmaint mode - the <code>sysmaint</code> account has access to tools like <code>sudo</code> and <code>pkexec</code>, and so backlight adjustment tools that rely on <code>sudo</code> and <code>pkexec</code> are able to function normally there.)</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/13</link>
+        <pubDate>Sun, 30 Nov 2025 20:52:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-13</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>Fine</p>
+<p>On Debian xbacklight  doesn’t work until this fix →</p>
+<p>If you get the “No outputs have backlight property” error, it is because xrandr/xbacklight does not choose the right directory in /sys/class/backlight. You can specify the directory by setting the Backlight option of the device section in xorg.conf. For instance, if the name of the directory is intel_backlight, the device section can be configured as follows:</p>
+<h2><a name="p-3719-etcx11xorgconf-1" class="anchor" href="https://forums.kicksecure.com#p-3719-etcx11xorgconf-1"></a>/etc/X11/xorg.conf</h2>
+<p>Section “Device”<br>
+Identifier  “Card0”<br>
+Driver      “intel”<br>
+Option      “Backlight”  “intel_backlight”<br>
+EndSectio</p>
+<p>Will Xbacklight work with Kicksecuere 17  so i can go back to it ?</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/12</link>
+        <pubDate>Sun, 30 Nov 2025 20:37:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-12</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
       <item>
         <title>Display brightness</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

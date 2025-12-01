@@ -5,6 +5,288 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Untested, but if xbacklight works by telling the X server to modify the brightness values itself, <em>and X is running as root</em>, it will likely work.</p>
+<p>The core reason things broke in this area in the first place is that modifying files under /sys/class/backlight requires root access. We previously had sudoers config in place that allowed Xfce utilities to modify the backlight files by running <code>sudo</code> without needing a password, but when we introduced user-sysmaint-split that broke. In Kicksecure 18, backlight-tool-dist uses privleap (a simpler, more restrictive privilege escalation framework) to do backlight changes, which is a lot safer than when we were doing it with sudo and still works. That tool isn’t available for Kicksecure 17 though.</p>
+<p>Any tool that requires direct root access to modify the backlight brightness will not work on Kicksecure 17. Tools that are able to circumvent this requirement (by, for instance, running a privileged systemd service that listens for backlight change requests from unprivileged processes) will likely work. (This is also why backlight tools work normally in sysmaint mode - the <code>sysmaint</code> account has access to tools like <code>sudo</code> and <code>pkexec</code>, and so backlight adjustment tools that rely on <code>sudo</code> and <code>pkexec</code> are able to function normally there.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271#post_13</link>
+        <pubDate>Sun, 30 Nov 2025 20:52:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3720</guid>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>Fine</p>
+<p>On Debian xbacklight  doesn’t work until this fix →</p>
+<p>If you get the “No outputs have backlight property” error, it is because xrandr/xbacklight does not choose the right directory in /sys/class/backlight. You can specify the directory by setting the Backlight option of the device section in xorg.conf. For instance, if the name of the directory is intel_backlight, the device section can be configured as follows:</p>
+<h2><a name="p-3719-etcx11xorgconf-1" class="anchor" href="https://forums.kicksecure.com#p-3719-etcx11xorgconf-1"></a>/etc/X11/xorg.conf</h2>
+<p>Section “Device”<br>
+Identifier  “Card0”<br>
+Driver      “intel”<br>
+Option      “Backlight”  “intel_backlight”<br>
+EndSectio</p>
+<p>Will Xbacklight work with Kicksecuere 17  so i can go back to it ?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271#post_12</link>
+        <pubDate>Sun, 30 Nov 2025 20:37:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3719</guid>
+      </item>
+      <item>
+        <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="SteveK1978" data-post="11" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>I thought Kicksecure is based on Debian instead of RHEL?</p>
+</blockquote>
+</aside>
+<p>Yes, but RHEL is/was the primary developers of <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> as I understand it.</p>
+<aside class="quote no-group" data-username="SteveK1978" data-post="11" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>The X server interacts with hardware. Something has to interact with hardware.</p>
+</blockquote>
+</aside>
+<p>That should be (and is, with both <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> and Wayland) the kernel.</p>
+<aside class="quote no-group quote-modified" data-username="SteveK1978" data-post="11" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>I highly recommend read this article:</p>
+<p><a href="https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277" class="inline-onebox" rel="noopener nofollow ugc">Think twice about Wayland. It breaks everything! · GitHub</a></p>
+</blockquote>
+</aside>
+<p>I am familiar with the article.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297#post_12</link>
+        <pubDate>Sun, 30 Nov 2025 18:40:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3717</guid>
+      </item>
+      <item>
+        <title>Reshaping the future of KickSecure &amp; Whonix</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>Kicksecure ensures all system updates are done over the Tor network by default. This way, update servers cannot know the user’s identity or IP address.</p>
+</blockquote>
+<p>This IS anonymity. But knowing the IP address doesn’t make any difference? The massive scanners scans the whole internet all the time. Also, the signature of packages and reproducible builds of Debian will prevent supply chain attack.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_7</link>
+        <pubDate>Sun, 30 Nov 2025 18:06:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3716</guid>
+      </item>
+      <item>
+        <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="10" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The primary developer was Red Hat, which deprecated <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> in RHEL 9 and fully removed it from RHEL 10</p>
+</blockquote>
+</aside>
+<p>I thought Kicksecure is based on Debian instead of RHEL? I also don’t trust this company at all. I think it just proves that we need to rely on Xorg and abandon Wayland.</p>
+<blockquote>
+<p>but I don’t really see how “this feature doesn’t work, no one wants to fix it, let’s throw it out” is really maintenance.</p>
+</blockquote>
+<p>Sometimes just remove codes is a good thing isn’t it? Keep it simple and stupid.</p>
+<blockquote>
+<p>Wayland doesn’t rely on simply being a better display server implementation for security</p>
+</blockquote>
+<p>Does that “implementation for security“ base on adding more security features? It will expand the code base and the more mechanism and codes you have the more possible there will be security issue.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="10" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p><a href="http://X.org" rel="noopener nofollow ugc">X.org</a> traditionally runs as root</p>
+</blockquote>
+</aside>
+<p>The X server interacts with hardware. Something has to interact with hardware.</p>
+<p>I highly recommend read this article:</p>
+<aside class="onebox githubgist" data-onebox-src="https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277">
+  <header class="source">
+
+      <a href="https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277" target="_blank" rel="noopener nofollow ugc">gist.github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277" target="_blank" rel="noopener nofollow ugc">https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277</a></h4>
+
+  <h5>Wayland.md</h5>
+  <pre><code class="Markdown"># Think twice before abandoning X11. Wayland breaks everything!
+
+&lt;!-- [![image](https://gist.github.com/user-attachments/assets/98ec6c1c-bd7f-427c-a2da-a9802a645373)](https://x.com/LundukeJournal/status/1940441670098809093) --&gt;
+
+Wayland breaks everything! It is binary incompatible, provides no clear transition path with 1:1 replacements for everything in X11, and is even philosophically incompatible with X11. Hence, if you are interested in existing applications to "just work" without the need for adjustments, then you may be better off avoiding Wayland.
+
+**Wayland solves no issues I have but breaks almost everything I need.** Even the most basic, most simple things (like `xkill`) - _in this case with no obvious replacement_. And usually it stays broken, because the Wayland folks mostly seem to care about Automotive, Gnome, maybe KDE - and alienating everyone else (e.g., people using just an X11 window manager or something like GNUstep) in the process.
+
+## Feature comparison
+</code></pre>
+   This file has been truncated. <a href="https://gist.github.com/probonopd/9feb7c20257af5dd915e3a9f2d1f2277" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+<p>
+</p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297#post_11</link>
+        <pubDate>Sun, 30 Nov 2025 17:43:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3715</guid>
+      </item>
+      <item>
+        <title>Reshaping the future of KickSecure &amp; Whonix</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="SteveK1978" data-post="5" data-topic="822">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>I suggest we create a metapackage that install everything except Tor. Let Kicksecure focus on security hardening and Whonix (based on Kicksecure) focus on anonymity.</p>
+</blockquote>
+</aside>
+<p>The presence of Tor on Kicksecure is purely for security reasons, not for anonymity. It makes it so that a user cannot be singled out to receive malicious software via normal software updates. See: <a href="https://www.kicksecure.com/wiki/About#torified_updates" class="inline-onebox" rel="noopener nofollow ugc">Kicksecure - A Security Hardened Linux Distribution</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_6</link>
+        <pubDate>Sun, 30 Nov 2025 17:03:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3714</guid>
+      </item>
+      <item>
+        <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="SteveK1978" data-post="9" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>There was a change submitted 3 days ago, it doesn’t seem like abandoned:</p>
+</blockquote>
+</aside>
+<p>The primary developer was Red Hat, which deprecated <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> in RHEL 9 and fully removed it from RHEL 10. <a href="https://www.phoronix.com/news/X.Org-Server-21.1.21" rel="noopener nofollow ugc">The last changes were <em>reverts</em> to fix regressions</a>, i.e. not code being fixed, but code being completely removed. That’s not the same as being truly maintained or developed. (It does seem like it’s seeing <em>more</em> changes than I believed it was receiving when I wrote that it was abandoned upstream, but I don’t really see how “this feature doesn’t work, no one wants to fix it, let’s throw it out” is really maintenance.) Additionally, the <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> repository Git history is not really a good way to measure the activity of the standalone <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> server, since the same repo also contains Xwayland, which is actively developed and maintained.</p>
+<aside class="quote no-group" data-username="SteveK1978" data-post="9" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>Many important applications doesn’t work on Wayland.</p>
+</blockquote>
+</aside>
+<p>This is increasingly becoming less and less of a problem. For users who absolutely need <a href="http://X.org" rel="noopener nofollow ugc">X.org</a>, it’s still in the Debian repos, you can install <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> and an appropriate window manager or similar to run software that requires X11.</p>
+<aside class="quote no-group" data-username="SteveK1978" data-post="9" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>Also, X is more stable and less bugs</p>
+</blockquote>
+</aside>
+<p>This has not been my experience personally, see notes about bitrotting application, toolkit, and driver support above.</p>
+<aside class="quote no-group" data-username="SteveK1978" data-post="9" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>and will contain obvious fewer security flaws than Wayland.</p>
+</blockquote>
+</aside>
+<p>I don’t believe this is the case. Wayland doesn’t rely on simply being a better display server implementation for security, it does a number of things that fundamentally make it less of a security hazard than X11 even <em>if</em> the compositor or libraries it depends on contain security vulnerabilities. For instance:</p>
+<ul>
+<li><a href="http://X.org" rel="noopener nofollow ugc">X.org</a> traditionally runs as root (and I believed ran as root even in Kicksecure 17), meaning a compromise of the display server is equivalent to a compromise of the entire system. Wayland runs in a logged-in unprivileged user account.</li>
+<li><a href="http://X.org" rel="noopener nofollow ugc">X.org</a> exposes its IPC sockets in a world-writable location, increasing the risk that a malicious process running as a restricted user like <code>man</code> could compromise the server. Wayland saves its IPC sockets in <code>/run/user/UID</code>, which is only available to the logged-in user itself. Thus applications are authenticated to the server just by virtue of being able to connect to the socket, and unauthorized applications are unable to connect because of kernel-level filesystem restrictions.</li>
+</ul>
+<p>These two advantages alone are huge because it means that almost any application that could connect to and compromise the Wayland server, most likely would gain no further access to the system by doing so (the only exception would be GUI applications with AppArmor sandboxes). An application <em>might</em> compromise the Wayland server to read the window contents of other applications or sniff keystrokes, but these are both things that <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> allows by design, so there’s no additional risk there. The display server goes from being a highly valuable exploit target to being relatively uninteresting. Even if labwc (our chosen Wayland compositor) or wlroots (the library it uses to implement a Wayland compositor) turns out to be riddled with security holes, it’s still better than a nearly bulletproof X11 would be (and X11 is not nearly bulletproof).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297#post_10</link>
+        <pubDate>Sun, 30 Nov 2025 17:00:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3713</guid>
+      </item>
+      <item>
+        <title>Reshaping the future of KickSecure &amp; Whonix</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<ol>
+<li>module based (features can be loaded and unloaded) (this can help to target people with specific requirement, strictest or not)</li>
+</ol>
+</blockquote>
+<p>I suggest we create a metapackage that install everything except Tor. Let Kicksecure focus on security hardening and Whonix (based on Kicksecure) focus on anonymity.</p>
+<p>I want to run Desktop and Server on a secure hardened Debian based system. But I don’t need Tor on some of the place.</p>
+<blockquote>
+<ol start="8">
+<li>Ship with Firefox ESR with strictest privacy options enable. No Extension Yet of course. It’s not hardening like arkenfox thing, but default settings after pulled to the max security.</li>
+</ol>
+</blockquote>
+<p>We need a new browser without any remote features + security hardened.</p>
+<blockquote>
+<p>is heavy operating system really required to ensure security ?</p>
+</blockquote>
+<p>Yes. For example I use Gnome on desktop. You can customize Gnome UI to make it looks like Mac OS X. And the system-monitor-next and Freon extension helps me to monitor the real time performance.</p>
+<p>Neither Xfce nor LXDE can do it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_5</link>
+        <pubDate>Sun, 30 Nov 2025 16:43:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3712</guid>
+      </item>
+      <item>
+        <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="8" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The <code>X.org</code> server however has been abandoned upstream</p>
+</blockquote>
+</aside>
+<p>There was a change submitted 3 days ago, it doesn’t seem like abandoned:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.freedesktop.org/xorg/xserver">
+  <header class="source">
+      <img src="https://gitlab.freedesktop.org/uploads/-/system/appearance/favicon/1/fdo-favicon.ico" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://gitlab.freedesktop.org/xorg/xserver" target="_blank" rel="noopener nofollow ugc">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.freedesktop.org/uploads/-/system/project/avatar/371/root-weave.png" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gitlab.freedesktop.org/xorg/xserver" target="_blank" rel="noopener nofollow ugc">xorg / xserver · GitLab</a></h3>
+
+  <p>X server</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Many important  applications doesn’t work on Wayland. Also, X is more stable and less bugs and will contain obvious fewer security flaws than Wayland. Switching to Wayland will reduce the security of Kicksecure.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297#post_9</link>
+        <pubDate>Sun, 30 Nov 2025 16:29:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3711</guid>
+      </item>
+      <item>
+        <title>How can I prevent any automatic unsolicited network connections?</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/trimmingfreebie">@trimmingfreebie</a> This is what you want to enable in Whonix Gateway:<br>
+<a href="http://xmrhfasfg5suueegrnc4gsgyi2tyclcy5oz7f5drnrodmdtob6t2ioyd.onion/relay/setup/bridge/index.html" class="onebox" target="_blank" rel="noopener nofollow ugc">http://xmrhfasfg5suueegrnc4gsgyi2tyclcy5oz7f5drnrodmdtob6t2ioyd.onion/relay/setup/bridge/index.html</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-can-i-prevent-any-automatic-unsolicited-network-connections/1337#post_3</link>
+        <pubDate>Sun, 30 Nov 2025 16:27:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3710</guid>
+      </item>
+      <item>
         <title>Kicksecure Qubes Template Development - Qubes Integration</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/updates-status/issues/6228">
@@ -1691,14 +1973,6 @@ The unit files have no installation config (WantedBy=, RequiredBy=, UpheldBy=, A
       </item>
       <item>
         <title>Display brightness</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>(post deleted by author)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/display-brightness/1271#post_9</link>
-        <pubDate>Wed, 26 Nov 2025 18:08:19 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3682</guid>
-      </item>
-      <item>
-        <title>Display brightness</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <p>There will be a new once available.</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stay_Tuned">
@@ -2772,140 +3046,6 @@ https://forums.kicksecure.com/t/suppor<span class="show-more-container"><a href=
         <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_3</link>
         <pubDate>Sun, 09 Nov 2025 23:40:11 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3644</guid>
-      </item>
-      <item>
-        <title>Where and how is the most secure way to install some nasty apps?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Use a VM.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353#post_4</link>
-        <pubDate>Sun, 09 Nov 2025 19:00:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3643</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Generally, USB drives themselves act like any other drive under Linux; it’s theoretically possible a drive <em>could</em> be compatible with Windows and not Linux, but in practice I have never seen this be the case.</p>
-<p>You’re using Rufus to burn the ISO to the drives. Rufus might not install Kicksecure to a USB drive properly; the ISO is designed to be written <em>directly</em> to a disk, not unpacked into a filesystem on the disk. If you must use Rufus, try using “dd mode” to write the ISO. Better yet, use an existing Linux installation and flash the ISO using <code>dd</code>, i.e. <code>sudo dd if=./kicksecure.iso of=/dev/sdX bs=4M</code>.</p>
-<p>(There is, of course, always the possibility that the drives themselves are failing. Drives are most likely to fail when they’re brand new and when they’re relatively old. There are command-line utilities for Linux such as <code>badblocks</code> you can use to check this, see <code>man badblocks</code>.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_2</link>
-        <pubDate>Sun, 09 Nov 2025 15:32:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3642</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
-        <description><![CDATA[ <p>I don’t expect this to require any bug fix, unless one comes to mind, but just wanted to warn others of my ordeal.  Kicksecure seems an ideal OS for booting on a thumb drive for a very secure environment.  It seems more suitable than Tails for my use cases, as I’d also like to install some software to it.  To test it out, I burnt the live disk to a really OLD Kingston thumb drive of 8GB, and used it to install a persistent, encrypted thumb drive OS that I could e.g. install other softs on with SU privileges, a really old SanDisk 16 GB.  It booted and worked great.  I can even install other software by removing the split.</p>
-<p>The Verbatim Seaglass drives seemed attractive, as they have lifetime warranties, which seems like a fairly strong expression of confidence in their shelf life.  I bought two 32GB and two 64, burnt the ISO on a Seaglass, and tried to boot it - this from the same ISO which previously worked.  It generated a bunch of errors and then said something like ‘Boot Failed’.  Note that virtual machines are enabled in both the BIOS’s I tried.  I then tried burning it without the extended volume name option in Rufus, and burnt onto a 64GB instead of a 32, and it worked.  I then plugged in the live disk in with another 64GB, and installed to it from Maint.  It seemed to complete quite happily, but it would not boot on any computer I tried it on, just like the first Live disk I originally burnt.  I compared it to the ancient SanDisk drive that worked.  I noticed in the boot order in the BIOS, I had a choice for the USB itself, and another for the same drive, with a Kicksecure name.  The one that started with USB wouldn’t boot, but the Kicksecure choice would.  Looking at two SeaGlass drives I tried to install to, neither show a Kicksecure choice in the BIOS.  It does not work with Secure Boot turned off.</p>
-<p>These Seaglass drives SAY that they work for formatting in EXT4 on Linux.  I seem to have only one significant choice on how to create the installed version: EXT4 or BTFS.  I tried both on one of the drives, but neither gave me a Kicksecure boot choice.  I tried booting it on a port on a hub, and two different ports on my desktop.  No dice.</p>
-<p>Based on the principle that if you try to install Windows on a machine, and you get errors instead of an OS, it is a virtual certainty that the HW is bad or incompatible  It seems like a foregone conclusion that the reason for the difference is the thumb drives; but feel free to make any suggestions.  I’ve had mostly good luck with Verbatim blank optical media over the years, but IMHO, this does not look good for them.  It seems like they are Kicksecure incompatible, as is.  I don’t know if it’s a bug in the design, M$ paid ‘em to be incompatible (which here seems unlikely, since they advertise Linux compatibility), or there’s a problem with USB 3.2 Gen 1; or maybe I’m missing something.  Maybe a bug in the KickSecure installer is more likely than Windows, but it seems less likely given that the prob. seems to show up depending on the thumb drive it’s installed on.  Implementing a thumb drive should under it all just be a big block of memory..</p>
-<p>My machine is an ancient ASRock Tai Chi X570, with a Ryzen 5 3800X.  The SeaGlass USB drives are for USB 3.2 Gen 1.  This matches the specs on most of the USB ports on my desktop, AND on my USB hub.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_1</link>
-        <pubDate>Sun, 09 Nov 2025 09:08:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3640</guid>
-      </item>
-      <item>
-        <title>No UTC/Etc timezone from calamares installer</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/69032d4090c233c68f7c2beaa4ce1991481d853e.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/69032d4090c233c68f7c2beaa4ce1991481d853e" title="UTC"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg" alt="UTC" data-base62-sha1="eYYWjCqg28hHhDvIzW7vSetXur4" width="436" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_654x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_872x1000.jpeg 2x" data-dominant-color="7C87D3"></a></div><p></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357#post_1</link>
-        <pubDate>Sat, 08 Nov 2025 21:53:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3638</guid>
-      </item>
-      <item>
-        <title>Where and how is the most secure way to install some nasty apps?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="NTH9R6" data-post="2" data-topic="1353">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
-<blockquote>
-<p>I really don’t know why you dont just install a separate more trustable browser then yandex and install some kind of translate extension???</p>
-</blockquote>
-</aside>
-<p><a href="https://addons.mozilla.org/en-US/firefox/addon/instant-translate/" rel="noopener nofollow ugc">Mate Translate (Firefox and Chrome)</a></p>
-<p><a href="https://chromewebstore.google.com/detail/subtrans-general-subtitle/oflioiciloahhlekagfajdkigboemklf" rel="noopener nofollow ugc">SubTrans - General Subtitle Translator Suite (Chrome)</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353#post_3</link>
-        <pubDate>Fri, 07 Nov 2025 15:20:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3637</guid>
-      </item>
-      <item>
-        <title>Request and Idea for including a tmpfs-setup package?</title>
-        <dc:creator><![CDATA[@Quiksilver]]></dc:creator>
-        <description><![CDATA[ <p>Um…last I checked bwrap has <code>bwrap --tmpfs</code> but requires more arguments or flags to do this correctly. This could be a good starting point if you where to make a bwrap wrapper for this.</p>
-<pre data-code-wrap="sh"><code class="lang-sh">bwrap \
-  --unshare-all \
-  --die-with-parent \
-  --proc /proc \
-  --dev /dev \
-  --tmpfs /tmp \
-  --tmpfs /run \
-  --tmpfs /home \
-  --tmpfs /root \
-  --tmpfs /var/tmp \
-  --tmpfs /var/cache \
-  --tmpfs /var/lib \
-  --setenv HOME /home/user \
-  --setenv XDG_CACHE_HOME /home/user/.cache \
-  --setenv XDG_CONFIG_HOME /home/user/.config \
-</code></pre>
-<p>The problem I see among others would be creating logic to detect the needed runtime dependencies to have exposed to bwrap. <code>--ro-bind /usr /usr</code> might help with automatic with having to know which libs are required. The other issue I could think of is if the application needs internet access and access to ca-certificates and ssl. Thoughts on using bwrap for a wrapper for launching apps in RAM?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277#post_4</link>
-        <pubDate>Fri, 07 Nov 2025 15:13:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3636</guid>
-      </item>
-      <item>
-        <title>Request and Idea for including a tmpfs-setup package?</title>
-        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
-        <description><![CDATA[ <p>Is there some type of wrapper that could be added so you could launch ./applications in some kind overlayroot in tmp based RAM?<br>
-This seems like a good work around between wanting “Live Mode” vs mounting all .cache in TMPFS.</p>
-<p>Use case = user wants to start a app in RAM but doesn’t want all their RAM resources being used for “Live Mode”.</p>
-<p>Two Examples would be generating a bitcoin wallet with Electrum in RAM so that nothing is saved. The other would be generating GPG keys so one could export their private keys without saving them to the system.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277#post_3</link>
-        <pubDate>Thu, 06 Nov 2025 17:41:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3635</guid>
-      </item>
-      <item>
-        <title>Where and how is the most secure way to install some nasty apps?</title>
-        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
-        <description><![CDATA[ <p>This brings me back when using yandex browser as a OSINT browser lol good stuff. There is a “unofficial” appimage and flakpak version of it but I would be leary tbh with you.</p>
-<p>There is two ways that I could think of doing it that don’t require virtual machine, the second would more of a setup. Either way would require you to create a new non sudor user for you’re “mother”.</p>
-<hr>
-<p>One way you “might” be able to do this, I could have sworn I did this with a .deb file of some software back in the day but it wasn’t a browser.</p>
-<ul>
-<li>
-<p>Make a local dir in the “mother” user account /<br>
-<code>mkdir -p "$HOME/.local/yandex-browser"</code></p>
-</li>
-<li>
-<p>Download the .deb and instead of installing it system wide try extracting it. /</p>
-</li>
-</ul>
-<pre data-code-wrap="sh"><code class="lang-sh">dpkg-deb -x yandex-browser.deb "$HOME/.local/yandex-browser
-</code></pre>
-<ul>
-<li>Then find the binary is in the directory and launch it, then you would need to make a desktop shortcut for the command.</li>
-</ul>
-<hr>
-<p>The other way would be installing the yandex browser in a Docker container and then after creating desktop shortcut that launches it with a x11 display.</p>
-<hr>
-<p>I really don’t know why you dont just install a separate more trustable browser then yandex and install some kind of translate extension???</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353#post_2</link>
-        <pubDate>Thu, 06 Nov 2025 17:30:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3634</guid>
-      </item>
-      <item>
-        <title>Unplugging external drive should trigger a shutdown</title>
-        <dc:creator><![CDATA[@NTH9R6]]></dc:creator>
-        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> I just want to say thank so much for this distro and the work you and any other devs do on this project.</p>
-<p>Tx ID:</p>
-<p><code>3691866a833547ccbe7fb165c0e81384e7eda20daeec9e87917eb53f9dcbf38d</code></p>
-<p>Also <a class="mention" href="https://forums.kicksecure.com/u/maltfield">@maltfield</a> thanks for the Buskill project. It’s things like your project that also inspire ideas and innovation <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
-<p>Tx ID:</p>
-<p><code>d85179a8c628d0308447f674bae0dccb877643e9a584685732023f35472e0af2</code></p>
-<p>*Both are private donations to each to show some respect</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994?page=2#post_30</link>
-        <pubDate>Thu, 06 Nov 2025 17:12:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3633</guid>
       </item>
   </channel>
 </rss>
