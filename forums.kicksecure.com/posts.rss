@@ -5,6 +5,381 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Confirmed, this is definitely a PAM hardening bug. It turns out that Swaylock runs PAM modules as an unprivileged user, which the <code>block-unsafe-logins</code> mechanism is not designed to handle.</p>
+<p>This should be semi-easy to fix thankfully.</p>
+<p>Edit: Fix, not yet merged into Kicksecure’s code:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">github.com/ArrayBolt3/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">Fix block-unsafe-logins when running as non-root, add swaylock to list of safe auth services</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-12-03" data-time="01:06:30" data-timezone="UTC">01:06AM - 03 Dec 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 13 additions and 3 deletions">
+        <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">
+          <span class="added">+13</span>
+          <span class="removed">-3</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_6</link>
+        <pubDate>Wed, 03 Dec 2025 00:49:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3733</guid>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Thanks, this is very helpful. I’ll reproduce on my end and see if I can fix the problem. (I wonder if our PAM hardening accidentally broke the screen locker.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_5</link>
+        <pubDate>Wed, 03 Dec 2025 00:21:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3732</guid>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@RebornRider]]></dc:creator>
+        <description><![CDATA[ <p>I was able to recreate this issue in virtualbox:</p>
+<ol>
+<li>Import the <code>Kicksecure-LXQt-18.0.7.6.Intel_AMD64.ova</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png" data-download-href="https://forums.kicksecure.com/uploads/default/831970db23362424cee0e2270cd81b97afb9c605" title="Step_1"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/831970db23362424cee0e2270cd81b97afb9c605_2_603x500.png" alt="Step_1" data-base62-sha1="iHL3qTQK5HtxPkO7UOl54kCDFdj" width="603" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/831970db23362424cee0e2270cd81b97afb9c605_2_603x500.png, https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png 2x" data-dominant-color="393739"></a></div></li>
+</ol>
+</li>
+<li>Boot into sysmaint</li>
+<li>Create a <code>user</code> password
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7.png" data-download-href="https://forums.kicksecure.com/uploads/default/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7" title="Step_2"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_690x425.png" alt="Step_2" data-base62-sha1="kIcIBqUv8UmIcGANcLomeIZMPTV" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_1380x850.png 2x" data-dominant-color="4C2122"></a></div></li>
+</ol>
+</li>
+<li>disable autologin for <code>user</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7.png" data-download-href="https://forums.kicksecure.com/uploads/default/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7" title="Step_3"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_690x425.png" alt="Step_3" data-base62-sha1="wp5xaKARnAN94RwrXJPV32RbF" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_1380x850.png 2x" data-dominant-color="4D2324"></a></div></li>
+</ol>
+</li>
+<li>shutdown and restart the VM</li>
+<li>use the new password to login into <code>user</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/14f1520076305604a5f0b76531f1b1633339b477.png" data-download-href="https://forums.kicksecure.com/uploads/default/14f1520076305604a5f0b76531f1b1633339b477" title="Step_4"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_690x425.png" alt="Step_4" data-base62-sha1="2ZgzHpqOeLE8JouEHCYMca00CO3" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_1380x850.png 2x" data-dominant-color="030303"></a></div></li>
+</ol>
+</li>
+<li>lock the screen
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/dc370644b2352045793fd3532ab75e4351fc5d23.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/dc370644b2352045793fd3532ab75e4351fc5d23" title="Step_5"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_690x425.jpeg" alt="Step_5" data-base62-sha1="vq6VQ7Wwf4x8DGtWxacD7N4LacH" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_690x425.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_1035x637.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_1380x850.jpeg 2x" data-dominant-color="8086B3"></a></div></li>
+</ol>
+</li>
+<li>type in the new password and hit enter (this will fail)
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554.png" data-download-href="https://forums.kicksecure.com/uploads/default/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554" title="Step_6"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_690x425.png" alt="Step_6" data-base62-sha1="78cPHy4Ntim9HpqVynobkyNkIRu" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_1380x850.png 2x" data-dominant-color="050506"></a></div></li>
+</ol>
+</li>
+</ol> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_4</link>
+        <pubDate>Tue, 02 Dec 2025 21:31:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3731</guid>
+      </item>
+      <item>
+        <title>Reshaping the future of KickSecure &amp; Whonix</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="822">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>so that would require a separate package</p>
+</blockquote>
+</aside>
+<p>Maybe a Metapackage just include <code>usability-misc dist-base-files security-misc kicksecure-base-files tirdad* sandbox-app-launcher</code></p>
+<p>And just add post install script one code rm -rf /etc/apparmor.d/tor*</p>
+<p>From I understand, those packages are the “core” part of Kicksecure hardening.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="822">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>No suitable browser could be identified at the time of writing.</p>
+</blockquote>
+</aside>
+<p>Oh ok. I am using Firefox ESR + arkenfox now. It is annoying that I don’t know how to make it radio silenced myself!</p>
+<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="822">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>That’s why torified updates are still needed for protection against targeted attacks even if reproducible builds are in place.</p>
+</blockquote>
+</aside>
+<p>First, I already have Tor running on my router in transparent proxy mode for some machines(not all). They have third party repos running. Torify everything will cause slow update downloads on other machines ans double-Tor on the machines already have proxy running on.</p>
+<p>Edit:</p>
+<p>I forgot to say this, I don’t want sdwdate, it is over Tor, I need to have everything connect to the local NTP server. If time is not synchronized will cause trouble.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/reshaping-the-future-of-kicksecure-whonix/822#post_9</link>
+        <pubDate>Tue, 02 Dec 2025 21:05:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3730</guid>
+      </item>
+      <item>
+        <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
+        <dc:creator><![CDATA[@SteveK1978]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Yes, but RHEL is/was the primary developers of <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> as I understand it.</p>
+</blockquote>
+</aside>
+<p>Great. So no feature will be added and only bug fixes, so everything will run stable. One more reason to use Xorg over Wayland. But I prefer we keep both in use.</p>
+<p>Red Hat is a company that supports genocide. I don’t trust them. Their ultimate goal is to control open source community.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>That should be (and is, with both <a href="http://X.org" rel="noopener nofollow ugc">X.org</a> and Wayland) the kernel.</p>
+</blockquote>
+</aside>
+<p>By the way, you can run X server rootlessly.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1297">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I am familiar with the article</p>
+</blockquote>
+</aside>
+<p>So let’s keep Wayland and Xorg both in support.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297#post_13</link>
+        <pubDate>Tue, 02 Dec 2025 20:36:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3729</guid>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@RebornRider]]></dc:creator>
+        <description><![CDATA[ <p>I’m using the British <code>gb</code> layout.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_3</link>
+        <pubDate>Tue, 02 Dec 2025 18:56:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3728</guid>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>What keyboard layout are you using? Locking works fine for me with the <code>us</code> layout.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_2</link>
+        <pubDate>Tue, 02 Dec 2025 18:37:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3727</guid>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[@RebornRider]]></dc:creator>
+        <description><![CDATA[ <p>I installed the kicksecure 18 iso on an old laptop and wanted to lock the screen when the lid closes.</p>
+<p>At first I received this warning message:</p>
+<pre data-code-wrap="plaintext"><code class="lang-plaintext">Refusing to lock screen, because current account 'user' has no password set.
+If the screen was locked, it would automatically unlock the moment any user input was received. Please set a password to enable screen locking.
+</code></pre>
+<p>So I creating a password &amp; disabled auto-login for “user” in sysmaint.<br>
+Now I can now lock the screen as “user”, but no matter what I type into sway lock I’m told the password in wrong.</p>
+<p>I tried changing the “user” password to a single numerical digit in case it’s some sort of keyboard layout issue, but that didn’t work either.</p>
+<p>Then I tried removing the “user“ password, re-enabled auto-login and manually ran the sway lock command from <code>/usr/bin/lock-screen</code> in qterminal:</p>
+<pre data-code-wrap="bash"><code class="lang-bash">swaylock --color 000000 --image /usr/share/kicksecure/lock-screen-background.png --scaling fit
+</code></pre>
+<p>That brings up sway lock, but no matter what I type it still won’t unlock (contrary to the prior warning message)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379#post_1</link>
+        <pubDate>Tue, 02 Dec 2025 17:00:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3725</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18 for Qubes R4.3 - Major Release - Testers Wanted!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Testers only!</p>
+<h1><a name="p-3723-download-1" class="anchor" href="https://forums.kicksecure.com#p-3723-download-1"></a>Download</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Qubes/Install">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764581425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Qubes/Install" target="_blank" rel="noopener" title="06:51AM - 29 November 2025">Kicksecure – 29 Nov 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/2/2a/Download-qubes.jpg?version=b32bca55e3a831e51fc67de6018efa96" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Qubes/Install" target="_blank" rel="noopener">Kicksecure for Qubes</a></h3>
+
+  <p>Using Kicksecure-Qubes</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<h1><a name="p-3723-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-3723-upgrade-2"></a>Upgrade</h1>
+<p>Alternatively, in-place release upgrade is possible upgrade using by performing a release upgrade.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Release_Upgrade">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764581425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Release_Upgrade" target="_blank" rel="noopener" title="03:01PM - 01 December 2025">Kicksecure – 1 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:332/500;"><img src="https://www.kicksecure.com/w/images/7/76/Releaseupgradewrew234.jpg?version=38d30d4a835145a75ea6073ea6a9db4e" class="thumbnail" alt="" width="332" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Release_Upgrade" target="_blank" rel="noopener">Release Upgrade</a></h3>
+
+  <p>What is a Release Upgrade?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Release_Upgrade_17_to_18">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764581425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Release_Upgrade_17_to_18" target="_blank" rel="noopener" title="03:23PM - 01 December 2025">Kicksecure – 1 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/d/d3/Upgrade.jpg?version=3adf9ff7d9da12688645c80c90041e1e" class="thumbnail" alt="" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Release_Upgrade_17_to_18" target="_blank" rel="noopener">Release Upgrade Kicksecure 17 to Kicksecure 18</a></h3>
+
+  <p>How to Release Upgrade from Kicksecure 17 to Kicksecure 18</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="p-3723-availability-and-kicksecure-for-qubes-support-qubes-r42-versus-qubes-r43-3" class="anchor" href="https://forums.kicksecure.com#p-3723-availability-and-kicksecure-for-qubes-support-qubes-r42-versus-qubes-r43-3"></a>Availability and Kicksecure for Qubes Support: Qubes R4.2 versus Qubes R4.3?</h1>
+<ul>
+<li><strong>Qubes R4.2:</strong> <strong>Kicksecure 18 unavailable.</strong> Kicksecure 18 won’t be available for Qubes R4.2.
+<ul>
+<li><strong>Release status:</strong> Even though Qubes R4.3 is only available as a <strong>r</strong>elease <strong>c</strong>andidate (RC) at the time of writing,</li>
+<li><strong>Expected release:</strong> A stable release of Qubes R4.3 (and Kicksecure 18) is probably not far away.</li>
+<li><strong>Upgrade recommendation:</strong> Kicksecure 17 users on Qubes R4.2 are encouraged to consider upgrading to Kicksecure 18 on Qubes R4.3 as soon as possible.</li>
+<li><strong>Maintenance situation:</strong> Kicksecure 18 is what developers are using and where the development focus is. It comes with much newer packages. Kicksecure is a small project and does not have a dedicated team for oldstable support. Therefore, oldstable support is maintained as a side project. More details: <a href="https://github.com/QubesOS/qubes-issues/issues/10219">decide availability of Kicksecure and Whonix 18 (Debian trixie based) on Qubes R4.2 versus R4.3 #10219</a></li>
+</ul>
+</li>
+<li><strong>Qubes R4.3:</strong> Kicksecure 18 is available.</li>
+</ul>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764581425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="08:43AM - 10 October 2024">Kicksecure – 10 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764581425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="02:15PM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" alt="" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<h1><a name="p-3723-changelog-4" class="anchor" href="https://forums.kicksecure.com#p-3723-changelog-4"></a>Changelog</h1>
+<p>Same as <a href="https://forums.kicksecure.com/t/kicksecure-18-0-7-5-major-release-upgrade-testers-wanted/1375" class="inline-onebox">Kicksecure 18.0.7.5 - Major Release Upgrade - Testers Wanted!</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-for-qubes-r4-3-major-release-testers-wanted/1377#post_1</link>
+        <pubDate>Tue, 02 Dec 2025 04:03:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3723</guid>
+      </item>
+      <item>
         <title>Reshaping the future of KickSecure &amp; Whonix</title>
         <dc:creator><![CDATA[@Patrick]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="SteveK1978" data-post="5" data-topic="822">
@@ -3436,250 +3811,6 @@ Sorry for my grammar, English is not my native language.</p>
         <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367#post_2</link>
         <pubDate>Thu, 20 Nov 2025 00:05:17 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3660</guid>
-      </item>
-      <item>
-        <title>Mullvad VPN and Lockdown mode</title>
-        <dc:creator><![CDATA[@JustPassinThru]]></dc:creator>
-        <description><![CDATA[ <p>First post, genuine question</p>
-<p>I come from Fedora and heard about KickSecure. It definitely piqued my curiosity. So I did a bare metal installation on an old Toshiba Satellite AMD4, UEFI &amp; Btrfs</p>
-<p>I am trying to button down the sysmaint profile but keep finding obstacles. So I have reinstalled it twice. I’ve been using ChatGPT for help…. works 50% of the time when it’s not hallucinating</p>
-<p>My question (and I have hundreds) can I get Mullvad VPN on Lockdown mode to connect before the ISP connects?</p>
-<p>Just one idea I had</p>
-<p>[Unit]<br>
-Description=Override to enforce early Mullvad lockdown<br>
-Before=network-pre.target network.target network-online.target<br>
-Wants=network-pre.target</p>
-<p>[Service]<br>
-ExecStartPost=/usr/bin/mullvad connect</p>
-<p>But it failed</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367#post_1</link>
-        <pubDate>Wed, 19 Nov 2025 23:31:28 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3659</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the instructions.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1359">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>That sounds like the drives you’re using are so slow that the default timeout value isn’t long enough;</p>
-</blockquote>
-</aside>
-<p>It seems worth a try, but as both the drives and the ports are USB 3.2 Gen1, they don’t seem especially slow to me.  It seems like it ought to be set slow enough to allow for installation to slower thumb drives, not just 3.2 gen1.  Of course, maybe they just had HDDs and SSDs in mind …</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1359">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>his sounds like Rufus is buggy to me.</p>
-</blockquote>
-</aside>
-<p>In my previous reply, I pointed out that my last four tries were made using a disk burned from a Live ISO on Tails, using the Linux “dd” command; <em>not</em> Rufus.</p>
-<p>Perhaps the intermittent nature of the issue, as I mentioned above, does point to a timing prob.  600 secs. is, of course, 10 mins.; which is a long time for the installation of a bootloader.  While I would expect one to install &lt;10 mins., your experience with this prob. on other USB3 drives prove be invaluable here.</p>
-<p>Some Web searches on this prob. have indicated that this prob. occurs across a wide variety of Linuces.  I’m gonna read some of these posts RE: other dristros, too.  Will let you know how my next round of tests comes out.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_8</link>
-        <pubDate>Sun, 16 Nov 2025 00:58:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3655</guid>
-      </item>
-      <item>
-        <title>`sudo sgdisk -v /dev/sda` - `Caution: Partition 3 doesn&#39;t end on a 2048-sector boundary. This may result in problems with some disk encryption tools.`</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Minor issue.</p>
-<pre><code>sudo sgdisk -v /dev/sda
-</code></pre>
-<pre><code class="lang-auto">Caution: Partition 3 doesn't end on a 2048-sector boundary. This may
-result in problems with some disk encryption tools.
-
-No problems found. 2021 free sectors (1010.5 KiB) available in 2
-segments, the largest of which is 2014 (1007.0 KiB) in size.
-</code></pre>
-<p>Scary warning but no actual issue.</p>
-<p>Quote <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a></p>
-<blockquote>
-<ul>
-<li>Aaron: May be difficult to fix. grml-debootstrap uses parted for partition creation, and according to parted, partition 3 is optimally aligned. I find it somewhat unlikely grml-debootstrap would want to port to sgdisk.
-<ul>
-<li>Sent an email to the GPT fdisk mailing list to see if there’s a good way to fix the discrepancy between the behavior of GPT fdisk and Parted.</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/">
-  <header class="source">
-      <img src="https://a.fsdn.com/con/img/sandiego/logo-180x180.png" class="site-icon" alt="" width="180" height="180">
-
-      <a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">sourceforge.net</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">[Gptfdisk-general] Partition end sector alignment concerns with
- partition...</a></h3>
-
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363#post_1</link>
-        <pubDate>Fri, 14 Nov 2025 06:52:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3654</guid>
-      </item>
-      <item>
-        <title>Support for hibernation?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Done in version 18 (and above).</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/grub-live/commit/99a97fb442a6e976f3547b4453f86cc946643992">
-  <header class="source">
-
-      <a href="https://github.com/Kicksecure/grub-live/commit/99a97fb442a6e976f3547b4453f86cc946643992" target="_blank" rel="noopener">github.com/Kicksecure/grub-live</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/Kicksecure/grub-live/commit/99a97fb442a6e976f3547b4453f86cc946643992" target="_blank" rel="noopener">set `nohibernate` kernel parameter</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2025-11-13" data-time="11:52:17" data-timezone="UTC">11:52AM - 13 Nov 25 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
-          adrelanos
-        </a>
-      </div>
-
-      <div class="lines" title="changed 2 files with 6 additions and 0 deletions">
-        <a href="https://github.com/Kicksecure/grub-live/commit/99a97fb442a6e976f3547b4453f86cc946643992" target="_blank" rel="noopener">
-          <span class="added">+6</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Thanks to @desi_fubu for the suggestion!
-
-https://forums.kicksecure.com/t/suppor<span class="show-more-container"><a href="https://github.com/Kicksecure/grub-live/commit/99a97fb442a6e976f3547b4453f86cc946643992" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">t-for-hibernation/1349/6</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/support-for-hibernation/1349#post_8</link>
-        <pubDate>Thu, 13 Nov 2025 12:03:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3653</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="CodeLurker" data-post="6" data-topic="1359">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/76d3ee/48.png" class="avatar"> CodeLurker:</div>
-<blockquote>
-<p>In each failure this time, and most of the previous ones, it gave the error about bootloader_config not finishing after 600 secs.</p>
-</blockquote>
-</aside>
-<p>That sounds like the drives you’re using are so slow that the default timeout value isn’t long enough; I’ve seen these errors when installing to some USB 3 TeamGroup drives in the past. Many USB flash drives have decent read speed but horrible write speed, even USB 3 drives.</p>
-<p>The <em>good</em> solution would be to use faster drives, but if you need to use the drives you have, you can lengthen the timeout:</p>
-<ul>
-<li>Boot the live ISO, and select <code>LIVE Mode | SYSMAINT Session | system maintenance, install</code>.</li>
-<li>Click <code>Open Terminal</code>.</li>
-<li>Run <code>sudo nano /usr/lib/calamares/modules/bootloader-config/module.desc</code>.</li>
-<li>Adjust the <code>timeout:     600</code> line to something longer, like <code>timeout:     5000</code>.</li>
-<li>Save with Ctrl+S, exit with Ctrl+X.</li>
-<li>Close the terminal window.</li>
-<li>Click <code>Install System</code>.</li>
-<li>Install like normal.</li>
-</ul>
-<p>Because USB installations like you’re doing are explicitly supported, and USB drives are so frequently slow, we should probably lengthen some of these timeouts.</p>
-<aside class="quote no-group" data-username="CodeLurker" data-post="5" data-topic="1359">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/76d3ee/48.png" class="avatar"> CodeLurker:</div>
-<blockquote>
-<p>If I installed in ISO mode, I had two boot choices in the BIOS: USB &amp; GPT. The USB choice resulted in “542: Index out of bounds” in a console window; but no maint mode.</p>
-</blockquote>
-</aside>
-<p>This sounds like Rufus is buggy to me. That message is most likely from GRUB. Etcher exists and probably would work better, but I didn’t mention it since like you mentioned, it does phone home. I don’t know of any other good ISO burning tools for Windows unfortunately. Thankfully, it looks like <code>dd</code> in Linux is doing the trick, so hopefully you won’t need to use Windows for this sort of thing <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_7</link>
-        <pubDate>Thu, 13 Nov 2025 01:10:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3652</guid>
-      </item>
-      <item>
-        <title>Support for hibernation?</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="desi_fubu" data-post="6" data-topic="1349">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
-<blockquote>
-<p>Does grub-live disable hibernation and if it doesn’t would the<a href="https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/kernel-parameters.txt#L1883-L1891"><code>hibernate=no</code></a> or <a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html"><code>nohibernate</code></a> flag/parameter be fine to add and should it be be added?</p>
-</blockquote>
-</aside>
-<p>Good idea. Should be added to grub-live at minimum. Maybe should also be added globally until/if hibernation is supported.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/support-for-hibernation/1349#post_7</link>
-        <pubDate>Wed, 12 Nov 2025 11:00:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3651</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
-        <description><![CDATA[ <p>I thought I was getting somewhere by finding a portable vers. of a prog. to run in Tails, but they are dead-set against Internet access in it outside of Tor.  A supposed method to allow it in a vid on YT, no longer works.  I did take the opportunity to burn a Live disk in Linux from it, using the dd command above.  It burnt a LOT faster than in Rufus.</p>
-<p>The first time I tried to install Kicksecure in it, it worked!  This was even burning onto one of the SeaGlass drives I’d had probs. with before.  Kicksecure looks very promising, IF there’s a way to disable Tor and/or allow third-party apps internet access.  With a presumably good Live disk on a USB, and full of something (perhaps enthusiasm?), I proceeded to spend lots of time trying to install it to other USB drives.  It failed on two yet different 32 GB SeaGlass drives, and to make it complete, it failed to install on the original ancient SanDisk it originally worked on.  <strong>That makes it four fresh tries, using the Live ISO burnt with with dd: One of them a success, and three more failures - including a non-Verbatim drive which had previously worked.</strong>  In each failure this time, and most of the previous ones, it gave the error about bootloader_config not finishing after 600 secs.  Failures occurred burning from at least two different USB drives that had worked for the Live ISO on other occasions.</p>
-<p>This seems like an uninitialized variable problem in the installation from the Live disk; or a timing problem.  It manifested if I booted up the Live USB with the GUID partition entry, or with its USB boot menu entry.  It looks like the problem isn’t Rufus, nor is it the SeaGlass drives.  One of the SeaGlass drives had been triggered to go into a Read-Only mode.  I couldn’t even format it until I went into Windows and did “DISKPART”.  I navigated to the drive, and did “CLEAN”.  This erases it, but makes it it writable.  I think you have a problem in your “bootloader_config” script, causing installing it to be a mostly hit or miss process (mostly miss).  It looks quite nice, from the two times the installer completed successfully..</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_6</link>
-        <pubDate>Wed, 12 Nov 2025 08:14:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3650</guid>
-      </item>
-      <item>
-        <title>Support for hibernation?</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <p>Does grub-live disable hibernation and if it doesn’t would the<a href="https://github.com/torvalds/linux/blob/master/Documentation/admin-guide/kernel-parameters.txt#L1883-L1891" rel="noopener nofollow ugc"><code>hibernate=no</code></a> or <a href="https://www.kernel.org/doc/html/latest/admin-guide/kernel-parameters.html" rel="noopener nofollow ugc"><code>nohibernate</code></a> flag/parameter be fine to add and should it be be added?</p>
-<p>Documentation states its been around for awhile, and dont think its depreciated or changed in new kernels. I know this topic is about hibernation and I don’t want change topics but might be something to look at here.</p>
-<p>The wiki states that <a href="https://www.kicksecure.com/wiki/Grub-live#cite_ref-12" rel="noopener nofollow ugc">“There is no swap partition by default in Kicksecure, except maybe if using Distribution Morphing.”</a> already but since some people distro morph. Then if a user has swap or encrypted swap this would just be a pro not a con to my understanding it could or would help add more defense to avoid persistence.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/support-for-hibernation/1349#post_6</link>
-        <pubDate>Tue, 11 Nov 2025 04:57:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3648</guid>
-      </item>
-      <item>
-        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
-        <description><![CDATA[ <p>I decided to try using the drives that had worked previously again.  If I installed in dd mode, the created disk wouldn’t launch the maint menu item.  If I installed in ISO mode, I had two boot choices in the BIOS: USB &amp; GPT.  The USB choice resulted in “542: Index out of bounds” in a console window; but no maint mode.  I finally got the live disk to boot with Rufus only if burned as an ISO, and booted from it’s GPT boot entry.  Using the same ISO, and the same drives that previously had worked with Rufus, I was unable to recreate my initial success.  Burnt as an ISO, they all had errors about not being able to config the bootloader, which had timed out after 600 secs., not being able to run config_bootloader, or index out of bounds.  It ultimately failed on the hardware it previously worked on.</p>
-<p>It looked very nice, the time it did work.  It seemed like just the thing I needed, the one time it did work.  It may take a while for me to install a Linux and give it a try there.  The point is, however, the problem was intermittent, and extended to all the thumb drives I tried it on.  It may well turn out that Rufus might turn out to be the problem, and just doesn’t burn it right.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_5</link>
-        <pubDate>Mon, 10 Nov 2025 08:26:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3646</guid>
       </item>
   </channel>
 </rss>
