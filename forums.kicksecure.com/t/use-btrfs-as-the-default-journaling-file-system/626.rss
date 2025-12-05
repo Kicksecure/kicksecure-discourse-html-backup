@@ -21,9 +21,307 @@ https://youtu.be/b4vTKg-qW_0?t=260
 
 (Suggest to use [zRAM](https://en.wikipedia.org/wiki/Zram) instead, known to be even faster).</description>
     
-    <lastBuildDate>Sat, 01 Nov 2025 17:22:27 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 04 Dec 2025 18:56:04 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="13" data-topic="626">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Fortunately, not trivially reproducible.</p>
+</blockquote>
+</aside>
+<p>BTRFS’s behavior can be somewhat deceptive in this regard.</p>
+<p>BTRFS allocates data in large chunks (usually 1 GB for large devices), and marks them as either “data” or “metadata” blocks. A few large files will consume mostly data, so if you do <code>cat /dev/random &gt; testfile</code> like illustrated above, the filesystem will run out of space in data blocks and run out of unallocated space, but will still have a significant amount of space left in metadata blocks.</p>
+<p>Deleting a file actually requires free metadata space to be available. So does “balancing” the disk to consolidate data blocks together to free up unallocated space. In this simple case, because there is free metadata space, you can easily delete the test file, and have space again.</p>
+<p>Where things go wrong is when you have a filesystem in production use, where you have many small files consuming metadata, and the disk is nearly full. Eventually all unallocated space will be used up, but the filesystem will still function because of free space left in the data and metadata blocks. If you run out of space in data blocks, you can still delete files, but if you run out of space in <em>metadata</em> blocks, then you can have a very hard time recovering. There’s no free metadata space, so you can’t delete files to free up unallocated space or reduce the size of metadata. You also can’t consolidate free space in data blocks in order to free up more unallocated space, because balancing the disk requires free metadata. The filesystem effectively becomes permanently read-only.</p>
+<p>There are ways to get around the issue, such as temporarily adding a second drive to the filesystem so that there’s unallocated space to use, but those can be complex and dangerous.</p>
+          <p><a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/14</link>
+        <pubDate>Thu, 04 Dec 2025 18:56:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-626-14</guid>
+        <source url="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss">Use Btrfs as the default journaling file system</source>
+      </item>
+      <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="11" data-topic="626">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Difficult to recover situations just because the disk is full would be awful usability. Needs testing if this is still an issue.</p>
+</blockquote>
+</aside>
+<p>Fortunately, not trivially reproducible. Running…</p>
+<pre><code>cat /dev/random &gt; testfile
+</code></pre>
+<p>…until disk is full. Reboot. <code>rm testfile</code>. Functional.</p>
+          <p><a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/13</link>
+        <pubDate>Thu, 04 Dec 2025 09:54:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-626-13</guid>
+        <source url="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss">Use Btrfs as the default journaling file system</source>
+      </item>
+      <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure 18:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/live-config-dist/commit/7de0979c969db588c4244e23989088c4cb8f1d66">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/live-config-dist/commit/7de0979c969db588c4244e23989088c4cb8f1d66" target="_blank" rel="noopener">github.com/Kicksecure/live-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/live-config-dist/commit/7de0979c969db588c4244e23989088c4cb8f1d66" target="_blank" rel="noopener">Bring back BTRFS support</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-06-09" data-time="00:23:40" data-timezone="UTC">12:23AM - 09 Jun 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
+        <a href="https://github.com/Kicksecure/live-config-dist/commit/7de0979c969db588c4244e23989088c4cb8f1d66" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-1</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/12</link>
+        <pubDate>Thu, 04 Dec 2025 09:47:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-626-12</guid>
+        <source url="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss">Use Btrfs as the default journaling file system</source>
+      </item>
+      <item>
+        <title>Use Btrfs as the default journaling file system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Some concerns about Btrfs…</p>
+<p>Quote <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in <a href="https://github.com/Kicksecure/security-misc/issues/214#issuecomment-3590330536" class="inline-onebox">/lib/sysctl.d/990-security-misc.conf - log_martians · Issue #214 · Kicksecure/security-misc · GitHub</a></p>
+<blockquote>
+<p>[…] my only remaining concern is with BTRFS. Systems that use ext4 can easily recover if disk space is exhausted. Systems with BTRFS cannot always recover at all when disk space is exhausted, as the filesystem sometimes must allocate additional space even to delete files or other intuitively space-freeing activities, meaning that once the disk fills up, it can be impossible to free up space without using dangerous and difficult techniques. Therefore a DoS against a system using BTRFS disks could be much more damaging than a DoS against a system using ext4 disks, […]</p>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://support.scc.suse.com/s/kb/enospc-errors-during-balance?language=en_US">
+  <header class="source">
+      <img src="https://www.suse.com/favicon.ico" class="site-icon" alt="" width="44" height="43">
+
+      <a href="https://support.scc.suse.com/s/kb/enospc-errors-during-balance?language=en_US" target="_blank" rel="noopener">support.scc.suse.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://support.scc.suse.com/s/kb/enospc-errors-during-balance?language=en_US" target="_blank" rel="noopener">SUSE Customer Portal</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://bugzilla.kernel.org/show_bug.cgi?id=74101">
+  <header class="source">
+      <img src="https://bugzilla.kernel.org/images/favicon.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://bugzilla.kernel.org/show_bug.cgi?id=74101" target="_blank" rel="noopener">bugzilla.kernel.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://bugzilla.kernel.org/show_bug.cgi?id=74101" target="_blank" rel="noopener">74101 – "Out of space" reported when there's lots of non-allocated space</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><a href="https://wiki.tnonline.net/w/Btrfs/ENOSPC" class="onebox" target="_blank" rel="noopener">https://wiki.tnonline.net/w/Btrfs/ENOSPC</a></p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.spinics.net/lists/linux-btrfs/msg105716.html">
+  <header class="source">
+      <img src="https://www.spinics.net/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://www.spinics.net/lists/linux-btrfs/msg105716.html" target="_blank" rel="noopener">spinics.net</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.spinics.net/lists/linux-btrfs/msg105716.html" target="_blank" rel="noopener">Re: how to recover from "enospc errors during balance" — Linux BTRFS</a></h3>
+
+  <p>Linux BTRFS Storage: Re: how to recover from "enospc errors during balance"</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://bugzilla.redhat.com/show_bug.cgi?id=2238982">
+  <header class="source">
+      <img src="https://bugzilla.redhat.com//extensions/RedHat/web/css/favicons/production.ico?v=0" class="site-icon" alt="" width="128" height="128">
+
+      <a href="https://bugzilla.redhat.com/show_bug.cgi?id=2238982" target="_blank" rel="noopener">bugzilla.redhat.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://bugzilla.redhat.com/show_bug.cgi?id=2238982" target="_blank" rel="noopener">2238982 – system acts as there is no space in /home though there is near 2G...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Still getting patched as of 2023.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://lore.kernel.org/linux-btrfs/a9e6b02e9eb7a0532c401a898661b0511c31d0e8.1695047676.git.josef@toxicpanda.com/">
+  <header class="source">
+
+      <a href="https://lore.kernel.org/linux-btrfs/a9e6b02e9eb7a0532c401a898661b0511c31d0e8.1695047676.git.josef@toxicpanda.com/" target="_blank" rel="noopener">lore.kernel.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://lore.kernel.org/linux-btrfs/a9e6b02e9eb7a0532c401a898661b0511c31d0e8.1695047676.git.josef@toxicpanda.com/" target="_blank" rel="noopener">[PATCH] btrfs: properly report 0 avail for very full file systems - Josef Bacik</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://lore.kernel.org/linux-btrfs/b97e47ce0ce1d41d221878de7d6090b90aa7a597.1695065233.git.josef@toxicpanda.com/">
+  <header class="source">
+
+      <a href="https://lore.kernel.org/linux-btrfs/b97e47ce0ce1d41d221878de7d6090b90aa7a597.1695065233.git.josef@toxicpanda.com/" target="_blank" rel="noopener">lore.kernel.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://lore.kernel.org/linux-btrfs/b97e47ce0ce1d41d221878de7d6090b90aa7a597.1695065233.git.josef@toxicpanda.com/" target="_blank" rel="noopener">[PATCH] btrfs: adjust overcommit logic when very close to full - Josef Bacik</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://bugzilla.redhat.com/show_bug.cgi?id=2256861">
+  <header class="source">
+      <img src="https://bugzilla.redhat.com//extensions/RedHat/web/css/favicons/production.ico?v=0" class="site-icon" alt="" width="128" height="128">
+
+      <a href="https://bugzilla.redhat.com/show_bug.cgi?id=2256861" target="_blank" rel="noopener">bugzilla.redhat.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://bugzilla.redhat.com/show_bug.cgi?id=2256861" target="_blank" rel="noopener">2256861 – btrfs forced read-only out of space with kernel backtrace</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Difficult to recover situations just because the disk is full would be awful usability. Needs testing if this is still an issue.</p>
+          <p><a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626/11</link>
+        <pubDate>Thu, 04 Dec 2025 09:45:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-626-11</guid>
+        <source url="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss">Use Btrfs as the default journaling file system</source>
+      </item>
       <item>
         <title>Use Btrfs as the default journaling file system</title>
         <dc:creator><![CDATA[Quiksilver]]></dc:creator>
