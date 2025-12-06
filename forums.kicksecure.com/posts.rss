@@ -6,6 +6,288 @@
     <description>Latest posts</description>
       <item>
         <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[@JustPassinThru]]></dc:creator>
+        <description><![CDATA[ <p>my old laptop was not able to properly use kicksecure. VM lacking certain required settings. But if you ask ChatGPT, it will write up the script.  Basically, it was installing it on sysmaint, which allowed user to access it. then set it up on user with autostart, login, kill switch and lockdown.</p>
+<p>On sysmaint, you have to write a script that allows connection. but on systmaint, you do not set it up within the app, but you do not connect to the internet immediately,  after kicksecure sysmaint is operational. start mullvad, then turn on your router</p>
+<p>Hope this helps</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367#post_6</link>
+        <pubDate>Fri, 05 Dec 2025 17:06:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3750</guid>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10455">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10455" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10455" target="_blank" rel="noopener">`pipewire.socket` unexpectedly runs in `minimal-netvm` and `minimal-usbvm` but should not</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-12-05" data-time="16:05:34" data-timezone="UTC">04:05PM - 05 Dec 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Qubes OS release
+
+R4.3rc3
+
+### Brief summary
+
+`pipewire.socket` should not b<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">e activated in `minimal-netvm` and `minimal-usbvm`. This is already the case for `pipewire.service`. But this is not yet done for `pipewire.socket` but probably should be.
+
+### Steps to reproduce
+
+It's a Kicksecure 18 VM but I don't see why this wouldn't happen with a Debian (13) based VM either.
+
+`systemctl --user is-system-running`
+
+```
+degraded
+zsh: exit 1     systemctl --user is-system-running
+```
+
+`systemctl --user status pipewire.socket`
+
+```
+× pipewire.socket - PipeWire Multimedia System Sockets
+     Loaded: loaded (/usr/lib/systemd/user/pipewire.socket; enabled; preset: enabled)
+     Active: failed (Result: trigger-limit-hit) since 
+   Duration: 182ms
+ Invocation: 2b6371b2762f419fbf8144db13f51c15
+   Triggers: ● pipewire.service
+     Listen: /run/user/1000/pipewire-0 (Stream)
+             /run/user/1000/pipewire-0-manager (Stream)
+
+sys-net systemd[1212]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+sys-net systemd[1212]: pipewire.socket: Trigger limit hit, refusing further activation.
+sys-net systemd[1212]: pipewire.socket: Failed with result 'trigger-limit-hit'.
+zsh: exit 3     systemctl --user status pipewire.socket
+```
+
+`systemctl --no-pager --user status pipewire.service`
+
+```
+○ pipewire.service - PipeWire Multimedia Service
+     Loaded: loaded (/usr/lib/systemd/user/pipewire.service; enabled; preset: enabled)
+    Drop-In: /usr/lib/systemd/user/pipewire.service.d
+             └─30_qubes.conf, 40_minimal.conf
+     Active: inactive (dead)
+TriggeredBy: × pipewire.socket
+  Condition: start condition unmet at 
+             └─ ConditionPathExists=!/var/run/qubes-service/minimal-netvm was not met
+
+sys-net systemd[1212]: pipewire.service - PipeWire Multimedia Service was skipped because of an unmet condition check (ConditionPathExists=!/var/run/qubes-ser…minimal-netvm).
+
+Hint: Some lines were ellipsized, use -l to show in full.
+zsh: exit 3     systemctl --no-pager --user status pipewire.service
+```
+
+### Expected behavior
+
+No such errors.
+
+### Actual behavior
+
+Above errors.
+
+### Additional information
+
+`/usr/lib/systemd/user/pipewire.service.d/40_minimal.conf` exists. And makes sense. That's for `pipewire.service`.
+
+Should the same file be placed in `/usr/lib/systemd/user/pipewire.socket.d/40_minimal.conf` for `pipewire.socket`?
+
+(And maybe equivalent for `/usr/lib/systemd/user/pipewire.service.d/30_qubes.conf`)
+
+----
+
+[1]
+
+`cat /usr/lib/systemd/user/pipewire.service.d/40_minimal.conf`
+
+```
+[Unit]
+ConditionPathExists=!/var/run/qubes-service/minimal-netvm
+ConditionPathExists=!/var/run/qubes-service/minimal-usbvm
+```
+
+`cat /usr/lib/systemd/user/pipewire.service.d/30_qubes.conf`
+
+```
+[Unit]
+# Avoid pipewire in root's session to not steal user's connection to the audiovm
+ConditionUser=!root
+```
+
+----
+
+This is also an issue because a new version of `systemcheck` in Kicksecure will report this issue.
+
+```
+[WARNING] [systemcheck] systemd 'user' units check result: One or more units failed to load.
+
+A possible system issue was detected. There is no need to panic. This is not a serious security problem. However, it may impact other system checks.
+
+Some systemd 'user' units may be stuck in a failed, activating, or deactivating state.
+
+Output of 'systemctl --user --no-pager --no-block --state=failed,activating,deactivating list-units'::
+
+########################################
+  UNIT            LOAD   ACTIVE SUB    DESCRIPTION
+* pipewire.socket loaded failed failed PipeWire Multimedia System Sockets
+
+Legend: LOAD   -&gt; Reflects whether the unit definition was properly loaded.
+        ACTIVE -&gt; The high-level unit activation state, i.e. generalization of SUB.
+        SUB    -&gt; The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed.
+########################################
+
+To check manually:
+1. Open a terminal. (dom0 -&gt; Start Menu -&gt; ServiceVM: sys-net -&gt; Terminal)
+2. Run: 
+systemctl --user --no-pager --no-block --state=failed,activating,deactivating list-units
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=" check_services_do "
+```
+
+----
+
+`systemctl --user is-system-running` outputting `degraded` might cause issues elsewhere in Qubes (guess).
+
+`/etc/qubes-rpc/qubes.WaitForSession` does `systemctl --user --wait --quiet is-system-running`. Related:
+
+* https://github.com/QubesOS/qubes-issues/issues/10384
+
+----
+
+The solution might be as simple as the equivalent of:
+
+```
+sudo mkdir /usr/lib/systemd/user/pipewire.socket.d/
+sudo cp /usr/lib/systemd/user/pipewire.service.d/* /usr/lib/systemd/user/pipewire.socket.d/
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679?page=2#post_28</link>
+        <pubDate>Fri, 05 Dec 2025 16:06:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3749</guid>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10454">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10454" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10454" target="_blank" rel="noopener">Dom0 (internal) tool to copy a file into specific place in a VM</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-12-05" data-time="13:17:35" data-timezone="UTC">01:17PM - 05 Dec 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/marmarek" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/726704?v=4" class="onebox-avatar-inline" width="20" height="20">
+          marmarek
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">&gt; &gt; While at this... Would it be possible to use a different path other than `/h<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ome` please? Because that may introduce a risk in context of user-sysmaint-split (and maybe also in context of home noexec).
+&gt; 
+&gt; This is the path where qvm-copy puts the file, and copy source (intentionally) has no influence on the directory. While dom0 could use a different mechanism to send the file (even naive `qvm-run ... 'cat &gt; ...'`), that would likely lead to other issues.
+&gt; 
+&gt; If there was a dom0 wrapper...
+&gt; 
+&gt;     qvm-copy-to-path dest_vmname dom0-source-file-or-folder vm-destination-file-or-folder
+&gt; 
+&gt; Then `qubes-dist-upgrade` could conveniently use it to install the file to a more appropriate location such as in `/usr/bin`. That would be easier to read than the `qvm-run ... 'cat &gt; ...'` syntax.
+&gt; 
+&gt; A dom0 tool `qvm-copy-to-path` would be nice to have anyhow for all sorts of system administration tasks. Or at least as an internal tool if not user facing. 
+
+ _Originally posted by @adrelanos in [#10437](https://github.com/QubesOS/qubes-issues/issues/10437#issuecomment-3616561841)_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679?page=2#post_27</link>
+        <pubDate>Fri, 05 Dec 2025 15:53:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-3748</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
         <dc:creator><![CDATA[@Fazeclan]]></dc:creator>
         <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/justpassinthru">@JustPassinThru</a></p>
 <p>Do you mind posting a guide how to do it?</p>
@@ -3663,91 +3945,6 @@ The unit files have no installation config (WantedBy=, RequiredBy=, UpheldBy=, A
         <link>https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368#post_4</link>
         <pubDate>Tue, 25 Nov 2025 14:52:12 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-3680</guid>
-      </item>
-      <item>
-        <title>Change to Nouveau drivers</title>
-        <dc:creator><![CDATA[@Fazeclan]]></dc:creator>
-        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a> thank you sir for answering.</p>
-<p>As i suspected, nouveau should load automatically when using Nvidia GPU. Since it is in linux mainkernel. I have googled similar fixes for debian, bookworm, even general linux distros…</p>
-<p>Nothing works. “Failed to load module; nouveau” in logs.</p>
-<p>Cant force load it with modprobe, terminal says it cant find path. Cant force it with GRUB “e” option nouveau.modeset=1.</p>
-<p>Im a complete linux noob so it is hard for me to do even simple things like this..</p>
-<p>I did install kicksecure live iso to USB then I installed kicksecure OS on another USB. Can this be a reason for the failed driver initialization? Could it make a difference if I install it onto my NVME drive instead?</p>
-<p>Trying to make the switch from windows so wanted to try it on a USB first, but unable to solve the nouveau driver issue…</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368#post_3</link>
-        <pubDate>Tue, 25 Nov 2025 12:52:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3678</guid>
-      </item>
-      <item>
-        <title>Display brightness</title>
-        <dc:creator><![CDATA[@suse211213]]></dc:creator>
-        <description><![CDATA[ <p>Very pleased to hear that you’ve resolved the problem</p>
-<p>Only Kicksecure 17 are visible on download site</p>
-<p>What’s the link for Kicksecure 18 xfce ISO</p>
-<p>Appreciate it</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/display-brightness/1271#post_7</link>
-        <pubDate>Tue, 25 Nov 2025 02:06:06 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3677</guid>
-      </item>
-      <item>
-        <title>Change to Nouveau drivers</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Nouveau is the default. No user action required.</p>
-<p>Same as on Debian. Should be unspecific to Kicksecure.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1763976625" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" alt="" width="250" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
-
-  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Can likely br resolved as per:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1763976625" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="12:01PM - 18 May 2025">Kicksecure – 18 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" alt="" width="666" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
-
-  <p>Definition of the Self Support First Policy for Kicksecure</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368#post_2</link>
-        <pubDate>Mon, 24 Nov 2025 21:06:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-3676</guid>
       </item>
   </channel>
 </rss>

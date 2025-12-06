@@ -9,9 +9,289 @@ https://github.com/Kicksecure/qubes-template-kicksecure
 
 * [Qubes Template](https://www.kicksecure.com/wiki/Qubes#Template)</description>
     
-    <lastBuildDate>Mon, 01 Dec 2025 14:55:28 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 05 Dec 2025 16:06:03 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10455">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10455" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10455" target="_blank" rel="noopener">`pipewire.socket` unexpectedly runs in `minimal-netvm` and `minimal-usbvm` but should not</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-12-05" data-time="16:05:34" data-timezone="UTC">04:05PM - 05 Dec 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Qubes OS release
+
+R4.3rc3
+
+### Brief summary
+
+`pipewire.socket` should not b<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">e activated in `minimal-netvm` and `minimal-usbvm`. This is already the case for `pipewire.service`. But this is not yet done for `pipewire.socket` but probably should be.
+
+### Steps to reproduce
+
+It's a Kicksecure 18 VM but I don't see why this wouldn't happen with a Debian (13) based VM either.
+
+`systemctl --user is-system-running`
+
+```
+degraded
+zsh: exit 1     systemctl --user is-system-running
+```
+
+`systemctl --user status pipewire.socket`
+
+```
+× pipewire.socket - PipeWire Multimedia System Sockets
+     Loaded: loaded (/usr/lib/systemd/user/pipewire.socket; enabled; preset: enabled)
+     Active: failed (Result: trigger-limit-hit) since 
+   Duration: 182ms
+ Invocation: 2b6371b2762f419fbf8144db13f51c15
+   Triggers: ● pipewire.service
+     Listen: /run/user/1000/pipewire-0 (Stream)
+             /run/user/1000/pipewire-0-manager (Stream)
+
+sys-net systemd[1212]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+sys-net systemd[1212]: pipewire.socket: Trigger limit hit, refusing further activation.
+sys-net systemd[1212]: pipewire.socket: Failed with result 'trigger-limit-hit'.
+zsh: exit 3     systemctl --user status pipewire.socket
+```
+
+`systemctl --no-pager --user status pipewire.service`
+
+```
+○ pipewire.service - PipeWire Multimedia Service
+     Loaded: loaded (/usr/lib/systemd/user/pipewire.service; enabled; preset: enabled)
+    Drop-In: /usr/lib/systemd/user/pipewire.service.d
+             └─30_qubes.conf, 40_minimal.conf
+     Active: inactive (dead)
+TriggeredBy: × pipewire.socket
+  Condition: start condition unmet at 
+             └─ ConditionPathExists=!/var/run/qubes-service/minimal-netvm was not met
+
+sys-net systemd[1212]: pipewire.service - PipeWire Multimedia Service was skipped because of an unmet condition check (ConditionPathExists=!/var/run/qubes-ser…minimal-netvm).
+
+Hint: Some lines were ellipsized, use -l to show in full.
+zsh: exit 3     systemctl --no-pager --user status pipewire.service
+```
+
+### Expected behavior
+
+No such errors.
+
+### Actual behavior
+
+Above errors.
+
+### Additional information
+
+`/usr/lib/systemd/user/pipewire.service.d/40_minimal.conf` exists. And makes sense. That's for `pipewire.service`.
+
+Should the same file be placed in `/usr/lib/systemd/user/pipewire.socket.d/40_minimal.conf` for `pipewire.socket`?
+
+(And maybe equivalent for `/usr/lib/systemd/user/pipewire.service.d/30_qubes.conf`)
+
+----
+
+[1]
+
+`cat /usr/lib/systemd/user/pipewire.service.d/40_minimal.conf`
+
+```
+[Unit]
+ConditionPathExists=!/var/run/qubes-service/minimal-netvm
+ConditionPathExists=!/var/run/qubes-service/minimal-usbvm
+```
+
+`cat /usr/lib/systemd/user/pipewire.service.d/30_qubes.conf`
+
+```
+[Unit]
+# Avoid pipewire in root's session to not steal user's connection to the audiovm
+ConditionUser=!root
+```
+
+----
+
+This is also an issue because a new version of `systemcheck` in Kicksecure will report this issue.
+
+```
+[WARNING] [systemcheck] systemd 'user' units check result: One or more units failed to load.
+
+A possible system issue was detected. There is no need to panic. This is not a serious security problem. However, it may impact other system checks.
+
+Some systemd 'user' units may be stuck in a failed, activating, or deactivating state.
+
+Output of 'systemctl --user --no-pager --no-block --state=failed,activating,deactivating list-units'::
+
+########################################
+  UNIT            LOAD   ACTIVE SUB    DESCRIPTION
+* pipewire.socket loaded failed failed PipeWire Multimedia System Sockets
+
+Legend: LOAD   -&gt; Reflects whether the unit definition was properly loaded.
+        ACTIVE -&gt; The high-level unit activation state, i.e. generalization of SUB.
+        SUB    -&gt; The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed.
+########################################
+
+To check manually:
+1. Open a terminal. (dom0 -&gt; Start Menu -&gt; ServiceVM: sys-net -&gt; Terminal)
+2. Run: 
+systemctl --user --no-pager --no-block --state=failed,activating,deactivating list-units
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=" check_services_do "
+```
+
+----
+
+`systemctl --user is-system-running` outputting `degraded` might cause issues elsewhere in Qubes (guess).
+
+`/etc/qubes-rpc/qubes.WaitForSession` does `systemctl --user --wait --quiet is-system-running`. Related:
+
+* https://github.com/QubesOS/qubes-issues/issues/10384
+
+----
+
+The solution might be as simple as the equivalent of:
+
+```
+sudo mkdir /usr/lib/systemd/user/pipewire.socket.d/
+sudo cp /usr/lib/systemd/user/pipewire.service.d/* /usr/lib/systemd/user/pipewire.socket.d/
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/28">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/28</link>
+        <pubDate>Fri, 05 Dec 2025 16:06:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-679-28</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
+      </item>
+      <item>
+        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10454">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10454" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10454" target="_blank" rel="noopener">Dom0 (internal) tool to copy a file into specific place in a VM</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-12-05" data-time="13:17:35" data-timezone="UTC">01:17PM - 05 Dec 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/marmarek" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/726704?v=4" class="onebox-avatar-inline" width="20" height="20">
+          marmarek
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">&gt; &gt; While at this... Would it be possible to use a different path other than `/h<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ome` please? Because that may introduce a risk in context of user-sysmaint-split (and maybe also in context of home noexec).
+&gt; 
+&gt; This is the path where qvm-copy puts the file, and copy source (intentionally) has no influence on the directory. While dom0 could use a different mechanism to send the file (even naive `qvm-run ... 'cat &gt; ...'`), that would likely lead to other issues.
+&gt; 
+&gt; If there was a dom0 wrapper...
+&gt; 
+&gt;     qvm-copy-to-path dest_vmname dom0-source-file-or-folder vm-destination-file-or-folder
+&gt; 
+&gt; Then `qubes-dist-upgrade` could conveniently use it to install the file to a more appropriate location such as in `/usr/bin`. That would be easier to read than the `qvm-run ... 'cat &gt; ...'` syntax.
+&gt; 
+&gt; A dom0 tool `qvm-copy-to-path` would be nice to have anyhow for all sorts of system administration tasks. Or at least as an internal tool if not user facing. 
+
+ _Originally posted by @adrelanos in [#10437](https://github.com/QubesOS/qubes-issues/issues/10437#issuecomment-3616561841)_</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/27">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/27</link>
+        <pubDate>Fri, 05 Dec 2025 15:53:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-679-27</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
+      </item>
       <item>
         <title>Kicksecure Qubes Template Development - Qubes Integration</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>
@@ -2818,140 +3098,6 @@ I'd modify [dm-qubes-templates-official-build-commands](https://github.com/Kicks
         <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/4</link>
         <pubDate>Wed, 07 May 2025 04:22:36 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-679-4</guid>
-        <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
-      </item>
-      <item>
-        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
-        <dc:creator><![CDATA[Patrick]]></dc:creator>
-        <description><![CDATA[
-            <p>Build command:</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/updates-status/issues/566#issuecomment-2832014894">
-  <header class="source">
-
-      <a href="https://github.com/QubesOS/updates-status/issues/566#issuecomment-2832014894" target="_blank" rel="noopener">github.com/QubesOS/updates-status</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/QubesOS/updates-status/issues/566#issuecomment-2832014894" target="_blank" rel="noopener">Place for build template commands</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2018-07-03" data-time="02:59:50" data-timezone="UTC">02:59AM - 03 Jul 18 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/marmarek" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/726704?v=4" class="onebox-avatar-inline" width="20" height="20">
-          marmarek
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Build in progress:</p>
-<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/updates-status/issues/5592">
-  <header class="source">
-
-      <a href="https://github.com/QubesOS/updates-status/issues/5592" target="_blank" rel="noopener">github.com/QubesOS/updates-status</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
-	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/QubesOS/updates-status/issues/5592" target="_blank" rel="noopener">qubes-template-kicksecure-17 4.2.0-202504261018 (r4.2)</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        opened <span class="discourse-local-date" data-format="ll" data-date="2025-04-26" data-time="10:18:17" data-timezone="UTC">10:18AM - 26 Apr 25 UTC</span>
-      </div>
-
-
-      <div class="user">
-        <a href="https://github.com/fepitre-bot" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/48861364?v=4" class="onebox-avatar-inline" width="20" height="20">
-          fepitre-bot
-        </a>
-      </div>
-    </div>
-
-    <div class="labels">
-        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
-          r4.2-building
-        </span>
-    </div>
-  </div>
-</div>
-
-  <div class="github-row">
-    <p class="github-body-container">Template kicksecure-17 4.2.0-202504261018 for Qubes OS r4.2, see comments below <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">for details and build status.
-
-If you're release manager, you can issue GPG-inline signed command (depending on template):
-
-* `Upload-template r4.2 kicksecure-17 4.2.0-202504261018 templates-itl` (available 5 days from now)
-* `Upload-template r4.2 kicksecure-17 4.2.0-202504261018 templates-community` (available 5 days from now)
-
-Above commands will work only if package in testing repository isn't superseded by newer version.
-
-For more information on how to test this update, please take a look at https://www.qubes-os.org/doc/testing/#updates.</span></p>
-  </div>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-          <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/3">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/3</link>
-        <pubDate>Sat, 26 Apr 2025 10:25:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-679-3</guid>
-        <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
-      </item>
-      <item>
-        <title>Kicksecure Qubes Template Development - Qubes Integration</title>
-        <dc:creator><![CDATA[Patrick]]></dc:creator>
-        <description><![CDATA[
-            <p>A post was split to a new topic: <a href="https://forums.kicksecure.com/t/minimal-kicksecure-qubes-template/682">Minimal Kicksecure Qubes Template</a></p>
-          <p><a href="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/2">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679/2</link>
-        <pubDate>Tue, 12 Nov 2024 06:27:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-679-2</guid>
         <source url="https://forums.kicksecure.com/t/kicksecure-qubes-template-development-qubes-integration/679.rss">Kicksecure Qubes Template Development - Qubes Integration</source>
       </item>
   </channel>
