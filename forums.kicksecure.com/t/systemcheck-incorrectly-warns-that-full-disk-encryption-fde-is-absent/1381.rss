@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Systemcheck incorrectly warns that full disk encryption (FDE) is absent</title>
+    <link>https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381</link>
+    <description>I installed the Kicksecure 18 iso with FDE enabled, so that I have have to input my luks password during boot.
+
+Running `/usr/libexec/systemcheck/crypt-check` shows:
+
+```shell
+/usr/libexec/systemcheck/crypt-check: INFO: Root partition is encrypted.
+```
+
+`sudo cryptsetup luksDump /dev/disk/by-uuid/1579d221-fab5-4c12-ac88-66bd895c65f4` outputs:
+
+```shell
+LUKS header information
+Version:        2
+Epoch:          3
+Metadata area:  16384 [bytes]
+Keyslots area:  16744448 [bytes]
+UUID:           1579d221-fab5-4c12-ac88-66bd895c65f4
+Label:          (no label)
+Subsystem:      (no subsystem)
+Flags:          (no flags)
+
+Data segments:
+  0: crypt
+        offset: 16777216 [bytes]
+        length: (whole device)
+        cipher: aes-xts-plain64
+        sector: 512 [bytes]
+
+Keyslots:
+  0: luks2
+        Key:        512 bits
+        Priority:   normal
+        Cipher:     aes-xts-plain64
+        Cipher key: 512 bits
+        PBKDF:      argon2id
+        Time cost:  4
+        Memory:     1048576
+        Threads:    4
+        Salt:       10 f6 17 b2 4f 0c 4f 13 a9 ba df 30 6f dd 43 35 
+                    5a 4c 7f 29 73 71 d9 0a d5 c0 6b 45 9f c8 ea d7 
+        AF stripes: 4000
+        AF hash:    sha512
+        Area offset:32768 [bytes]
+        Area length:258048 [bytes]
+        Digest ID:  0
+Tokens:
+Digests:
+  0: pbkdf2
+        Hash:       sha512
+        Iterations: 191906
+...
+```
+
+Yet `systemcheck` claims that FDE is absent:
+
+```shell
+[INFO] [systemcheck] Connected to Tor.
+[INFO] [systemcheck] Kicksecure is a research project.
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Enabled
+https://www.kicksecure.com/wiki/sysmaint
+[INFO] [systemcheck] user-sysmaint-split session detection result: SYSMAINT Session.
+[INFO] [systemcheck] Full Disk Encryption (FDE): Absent
+See also: https://www.kicksecure.com/wiki/Full_Disk_Encryption
+[INFO] [systemcheck] GRUB bootloader password: Enabled
+See also: https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Bootloader_Password
+```</description>
+    
+    <lastBuildDate>Sun, 07 Dec 2025 18:30:13 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Systemcheck incorrectly warns that full disk encryption (FDE) is absent</title>
+        <dc:creator><![CDATA[RebornRider]]></dc:creator>
+        <description><![CDATA[
+            <p>I installed the Kicksecure 18 iso with FDE enabled, so that I have have to input my luks password during boot.</p>
+<p>Running <code>/usr/libexec/systemcheck/crypt-check</code> shows:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">/usr/libexec/systemcheck/crypt-check: INFO: Root partition is encrypted.
+</code></pre>
+<p><code>sudo cryptsetup luksDump /dev/disk/by-uuid/1579d221-fab5-4c12-ac88-66bd895c65f4</code> outputs:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">LUKS header information
+Version:        2
+Epoch:          3
+Metadata area:  16384 [bytes]
+Keyslots area:  16744448 [bytes]
+UUID:           1579d221-fab5-4c12-ac88-66bd895c65f4
+Label:          (no label)
+Subsystem:      (no subsystem)
+Flags:          (no flags)
+
+Data segments:
+  0: crypt
+        offset: 16777216 [bytes]
+        length: (whole device)
+        cipher: aes-xts-plain64
+        sector: 512 [bytes]
+
+Keyslots:
+  0: luks2
+        Key:        512 bits
+        Priority:   normal
+        Cipher:     aes-xts-plain64
+        Cipher key: 512 bits
+        PBKDF:      argon2id
+        Time cost:  4
+        Memory:     1048576
+        Threads:    4
+        Salt:       10 f6 17 b2 4f 0c 4f 13 a9 ba df 30 6f dd 43 35 
+                    5a 4c 7f 29 73 71 d9 0a d5 c0 6b 45 9f c8 ea d7 
+        AF stripes: 4000
+        AF hash:    sha512
+        Area offset:32768 [bytes]
+        Area length:258048 [bytes]
+        Digest ID:  0
+Tokens:
+Digests:
+  0: pbkdf2
+        Hash:       sha512
+        Iterations: 191906
+...
+</code></pre>
+<p>Yet <code>systemcheck</code> claims that FDE is absent:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">[INFO] [systemcheck] Connected to Tor.
+[INFO] [systemcheck] Kicksecure is a research project.
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Enabled
+https://www.kicksecure.com/wiki/sysmaint
+[INFO] [systemcheck] user-sysmaint-split session detection result: SYSMAINT Session.
+[INFO] [systemcheck] Full Disk Encryption (FDE): Absent
+See also: https://www.kicksecure.com/wiki/Full_Disk_Encryption
+[INFO] [systemcheck] GRUB bootloader password: Enabled
+See also: https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Bootloader_Password
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381/1</link>
+        <pubDate>Sun, 07 Dec 2025 18:30:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1381-1</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381.rss">Systemcheck incorrectly warns that full disk encryption (FDE) is absent</source>
+      </item>
+  </channel>
+</rss>

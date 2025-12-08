@@ -5,8 +5,81 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Tue, 02 Dec 2025 17:00:49 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 07 Dec 2025 18:30:13 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Systemcheck incorrectly warns that full disk encryption (FDE) is absent</title>
+          <dc:creator><![CDATA[RebornRider]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I installed the Kicksecure 18 iso with FDE enabled, so that I have have to input my luks password during boot.</p>
+<p>Running <code>/usr/libexec/systemcheck/crypt-check</code> shows:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">/usr/libexec/systemcheck/crypt-check: INFO: Root partition is encrypted.
+</code></pre>
+<p><code>sudo cryptsetup luksDump /dev/disk/by-uuid/1579d221-fab5-4c12-ac88-66bd895c65f4</code> outputs:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">LUKS header information
+Version:        2
+Epoch:          3
+Metadata area:  16384 [bytes]
+Keyslots area:  16744448 [bytes]
+UUID:           1579d221-fab5-4c12-ac88-66bd895c65f4
+Label:          (no label)
+Subsystem:      (no subsystem)
+Flags:          (no flags)
+
+Data segments:
+  0: crypt
+        offset: 16777216 [bytes]
+        length: (whole device)
+        cipher: aes-xts-plain64
+        sector: 512 [bytes]
+
+Keyslots:
+  0: luks2
+        Key:        512 bits
+        Priority:   normal
+        Cipher:     aes-xts-plain64
+        Cipher key: 512 bits
+        PBKDF:      argon2id
+        Time cost:  4
+        Memory:     1048576
+        Threads:    4
+        Salt:       10 f6 17 b2 4f 0c 4f 13 a9 ba df 30 6f dd 43 35 
+                    5a 4c 7f 29 73 71 d9 0a d5 c0 6b 45 9f c8 ea d7 
+        AF stripes: 4000
+        AF hash:    sha512
+        Area offset:32768 [bytes]
+        Area length:258048 [bytes]
+        Digest ID:  0
+Tokens:
+Digests:
+  0: pbkdf2
+        Hash:       sha512
+        Iterations: 191906
+...
+</code></pre>
+<p>Yet <code>systemcheck</code> claims that FDE is absent:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">[INFO] [systemcheck] Connected to Tor.
+[INFO] [systemcheck] Kicksecure is a research project.
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Enabled
+https://www.kicksecure.com/wiki/sysmaint
+[INFO] [systemcheck] user-sysmaint-split session detection result: SYSMAINT Session.
+[INFO] [systemcheck] Full Disk Encryption (FDE): Absent
+See also: https://www.kicksecure.com/wiki/Full_Disk_Encryption
+[INFO] [systemcheck] GRUB bootloader password: Enabled
+See also: https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Bootloader_Password
+</code></pre>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381</link>
+          <pubDate>Sun, 07 Dec 2025 18:30:13 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1381</guid>
+          <source url="https://forums.kicksecure.com/t/systemcheck-incorrectly-warns-that-full-disk-encryption-fde-is-absent/1381.rss">Systemcheck incorrectly warns that full disk encryption (FDE) is absent</source>
+        </item>
         <item>
           <title>Unable to unlock screen-locker after setting a user password</title>
           <dc:creator><![CDATA[RebornRider]]></dc:creator>
@@ -593,77 +666,6 @@ Errors occurred while processing the following packages:
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1279</guid>
           <source url="https://forums.kicksecure.com/t/dpkg-error-while-processing-a-package-libreoffice-common-installed-post-installation-script-returned-error-code-10/1279.rss">Dpkg: error while processing a package libreoffice-common installed post-installation script returned error code 10</source>
-        </item>
-        <item>
-          <title>Is anonbox no longer relevant and not in the repository?</title>
-          <dc:creator><![CDATA[SpecialBook]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>When I try to install anonbox following the instructions from the wiki on a clean whonix machine, it says it’s not in the repository.</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Anbox">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1757237425" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc" title="11:54AM - 17 August 2025">Kicksecure – 17 Aug 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://www.kicksecure.com/w/images/1/1e/Anbox_apps_short.png?version=8b0ad69f34c1c8f95e203577dfa9f351" class="thumbnail" alt="" width="690" height="255"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Anbox" target="_blank" rel="noopener nofollow ugc">Anbox - Run Android Applications and Games</a></h3>
-
-  <p>Anbox allows Android applications and mobile games to run inside Kicksecure.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Unable to locate package anbox<br>
-zsh: exit 100   sudo apt install --no-install-recommends linux-image-amd64 linux-headers-amd6</p>
-<p>Also the documentation says to install anonbox version 2018, is this project abandoned and no longer recommended?</p>
-<p>I was planning to repeat the above instructions</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account">
-  <header class="source">
-      <img src="https://web.archive.org/web/20230603151721im_/https://agorism.blog/favicon.ico" class="site-icon" alt="" width="32" height="37">
-
-      <a href="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account" target="_blank" rel="noopener nofollow ugc" title="01:03AM - 03 September 2022">anarkio – 3 Sep 22</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="" height="" src="https://web.archive.org/web/20230603151721im_/https://agorism.blog/img/avatars/a.png" class="thumbnail" alt="">
-
-<h3><a href="https://web.archive.org/web/20230603151721/https://agorism.blog/anarkio/anonymous-telegram-account" target="_blank" rel="noopener nofollow ugc">[Tech] How to create anonymous Telegram and Signal accounts without a phone</a></h3>
-
-  <p>Tags: #tech #privacy #anonymity #telegram #signal #whonix  This guide (Whonix + Anbox) also works for other apps, such as Signal, Samoura...</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-            <p><small>3 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275</link>
-          <pubDate>Sun, 07 Sep 2025 14:31:34 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1275</guid>
-          <source url="https://forums.kicksecure.com/t/is-anonbox-no-longer-relevant-and-not-in-the-repository/1275.rss">Is anonbox no longer relevant and not in the repository?</source>
         </item>
   </channel>
 </rss>
