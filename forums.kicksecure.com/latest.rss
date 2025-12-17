@@ -5,8 +5,51 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Mon, 15 Dec 2025 03:55:52 +0000</lastBuildDate>
+      <lastBuildDate>Tue, 16 Dec 2025 04:39:14 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>3D acceleration for Kicksecure VMs</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Creating this so I have something to reference for documentation on the wiki.</p>
+<p>While attempting to update the glmark2 instructions for Kicksecure 18, I discovered that 3d acceleration under VirtualBox is a mess, at least when using VMSVGA graphics. So far:</p>
+<ul>
+<li>With 3d accel disabled, everything <em>seems</em> OK, glmark2-wayland runs without problems, but naturally it uses the CPU for everything.</li>
+<li>With 3d accel enabled, glmark2-wayland still uses CPU rendering by default, because labwc is started with <code>WLR_RENDERER=pixman</code> set by default. One has to unset this environment variable before starting labwc to get 3d acceleration capabilities to be recognized. Technically this is a Kicksecure limitation that could be fixed.</li>
+<li>If you are running with low memory (in my case 768 MB, I had left the VM with this amount of memory on accident), 3d accel is enabled, and glmark2-wayland is <strong>NOT</strong> using 3d accel (i.e. <code>WLR_RENDERER=pixman</code> is set), the VM will spontaneously hang or reboot during the glmark2-wayland test. This is because something (didn’t have the presence of mind to record what) in the kernel ends up doing the equivalent of a segfault, which results in a kernel oops, which results in a kernel panic, which results in an instant reboot..</li>
+<li>If you attempt to run glmark2 (just plain glmark2, which will go through Xwayland) without using CPU rendering (<code>WLR_RENDERER=pixman</code>), the glmark2 window will briefly flash on-screen and then vanish.</li>
+<li>If you attempt to run glmark2 (the X11 version) with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately crash <em>labwc itself</em> when launched.</li>
+<li>If you attempt to run glmark2-wayland with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately error out:</li>
+</ul>
+<pre><code class="lang-auto">=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      VMware, Inc.
+    GL_RENDERER:    SVGA3D; build: RELEASE;  LLVM;
+    GL_VERSION:     4.1 (Compatibility Profile) Mesa 25.0.7-2
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false:[destroyed object]: error 7: importing the supplied dmabufs failed
+ FPS: 1037 FrameTime: 0.965 ms
+=======================================================
+                                  glmark2 Score: 1036 
+=======================================================
+</code></pre>
+<p>At this point I’m pretty sure 3d rendering in VirtualBox is just broken. It might work better if using VBoxSVGA graphics, but as I understand it, the 3d acceleration code for that graphics emulator is insecure and can be used for a VM escape.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393</link>
+          <pubDate>Tue, 16 Dec 2025 04:39:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1393</guid>
+          <source url="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393.rss">3D acceleration for Kicksecure VMs</source>
+        </item>
         <item>
           <title>Grub Live vs toram?</title>
           <dc:creator><![CDATA[Tengu]]></dc:creator>
@@ -18,7 +61,7 @@
 <p>Whats different with “grub live” or makes it different from a custom entry that has <code>toram noswap nohibernate</code> chosen and passed after selecting it in the bootloader?</p>
 <p>Previously I installed grub-live on debian through the Kicksecure repo in the past out of curiosity it said I had swap enabled still which also confuses it me? That was like many months ago so I’m sure things have changed?</p>
 <p>Is it some kind of compression swap like overlay like zram?</p>
-            <p><small>1 post - 1 participant</small></p>
+            <p><small>3 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/grub-live-vs-toram/1391">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/grub-live-vs-toram/1391</link>
@@ -2528,25 +2571,6 @@ The main developer of HEADS ( <a href="https://github.com/tlaurion" class="inlin
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1338</guid>
           <source url="https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338.rss">Make the taskbar on the bottom not at the top</source>
-        </item>
-        <item>
-          <title>How can I prevent any automatic unsolicited network connections?</title>
-          <dc:creator><![CDATA[trimmingfreebie]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>How can I prevent any automatic unsolicited network connections in Kicksecure (at least temporarily), especially at system startup and when enabling a network connection?</p>
-<p>At the very least, I would like to first put the whole network connection behind a VPN, notably to hide Tor traffic (generated by the secure NTP and the update check) from my ISP.</p>
-<p>I can’t put a VPN on my router, so I have to enable it using the VPN’s software, but that requires connecting my PC to the internet first, (which generates Tor connections by default).</p>
-            <p><small>3 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/how-can-i-prevent-any-automatic-unsolicited-network-connections/1337">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/how-can-i-prevent-any-automatic-unsolicited-network-connections/1337</link>
-          <pubDate>Wed, 29 Oct 2025 20:02:59 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1337</guid>
-          <source url="https://forums.kicksecure.com/t/how-can-i-prevent-any-automatic-unsolicited-network-connections/1337.rss">How can I prevent any automatic unsolicited network connections?</source>
         </item>
   </channel>
 </rss>

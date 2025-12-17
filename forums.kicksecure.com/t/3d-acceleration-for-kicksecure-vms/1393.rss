@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>3D acceleration for Kicksecure VMs</title>
+    <link>https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393</link>
+    <description>Creating this so I have something to reference for documentation on the wiki.
+
+While attempting to update the glmark2 instructions for Kicksecure 18, I discovered that 3d acceleration under VirtualBox is a mess, at least when using VMSVGA graphics. So far:
+
+* With 3d accel disabled, everything *seems* OK, glmark2-wayland runs without problems, but naturally it uses the CPU for everything.
+* With 3d accel enabled, glmark2-wayland still uses CPU rendering by default, because labwc is started with `WLR_RENDERER=pixman` set by default. One has to unset this environment variable before starting labwc to get 3d acceleration capabilities to be recognized. Technically this is a Kicksecure limitation that could be fixed.
+* If you are running with low memory (in my case 768 MB, I had left the VM with this amount of memory on accident), 3d accel is enabled, and glmark2-wayland is **NOT** using 3d accel (i.e. `WLR_RENDERER=pixman` is set), the VM will spontaneously hang or reboot during the glmark2-wayland test. This is because something (didn&#39;t have the presence of mind to record what) in the kernel ends up doing the equivalent of a segfault, which results in a kernel oops, which results in a kernel panic, which results in an instant reboot..
+* If you attempt to run glmark2 (just plain glmark2, which will go through Xwayland) without using CPU rendering (`WLR_RENDERER=pixman`), the glmark2 window will briefly flash on-screen and then vanish.
+* If you attempt to run glmark2 (the X11 version) with GPU rendering (`WLR_RENDERER` unset when labwc is started), it will immediately crash *labwc itself* when launched.
+* If you attempt to run glmark2-wayland with GPU rendering (`WLR_RENDERER` unset when labwc is started), it will immediately error out:
+
+```
+=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      VMware, Inc.
+    GL_RENDERER:    SVGA3D; build: RELEASE;  LLVM;
+    GL_VERSION:     4.1 (Compatibility Profile) Mesa 25.0.7-2
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false:[destroyed object]: error 7: importing the supplied dmabufs failed
+ FPS: 1037 FrameTime: 0.965 ms
+=======================================================
+                                  glmark2 Score: 1036 
+=======================================================
+```
+
+At this point I&#39;m pretty sure 3d rendering in VirtualBox is just broken. It might work better if using VBoxSVGA graphics, but as I understand it, the 3d acceleration code for that graphics emulator is insecure and can be used for a VM escape.</description>
+    
+    <lastBuildDate>Tue, 16 Dec 2025 04:39:14 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>3D acceleration for Kicksecure VMs</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Creating this so I have something to reference for documentation on the wiki.</p>
+<p>While attempting to update the glmark2 instructions for Kicksecure 18, I discovered that 3d acceleration under VirtualBox is a mess, at least when using VMSVGA graphics. So far:</p>
+<ul>
+<li>With 3d accel disabled, everything <em>seems</em> OK, glmark2-wayland runs without problems, but naturally it uses the CPU for everything.</li>
+<li>With 3d accel enabled, glmark2-wayland still uses CPU rendering by default, because labwc is started with <code>WLR_RENDERER=pixman</code> set by default. One has to unset this environment variable before starting labwc to get 3d acceleration capabilities to be recognized. Technically this is a Kicksecure limitation that could be fixed.</li>
+<li>If you are running with low memory (in my case 768 MB, I had left the VM with this amount of memory on accident), 3d accel is enabled, and glmark2-wayland is <strong>NOT</strong> using 3d accel (i.e. <code>WLR_RENDERER=pixman</code> is set), the VM will spontaneously hang or reboot during the glmark2-wayland test. This is because something (didn’t have the presence of mind to record what) in the kernel ends up doing the equivalent of a segfault, which results in a kernel oops, which results in a kernel panic, which results in an instant reboot..</li>
+<li>If you attempt to run glmark2 (just plain glmark2, which will go through Xwayland) without using CPU rendering (<code>WLR_RENDERER=pixman</code>), the glmark2 window will briefly flash on-screen and then vanish.</li>
+<li>If you attempt to run glmark2 (the X11 version) with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately crash <em>labwc itself</em> when launched.</li>
+<li>If you attempt to run glmark2-wayland with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately error out:</li>
+</ul>
+<pre><code class="lang-auto">=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      VMware, Inc.
+    GL_RENDERER:    SVGA3D; build: RELEASE;  LLVM;
+    GL_VERSION:     4.1 (Compatibility Profile) Mesa 25.0.7-2
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false:[destroyed object]: error 7: importing the supplied dmabufs failed
+ FPS: 1037 FrameTime: 0.965 ms
+=======================================================
+                                  glmark2 Score: 1036 
+=======================================================
+</code></pre>
+<p>At this point I’m pretty sure 3d rendering in VirtualBox is just broken. It might work better if using VBoxSVGA graphics, but as I understand it, the 3d acceleration code for that graphics emulator is insecure and can be used for a VM escape.</p>
+          <p><a href="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393/1</link>
+        <pubDate>Tue, 16 Dec 2025 04:39:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1393-1</guid>
+        <source url="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393.rss">3D acceleration for Kicksecure VMs</source>
+      </item>
+  </channel>
+</rss>
