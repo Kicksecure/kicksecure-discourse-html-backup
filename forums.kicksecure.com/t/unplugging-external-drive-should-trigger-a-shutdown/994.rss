@@ -14,9 +14,21 @@ I do want to add that also set up LUKS when I installed Debian.
 
 Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</description>
     
-    <lastBuildDate>Wed, 17 Dec 2025 03:00:05 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 20 Dec 2025 02:20:03 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Unplugging external drive should trigger a shutdown</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <p>Would <code>rd.live.ram=1</code> work with emerg-shutdown?</p>
+          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/32">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/32</link>
+        <pubDate>Sat, 20 Dec 2025 02:20:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-994-32</guid>
+        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
+      </item>
       <item>
         <title>Unplugging external drive should trigger a shutdown</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -622,66 +634,6 @@ Samsung has been known for issues like with things like SMART support so that so
         <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/8</link>
         <pubDate>Wed, 07 May 2025 03:23:46 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-994-8</guid>
-        <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
-      </item>
-      <item>
-        <title>Unplugging external drive should trigger a shutdown</title>
-        <dc:creator><![CDATA[maltfield]]></dc:creator>
-        <description><![CDATA[
-            <aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
-<blockquote>
-<p>would clear the LUKS password from system memory.</p>
-</blockquote>
-</aside>
-<p>Take a look at <a href="https://www.man7.org/linux/man-pages/man8/cryptsetup-luksSuspend.8.html" rel="noopener nofollow ugc">luksSuspend</a></p>
-<aside class="quote no-group" data-username="NTH9R6" data-post="6" data-topic="994">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
-<blockquote>
-<p>Does the <code>shutdown -h now</code> command close the LUKS volume or should <code>unmount</code> and <code>cryptsetup luksClose</code> used before that command?<br>
-If so I wonder if replacing the <code>RUN+="shutdown -h now"</code> with one of the dracut ram-wipe module hooks would be efficient enough for me to test in non live mode?</p>
-</blockquote>
-</aside>
-<p>I would execute a <code>luksSuspend</code> followed by shutdown. If you want a faster shutdown, try <code>echo o &gt; /proc/sysrq-trigger &amp;</code>. See how we do this at the end of the BusKill self-destruct script:</p>
-<ul>
-<li><a href="https://github.com/BusKill/buskill-linux/blob/c3e056251377a25e504f5bdc41b2fc17c49f8d2e/triggers/buskill-selfdestruct.sh#L154-L179" class="inline-onebox" rel="noopener nofollow ugc">buskill-linux/triggers/buskill-selfdestruct.sh at c3e056251377a25e504f5bdc41b2fc17c49f8d2e · BusKill/buskill-linux · GitHub</a></li>
-</ul>
-<pre><code class="lang-auto">#################################
-# WIPE DECRYPTION KEYS FROM RAM #
-#################################
-
-# suspend each currently-decrypted LUKS volume
-${ECHO} "INFO: removing decryption keys from memory"
-for device in $( ${LS} -1 "/dev/mapper" ); do
-
-	${ECHO} -e "\t${device}";
-	${CRYPTSETUP} luksSuspend "${device}" &amp;
-
-	# clear page caches in memory (again)
-	sync; echo 3 &gt; /proc/sys/vm/drop_caches
-
-done
-
-#############################
-# (IMMEDIATE) HARD SHUTDOWN #
-#############################
-
-# do whatever works; this is important.
-echo o &gt; /proc/sysrq-trigger &amp;
-sleep 1
-shutdown -h now &amp;
-sleep 1
-poweroff --force --no-sync &amp;
-</code></pre>
-          <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/7">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994/7</link>
-        <pubDate>Mon, 21 Apr 2025 21:38:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-994-7</guid>
         <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
       </item>
   </channel>
