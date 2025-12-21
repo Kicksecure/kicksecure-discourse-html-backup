@@ -5,8 +5,32 @@
     <link>https://forums.kicksecure.com/c/development/7</link>
     <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code. &lt;a href=&quot;https://www.kicksecure.com/wiki/Development_Discussion_Policy&quot;&gt;Development Discussion Policy&lt;/a&gt; and &lt;a href=&quot;https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy&quot;&gt;First-Time Source Code Contributor Policy&lt;/a&gt; apply.</description>
     
-      <lastBuildDate>Tue, 16 Dec 2025 04:39:14 +0000</lastBuildDate>
+      <lastBuildDate>Sat, 20 Dec 2025 02:12:29 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+          <dc:creator><![CDATA[Tengu]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>While browsing the grub‑live wiki I discovered that neither grub‑live nor Tails clears VRAM when the system shuts down.</p>
+<p>When the system powers down, the kernel stops the CPUs and tells each driver to simply hand the device back to the firmware. The firmware may or may not clear the memory when power is removed. Complete loss of power guarantees erasure usually right?</p>
+<p>With the nohibernate flag now in play, could this interfere with reaching the deepest D3 cold power state? I’m no computer scientist, but my intuition says there shouldn’t be a direct link.<br>
+Has anyone published research on this topic? Is a reliable feature even feasible for Kicksecure?</p>
+<p>How could you turn the GPU off before the CPU?</p>
+<p>Does an already normal linux shutdown put devices in D3 cold?</p>
+<p>For context, I’ve been looking at kernel GPU parameters and both AMD and Radeon expose runtime power management flags that let the GPU request D3 Cold.</p>
+<p>Building on a previous discussion about dracut and grub‑live, I’m wondering whether we can leverage <code>rd.driver.pre=</code> and <code>rd.driver.post=</code> to force the amdgpu module to load inside the initramfs before the real root mounts. Then keep that module loaded after the real root is mounted so it is still present when the dracut‑shutdown stage runs? I’d presume that it wouldn’t be as simple as just this alone. Something like the ram-wipe Dracut module?</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404</link>
+          <pubDate>Sat, 20 Dec 2025 02:12:29 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1404</guid>
+          <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+        </item>
         <item>
           <title>3D acceleration for Kicksecure VMs</title>
           <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -1240,23 +1264,6 @@ Either the package should detect this and not interfere. otherwise a more robust
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1189</guid>
           <source url="https://forums.kicksecure.com/t/boot-device-lockdown/1189.rss">Boot Device Lockdown</source>
-        </item>
-        <item>
-          <title>Hardware-backed Full Disk Encryption (FDE)</title>
-          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
-          <category>Development</category>
-          <description><![CDATA[
-            <p>Encryption keys are stored in hardware (like a TPM or otherwise), meaning even if the disk is removed, it cannot be decrypted without the original device.</p>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/hardware-backed-full-disk-encryption-fde/1188">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/hardware-backed-full-disk-encryption-fde/1188</link>
-          <pubDate>Sat, 26 Jul 2025 20:22:02 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1188</guid>
-          <source url="https://forums.kicksecure.com/t/hardware-backed-full-disk-encryption-fde/1188.rss">Hardware-backed Full Disk Encryption (FDE)</source>
         </item>
   </channel>
 </rss>

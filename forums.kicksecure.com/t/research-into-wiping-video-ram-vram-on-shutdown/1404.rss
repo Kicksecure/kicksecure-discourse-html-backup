@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+    <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404</link>
+    <description>While browsing the grub‑live wiki I discovered that neither grub‑live nor Tails clears VRAM when the system shuts down.
+
+When the system powers down, the kernel stops the CPUs and tells each driver to simply hand the device back to the firmware. The firmware may or may not clear the memory when power is removed. Complete loss of power guarantees erasure usually right?
+
+With the nohibernate flag now in play, could this interfere with reaching the deepest D3 cold power state? I’m no computer scientist, but my intuition says there shouldn’t be a direct link.
+Has anyone published research on this topic? Is a reliable feature even feasible for Kicksecure?
+
+How could you turn the GPU off before the CPU?
+
+Does an already normal linux shutdown put devices in D3 cold?
+
+For context, I’ve been looking at kernel GPU parameters and both AMD and Radeon expose runtime power management flags that let the GPU request D3 Cold.
+
+Building on a previous discussion about dracut and grub‑live, I’m wondering whether we can leverage `rd.driver.pre=` and `rd.driver.post=` to force the amdgpu module to load inside the initramfs before the real root mounts. Then keep that module loaded after the real root is mounted so it is still present when the dracut‑shutdown stage runs? I’d presume that it wouldn’t be as simple as just this alone. Something like the ram-wipe Dracut module?</description>
+    
+    <lastBuildDate>Sun, 21 Dec 2025 01:20:09 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>There are a lot of questions here; generally it’s better to have one forum post per question to keep things easy to track. (We use posts, especially development posts, to track individual things that need worked on, so keeping one topic per post makes us able to do that.)</p>
+<aside class="quote no-group" data-username="Tengu" data-post="1" data-topic="1404">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/d26b3c/48.png" class="avatar"> Tengu:</div>
+<blockquote>
+<p>When the system powers down, the kernel stops the CPUs and tells each driver to simply hand the device back to the firmware. The firmware may or may not clear the memory when power is removed. Complete loss of power guarantees erasure usually right?</p>
+</blockquote>
+</aside>
+<p>It’s supposed to, and in practice it <strong>usually</strong> does. Unfortunately, it doesn’t <em>always</em> do so, 3mdeb did some research on how different RAM responds to power loss and some of it can maintain a substantial amount of data for alarmingly long. (One particular 4GB DDR4 DIMM from Kingston ended up retaining a tiny, but recognizable, amount of data for <em>two minutes</em> after power loss. Most other memory tested didn’t do that, but it’s dependent on the particular RAM you have.) See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://blog.3mdeb.com/2024/2024-12-13-ram-data-decay-research/">
+  <header class="source">
+
+      <a href="https://blog.3mdeb.com/2024/2024-12-13-ram-data-decay-research/" target="_blank" rel="noopener">blog.3mdeb.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://blog.3mdeb.com/2024/2024-12-13-ram-data-decay-research/" target="_blank" rel="noopener">Thoughts dereferenced from the scratchpad noise.  | Research of RAM data...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://blog.3mdeb.com/2025/2025-01-24-ram-data-decay-research-part2/">
+  <header class="source">
+
+      <a href="https://blog.3mdeb.com/2025/2025-01-24-ram-data-decay-research-part2/" target="_blank" rel="noopener">blog.3mdeb.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://blog.3mdeb.com/2025/2025-01-24-ram-data-decay-research-part2/" target="_blank" rel="noopener">Thoughts dereferenced from the scratchpad noise.  | Research of RAM data...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://blog.3mdeb.com/2025/2025-02-20-conclusions-from-ram-data-remanence-tests/">
+  <header class="source">
+
+      <a href="https://blog.3mdeb.com/2025/2025-02-20-conclusions-from-ram-data-remanence-tests/" target="_blank" rel="noopener">blog.3mdeb.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://blog.3mdeb.com/2025/2025-02-20-conclusions-from-ram-data-remanence-tests/" target="_blank" rel="noopener">Thoughts dereferenced from the scratchpad noise.  | Conclusions from RAM data...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Many systems (all of them except for those with discrete GPUs) have video and system memory on the same RAM modules, so turning off the GPU first probably wouldn’t help much. What would help is the ability to wipe RAM when it’s no longer used, which we try to do via the kernel parameters <code>init_on_alloc=1</code> and <code>init_on_free=1</code> (both of which are set in <code>security-misc-shared</code>). It’s unclear if the Intel and AMD graphics subsystems actually obey these kernel parameters though; if the GPU reserves memory entirely for its own use, it might be out of the kernel’s control. Systems with discrete GPUs are even less likely to obey those settings.</p>
+<p>We have a task made to look at wiping VRAM (<a href="https://www.kicksecure.com/wiki/Dev/todo#wipe_video_RAM" class="inline-onebox">ToDo for Developers</a>), but it’s pretty low in the priority list.</p>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/3</link>
+        <pubDate>Sun, 21 Dec 2025 01:20:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-3</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <p><code>cat /sys/class/drm/card*/device/power_state</code> returns D0 or D3cold indicating the power state</p>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/2</link>
+        <pubDate>Sat, 20 Dec 2025 02:30:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-2</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <p>While browsing the grub‑live wiki I discovered that neither grub‑live nor Tails clears VRAM when the system shuts down.</p>
+<p>When the system powers down, the kernel stops the CPUs and tells each driver to simply hand the device back to the firmware. The firmware may or may not clear the memory when power is removed. Complete loss of power guarantees erasure usually right?</p>
+<p>With the nohibernate flag now in play, could this interfere with reaching the deepest D3 cold power state? I’m no computer scientist, but my intuition says there shouldn’t be a direct link.<br>
+Has anyone published research on this topic? Is a reliable feature even feasible for Kicksecure?</p>
+<p>How could you turn the GPU off before the CPU?</p>
+<p>Does an already normal linux shutdown put devices in D3 cold?</p>
+<p>For context, I’ve been looking at kernel GPU parameters and both AMD and Radeon expose runtime power management flags that let the GPU request D3 Cold.</p>
+<p>Building on a previous discussion about dracut and grub‑live, I’m wondering whether we can leverage <code>rd.driver.pre=</code> and <code>rd.driver.post=</code> to force the amdgpu module to load inside the initramfs before the real root mounts. Then keep that module loaded after the real root is mounted so it is still present when the dracut‑shutdown stage runs? I’d presume that it wouldn’t be as simple as just this alone. Something like the ram-wipe Dracut module?</p>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/1</link>
+        <pubDate>Sat, 20 Dec 2025 02:12:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-1</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
+  </channel>
+</rss>

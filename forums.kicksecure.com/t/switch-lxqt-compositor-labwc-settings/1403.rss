@@ -7,9 +7,56 @@
 
 I’m fairly used to a traditional Linux desktop, where I have a window manager setup. Personally I would have loved if Kicksecure would provide a cli version to install on metal, but it seems the only option for that is morphing debian, which is not really what I want to do. I understand this is a low priority for most users, and obviously, the focus of this is security, not customization. That said, given this is LXQT, is there a way to access the settings of labwc and/or change the compositor to Sway (for tiling)? Some of my keyboard buttons (volume, most importantly)are not working, and I would like to add some keyboard shortcuts, but on Wayland, this needs to be done through the compositor, not LXQT. I couldn’t see any GUI settings for this, but I was pretty sure they existed (granted it has been a while since I last used LXQT). Have these been hidden for a security reason, or am I misremembering? Is there any way to change these safely?</description>
     
-    <lastBuildDate>Sat, 20 Dec 2025 00:02:40 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 21 Dec 2025 00:59:41 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/switch-lxqt-compositor-labwc-settings/1403.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Switch LXQT compositor/labwc settings?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="zaliv" data-post="1" data-topic="1403">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/53a042/48.png" class="avatar"> zaliv:</div>
+<blockquote>
+<p>That said, given this is LXQT, is there a way to access the settings of labwc</p>
+</blockquote>
+</aside>
+<p>I don’t think a GUI for this is pre-installed in Kicksecure. There is <a href="https://github.com/labwc/labwc-tweaks">labwc-tweaks</a>, but unfortunately that isn’t present in Debian Trixie (which Kicksecure 18 is based on), and it doesn’t have signed releases so we were reticent to package it ourselves. Currently the best way to tweak labwc settings is to read <a href="https://labwc.github.io/labwc-config.5.html">labwc’s documentation</a> and place your customizations in <code>~/.config/labwc/rc.xml</code> or another appropriate configuration file. (Note that we have layered configuration enabled in labwc, so you should only have to set the settings you want to <em>change</em>; anything that isn’t explicitly specified will fall back to system-wide configuration.)</p>
+<aside class="quote no-group" data-username="zaliv" data-post="1" data-topic="1403">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/53a042/48.png" class="avatar"> zaliv:</div>
+<blockquote>
+<p>and/or change the compositor to Sway (for tiling)?</p>
+</blockquote>
+</aside>
+<p>We don’t <em>explicitly</em> support switching to Sway, and because of how our Wayland session works it might be difficult to do so. <code>/usr/libexec/desktop-config-dist/start-lxqt-session</code> should give you a good starting point to work from, but keep in mind changes made to this file will be overwritten by upgrades of <code>desktop-config-dist</code> so modifying it directly is not recommended.</p>
+<aside class="quote no-group" data-username="zaliv" data-post="1" data-topic="1403">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/53a042/48.png" class="avatar"> zaliv:</div>
+<blockquote>
+<p>I couldn’t see any GUI settings for this, but I was pretty sure they existed (granted it has been a while since I last used LXQT).</p>
+</blockquote>
+</aside>
+<p>They exist <em>under X11</em>. Unfortunately a lot of the GUI configuration tools in LXQt 2.1 are disabled when using Wayland, and some of the tools will likely remain that way permanently because LXQt doesn’t want to add compositor-specific code if possible. Tools like labwc-tweaks are supposed to fill in the gaps there, and we also have been creating some of our own tools (like <code>set-labwc-keymap</code> and <code>set-system-keymap</code>) to fill in more of the gaps.</p>
+<aside class="quote no-group" data-username="zaliv" data-post="1" data-topic="1403">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/z/53a042/48.png" class="avatar"> zaliv:</div>
+<blockquote>
+<p>Is there any way to change these safely?</p>
+</blockquote>
+</aside>
+<p>Modifying user-specific configuration files like mentioned above is probably the best way forward.</p>
+          <p><a href="https://forums.kicksecure.com/t/switch-lxqt-compositor-labwc-settings/1403/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/switch-lxqt-compositor-labwc-settings/1403/2</link>
+        <pubDate>Sun, 21 Dec 2025 00:59:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1403-2</guid>
+        <source url="https://forums.kicksecure.com/t/switch-lxqt-compositor-labwc-settings/1403.rss">Switch LXQT compositor/labwc settings?</source>
+      </item>
       <item>
         <title>Switch LXQT compositor/labwc settings?</title>
         <dc:creator><![CDATA[zaliv]]></dc:creator>
