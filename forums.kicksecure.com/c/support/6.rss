@@ -5,8 +5,51 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Sat, 20 Dec 2025 08:29:07 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 22 Dec 2025 12:34:48 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Sdwdate broken after upgrade to Kicksecure 18: Missing SECCOMP syscalls (statx, fstatfs, epoll_pwait2)</title>
+          <dc:creator><![CDATA[oblivion_devourer]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello everyone!</p>
+<p>After upgrading from Kicksecure 17 to 18 I noticed that <code>sdwdate</code> never finished syncing time. After checking the logs I found several lines similar to this,</p>
+<p><code>SECCOMP auid=4294967295 uid=117 gid=130 ses=4294967295 subj=unconfined pid=6319 comm=“leaprun” exe=“/usr/bin/python3.13” sig=31 arch=c000003e syscall=332 compat=0 ip=0x7c87efbaf31a code=0x80000000</code></p>
+<p>By following the instructions on <a href="https://www.kicksecure.com/wiki/Seccomp" rel="noopener nofollow ugc">Debugging Systemd Seccomp</a>, I figure out that syscalls 332 (statx), 138 (fstatfs) and 441 (epoll_pwait2) needed to be added to <code>SystemCallFilter=</code>. And indeed after doing that the issue was completely fixed. Architecture is x86_64.</p>
+<p>Sorry if this is not the correct category, I wasn’t sure if I should post this on Support or Development.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sdwdate-broken-after-upgrade-to-kicksecure-18-missing-seccomp-syscalls-statx-fstatfs-epoll-pwait2/1412">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sdwdate-broken-after-upgrade-to-kicksecure-18-missing-seccomp-syscalls-statx-fstatfs-epoll-pwait2/1412</link>
+          <pubDate>Mon, 22 Dec 2025 12:34:48 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1412</guid>
+          <source url="https://forums.kicksecure.com/t/sdwdate-broken-after-upgrade-to-kicksecure-18-missing-seccomp-syscalls-statx-fstatfs-epoll-pwait2/1412.rss">Sdwdate broken after upgrade to Kicksecure 18: Missing SECCOMP syscalls (statx, fstatfs, epoll_pwait2)</source>
+        </item>
+        <item>
+          <title>When’s kicksecure getting into QubesOS 4.3 templates?</title>
+          <dc:creator><![CDATA[monero-secure]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>When’s kicksecure getting into QubesOS 4.3 templates?  I have</p>
+<ul>
+<li>Official templates</li>
+<li>Community templates</li>
+</ul>
+<p>enabled.  But, <code>qvm-template list</code> command on dom0 isn’t listing kicksecure-18.</p>
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/when-s-kicksecure-getting-into-qubesos-4-3-templates/1410">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/when-s-kicksecure-getting-into-qubesos-4-3-templates/1410</link>
+          <pubDate>Mon, 22 Dec 2025 07:29:27 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1410</guid>
+          <source url="https://forums.kicksecure.com/t/when-s-kicksecure-getting-into-qubesos-4-3-templates/1410.rss">When’s kicksecure getting into QubesOS 4.3 templates?</source>
+        </item>
         <item>
           <title>For how long would it be safe to use 17.4.4.6?</title>
           <dc:creator><![CDATA[Banebere]]></dc:creator>
@@ -98,7 +141,7 @@ So the question is for how long will the 17.4.4.6 versions of whonix and kick be
 <p>Whats different with “grub live” or makes it different from a custom entry that has <code>toram noswap nohibernate</code> chosen and passed after selecting it in the bootloader?</p>
 <p>Previously I installed grub-live on debian through the Kicksecure repo in the past out of curiosity it said I had swap enabled still which also confuses it me? That was like many months ago so I’m sure things have changed?</p>
 <p>Is it some kind of compression swap like overlay like zram?</p>
-            <p><small>7 posts - 3 participants</small></p>
+            <p><small>8 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/grub-live-vs-toram/1391">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/grub-live-vs-toram/1391</link>
@@ -580,55 +623,6 @@ Which option will be best in this situation, maybe you have better solution?</li
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1299</guid>
           <source url="https://forums.kicksecure.com/t/which-setup-will-be-most-secure-and-anonymous/1299.rss">Which setup will be most secure and anonymous?</source>
-        </item>
-        <item>
-          <title>Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</title>
-          <dc:creator><![CDATA[SteveK1978]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>How is the development status for Debian 13? From what I see here, Debian 13 hasn’t been added into extrepo data yet. <a href="https://salsa.debian.org/extrepo-team/extrepo-data/-/blob/master/repos/debian/kicksecure.yaml?ref_type=heads" class="inline-onebox" rel="noopener nofollow ugc">repos/debian/kicksecure.yaml · master · External repositories team / extrepo-data · GitLab</a></p>
-<p>I enabled Kicksecure repo from extrepo. How do I upgrade everything from Debian 12 to 13 from the repo contained in extrepo?</p>
-            <p><small>14 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297</link>
-          <pubDate>Wed, 01 Oct 2025 15:49:27 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1297</guid>
-          <source url="https://forums.kicksecure.com/t/debian-13-status-and-how-to-upgrade-from-debian-12-to-13-via-extrepo/1297.rss">Debian 13 status and how to upgrade from Debian 12 to 13 via extrepo?</source>
-        </item>
-        <item>
-          <title>TORBROWSER Crash after new Update</title>
-          <dc:creator><![CDATA[tsvetkovsecurity]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hello, today after new update of Tor Browser , they cannot start anymore.</p>
-<p>Error:</p>
-<blockquote>
-<p><strong>ERROR</strong>: Tor Browser ended with non-zero (error) exit code!</p>
-<p>Tor Browser was started with:</p>
-<p>/home/user/.tb/tor-browser/Browser/start-tor-browser --verbose --allow-remote</p>
-<p>Tor Browser exited with code: 126<br>
-OPEN_LINK_CONFIRMATION_COUNTER: 0</p>
-<p>To see this for yourself, you could try:</p>
-<p>Start Menu → System → Xfce Terminal<br>
-Then run:<br>
-/home/user/.tb/tor-browser/Browser/start-tor-browser --verbose --allow-remote</p>
-<p>See online documentation:</p>
-</blockquote>
-<p>Anyone solve the issue?</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/torbrowser-crash-after-new-update/1290">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/torbrowser-crash-after-new-update/1290</link>
-          <pubDate>Wed, 17 Sep 2025 04:43:10 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1290</guid>
-          <source url="https://forums.kicksecure.com/t/torbrowser-crash-after-new-update/1290.rss">TORBROWSER Crash after new Update</source>
         </item>
   </channel>
 </rss>
