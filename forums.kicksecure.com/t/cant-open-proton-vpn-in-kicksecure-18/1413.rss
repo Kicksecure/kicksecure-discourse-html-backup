@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Can&#39;t open proton VPN in kicksecure 18</title>
+    <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413</link>
+    <description>In QubesOS 4.2.4 I’d sys-vpn based on kicksecure-17 and it was working fine.
+
+But in QubesOS 4.3 I am trying to open Proton VPN on kicksecure-18. Initially it opened and worked fine but when I enabled kill switch, now its not opening and giving this error:
+
+```bash
+2025-12-23T13:25:10.486891+00:00 | proton.vpn.core.connection:508 | INFO | CONN:STATE_CHANGED | Disconnected (initial state)
+Traceback (most recent call last):
+  File &quot;/usr/bin/protonvpn-app&quot;, line 33, in &lt;module&gt;
+    sys.exit(load_entry_point(&#39;proton-vpn-gtk-app==4.13.1&#39;, &#39;console_scripts&#39;, &#39;protonvpn-app&#39;)())
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/app/gtk/__main__.py&quot;, line 35, in main
+    controller = Controller.get(executor, exception_handler)
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py&quot;, line 72, in get
+    executor.submit(controller.initialize_vpn_connector).result()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File &quot;/usr/lib/python3.13/concurrent/futures/_base.py&quot;, line 456, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File &quot;/usr/lib/python3.13/concurrent/futures/_base.py&quot;, line 401, in __get_result
+    raise self._exception
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py&quot;, line 104, in initialize_vpn_connector
+    self._connector = await self._api.get_vpn_connector()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/core/api.py&quot;, line 69, in get_vpn_connector
+    self._vpn_connector = await VPNConnector.get(
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/core/connection.py&quot;, line 100, in get
+    await connector.initialize_state()
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/core/connection.py&quot;, line 311, in initialize_state
+    await self._update_state(state)
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/core/connection.py&quot;, line 532, in _update_state
+    new_event = await self._current_state.run_tasks()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/connection/states.py&quot;, line 194, in run_tasks
+    await self.context.kill_switch.enable(permanent=True)
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/wgkillswitch.py&quot;, line 64, in enable                                                                            
+    await self._ks_handler.add_kill_switch_connection(permanent)
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py&quot;, line 134, in add_kill_switch_connection                                      
+    await _wrap_future(
+        self.nm_client.add_connection_async(kill_switch.connection, save_to_disk=permanent)
+    )
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py&quot;, line 56, in _wrap_future                                                     
+    return await asyncio.wait_for(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;2 lines&gt;...
+    )
+    ^
+  File &quot;/usr/lib/python3.13/asyncio/tasks.py&quot;, line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File &quot;/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/nmclient.py&quot;, line 185, in _on_connection_added                                                                 
+    nm_client.add_connection_finish(res)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+RuntimeError: Error adding KS connection: nm-settings-error-quark: Insufficient privileges (1)
+zsh: exit 1     protonvpn-app
+```
+
+Is there a workaround?</description>
+    
+    <lastBuildDate>Tue, 23 Dec 2025 22:44:29 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="monero-secure" data-post="5" data-topic="1413">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/monero-secure/48/163_2.png" class="avatar"> monero-secure:</div>
+<blockquote>
+<p>I am using the Qubes Settings menu for the sys-vpn I have (which I run<br>
+the NetworkManager’s built-in VPN support), and in the Firewall<br>
+settings, I only allow the vpn server’s IP address to be connected. I<br>
+believe this should act as a “kill switch”, in the sense that VPN<br>
+server’s IPv4 is the only outgoing address the sys-vpn can connect to.</p>
+</blockquote>
+</aside>
+<p>That’s really clever, thanks for sharing that!</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/7</link>
+        <pubDate>Tue, 23 Dec 2025 22:44:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-7</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[marcos-morar43]]></dc:creator>
+        <description><![CDATA[
+            <p>Proton VPN is now working in Unrestricted mode.</p>
+<p>I reinstalled the <code>user-sysmaint-split</code> package because I was not convinced that, when unrestricted mode is available, there is any need to uninstall this package.</p>
+<p>After reinstalling, the first time I started <code>sys-vpn</code> in unrestricted mode, but the proton vpn didn’t work. However, after restarting the qube, it worked on the second attempt.</p>
+<p>Through further observation, I discovered that if an app requiring privileged access is started before the <code>user-sysmaint-split</code> removal process completes on each AppVM startup, it will not work, no matter how long you wait afterward.</p>
+<p>But if you wait a short while after startup (allowing the system to uninstall <code>user-sysmaint-split</code> in the background) and then start the app, it works.</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/6</link>
+        <pubDate>Tue, 23 Dec 2025 17:56:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-6</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[monero-secure]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<ul>
+<li>Alternatively, you may be able to use NetworkManager’s built-in VPN<br>
+support instead of the app (this won’t come with the kill switch<br>
+though)</li>
+</ul>
+</blockquote>
+<p>I am using this way of using protonvpn.  No <code>sudo</code> needed.</p>
+<blockquote>
+<p>this won’t come with the kill switch though</p>
+</blockquote>
+<p>I am using the Qubes Settings menu for the sys-vpn I have (which I run<br>
+the NetworkManager’s built-in VPN support), and in the Firewall<br>
+settings, I only allow the vpn server’s IP address to be connected.  I<br>
+believe this should act as a “kill switch”, in the sense that VPN<br>
+server’s IPv4 is the only outgoing address the sys-vpn can connect to.</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/5</link>
+        <pubDate>Tue, 23 Dec 2025 17:06:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-5</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>When you boot into unrestricted admin mode, a service starts in the background that uninstalls user-sysmaint-split (though this will only last for one boot of the AppVM because most changes to AppVMs are ephemeral). This takes some time, so if you try to do something that requires administrative permissions immediately after booting into unrestricted admin mode, it probably won’t work. After a few seconds, it should work though.</p>
+<p>As for why this broke in Kicksecure 18, I’m not sure either. Nothing new changed about how tight the restrictions are in Kicksecure, so as long as something doesn’t need administrative permissions, things should work. Maybe a setting that didn’t require administrative permissions in Debian 12 now does require administrative permissions in Debian 13.</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/4</link>
+        <pubDate>Tue, 23 Dec 2025 15:59:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-4</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[marcos-morar43]]></dc:creator>
+        <description><![CDATA[
+            <p>I tried unrestricted mode, but the app didn’t start, though the error was different that time. Then I switched to sysmaint mode, the app launched, the VPN connected successfully, but it wasn’t providing internet to other qubes. Ultimately, removing the <code>user-sysmaint-split</code> worked.</p>
+<p>I don’t understand the logic behind it, though. Kicksecure-17 also had the <code>user-sysmaint-split</code>, but it never caused an issue for sys-vpn there. In Kicksecure-18, however, it does, even though the option to use sysmaint or unrestricted mode is now available even for AppVMs, which wasn’t possible before.</p>
+<p>That’s really odd!</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/3</link>
+        <pubDate>Tue, 23 Dec 2025 15:17:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-3</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m guessing whatever network setting its trying to set, requires administrative privileges to set, and the fact that pkexec and Polkit prompts are disabled in non-sysmaint sessions is interfering with things. You could try:</p>
+<ul>
+<li>Booting into “UNRESTRICTED Mode” in the AppVM (you can set this in the settings for the AppVM, under the Advanced tab)</li>
+<li>Removing user-sysmaint-split from the template, instructions for doing so are here:</li>
+</ul>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unrestricted_admin_mode#Kicksecure_for_Qubes">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766482224" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode#Kicksecure_for_Qubes" target="_blank" rel="noopener" title="05:02AM - 16 December 2025">Kicksecure – 16 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/f/f9/Unrestricted_admin_mode.png?version=40214988089be8f5f612e30ac20955f1" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode#Kicksecure_for_Qubes" target="_blank" rel="noopener">Unrestricted Admin Mode</a></h3>
+
+  <p>Kicksecure allows configuration for unrestricted admin mode, enabling the default user account to access privilege escalation tools like sudo and pkexec.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<ul>
+<li>Alternatively, you may be able to use NetworkManager’s built-in VPN support instead of the app (this won’t come with the kill switch though)</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/2</link>
+        <pubDate>Tue, 23 Dec 2025 15:07:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-2</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+      <item>
+        <title>Can&#39;t open proton VPN in kicksecure 18</title>
+        <dc:creator><![CDATA[marcos-morar43]]></dc:creator>
+        <description><![CDATA[
+            <p>In QubesOS 4.2.4 I’d sys-vpn based on kicksecure-17 and it was working fine.</p>
+<p>But in QubesOS 4.3 I am trying to open Proton VPN on kicksecure-18. Initially it opened and worked fine but when I enabled kill switch, now its not opening and giving this error:</p>
+<pre data-code-wrap="bash"><code class="lang-bash">2025-12-23T13:25:10.486891+00:00 | proton.vpn.core.connection:508 | INFO | CONN:STATE_CHANGED | Disconnected (initial state)
+Traceback (most recent call last):
+  File "/usr/bin/protonvpn-app", line 33, in &lt;module&gt;
+    sys.exit(load_entry_point('proton-vpn-gtk-app==4.13.1', 'console_scripts', 'protonvpn-app')())
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/__main__.py", line 35, in main
+    controller = Controller.get(executor, exception_handler)
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py", line 72, in get
+    executor.submit(controller.initialize_vpn_connector).result()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py", line 104, in initialize_vpn_connector
+    self._connector = await self._api.get_vpn_connector()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/api.py", line 69, in get_vpn_connector
+    self._vpn_connector = await VPNConnector.get(
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 100, in get
+    await connector.initialize_state()
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 311, in initialize_state
+    await self._update_state(state)
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 532, in _update_state
+    new_event = await self._current_state.run_tasks()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/connection/states.py", line 194, in run_tasks
+    await self.context.kill_switch.enable(permanent=True)
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/wgkillswitch.py", line 64, in enable                                                                            
+    await self._ks_handler.add_kill_switch_connection(permanent)
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py", line 134, in add_kill_switch_connection                                      
+    await _wrap_future(
+        self.nm_client.add_connection_async(kill_switch.connection, save_to_disk=permanent)
+    )
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py", line 56, in _wrap_future                                                     
+    return await asyncio.wait_for(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;2 lines&gt;...
+    )
+    ^
+  File "/usr/lib/python3.13/asyncio/tasks.py", line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/nmclient.py", line 185, in _on_connection_added                                                                 
+    nm_client.add_connection_finish(res)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+RuntimeError: Error adding KS connection: nm-settings-error-quark: Insufficient privileges (1)
+zsh: exit 1     protonvpn-app
+</code></pre>
+<p>Is there a workaround?</p>
+          <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413/1</link>
+        <pubDate>Tue, 23 Dec 2025 13:36:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1413-1</guid>
+        <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+      </item>
+  </channel>
+</rss>

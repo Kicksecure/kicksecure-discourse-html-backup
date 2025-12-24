@@ -5,8 +5,81 @@
     <link>https://forums.kicksecure.com/c/qubes/8</link>
     <description>Topics in the &#39;Qubes&#39; category Everything specific to &lt;a href=&quot;https://www.kicksecure.com/wiki/Qubes&quot;&gt;Kicksecure for Qubes&lt;/a&gt;.</description>
     
-      <lastBuildDate>Mon, 27 Oct 2025 21:33:38 +0000</lastBuildDate>
+      <lastBuildDate>Tue, 23 Dec 2025 13:36:40 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/qubes/8.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Can&#39;t open proton VPN in kicksecure 18</title>
+          <dc:creator><![CDATA[marcos-morar43]]></dc:creator>
+          <category>Qubes</category>
+          <description><![CDATA[
+            <p>In QubesOS 4.2.4 I’d sys-vpn based on kicksecure-17 and it was working fine.</p>
+<p>But in QubesOS 4.3 I am trying to open Proton VPN on kicksecure-18. Initially it opened and worked fine but when I enabled kill switch, now its not opening and giving this error:</p>
+<pre data-code-wrap="bash"><code class="lang-bash">2025-12-23T13:25:10.486891+00:00 | proton.vpn.core.connection:508 | INFO | CONN:STATE_CHANGED | Disconnected (initial state)
+Traceback (most recent call last):
+  File "/usr/bin/protonvpn-app", line 33, in &lt;module&gt;
+    sys.exit(load_entry_point('proton-vpn-gtk-app==4.13.1', 'console_scripts', 'protonvpn-app')())
+             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/__main__.py", line 35, in main
+    controller = Controller.get(executor, exception_handler)
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py", line 72, in get
+    executor.submit(controller.initialize_vpn_connector).result()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 456, in result
+    return self.__get_result()
+           ~~~~~~~~~~~~~~~~~^^
+  File "/usr/lib/python3.13/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/usr/lib/python3/dist-packages/proton/vpn/app/gtk/controller.py", line 104, in initialize_vpn_connector
+    self._connector = await self._api.get_vpn_connector()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/api.py", line 69, in get_vpn_connector
+    self._vpn_connector = await VPNConnector.get(
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;3 lines&gt;...
+    )
+    ^
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 100, in get
+    await connector.initialize_state()
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 311, in initialize_state
+    await self._update_state(state)
+  File "/usr/lib/python3/dist-packages/proton/vpn/core/connection.py", line 532, in _update_state
+    new_event = await self._current_state.run_tasks()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/connection/states.py", line 194, in run_tasks
+    await self.context.kill_switch.enable(permanent=True)
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/wgkillswitch.py", line 64, in enable                                                                            
+    await self._ks_handler.add_kill_switch_connection(permanent)
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py", line 134, in add_kill_switch_connection                                      
+    await _wrap_future(
+        self.nm_client.add_connection_async(kill_switch.connection, save_to_disk=permanent)
+    )
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/killswitch_connection_handler.py", line 56, in _wrap_future                                                     
+    return await asyncio.wait_for(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+    ...&lt;2 lines&gt;...
+    )
+    ^
+  File "/usr/lib/python3.13/asyncio/tasks.py", line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "/usr/lib/python3/dist-packages/proton/vpn/backend/networkmanager/killswitch/wireguard/nmclient.py", line 185, in _on_connection_added                                                                 
+    nm_client.add_connection_finish(res)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^
+RuntimeError: Error adding KS connection: nm-settings-error-quark: Insufficient privileges (1)
+zsh: exit 1     protonvpn-app
+</code></pre>
+<p>Is there a workaround?</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413</link>
+          <pubDate>Tue, 23 Dec 2025 13:36:40 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1413</guid>
+          <source url="https://forums.kicksecure.com/t/cant-open-proton-vpn-in-kicksecure-18/1413.rss">Can&#39;t open proton VPN in kicksecure 18</source>
+        </item>
         <item>
           <title>Issue with Kicksecure 17 without sys-whonix</title>
           <dc:creator><![CDATA[Computer1]]></dc:creator>
