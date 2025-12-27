@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Cli morphing changed?</title>
+    <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418</link>
+    <description>Hi
+
+is `kicksecure-qubes-server` required after the installation is done?
+I used `sudo apt install --no-install-recommends kicksecure-qubes-server` and after completion - `sudo apt purge tor -y` and it deleted the `kicksecure-qubes-server`
+
+please clarify. I don’t recall the same behavior with `cli`package on prev version</description>
+    
+    <lastBuildDate>Fri, 26 Dec 2025 19:23:01 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="brilliantjeana" data-post="12" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>But it’s not simply just tor, it’s also the sdwdate and many other little things that in combine bring lots of issues.</p>
+</blockquote>
+</aside>
+<p>You can use <code>dummy-dependency</code> to remove those too.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="12" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>So if I do wanna remove it - there’s simply no way to do it(with keeping up with updates etc)???</p>
+</blockquote>
+</aside>
+<p>Not a <em>simple</em> way, but as explained above there is <em>a</em> way. <code>dummy-dependency</code> can be used to remove anything even if other packages depend on it. Anything you consider unnecessary, you can remove, including <code>tor</code>, <code>sdwdate</code>, etc. It might cause other things that depend on a remove component to malfunction, but if that occurs, you can reinstall the component in question (or uninstall the malfunctioning components). For instance, removing sdwdate will cause issues with sdwdate-gui, but you can remove sdwdate-gui too.</p>
+<p>There have been requests to create a minimal variant of Kicksecure, but the demand isn’t high enough for us to commit to maintaining it (it would likely entail at least another seven images to support, maybe more).</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/13</link>
+        <pubDate>Fri, 26 Dec 2025 19:22:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-13</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>But it’s not simply just tor, it’s also the sdwdate and many other little things that in combine bring lots of issues. I mean, if it’s a main system there would be no issue, but I’m running multiple qubes and the the resources are limited.<br>
+There are many situations where tor simply not needed at all for me, not its related things. Obviously I have kicksecure template with tor as well.</p>
+<p>So if I do wanna remove it - there’s simply no way to do it(with keeping up with updates etc)???</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/12</link>
+        <pubDate>Fri, 26 Dec 2025 19:06:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-12</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>If you really want to get rid of Tor, you should not <code>apt purge</code> it. Use <code>dummy-dependency</code> to remove it instead:</p>
+<pre><code class="lang-auto">sudo dummy-dependency --purge --yes tor
+</code></pre>
+<p>That will remove Tor without removing <code>kicksecure-qubes-server</code>. Once that command is run, you should run <code>sudo apt install kicksecure-qubes-server</code> to ensure that software updates continue working in the future.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="10" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>So, then when <code>-server</code> package is being deleted I still keep all of the rest security/privacy benefits that kicksecure provides - correct?</p>
+</blockquote>
+</aside>
+<p>Unfortunately no, since sometimes new security enhancements require the installation of new packages, and without <code>kicksecure-qubes-server</code>, those might not get installed automatically. The workaround above will let you keep the metapackage without keeping Tor.</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/11</link>
+        <pubDate>Fri, 26 Dec 2025 18:27:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-11</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>Yes, I actually recall something like that from previous discussions/questions.<br>
+So if I don’t wanna use sdwdate and I use updates without the <code>tor+</code>, then I do may use <code>purge tor</code> and still benefit from the rest of the kicksecure security/privacy features - please confirm this if this is correct.</p>
+<p>So, then when <code>-server</code> package is being deleted I still keep all of the rest security/privacy benefits that kicksecure provides - correct?</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/10</link>
+        <pubDate>Fri, 26 Dec 2025 18:19:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-10</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="8" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>Kicksecure <em>can</em> be used with clearnet. Anonymity features are not intended to land in Kicksecure for the most part, those are for Whonix. Any time you use your web browser or most network-connected applications, they will go over clearnet.</li>
+</ul>
+</blockquote>
+</aside>
+<p>Yes. Elaborated here:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766741426" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="02:23PM - 12 December 2025">Kicksecure – 12 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
+
+  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="brilliantjeana" data-post="5" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>How do I use kicksecure without Tor then?</p>
+</blockquote>
+</aside>
+<p>See link in my previous post.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="7" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>Why the heck then in the docs it gives a clear impression that kicksecure can be used with clearnet then???</p>
+</blockquote>
+</aside>
+<p>It is possible. Because <a href="https://www.kicksecure.com/wiki/Based_on_Debian" class="inline-onebox">Kicksecure is based on Debian</a> and there <a href="https://www.kicksecure.com/wiki/Reasons_for_Freedom_Software#No_Intentional_User_Freedom_Restrictions">No Intentional User Freedom Restrictions</a>. Hence, Kicksecure can be reconfigured.</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/9</link>
+        <pubDate>Fri, 26 Dec 2025 18:08:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-9</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>There’s a slight misunderstanding here I think.</p>
+<ul>
+<li>Kicksecure <em>can</em> be used with clearnet. Anonymity features are not intended to land in Kicksecure for the most part, those are for Whonix. Any time you use your web browser or most network-connected applications, they will go over clearnet.</li>
+<li>There is a specific subset of Kicksecure features that require Tor for non-anonymity purposes. One of those is the time synchronization daemon (sdwdate, which acts as an alternative to ntpd). Another one is software updates (though this is only applicable to non-Qubes platforms).
+<ul>
+<li>sdwdate works on Qubes OS. It requires Tor because Tor provides an encrypted, authenticated way to get time values from web servers and use those to synchronize the VM’s time. Traditional methods of time synchronization (ntp) are unencrypted and vulnerable to MITM attacks, and an MITM in time synchronization can allow circumventing SSL (i.e. breaking HTTPS encryption) in some situations.</li>
+<li>On non-Qubes platforms, software updates in apt are also downloaded over Tor. This is arguably an anonymity feature, but it’s for a security reason; downloading software updates over clearnet allows a malicious update server to target <em>you</em> (or a group you’re in) for malware while delivering uninfected software updates to others. By downloading updates over Tor, a malicious update server would have to attack everyone on the Tor network to deliver malware to you, there isn’t a good way to single you out for the bad updates.
+<ul>
+<li>Under Qubes OS this usually isn’t done by default because software updates are downloaded via an update proxy VM. If you set your Kicksecure template’s update proxy to sys-whonix, you’ll get torified software updates, otherwise software updates will be downloaded via clearnet. If you use a Kicksecure StandaloneVM, its software updates will be torified because it will connect to the Internet directly to get its updates rather than using an updates proxy.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Because of these specific Tor-powered features, Tor is a semi-mandatory part of Kicksecure. (edit: changed “mandatory” to “semi-mandatory” since it is important and usually shouldn’t be removed, but some users have reasons to remove it anyway.)</li>
+<li>This does not mean your network traffic typically goes over Tor.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/8</link>
+        <pubDate>Fri, 26 Dec 2025 18:05:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-8</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>I really don’t get it. Why the heck then in the docs it gives a clear impression that kicksecure can be used with clearnet then???</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/7</link>
+        <pubDate>Fri, 26 Dec 2025 16:31:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-7</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Yes. Tor has always been an essential part of Kicksecure, and removing it, even if it seems to work, will reduce the security of the system.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="3" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>the<code> -cli</code> is still present though.</p>
+</blockquote>
+</aside>
+<p>The <code>-cli</code> metapackages are part of Kicksecure’s metapackage system but are not primary metapackages. They depend on bits of Kicksecure that are shared between both “server” and GUI installations. Having them installed is not enough to ensure updates always work. More details on how the metapackages in Kicksecure 18 work is at:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Metapackages">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766741426" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Metapackages" target="_blank" rel="noopener" title="09:51PM - 12 December 2025">Kicksecure – 12 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Metapackages" target="_blank" rel="noopener">Dev/Metapackages</a></h3>
+
+  <p>Development Notes / Design Documentation about Kicksecure Metapackages</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/6</link>
+        <pubDate>Fri, 26 Dec 2025 16:28:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-6</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>How do I use kicksecure without Tor then? I remember some time ago(maybe a year or a two, not sure) you said it was ok to purge tor and I used it like that. Was that wrong then???</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/5</link>
+        <pubDate>Fri, 26 Dec 2025 16:18:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-5</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="brilliantjeana" data-post="1" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>I used <code>sudo apt install --no-install-recommends kicksecure-qubes-server</code> and after completion - <code>sudo apt purge tor -y</code> and it deleted the <code>kicksecure-qubes-server</code></p>
+<p>please clarify. I don’t recall the same behavior with <code>cli</code>package on prev version</p>
+</blockquote>
+</aside>
+<p>This has unfortunately always been the case. Full user documentation and technical background:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian_Packages">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766741426" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener" title="01:55AM - 14 December 2025">Kicksecure – 14 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:614/500;"><img src="https://www.kicksecure.com/w/images/a/aa/Box-158523640.png?version=4622f187d3eec6059bd842d42be6d941" class="thumbnail" alt="" width="614" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian_Packages" target="_blank" rel="noopener">Debian Packages</a></h3>
+
+  <p>Which Kicksecure Debian packages are safe to remove? What is a meta package? What other packages do Kicksecure meta packages install? Which packages should never be removed?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>For information on the removal of the tor package on Kicksecure specifically, see:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Tor">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766741426" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Tor" target="_blank" rel="noopener" title="09:00AM - 24 December 2025">Kicksecure – 24 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Tor" target="_blank" rel="noopener">Kicksecure Tor Integration</a></h3>
+
+  <p>Using Kicksecure without Tor. Can Kicksecure be used without Tor?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/4</link>
+        <pubDate>Fri, 26 Dec 2025 16:13:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-4</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>Even after the<code>-server</code>package is removed, the<code> -cli</code> is still present though.</p>
+<p>The thing is, I want to use kicksecure without tor. And previously there was no issue with that. Why is this all of a sudden the case? Why the heck is <code>-server</code> package removed if it’s indeed necessary just because I don’t wanna use tor?</p>
+<p>And yes, sdwdate isn’t necessary for me(AFAIK) because I use clear net, so it removed this too.</p>
+<p>I need a certain clarification on this matter please.</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/3</link>
+        <pubDate>Fri, 26 Dec 2025 16:10:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-3</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="brilliantjeana" data-post="1" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>is <code>kicksecure-qubes-server</code> required after the installation is done?</p>
+</blockquote>
+</aside>
+<p>It is. In Kicksecure 18, that is the primary metapackage for CLI installations of Kicksecure on Qubes OS. If it isn’t installed, future software updates may be incomplete.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="1" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>and after completion - <code>sudo apt purge tor -y</code></p>
+</blockquote>
+</aside>
+<p>You probably shouldn’t do this. Tor is preinstalled so that sdwdate-gui will work. This is necessary to get a securely synced system clock, which is useful to ensure things like SSL work correctly.</p>
+<aside class="quote no-group" data-username="brilliantjeana" data-post="1" data-topic="1418">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/b/b19c9b/48.png" class="avatar"> brilliantjeana:</div>
+<blockquote>
+<p>and it deleted the <code>kicksecure-qubes-server</code></p>
+</blockquote>
+</aside>
+<p>Yes, this is intended behavior. If you remove a package Kicksecure depends on, the metapackage will go away. If there is a package that is truly superfluous, you can use <code>dummy-dependency</code> to remove it, but in many instances packages that are depended upon (either directly or indirectly) by a metapackage like <code>kicksecure-qubes-server</code> are there for a reason and shouldn’t be removed.</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/2</link>
+        <pubDate>Fri, 26 Dec 2025 15:05:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-2</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+      <item>
+        <title>Cli morphing changed?</title>
+        <dc:creator><![CDATA[brilliantjeana]]></dc:creator>
+        <description><![CDATA[
+            <p>Hi</p>
+<p>is <code>kicksecure-qubes-server</code> required after the installation is done?<br>
+I used <code>sudo apt install --no-install-recommends kicksecure-qubes-server</code> and after completion - <code>sudo apt purge tor -y</code> and it deleted the <code>kicksecure-qubes-server</code></p>
+<p>please clarify. I don’t recall the same behavior with <code>cli</code>package on prev version</p>
+          <p><a href="https://forums.kicksecure.com/t/cli-morphing-changed/1418/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/cli-morphing-changed/1418/1</link>
+        <pubDate>Fri, 26 Dec 2025 13:37:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1418-1</guid>
+        <source url="https://forums.kicksecure.com/t/cli-morphing-changed/1418.rss">Cli morphing changed?</source>
+      </item>
+  </channel>
+</rss>
