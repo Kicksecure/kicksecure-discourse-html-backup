@@ -177,14 +177,17 @@ Anyone know which could be the problem?</description>
 <p>Probably same issue as this:</p><aside class="quote quote-modified" data-post="5" data-topic="556">
   <div class="title">
     <div class="quote-controls"></div>
-    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/p/b2d939/48.png" class="avatar">
-    <a href="https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556/5">Illegal instruction (core dumped)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar">
+    <div class="quote-title__text-content">
+      <a href="https://forums.kicksecure.com/t/illegal-instruction-core-dumped/556/5">Illegal instruction (core dumped) - `wc -l`</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category --style-square " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+    </div>
   </div>
   <blockquote>
-    kernel parameter gather_data_sampling=force is likely causing this on some CPUs on Debian bookworm based operating systems. 
-Solution: Comment out gather_data_sampling=force in the /etc/default/grub.d/40_cpu_mitigations.cfg configuration file and reboot. 
-Comment out explanation: <a href="https://www.kicksecure.com/wiki/Configuration_Files#Commenting_Syntax_and_Effects">Commenting Syntax and Effects</a> 
-sudo str_replace 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' '#GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_data_sampling=force"' /etc/default/grub.d/40_cpu_mit…
+    Kernel parameter gather_data_sampling=force is likely causing this on some CPUs on Debian bookworm based operating systems such as Kicksecure 17. 
+Solution: Remove the gather_data_sampling=force kernel parameter. The following commands can accomplish that. 
+1. Boot into sysmaint mode. 
+2. Comment out [1] gather_data_sampling=force in the /etc/default/grub.d/40_cpu_mitigations.cfg configuration file, sudo update-grub and reboot. 
+sudo str_replace 'GRUB_CMDLINE_LINUX="$GRUB_CMDLINE_LINUX gather_da…
   </blockquote>
 </aside>
 
