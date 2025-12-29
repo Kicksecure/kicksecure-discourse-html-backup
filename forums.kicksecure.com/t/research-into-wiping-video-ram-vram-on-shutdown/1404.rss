@@ -18,9 +18,72 @@ For context, I’ve been looking at kernel GPU parameters and both AMD and Radeo
 
 Building on a previous discussion about dracut and grub‑live, I’m wondering whether we can leverage `rd.driver.pre=` and `rd.driver.post=` to force the amdgpu module to load inside the initramfs before the real root mounts. Then keep that module loaded after the real root is mounted so it is still present when the dracut‑shutdown stage runs? I’d presume that it wouldn’t be as simple as just this alone. Something like the ram-wipe Dracut module?</description>
     
-    <lastBuildDate>Tue, 23 Dec 2025 03:00:23 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Dec 2025 10:39:13 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Tengu" data-post="6" data-topic="1404">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/d26b3c/48.png" class="avatar"> Tengu:</div>
+<blockquote>
+<p>Yeah and immou security is already set right?</p>
+</blockquote>
+</aside>
+<pre><code>cat /proc/cmdline | grep --color iommu
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/7</link>
+        <pubDate>Sun, 28 Dec 2025 10:39:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-7</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <p>Yeah and immou security is already set right?</p>
+<p>For AMD aspm=1 runpm=-1 ?</p>
+<p>When looking around I glanced at <code>pcie_aspm=</code> and <code>pcie_port_pm=</code> <code>pci=pcie_bus_perf</code> but there is stability issues with force so scratch those.</p>
+<blockquote>
+<p><a href="https://docs.kernel.org/gpu/amdgpu/module-parameters.html" class="inline-onebox" rel="noopener nofollow ugc">Module Parameters — The Linux Kernel documentation</a><br>
+<a href="https://docs.kernel.org/admin-guide/kernel-parameters.html" class="inline-onebox" rel="noopener nofollow ugc">The kernel’s command-line parameters — The Linux Kernel documentation</a></p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/6</link>
+        <pubDate>Sun, 28 Dec 2025 05:09:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-6</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
+      <item>
+        <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1404">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>There are a lot of questions here; generally it’s better to have one forum post per question to keep things easy to track.</p>
+</blockquote>
+</aside>
+<p>Sorry for posting in the wrong section, it’s hard for me to keep my thoughts and questions in one place. Thanks for the 3mdeb links <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> will check them out</p>
+<blockquote>
+<p>Many systems (all of them except for those with discrete GPUs) have video and system memory on the same RAM modules, so turning off the GPU first probably wouldn’t help much.</p>
+</blockquote>
+<p>Yes, those are the ones I was thinking of were the discrete GPU’s, the ones you install in the PCIe slots. Lots of security risks with them hence why Qubes disables them and only allows integrated.</p>
+          <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404/5</link>
+        <pubDate>Sun, 28 Dec 2025 05:07:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1404-5</guid>
+        <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+      </item>
       <item>
         <title>Research into Wiping video RAM (VRAM) on shutdown</title>
         <dc:creator><![CDATA[Patrick]]></dc:creator>

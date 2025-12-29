@@ -88,9 +88,87 @@ Would this be a good idea to implement or do you think its a waste of time since
 &gt;
 &gt; &gt; From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</description>
     
-    <lastBuildDate>Fri, 07 Nov 2025 15:13:35 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Dec 2025 19:13:54 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[Quiksilver]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m currently trying to do something like this so I thought I would put it here as a reference note for anyone interested in looking into it:</p>
+<pre><code class="lang-auto">#!/usr/bin/env bash
+# Isolate apps in RAM with bwrap
+set -euo pipefail
+
+# Base namespace isolation
+exec bwrap \
+  --unshare-all \
+  --die-with-parent \
+  --proc /proc \
+  --dev /dev \
+  \
+# Read-only system tree
+  --ro-bind /usr /usr \
+  --ro-bind /lib /lib \
+  --ro-bind /lib64 /lib64 \
+  --ro-bind /etc /etc \
+  \
+# Fonts (optional)
+  --ro-bind-try /usr/share/fonts /usr/share/fonts \
+  \
+# Essential RAM filesystems (No HOME subdir overlays)
+  --tmpfs /tmp \
+  --tmpfs /var/tmp \
+  --tmpfs /run \
+  --tmpfs /home/user \
+  \
+# Home directory
+  --bind "$HOME" /home/user \
+  --setenv HOME /home/user \
+  --setenv XDG_CACHE_HOME /home/user/.cache \
+  --setenv XDG_CONFIG_HOME /home/user/.config \
+  --setenv XDG_DATA_HOME /home/user/.local/share \
+  --setenv XDG_STATE_HOME /home/user/.local/state \
+  \
+# Network + Tor (Tor control socket no env vars needed to avoid tor over tor)
+  --share-net \
+  --ro-bind-try /etc/ssl/certs /etc/ssl/certs \
+  --bind-try /var/run/tor/control /var/run/tor/control \
+  \
+# Wayland Display
+  $( [ -n "${WAYLAND_DISPLAY:-}" ] &amp;&amp; \
+     echo "--bind /run/user/$UID /run/user/$UID \
+           --setenv WAYLAND_DISPLAY $WAYLAND_DISPLAY \
+           --setenv XDG_RUNTIME_DIR /run/user/$UID" ) \
+  \
+# X11
+  #$( [ -n "${DISPLAY:-}" ] &amp;&amp; \
+  #   echo "--ro-bind /tmp/.X11-unix /tmp/.X11-unix \
+  #         --setenv DISPLAY $DISPLAY" ) \
+  #\
+# Audio (pulse audio)
+  $( [ -S "${XDG_RUNTIME_DIR:-}/pulse/native" ] &amp;&amp; \
+     echo "--bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" ) \
+  \
+# D-Bus
+  $( [ -S "${XDG_RUNTIME_DIR:-}/bus" ] &amp;&amp; \
+     echo "--bind $XDG_RUNTIME_DIR/bus $XDG_RUNTIME_DIR/bus" ) \
+  \
+# GPU + Shared Memory
+  $( [ -d /dev/dri ] &amp;&amp; echo "--dev-bind /dev/dri /dev/dri 0 666" ) \
+  --dev-bind /dev/shm /dev/shm \
+  \
+# Hand over execution to the program passed
+  -- "$@"
+</code></pre>
+<p>The display handoff is what I’m having issues with since I think apps that dont fully support wayland use xwayland?</p>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/5</link>
+        <pubDate>Sun, 28 Dec 2025 19:13:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-5</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
       <item>
         <title>Request and Idea for including a tmpfs-setup package?</title>
         <dc:creator><![CDATA[Quiksilver]]></dc:creator>
