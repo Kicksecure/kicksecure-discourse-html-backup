@@ -5,8 +5,211 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Fri, 02 Jan 2026 16:53:39 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 04 Jan 2026 21:48:29 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>KS/Whonix on MicroSD?</title>
+          <dc:creator><![CDATA[Avoca]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi all,</p>
+<p>Ok, so I’m a TAILS OS user from wayback, but, as you all know, its not the most convenient ‘daily driver’ option, hence, I like the idea of KS/Whonix on a persistent USB.</p>
+<p>To that end, has anyone manged to clone this configuration to a MicroSD card?</p>
+<p>I have my ‘persistent’ TAILS OS on a 32GB MicroSD, which makes portable concealment that much easier.</p>
+<p>Cheers.</p>
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ks-whonix-on-microsd/1463">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ks-whonix-on-microsd/1463</link>
+          <pubDate>Sun, 04 Jan 2026 21:48:29 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1463</guid>
+          <source url="https://forums.kicksecure.com/t/ks-whonix-on-microsd/1463.rss">KS/Whonix on MicroSD?</source>
+        </item>
+        <item>
+          <title>MacBook Pro keyboard backlight issue</title>
+          <dc:creator><![CDATA[Avoca]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi all,</p>
+<p>I can’t for the life of me workout how to adjust the keyboard backlight on my Intel MacBook Pro.</p>
+<p>The “Keyboard &amp; Mouse” settings panel in KS is not an option because it is non-functional and the suggested workaround is beyond my pay grade at this early stage.</p>
+<p>The actual keyboard ‘keys’ do nothing.</p>
+<p>Tips and advice greatly appreciated.</p>
+<p>Cheers.</p>
+            <p><small>6 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462</link>
+          <pubDate>Sun, 04 Jan 2026 21:42:49 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1462</guid>
+          <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+        </item>
+        <item>
+          <title>Kicksecure IPv6 Default Settings (17.4.4.6 Feedback)</title>
+          <dc:creator><![CDATA[exfil]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <h3><a name="p-3989-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-3989-installation-details-1"></a>Installation Details</h3>
+<hr>
+<p>Version:           Kicksecure 17.4.4.6</p>
+<p>Install medium:    Sandisk USB</p>
+<p>Partition format:  ext4 (auto-formatted)</p>
+<hr>
+<p>I recall reading that the security‑misc profile disables the entire IPv6 stack. After installing, however, I verified that IPv6 is still active:<br>
+Upon post install I checked and <code>cat /proc/sys/net/ipv6/conf/all/disable_ipv6</code> returned 0 (enabled) and <code>ip -6 addr show</code> returned a inet6 address.</p>
+<p>I had to create a config file <code>/etc/sysctl.d/99_disable-ipv6.conf</code> with these lines to disable it:</p>
+<pre><code class="lang-auto">net.ipv6.conf.all.disable_ipv6=1
+net.ipv6.conf.default.disable_ipv6=1
+</code></pre>
+<p>Upon further looking at the github README:</p>
+<blockquote>
+<p>Networking:</p>
+<p>Optional - Disable the entire IPv6 stack to reduce attack surface.</p>
+</blockquote>
+<p>But it doesn’t point to the exact configuration file that implements this.</p>
+<p>I’m not using this installation as a server, and I’m skeptical of the “IPv6 evangelism” that circulates in many networking sysadmin circles, not Kicksecure. My concerns stem mainly from two points:</p>
+<ul>
+<li>IPv6 doesn’t provide the implicit NAT barrier that IPv4 does.</li>
+<li>Privacy implications of EUI‑64 that can expose hardware identifiers.</li>
+</ul>
+<p><strong>So here are two questions about IPv6 and Kicksecure.</strong></p>
+<h2><a name="p-3989-h-1-does-disabling-ipv6-reduce-tor-anonymity-set-2" class="anchor" href="https://forums.kicksecure.com#p-3989-h-1-does-disabling-ipv6-reduce-tor-anonymity-set-2"></a>1. Does Disabling IPv6 reduce Tor Anonymity set?</h2>
+<p>Does disabling the IPv6 network stack on my machine then in return prevent the Tor Daemons from using IPv6 relays? (Reduced relay pool to select from)<br>
+Will Tor only connect to IPv4 relays and ignore IPv6 relays?</p>
+<h2><a name="p-3989-h-2-can-we-have-ipv6-privacy-extensions-enabled-without-breaking-root-dhcp-server-3" class="anchor" href="https://forums.kicksecure.com#p-3989-h-2-can-we-have-ipv6-privacy-extensions-enabled-without-breaking-root-dhcp-server-3"></a>2. Can we have IPv6 privacy extensions enabled without breaking root DHCP server?</h2>
+<p>Can we enable full IPv6 (for Tor daemon’s IPv6 relay access and machine outbound) with privacy extensions, while maintaining a stable IPv6 address bound to your DHCPv6 server’s DUID for reliable client leasing and server reachability as to not add breakage for users needing the IPv6 server?</p>
+<p><em>Config note here worth mentioning <code>man nm-settings-dbus</code></em></p>
+<blockquote>
+<p>The special values “llt” and “ll” will generate a DUID of type LLT or LL (see RFC 3315) based on the current MAC address of the device.<br>
+dhcp-duid=ll  # Fallbacks to link-local DUID for IPv6</p>
+</blockquote>
+<p>The bottom line is can we keep a stable, DUID derived address for server accessibility while also generating temporary privacy focused addresses for outbound traffic (Tor relay/daemon and general machine use like e.g. in a users post about reticulum use)?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-17-4-4-6-feedback/1459">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-17-4-4-6-feedback/1459</link>
+          <pubDate>Sun, 04 Jan 2026 19:27:36 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1459</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-17-4-4-6-feedback/1459.rss">Kicksecure IPv6 Default Settings (17.4.4.6 Feedback)</source>
+        </item>
+        <item>
+          <title>Kicksecure Removable Media plugin (17.4.4.6 Feedback)</title>
+          <dc:creator><![CDATA[exfil]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <h3><a name="p-3988-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-3988-installation-details-1"></a>Installation Details</h3>
+<hr>
+<p>Version:           Kicksecure 17.4.4.6</p>
+<p>Install medium:    Sandisk USB</p>
+<p>Partition format:  ext4 (auto-formatted)</p>
+<hr>
+<p>This post is about what I believe to be called the Volume Manager plugin.</p>
+<ul>
+<li>System volumes shown</li>
+</ul>
+<p>After install I noticed the “Removable Media” plugin on the lxqt panel in the upper right corner shows <code>/boot</code>, <code>/rootfs</code>, and <code>/efi</code> as mount points. Can the widget be told to ignore system or not show system volumes? I can see users accidentally unmounting these.</p>
+<ul>
+<li>“Removable Media” showing on center of desktop at boot</li>
+</ul>
+<p>After I booted I saw the panel plugin the center of screen as if it was a desktop icon but after like 5 seconds it disappeared. My guess is it is a bug with Wayland? Thought I would mention it.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-17-4-4-6-feedback/1458">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-17-4-4-6-feedback/1458</link>
+          <pubDate>Sun, 04 Jan 2026 17:48:17 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1458</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-17-4-4-6-feedback/1458.rss">Kicksecure Removable Media plugin (17.4.4.6 Feedback)</source>
+        </item>
+        <item>
+          <title>Kicksecure Installer Settings (17.4.4.6 Feedback)</title>
+          <dc:creator><![CDATA[exfil]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I’d like to break my feedback into separate posts, each covering a single topic, to keep things clear. First, I have to say I’m genuinely impressed with Kicksecure. Over the years I’ve written countless post install scripts just to harden a vanilla Debian installation. Despite trying several distributions, I always end up back at Debian. Only to be frustrated by its insecure defaults and the tedious manual hardening required. Literally editing config files till I go crazy lol. Kicksecure feels refreshingly different, the defaults are already security focused, which is fantastic. Kudos to the developers and the community!</p>
+<h3><a name="p-3986-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-3986-installation-details-1"></a>Installation Details</h3>
+<hr>
+<p>Version:           Kicksecure 17.4.4.6</p>
+<p>Install medium:    Sandisk USB</p>
+<p>Partition format:  ext4 (auto-formatted)</p>
+<hr>
+<p>I flashed the ISO to one USB stick, then used a second USB as the target for the installation (for testing purposes).</p>
+<ul>
+<li>Missing “Etc/UTC” Timezone Option</li>
+</ul>
+<p>Under timezone there is no <code>Etc/UTC</code> which I really wanted to set and had to set after post install <code>timedatectl set-timezone "Etc/UTC"</code>. This isn’t really Kicksecures fault but a Calamares configuration issue. I believe this timezone is omitted or ignored in the default installer but I haven’t digged enough yet to see.</p>
+<ul>
+<li>Can’t show LUKS password (LUKS Password Visibility)</li>
+</ul>
+<p>Again, this is an installer side matter rather than a Kicksecure problem. While many installers (e.g., Ubuntu) let you toggle password visibility for user accounts, the Calamares stage that collects the LUKS passphrase lacks such a toggle. In a previous Debian install, long some time ago I entered the wrong LUKS password. I had to reinstall cause I was off on the keys I set for the LUKS password at this stage.</p>
+<p>Is there a way to expose a “show password” option for the LUKS field in the Calamares configuration? If not, perhaps this could be proposed upstream to libkpmcore?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-installer-settings-17-4-4-6-feedback/1457">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-installer-settings-17-4-4-6-feedback/1457</link>
+          <pubDate>Sun, 04 Jan 2026 17:44:39 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1457</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-installer-settings-17-4-4-6-feedback/1457.rss">Kicksecure Installer Settings (17.4.4.6 Feedback)</source>
+        </item>
+        <item>
+          <title>Virtualbox error Kernel driver not installed (rc=-1908)</title>
+          <dc:creator><![CDATA[ValdemarJo]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello, virtualbox does not work when secureboot is enabled.</p>
+<p><strong>Kernel driver not installed (rc=-1908)</strong></p>
+<p>The VirtualBox Linux kernel driver is either not loaded or not set up correctly. Please try setting it up again by executing</p>
+<p>‘/sbin/vboxconfig’</p>
+<p>as root.</p>
+<p>If your system has EFI Secure Boot enabled you may also need to sign the kernel modules (vboxdrv, vboxnetflt, vboxnetadp, vboxpci) before you can load them. Please see your Linux system’s documentation for more information.</p>
+<p>where: suplibOsInit what: 3 VERR_VM_DRIVER_NOT_INSTALLED (-1908) - The support driver is not installed. On linux, open returned ENOENT.</p>
+<p>How to fix it? I don’t want to disable secureboot.</p>
+            <p><small>8 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/virtualbox-error-kernel-driver-not-installed-rc-1908/1453">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/virtualbox-error-kernel-driver-not-installed-rc-1908/1453</link>
+          <pubDate>Sun, 04 Jan 2026 11:15:42 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1453</guid>
+          <source url="https://forums.kicksecure.com/t/virtualbox-error-kernel-driver-not-installed-rc-1908/1453.rss">Virtualbox error Kernel driver not installed (rc=-1908)</source>
+        </item>
+        <item>
+          <title>KS persistent USB install issue, Linux Mint/Intel MacBook Pro</title>
+          <dc:creator><![CDATA[Avoca]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi all,</p>
+<p>Trying to create a Persistent Whonix USB stick. I have created two equal Live ISO images, each on a separate USB Drive, as per instructions.</p>
+<p>However, the second USB Drive does not show as an installation option in the KS Install app in the maintenance section. Only my system SSD and an External Backup Drive I use.</p>
+<p>Any pointers/tips greatly appreciated.</p>
+<p>Cheers.</p>
+            <p><small>6 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ks-persistent-usb-install-issue-linux-mint-intel-macbook-pro/1451">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ks-persistent-usb-install-issue-linux-mint-intel-macbook-pro/1451</link>
+          <pubDate>Sun, 04 Jan 2026 05:03:37 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1451</guid>
+          <source url="https://forums.kicksecure.com/t/ks-persistent-usb-install-issue-linux-mint-intel-macbook-pro/1451.rss">KS persistent USB install issue, Linux Mint/Intel MacBook Pro</source>
+        </item>
         <item>
           <title>VeraCrypt: unable to decrypt or mount any volume; it says that the device is busy</title>
           <dc:creator><![CDATA[Roxy]]></dc:creator>
@@ -90,7 +293,7 @@ but none of the choices are installable:<br>
 [no choices]<br>
 zsh: exit 100 sudo apt install virtualbox</li>
 </ol>
-            <p><small>6 posts - 3 participants</small></p>
+            <p><small>7 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/install-virtualbox-error/1440">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/install-virtualbox-error/1440</link>
@@ -496,161 +699,6 @@ Now I can now lock the screen as “user”, but no matter what I type into sway
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1374</guid>
           <source url="https://forums.kicksecure.com/t/question-about-ram-wipe/1374.rss">Question about RAM Wipe</source>
-        </item>
-        <item>
-          <title>Change to Nouveau drivers</title>
-          <dc:creator><![CDATA[Fazeclan]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi,</p>
-<p>New to kicksecure. Clean install (nvidia 40xx series).</p>
-<p>It uses VESA drivers, thus max res is 1200x<em>800. Got no options to change to 1920*1080 in display manager?!</em></p>
-<p>Xrandr gives some errorcode with FAILED TO OUTPUT GAMMA something something. Display is not found “unknown display”.</p>
-<p>How do I change to Nouveau? Do I need to enroll DKMS for the driver to load?</p>
-<p>All other distros I have tried loads nouveau automatically and shows 1920*1080 in display manager.</p>
-<p>This is in the HOST OS. Both in sysmaint and user, VESA driver loaded. Too low resolution for my eyes</p>
-            <p><small>6 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368</link>
-          <pubDate>Thu, 20 Nov 2025 21:12:13 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1368</guid>
-          <source url="https://forums.kicksecure.com/t/change-to-nouveau-drivers/1368.rss">Change to Nouveau drivers</source>
-        </item>
-        <item>
-          <title>Mullvad VPN and Lockdown mode</title>
-          <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>First post, genuine question</p>
-<p>I come from Fedora and heard about KickSecure. It definitely piqued my curiosity. So I did a bare metal installation on an old Toshiba Satellite AMD4, UEFI &amp; Btrfs</p>
-<p>I am trying to button down the sysmaint profile but keep finding obstacles. So I have reinstalled it twice. I’ve been using ChatGPT for help…. works 50% of the time when it’s not hallucinating</p>
-<p>My question (and I have hundreds) can I get Mullvad VPN on Lockdown mode to connect before the ISP connects?</p>
-<p>Just one idea I had</p>
-<p>[Unit]<br>
-Description=Override to enforce early Mullvad lockdown<br>
-Before=network-pre.target network.target network-online.target<br>
-Wants=network-pre.target</p>
-<p>[Service]<br>
-ExecStartPost=/usr/bin/mullvad connect</p>
-<p>But it failed</p>
-            <p><small>6 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367</link>
-          <pubDate>Wed, 19 Nov 2025 23:31:28 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1367</guid>
-          <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
-        </item>
-        <item>
-          <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
-          <dc:creator><![CDATA[CodeLurker]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>I don’t expect this to require any bug fix, unless one comes to mind, but just wanted to warn others of my ordeal.  Kicksecure seems an ideal OS for booting on a thumb drive for a very secure environment.  It seems more suitable than Tails for my use cases, as I’d also like to install some software to it.  To test it out, I burnt the live disk to a really OLD Kingston thumb drive of 8GB, and used it to install a persistent, encrypted thumb drive OS that I could e.g. install other softs on with SU privileges, a really old SanDisk 16 GB.  It booted and worked great.  I can even install other software by removing the split.</p>
-<p>The Verbatim Seaglass drives seemed attractive, as they have lifetime warranties, which seems like a fairly strong expression of confidence in their shelf life.  I bought two 32GB and two 64, burnt the ISO on a Seaglass, and tried to boot it - this from the same ISO which previously worked.  It generated a bunch of errors and then said something like ‘Boot Failed’.  Note that virtual machines are enabled in both the BIOS’s I tried.  I then tried burning it without the extended volume name option in Rufus, and burnt onto a 64GB instead of a 32, and it worked.  I then plugged in the live disk in with another 64GB, and installed to it from Maint.  It seemed to complete quite happily, but it would not boot on any computer I tried it on, just like the first Live disk I originally burnt.  I compared it to the ancient SanDisk drive that worked.  I noticed in the boot order in the BIOS, I had a choice for the USB itself, and another for the same drive, with a Kicksecure name.  The one that started with USB wouldn’t boot, but the Kicksecure choice would.  Looking at two SeaGlass drives I tried to install to, neither show a Kicksecure choice in the BIOS.  It does not work with Secure Boot turned off.</p>
-<p>These Seaglass drives SAY that they work for formatting in EXT4 on Linux.  I seem to have only one significant choice on how to create the installed version: EXT4 or BTFS.  I tried both on one of the drives, but neither gave me a Kicksecure boot choice.  I tried booting it on a port on a hub, and two different ports on my desktop.  No dice.</p>
-<p>Based on the principle that if you try to install Windows on a machine, and you get errors instead of an OS, it is a virtual certainty that the HW is bad or incompatible  It seems like a foregone conclusion that the reason for the difference is the thumb drives; but feel free to make any suggestions.  I’ve had mostly good luck with Verbatim blank optical media over the years, but IMHO, this does not look good for them.  It seems like they are Kicksecure incompatible, as is.  I don’t know if it’s a bug in the design, M$ paid ‘em to be incompatible (which here seems unlikely, since they advertise Linux compatibility), or there’s a problem with USB 3.2 Gen 1; or maybe I’m missing something.  Maybe a bug in the KickSecure installer is more likely than Windows, but it seems less likely given that the prob. seems to show up depending on the thumb drive it’s installed on.  Implementing a thumb drive should under it all just be a big block of memory..</p>
-<p>My machine is an ancient ASRock Tai Chi X570, with a Ryzen 5 3800X.  The SeaGlass USB drives are for USB 3.2 Gen 1.  This matches the specs on most of the USB ports on my desktop, AND on my USB hub.</p>
-            <p><small>11 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359</link>
-          <pubDate>Sun, 09 Nov 2025 09:08:25 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1359</guid>
-          <source url="https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359.rss">Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</source>
-        </item>
-        <item>
-          <title>Noob questions VPN/Display resolution</title>
-          <dc:creator><![CDATA[Fazeclan]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi,</p>
-<p>Trying to install kicksecure, however before I connect to the internet id like to install a VPN. Managed to do it by entering Sysmaint, mount the usb, copy files to /media/ install the .deb file.</p>
-<p>However, I have a question. Now that I have a VPN installed in sysmaint (and host user). Will all traffic be router by the vpn, even clearnet/APT upgrades?</p>
-<p>Do I first need to launch the VPN in sysmaint - before updating packages/software for it to cover the APT traffic? ISP → VPN → Clearnet/Tor</p>
-<p>Regarding the Display. I only get 1200x<em>800 in resolution, no other suggestions. I figured it is a driver issue</em>…? Linux Mint shows alot of resolutions per default. Not kicksecure. <em>Kicksecure is using MESA drivers and my display (1920 x 1080) is not found. I tried force set display with xrandr but doesnt work. Just throws error codes. How do I switch/change to Nouveau drivers? Or does it not having enrolled the secure boot key therefor preventing Nouveau drivers to load? I have read the nouveau drivers should be included in the linux mainkernel by default. My linux mint test-install showed indeed Nouveau drivers was in use.</em></p>
-<p>Keep in mind im a total noob to linux. Trying to make the switch to more secure software after having trouble with hacker attacks and malware in windows.</p>
-            <p><small>1 post - 1 participant</small></p>
-            <p><a href="https://forums.kicksecure.com/t/noob-questions-vpn-display-resolution/1356">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/noob-questions-vpn-display-resolution/1356</link>
-          <pubDate>Wed, 05 Nov 2025 11:46:05 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1356</guid>
-          <source url="https://forums.kicksecure.com/t/noob-questions-vpn-display-resolution/1356.rss">Noob questions VPN/Display resolution</source>
-        </item>
-        <item>
-          <title>Where and how is the most secure way to install some nasty apps?</title>
-          <dc:creator><![CDATA[mike_bre]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>I wanna install yandex browser and I’m pretty sure it’s kinda nasty thing. I wanna install it for my mom as she’s fluent with russian and yandex has youtube audio translations for russians etc… don’t ask.<br>
-anyways, what’s the best way to install it? I mean it’s kinda scary to install it as it is, maybe there’s some recommended way to do so(so the GPU’s acceleration will still work etc)?</p>
-            <p><small>4 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353</link>
-          <pubDate>Mon, 03 Nov 2025 07:32:44 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1353</guid>
-          <source url="https://forums.kicksecure.com/t/where-and-how-is-the-most-secure-way-to-install-some-nasty-apps/1353.rss">Where and how is the most secure way to install some nasty apps?</source>
-        </item>
-        <item>
-          <title>Virtualbox problems</title>
-          <dc:creator><![CDATA[slyfox]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>So i have i think i manged to uninstall and reinstall virtualbox x10 times to try to circumvent the rather annoying problem of it instantly hanging as soon as i try to start it. The corrupt whonix.osa VM or whatever it is must still be i dunno jammed inside it? I also deleted the files of the vm image inside the home/usr folder but to no avail. I can’t access the error code right now however i will be back (which is the same one on the well known list) yeah i know but i can’t find anything like this and am half demented by this point .. took me ages last year to set it up and been months since i could get near it <img src="https://forums.kicksecure.com/images/emoji/twitter/frowning.png?v=14" title=":frowning:" class="emoji" alt=":frowning:" loading="lazy" width="20" height="20"> Please help</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/virtualbox-problems/1351">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/virtualbox-problems/1351</link>
-          <pubDate>Sun, 02 Nov 2025 22:22:42 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1351</guid>
-          <source url="https://forums.kicksecure.com/t/virtualbox-problems/1351.rss">Virtualbox problems</source>
-        </item>
-        <item>
-          <title>Some questions before switching</title>
-          <dc:creator><![CDATA[carylshaky]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hi there</p>
-<p>I’m currently using endeavour os on two computers(one with additional nvidia GPU and the other one just with integrated intel’s). I like it mainly because:</p>
-<ol>
-<li>it never breaks(like after updates etc) and I used different ones before that(ubuntu, fedora, manjaro etc). This one I use on both computers like over 2 years now and with no issues.</li>
-<li>for the nvidia GPU laptop I don’t need to think what to do each time something is not right etc. The drivers just work (I use the nvidia’s drivers the system suggest to install).</li>
-</ol>
-<p>BUT… despite I use hardened kernel, I know that kicksecure is probably way more secure and much more privacy respected system. That’s why I wanna switch, but the above two things are stopping me from it.</p>
-<p>Can you please clarify the two points above, because I’m not really a techie and don’t wanna deal with all the under-stuff. I just want my system to just work and be as secure and private as possible.</p>
-<p>I feel like when I’ll install it I’ll end up switching back because I will need to pull my hairs off again dealing with the nvidia GPU drivers or that some day after an update the system will not boot or something will not work and again I will pull my hairs off.</p>
-<p>P.S: forgot to mention that I use KDE plasma and highly used to it, in case it matters somehow</p>
-            <p><small>2 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/some-questions-before-switching/1348">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/some-questions-before-switching/1348</link>
-          <pubDate>Sun, 02 Nov 2025 14:06:44 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1348</guid>
-          <source url="https://forums.kicksecure.com/t/some-questions-before-switching/1348.rss">Some questions before switching</source>
         </item>
   </channel>
 </rss>
