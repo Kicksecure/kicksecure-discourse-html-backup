@@ -15,9 +15,132 @@ Tips and advice greatly appreciated.
 
 Cheers.</description>
     
-    <lastBuildDate>Mon, 05 Jan 2026 01:32:37 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Jan 2026 07:22:02 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[Avoca]]></dc:creator>
+        <description><![CDATA[
+            <p>Wow, champion effort.</p>
+<p>Worked like a treat! Thanks arraybolt3…</p>
+<p>Now I am super impressed with Kicksecure, even in its own right.</p>
+<p>Much, much more user friendly than TAILS OS.</p>
+<p>More secure? I dunno, above my pay-grade, but, as a portable non-Windows/Apple OS, its a ripper.</p>
+<p>(Having said that, TAILS OS is not going anywhere. I’ll use both…)</p>
+<p>Cheers to the dev. team!</p>
+<p>Awesome work, thanks.</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/13</link>
+        <pubDate>Mon, 05 Jan 2026 07:22:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-13</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[Avoca]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks,</p>
+<p>Sorry for the delay, I got put on the naughty boy step for 2 hours because I exceeded my first day post limit…<img src="https://forums.kicksecure.com/images/emoji/twitter/smiley.png?v=14" title=":smiley:" class="emoji" alt=":smiley:" loading="lazy" width="20" height="20"> .</p>
+<p>However, all I need to now is workout how to ‘cut and paste’ all that into the command line of the, very basic, ‘Maintenance’ version of my install.</p>
+<p>Cheers.</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/12</link>
+        <pubDate>Mon, 05 Jan 2026 06:32:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-12</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>If I can get work time allocated to this, I’ll work on it. As a short-term solution, you can run something like this while booted into <code>PERSISTENT Mode | SYSMAINT Session | system maintenance tasks</code>:</p>
+<pre><code class="lang-auto">cat &lt;&lt;EOF | sudo tee /etc/systemd/system/set-apple-kb-backlight.service
+[Unit]
+Description=Enable keyboard backlight on Apple systems
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=bash -c -- 'echo 255 &gt; /sys/class/leds/smc::kbd_backlight/brightness'
+
+[Install]
+WantedBy=multi-user.target sysmaint-boot.target
+EOF
+sudo systemctl daemon-reload
+sudo systemctl enable set-apple-kb-backlight.service
+sudo systemctl start set-apple-kb-backlight.service
+</code></pre>
+<p>This should make the backlight immediately turn on, and it should be automatically turned on each time you boot up thereafter. If max brightness is too intense, change the <code>255</code> in <code>echo 255</code> to a smaller value. (This will create a new file at <code>/etc/systemd/system/set-apple-kb-backlight.service</code>, so if you need to change things later, that’s the file to change.)</p>
+<p>(The ideal solution would be for Kicksecure’s backlight-tool to display the keyboard backlight as an additional device with controllable brightness, but that will take a lot longer to make happen.)</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/11</link>
+        <pubDate>Mon, 05 Jan 2026 02:56:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-11</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[Avoca]]></dc:creator>
+        <description><![CDATA[
+            <p>Ok, so this was taken with Flameshot from within KS on the 64GB MicroSD card I cloned.</p>
+<p>Fix my KB backlight and I’ll be a very, very happy camper.</p>
+<p>Cheers.</p>
+<p>(Mmmmm, can I install Kali on this as well…?)</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/10</link>
+        <pubDate>Mon, 05 Jan 2026 02:50:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-10</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[Avoca]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1462">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>cd /sys/class/leds/smc::kbd_backlight &amp;&amp; grep . *</p>
+</blockquote>
+</aside>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/d53690e93d9818755663b1f2f3083506834bae58.png" data-download-href="https://forums.kicksecure.com/uploads/default/d53690e93d9818755663b1f2f3083506834bae58" title="image"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/d53690e93d9818755663b1f2f3083506834bae58_2_690x64.png" alt="image" data-base62-sha1="uqaBIS9pLz2CQYPL2LnTDh1DJnq" width="690" height="64" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/d53690e93d9818755663b1f2f3083506834bae58_2_690x64.png, https://forums.kicksecure.com/uploads/default/optimized/1X/d53690e93d9818755663b1f2f3083506834bae58_2_1035x96.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/d53690e93d9818755663b1f2f3083506834bae58_2_1380x128.png 2x" data-dominant-color="070303"></a></div><p></p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/9</link>
+        <pubDate>Mon, 05 Jan 2026 02:48:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-9</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>That might be helpful just to make sure that the driver exists and is being loaded by default in Kicksecure, but it will almost certainly give similar or identical results (<code>brightness</code> might be a different value and the <code>trigger</code> contents might be a bit different but that’s the most I’d expect). If you’d like to do that, that would be great.</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/8</link>
+        <pubDate>Mon, 05 Jan 2026 02:18:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-8</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
+      <item>
+        <title>MacBook Pro keyboard backlight issue</title>
+        <dc:creator><![CDATA[Avoca]]></dc:creator>
+        <description><![CDATA[
+            <p>Do you want me to run the command from within KS?</p>
+          <p><a href="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462/7</link>
+        <pubDate>Mon, 05 Jan 2026 02:16:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1462-7</guid>
+        <source url="https://forums.kicksecure.com/t/macbook-pro-keyboard-backlight-issue/1462.rss">MacBook Pro keyboard backlight issue</source>
+      </item>
       <item>
         <title>MacBook Pro keyboard backlight issue</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
