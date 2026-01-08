@@ -121,7 +121,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="9pHyKUO5n7X0OmF1ioSe6ozbA"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="Wnk0rNl9XPS9qeFwwFIk6jMlG"></script>
 
 <!-- END End of Year Banner -->
 
@@ -147,7 +147,7 @@ END custom CSS / JS
 <meta name="twitter:label1" value="Reading time" />
 <meta name="twitter:data1" value="1 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="4 ❤" />
+<meta name="twitter:data2" value="5 ❤" />
 <meta property="article:published_time" content="2026-01-06T00:44:17+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -317,6 +317,41 @@ Not sure what sound backend is used and if they can be set globally to 50% inste
 </aside>
 
 <p>This might benefit from having a configuration file added to it so the user can customize the default volume.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-01-08T05:30:21Z' class='post-time'>
+                    January 8, 2026,  5:30am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-01-08T05:30:21Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Reverted the above change without replacement, because:</p>
+<ul>
+<li>The systemd unit was crashing in sysmaint sessions, due to trying to adjust the speaker volume too early.</li>
+<li>Setting the default audio under KVM is difficult due to spice-vdagent automatically setting audio volume inside the VMs to 100% or close to 100%. The host should be the one controlling VM volume anyway, preventing blowing the speakers that way. The only time adjusting VM volume would provide help is if a host is misconfigured (which admittedly can happen, but then other things could break the host’s speakers too).</li>
+<li>On my end, when booting Kicksecure on physical hardware, the audio volume defaults to 40%. Thus this doesn’t appear to be a concern on at least some physical hardware.</li>
+</ul>
+<p>Unless avoiding issues with misconfigured host systems is something we really want to support, or there are some hardware devices where the audio defaults to 100%, I don’t think this is worth it.</p>
+<p><a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/exfil">@exfil</a> Were you observing the 100% speaker volume on physical hardware, or is this in a VM? If you see it on hardware, there’s an alternate and most likely better solution than the initial one that I can push and test. It will still leave the volume to do whatever it wants inside virtual machines, but it will set the volume on physical systems one time only and let Pipewire remember the volume the rest of the time.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
