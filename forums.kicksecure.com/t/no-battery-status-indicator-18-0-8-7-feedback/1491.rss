@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
+    <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491</link>
+    <description>### Installation Details
+
+---
+
+Version:           Kicksecure 18.0.8.7
+
+Install medium:    Sandisk USB (Baremetal no virtualization)
+
+Partition format:  ext4 (auto-formatted) + LUKS
+
+Bios:		   Coreboot
+
+---
+
+I noticed that neither sysmaint nor user displayed a battery indicator. As a laptop user, that icon is essential when I’m installing software or applying updates.
+
+Below are the terminal checks I ran:
+
+```
+[user ~]% systemctl --user status upower
+Unit upower.service could not be found.
+zsh: exit 4     systemctl --user status upower
+[user ~]% qdbus org.lxqt.panel /org/lxqt/Panel1 
+zsh: command not found: qdbus
+zsh: exit 127   qdbus org.lxqt.panel /org/lxqt/Panel1
+[user ~]% dbus-send --session --dest=org.freedesktop.UPower --print-reply /org/freedesktop/UPower org.freedesktop.DBus.Introspectable.Introspect
+
+Error org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+zsh: exit 1     dbus-send --session --dest=org.freedesktop.UPower --print-reply  
+[user ~]% 
+```
+
+First, I inspected the upower service in sysmaint. It reported “active but disabled,” so I enabled it `sudo systemctl enable upower` and rebooted into the user session.
+
+Even after that, the power indicator remained elusive, and the panel lacked a battery widget entirely.
+
+The workaround? I opened Power Management, ticked Enable Battery Watcher, and finally got something to appear at the top of the panel. It isn’t the classic battery icon, but it does show the charging state e.g., “Charging (100 %), to full 0 minute(s).” Unfortunately, the physical LED on my laptop is NOT green despite it saying 100 % with 0 minutes remaining lol
+
+Any reason why the widget is not installed? Security reasons? Wayland issues?</description>
+    
+    <lastBuildDate>Sun, 11 Jan 2026 01:25:44 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Sounds like a bug, will look into it.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491/2</link>
+        <pubDate>Sun, 11 Jan 2026 01:25:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1491-2</guid>
+        <source url="https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491.rss">No battery Status Indicator? (18.0.8.7 Feedback)</source>
+      </item>
+      <item>
+        <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[exfil]]></dc:creator>
+        <description><![CDATA[
+            <h3><a name="p-4120-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-4120-installation-details-1"></a>Installation Details</h3>
+<hr>
+<p>Version:           Kicksecure 18.0.8.7</p>
+<p>Install medium:    Sandisk USB (Baremetal no virtualization)</p>
+<p>Partition format:  ext4 (auto-formatted) + LUKS</p>
+<p>Bios:		   Coreboot</p>
+<hr>
+<p>I noticed that neither sysmaint nor user displayed a battery indicator. As a laptop user, that icon is essential when I’m installing software or applying updates.</p>
+<p>Below are the terminal checks I ran:</p>
+<pre><code class="lang-auto">[user ~]% systemctl --user status upower
+Unit upower.service could not be found.
+zsh: exit 4     systemctl --user status upower
+[user ~]% qdbus org.lxqt.panel /org/lxqt/Panel1 
+zsh: command not found: qdbus
+zsh: exit 127   qdbus org.lxqt.panel /org/lxqt/Panel1
+[user ~]% dbus-send --session --dest=org.freedesktop.UPower --print-reply /org/freedesktop/UPower org.freedesktop.DBus.Introspectable.Introspect
+
+Error org.freedesktop.DBus.Error.ServiceUnknown: The name org.freedesktop.UPower was not provided by any .service files
+zsh: exit 1     dbus-send --session --dest=org.freedesktop.UPower --print-reply  
+[user ~]% 
+</code></pre>
+<p>First, I inspected the upower service in sysmaint. It reported “active but disabled,” so I enabled it <code>sudo systemctl enable upower</code> and rebooted into the user session.</p>
+<p>Even after that, the power indicator remained elusive, and the panel lacked a battery widget entirely.</p>
+<p>The workaround? I opened Power Management, ticked Enable Battery Watcher, and finally got something to appear at the top of the panel. It isn’t the classic battery icon, but it does show the charging state e.g., “Charging (100 %), to full 0 minute(s).” Unfortunately, the physical LED on my laptop is NOT green despite it saying 100 % with 0 minutes remaining lol</p>
+<p>Any reason why the widget is not installed? Security reasons? Wayland issues?</p>
+          <p><a href="https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491/1</link>
+        <pubDate>Sat, 10 Jan 2026 17:38:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1491-1</guid>
+        <source url="https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491.rss">No battery Status Indicator? (18.0.8.7 Feedback)</source>
+      </item>
+  </channel>
+</rss>

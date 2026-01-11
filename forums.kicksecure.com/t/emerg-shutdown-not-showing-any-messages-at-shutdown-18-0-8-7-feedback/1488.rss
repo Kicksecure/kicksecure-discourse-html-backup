@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+    <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488</link>
+    <description>### Installation Details
+
+---
+
+Version:           18.0.8.7 Feedback
+
+Install medium:    Sandisk USB (Baremetal no virtualization)
+
+Partition format:  ext4 (auto-formatted) + LUKS
+
+BIOS:              Coreboot
+
+---
+
+Hi everyone,
+
+I’m a bit puzzled by the way emerg‑shutdown operates in both persistence and live modes when I’m using a USB thumb drive. I want to report that it does work in both modes for my installation. The question at hand is when I unplug the drive, the system simply powers off without displaying any on screen notification.
+
+Is this the intended behavior? If not, could we consider adding a brief display message before the shutdown occurs?
+
+Thanks for your help!
+
+P.S. Very much pleased so far :slight_smile: good work!</description>
+    
+    <lastBuildDate>Sun, 11 Jan 2026 01:16:15 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="exfil" data-post="1" data-topic="1488">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/5daacb/48.png" class="avatar"> exfil:</div>
+<blockquote>
+<p>Is this the intended behavior? If not, could we consider adding a brief display message before the shutdown occurs?</p>
+</blockquote>
+</aside>
+<p>This is the intended behavior indeed.</p>
+<p>Adding a display message (or any pause of any kind) would be a security hazard for the threat model emerg-shutdown is meant to defend against. Imagine you’re using Kicksecure from an external USB drive, and you’re using it to do something a physically proximate adversary doesn’t like. As you’re doing this work, the adversary suddenly breaks open the door to the room you’re in and starts walking toward you quickly. At this point one of your primary concerns is turning off the computer as quickly as possible so that all traces of what you were doing are erased. Every millisecond counts in this scenario, so emerg-shutdown is designed to power off the computer with all haste. It doesn’t make any attempt to save unsaved data, sync filesystems, warn the user of what’s going to happen, etc. it just* tells the kernel to cut power to the system as quickly as it can.</p>
+<p>*well, almost; to work around kernel bugs that can result in a kernel panic during shutdown, emerg-shutdown switches to an unused TTY first. This is necessary to keep the system from hanging or rebooting instead of shutting down if you’re using Intel graphics, at least on some systems.</p>
+<p>More about emerg-shutdown’s threat model, implementation, and usage is here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Emerg-shutdown">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Emerg-shutdown" target="_blank" rel="noopener" title="09:02AM - 19 December 2025">Kicksecure – 19 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Emerg-shutdown" target="_blank" rel="noopener">emerg-shutdown - Instantly Power Off the System</a></h3>
+
+  <p>emerg-shutdown immediately and forcibly powers off the system if the boot drive is removed or a "panic" key combo is pressed. When used in combination with full disk encryption, it is a powerful tool to prevent data theft by physically present...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488/2</link>
+        <pubDate>Sun, 11 Jan 2026 01:16:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1488-2</guid>
+        <source url="https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488.rss">Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</source>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[exfil]]></dc:creator>
+        <description><![CDATA[
+            <h3><a name="p-4112-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-4112-installation-details-1"></a>Installation Details</h3>
+<hr>
+<p>Version:           18.0.8.7 Feedback</p>
+<p>Install medium:    Sandisk USB (Baremetal no virtualization)</p>
+<p>Partition format:  ext4 (auto-formatted) + LUKS</p>
+<p>BIOS:              Coreboot</p>
+<hr>
+<p>Hi everyone,</p>
+<p>I’m a bit puzzled by the way emerg‑shutdown operates in both persistence and live modes when I’m using a USB thumb drive. I want to report that it does work in both modes for my installation. The question at hand is when I unplug the drive, the system simply powers off without displaying any on screen notification.</p>
+<p>Is this the intended behavior? If not, could we consider adding a brief display message before the shutdown occurs?</p>
+<p>Thanks for your help!</p>
+<p>P.S. Very much pleased so far <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> good work!</p>
+          <p><a href="https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488/1</link>
+        <pubDate>Sat, 10 Jan 2026 16:28:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1488-1</guid>
+        <source url="https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488.rss">Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</source>
+      </item>
+  </channel>
+</rss>
