@@ -5,9 +5,81 @@
     <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474</link>
     <description>I’m adding a second language to layout, but it disappears after restarting qube - only one language (English) remains in layout. I tried it in both AppVM and TemplateVM/dvm (Kicksecure/Whonix), but second language always disappear. Is this a bug, or a private-function that only English to be used? Or am I doing something wrong? (First time using LXQt)</description>
     
-    <lastBuildDate>Sun, 11 Jan 2026 14:50:10 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Jan 2026 02:29:20 +0000</lastBuildDate>
     <category>Qubes</category>
     <atom:link href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>In case it’s useful, I was able to successfully reproduce this on an entirely clean installation of Qubes R4.3.0 with the Xfce desktop:</p>
+<p>Using keyboard layout settings in dom0 Xfce:</p>
+<ul>
+<li>Set English and German as keyboard layout languages in dom0</li>
+<li>Set switching key to Alt+Shift in dom0</li>
+<li>Set Compose key to right Ctrl in dom0</li>
+<li>Started AppVM <code>personal</code> (based on <code>fedora-42-xfce</code>)
+<ul>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+</ul>
+</li>
+<li>Started AppVM <code>anon-whonix</code> (based on <code>whonix-workstation-18</code>)
+<ul>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+</ul>
+</li>
+</ul>
+<p>Using keyboard layout settings in individual AppVMs, dom0 still using Xfce:</p>
+<ul>
+<li>Reverted all keyboard layout changes in dom0, logged out of dom0 and then logged back in</li>
+<li>Started AppVM <code>personal</code> (based on <code>fedora-42-xfce</code>)</li>
+</ul>
+<p>Despite</p>
+<ul>
+<li>Confirmed that the keyboard layout is now stuck on US, as expected</li>
+<li>In the AppVM itself, set English and German as keyboard layout languages, set switching key to Alt+Shift, set Compose key to right Ctrl</li>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+<li>Started AppVM <code>anon-whonix</code> (based on <code>whonix-workstation-18</code>)
+<ul>
+<li>Confirmed that the keyboard layout is stuck on US, as expected</li>
+<li>Confirmed that I could have the keyboard layout language in <code>personal</code> set to German and the keyboard layout language in <code>anon-whonix</code> set to English at the same time, both languages seem to work</li>
+<li>In the AppVM itself, set English and German as keyboard layout languages, set switching key to Alt+Shift (LXQt settings didn’t allow configuring the compose key)</li>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+</ul>
+</li>
+<li>Shut down both <code>anon-whonix</code> and <code>personal</code></li>
+<li>Started both <code>anon-whonix</code> and <code>personal</code></li>
+<li>Tested keyboard layouts in <code>personal</code>
+<ul>
+<li>Can still switch keyboard layout languages between English and German in this AppVM</li>
+<li>Both languages seem to work right initially</li>
+</ul>
+</li>
+<li>Tested keyboard layouts in <code>anon-whonix</code>
+<ul>
+<li>Cannot switch keyboard layout languages between English and German in this AppVM</li>
+</ul>
+</li>
+</ul>
+<p>(I was going to test KDE next, but this was able to be reproduced before getting to that.)</p>
+<p><a class="mention" href="https://forums.kicksecure.com/u/marmarek">@marmarek</a> I don’t think this is a Qubes problem (at least not all of it; the KDE weirdness might be, but the failure to preserve VM-specific keyboard layouts I think is a Kicksecure thing). Adjusting the keyboard layout settings in LXQt adjusts the configuration in <code>~/.config/lxqt/session.conf</code>, which <a href="https://github.com/lxqt/wiki/blob/2adb0331555757c8d8ffa48b79d8121b0ffffa22/docs/lxqt.wiki/General.md">is supposed to be read by lxqt-session</a>. lxqt-session isn’t even installed in a Qubes environment, so the component of LXQt that would restore the keyboard layout settings in this way is missing entirely.</p>
+<p>lxqt-session was intentionally left out because it doesn’t manage the session in a Qubes environment, <a href="https://github.com/QubesOS/qubes-gui-agent-linux/blob/main/appvm-scripts/usrbin/qubes-session">qubes-session</a> does. Unsurprisingly and reasonably, qubes-session does not know how to interpret LXQt’s session.conf (or anyone else’s session config for that matter; why this works with Xfce is unclear, though I suspect xfconfd is what’s making things work). Thus something else has to do that job.</p>
+<p>The best solution would probably be to figure out how to get lxqt-session to do only those things that are “reasonable” under Qubes OS, like loading keyboard layouts, and ignore everything else. I haven’t had much luck with this; I can start lxqt-session inside an anon-whonix AppVM, but it doesn’t seem to do anything to the keyboard layouts when launched, and its configuration options aren’t really working the way I would expect, so I don’t know how practical this is. (It’s not looking very hopeful initially :P)</p>
+<p>As a fallback, we could write some code that could read the LXQt keyboard layout configuration and load it into X11 at startup. This is non-ideal and would be Qubes-specific since Kicksecure uses Wayland on non-Qubes platforms now, but it would work.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/27">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/27</link>
+        <pubDate>Mon, 12 Jan 2026 02:29:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1474-27</guid>
+        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
+      </item>
       <item>
         <title>Add second language to layout</title>
         <dc:creator><![CDATA[linuxer]]></dc:creator>
@@ -684,18 +756,6 @@ Failed to read /keyboard-layout</p>
         <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/3</link>
         <pubDate>Wed, 07 Jan 2026 17:57:52 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1474-3</guid>
-        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[Patrick]]></dc:creator>
-        <description><![CDATA[
-            <p>Reproducible with Debian based Qube?</p>
-          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/2">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/2</link>
-        <pubDate>Wed, 07 Jan 2026 17:11:23 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474-2</guid>
         <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
       </item>
   </channel>
