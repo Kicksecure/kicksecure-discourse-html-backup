@@ -5,6 +5,893 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Virtualbox installers stopped working</title>
+        <dc:creator><![CDATA[@shaylabeige]]></dc:creator>
+        <description><![CDATA[ <p>Yesterday i had no problem with the installer that was recommended, but today I span brand new clean VM which i always do when i test new setups for when things break like this. And I tested 8 methods of installing 7 of which produced errors. I had to remove all the links so it might be a bit unintelligible. If you want o read with links the pastebin is XC638Aku</p>
+<p>Method’s 1, 2, 3 and 4 produced the same Error:<br>
+[sysmaint ~]% bash ./virtualbox-installer-clivirtualbox-installer-cli:<br>
+[ERROR]: Directory doesn’t exist: ‘/home/user’virtualbox-installer-cli:<br>
+[ERROR]: Aborting.virtualbox-installer-cli:<br>
+[NOTICE]: Executed script, function, command executed: ‘./virtualbox-installer-cli’ ‘die’ ‘exit “${1}”’virtualbox-installer-cli:<br>
+[ERROR]: Installer exited with code: ‘1’zsh: exit 1     bash ./virtualbox-installer-cli<br>
+(Same Directory doesn’t exist: ‘/home/user’ etc)</p>
+<p>Method: 1<br>
+kicksecure-lxqt-installer-cli<br>
+kicksecure-lxqt-installer-cli --onion</p>
+<blockquote>
+<p>Method 2<br>
+curl --tlsv1.3 --output virtualbox-installer-cli --url kicksecure. /dist-installer-clibash ./virtualbox-installer-cli</p>
+</blockquote>
+<blockquote>
+<p>Method 3:<br>
+curl --tlsv1.3 --output kicksecure-lxqt-installer-cli --url kicksecure /dist-installer-cli<br>
+bash ./virtualbox-installer-cli --onion</p>
+<p>Method 4:<br>
+bash ./virtualbox-installer-cli --oracle-repo</p>
+<p>Method 5:<br>
+sudo apt update<br>
+sudo apt install --no-install-recommends virtualbox-qt<br>
+sudo adduser $(whoami) vboxusers</p>
+</blockquote>
+<p>Producess Error:<br>
+Unsatisfied dependencies:<br>
+virtualbox-qt : Depends: virtualbox (= 7.2.2-dfsg-2) but it is not installable<br>
+Error: Unable to correct problems, you have held broken packages.<br>
+Error: The following information from --solver 3.0 may provide additional context:<br>
+Unable to satisfy dependencies. Reached two conflicting decisions:</p>
+<ol>
+<li>virtualbox-qt:amd64=7.2.2-dfsg-2 is selected for install</li>
+<li>virtualbox-qt:amd64 Depends virtualbox (= 7.2.2-dfsg-2)<br>
+but none of the choices are installable:<br>
+[no choices]<br>
+zsh: exit 100   sudo apt install --no-install-recommends virtualbox-qt</li>
+</ol>
+<blockquote>
+<p>Method 6 :</p>
+</blockquote>
+<p>sudo apt update &amp;&amp; sudo apt full-upgrade</p>
+<p>sudo apt install --no-install-recommends extrepo</p>
+<p>sudoedit /etc/extrepo/config.yaml</p>
+<ul>
+<li>contrib</li>
+<li>non-free</li>
+</ul>
+<p>sudo extrepo enable virtualbox</p>
+<p>sudo apt update</p>
+<p>sudo apt install virtualbox-7.2 linux-headers-$(uname -r)</p>
+<p>Produces error: The file does not exist. And doesnt let me save the changes</p>
+<blockquote>
+<p>Method 7:<br>
+Paste the whole text:</p>
+</blockquote>
+<p>echo “Types: deb<br>
+URIs:<br>
+Suites: $(lsb_release -sc)<br>
+Components: contrib<br>
+Enabled: yes<br>
+Signed-By: /usr/share/keyrings/virtualbox-archive-keyring.asc” | sudo tee /etc/apt/sources.list.d/virtualbox.sources</p>
+<p>curl --tlsv1.3 --remote-name --tlsv1.2</p>
+<p>gpg --keyid-format long --import --import-options show-only --with-fingerprint oracle_vbox_2016.asc</p>
+<blockquote>
+<p>Verify the fingerprint.<br>
+The most important check is confirming the key fingerprint exactly matches the output below.<br>
+Key fingerprint = B9F8 D658 297A F3EF C18D  5CDF A2F6 83C5 2980 AECF</p>
+</blockquote>
+<p>sudo cp oracle_vbox_2016.asc /usr/share/keyrings/virtualbox-archive-keyring.asc</p>
+<p>sudo apt update</p>
+<p>sudo apt install virtualbox-7.2 linux-headers-$(uname -r)</p>
+<p>Produces Error:<br>
+Get:1  trixie InRelease [4,440 B]<br>
+Err:1  trixie InRelease<br>
+Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring “/usr/share/keyrings/virtualbox-archive-keyring.asc”  Caused by:     0: Reading “/usr/share/keyrings/virtualbox-archive-keyring.asc”: Permission denied (os error 13)     1: Permission denied (os error 13)<br>
+Hit:2 tor+://deb.kicksecure. trixie InRelease<br>
+Hit:3 tor+://fasttrack.debian .net/debian-fasttrack trixie-fasttrack InRelease<br>
+Hit:4 tor+://fasttrack.debian. net/debian-fasttrack trixie-backports-staging InRelease<br>
+Hit:5 tor+://deb.debian. org/ debian trixie InRelease<br>
+Hit:6 tor+://deb.debian. org/debian trixie-updates InRelease<br>
+Hit:7 tor+://deb.debian .org/debian trixie-backports InRelease<br>
+Hit:8 tor+://deb.debian .org/debian-security trixie-security InRelease<br>
+Warning: OpenPGP signature verification failed:  trixie InRelease: Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring “/usr/share/keyrings/virtualbox-archive-keyring.asc”  Caused by:     0: Reading “/usr/share/keyrings/virtualbox-archive-keyring. asc”: Permission denied (os error 13)     1: Permission denied (os error 13)<br>
+Error: The repository ‘ trixie InRelease’ is not signed.<br>
+Notice: Updating from such a repository can’t be done securely, and is therefore disabled by default.<br>
+Notice: See apt-secure(8) manpage for repository creation and user configuration details.<br>
+zsh: exit 100   sudo apt update<br>
+The links were removed so i can post but they ware towards debian repository</p>
+<p>Method 8: Is the only one that works for me for now</p>
+<p>$ sudo apt install curl wget gnupg2 lsb-release -y<br>
+$ curl -fsSL  gpg --dearmor -o /etc/apt/trusted.gpg.d/vbox.gpg<br>
+$ curl -fsSL  gpg --dearmor -o /etc/apt/trusted.gpg.d/oracle_vbox.gpg</p>
+<p>$ echo “deb [arch=amd64]  $(lsb_release -cs) contrib” | sudo tee /etc/apt/sources.list.d/virtualbox.list</p>
+<p>$ sudo apt update<br>
+$ sudo apt install linux-headers-$(uname -r) dkms -y<br>
+$ sudo apt install virtualbox-7.2 -y</p>
+<p>$ sudo usermod -aG vboxusers $USER<br>
+$ newgrp vboxusers</p>
+<p>$ wget download.virtualbox./virtualbox/7.2.4/Oracle_VirtualBox_Extension_Pack-7.2.4.vbox-extpack</p>
+<p>$ sudo vboxmanage extpack install Oracle_VirtualBox_Extension_Pack-7.2.4.vbox-extpack</p>
+<p>vboxmanage --version<br>
+sudo apt remove --purge virtualbox-7.2<br>
+sudo apt autoremove<br>
+sudo apt autoremove virtualbox</p>
+<blockquote>
+<p>Success</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501#post_1</link>
+        <pubDate>Sun, 11 Jan 2026 16:40:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4162</guid>
+      </item>
+      <item>
+        <title>Start up is a little strange for me in version 18</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="3" data-topic="1498">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>Can I flash a USB with kicksecure 18?</p>
+</blockquote>
+</aside>
+<p>I think you’re talking about installing Kicksecure to a USB drive the way you’d install it onto an internal hard disk? If so, yes, this is supported and documented:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/USB_Installation#PERSISTENT_Mode">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/USB_Installation#PERSISTENT_Mode" target="_blank" rel="noopener" title="02:34PM - 18 December 2025">Kicksecure – 18 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/0/03/Download-usb.jpg?version=fd433a55102b14d723f69090c7e6be4f" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/USB_Installation#PERSISTENT_Mode" target="_blank" rel="noopener">Installation of Kicksecure on a USB</a></h3>
+
+  <p>Yes, Kicksecure can be installed on a USB. Here's how.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(Note: You’ll want to boot into <code>LIVE Mode | UNRESTRICTED Session</code> when booting from the ISO to make the instructions here work as written. It looks like this wiki page needs some minor updates.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/start-up-is-a-little-strange-for-me-in-version-18/1498#post_4</link>
+        <pubDate>Sun, 11 Jan 2026 15:53:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4160</guid>
+      </item>
+      <item>
+        <title>Problems with Kicksecure-18 in Qubes OS (usbguard in sys-qubes)</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1489">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>sudo systemctl disable usbguard-dbus.service</p>
+</blockquote>
+</aside>
+<p>thanks!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/problems-with-kicksecure-18-in-qubes-os-usbguard-in-sys-qubes/1489#post_4</link>
+        <pubDate>Sun, 11 Jan 2026 14:51:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4159</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@linuxer]]></dc:creator>
+        <description><![CDATA[ <p>Run appVM, open LXQT Config Center - Keyboard and mouse - Keyboard Layout, add layout and keys to change layout, Apply</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_26</link>
+        <pubDate>Sun, 11 Jan 2026 14:50:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4158</guid>
+      </item>
+      <item>
+        <title>Start up is a little strange for me in version 18</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>I had many things pre-installed. Hopefully it’s a problem on my end. What I might do is back up my data and do a fresh install. Can I flash a USB with kicksecure 18?</p>
+<p>Thanks! <img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face.png?v=14" title=":grinning_face:" class="emoji" alt=":grinning_face:" loading="lazy" width="20" height="20"><img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face.png?v=14" title=":grinning_face:" class="emoji" alt=":grinning_face:" loading="lazy" width="20" height="20"><img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face.png?v=14" title=":grinning_face:" class="emoji" alt=":grinning_face:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/start-up-is-a-little-strange-for-me-in-version-18/1498#post_3</link>
+        <pubDate>Sun, 11 Jan 2026 13:53:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4157</guid>
+      </item>
+      <item>
+        <title>Start up is a little strange for me in version 18</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Could you post a screenshot please?</p>
+<p>Did you change any settings?</p>
+<p>Did you install any packages? <code>debug-misc</code> has the chance to cause this.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/start-up-is-a-little-strange-for-me-in-version-18/1498#post_2</link>
+        <pubDate>Sun, 11 Jan 2026 13:45:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4156</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="9" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>I know you said to go to another thread, but may I ask if there’s any plans to implement the desktop switcher anytime soon?</p>
+</blockquote>
+</aside>
+<p>No. Maybe in the next major version. Depending on LXQt / labwc or whatever desktop environment will be the thing at that time.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_10</link>
+        <pubDate>Sun, 11 Jan 2026 13:44:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4155</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>Dude! You’re and absolute LEGEND!! Thank you!</p>
+<p>Also I kinda like the new shutdown sequence more than the old one. <img src="https://forums.kicksecure.com/images/emoji/twitter/wink.png?v=14" title=":wink:" class="emoji" alt=":wink:" loading="lazy" width="20" height="20"></p>
+<p>Yeah nah I like what you’ve done, again, the redesign is cool and I like how the battery symbol now has the percentage number on it too. Lots of small minor quality of life improvements!</p>
+<p>I know you said to go to another thread, but may I ask if there’s any plans to implement the desktop switcher anytime soon?</p>
+<p>Thanks again man <img src="https://forums.kicksecure.com/images/emoji/twitter/victory_hand.png?v=14" title=":victory_hand:" class="emoji" alt=":victory_hand:" loading="lazy" width="20" height="20"><img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face.png?v=14" title=":grinning_face:" class="emoji" alt=":grinning_face:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_9</link>
+        <pubDate>Sun, 11 Jan 2026 13:41:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4154</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="7" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>Also it doesn’t say when I start up my laptop that ram-wipe is on.</p>
+</blockquote>
+</aside>
+<p>Indeed. I removed that. There are no more visual indicators during boot. Updated wiki chapter <a href="https://www.kicksecure.com/wiki/Ram-wipe#Boot_Printout">Boot Printout</a> just now.</p>
+<p>But that reminds me… [1]</p>
+<aside class="quote no-group" data-username="trizzo" data-post="6" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>So you reckon it still works?</p>
+</blockquote>
+</aside>
+<p>Thanks to third-party security audit, <a href="https://blog.3mdeb.com/2025/2025-08-27-ram-wipe-further-analysis/">ram-wipe security-audit by 3MDEB in 2025</a>, this can be labeled <a href="https://www.kicksecure.com/wiki/Reasonable_Security" class="inline-onebox">Reasonable Security</a>.</p>
+<aside class="quote no-group" data-username="trizzo" data-post="6" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>I’m just not sure what I’m looking for with ram-wipe.</p>
+</blockquote>
+</aside>
+<p>[1] It could be very hard for laymen users to confirm functionality. There is one thing you might be able to see. → <a href="https://www.kicksecure.com/wiki/Ram-wipe#Shutdown_Printout">Shutdown Printout</a></p>
+<p>But these messages will probably appear so fast and the reboot/shutdown is so fast that can most people probably will have reasonable chance to read messages. One simple “trick” could be to video record the shutdown process with camera and then watch/pause the recording.</p>
+<p>For <a href="https://www.kicksecure.com/wiki/Advanced_Users" class="inline-onebox">Advanced Users</a>, at least a basic review using a serial console is possible. There are some pointers here: <a href="https://www.kicksecure.com/wiki/Dev/RAM_Wipe#ram-wipe_Functionality_Testing">ram-wipe Functionality Testing</a></p>
+<p>Otherwise if messages are appearing to fast, developers locally for example inject <code>sleep</code> commands into the code or inject a shell.</p>
+<p>Full review can be done by developers / expert. The test methodology had been fully documented during the 3MDEB security-misc audit.</p>
+<p>Related:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/System_Audit">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener" title="06:12AM - 18 August 2025">Kicksecure – 18 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/4/4a/Systemcheck1234640.png?version=a11126a6375fcc587b9175b32d5b34b2" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/System_Audit" target="_blank" rel="noopener">System Audit</a></h3>
+
+  <p>Verifying the system is configured as intended</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_8</link>
+        <pubDate>Sun, 11 Jan 2026 13:32:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4153</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>Oh! Also it doesn’t say when I start up my laptop that ram-wipe is on. You know when you start up your laptop and ram-wipe would usually indicate it’s running. Now I’m not getting any indicator that it’s running.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_7</link>
+        <pubDate>Sun, 11 Jan 2026 13:20:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4152</guid>
+      </item>
+      <item>
+        <title>Start up is a little strange for me in version 18</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>Hi. I recently updated Kicksecure to version 18. The start up sequence is strange. I’m not a coder or anything, and have very little knowledge but I’ll explain briefly what’s happening to me.</p>
+<p>When I turn on my laptop, it goes to the boot options (persistent, live mode, etc.). If I select either live mode or persistent, things start up normally, however when it comes to the part where I need to type in my password, for some reason the console freaks out and creates a loop of text (again, I’m sorry for being vague, as with such little knowledge I don’t know how to explain these things). Now in the midst of this strange loop of text, if I type my password in, it works and logs me in. Just a little strange, I can still access my computer and all, it’s just really weird.</p>
+<p>Thanks <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/start-up-is-a-little-strange-for-me-in-version-18/1498#post_1</link>
+        <pubDate>Sun, 11 Jan 2026 13:15:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4150</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>Ah ok thanks, yeah I’m a novice user and am only used to seeing a bunch of stars generate. So you reckon it still works? I’m just not sure what I’m looking for with ram-wipe.</p>
+<p>Thanks <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_6</link>
+        <pubDate>Sun, 11 Jan 2026 13:08:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4149</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="1" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<ul>
+<li>Start up sequence is weird, loops around and around until I type my passphrase in, then it works</li>
+</ul>
+</blockquote>
+</aside>
+<p>Separate forum thread required.<br>
+Proper bug report as per <a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Sample_Bug_Report">Sample Bug Report</a> required.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_5</link>
+        <pubDate>Sun, 11 Jan 2026 12:45:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4148</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="1" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<ol>
+<li>The panel doesn’t intelligently hide when I select the option for it to hide when a window overlaps.</li>
+</ol>
+</blockquote>
+</aside>
+<p>Should be the same as on Debian with LXQt / labwc.</p>
+<p>This you can try to solve as per:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unspecific">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener" title="07:10AM - 06 September 2024">Kicksecure – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:250/500;"><img src="https://www.kicksecure.com/w/images/7/74/Booster132.png?version=45557debf593fbb24d26970c477f16db" class="thumbnail" alt="" width="250" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unspecific" target="_blank" rel="noopener">Potential Solutions Beyond Kicksecure!</a></h3>
+
+  <p>Explore resources outside of Kicksecure to address unspecific questions or issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Self_Support_First_Policy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener" title="12:01PM - 18 May 2025">Kicksecure – 18 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.kicksecure.com/w/images/c/c6/Self-support.jpg?version=ff7bb4e369079801406f79a2ab8db191" class="thumbnail" alt="" width="666" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" target="_blank" rel="noopener">Self Support First Policy for Kicksecure</a></h3>
+
+  <p>Definition of the Self Support First Policy for Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Otherwise, please create a separate forum thread.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_4</link>
+        <pubDate>Sun, 11 Jan 2026 12:44:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4147</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="trizzo" data-post="1" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<p>I cannot create multiple desktops!</p>
+</blockquote>
+</aside>
+<p>Use this forum thread for that:</p><aside class="quote quote-modified" data-post="2" data-topic="1443">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar">
+    <div class="quote-title__text-content">
+      <a href="https://forums.kicksecure.com/t/multiple-workspaces-multiple-virtual-desktops-in-kicksecure-18-wayland-labwc/1443/2">Multiple workspaces / multiple virtual desktops in Kicksecure 18 (Wayland / labwc)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category --style-square " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
+    </div>
+  </div>
+  <blockquote>
+    Switching the Wayland compositor used by Kicksecure isn’t supported currently. Supporting a Wayland compositor is much more involved than supporting a window manager under X11, because the compositor is both the window manager and the display server. Of all the desktop environments in Kicksecure, LXQt was the only one light enough to be suitable for Kicksecure and that had mature enough Wayland support, and the best-supported compositor for LXQt is labwc, so that’s what we went with. (For simila…
+  </blockquote>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_3</link>
+        <pubDate>Sun, 11 Jan 2026 12:43:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4146</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>1 issue = 1 forum thread please.</p>
+<p>These are very different issues and will create a mess if discussed in the same forum thread. So I’ll just focus on the first one.</p>
+<aside class="quote no-group" data-username="trizzo" data-post="1" data-topic="1497">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f4b2a3/48.png" class="avatar"> trizzo:</div>
+<blockquote>
+<ul>
+<li>Ram-Wipe no longer works</li>
+</ul>
+</blockquote>
+</aside>
+<p>“No longer works” is very vague. How do you conclude that it does no works?</p>
+<p>Proper bug report as per <a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Sample_Bug_Report">Sample Bug Report</a> required.</p>
+<p>But as for ram-wipe. let me wild guess… You’re used to seeing lots of output (by <code>sdmem</code>) during shut down but cannot see that anymore?</p>
+<p>No. That’s invalid methodology. ram-wipe nowadays works differently and more efficiently. There is no more need to use sdmem.</p>
+<p>Related ram-wipe user documentation:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Ram-wipe">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Ram-wipe" target="_blank" rel="noopener" title="01:12PM - 29 November 2025">Kicksecure – 29 Nov 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/5/51/Ram-wipe.png?version=0d475909b17cf4a92abe3c59face4276" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Ram-wipe" target="_blank" rel="noopener">ram-wipe - Wipe RAM on shutdown and reboot</a></h3>
+
+  <p>Wipe RAM at shutdown to prevent information extraction from memory. ram-wipe, a software project designed to defend against RAM extraction attacks by wiping a computer's RAM clean during shutdown or restart. This provides an additional layer of...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Related ram-wipe developer documentation:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/RAM_Wipe">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768123825" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/RAM_Wipe" target="_blank" rel="noopener" title="12:15PM - 30 November 2025">Kicksecure – 30 Nov 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/5/58/Ram-wipe-developer.png?version=f1146ee953968c6fc7a604081f15608d" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/RAM_Wipe" target="_blank" rel="noopener">RAM Wipe Development Notes</a></h3>
+
+  <p>ram-wipe - Implementation notes.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/zarhus/ram-dump-efi">
+  <header class="source">
+
+      <a href="https://github.com/zarhus/ram-dump-efi" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/242b38037942c3ac5ac43bdde9373ee1/zarhus/ram-dump-efi" class="thumbnail">
+
+  <h3><a href="https://github.com/zarhus/ram-dump-efi" target="_blank" rel="noopener">GitHub - zarhus/ram-dump-efi: Minimalistic application to dump RAM from EFI,...</a></h3>
+
+    <p><span class="github-repo-description">Minimalistic application to dump RAM from EFI, based on Dasharo/ram-remanence-tester</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://blog.3mdeb.com/2025/2025-08-27-ram-wipe-further-analysis/">
+  <header class="source">
+
+      <a href="https://blog.3mdeb.com/2025/2025-08-27-ram-wipe-further-analysis/" target="_blank" rel="noopener">blog.3mdeb.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://blog.3mdeb.com/2025/2025-08-27-ram-wipe-further-analysis/" target="_blank" rel="noopener">Thoughts dereferenced from the scratchpad noise.  | ram-wipe: Further analysis</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_2</link>
+        <pubDate>Sun, 11 Jan 2026 12:39:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4145</guid>
+      </item>
+      <item>
+        <title>Ram-wipe no longer functional in Kicksecure 18?</title>
+        <dc:creator><![CDATA[@trizzo]]></dc:creator>
+        <description><![CDATA[ <p>Hi. I just upgraded to Kicksecure 18. It looks amazing! Well done guys!</p>
+<p>However I have many issues that I’ll list below:</p>
+<ol>
+<li>Ram-Wipe no longer works</li>
+<li>Start up sequence is weird, loops around and around until I type my passphrase in, then it works</li>
+<li>I cannot create multiple desktops! Something I need personally</li>
+<li>The panel doesn’t intelligently hide when I select the option for it to hide when a window overlaps.</li>
+</ol>
+<p>Other than these few things I’ve noticed, it is all in all pretty good!</p>
+<p>Cheers guys, I hope these problems can be fixed soon <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18/1497#post_1</link>
+        <pubDate>Sun, 11 Jan 2026 09:54:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4144</guid>
+      </item>
+      <item>
+        <title>No LibreOffice Included? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This is a rather difficult balance to strike.</p>
+<p>Here in this forum thread is a request for “more”.</p>
+<p>Other users are requesting “less”:<br>
+<a href="https://forums.whonix.org/t/whonix-should-bundle-less-pre-installed-programs-minimal-images/22000" class="inline-onebox">Whonix should bundle less pre-installed programs (minimal images) - Development - Whonix Forum</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/no-libreoffice-included-18-0-8-7-feedback/1492#post_3</link>
+        <pubDate>Sun, 11 Jan 2026 07:25:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4142</guid>
+      </item>
+      <item>
+        <title>Kicksecure Default Applications Missing</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This issue looks should be no longer existing nowadays.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93#post_4</link>
+        <pubDate>Sun, 11 Jan 2026 07:14:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4141</guid>
+      </item>
+      <item>
+        <title>Kicksecure IPv6 Default Settings (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Question “Does Disabling IPv6 reduce Tor Anonymity set?” is unspecific to Kicksecure in so far as the very same question could be asked when using Debian. Kicksecure doesn’t introduce a relevant difference. Therefore the answer would also be the same. Therefore this question is best redirected at the Tor community as per <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" class="inline-onebox">Self Support First Policy for Kicksecure</a>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-18-0-8-7-feedback/1459#post_6</link>
+        <pubDate>Sun, 11 Jan 2026 07:07:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4140</guid>
+      </item>
+      <item>
+        <title>Add a “Privacy Settings” Section to Kicksecure’s System‑Maintenance Panel</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="02:23PM - 12 December 2025">Kicksecure – 12 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
+
+  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/Whonix-Host">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener" title="09:32PM - 19 April 2025">Whonix – 19 Apr 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="480" height="480" src="https://www.whonix.org/w/images/a/a5/Cd-rom-icon.png?version=7a6cdf63778a836bb7a4bf631442e0bc" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener">Whonix-Host Operating System Live ISO, Whonix-Host Installer</a></h3>
+
+  <p>Upcoming Host Operating System - In Development - Help wanted! - Please contribute!</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490#post_2</link>
+        <pubDate>Sun, 11 Jan 2026 07:03:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4139</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="linuxer" data-post="24" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
+<blockquote>
+<p>Yes, I added Spanish layout to Kicksecure AppVM,</p>
+</blockquote>
+</aside>
+<p>How?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_25</link>
+        <pubDate>Sun, 11 Jan 2026 07:00:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4138</guid>
+      </item>
+      <item>
+        <title>System Sound Volume at 100% Post Install (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Alternate solution implemented and submitted for review:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">github.com/ArrayBolt3/desktop-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">Set speaker volume to 50% on login one time</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="04:24:20" data-timezone="UTC">04:24AM - 11 Jan 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 20 additions and 0 deletions">
+        <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">
+          <span class="added">+20</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">github.com/ArrayBolt3/user-sysmaint-split</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">Set speaker volume to 50% on login one time</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="04:19:24" data-timezone="UTC">04:19AM - 11 Jan 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 20 additions and 0 deletions">
+        <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">
+          <span class="added">+20</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/system-sound-volume-at-100-post-install-18-0-8-7-feedback/1468#post_6</link>
+        <pubDate>Sun, 11 Jan 2026 04:34:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4137</guid>
+      </item>
+      <item>
+        <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Bug found, fix created:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">github.com/ArrayBolt3/vm-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">Fix suppress-power-management-in-vms always thinking it's running on a VM</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="03:54:48" data-timezone="UTC">03:54AM - 11 Jan 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
+        <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">
+          <span class="added">+1</span>
+          <span class="removed">-1</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>In the mean time, the workaround you’re using should be good. You may also want to enable the lid watcher so that the machine goes to sleep when you close the lid.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491#post_3</link>
+        <pubDate>Sun, 11 Jan 2026 03:56:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4136</guid>
+      </item>
+      <item>
+        <title>Problems with Kicksecure-18 in Qubes OS (usbguard in sys-qubes)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1489">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I don’t really understand why disabling the service in the template isn’t working. Will test here and document what needs to be done to turn it off if the steps end up being harder than a simple <code>sudo systemctl disable usbguard.service</code> command.</p>
+</blockquote>
+</aside>
+<p>Found the issue, <code>usbguard-dbus.service</code> also needs disabled with <code>sudo systemctl disable usbguard-dbus.service</code>. Once both this and <code>usbguard.service</code> are disabled, USB devices are transparently accepted in a Kicksecure-based sys-usb.</p>
+<p>Documented at:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/USBGuard#Disable_USBGuard">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/USBGuard#Disable_USBGuard" target="_blank" rel="noopener" title="03:34AM - 11 January 2026">Kicksecure – 11 Jan 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:533/112;"><img src="https://www.kicksecure.com/w/images/6/60/Usbguard-banner-400.svg?version=451e092ddad11b54ccbdb19891dd1990" class="thumbnail" alt="" width="533" height="112"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/USBGuard#Disable_USBGuard" target="_blank" rel="noopener">USBGuard - protect your computer against rogue USB devices</a></h3>
+
+  <p>Enable and disable USBGuard on Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/problems-with-kicksecure-18-in-qubes-os-usbguard-in-sys-qubes/1489#post_3</link>
+        <pubDate>Sun, 11 Jan 2026 03:35:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4135</guid>
+      </item>
+      <item>
         <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Sounds like a bug, will look into it.</p> ]]></description>
@@ -13,7 +900,7 @@
         <guid isPermaLink="false">forums.kicksecure.com-post-4134</guid>
       </item>
       <item>
-        <title>Kicksecure Removable Media plugin (17.4.4.6 Feedback)</title>
+        <title>Kicksecure Removable Media plugin (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="exfil" data-post="4" data-topic="1458">
 <div class="title">
@@ -74,7 +961,7 @@ MountRemovable=true
   <div style="clear: both"></div>
 </aside>
  ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-17-4-4-6-feedback/1458#post_5</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-18-0-8-7-feedback/1458#post_5</link>
         <pubDate>Sun, 11 Jan 2026 01:24:34 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4133</guid>
       </item>
@@ -182,16 +1069,6 @@ Name=user
         <guid isPermaLink="false">forums.kicksecure.com-post-4127</guid>
       </item>
       <item>
-        <title>Please delete my account</title>
-        <dc:creator><![CDATA[@Avoca]]></dc:creator>
-        <description><![CDATA[ <p>Please delete my account or point me to the button that does.</p>
-<p>Thank you and best wishes.</p>
-<p>Avoca</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/please-delete-my-account/1495#post_1</link>
-        <pubDate>Sat, 10 Jan 2026 23:48:20 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4126</guid>
-      </item>
-      <item>
         <title>Cleaner Default Desktop (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@exfil]]></dc:creator>
         <description><![CDATA[ <h3><a name="p-4125-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-4125-installation-details-1"></a>Installation Details</h3>
@@ -209,7 +1086,7 @@ Name=user
         <guid isPermaLink="false">forums.kicksecure.com-post-4125</guid>
       </item>
       <item>
-        <title>Kicksecure IPv6 Default Settings (17.4.4.6 Feedback)</title>
+        <title>Kicksecure IPv6 Default Settings (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@exfil]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="Patrick" data-post="3" data-topic="1459">
 <div class="title">
@@ -228,12 +1105,12 @@ Name=user
 </blockquote>
 </aside>
 <p>Well kinda since Kicksecure ships the tor daemon for updates and sdwdate…but like you stated IPv6 is not disabled by default so it wouldn’t effect that point</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-17-4-4-6-feedback/1459#post_5</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-18-0-8-7-feedback/1459#post_5</link>
         <pubDate>Sat, 10 Jan 2026 18:24:42 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4124</guid>
       </item>
       <item>
-        <title>Kicksecure IPv6 Default Settings (17.4.4.6 Feedback)</title>
+        <title>Kicksecure IPv6 Default Settings (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@exfil]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1459">
 <div class="title">
@@ -244,7 +1121,7 @@ Name=user
 </blockquote>
 </aside>
 <p>There’s gotta be some configuration way? But then again NetworkManager amiright lol like just how its hardcoded to list SSID’s alphabetically with no option to list by signal strength. Atleast I haven’t found any such option. Something I noticed today when looking for my network in the wave of signals.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-17-4-4-6-feedback/1459#post_4</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-18-0-8-7-feedback/1459#post_4</link>
         <pubDate>Sat, 10 Jan 2026 18:23:41 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4123</guid>
       </item>
@@ -446,7 +1323,7 @@ upd. It seems I’ve found a solution in the wiki for <code>denied: sdwdate-gui.
         <guid isPermaLink="false">forums.kicksecure.com-post-4114</guid>
       </item>
       <item>
-        <title>Kicksecure Removable Media plugin (17.4.4.6 Feedback)</title>
+        <title>Kicksecure Removable Media plugin (18.0.8.7 Feedback)</title>
         <dc:creator><![CDATA[@exfil]]></dc:creator>
         <description><![CDATA[ <p>It does look like you can’t hide system volumes?</p>
 <p>I tried hidding the Network tab in PCManFM-Qt with luck by trying to add:</p>
@@ -462,7 +1339,7 @@ MountRemovable=true
 
 </code></pre>
 <p><code>~/.config/pcmanfm-qt/lxqt/settings.conf</code> should that be disabled or would that effect users like myself that fully installed the system on USB or SD card?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-17-4-4-6-feedback/1458#post_4</link>
+        <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-18-0-8-7-feedback/1458#post_4</link>
         <pubDate>Sat, 10 Jan 2026 16:30:49 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4113</guid>
       </item>
@@ -523,712 +1400,6 @@ MountRemovable=true
         <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_21</link>
         <pubDate>Thu, 08 Jan 2026 20:03:30 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4102</guid>
-      </item>
-      <item>
-        <title>Unable to clone Kicksecure MicroSD to USB-A</title>
-        <dc:creator><![CDATA[@Avoca]]></dc:creator>
-        <description><![CDATA[ <p>Bingo!</p>
-<p>MicroSD card (source) 63,864,etc., USB-A drive (destination) 62,495,etc.</p>
-<p>So, the other way WOULD work then, I guess…</p>
-<p>Mmmm, stubborn little things aren’t they.</p>
-<p>Thanks again arraybolt3.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unable-to-clone-kicksecure-microsd-to-usb-a/1484#post_3</link>
-        <pubDate>Thu, 08 Jan 2026 19:55:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4101</guid>
-      </item>
-      <item>
-        <title>Unable to clone Kicksecure MicroSD to USB-A</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Check the exact size of the SD card and the USB drive in bytes. If the SD card is actually 63.124 and the USB is 63.120 GB, you’re effectively cloning a larger drive to a smaller one, in which case you will lose whatever was at the end of the drive (including the backup partition table and possibly filesystem structures), and will probably confuse filesystem drivers as well.</p>
-<p>If you are running into a “larger-to-smaller” clone issue, you can try to shrink the root partition on the SD card a bit so it will fit on the USB drive. <a href="https://unix.stackexchange.com/a/41093/535873">https://unix.stackexchange.com/a/41093/535873</a> may help, but keep in mind this comes with a very high risk of destroying the Kicksecure installation on the SD card. You might find it easier to reinstall from scratch.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unable-to-clone-kicksecure-microsd-to-usb-a/1484#post_2</link>
-        <pubDate>Thu, 08 Jan 2026 19:34:14 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4100</guid>
-      </item>
-      <item>
-        <title>Unable to clone Kicksecure MicroSD to USB-A</title>
-        <dc:creator><![CDATA[@Avoca]]></dc:creator>
-        <description><![CDATA[ <p>Hi all,</p>
-<p>My attempts to clone a functional Persistent install of KS from a 64GB MicroSD card to a 64GB USB-A drive have failed.</p>
-<p>While all seems well and the cloned drive’s Boot Menu appears and works, the thing times-out trying to ‘access’ the LUKS password procededure. i.e. the password request just doesn’t happen. and the device spasms about with various error codes and, eventually, crashes.</p>
-<p>The ‘source’ card remains fine.</p>
-<p>I’m assuming ‘hidden’ files issues or similar during cloning?</p>
-<p>Advice appreciated.</p>
-<p>Cheers</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/unable-to-clone-kicksecure-microsd-to-usb-a/1484#post_1</link>
-        <pubDate>Thu, 08 Jan 2026 18:45:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4099</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>It seems KDE settings in dom0 affect it. Problems with layout switching appearing in other qubes, but all qubes always keep two layouts except for Kicksecure/Whonix. I notice that changing language order in KDE’s layouts begins to affect layout switching in all qubes. Restoring KDE settings re‑enables layout switching in all qubes except Kicksecure/Whonix - second layout disappears.</p>
-<p>I see two scenarios:</p>
-<ol>
-<li>All qubes switch layouts, but Kicksecure/Whonix loses second layout after a reboot;</li>
-<li>Or all qubes have a second layout (including Kicksecure/Whonix), but none of the qubes can switch layouts.</li>
-</ol> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_20</link>
-        <pubDate>Thu, 08 Jan 2026 12:51:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4097</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>template and appVM</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_19</link>
-        <pubDate>Thu, 08 Jan 2026 12:36:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4096</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@marmarek]]></dc:creator>
-        <description><![CDATA[ <p>I’m not sure yet why specifically it happens, but it does look like an issue on qubes side, not kicksecure.</p>
-<aside class="quote no-group" data-username="sam" data-post="16" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>I reinstalled it.</p>
-</blockquote>
-</aside>
-<p>Just to confirm - have you done it in the template or the app qube?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_18</link>
-        <pubDate>Thu, 08 Jan 2026 12:27:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4095</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="sam" data-post="11" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>I noticed something else – I enabled keyboard layout editing in the KDE dom0 settings and changed the order, making English the second language. Then I rebooted Qubes. After startup, Kicksecure appVM had second layout, but I couldn’t switch to it – now only layout‑switching keys no longer persist after reboot Kicksecure/Whonix appVMs.</p>
-</blockquote>
-</aside>
-<p>In this scenario command <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> output is repeated with two keyboard layouts, but keys for switching layouts are not persist after a reboot.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_17</link>
-        <pubDate>Thu, 08 Jan 2026 12:22:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4094</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>I reinstalled it. Yes, file is there now, but the keyboard layout issue remains after reinstalling</p>
-<pre><code class="lang-auto">sh -x /usr/lib/qubes/qubes-keymap.sh
-</code></pre>
-<ul>
-<li>
-<pre><code class="lang-auto">/usr/bin/qubesdb-read /keyboard-layout
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">QUBES_KEYMAP=ru++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n ru++ ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">set_keyboard_layout ru++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP=ru++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -z ru++ ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo ru+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 1 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_LAYOUT=ru
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo ru+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 2 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_VARIANT=
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo ru+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 3 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_OPTIONS=
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ ru != us -a ru != si ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_LAYOUT=ru,us
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_VARIANT=,
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n , ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_VARIANT=-variant ,
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n  ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">basename /tmp/.X11-unix/X0
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">display=X0
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">setxkbmap -display :0 -layout ru,us -variant ,
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">qubesdb-watch /keyboard-layout
-</code></pre>
-</li>
-</ul>
-<p>It after adding second layout.</p>
-<p>But it after restart Kicksecure appVM</p>
-<pre><code class="lang-auto">sh -x /usr/lib/qubes/qubes-keymap.sh
-</code></pre>
-<ul>
-<li>
-<pre><code class="lang-auto">/usr/bin/qubesdb-read /keyboard-layout
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">QUBES_KEYMAP=us++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n us++ ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">set_keyboard_layout us++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP=us++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -z us++ ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo us+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 1 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_LAYOUT=us
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo us+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 2 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_VARIANT=
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">echo us+++
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">cut -f 3 -d +
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">KEYMAP_OPTIONS=
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ us != us -a us != si ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n  ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">[ -n  ]
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">basename /tmp/.X11-unix/X0
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">display=X0
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">setxkbmap -display :0 -layout us
-</code></pre>
-</li>
-<li>
-<pre><code class="lang-auto">qubesdb-watch /keyboard-layout
-</code></pre>
-</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_16</link>
-        <pubDate>Thu, 08 Jan 2026 12:12:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4093</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I don’t know why you’re missing file <code>/usr/lib/qubes/qubes-keymap.sh</code> (part of package <code>qubes-gui-agent</code> [1]). To investigate…</p>
-<hr>
-<p>Try to check your system using <code>debsums</code>.</p>
-<pre><code>sudo debsums --silent --all
-</code></pre>
-<p>You can ignore most modified files in <code>/etc</code> and missing files in <code>/boot</code>.</p>
-<hr>
-<p>Try to re-install <code>qubes-gui-agent</code>.</p>
-<pre><code>sudo apt install --reinstall qubes-gui-agent
-</code></pre>
-<p>Then see if that restores the file.</p>
-<hr>
-<p>[1] Not important. Just letting you know how I was looking that up.</p>
-<pre><code>dpkg -S /usr/lib/qubes/qubes-keymap.sh
-</code></pre>
-<blockquote>
-<p>qubes-gui-agent: /usr/lib/qubes/qubes-keymap.sh</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_15</link>
-        <pubDate>Thu, 08 Jan 2026 12:03:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4092</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>X11 default session</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_14</link>
-        <pubDate>Thu, 08 Jan 2026 10:55:51 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4091</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@marmarek]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="sam" data-post="11" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>KDE</p>
-</blockquote>
-</aside>
-<p>Is it Wayland-based KDE or X11 one? Default instructions should install X11 one. Wayland one isn’t fully supported yet, and the layout switching is one of the missing part. Tracked here: <a href="https://github.com/QubesOS/qubes-issues/issues/9517" class="inline-onebox" rel="noopener nofollow ugc">[Build 2024101803-4.3] openQA test fails in gui_keyboard_layout under Wayland Plasma session · Issue #9517 · QubesOS/qubes-issues · GitHub</a></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_13</link>
-        <pubDate>Thu, 08 Jan 2026 10:54:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4090</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@marmarek]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p><a class="mention" href="https://forums.kicksecure.com/u/marmarek">@marmarek</a> The <code>while qubesdb-watch /keyboard-layout ; do</code> in the script might be a bit brittle? Maybe there is a race condition here?</p>
-</blockquote>
-</aside>
-<p>It <em>is</em> supposed to wait forever, to apply later layout changes dynamically. The initial layout is set based on qubesdb-read you can see earlier in the output.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_12</link>
-        <pubDate>Thu, 08 Jan 2026 10:51:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4089</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>yes Qubes R4.3 last stable release, Kicksecure/Whonix 18</p>
-<p>dpkg -l | grep "qubes-gui-agent "<br>
-ii  qubes-gui-agent                      4.3.15-1+deb13u1                     amd64</p>
-<p>I noticed something else – I enabled keyboard layout editing in the KDE dom0 settings and changed the order, making English the second language. Then I rebooted Qubes. After startup, Kicksecure appVM had second layout, but I couldn’t switch to it – now only layout‑switching keys no longer persist after reboot Kicksecure/Whonix appVMs.</p>
-<p>Then I changed keyboard‑layout order again in KDE dom0 settings, putting English in the first position. After that, second layout stopped longer persist in the Kicksecure/Whonix VM again after reboot AppVMs</p>
-<p>Perhaps this issue is related to the known problem with keyboard‑layout switching in Qubes KDE <a href="https://forum.qubes-os.org/t/cant-change-keyboard-layout-in-kde/3002" rel="noopener nofollow ugc"> https://forum.qubes-os.org/t/cant-change-keyboard-layout-in-kde/3002</a></p>
-<p>However, I somehow avoided that problem in debian/fedora VMs. My problem is only with the Kicksecure/Whonix VMs: adding second layout and keys to change layout, and persist it after reboot</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_11</link>
-        <pubDate>Thu, 08 Jan 2026 10:43:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4088</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Are you using Kicksecure version 18? To test, see:<br>
-<a href="https://www.kicksecure.com/wiki/Systemcheck#Check_Version">Kicksecure, systemcheck, Check Version</a></p>
-<p>Was this a newly installed <a href="https://www.kicksecure.com/wiki/Qubes#Installation">Kicksecure Template</a> or a <a href="https://www.kicksecure.com/wiki/Release_Upgrade" class="inline-onebox">Release Upgrade</a>?</p>
-<p>Are you using R4,3 Qubes repositories, do you have file <code>/etc/apt/sources.list.d/qubes-r4.list</code>?</p>
-<p>To check your qubes-gui-agent version:</p>
-<pre><code>dpkg -l | grep "qubes-gui-agent "
-</code></pre>
-<p>Output should include:</p>
-<blockquote>
-<p>ii  qubes-gui-agent                                4.3.[…]</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_10</link>
-        <pubDate>Thu, 08 Jan 2026 10:12:35 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4087</guid>
-      </item>
-      <item>
-        <title>Kicksecure scale issue</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>This will be fixed in version <code>18.1.0.6</code> and above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-scale-issue/1446#post_3</link>
-        <pubDate>Thu, 08 Jan 2026 10:01:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4086</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>qubesdb-read /keyboard-layout<br>
-Failed to read /keyboard-layout</p>
-<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Can you confirm that file <code>/etc/X11/xinit/xinitrc.d/qubes-keymap.sh</code> does <strong>not</strong> exist on your system?</p>
-</blockquote>
-</aside>
-<p><strong>not</strong> exis</p>
-<aside class="quote no-group" data-username="Patrick" data-post="8" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Can you run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in verbose mode please and post the output here?</p>
-</blockquote>
-</aside>
-<p><code>ls /usr/lib/qubes/</code><br>
-<code>cleanup-dispvms   qrexec-client                  udev-block-remove</code><br>
-<code>create-snapshot   qrexec-policy-agent-autostart  udev-usb-add-change</code><br>
-<code>destroy-snapshot  qubes-device-agent-autostart   udev-usb-remove</code><br>
-<code>fix-dir-perms.sh  qubes-rpc                      uki-generate</code><br>
-<code>icon-receiver     qubes-rpc-multiplexer          update-xfce-config</code><br>
-<code>input-proxy-arg   startup-misc.sh                vm-modules-genfs</code><br>
-<code>preload-dispvm    tests</code><br>
-<code>qfile-dom0-agent  udev-block-add-change</code></p>
-<p>file not found</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_9</link>
-        <pubDate>Thu, 08 Jan 2026 09:46:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4085</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>I am understanding the conditions better now.</p>
-<ul>
-<li>Qubes OS 4.3.</li>
-<li>Qubes with KDE installed in dom0.</li>
-<li>Not using HVM.</li>
-<li>Not installing KDE inside Kicksecure template.</li>
-</ul>
-<hr>
-<p>What is the output of the following command - you don’t need to specifically reply and reveal the value - but does it differ from the output in unaffected VMs such as Debian VMs?</p>
-<pre><code>qubesdb-read /keyboard-layout
-</code></pre>
-<hr>
-<p>Can you confirm that file <code>/etc/X11/xinit/xinitrc.d/qubes-keymap.sh</code> does <strong>not</strong> exist on your system?</p>
-<p>(That was a previous location. I do not recommend to simply delete the file if it exists. I am just trying to figure out if the upgrade path had a leftover. And if so, that would be a Qubes bug.)</p>
-<hr>
-<p>Can you confirm that file <code>/etc/xdg/autostart/qubes-keymap.desktop</code> does exist?</p>
-<hr>
-<p>Can you run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in verbose mode please and post the output here?</p>
-<p>You can remove your actual keyboard layout from the output. I recommend using a file editor and its search function to catch all mentions.</p>
-<pre><code>sh -x /usr/lib/qubes/qubes-keymap.sh
-</code></pre>
-<p>Here’s the output for me (no redaction required, since well known in my case):</p>
-<pre><code class="lang-auto">+ /usr/bin/qubesdb-read /keyboard-layout
-+ QUBES_KEYMAP=de++
-+ [ -n de++ ]
-+ set_keyboard_layout de++
-+ KEYMAP=de++
-+ [ -z de++ ]
-+ echo de+++
-+ cut -f 1 -d +
-+ KEYMAP_LAYOUT=de
-+ echo de+++
-+ cut -f 2 -d +
-+ KEYMAP_VARIANT=
-+ echo de+++
-+ cut -f 3 -d +
-+ KEYMAP_OPTIONS=
-+ [ de != us -a de != si ]
-+ KEYMAP_LAYOUT=de,us
-+ KEYMAP_VARIANT=,
-+ [ -n , ]
-+ KEYMAP_VARIANT=-variant ,
-+ [ -n  ]
-+ basename /tmp/.X11-unix/X0
-+ display=X0
-+ setxkbmap -display :0 -layout de,us -variant ,
-+ qubesdb-watch /keyboard-layout
-</code></pre>
-<hr>
-<p><a class="mention" href="https://forums.kicksecure.com/u/marmarek">@marmarek</a> The <code>while qubesdb-watch /keyboard-layout ; do</code> in the script might be a bit brittle? Maybe there is a race condition here?</p>
-<p>I guess if <code>/usr/lib/qubes/qubes-keymap.sh</code> runs after <code>/keyboard-layout</code> was already written into qubesdb, it will wait forever. In other words, this script is not idempotent. Attempting to re-execute it on my system results in the script waiting forever as the qubesdb entry already exists.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_8</link>
-        <pubDate>Thu, 08 Jan 2026 09:35:40 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4084</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Yes Qubes OS 4.3 with Kicksecure/Whonix templates. Kde installed from this guide <a href="https://doc.qubes-os.org/en/latest/user/advanced-topics/kde.html" class="inline-onebox" rel="noopener nofollow ugc">KDE (desktop environment) — Qubes OS Documentation</a></p>
-<p>Problem occurs only in Kicksecure/Whonix templates/appVM. Other VMs don’t have this issue (Debian 13, Fedora 42) - 2 layouts persist after restarting qube.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_7</link>
-        <pubDate>Thu, 08 Jan 2026 09:16:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4083</guid>
-      </item>
-      <item>
-        <title>In-place upgrade of distromorphed Kicksecure 17 with wrong meta package</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="riffi12" data-post="1" data-topic="1480">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e9a140/48.png" class="avatar"> riffi12:</div>
-<blockquote>
-<p>Can I download this file, update the VM check variable and then just run it with sudo and achieve the same result?</p>
-</blockquote>
-</aside>
-<p>You could probably edit the file on the disk. All that the function call to <code>meta_package_detect</code> does is set two variables:</p>
-<ul>
-<li><code>old_meta_package</code></li>
-<li><code>new_meta_package</code></li>
-</ul>
-<p>So if you know what you’re doing you could out comment the <code>meta_package_detect</code> function and instead set the values of these variables manually in place where <code>meta_package_detect</code> is now.</p>
-<p>You could modify the script or do the same things manually indeed. I would recommend the script has doing that by hand could be more cumbersome and error-prone.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/in-place-upgrade-of-distromorphed-kicksecure-17-with-wrong-meta-package/1480#post_4</link>
-        <pubDate>Thu, 08 Jan 2026 09:04:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4080</guid>
-      </item>
-      <item>
-        <title>In-place upgrade of distromorphed Kicksecure 17 with wrong meta package</title>
-        <dc:creator><![CDATA[@riffi12]]></dc:creator>
-        <description><![CDATA[ <p>Thanks for the fast reply. I had debugged this and updated the original post with a question on how to proceed if you could give it a quick look <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
-<p>tl;dr: Can I download <code>https://raw.githubusercontent.com/Kicksecure/legacy-dist/refs/heads/master/usr/sbin/release-upgrade</code>, change the check and just run the file?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/in-place-upgrade-of-distromorphed-kicksecure-17-with-wrong-meta-package/1480#post_3</link>
-        <pubDate>Thu, 08 Jan 2026 09:03:59 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4079</guid>
-      </item>
-      <item>
-        <title>In-place upgrade of distromorphed Kicksecure 17 with wrong meta package</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="riffi12" data-post="1" data-topic="1480">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e9a140/48.png" class="avatar"> riffi12:</div>
-<blockquote>
-<pre><code class="lang-auto">+ '[' kvm = none ']'
-</code></pre>
-</blockquote>
-</aside>
-<p>The VPS is KVM based. We don’t consider this a “<code>host</code>”.</p>
-<p>This results in condition <code>if [ "${virt_mode}" = 'none' ]; then</code> to evaluate as <code>false</code>. Hence only this code block is applicable:</p>
-<pre><code class="lang-auto">         else
-            old_meta_package=kicksecure-xfce-vm
-            new_meta_package=kicksecure-vm-gui-lxqt
-            if meta_package_installed_check ; then return 0 ; fi
-            old_meta_package=kicksecure-cli-vm
-            new_meta_package=kicksecure-vm-cli
-            if meta_package_installed_check ; then return 0 ; fi
-         fi
-</code></pre>
-<p>In plain English, only old meta package <code>kicksecure-xfce-vm</code> or <code>kicksecure-cli-vm</code> would be acceptable.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/in-place-upgrade-of-distromorphed-kicksecure-17-with-wrong-meta-package/1480#post_2</link>
-        <pubDate>Thu, 08 Jan 2026 09:01:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4078</guid>
-      </item>
-      <item>
-        <title>In-place upgrade of distromorphed Kicksecure 17 with wrong meta package</title>
-        <dc:creator><![CDATA[@riffi12]]></dc:creator>
-        <description><![CDATA[ 
-Original post <a href="https://forums.kicksecure.com/t/in-place-upgrade-of-distromorphed-kicksecure-17-with-wrong-meta-package/1480/1">(click for more details)</a>
-<p>Edit: Looking at the full log, it never checks for the old meta package I installed because it detects a VM and I installed the baremetal package back then. What would my options be? Execute the steps the tool does manually? Reinstalling is not an option because of the amount of data on it.</p>
-<p>Can I download this file, update the VM check variable and then just run it with sudo and achieve the same result?</p>
-<p><code>https://raw.githubusercontent.com/Kicksecure/legacy-dist/refs/heads/master/usr/sbin/release-upgrade</code></p>
-<pre><code class="lang-auto">+ meta_package_detect
-+ '[' '!' '' = '' ']'
-+ test -e /usr/share/qubes/marker-vm
-+ test -e /usr/share/whonix/marker
-+ test -e /usr/share/kicksecure/marker
-+ '[' kvm = none ']'
-+ old_meta_package=kicksecure-xfce-vm
-+ new_meta_package=kicksecure-vm-gui-lxqt
-+ meta_package_installed_check
-+ pkg_installed kicksecure-xfce-vm
-+ local package_name dpkg_query_output
-+ local requested_action status error_state
-+ package_name=kicksecure-xfce-vm
-++ dpkg-query --show '--showformat=${Status}' kicksecure-xfce-vm
-+ dpkg_query_output=
-+ true
-++ printf %s ''
-++ awk '{print $1}'
-+ requested_action=
-++ printf %s ''
-++ awk '{print $2}'
-+ status=
-++ printf %s ''
-++ awk '{print $3}'
-+ error_state=
-+ '[' '' = install ']'
-+ true '/usr/sbin/release-upgrade: INFO: kicksecure-xfce-vm is not installed, ok.'
-+ return 1
-+ pkg_installed kicksecure-vm-gui-lxqt
-+ local package_name dpkg_query_output
-+ local requested_action status error_state
-+ package_name=kicksecure-vm-gui-lxqt
-++ dpkg-query --show '--showformat=${Status}' kicksecure-vm-gui-lxqt
-+ dpkg_query_output=
-+ true
-++ printf %s ''
-++ awk '{print $1}'
-+ requested_action=
-++ printf %s ''
-++ awk '{print $2}'
-+ status=
-++ printf %s ''
-++ awk '{print $3}'
-+ error_state=
-+ '[' '' = install ']'
-+ true '/usr/sbin/release-upgrade: INFO: kicksecure-vm-gui-lxqt is not installed, ok.'
-+ return 1
-+ return 1
-+ old_meta_package=kicksecure-cli-vm
-+ new_meta_package=kicksecure-vm-cli
-+ meta_package_installed_check
-+ pkg_installed kicksecure-cli-vm
-+ local package_name dpkg_query_output
-+ local requested_action status error_state
-+ package_name=kicksecure-cli-vm
-++ dpkg-query --show '--showformat=${Status}' kicksecure-cli-vm
-+ dpkg_query_output=
-+ true
-++ printf %s ''
-++ awk '{print $1}'
-+ requested_action=
-++ printf %s ''
-++ awk '{print $2}'
-+ status=
-++ printf %s ''
-++ awk '{print $3}'
-+ error_state=
-+ '[' '' = install ']'
-+ true '/usr/sbin/release-upgrade: INFO: kicksecure-cli-vm is not installed, ok.'
-+ return 1
-+ pkg_installed kicksecure-vm-cli
-+ local package_name dpkg_query_output
-+ local requested_action status error_state
-+ package_name=kicksecure-vm-cli
-++ dpkg-query --show '--showformat=${Status}' kicksecure-vm-cli
-+ dpkg_query_output=
-+ true
-++ printf %s ''
-++ awk '{print $1}'
-+ requested_action=
-++ printf %s ''
-++ awk '{print $2}'
-+ status=
-++ printf %s ''
-++ awk '{print $3}'
-+ error_state=
-+ '[' '' = install ']'
-+ true '/usr/sbin/release-upgrade: INFO: kicksecure-vm-cli is not installed, ok.'
-+ return 1
-+ return 1
-+ old_meta_package=
-+ new_meta_package=
-+ '[' '' = '' ']'
-+ true 'ERROR: no installed meta package detected!'
-+ exit 1
-zsh: exit 1     sudo release-upgrade
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/in-place-upgrade-of-distromorphed-kicksecure-17-with-wrong-meta-package/1480#post_1</link>
-        <pubDate>Thu, 08 Jan 2026 08:48:59 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4076</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="sam" data-post="4" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>I forgot to say that I have KDE desktop installed.</p>
-</blockquote>
-</aside>
-<p>Are you using <a href="https://www.qubes-os.org/">Qubes OS</a>?</p>
-<p>How did you install KDE desktop?</p>
-<p>Are you using an <a href="https://doc.qubes-os.org/en/latest/user/advanced-topics/standalones-and-hvms.html">HVM</a>?</p>
-<aside class="quote no-group" data-username="sam" data-post="5" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>This problem on KDE desktop. Debian and Fedora AppVMs work well with 2 layouts.</p>
-</blockquote>
-</aside>
-<p>Is this reproducible in a similar environment Debian + KDE desktop?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_6</link>
-        <pubDate>Thu, 08 Jan 2026 08:47:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4075</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>Hello. This problem on KDE desktop. Debian and Fedora AppVMs work well with 2 layouts. Sorry I forgot to say about KDE</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474#post_5</link>
-        <pubDate>Thu, 08 Jan 2026 08:05:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4073</guid>
       </item>
   </channel>
 </rss>
