@@ -132,9 +132,64 @@ sudo apt autoremove virtualbox
 
 &gt; Success</description>
     
-    <lastBuildDate>Sun, 11 Jan 2026 16:40:02 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 12 Jan 2026 09:55:39 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Virtualbox installers stopped working</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>1 forum thread = 1 issue only please. In this case, 1 forum thread = 1 method only please. So I’ll only focus on the installer method.</p>
+<p>For other methods such as manually adding the VirtualBox repository, using extrepo (which does the same), if still relevant, please open a separate forum thread.</p>
+<p>Otherwise this will get too confusing.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Method’s 1, 2, 3 and 4 produced the same Error:<br>
+[sysmaint ~]% bash ./virtualbox-installer-clivirtualbox-installer-cli:<br>
+[ERROR]: Directory doesn’t exist: ‘/home/user’virtualbox-installer-cli:<br>
+[ERROR]: Aborting.virtualbox-installer-cli:<br>
+[NOTICE]: Executed script, function, command executed: ‘./virtualbox-installer-cli’ ‘die’ ‘exit “${1}”’virtualbox-installer-cli:<br>
+[ERROR]: Installer exited with code: ‘1’zsh: exit 1 bash ./virtualbox-installer-cli<br>
+(Same Directory doesn’t exist: ‘/home/user’ etc)</p>
+</blockquote>
+</aside>
+<p>I was able to reproduce this. It can happen when you only used sysmaint session so far. In other words, this can happen if you never started a user session yet. In result, account <code>user</code> has never logged in. However, the home directly of account <code>user</code> is only created upon its first login.</p>
+<p>So the solution is: Boot into user session at least once. Then you can reboot into a sysmaint session and the installer should be functional.</p>
+<p>A more helpful error message pointing that out will be added in a future release.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>kicksecure-lxqt-installer-cli</p>
+</blockquote>
+</aside>
+<p>This is “largely” not a different method. virtualbox-installer-cli and kicksecure-lxqt-installer-cli share the very same source code. So if virtualbox-installer-cli, there is no need to try any of the other Linux installers by Kicksecure (or Whonix).</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring “/usr/share/keyrings/virtualbox-archive-keyring.asc” Caused by: 0: Reading “/usr/share/keyrings/virtualbox-archive-keyring.asc”: Permission denied (os error 13) 1: Permission denied (os error 13)</p>
+</blockquote>
+</aside>
+<p>To fix:</p>
+<pre><code>sudo chmod o+r /usr/share/keyrings/virtualbox-archive-keyring.asc
+</code></pre>
+<p>[1]</p>
+<p>This step was missing in the documentation. Added just now.</p>
+<hr>
+<p>[1] This is due to <a href="https://www.kicksecure.com/wiki/Umask" class="inline-onebox">umask</a>.</p>
+          <p><a href="https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501/2</link>
+        <pubDate>Mon, 12 Jan 2026 09:55:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1501-2</guid>
+        <source url="https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501.rss">Virtualbox installers stopped working</source>
+      </item>
       <item>
         <title>Virtualbox installers stopped working</title>
         <dc:creator><![CDATA[shaylabeige]]></dc:creator>

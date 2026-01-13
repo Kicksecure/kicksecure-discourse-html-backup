@@ -5,6 +5,342 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">github.com/ArrayBolt3/user-sysmaint-split</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">Enable usbguard-dbus.service in sysmaint sessions by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-13" data-time="01:21:20" data-timezone="UTC">01:21AM - 13 Jan 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 3 additions and 0 deletions">
+        <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">
+          <span class="added">+3</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248?page=4#post_64</link>
+        <pubDate>Tue, 13 Jan 2026 01:22:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4176</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@marmarek]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="29" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>What the poster is trying to do is configure keyboard layouts <em>at the AppVM level</em>, separate from dom0.</p>
+</blockquote>
+</aside>
+<p>I don’t think this is supported configuration in any way. While theoretically mismatching keyboard layouts between dom0 and VM may work in some (many) cases, it does lead to various corner cases (for example if one of those layouts assign different meaning for some modifiers, they won’t synchronize properly anymore). Keyboard layout should be modified at dom0 level.</p>
+<p>If one wants to use different layouts in different VMs, there are dom0 applications that can switch layouts based on active window - I believe KDE has this built in, but also I get similar behavior with Xfce built-in layout switcher, if I switch layout with some window active, by clicking on the widget, not key combo.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_31</link>
+        <pubDate>Tue, 13 Jan 2026 00:34:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4175</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I can additionally confirm that even when setting keyboard layout settings in dom0, layout switching is broken when using KDE in dom0. Pressing the keyboard layout switch shortcut (Meta+Alt+K by default) results in a popup appearing in dom0 that <em>says</em> the keyboard layout has been changed, but the keyboard layout does not actually change within a debian-13-minimal AppVM. If I run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in a terminal window, I don’t see anything printed to the terminal when pressing Meta+Alt+K in the KDE session, so it looks like the keyboard layout change notification isn’t reaching the AppVM at all. In contrast, if I log into the Xfce session in dom0, configure a second keyboard layout, run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in a <code>debian-13-minimal</code> AppVM, and then press the keyboard layout change shortcut, I see some text scroll down in the AppVM terminal upon pressing the shortcut. The keyboard layout within the VM also changes, so things seem to be working properly there.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_30</link>
+        <pubDate>Tue, 13 Jan 2026 00:24:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4174</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="28" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Shouldn’t this be reproducible inside a Debian minimal VM too?</p>
+</blockquote>
+</aside>
+<p>Yes, almost without question (I’m testing it now). Edit: Just tested, this is reproducible in <code>debian-13-minimal</code> after installing <code>lxqt-config</code> and using it to add a second keyboard layout.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="28" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Why this cannot be left to <code>/usr/lib/qubes/qubes-keymap.sh</code>?</p>
+</blockquote>
+</aside>
+<p>Because the original poster is trying to do something fundamentally different than what <code>qubes-keymap.sh</code> does. <code>qubes-keymap.sh</code> takes the keyboard layout settings from dom0 and loads those settings into each individual qube. What the poster is trying to do is configure keyboard layouts <em>at the AppVM level</em>, separate from dom0. Why is somewhat unclear (maybe they want to use different keyboard layout settings in different VMs, or maybe they’re trying to work around a limitation of the KDE session, or both), but that’s what they’re doing, as I understand it. This is why they mention settings things up in LXQt’s configuration, even though dom0 doesn’t have LXQt components installed most likely.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_29</link>
+        <pubDate>Mon, 12 Jan 2026 23:54:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4173</guid>
+      </item>
+      <item>
+        <title>Vm and grub-live</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Which filesystems are writeable? To find out, you can left click on the live check icon. It’s the green icon which turns red if writeable filesystems are detected.</p>
+<p>Or you could run:</p>
+<pre><code>/usr/libexec/helper-scripts/get_writable_fs_lists.sh
+</code></pre>
+<p>That would output all writeable filesystems in the terminal. That’s the same tool that the livecheck systray uses internally.</p>
+<hr>
+<p>Development comment:<br>
+We might want to move that file to /usr/bin and rename it to make it more easily accessible.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vm-and-grub-live/1504#post_2</link>
+        <pubDate>Mon, 12 Jan 2026 15:27:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4171</guid>
+      </item>
+      <item>
+        <title>Virtualbox installers stopped working</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>1 forum thread = 1 issue only please. In this case, 1 forum thread = 1 method only please. So I’ll only focus on the installer method.</p>
+<p>For other methods such as manually adding the VirtualBox repository, using extrepo (which does the same), if still relevant, please open a separate forum thread.</p>
+<p>Otherwise this will get too confusing.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Method’s 1, 2, 3 and 4 produced the same Error:<br>
+[sysmaint ~]% bash ./virtualbox-installer-clivirtualbox-installer-cli:<br>
+[ERROR]: Directory doesn’t exist: ‘/home/user’virtualbox-installer-cli:<br>
+[ERROR]: Aborting.virtualbox-installer-cli:<br>
+[NOTICE]: Executed script, function, command executed: ‘./virtualbox-installer-cli’ ‘die’ ‘exit “${1}”’virtualbox-installer-cli:<br>
+[ERROR]: Installer exited with code: ‘1’zsh: exit 1 bash ./virtualbox-installer-cli<br>
+(Same Directory doesn’t exist: ‘/home/user’ etc)</p>
+</blockquote>
+</aside>
+<p>I was able to reproduce this. It can happen when you only used sysmaint session so far. In other words, this can happen if you never started a user session yet. In result, account <code>user</code> has never logged in. However, the home directly of account <code>user</code> is only created upon its first login.</p>
+<p>So the solution is: Boot into user session at least once. Then you can reboot into a sysmaint session and the installer should be functional.</p>
+<p>A more helpful error message pointing that out will be added in a future release.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>kicksecure-lxqt-installer-cli</p>
+</blockquote>
+</aside>
+<p>This is “largely” not a different method. virtualbox-installer-cli and kicksecure-lxqt-installer-cli share the very same source code. So if virtualbox-installer-cli, there is no need to try any of the other Linux installers by Kicksecure (or Whonix).</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring “/usr/share/keyrings/virtualbox-archive-keyring.asc” Caused by: 0: Reading “/usr/share/keyrings/virtualbox-archive-keyring.asc”: Permission denied (os error 13) 1: Permission denied (os error 13)</p>
+</blockquote>
+</aside>
+<p>To fix:</p>
+<pre><code>sudo chmod o+r /usr/share/keyrings/virtualbox-archive-keyring.asc
+</code></pre>
+<p>[1]</p>
+<p>This step was missing in the documentation. Added just now.</p>
+<hr>
+<p>[1] This is due to <a href="https://www.kicksecure.com/wiki/Umask" class="inline-onebox">umask</a>.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/virtualbox-installers-stopped-working/1501#post_2</link>
+        <pubDate>Mon, 12 Jan 2026 09:55:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4170</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Shouldn’t this be reproducible inside a Debian minimal VM too?</p>
+<p>Why this cannot be left to <code>/usr/lib/qubes/qubes-keymap.sh</code>?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_28</link>
+        <pubDate>Mon, 12 Jan 2026 09:05:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4169</guid>
+      </item>
+      <item>
+        <title>Vm and grub-live</title>
+        <dc:creator><![CDATA[@lsusb810]]></dc:creator>
+        <description><![CDATA[ <p>I installed KickSecure on a laptop with 8GB of RAM, installed VirtualBox and VMs (specifically Whonix Gateway and WorkStation) in persistence mode, took a snapshot of the VMs in VirtualBox, and then launched KickSecure in live boot to launch Whonix. But sometimes I get a notification that says “livecheck: the system’s live status has changed.current status:grub-live-semi-persistence-unsafe”. is. Are there traces on SSDs? Also, Are there any risks in forensic analysis? (Veracrypt, external SSD, HDD, USB memory is not used.))</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vm-and-grub-live/1504#post_1</link>
+        <pubDate>Mon, 12 Jan 2026 07:16:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4168</guid>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Discussed some aspects of this with Patrick more, I’m not sure if we’re getting closer to a concrete implementation plan or not, but here’s some rough notes about what we were thinking:</p>
+<p>Right now we have two privilege levels, <code>user</code> and <code>sysmaint</code>. <code>sysmaint</code> has the power most administrative users on other distros have; it’s “root with light safeguards to make it harder to do something foolish on accident”. <code>user</code> is more like what non-administrative users on Windows are; they can run arbitrary applications, work with files, use the network, etc., but they can’t mess with the guts of the system. This provides some additional security since it’s harder to get a foothold in the root account, but ultimately it doesn’t do much to fight malware that wants to steal or encrypt the user’s data, except for making it more likely that a user will be mindful about what they install.</p>
+<p>Our ultimate goal, however we implement it, is to add a third privilege level to this model. Let’s call it <code>untrusted-user</code> (bad name, but it gets the point across for now).</p>
+<ul>
+<li>The standard <code>user</code> privilege level will retain all of the power it currently has. It is also where all of the user’s trusted data will be stored.</li>
+<li>The <code>untrusted-user</code> privilege level is where more dangerous applications (such as web browsers) should run. This privilege level should be resistant to <em>attacker-incited</em> persistent compromise, while simultaneously expecting temporary compromise. That is, if an attacker manages to compromise a legitimate application running as <code>untrusted-user</code>, that compromise must be able to “just go away” somehow. While the attacker has a foothold in <code>untrusted-user</code>, our implementation must contain that compromise if at all possible so that it cannot gain access to <code>user</code> data.
+<ul>
+<li>This implies that <code>untrusted-user</code> will be at least semi-ephemeral; changes made by malware need to be able to be erased reliably in some fashion.</li>
+</ul>
+</li>
+<li>It is likely that the <code>untrusted-user</code> environment will suffer from <em>user-incited</em> persistent compromise (i.e. someone intentionally installed malware into the environment). It therefore must be possible to get rid of malware of this kind in some manner.</li>
+<li>Users may work with data they want to store long-term when using <code>untrusted-user</code>, so they must be able to save that data persistently. Some of that data may be trusted, in which case there needs to be a way to move it into the <code>user</code> privilege level (users will obviously have to be very careful about what data they move), while some of that data may be untrusted and needs to stay in the <code>untrusted-user</code> privilege level. Users will also need to be able to move files from the <code>user</code> privilege level to the <code>untrusted-user</code> level.</li>
+<li>Users will be running resource-intensive apps (most notably web browsers) in the <code>untrusted-user</code> privilege level. They will also be running these apps within potentially resource-constrained virtual machines. Thus, performance concerns have to be taken into account. Any solution based on virtualization will have to take into account the fact that nested virtualization may be disabled or may not be available at all (such as on current versions of Qubes OS).</li>
+<li>Users will be running apps that make use of Linux’s native sandboxing capabilities. The implementation of <code>untrusted-user</code> <strong>must not break or weaken these sandboxes if at all possible.</strong></li>
+<li>Applications running as <code>untrusted-user</code> are going to have to do IPC with things that run as <code>user</code> (most notably Wayland, Pipewire, and terminal emulator software, but probably also others). This provides substantial attack surface; Wayland is not a simple protocol, and labwc is not written in a memory-safe language, so I would not be surprised if a motivated attacker could attack the compositor to escape the sandbox.</li>
+<li>We do not know what applications the user will run in the sandbox. The sandbox should work transparently with as many existing applications as possible.</li>
+<li>Users will have legitimate reasons to run things in the <code>user</code> privilege level for compatibility or performance reasons. Not everything can be pushed into a container or VM and just work. However, a subset of users will only want to use the <code>user</code> privilege level for managing application that run as <code>untrusted-user</code>, or for very basic tasks. For those users who can afford to lock down <code>user</code>, there should be an option that uses a project like <a href="https://github.com/roddhjav/apparmor.d">apparmor.d</a> to lock down the <code>user</code> privilege level. This might be worth while to enable by default and make opt-out.</li>
+</ul>
+<p>There are two main sandboxing models that I can see, per-application sandboxing and per-usecase sandboxing. Firejail, Bubblewrap, Flatpak, and sandbox-app-launcher are examples of the former kind. I personally do not believe this is the best way of doing things, for a few reasons:</p>
+<ul>
+<li>Per-application sandboxing generally involves figuring out everything a particular application needs, allowlisting it, and then denying everything else. This means that a special profile has to be written for every application, and that lots of fiddling is needed to ensure good application compatibility. sandbox-app-launcher doesn’t seem to have had this problem, but Firejail and Bubblejail certainly do.</li>
+<li>Per-application sandboxing makes it confusing, difficult, or impossible to run the same app in two different “trust domains”. It causes similar implications when trying to run multiple apps in the same “trust domain”.</li>
+<li>Because each application is isolated independently of others, one cannot easily sandbox utilities that are primarily used as parts of larger systems. For instance, it’s hard to imagine a useful generic sandbox for <code>netcat</code>. Per-usecase sandboxing allows one to sandbox these lower-level utilities meaningfully (for instance, maybe my “software-dev” environment should only allow <code>netcat</code> to reach out to <code>termbin.com</code>, while my “document-processing” environment should allow it to reach out to a local network printer for… some reason… this is a bad example but you get my point).</li>
+<li>Because each application is isolated independently of others, IPC becomes a concern. Should a sandboxed Tor Browser be able to ask my file manager to open a directory and show me the contents? On the surface, the answer is “yes”, because I might want to use its “Open containing folder” feature after downloading something. But what if the browser is compromised, and it’s able to use the ability to open my file manager by itself as part of a social engineering attack, trying to convince me to upload sensitive data somewhere? It shouldn’t be able to do that. With per-usecase sandboxing, I can say that Tor Browser should be allowed to communicate with <em>anything</em> within its sandbox, for any reason, but <em>nothing</em> outside of its sandbox. If the browser then decides to open a file manager window out of nowhere, it will be recognizably not my normal file manager, and it won’t be able to show me any sensitive files, so the attack’s likelihood of success goes down.</li>
+<li>Sandboxing of server-like “applications” becomes harder, especially if they depend on and integrate with things like systemd.</li>
+</ul>
+<p>Per-usecase sandboxing is basically what containers and VMs give us. VMs are better from a security standpoint in a lot of ways, but due to resource constraints and compatibility issues, we can’t rely on them alone like I was suggesting previously. Containers are somewhat scary because they run directly on the host kernel, meaning that any host kernel bug in code accessible to the container can be exploited, potentially allowing an attacker to obtain kernel-level privileges. That being said, they’re better than nothing, and they allow working around many of the limitations of virtual machines (for instance, 3d acceleration can work inside containers).</p>
+<p>There are a lot of existing containerization systems out there; Docker, LXC, LXD, Incus, systemd-nspawn, libvirt-lxc, etc. Which one of these would be good to build on top of, I’m not quite sure yet, but I initially think either systemd-nspawn or libvirt-lxc would be a good option. One nice thing about libvirt-lxc is that it allows defining a container in much the same way one would define a virtual machine, and libvirt provides both container and virtual machine functionality. This might permit implementing both VM-based sandboxing and container-based sandboxing in the same application. Something similar could be done with systemd-nspawn and systemd-vmspawn possibly, but unfortunately systemd-vmspawn is not present in Debian Trixie, so this may not be the best option.</p>
+<p>In my mind, an ideal sandboxing solution would look something like this:</p>
+<ul>
+<li>There’s a privileged daemon (let’s call it <code>sandboxd</code>), which listens for requests to create and manage sandboxes. <code>sandboxd</code> creates sandboxes by using <code>mmdebstrap</code> to create a Debian rootfs with proper UIDs and GIDs so that an unprivileged sandbox can be booted. This daemon runs as root so that it can make the needed ownership changes after bootstrapping a new sandbox.</li>
+<li>There’s a user-accessible application (call it <code>sandboxctl</code>) that talks to the daemon in order to do things like create, delete, rename, query information about, start, and stop sandboxes. It can also request files to be moved between the user’s home folder and the sandbox’s home folder, or can request a directory to be transparently passed through.</li>
+<li>A number of validating proxies for basic, unavoidable IPC are provided with the system. These proxies do things like virtualize Wayland, Pipewire, and console access, preventing malicious interactions with parts of the system that run under the <code>user</code> privilege level.</li>
+<li>A number of basic permissions exist (“allow network”, “allow GUI”, “allow audio”, “allow mic”, “allow 3d accel”, etc.). These permissions can be toggled on or off at the trust domain level. Wherever possible, validating proxies are used to enable these permissions rather than just passing through bits of the host system to the container. In some situation though, host passthrough will likely be unavoidable, for instance for passing through something like <code>/dev/dri/renderD128</code> for 3d acceleration.</li>
+<li>A helper application using seccomp-bpf will be provided that will deny the ability to create user namespaces to most applications in some way (handwaving here, haven’t thought this through fully). Only specific applications that need user namespaces such as web browsers will be run without this application wrapping them, thus allowing us to have the lessened kernel attack surface of “no user namespaces”, and the better in-browser security that comes with user namespaces.</li>
+<li>Sandboxes can be booted with an optional RAM-based overlay within the sandbox to make them ephemeral. Only specific folders within the sandbox’s home folder such as Documents would be exempted (bind mounting would be needed for this). This would allow a user to make a sandbox “forget” a compromise, even one that used files like <code>~/.bashrc</code> for persistence, by simply rebooting the sandbox. For software updates and installation, the sandbox could be booted in a fully persistent mode.</li>
+</ul>
+<p>This is the basic architecture in my mind. This would meet all of the criteria above AFAICT.</p>
+<p>The hardest part of this is probably going to be the validating proxies. What might be doable instead is to run a real Wayland compositor and audio server within the sandbox, then use simpler protocols like VNC and audio streaming to get video and audio out of the container. A terminal emulator could then be run within the sandbox rather than using a <code>user</code>-privileged terminal emulator to interface with the sandbox. The performance impact of this might be substantial, and it could make things like the clipboard harder to use, but perhaps not impossible. Research would have to be done into this.</p>
+<p>Everything after this is research I did into a bunch of existing sandboxing mechanisms and why I think they probably aren’t suitable for what we want to do.</p>
+<ul>
+<li>VirtualBox and KVM are both very resource intensive. They require lots of disk space, lots of memory, lots of CPU power, and destroy the ability to use graphics hardware acceleration (which is necessary to do things like watch videos at reasonable resolutions). They require hardware virtualization features, making them unsuitable for use within Qubes or environments where nested virtualization isn’t available or is painfully slow.</li>
+<li>Flatpak uses a combination of namespaces, cgroups, and seccomp to sandbox applications. While good in theory, in practice this results in a lot of problems:
+<ul>
+<li>Many Flatpaks have very loose permissions, and those that don’t oftentimes don’t work right.</li>
+<li>seccomp is used to deny access to features that may increase kernel attack surface, like user namespaces. This breaks Chrome’s sandbox among other things, making it more dangerous to use a Flatpak-packaged browser than an apt-packaged one.</li>
+<li>Sandboxed applications connect directly to the Wayland compositor, which is unsafe as described above.</li>
+<li>The way in which Flatpaks bundle dependencies means that oftentimes Flatpaks can contain insecure dependencies, resulting in security problems. <a href="https://flatkill.org/">https://flatkill.org/</a> goes into a lot of detail on that.</li>
+</ul>
+</li>
+<li>Snap suffers from similar issues as Flatpak, though it may not be as bad from a dependency standpoint if it uses packages from the Ubuntu archive. It may also handle nested sandboxing better. It’s a semi-closed-source system dependent upon Canonical though, so it may be better avoided.</li>
+<li>Bubblewrap can be used on its own, without Flatpak. Depending on what exactly is being done, this <em>can</em> be a viable sandboxing mechanism, it might be usable instead of systemd-nspawn or libvirt-lxc. I’m not sure if it has advantages beyond these mechanisms yet, it might complicate attempts to make VM-based sandboxing work.</li>
+<li>I took a look at Landlock. It looks like a rather interesting way to do some of the things AppArmor does, but without needing privileges. It can be used to do things like make an application that says “I need to be able to read from this dir, read and write this other dir, and read, write, and execute this third dir, and that’s it.” Then the kernel will keep it from doing anything other than the things it locked itself into doing.
+<ul>
+<li>This isn’t really what we’re looking for I would argue. It might be interesting for some specific usecases, but… we already have AppArmor for this sort of thing. This is a variant on mandatory access control, which doesn’t provide the compatibility we’re looking for.</li>
+</ul>
+</li>
+<li>AppArmor is something we’re already familiar with, as we actively use it to do things like sandbox Tor Browser.
+<ul>
+<li>This requires a custom policy to be written for each sandboxed application, which is a pain, and it also doesn’t do much to work with applications that don’t work if you deny them resources that are potentially dangerous. It also doesn’t allow isolating data into separate <code>untrusted-user</code> environments.</li>
+</ul>
+</li>
+<li>Firejail is designed to sandbox individual applications using individually written profiles. It also allows the user to create custom profiles for applications that don’t have profiles written for them already. It sandboxes the applications that already exist on the root filesystem.
+<ul>
+<li>It’s SUID-root, which is problematic since we’re trying to get rid of such applications.</li>
+<li>While simple to use in theory, it seems to require the user to know that they’re doing a bit more than I personally would prefer. Rather than saying “this set of apps has its own environment”, it says “here are the parts of the <code>user</code> environment this particular app can access.” This is possibly dangerous since it blurs the lines between the privilege levels we want to establish. For instance, a browser should naturally be allowed to save things in Downloads, but what if you have sensitive company data in your Downloads folder, and your browser gets compromised and uploads it?</li>
+<li>There has been at least one TOCTOU vuln in Firejail which allowed an attacker to escalate their privileges to root. This is arguably proof that Firejail as an SUID application is a less-than-great idea. <a href="https://unparalleled.eu/blog/2021/20210208-rigged-race-against-firejail-for-local-root/" class="inline-onebox">Rigged Race Against Firejail for Local Root</a> is a good example. There have been other vulnerabilities in Firejail that make this look dangerous.</li>
+</ul>
+</li>
+</ul>
+<p>This is a bit long, but hopefully it will be useful.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120#post_20</link>
+        <pubDate>Mon, 12 Jan 2026 05:55:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4165</guid>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>In case it’s useful, I was able to successfully reproduce this on an entirely clean installation of Qubes R4.3.0 with the Xfce desktop:</p>
+<p>Using keyboard layout settings in dom0 Xfce:</p>
+<ul>
+<li>Set English and German as keyboard layout languages in dom0</li>
+<li>Set switching key to Alt+Shift in dom0</li>
+<li>Set Compose key to right Ctrl in dom0</li>
+<li>Started AppVM <code>personal</code> (based on <code>fedora-42-xfce</code>)
+<ul>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+</ul>
+</li>
+<li>Started AppVM <code>anon-whonix</code> (based on <code>whonix-workstation-18</code>)
+<ul>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+</ul>
+</li>
+</ul>
+<p>Using keyboard layout settings in individual AppVMs, dom0 still using Xfce:</p>
+<ul>
+<li>Reverted all keyboard layout changes in dom0, logged out of dom0 and then logged back in</li>
+<li>Started AppVM <code>personal</code> (based on <code>fedora-42-xfce</code>)</li>
+</ul>
+<p>Despite</p>
+<ul>
+<li>Confirmed that the keyboard layout is now stuck on US, as expected</li>
+<li>In the AppVM itself, set English and German as keyboard layout languages, set switching key to Alt+Shift, set Compose key to right Ctrl</li>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+<li>Compose key works</li>
+<li>Started AppVM <code>anon-whonix</code> (based on <code>whonix-workstation-18</code>)
+<ul>
+<li>Confirmed that the keyboard layout is stuck on US, as expected</li>
+<li>Confirmed that I could have the keyboard layout language in <code>personal</code> set to German and the keyboard layout language in <code>anon-whonix</code> set to English at the same time, both languages seem to work</li>
+<li>In the AppVM itself, set English and German as keyboard layout languages, set switching key to Alt+Shift (LXQt settings didn’t allow configuring the compose key)</li>
+<li>I can switch between English and German in this AppVM using Alt+Shift</li>
+<li>Both languages seem to work right initially</li>
+</ul>
+</li>
+<li>Shut down both <code>anon-whonix</code> and <code>personal</code></li>
+<li>Started both <code>anon-whonix</code> and <code>personal</code></li>
+<li>Tested keyboard layouts in <code>personal</code>
+<ul>
+<li>Can still switch keyboard layout languages between English and German in this AppVM</li>
+<li>Both languages seem to work right initially</li>
+</ul>
+</li>
+<li>Tested keyboard layouts in <code>anon-whonix</code>
+<ul>
+<li>Cannot switch keyboard layout languages between English and German in this AppVM</li>
+</ul>
+</li>
+</ul>
+<p>(I was going to test KDE next, but this was able to be reproduced before getting to that.)</p>
+<p><a class="mention" href="https://forums.kicksecure.com/u/marmarek">@marmarek</a> I don’t think this is a Qubes problem (at least not all of it; the KDE weirdness might be, but the failure to preserve VM-specific keyboard layouts I think is a Kicksecure thing). Adjusting the keyboard layout settings in LXQt adjusts the configuration in <code>~/.config/lxqt/session.conf</code>, which <a href="https://github.com/lxqt/wiki/blob/2adb0331555757c8d8ffa48b79d8121b0ffffa22/docs/lxqt.wiki/General.md">is supposed to be read by lxqt-session</a>. lxqt-session isn’t even installed in a Qubes environment, so the component of LXQt that would restore the keyboard layout settings in this way is missing entirely.</p>
+<p>lxqt-session was intentionally left out because it doesn’t manage the session in a Qubes environment, <a href="https://github.com/QubesOS/qubes-gui-agent-linux/blob/main/appvm-scripts/usrbin/qubes-session">qubes-session</a> does. Unsurprisingly and reasonably, qubes-session does not know how to interpret LXQt’s session.conf (or anyone else’s session config for that matter; why this works with Xfce is unclear, though I suspect xfconfd is what’s making things work). Thus something else has to do that job.</p>
+<p>The best solution would probably be to figure out how to get lxqt-session to do only those things that are “reasonable” under Qubes OS, like loading keyboard layouts, and ignore everything else. I haven’t had much luck with this; I can start lxqt-session inside an anon-whonix AppVM, but it doesn’t seem to do anything to the keyboard layouts when launched, and its configuration options aren’t really working the way I would expect, so I don’t know how practical this is. (It’s not looking very hopeful initially :P)</p>
+<p>As a fallback, we could write some code that could read the LXQt keyboard layout configuration and load it into X11 at startup. This is non-ideal and would be Qubes-specific since Kicksecure uses Wayland on non-Qubes platforms now, but it would work.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_27</link>
+        <pubDate>Mon, 12 Jan 2026 02:29:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4164</guid>
+      </item>
+      <item>
         <title>Mullvad VPN and Lockdown mode</title>
         <dc:creator><![CDATA[@JustPassinThru]]></dc:creator>
         <description><![CDATA[ <p>I removed the entire MullvadVPN from sysmaint. It was a horrible idea. But I do use it on user side and run Whonix thru it</p>
@@ -1211,198 +1547,6 @@ zsh: exit 1     dbus-send --session --dest=org.freedesktop.UPower --print-reply
         <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491#post_1</link>
         <pubDate>Sat, 10 Jan 2026 17:38:39 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4120</guid>
-      </item>
-      <item>
-        <title>Add a “Privacy Settings” Section to Kicksecure’s System‑Maintenance Panel</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <p>Kicksecure’s primary focus is rock solid security out of the box, and its close ties to Whonix and the wider privacy community are impossible to ignore. In practice, today’s Kicksecure installation feels much like a Whonix workstation acting as the host, with a handful of extra hardening tweaks.</p>
-<p>Because many Kicksecure users (myself included) come from Whonix or other privacy centric ecosystems communities, a consolidated Privacy panel would be a welcome addition. It would give privacy focused users a single place to fine tune their system after install (post install), while preserving the <em>security first</em> and user choice philosophy that defines Kicksecure. This would help point users that ask repeated questions “about why is xyz privacy feature or setting not in Kicksecure” to go there to enable them if they need them.</p>
-<p>Most mainstream distributions ship a “Privacy” section in settings in their DE, but those menus rarely expose the full set of controls that power users expect. Adding a dedicated privacy section to the sysmaint‑panel would let users adjust these options on demand, without enabling them by default. This also benefits anyone who runs Kicksecure as the host OS and then layers Whonix (or another VM) on top via VirtualBox or KVM.</p>
-<p>Below is idea for each item could be presented as a simple checkbox (or switch) that toggles the corresponding setting:</p>
-<pre><code class="lang-auto">[ ] Set the system timezone to UTC
-[ ] Enable/Disabe Boot Clock Randomization
-[ ] Fully Disable Bluetooth
-[ ] Enable/Disable MAC address spoofing
-[ ] Disable sending hostname with DHCP requests (reduces some fingerprintability when combined with mac spoofing)
-[ ] Activate/Deactivate IPv6 Privacy Extensions
-[ ] Check if GeoClue is removed and install dummy dependencies
-</code></pre>
-<p>What are your thoughts on this? Would is blur the line between Kicksecure and Whonix too much or would it be a nice addition?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490#post_1</link>
-        <pubDate>Sat, 10 Jan 2026 17:25:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4119</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>Yes, I added Spanish layout to Kicksecure AppVM, but it was removed after a restart</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_24</link>
-        <pubDate>Sat, 10 Jan 2026 17:03:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4118</guid>
-      </item>
-      <item>
-        <title>Problems with Kicksecure-18 in Qubes OS (usbguard in sys-qubes)</title>
-        <dc:creator><![CDATA[@linuxer]]></dc:creator>
-        <description><![CDATA[ <p>Hello. I’m not a very advanced user and I’ve run into difficulties with kicksecure‑18 in Qubes. I want to set up sys‑net, sys‑firewall, and sys‑usb on a Kicksecure template. I’m using a USB‑Wi‑Fi adapter, and usbguard always blocks it. I disabled usbguard.service in Kicksecure template, but that didn’t help - Wi‑Fi adapter is still blocked. Could you write a wiki instruction for handling cases like this?</p>
-<p>I also keep receiving notifications:<br>
-<code>denied: sdwdate-gui.connectCheck from sys‑usb </code>(sys‑firewall, sys‑net)<code> to sys‑whonix</code>.<br>
-upd. It seems I’ve found a solution in the wiki for <code>denied: sdwdate-gui.connectCheck</code></p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Qubes#Known_Issues">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Qubes#Known_Issues" target="_blank" rel="noopener nofollow ugc" title="07:03AM - 07 January 2026">Kicksecure – 7 Jan 26</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/2/2a/Download-qubes.jpg?version=b32bca55e3a831e51fc67de6018efa96" class="thumbnail" alt="" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Qubes#Known_Issues" target="_blank" rel="noopener nofollow ugc">Kicksecure for Qubes</a></h3>
-
-  <p>Using Kicksecure-Qubes</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/problems-with-kicksecure-18-in-qubes-os-usbguard-in-sys-qubes/1489#post_1</link>
-        <pubDate>Sat, 10 Jan 2026 17:01:18 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4117</guid>
-      </item>
-      <item>
-        <title>Systemcheck shows FDE absent in Live Mode (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1467">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>systemcheck could be tailored to be non-intrusive, more suitable in live mode.</p>
-</blockquote>
-</aside>
-<p>Now you got me confused as to what I was asking lol I guess maybe not show errors for things that user cant run due to user-sysmaint-split “sudo commands”. Will have to dig into the meat and potatos of what it all does in the wiki/code.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1467">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>systemcheck could be tailored to be non-intrusive, more suitable in live mode.</p>
-</blockquote>
-</aside>
-<p>Yeah I think that’s what I was getting at. This thread shouldn’t be high priority just my personal thoughts up installation and use. Like I see smartmontools is bundeled in Kicksecure, not sure which thing its for and if that plays role any checks like you mentioned. Really nice to have it included but it fails for USER on persistent mode despite getting it set for my Sandisk Cruiser (<code>sudo smartctl -d scsi -s on /dev/sda</code>). Failing drives such a pain if you have had them, which I have btw (unrelated to kicksecure). Nice to have it setup if I can with sendmail to send email notifying you your drive is gonna fail. Might be good for documentation on setting that up. Useful for server users despite them having RAID setup, or just a desktop user.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/systemcheck-shows-fde-absent-in-live-mode-18-0-8-7-feedback/1467#post_7</link>
-        <pubDate>Sat, 10 Jan 2026 16:49:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4116</guid>
-      </item>
-      <item>
-        <title>Systemcheck shows FDE absent in Live Mode (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1467">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>s your system fully up-to-date?</p>
-</blockquote>
-</aside>
-<p>Yes <code>apt update &amp;&amp; apt full-upgrade &amp;&amp; apt dist-upgrade &amp;&amp; apt clean</code></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/systemcheck-shows-fde-absent-in-live-mode-18-0-8-7-feedback/1467#post_6</link>
-        <pubDate>Sat, 10 Jan 2026 16:47:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4115</guid>
-      </item>
-      <item>
-        <title>System Sound Volume at 100% Post Install (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1468">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Were you observing the 100% speaker volume on physical hardware, or is this in a VM? If you see it on hardware, there’s an alternate and most likely better solution than the initial one that I can push and test.</p>
-</blockquote>
-</aside>
-<p>Physical hardware hence the <em>Install medium: Sandisk USB</em> at the top of my post. I was not aware it was pipeware thanks for clarifying on that. Yeah its just that many others distros last I checked like GNOME and I believe Ubuntu set them less then Full at default then remember that last one user toggles or sets.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/system-sound-volume-at-100-post-install-18-0-8-7-feedback/1468#post_4</link>
-        <pubDate>Sat, 10 Jan 2026 16:35:50 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4114</guid>
-      </item>
-      <item>
-        <title>Kicksecure Removable Media plugin (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <p>It does look like you can’t hide system volumes?</p>
-<p>I tried hidding the Network tab in PCManFM-Qt with luck by trying to add:</p>
-<pre><code class="lang-auto">[Places]
-HiddenPlaces=network;
-</code></pre>
-<p>in <code>~/.config/pcmanfm-qt/default/settings.conf</code> and <code>~/.config/pcmanfm-qt/lxqt/settings.conf</code> but manually check “hide” in the GUI worked but we should figure out how to globally set it for the conf</p>
-<p>I also saw and took note of:</p>
-<pre><code class="lang-auto">[Volume]
-AutoRun=true
-MountOnStartup=true
-MountRemovable=true
-
-</code></pre>
-<p><code>~/.config/pcmanfm-qt/lxqt/settings.conf</code> should that be disabled or would that effect users like myself that fully installed the system on USB or SD card?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-removable-media-plugin-18-0-8-7-feedback/1458#post_4</link>
-        <pubDate>Sat, 10 Jan 2026 16:30:49 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4113</guid>
-      </item>
-      <item>
-        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@exfil]]></dc:creator>
-        <description><![CDATA[ <h3><a name="p-4112-installation-details-1" class="anchor" href="https://forums.kicksecure.com#p-4112-installation-details-1"></a>Installation Details</h3>
-<hr>
-<p>Version:           18.0.8.7 Feedback</p>
-<p>Install medium:    Sandisk USB (Baremetal no virtualization)</p>
-<p>Partition format:  ext4 (auto-formatted) + LUKS</p>
-<p>BIOS:              Coreboot</p>
-<hr>
-<p>Hi everyone,</p>
-<p>I’m a bit puzzled by the way emerg‑shutdown operates in both persistence and live modes when I’m using a USB thumb drive. I want to report that it does work in both modes for my installation. The question at hand is when I unplug the drive, the system simply powers off without displaying any on screen notification.</p>
-<p>Is this the intended behavior? If not, could we consider adding a brief display message before the shutdown occurs?</p>
-<p>Thanks for your help!</p>
-<p>P.S. Very much pleased so far <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> good work!</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_1</link>
-        <pubDate>Sat, 10 Jan 2026 16:28:46 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4112</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@sam]]></dc:creator>
-        <description><![CDATA[ <p>I reinstalled template yesterday. This file is present, but problem remains. I also think that in the rush yesterday I might have mixed up terminals and entered command in wrong window (I have many qubes). Or I tried to fix problem myself and deleted something files (I was using AI for assistance - I’ve never worked with LXQt). Right now all of my appVMs switch keyboard layouts correctly and have two languages, except for Kicksecure/Whonix. I tried to find a temporary workaround for this problem – could you help me?</p>
-<p>I also checked whonix‑workstation template - file is present. So problem with file must have been some mistake on my part. I didn’t reinstall whonix‑workstation and qubes-gui-agent in whonix</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_23</link>
-        <pubDate>Fri, 09 Jan 2026 08:11:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4104</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>The paste is hard to read. Next time, please use <a href="https://www.kicksecure.com/wiki/Forum_Best_Practices#Code_Tags">Code Tags</a>.</p>
-<aside class="quote no-group" data-username="Patrick" data-post="15" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
-<blockquote>
-<p>Try to check your system using <code>debsums</code>.</p>
-<pre><code class="lang-auto">sudo debsums --silent --all
-</code></pre>
-<p>You can ignore most modified files in <code>/etc</code> and missing files in <code>/boot</code>.</p>
-</blockquote>
-</aside>
-<p>You didn’t provide this. So I don’t know how broken your Template is. This is highly unexpected. I don’t know how you could end up without file <code>/usr/lib/qubes/qubes-keymap.sh</code> unless you manually deleted it?</p>
-<p>(No. Not a indicator of compromise. <a href="https://www.kicksecure.com/wiki/Malware#Valid_Compromise_Indicators_versus_Invalid_Compromise_Indicators">Valid Compromise Indicators versus Invalid Compromise Indicators</a>)</p>
-<p>The way to fix this is by investigating why the Template was broken in this way or re-installing the Template. Because if this strange missing file issue can happen, then you can also have lots of other strange follow-up issues.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_22</link>
-        <pubDate>Fri, 09 Jan 2026 07:53:55 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4103</guid>
       </item>
   </channel>
 </rss>

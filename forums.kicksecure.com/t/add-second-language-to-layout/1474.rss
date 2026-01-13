@@ -5,9 +5,84 @@
     <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474</link>
     <description>I’m adding a second language to layout, but it disappears after restarting qube - only one language (English) remains in layout. I tried it in both AppVM and TemplateVM/dvm (Kicksecure/Whonix), but second language always disappear. Is this a bug, or a private-function that only English to be used? Or am I doing something wrong? (First time using LXQt)</description>
     
-    <lastBuildDate>Mon, 12 Jan 2026 02:29:20 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 13 Jan 2026 00:34:17 +0000</lastBuildDate>
     <category>Qubes</category>
     <atom:link href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[marmarek]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="29" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>What the poster is trying to do is configure keyboard layouts <em>at the AppVM level</em>, separate from dom0.</p>
+</blockquote>
+</aside>
+<p>I don’t think this is supported configuration in any way. While theoretically mismatching keyboard layouts between dom0 and VM may work in some (many) cases, it does lead to various corner cases (for example if one of those layouts assign different meaning for some modifiers, they won’t synchronize properly anymore). Keyboard layout should be modified at dom0 level.</p>
+<p>If one wants to use different layouts in different VMs, there are dom0 applications that can switch layouts based on active window - I believe KDE has this built in, but also I get similar behavior with Xfce built-in layout switcher, if I switch layout with some window active, by clicking on the widget, not key combo.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/31">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/31</link>
+        <pubDate>Tue, 13 Jan 2026 00:34:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1474-31</guid>
+        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I can additionally confirm that even when setting keyboard layout settings in dom0, layout switching is broken when using KDE in dom0. Pressing the keyboard layout switch shortcut (Meta+Alt+K by default) results in a popup appearing in dom0 that <em>says</em> the keyboard layout has been changed, but the keyboard layout does not actually change within a debian-13-minimal AppVM. If I run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in a terminal window, I don’t see anything printed to the terminal when pressing Meta+Alt+K in the KDE session, so it looks like the keyboard layout change notification isn’t reaching the AppVM at all. In contrast, if I log into the Xfce session in dom0, configure a second keyboard layout, run <code>sh -x /usr/lib/qubes/qubes-keymap.sh</code> in a <code>debian-13-minimal</code> AppVM, and then press the keyboard layout change shortcut, I see some text scroll down in the AppVM terminal upon pressing the shortcut. The keyboard layout within the VM also changes, so things seem to be working properly there.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/30">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/30</link>
+        <pubDate>Tue, 13 Jan 2026 00:24:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1474-30</guid>
+        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="28" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Shouldn’t this be reproducible inside a Debian minimal VM too?</p>
+</blockquote>
+</aside>
+<p>Yes, almost without question (I’m testing it now). Edit: Just tested, this is reproducible in <code>debian-13-minimal</code> after installing <code>lxqt-config</code> and using it to add a second keyboard layout.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="28" data-topic="1474">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Why this cannot be left to <code>/usr/lib/qubes/qubes-keymap.sh</code>?</p>
+</blockquote>
+</aside>
+<p>Because the original poster is trying to do something fundamentally different than what <code>qubes-keymap.sh</code> does. <code>qubes-keymap.sh</code> takes the keyboard layout settings from dom0 and loads those settings into each individual qube. What the poster is trying to do is configure keyboard layouts <em>at the AppVM level</em>, separate from dom0. Why is somewhat unclear (maybe they want to use different keyboard layout settings in different VMs, or maybe they’re trying to work around a limitation of the KDE session, or both), but that’s what they’re doing, as I understand it. This is why they mention settings things up in LXQt’s configuration, even though dom0 doesn’t have LXQt components installed most likely.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/29">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/29</link>
+        <pubDate>Mon, 12 Jan 2026 23:54:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1474-29</guid>
+        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
+      </item>
+      <item>
+        <title>Add second language to layout</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Shouldn’t this be reproducible inside a Debian minimal VM too?</p>
+<p>Why this cannot be left to <code>/usr/lib/qubes/qubes-keymap.sh</code>?</p>
+          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/28">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/28</link>
+        <pubDate>Mon, 12 Jan 2026 09:05:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1474-28</guid>
+        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
+      </item>
       <item>
         <title>Add second language to layout</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
@@ -689,73 +764,6 @@ Failed to read /keyboard-layout</p>
         <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/7</link>
         <pubDate>Thu, 08 Jan 2026 09:16:13 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-1474-7</guid>
-        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[Patrick]]></dc:creator>
-        <description><![CDATA[
-            <aside class="quote no-group" data-username="sam" data-post="4" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>I forgot to say that I have KDE desktop installed.</p>
-</blockquote>
-</aside>
-<p>Are you using <a href="https://www.qubes-os.org/">Qubes OS</a>?</p>
-<p>How did you install KDE desktop?</p>
-<p>Are you using an <a href="https://doc.qubes-os.org/en/latest/user/advanced-topics/standalones-and-hvms.html">HVM</a>?</p>
-<aside class="quote no-group" data-username="sam" data-post="5" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/5f9b8f/48.png" class="avatar"> sam:</div>
-<blockquote>
-<p>This problem on KDE desktop. Debian and Fedora AppVMs work well with 2 layouts.</p>
-</blockquote>
-</aside>
-<p>Is this reproducible in a similar environment Debian + KDE desktop?</p>
-          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/6">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/6</link>
-        <pubDate>Thu, 08 Jan 2026 08:47:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474-6</guid>
-        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[sam]]></dc:creator>
-        <description><![CDATA[
-            <p>Hello. This problem on KDE desktop. Debian and Fedora AppVMs work well with 2 layouts. Sorry I forgot to say about KDE</p>
-          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/5">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/5</link>
-        <pubDate>Thu, 08 Jan 2026 08:05:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474-5</guid>
-        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[sam]]></dc:creator>
-        <description><![CDATA[
-            <p>oh sorry. I forgot to say that I have KDE desktop installed. but this does not affect other appVMs (fedora, debian, kali, arch) - I have successfully added a second keyboard layout to all AppVMs except Whonix and Kicksecure. I have to add a second layout every time after starting Kicksecure/Whonix - layout disappears after shutdown of the vm.</p>
-          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/4">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/4</link>
-        <pubDate>Thu, 08 Jan 2026 05:33:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474-4</guid>
-        <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[marmarek]]></dc:creator>
-        <description><![CDATA[
-            <p>Are you talking about keyboard layout? Those are normally managed at dom0 level (when set in dom0, the setting is automatically propagated to relevant qubes).</p>
-          <p><a href="https://forums.kicksecure.com/t/add-second-language-to-layout/1474/3">Read full topic</a></p>
-        ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474/3</link>
-        <pubDate>Wed, 07 Jan 2026 17:57:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-1474-3</guid>
         <source url="https://forums.kicksecure.com/t/add-second-language-to-layout/1474.rss">Add second language to layout</source>
       </item>
   </channel>

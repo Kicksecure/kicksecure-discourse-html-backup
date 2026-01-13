@@ -114,7 +114,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="eYGUUbZGT2IPXPL6hBBV21YSe"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="rZ47MBnoAG0UF8s69Mcd8MiuD"></script>
 
 <!-- END End of Year Banner -->
 
@@ -325,6 +325,77 @@ sudo apt autoremove virtualbox</p>
 <blockquote>
 <p>Success</p>
 </blockquote>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-01-12T09:55:39Z' class='post-time'>
+                    January 12, 2026,  9:55am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-01-12T09:55:39Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>1 forum thread = 1 issue only please. In this case, 1 forum thread = 1 method only please. So I’ll only focus on the installer method.</p>
+<p>For other methods such as manually adding the VirtualBox repository, using extrepo (which does the same), if still relevant, please open a separate forum thread.</p>
+<p>Otherwise this will get too confusing.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Method’s 1, 2, 3 and 4 produced the same Error:<br>
+[sysmaint ~]% bash ./virtualbox-installer-clivirtualbox-installer-cli:<br>
+[ERROR]: Directory doesn’t exist: ‘/home/user’virtualbox-installer-cli:<br>
+[ERROR]: Aborting.virtualbox-installer-cli:<br>
+[NOTICE]: Executed script, function, command executed: ‘./virtualbox-installer-cli’ ‘die’ ‘exit “${1}”’virtualbox-installer-cli:<br>
+[ERROR]: Installer exited with code: ‘1’zsh: exit 1 bash ./virtualbox-installer-cli<br>
+(Same Directory doesn’t exist: ‘/home/user’ etc)</p>
+</blockquote>
+</aside>
+<p>I was able to reproduce this. It can happen when you only used sysmaint session so far. In other words, this can happen if you never started a user session yet. In result, account <code>user</code> has never logged in. However, the home directly of account <code>user</code> is only created upon its first login.</p>
+<p>So the solution is: Boot into user session at least once. Then you can reboot into a sysmaint session and the installer should be functional.</p>
+<p>A more helpful error message pointing that out will be added in a future release.</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>kicksecure-lxqt-installer-cli</p>
+</blockquote>
+</aside>
+<p>This is “largely” not a different method. virtualbox-installer-cli and kicksecure-lxqt-installer-cli share the very same source code. So if virtualbox-installer-cli, there is no need to try any of the other Linux installers by Kicksecure (or Whonix).</p>
+<aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1501">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
+<blockquote>
+<p>Sub-process /usr/bin/sqv returned an error code (1), error message is: Error: Failed to parse keyring “/usr/share/keyrings/virtualbox-archive-keyring.asc” Caused by: 0: Reading “/usr/share/keyrings/virtualbox-archive-keyring.asc”: Permission denied (os error 13) 1: Permission denied (os error 13)</p>
+</blockquote>
+</aside>
+<p>To fix:</p>
+<pre><code>sudo chmod o+r /usr/share/keyrings/virtualbox-archive-keyring.asc
+</code></pre>
+<p>[1]</p>
+<p>This step was missing in the documentation. Added just now.</p>
+<hr>
+<p>[1] This is due to <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Umask" class="inline-onebox">umask</a>.</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
