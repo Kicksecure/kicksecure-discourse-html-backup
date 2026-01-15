@@ -6,6 +6,216 @@
     <description>Latest posts</description>
       <item>
         <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
+        <dc:creator><![CDATA[@CodeLurker]]></dc:creator>
+        <description><![CDATA[ <p>Again, it also happens with a known good SanDisk that’s easily a decade or two old.  The first time it worked, but the second time, it didn’t.  I just installed Tails again onto one of the new drives.  No problem.  How many times do I have to install Tails without a problem, or almost always have a KickSecure install has a problem; at the same point.  When the SanDisk failed, it was, again, when trying to install the bootloader.  I have also had the same problem with ParrotOS; although I haven’t tested it anywhere near as extensively.  It’s not unique to KickSecure, but I can repeatedly burn Tails to these same drives, but rarely have a success with KickSecure.  Too bad I didn’t keep exact numbers for you; but I believe I tried all four USBs 2-3X, and only once got a success.  If it was a bad USB controller, then why did it fail when plugged into my computer; AND when I used an external USB hub?  I also tried burning plugged into my solitary USB 3.2 point.  I admit, I’ve only tried the old USB 2X I think, but again, they only ever fail when they try to install the bootloader.</p>
+<p>The classic thing, is if an OS won’t install, it’s the hardware.  I wouldn’t rule it out; except it happened once on an old HP desktop refurb.  It does not seem to be a defect in all the new drives, nor a bad USB controller.  Come to think of it, I believe I tried and failed to write it on another computer once; only to have it fail at the same point yet again.  I have gone around and around with problems with my MOTU audio interface; and they asked me to try a lot of things; except one cannot eliminate Win11 involvement in that case.  I was trying a lot of similar things with KickSecure.  They are evidently failing at the same point, no matter what make of USB, mostly on one computer; but with one failure on another, too.  I’m leaning toward an uninitialized variable from somewhere upstream to you, that only happens on certain hardware.  The really maddening thing, is everything appears to work perfectly until the very end and then hang indefinitely - requiring the trials to waste the maximum amount of time possible.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/warning-prob-with-installing-on-verbatim-seaglass-drives-false-alarm/1359#post_14</link>
+        <pubDate>Wed, 14 Jan 2026 17:33:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4200</guid>
+      </item>
+      <item>
+        <title>Browser choice</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/browser-choice/issues/2">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/browser-choice/issues/2" target="_blank" rel="noopener">github.com/Kicksecure/browser-choice</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/browser-choice/issues/2" target="_blank" rel="noopener">Add a policy option for users who need captive portals on chromium [Feature Request]</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-01-13" data-time="16:34:13" data-timezone="UTC">04:34PM - 13 Jan 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/NomadicUser" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/254721595?v=4" class="onebox-avatar-inline" width="20" height="20">
+          NomadicUser
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Despite after making sure my keyring was unlocked (the annoying popup for chrome<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> browsers) on linux. I was not able to connect to any public WiFi captive portals I tested. This is unrelated to the fact that most places in the US use AT&amp;T as their provider. I looked into this and captive portals are almost always over a http not https. Chromium forces handling of http to upgrade to https and many users report this issue.
+
+I proceeded to create a global policy and it fixed the issue for me:
+
+```
+{
+  "BasicAuthOverHttpEnabled": true,
+  "HttpsUpgradesEnabled": false
+}
+```
+
+[HttpsUpgradesEnabled](https://chromeenterprise.google/policies/#HttpsUpgradesEnabled) may not need to be set I didn't try without it but BasicAuthOverHttpEnabled most certainly needs to be set to even reach captive portals.
+
+
+Chrome 154 will set [HTTPS by default](https://security.googleblog.com/2025/10/https-by-default.html) which I bet will lead to more people having this issue. Currently though the default chrome settings disallows Basic Authentication dialogs on plain HTTP which almost most public captive portal gateways use. The second is chrome automatically upgrades any `http://` request to `https://` before sending it by default.
+
+The global policy directory for all users is `/etc/chromium/policies/managed/` and chrome supports multiple policy files in the directory.
+
+&gt; Any JSON files placed there are read and merged together, so you can split your configuration across multiple policy files if that makes management easier.
+
+This makes it easy if more such "Enterprise Policy" options were added to browser choice in the future:
+
+```
+/etc/chromium/policies/managed/
+├── 01_browser-choice_captive-portal-policy.json
+└── 02‑homepage‑policy.json
+```
+
+## Summery
+
+- Please add a check box option for Brave Browser and Chromium to create a Enterprise policy at install.
+
+```
+- **Enterprise Policies:**
+
+[ ] Enable access to Captive Portals (Public WiFi)
+```</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/browser-choice/issues/1">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/browser-choice/issues/1" target="_blank" rel="noopener">github.com/Kicksecure/browser-choice</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/browser-choice/issues/1" target="_blank" rel="noopener">Add Brave Browser Onion Repo install/update option</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-01-13" data-time="16:19:46" data-timezone="UTC">04:19PM - 13 Jan 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/NomadicUser" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/254721595?v=4" class="onebox-avatar-inline" width="20" height="20">
+          NomadicUser
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Please add an option to the Repo install of Brave to update and install the brow<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ser over Brave's Onion `tor+https://brave-browser-apt-release.s3.brave4u7jddbv7cyviptqjc7jusxh72uik7zt6adtckl5f4nwy2v72qd.onion` rather the clear connection. 
+
+The very least `tor+https://brave-browser-apt-release.s3.brave.com` cause I saw it was not torified over apt after installing and I doubt I'm the only one who would like such a feature. (Kicksecure already updates over Tor)
+
+I have been updating the browser over tor for some time but not with the newest debian source format but last I checked the new format supports the tor+ format provided by apt-transport-tor.
+
+```
+sudo tee /etc/apt/sources.list.d/brave-browser.list &gt; /dev/null &lt;&lt;'EOF'
+Types: deb
+URIs: tor+https://brave-browser-apt-release.s3.brave4u7jddbv7cyviptqjc7jusxh72uik7zt6adtckl5f4nwy2v72qd.onion
+Suites: stable
+Components: main
+Architectures: amd64 arm64
+Signed-By: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+EOF
+```
+
+```
+sudo tee /etc/apt/sources.list.d/brave-browser.list &gt; /dev/null &lt;&lt;'EOF'
+Types: deb
+URIs: tor+https://brave-browser-apt-release.s3.brave.com
+Suites: stable
+Components: main
+Architectures: amd64 arm64
+Signed-By: /usr/share/keyrings/brave-browser-archive-keyring.gpg
+EOF
+```
+
+### Basic Summery
+
+Include checkbox for in the repo option to either update/install over the onion or basic tor+ for users.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/browser-choice/1025?page=2#post_24</link>
+        <pubDate>Wed, 14 Jan 2026 08:41:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4199</guid>
+      </item>
+      <item>
+        <title>DKMS build fail. Kernel update fail on fresh install</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>FWIW, I tested it, and was able to confirm that the initial upgrade of a fresh installation of Kicksecure 18 from the ISO works. Thanks for the update!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dkms-build-fail-kernel-update-fail-on-fresh-install/1511#post_3</link>
+        <pubDate>Wed, 14 Jan 2026 04:53:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4198</guid>
+      </item>
+      <item>
+        <title>DKMS build fail. Kernel update fail on fresh install</title>
+        <dc:creator><![CDATA[@BlessedDove]]></dc:creator>
+        <description><![CDATA[ <p>I must humbly apologize. The brand new USB medium I bought was faulty. I did try to check both mediums for image integrity but I usually get no prompt or response when booting any USBs for integrity checks and certain tools. I am unsure if it doesn’t work with my BIOS settings since I disabled secure boot for compatibility and ease of use reasons. Ever since mainline grub or linux changed something with SHIM and secure boot I usually do not touch secure boot.</p>
+<p>I will shortly delete this if necessary, but for clarity will remain for a bit for those unfortunate enough to have read it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dkms-build-fail-kernel-update-fail-on-fresh-install/1511#post_2</link>
+        <pubDate>Wed, 14 Jan 2026 04:35:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4197</guid>
+      </item>
+      <item>
+        <title>DKMS build fail. Kernel update fail on fresh install</title>
+        <dc:creator><![CDATA[@BlessedDove]]></dc:creator>
+        <description><![CDATA[ <p>Using a verified fresh Kicksecure-LXQt-18.0.8.7.Intel_AMD64.iso I install from LIVE USB Sysmaint a Permanent Kicksecure system to a drive and reboot directly into the new system’s Sysmaint to begin a first update and upgrade. After 2 fresh new install attempts, updating with/without GUI/terminal, and debugging with apt it will still not let me update necessary linux images and headers. The same tirdad error remains after a fresh install. The only relevant logs I got are related to apt dependencies and configuration, but likely stemming from DKMS build failure. I have no experience with dkms, module building, or Debian build systems but I can only guess the build process cannot find or has no privilege to access pahole and possibly other necessary tools or files. I saved 2 logs from apt and dkms and from the dkms log:</p>
+<p>"/bin/sh: 1: pahole: not found "</p>
+<p><a href="https://paste.coalserver.de/?8575936c04833f84#YXqJK3oGa5KAfQ2scZfEwuR6vRrdEaDk9kKymAUivaR" rel="noopener nofollow ugc">https://paste.coalserver.de/?8575936c04833f84#YXqJK3oGa5KAfQ2scZfEwuR6vRrdEaDk9kKymAUivaR</a></p>
+<p>I was testing a new working system that was functional for a short while before the new linux image and header updates leading me to try an even newer install from the same, yet newest, ISO release. I apologize. I just do not know what specifically is wrong or where to learn more about it. Is this unspecific to Kicksecure?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/dkms-build-fail-kernel-update-fail-on-fresh-install/1511#post_1</link>
+        <pubDate>Wed, 14 Jan 2026 02:14:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4196</guid>
+      </item>
+      <item>
+        <title>Warning: Prob. with installing on Verbatim SeaGlass drives - False alarm</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="CodeLurker" data-post="12" data-topic="1359">
 <div class="title">
@@ -1436,254 +1646,6 @@ Proper bug report as per <a href="https://www.kicksecure.com/wiki/Reporting_Bugs
         <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93#post_4</link>
         <pubDate>Sun, 11 Jan 2026 07:14:59 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-4141</guid>
-      </item>
-      <item>
-        <title>Kicksecure IPv6 Default Settings (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <p>Question “Does Disabling IPv6 reduce Tor Anonymity set?” is unspecific to Kicksecure in so far as the very same question could be asked when using Debian. Kicksecure doesn’t introduce a relevant difference. Therefore the answer would also be the same. Therefore this question is best redirected at the Tor community as per <a href="https://www.kicksecure.com/wiki/Self_Support_First_Policy" class="inline-onebox">Self Support First Policy for Kicksecure</a>.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-ipv6-default-settings-18-0-8-7-feedback/1459#post_6</link>
-        <pubDate>Sun, 11 Jan 2026 07:07:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4140</guid>
-      </item>
-      <item>
-        <title>Add a “Privacy Settings” Section to Kicksecure’s System‑Maintenance Panel</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="151" height="151">
-
-      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="02:23PM - 12 December 2025">Kicksecure – 12 Dec 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar" alt="">
-
-<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
-
-  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/Whonix-Host">
-  <header class="source">
-      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1768037425" class="site-icon" alt="" width="500" height="500">
-
-      <a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener" title="09:32PM - 19 April 2025">Whonix – 19 Apr 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <img width="480" height="480" src="https://www.whonix.org/w/images/a/a5/Cd-rom-icon.png?version=7a6cdf63778a836bb7a4bf631442e0bc" class="thumbnail onebox-avatar" alt="">
-
-<h3><a href="https://www.whonix.org/wiki/Whonix-Host" target="_blank" rel="noopener">Whonix-Host Operating System Live ISO, Whonix-Host Installer</a></h3>
-
-  <p>Upcoming Host Operating System - In Development - Help wanted! - Please contribute!</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490#post_2</link>
-        <pubDate>Sun, 11 Jan 2026 07:03:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4139</guid>
-      </item>
-      <item>
-        <title>Add second language to layout</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="linuxer" data-post="24" data-topic="1474">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/b5e925/48.png" class="avatar"> linuxer:</div>
-<blockquote>
-<p>Yes, I added Spanish layout to Kicksecure AppVM,</p>
-</blockquote>
-</aside>
-<p>How?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-second-language-to-layout/1474?page=2#post_25</link>
-        <pubDate>Sun, 11 Jan 2026 07:00:34 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4138</guid>
-      </item>
-      <item>
-        <title>System Sound Volume at 100% Post Install (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Alternate solution implemented and submitted for review:</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">github.com/ArrayBolt3/desktop-config-dist</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">Set speaker volume to 50% on login one time</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="04:24:20" data-timezone="UTC">04:24AM - 11 Jan 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 20 additions and 0 deletions">
-        <a href="https://github.com/ArrayBolt3/desktop-config-dist/commit/35f31c4655542469992d2b3bb800ece8b3bcd126" target="_blank" rel="noopener">
-          <span class="added">+20</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">github.com/ArrayBolt3/user-sysmaint-split</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">Set speaker volume to 50% on login one time</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="04:19:24" data-timezone="UTC">04:19AM - 11 Jan 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 20 additions and 0 deletions">
-        <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/5208c2cba40aae198f6b1fa5a82592c8daa530c1" target="_blank" rel="noopener">
-          <span class="added">+20</span>
-          <span class="removed">-0</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/system-sound-volume-at-100-post-install-18-0-8-7-feedback/1468#post_6</link>
-        <pubDate>Sun, 11 Jan 2026 04:34:30 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4137</guid>
-      </item>
-      <item>
-        <title>No battery Status Indicator? (18.0.8.7 Feedback)</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Bug found, fix created:</p>
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">github.com/ArrayBolt3/vm-config-dist</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">Fix suppress-power-management-in-vms always thinking it's running on a VM</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-11" data-time="03:54:48" data-timezone="UTC">03:54AM - 11 Jan 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 1 additions and 1 deletions">
-        <a href="https://github.com/ArrayBolt3/vm-config-dist/commit/5130903354b795695c658e4ba942caf84422d9cd" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-1</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>In the mean time, the workaround you’re using should be good. You may also want to enable the lid watcher so that the machine goes to sleep when you close the lid.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/no-battery-status-indicator-18-0-8-7-feedback/1491#post_3</link>
-        <pubDate>Sun, 11 Jan 2026 03:56:00 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-4136</guid>
       </item>
   </channel>
 </rss>
