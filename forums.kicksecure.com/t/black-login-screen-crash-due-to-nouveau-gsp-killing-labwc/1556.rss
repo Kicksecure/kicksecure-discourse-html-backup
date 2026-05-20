@@ -1,0 +1,693 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Black login screen crash due to nouveau gsp killing labwc</title>
+    <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556</link>
+    <description>
+- Install KS on external USB.
+
+- Boot KS USB from the PC.
+- Go to sysmaint, and insert an external hard drive to KS.
+- USBguard popup gonna show up and then in seconds the black screen login gonna show up, and if i type the username “sysmaint” then login in again, after couple of seconds i will be logged out again with the same issue. If i remove the external hard drive then everything will go back to normal.</description>
+    
+    <lastBuildDate>Tue, 10 Feb 2026 11:13:38 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="23" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>Edit <code>/etc/profile.d/15_desktop-config-dist.sh</code>, and comment out the <code>if</code> block surrounding <code>export WLR_RENDERER='pixman'</code>. Do NOT comment out the WLR_RENDERER line itself.</li>
+<li>Reboot into a sysmaint session, but add the kernel parameter <code>nouveau.noaccel=1</code></li>
+</ul>
+</blockquote>
+</aside>
+<p>It worked!! good catch <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="24" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<blockquote>
+<p>add the kernel parameter</p>
+</blockquote>
+<p>Documented here:</p>
+</blockquote>
+</aside>
+<p>2 small notes to be added:</p>
+<blockquote>
+<p>sudoedit /etc/default/grub.d/50_user.cfg</p>
+</blockquote>
+<p>50_user.cfg is not created by default, but it will be newly created by this command.</p>
+<p>Adding the noaccel to /etc/default/grub will not give any effect, so only commands in <code>/etc/default/grub.d/</code> will take effect.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/25">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/25</link>
+        <pubDate>Tue, 10 Feb 2026 11:13:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-25</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="23" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Edit <code>/etc/profile.d/15_desktop-config-dist.sh</code>, and comment out the <code>if</code> block surrounding <code>export WLR_RENDERER='pixman'</code>. Do NOT comment out the WLR_RENDERER line itself.</p>
+</blockquote>
+</aside>
+<p>To elaborate, this means…</p>
+<p><code>/etc/profile.d/15_desktop-config-dist.sh</code></p>
+<p>old:</p>
+<pre><code class="lang-auto">  if [ "$(systemd-detect-virt 2&gt;/dev/null)" != 'none' ]; then
+    export WLR_RENDERER='pixman'
+  fi
+</code></pre>
+<p>new:</p>
+<pre><code class="lang-auto">#  if [ "$(systemd-detect-virt 2&gt;/dev/null)" != 'none' ]; then
+    export WLR_RENDERER='pixman'
+#  fi
+</code></pre>
+<p>As an alternative, mabye simpler to instead append on the very bottom of the file:</p>
+<pre><code>export WLR_RENDERER='pixman'
+</code></pre>
+<p>To confirm if that worked, after booting open a terminal and run.</p>
+<pre><code>echo "$WLR_RENDERER"
+</code></pre>
+<p>Should output:</p>
+<blockquote>
+<p>pixman</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>add the kernel parameter</p>
+</blockquote>
+<p>Documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grub">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1770625814" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Grub" target="_blank" rel="noopener" title="03:38PM - 25 January 2026">Kicksecure – 25 Jan 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" alt="" width="690" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Grub" target="_blank" rel="noopener">grub bootloader Configuration Changes</a></h3>
+
+  <p>Kernel Boot Parameter Changes</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Please verify using <a href="https://www.kicksecure.com/wiki/Grub#Inspect_Kernel_Command_Line">Inspect Kernel Command Line</a>.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/24">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/24</link>
+        <pubDate>Tue, 10 Feb 2026 03:31:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-24</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I have an idea I’d like you to test if you have the opportunity:</p>
+<ul>
+<li>Ensure the proprietary NVIDIA drivers are NOT installed.</li>
+<li>Edit <code>/etc/profile.d/15_desktop-config-dist.sh</code>, and comment out the <code>if</code> block surrounding <code>export WLR_RENDERER='pixman'</code>. Do NOT comment out the WLR_RENDERER line itself.</li>
+<li>Reboot into a sysmaint session, but add the kernel parameter <code>nouveau.noaccel=1</code> to the kernel command line before booting.</li>
+<li>See if the session is stable this time.</li>
+</ul>
+<p>This is probably the closest we’ll get to a raw framebuffer for the display. (wlroots doesn’t have and doesn’t want a true fbdev backend, and when I tried booting an NVIDIA-only machine with Nouveau disabled, the display resolution looked like it was somewhere around 640x480, which obviously wouldn’t be practically usable). This allows high resolutions, but also forces software rendering, which might work around bugs in the driver.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/23">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/23</link>
+        <pubDate>Tue, 10 Feb 2026 02:58:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-23</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Workaround has been added to the wiki:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1770625814" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener" title="09:11AM - 09 February 2026">Kicksecure – 9 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener">Nvidia</a></h3>
+
+  <p>NVIDIA: Intended Purpose, How It’s Used, and Common Issues in Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/22">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/22</link>
+        <pubDate>Tue, 10 Feb 2026 00:17:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-22</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>A post was split to a new topic: <a href="https://forums.kicksecure.com/t/system-broke-after-installing-nvidia-package/1590">System broke after installing nvidia package</a></p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/21">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/21</link>
+        <pubDate>Mon, 09 Feb 2026 09:08:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-21</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>A future version of <a href="https://www.kicksecure.com/wiki/Systemcheck">systemcheck</a> that will probably be released with Kicksecure version <code>18.1.3.9</code> and above will have improved <a href="https://www.kicksecure.com/wiki/Systemcheck#Journal_Inspection_and_Diagnostics_Logs">Journal Inspection and Diagnostics Logs</a>, therefore making this issue if appearing on any system easier to detect and link to <code>wiki/nvidia</code> (yet to be written) where workarounds will be documented.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/20">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/20</link>
+        <pubDate>Sun, 08 Feb 2026 18:34:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-20</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="17" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I’s quite common unfortunately. See:</p>
+</blockquote>
+</aside>
+<p>Good list, never saw one in the local nor in the online PC with one of these CPUs.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="17" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>We need some way for NVIDIA users to get graphics output though even if we disable Nouveau by default, since like discussed above integrated graphics are oftentimes just not there.</p>
+</blockquote>
+</aside>
+<p>I gave all the possibilities in my previous post, maybe make a wiki page of hardware that has issues with KS.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/19">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/19</link>
+        <pubDate>Sun, 08 Feb 2026 17:47:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-19</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="16" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>calamares must be kept simple. We cannot add thousands of options there (various requests for various calamares configurable settings exist) because testing these is time consuming (requires installation using calamares).</p>
+</blockquote>
+</aside>
+<p>Look at distros which are using calamares, they are adding thousands of options for the installation. But yeah testing them is essential for stability.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/18">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/18</link>
+        <pubDate>Sun, 08 Feb 2026 17:46:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-18</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>i dont know any market which sell a pc or laptop without CPU integrated graphics (i think even impossible).</p>
+</blockquote>
+</aside>
+<p>I’s quite common unfortunately. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.intel.com/content/www/us/en/support/articles/000027144/processors/intel-core-processors.html">
+  <header class="source">
+      <img src="https://www.intel.com/etc.clientlibs/settings/wcm/designs/intel/default/resources/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://www.intel.com/content/www/us/en/support/articles/000027144/processors/intel-core-processors.html" target="_blank" rel="noopener">Intel</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:586/330;"><img src="https://www.intel.com/etc.clientlibs/settings/wcm/designs/intel/us/en/images/resources/printlogo.png" class="thumbnail" alt="" width="586" height="330"></div>
+
+<h3><a href="https://www.intel.com/content/www/us/en/support/articles/000027144/processors/intel-core-processors.html" target="_blank" rel="noopener">Intel® Boxed Desktop Processors with No Intel® Processor Graphics</a></h3>
+
+  <p>Lists processors without Intel® Processor Graphics.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>AMD also has processors without integrated graphics, I believe the Ryzen 8000 F-series is an example, as well as older non-G-series processors.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Its a plus if KS doesnt work on old hardware, but sadly i have x200 where KS is working fine on it (no nvidia card).</p>
+</blockquote>
+</aside>
+<p>I disagree but that’s a side-topic.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>User who want nvidia/amd graphic cards he can enable that from the panel options, and/or enable/install related drivers manually (in calamares installer list might be the best option).</p>
+</blockquote>
+</aside>
+<p>AMD’s “full fat” graphics drivers are built into the kernel already, so disabling them would make little sense and would be difficult (similar to disabling Intel’s graphics drivers). Those drivers are also used for AMD’s iGPUs so they’re needed in any event.</p>
+<p>We need some way for NVIDIA users to get graphics output though even if we disable Nouveau by default, since like discussed above integrated graphics are oftentimes just not there.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/17</link>
+        <pubDate>Sun, 08 Feb 2026 15:36:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-17</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>(in calamares installer list might be the best option)</p>
+</blockquote>
+</aside>
+<p>calamares must be kept simple. We cannot add thousands of options there (various requests for various calamares configurable settings exist) because testing these is time consuming (requires installation using calamares).</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/16</link>
+        <pubDate>Sun, 08 Feb 2026 10:24:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-16</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="14" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>That may make life difficult for users who have NVIDIA as their only graphics output (high-end desktop CPUs may come with no integrated graphics</p>
+</blockquote>
+</aside>
+<p>Very specified cases, i dont know any market which sell a pc or laptop without CPU integrated graphics (i think even impossible).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="14" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>some older laptops may also be like that</p>
+</blockquote>
+</aside>
+<p>Its a plus if KS doesnt work on old hardware, but sadly i have x200 where KS is working fine on it (no nvidia card).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="14" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Is there a generic graphics driver that can be used with success, like a VESA driver? If there is, maybe it would work to default to that driver and software rendering, then expose options in the system maintenance panel for switching to accelerated graphics with either open-source or proprietary drivers.</p>
+</blockquote>
+</aside>
+<p>User who want nvidia/amd graphic cards he can enable that from the panel options, and/or enable/install related drivers manually (in calamares installer list might be the best option).</p>
+<p>Otherwise we should have a list of where KS is working properly VS not (similar to Qubes hcl). or worst case scenario we ship nvidia proprietary by default.</p>
+<p>Note: This also effect KS/WS on KVM because VMs can be mapped to the nvidia graphic card which will activate nouveau, VirtualBox is not effected because Vbox cant be used with nvidia.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/15</link>
+        <pubDate>Sun, 08 Feb 2026 06:45:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-15</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="12" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>So might be disable interaction with nvidia hardware by default and we can put it as an option in the calamares installation list and/or in System Maintenance Panel?</p>
+</blockquote>
+</aside>
+<p>That may make life difficult for users who have NVIDIA as their only graphics output (high-end desktop CPUs may come with no integrated graphics, some older laptops may also be like that). Nouveau is also not unstable for all users (it’s pretty stable on my hardware, or so it seems initially). Is there a generic graphics driver that can be used with success, like a VESA driver? If there is, maybe it would work to default to that driver and software rendering, then expose options in the system maintenance panel for switching to accelerated graphics with either open-source or proprietary drivers.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/14</link>
+        <pubDate>Sun, 08 Feb 2026 00:23:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-14</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Found the workaround (nvidia proprietary):</p>
+<p><code>sudo apt install nvidia-driver nvidia-kernel-dkms</code></p>
+<p>or</p>
+<p><code>sudo apt install --no-install-recommends firmware-nvidia-gsp nvidia-smi nvidia-driver nvidia-kernel-dkms</code></p>
+<p>It will ask you that it will conflict with <code>nouveau</code> but reboot gonna fix it, fine reboot after installation finish (gonna take time when building nvidia).</p>
+<p>Enroll Secure Boot MOK <a href="https://www.kicksecure.com/wiki/Secure_Boot#Secure_Boot_DKMS_Signing_Key_Enrollment">then do the necessary steps</a>:</p>
+<p>Done, no crushes and run:</p>
+<p><code>sudo nvidia-smi</code></p>
+<p>to make sure that nvidia has been detected.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/13</link>
+        <pubDate>Sat, 07 Feb 2026 09:01:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-13</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Yeah nouveau is the issue (previous log):</p>
+<pre><code class="lang-auto">localhost kernel: nouveau 0000:01:00.0: gsp: mmu fault queued
+localhost kernel: nouveau 0000:01:00.0: gsp: rc engn:00000001 chid:16 type:31 scope:1 part:233
+localhost kernel: nouveau 0000:01:00.0: fifo:c00000:0002:0010:[labwc[2244]] errored - disabling channel
+localhost kernel: nouveau 0000:01:00.0: labwc[2244]: channel 16 killed!
+</code></pre>
+<p>New recorded screenshot (then the crash will happen after):</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/7cecdf897c25d4bcdb61d0494d667488bd1ac62d.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/7cecdf897c25d4bcdb61d0494d667488bd1ac62d" title="nouv"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/7cecdf897c25d4bcdb61d0494d667488bd1ac62d_2_401x500.jpeg" alt="nouv" data-base62-sha1="hP8HHhvPGM1aA9oEMIbML2THtBH" width="401" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/7cecdf897c25d4bcdb61d0494d667488bd1ac62d_2_401x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/7cecdf897c25d4bcdb61d0494d667488bd1ac62d_2_601x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/7cecdf897c25d4bcdb61d0494d667488bd1ac62d_2_802x1000.jpeg 2x" data-dominant-color="6F5654"></a></div><p></p>
+<p>So the OS is sorta unusable when this issue occur, because machine will logout at any moment with no stop.</p>
+<p>So might be disable interaction with nvidia hardware by default and we can put it as an option in the calamares installation list and/or in System Maintenance Panel? (also adding the option of either using open source nvidia or the proprietary one).</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/12</link>
+        <pubDate>Sat, 07 Feb 2026 07:56:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-12</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="10" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If you can reproduce this in vanilla Debian 13, it would be best to report it there.</p>
+</blockquote>
+</aside>
+<p>No sadly its not reproducible with debian.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="10" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If you can pinpoint a setting we’re using that’s causing the issue, that would also be useful to know.</p>
+</blockquote>
+</aside>
+<p>Its a fresh installation no additional settings added/removed.</p>
+<p>Will check if any additional useful logs can be added.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/11</link>
+        <pubDate>Sat, 07 Feb 2026 05:32:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-11</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Just tested on my NVIDIA machine, was not able to reproduce the issue with either the Nouveau or proprietary NVIDIA 550 drivers.</p>
+<p>If you can reproduce this in vanilla Debian 13, it would be best to report it there. If you can pinpoint a setting we’re using that’s causing the issue, that would also be useful to know.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/10</link>
+        <pubDate>Fri, 06 Feb 2026 21:04:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-10</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>NVIDIA might be the culprit. I have a machine with an RTX 4070 that I can test on.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/9</link>
+        <pubDate>Fri, 06 Feb 2026 06:11:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-9</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Laptop is <a href="https://support.hp.com/us-en/document/ish_8109217-8109292-16">OMEN 16-ae0xxx</a>, comes with Intel UHD Graphics and Nvidia RTX 4060.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/8</link>
+        <pubDate>Fri, 06 Feb 2026 06:09:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-8</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Most likely relevant log lines:</p>
+<pre><code class="lang-auto">ﻒﺑﺭ 06 03:11:50 localhost kernel: labwc[2244]: segfault at 5c4000000000 ip 000077a34b92080c sp 00007ffc62178df0 error 4 in libgallium-25.0.7-2.so[b2080c,77a34aee1000+173b000] likely on CPU 2 (core 8, socket 0)
+ﻒﺑﺭ 06 03:11:50 localhost kernel: Code: 10 40 01 00 0f 8e c4 00 00 00 41 8b 45 00 48 8b 3c 24 be 01 00 00 00 4c 8d 05 83 22 d3 00 49 8b 55 08 45 8b 4d 00 48 8d 04 80 &lt;4c&gt; 8b 3c c7 49 8b 45 10 48 8b 3d 7d 3d db 01 49 8b 4f 28 48 89 c5
+ﻒﺑﺭ 06 03:11:50 localhost kernel: audit: type=1701 audit(1770333110.029:920): auid=1001 uid=1001 gid=1001 ses=1 subj=unconfined pid=2244 comm="labwc" exe="/usr/bin/labwc" sig=11 res=1
+ﻒﺑﺭ 06 03:11:50 localhost xdg-desktop-por[2658]: Error reading events from display: Broken pipe
+ﻒﺑﺭ 06 03:11:50 localhost livecheck[2500]: The Wayland connection broke. Did the Wayland compositor die?
+</code></pre>
+<p>The compositor itself is crashing. libgallium is an internal component of Mesa, so something is crashing in the graphics rendering code.</p>
+<p><a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a> What graphics hardware is your system using?</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/7</link>
+        <pubDate>Fri, 06 Feb 2026 01:01:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-7</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>18.0.8.7</p>
+</blockquote>
+</aside>
+<p>18.1.3.4*</p>
+<p>but i think you will land on the same error:</p>
+<aside class="quote no-group" data-username="Patrick" data-post="5" data-topic="1556" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Try <a href="https://www.kicksecure.com/wiki/Troubleshooting#Check_Systemd_Journal_Log_of_Previous_Boot">Check Systemd Journal Log of Previous Boot</a>.</p>
+</blockquote>
+</aside>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gofile.io/d/JDNbXa">
+  <header class="source">
+      <img src="https://gofile.io/dist/img/favicon16.png" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://gofile.io/d/JDNbXa" target="_blank" rel="noopener">gofile.io</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="300" height="300" src="https://gofile.io/dist/img/logo-small-og.png" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gofile.io/d/JDNbXa" target="_blank" rel="noopener">Gofile - Cloud Storage Made Simple</a></h3>
+
+  <p>Secure, fast and free cloud storage solution. Upload and share files instantly.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>full journalctl (hope of there is a way to upload it here .txt).</p>
+<p>Issue (i believe): Running unsigned software in EFI+Secureboot hardware, try to check this line:</p>
+<blockquote>
+<p>localhost kernel: Loading of unsigned module is rejected</p>
+</blockquote>
+<p>Around this the crashes happened (2 should be recorded) while im watching live journalctl by just clicking on restart sdwdate (yeah not even inserting another USB caused the black login screen).</p>
+<p>Note: typing “sysmaint” in the black screen then Enter, will log you back in as a new login session.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/6</link>
+        <pubDate>Thu, 05 Feb 2026 23:59:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-6</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Try <a href="https://www.kicksecure.com/wiki/Troubleshooting#Check_Systemd_Journal_Log_of_Previous_Boot">Check Systemd Journal Log of Previous Boot</a>.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/5</link>
+        <pubDate>Thu, 05 Feb 2026 08:11:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-5</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Unable to reproduce on my end with a fresh Kicksecure 18 installation (both before and after installing updates).</p>
+<ul>
+<li>Installed Kicksecure 18.0.8.7 persistently to a USB drive (via Calamares, not just flashing the ISO).</li>
+<li>Booted from the persistent installation.</li>
+<li>Booted into user mode first to make sure /home/user existed since sometimes that’s important</li>
+<li>Rebooted into sysmaint mode</li>
+<li>Plugged in a Western Digital EasyStore external USB drive (12 TB). USBGuard notification appeared, sysmaint session <strong>did not crash</strong>. Drive shows up in <code>lsblk</code>.</li>
+<li>Unplugged and replugged the drive, same results as above.</li>
+<li>Installed all system updates, then rebooted, booting into sysmaint mode again.</li>
+<li>Plugged in the drive. USBGuard notification appeared, again the sysmaint session <strong>did not crash</strong>. Drive shows up in <code>lsblk</code>.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/4</link>
+        <pubDate>Thu, 05 Feb 2026 05:06:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-4</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="leok" data-post="2" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/f4b2a3/48.png" class="avatar"> leok:</div>
+<blockquote>
+<p>which version of KS are you using?</p>
+</blockquote>
+</aside>
+<p><a href="https://download.kicksecure.com/iso/18.1.3.4/">18.1.3.4</a>.</p>
+<aside class="quote no-group" data-username="leok" data-post="2" data-topic="1556">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/f4b2a3/48.png" class="avatar"> leok:</div>
+<blockquote>
+<p>Also tested the “testers version” with no error.</p>
+</blockquote>
+</aside>
+<p>Yes testers enabled.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/3</link>
+        <pubDate>Mon, 02 Feb 2026 16:41:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-3</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[leok]]></dc:creator>
+        <description><![CDATA[
+            <p>Uunable to duplicate this error - which version of KS are you using? Tested latest release and all good.</p>
+<p>Also tested the “testers version” with no error.</p>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/2</link>
+        <pubDate>Mon, 02 Feb 2026 14:31:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-2</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+      <item>
+        <title>Black login screen crash due to nouveau gsp killing labwc</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <ul>
+<li>
+<p>Install KS on external USB.</p>
+</li>
+<li>
+<p>Boot KS USB from the PC.</p>
+</li>
+<li>
+<p>Go to sysmaint, and insert an external hard drive to KS.</p>
+</li>
+<li>
+<p>USBguard popup gonna show up and then in seconds the black screen login gonna show up, and if i type the username “sysmaint” then login in again, after couple of seconds i will be logged out again with the same issue. If i remove the external hard drive then everything will go back to normal.</p>
+</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556/1</link>
+        <pubDate>Mon, 02 Feb 2026 13:30:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1556-1</guid>
+        <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+      </item>
+  </channel>
+</rss>

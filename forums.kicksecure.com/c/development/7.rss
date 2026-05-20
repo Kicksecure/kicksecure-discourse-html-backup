@@ -1,0 +1,1556 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Development - Kicksecure Forums</title>
+    <link>https://forums.kicksecure.com/c/development/7</link>
+    <description>Topics in the &#39;Development&#39; category Development of Kicksecure software and source code. &lt;a href=&quot;https://www.kicksecure.com/wiki/Development_Discussion_Policy&quot;&gt;Development Discussion Policy&lt;/a&gt; and &lt;a href=&quot;https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy&quot;&gt;First-Time Source Code Contributor Policy&lt;/a&gt; apply.</description>
+    
+      <lastBuildDate>Fri, 15 May 2026 11:04:22 +0000</lastBuildDate>
+      <atom:link href="https://forums.kicksecure.com/c/development/7.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.</p>
+<p>This is useful for better display graphic and graphics related work.</p>
+<p>KS will boot into black screen if only nvidia installed, this is the log:</p>
+<pre><code class="lang-auto">[sysmaint ~]% journalctl -b -1                                                                               
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:43 localhost systemd[2038]: msgcollector-gui.service: Failed with result 'signal'.
+May 14 14:06:43 localhost systemd[2038]: Stopped msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: disconnected from pipewire
+May 14 14:06:43 localhost systemd[2038]: Stopped wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:43 localhost systemd[2038]: wireplumber.service: Consumed 188ms CPU time, 101.8M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopping pipewire.service - PipeWire Multimedia Service...
+May 14 14:06:43 localhost systemd[2038]: Stopped pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:43 localhost systemd[2038]: Removed slice session.slice - User Core Session Slice.
+May 14 14:06:43 localhost systemd[2038]: session.slice: Consumed 348ms CPU time, 119.6M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopped target basic.target - Basic System.
+May 14 14:06:43 localhost systemd[2038]: Stopped target paths.target - Paths.
+May 14 14:06:43 localhost systemd[2038]: Stopped target sockets.target - Sockets.
+May 14 14:06:43 localhost systemd[2038]: Stopped target timers.target - Timers.
+May 14 14:06:43 localhost systemd[2038]: Closed dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:43 localhost systemd[2038]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:43 localhost systemd[2038]: Closed gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:43 localhost systemd[2038]: Closed keyboxd.socket - GnuPG public key management service.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:43 localhost systemd[2038]: Removed slice app.slice - User Application Slice.
+May 14 14:06:43 localhost systemd[2038]: app.slice: Consumed 780ms CPU time, 103.7M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Reached target shutdown.target - Shutdown.
+May 14 14:06:43 localhost systemd[2038]: Finished systemd-exit.service - Exit the Session.
+May 14 14:06:43 localhost systemd[2038]: Reached target exit.target - Exit the Session.
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_unix(systemd-user:session): session closed for user sysmaint
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid eq 0" not met by user "sysmaint"
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid ne 0" was met by user "sysmaint"
+lines 108-141/141 (END)
+</code></pre>
+<p>So there are flags need to be added to make it compatible with discrete mode:</p>
+<p><code>sudo nano /etc/modprobe.d/nvidia-drm.conf</code></p>
+<p>add:</p>
+<p><code>options nvidia-drm modeset=1 fbdev=1</code></p>
+<p>Then regenerate:</p>
+<p><code>sudo dracut --force --regenerate-all</code></p>
+<p>The next reboot will lead to kernel panic, only way to bootup again it remove the flags from grub:</p>
+<p>Press e on grub window, search for the line starting with “linux”, and add to the end of it:</p>
+<p><code>rd.driver.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm modprobe.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm module_blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm systemd.unit=multi-user.target</code></p>
+<p>Then F10.</p>
+<p>After that it will boot up, and you need to remove the added flags and regenerate dracut.</p>
+<p>Note: I have tested that with Debian 13 DVD image with LXQT (default going to be initramfs and xorg) + Nvidia setup as before = it will bootup normally without issues.</p>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727</link>
+          <pubDate>Fri, 15 May 2026 11:04:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1727</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</source>
+        </item>
+        <item>
+          <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>KS on VM is working good, but KS on direct hardware after fresh installation always suffering of clock gab between real UTC time and KS local time with 4 hours backward in KS case, leading to broken sdwdate (but there is an internet connection).</p>
+<p>Manual time adjustment will fix it but this is impractical.</p>
+<p>Either fixing the issue of why its not catching up or making NTP as fallback mechanism when needed to fix itself.</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724</link>
+          <pubDate>Thu, 14 May 2026 23:46:30 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1724</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724.rss">Kicksecure on hardware - sdwdate clock always broken on direct hard drive</source>
+        </item>
+        <item>
+          <title>Any ETA for the next release?</title>
+          <dc:creator><![CDATA[vafogoj179]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Im going to be installing kick on a new machine + whonix vms and since there has been almost 2 months since  1.4.2 i was wondering if i the next release will be soon so i can go with it and avoid having to update everything twice in short period of time.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/any-eta-for-the-next-release/1659">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/any-eta-for-the-next-release/1659</link>
+          <pubDate>Wed, 08 Apr 2026 12:15:15 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1659</guid>
+          <source url="https://forums.kicksecure.com/t/any-eta-for-the-next-release/1659.rss">Any ETA for the next release?</source>
+        </item>
+        <item>
+          <title>Sequoia git (`sq-git`)</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><code>sq-git</code></p>
+<ul>
+<li><a href="https://sequoia-pgp.gitlab.io/sequoia-git/" class="inline-onebox">Sequoia git</a></li>
+<li><a href="https://sequoia-pgp.gitlab.io/sequoia-git/user-manual/" class="inline-onebox">Introduction - Sequoia git</a></li>
+<li><a href="https://sequoia-pgp.gitlab.io/sequoia-git/man/sq-git.1.html" class="inline-onebox">Sequoia PGP Manual Pages</a></li>
+<li><a href="https://fosdem.org/2026/schedule/event/KFSUCW-sequoia-git/" class="inline-onebox">FOSDEM 2026 - Sequoia git: Making Signed Commits Matter</a></li>
+<li><a href="https://github.com/sequoia-pgp/hello-world" class="inline-onebox">GitHub - sequoia-pgp/hello-world · GitHub</a></li>
+<li><a href="https://github.com/sequoia-pgp/authenticate-commits" class="inline-onebox">GitHub - sequoia-pgp/authenticate-commits: Authenticate commits using the repository's commit policy · GitHub</a></li>
+</ul>
+            <p><small>5 posts - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sequoia-git-sq-git/1638">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sequoia-git-sq-git/1638</link>
+          <pubDate>Sat, 21 Mar 2026 10:32:53 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1638</guid>
+          <source url="https://forums.kicksecure.com/t/sequoia-git-sq-git/1638.rss">Sequoia git (`sq-git`)</source>
+        </item>
+        <item>
+          <title>Which kicksecure security features can be implemented in non-debian distros?</title>
+          <dc:creator><![CDATA[motionsuspended10]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>To be more specific, I’m talking about these;</p>
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/security-misc">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/43292d4ea14bd8929285be1becec8b94/Kicksecure/security-misc" class="thumbnail">
+
+  <h3><a href="https://github.com/Kicksecure/security-misc" target="_blank" rel="noopener nofollow ugc">GitHub - Kicksecure/security-misc: Kernel Hardening; Protect Linux User Accounts...</a></h3>
+
+    <p><span class="github-repo-description">Kernel Hardening; Protect Linux User Accounts against Brute Force Attacks; Improve Entropy Collection; Strong Linux User Account Separation; Enhances Misc Security Settings - https://www.kicksecure.com/wiki/Security-misc</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/grub-live">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/grub-live" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/2568b8e75c0e9c1d98deae93a0a47e61/Kicksecure/grub-live" class="thumbnail">
+
+  <h3><a href="https://github.com/Kicksecure/grub-live" target="_blank" rel="noopener nofollow ugc">GitHub - Kicksecure/grub-live: optional grub live boot menu entry as second...</a></h3>
+
+    <p><span class="github-repo-description">optional grub live boot menu entry as second option https://www.kicksecure.com/wiki/Grub-live</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/Kicksecure/user-sysmaint-split">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/user-sysmaint-split" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/960eb64949781e76cee35f76678ade10/Kicksecure/user-sysmaint-split" class="thumbnail">
+
+  <h3><a href="https://github.com/Kicksecure/user-sysmaint-split" target="_blank" rel="noopener nofollow ugc">GitHub - Kicksecure/user-sysmaint-split</a></h3>
+
+    <p><span class="github-repo-description">Contribute to Kicksecure/user-sysmaint-split development by creating an account on GitHub.</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Would it be possible to set these things up manually on other distros like Arch, Void or Gentoo (OpenRC)?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/which-kicksecure-security-features-can-be-implemented-in-non-debian-distros/1619">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/which-kicksecure-security-features-can-be-implemented-in-non-debian-distros/1619</link>
+          <pubDate>Tue, 03 Mar 2026 14:27:09 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1619</guid>
+          <source url="https://forums.kicksecure.com/t/which-kicksecure-security-features-can-be-implemented-in-non-debian-distros/1619.rss">Which kicksecure security features can be implemented in non-debian distros?</source>
+        </item>
+        <item>
+          <title>Black login screen crash due to nouveau gsp killing labwc</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <ul>
+<li>
+<p>Install KS on external USB.</p>
+</li>
+<li>
+<p>Boot KS USB from the PC.</p>
+</li>
+<li>
+<p>Go to sysmaint, and insert an external hard drive to KS.</p>
+</li>
+<li>
+<p>USBguard popup gonna show up and then in seconds the black screen login gonna show up, and if i type the username “sysmaint” then login in again, after couple of seconds i will be logged out again with the same issue. If i remove the external hard drive then everything will go back to normal.</p>
+</li>
+</ul>
+            <p><small>25 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556</link>
+          <pubDate>Mon, 02 Feb 2026 13:30:42 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1556</guid>
+          <source url="https://forums.kicksecure.com/t/black-login-screen-crash-due-to-nouveau-gsp-killing-labwc/1556.rss">Black login screen crash due to nouveau gsp killing labwc</source>
+        </item>
+        <item>
+          <title>Fix not identified languages (squares) from calamares installer</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/88f5674f0df9adec4235513cc8c1a15b26b4cad1.png" data-download-href="https://forums.kicksecure.com/uploads/default/88f5674f0df9adec4235513cc8c1a15b26b4cad1" title="language"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/88f5674f0df9adec4235513cc8c1a15b26b4cad1_2_673x500.png" alt="language" data-base62-sha1="jxAI3MGPlo0MDxdPZcEaD9z9yfv" width="673" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/88f5674f0df9adec4235513cc8c1a15b26b4cad1_2_673x500.png, https://forums.kicksecure.com/uploads/default/original/1X/88f5674f0df9adec4235513cc8c1a15b26b4cad1.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/88f5674f0df9adec4235513cc8c1a15b26b4cad1.png 2x" data-dominant-color="D2D4D6"></a></div><p></p>
+<p>Either remove squares by removing the unsupported languages or add the missing languages.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/fix-not-identified-languages-squares-from-calamares-installer/1539">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/fix-not-identified-languages-squares-from-calamares-installer/1539</link>
+          <pubDate>Fri, 30 Jan 2026 18:50:02 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1539</guid>
+          <source url="https://forums.kicksecure.com/t/fix-not-identified-languages-squares-from-calamares-installer/1539.rss">Fix not identified languages (squares) from calamares installer</source>
+        </item>
+        <item>
+          <title>Ram-wipe no longer functional in Kicksecure 18? / How to verify functionality of ram-wipe?</title>
+          <dc:creator><![CDATA[trizzo]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Hi. I just upgraded to Kicksecure 18. It looks amazing! Well done guys!</p>
+<p>However I have many issues that I’ll list below:</p>
+<ol>
+<li>Ram-Wipe no longer works</li>
+</ol>
+<p>Other than these few things I’ve noticed, it is all in all pretty good!</p>
+<p>Cheers guys, I hope these problems can be fixed soon <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=14" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<hr>
+<p>Moderation comment: Edited to address only 1 issue.</p>
+            <p><small>10 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18-how-to-verify-functionality-of-ram-wipe/1497">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18-how-to-verify-functionality-of-ram-wipe/1497</link>
+          <pubDate>Sun, 11 Jan 2026 09:54:32 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1497</guid>
+          <source url="https://forums.kicksecure.com/t/ram-wipe-no-longer-functional-in-kicksecure-18-how-to-verify-functionality-of-ram-wipe/1497.rss">Ram-wipe no longer functional in Kicksecure 18? / How to verify functionality of ram-wipe?</source>
+        </item>
+        <item>
+          <title>Use GUID Partition Table (GPT) by default</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Quote ticket <a href="https://www.kicksecure.com/wiki/Dev/todo#calamares_-_use_gpt_by_default">calamares - use gpt by default</a>:</p>
+<blockquote>
+<ul>
+<li>Patrick: bug: unencrypted installations are mbr by default</li>
+<li>Patrick: todo: port from <a href="https://en.wikipedia.org/wiki/Master_boot_record">master boot record (MBR)</a> to <a href="https://en.wikipedia.org/wiki/GUID_Partition_Table">GUID Partition Table (GPT)</a>, if sane</li>
+<li>Aaron: Likely not a good idea until a Calamares release with <a href="https://github.com/calamares/calamares/pull/2422" class="inline-onebox">Hybrid bootloader (BIOS+UEFI) installation support by ArrayBolt3 · Pull Request #2422 · calamares/calamares · GitHub</a> in it is made (the version in Trixie doesn’t have this yet). We’d have to introduce a bios-grub partition unconditionally on both EFI and BIOS, and only one bootloader would be installed. This would mean that BIOS systems would end up with a bios_boot partition and no ESP, while EFI systems would get both bios_boot and ESP partitions but only an EFI bootloader installed. Once the linked PR is present in a release, we will be able to always have both partitions and both bootloaders.
+<ul>
+<li>Aaron: Technically GRUB can be installed on BIOS systems without a bios_boot partition, but <code>grub-install</code> must be run with <code>--force</code> to do this, and the bootloader may break at any time if this is done. See <a href="https://savannah.gnu.org/bugs/index.php?32391#comment1:" class="inline-onebox">Their whole art, is this: “It is impossible to cogitate this systematic.</a></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>The blocklists are unreliable because the filesystems can move the files around at will and so the exact sectors are subject to change. Any such change creates both a reliability and security problem. Previously the blocks were only rarely moved around. However, now, with features like tail repacking and online defragmenter it will become increasingly of a problem.</p>
+</blockquote>
+</blockquote>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/use-guid-partition-table-gpt-by-default/1465">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/use-guid-partition-table-gpt-by-default/1465</link>
+          <pubDate>Mon, 05 Jan 2026 09:26:36 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1465</guid>
+          <source url="https://forums.kicksecure.com/t/use-guid-partition-table-gpt-by-default/1465.rss">Use GUID Partition Table (GPT) by default</source>
+        </item>
+        <item>
+          <title>Research into Wiping video RAM (VRAM) on shutdown</title>
+          <dc:creator><![CDATA[Tengu]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>While browsing the grub‑live wiki I discovered that neither grub‑live nor Tails clears VRAM when the system shuts down.</p>
+<p>When the system powers down, the kernel stops the CPUs and tells each driver to simply hand the device back to the firmware. The firmware may or may not clear the memory when power is removed. Complete loss of power guarantees erasure usually right?</p>
+<p>With the nohibernate flag now in play, could this interfere with reaching the deepest D3 cold power state? I’m no computer scientist, but my intuition says there shouldn’t be a direct link.<br>
+Has anyone published research on this topic? Is a reliable feature even feasible for Kicksecure?</p>
+<p>How could you turn the GPU off before the CPU?</p>
+<p>Does an already normal linux shutdown put devices in D3 cold?</p>
+<p>For context, I’ve been looking at kernel GPU parameters and both AMD and Radeon expose runtime power management flags that let the GPU request D3 Cold.</p>
+<p>Building on a previous discussion about dracut and grub‑live, I’m wondering whether we can leverage <code>rd.driver.pre=</code> and <code>rd.driver.post=</code> to force the amdgpu module to load inside the initramfs before the real root mounts. Then keep that module loaded after the real root is mounted so it is still present when the dracut‑shutdown stage runs? I’d presume that it wouldn’t be as simple as just this alone. Something like the ram-wipe Dracut module?</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404</link>
+          <pubDate>Sat, 20 Dec 2025 02:12:29 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1404</guid>
+          <source url="https://forums.kicksecure.com/t/research-into-wiping-video-ram-vram-on-shutdown/1404.rss">Research into Wiping video RAM (VRAM) on shutdown</source>
+        </item>
+        <item>
+          <title>3D acceleration for Kicksecure VMs</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Creating this so I have something to reference for documentation on the wiki.</p>
+<p>While attempting to update the glmark2 instructions for Kicksecure 18, I discovered that 3d acceleration under VirtualBox is a mess, at least when using VMSVGA graphics. So far:</p>
+<ul>
+<li>With 3d accel disabled, everything <em>seems</em> OK, glmark2-wayland runs without problems, but naturally it uses the CPU for everything.</li>
+<li>With 3d accel enabled, glmark2-wayland still uses CPU rendering by default, because labwc is started with <code>WLR_RENDERER=pixman</code> set by default. One has to unset this environment variable before starting labwc to get 3d acceleration capabilities to be recognized. Technically this is a Kicksecure limitation that could be fixed.</li>
+<li>If you are running with low memory (in my case 768 MB, I had left the VM with this amount of memory on accident), 3d accel is enabled, and glmark2-wayland is <strong>NOT</strong> using 3d accel (i.e. <code>WLR_RENDERER=pixman</code> is set), the VM will spontaneously hang or reboot during the glmark2-wayland test. This is because something (didn’t have the presence of mind to record what) in the kernel ends up doing the equivalent of a segfault, which results in a kernel oops, which results in a kernel panic, which results in an instant reboot..</li>
+<li>If you attempt to run glmark2 (just plain glmark2, which will go through Xwayland) without using CPU rendering (<code>WLR_RENDERER=pixman</code>), the glmark2 window will briefly flash on-screen and then vanish.</li>
+<li>If you attempt to run glmark2 (the X11 version) with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately crash <em>labwc itself</em> when launched.</li>
+<li>If you attempt to run glmark2-wayland with GPU rendering (<code>WLR_RENDERER</code> unset when labwc is started), it will immediately error out:</li>
+</ul>
+<pre><code class="lang-auto">=======================================================
+    glmark2 2023.01
+=======================================================
+    OpenGL Information
+    GL_VENDOR:      VMware, Inc.
+    GL_RENDERER:    SVGA3D; build: RELEASE;  LLVM;
+    GL_VERSION:     4.1 (Compatibility Profile) Mesa 25.0.7-2
+    Surface Config: buf=32 r=8 g=8 b=8 a=8 depth=24 stencil=0 samples=0
+    Surface Size:   800x600 windowed
+=======================================================
+[build] use-vbo=false:[destroyed object]: error 7: importing the supplied dmabufs failed
+ FPS: 1037 FrameTime: 0.965 ms
+=======================================================
+                                  glmark2 Score: 1036 
+=======================================================
+</code></pre>
+<p>At this point I’m pretty sure 3d rendering in VirtualBox is just broken. It might work better if using VBoxSVGA graphics, but as I understand it, the 3d acceleration code for that graphics emulator is insecure and can be used for a VM escape.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393</link>
+          <pubDate>Tue, 16 Dec 2025 04:39:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1393</guid>
+          <source url="https://forums.kicksecure.com/t/3d-acceleration-for-kicksecure-vms/1393.rss">3D acceleration for Kicksecure VMs</source>
+        </item>
+        <item>
+          <title>Creating new user will not be shown into boot menu</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>When a new user created the expectation of the OS user to see this new user popped up automatically on the boot menu so he can use it similarly to user session which comes by default. Otherwise how he can even use the new user?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/creating-new-user-will-not-be-shown-into-boot-menu/1385">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/creating-new-user-will-not-be-shown-into-boot-menu/1385</link>
+          <pubDate>Thu, 11 Dec 2025 09:08:56 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1385</guid>
+          <source url="https://forums.kicksecure.com/t/creating-new-user-will-not-be-shown-into-boot-menu/1385.rss">Creating new user will not be shown into boot menu</source>
+        </item>
+        <item>
+          <title>Not Passing any Info from user to sysmaint (NetworkManager) (polkit)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>The ability of passing information from user session to sysmaint session can be used maliciously.</p>
+<p>Scenario in my head is that the NetworkManager if configured under user session the same info will be passed to sysmaint, what if the info passed will not be x.x.x.x IP but instead sudo 123?</p>
+<p>So user/s sessions shall not pass information of their changes to sysmaint to avoid such scenario.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/not-passing-any-info-from-user-to-sysmaint-networkmanager-polkit/1384">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/not-passing-any-info-from-user-to-sysmaint-networkmanager-polkit/1384</link>
+          <pubDate>Thu, 11 Dec 2025 09:04:30 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1384</guid>
+          <source url="https://forums.kicksecure.com/t/not-passing-any-info-from-user-to-sysmaint-networkmanager-polkit/1384.rss">Not Passing any Info from user to sysmaint (NetworkManager) (polkit)</source>
+        </item>
+        <item>
+          <title>Kicksecure for Qubes - HVM Issues</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://www.kicksecure.com/wiki/Qubes#HVM">Kicksecure for Qubes - HVM</a></p>
+<p>For reference only.</p>
+<p>Note, the following issues are unspecific to Kicksecure. These are general Qubes HVM issues.</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10424">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10424" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10424" target="_blank" rel="noopener">Emulated VGA in HVMs advertises resolutions that aren't actually supported by the VGA adapter</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-11-23" data-time="04:11:19" data-timezone="UTC">04:11AM - 23 Nov 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+###<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> Qubes OS release
+
+R4.3
+
+### Brief summary
+
+Some of the resolutions advertised to HVMs by the VGA emulation aren't supported by the VGA emulation itself. One of those resolutions is 1366x768, which if actually set will result in a badly distorted flashy mess. This happens in arbitrary Linux distributions regardless of display server (X or Wayland) to my awareness; I can reproduce the issue on openSUSE Tumbleweed (both XFCE and GNOME) and Kicksecure 18. All show 1366x768 as available; Kicksecure and openSUSE Tumbleweed XFCE show distortion when set to these resolutions, while openSUSE Tumbleweed GNOME ends up set to 1360x768 when 1366x768 is requested.
+
+### Steps to reproduce
+
+1. Download an OpenSUSE live image from https://get.opensuse.org/tumbleweed/?type=desktop#download, which image doesn't matter.
+2. Create a new HVM, set its memory to 4000/4000 MB, and disable memory balancing.
+3. Boot the HVM from the downloaded ISO.
+4. Look at the display resolution settings. 1366x768 will be advertised.
+5. Set the resolution to 1366x768.
+
+### Expected behavior
+
+1366x768 either should not be advertised, or should work properly.
+
+### Actual behavior
+
+1366x768 is recognized, and when set it results in either a badly distorted, unusable display, or a slightly smaller display than expected.
+
+### Additional information
+
+This issue does not occur with QEMU 10.1.2 build from source on Kubuntu 24.04 (the 1366x768 display mode isn't advertised at all). Thus if this is a QEMU bug, it's probably fixed upstream already.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10425">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10425" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10425" target="_blank" rel="noopener">Allow setting video RAM for HVMs via qvm-features</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-11-23" data-time="04:17:39" data-timezone="UTC">04:17AM - 23 Nov 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+###<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> The problem you're addressing (if any)
+
+The default quantity of VRAM available for HVMs (I believe 16 MB) is insufficient to support 1920x1080 with some display servers (notably labwc). Attempting to set this resolution will succeed, but the display server will lock up and spam memory allocation errors to the system log. Increasing video RAM to 64 MB fixes the issue, at the cost of increasing RAM consumption. This increased RAM consumption makes increasing the video RAM for all VMs on Qubes an undesirable solution, so the user should be able to customize the quantity of video RAM themselves. While technically this is doable already, it has to be done by creating a Jinja template for libvirt XML, as documented at https://dev.qubes-os.org/projects/core-admin/en/latest/libvirt.html. This is not easy for a user to do.
+
+### The solution you'd like
+
+Provide a new qvm-feature, `video-ram` or similar, that allows setting the amount of RAM allocated to the emulated VGA card in megabytes, similar to the `vgamem_mb` setting in QEMU.
+
+### The value to a user and who that user might be
+
+Users can take advantage of high VM display resolutions when using HVMs, without having to create a Jinja template.
+
+### Completion criteria checklist
+
+(This section is for developer use only. Please do not modify it.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10426">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10426" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10426" target="_blank" rel="noopener">Qubes HVM: add support for `virtio` (or other modern) graphic driver / device</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-11-23" data-time="09:03:00" data-timezone="UTC">09:03AM - 23 Nov 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### The problem you're addressing (if any)
+
+Qubes HVMs do not support common or <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">high resolutions. Would also probably solve:
+
+* https://github.com/QubesOS/qubes-issues/issues/10424
+
+### The solution you'd like
+
+Support `virtio` graphic driver inside HVM or other modern virtual graphic device / driver.
+
+### The value to a user and who that user might be
+
+More compatible Qubes HVM and less failed boots for users such as black screen during boot.
+
+### Additional information
+
+From Matrix qubes-public channel.
+
+Quote @arraybolt3 
+
+&gt; @marmarek: Is there any way to pass custom parameters to the QEMU instance that HVMs run in? Not sure why we didn't run into this before, maybe it's kernel related, but it looks like labwc really, really hates the default VGA graphics that Qubes OS provides to VGA-enabled HVMs. This isn't Qubes-specific, I've seen the same behavior under QEMU/KVM on Kubuntu 24.04 also. I know that virtio graphics work, and would like to switch to those.
+
+Quote @marmarek 
+
+&gt; see qvm-features -&gt; video-model
+
+Quote @arraybolt3
+
+&gt; (the specific behavior is that labwc initially works, then freezes, and spams a lot of errors stating `connector Virtual-1: Atomic commit failed: Cannot allocate memory`
+
+Quote @marmarek:
+
+&gt; that said, I'm not sure if virtio will work here, but I guess you can try... but there are also other possible options
+
+Quote @marmarek:
+
+&gt; doesn't seem to have virtio support, but qxl is there, so maybe that will be enough.
+
+Quote @arraybolt3:
+
+&gt; sadly it looks like the only option supported other than the default vga or xen (which appears to be a synonym for vga) is cirrus, which does actually work but also has a max resolution of 1360x768. [...]
+
+&gt; So it turns out that the issue is almost certainly that we now have code that resizes the window to 1920x1080 during bootup. labwc works just fine as 1024x768, and a few higher resolutions, but 1366x768 results in a horribly distorted display, 1600x900 did even weirder things, and 1920x1080 results in labwc freezing.
+
+&gt; AFAICT the video-model option is just telling Xen what VGA hardware it should emulate, rather than using QEMU to do that part. Is there any way in which Qubes OS could use QEMU for graphics emulation instead, so that things like virtio would be available?
+
+Quote @marmarek
+
+&gt; Xen doesn't do any emulation, it's all in QEMU, and this option translates to QEMU cmdline. There is libvirt in between, which affects what options are supported. But as said before, even if virtio would be on the list, I doubt it would work with Xen...
+
+&gt; Another thing is also vram attribute in libvirt xml, it defaults to 16MB, maybe that needs increasing? But for that we don't have qvm-features, it would need https://dev.qubes-os.org/projects/core-admin/en/latest/libvirt.html
+
+### Related issues
+
+* https://github.com/QubesOS/qubes-issues/issues/10424
+* https://github.com/QubesOS/qubes-issues/issues/10425
+
+### Completion criteria checklist
+
+(This section is for developer use only. Please do not modify it.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-for-qubes-hvm-issues/1372">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-for-qubes-hvm-issues/1372</link>
+          <pubDate>Sun, 23 Nov 2025 09:04:01 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1372</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-for-qubes-hvm-issues/1372.rss">Kicksecure for Qubes - HVM Issues</source>
+        </item>
+        <item>
+          <title>Load Kicksecure into RAM</title>
+          <dc:creator><![CDATA[EF88324C3B45594FD1]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Hello. I have read an article from the anarsec guide about best practices using Tails. It recommends to use a write protect switch. It mentions two methods (using a USB drive with a write-protect switch and using a mircoSD card) that relies either on a proprietary hardware, or on a method that is not secure (SD card write protect switch asks for a protection but does not physically prevent writing on the disk).</p>
+<p>But the article mention one way that could provide a provably secure operating system : Load the OS into RAM. The idea would be to boot the ISO on, load it into RAM, unplug the drive, and then start browsing the internet and maybe expose to viruses and malwares. <strong>My proposition is to add an option to load Kicksecure/Whonix Host into RAM with a graphical interface.</strong><br>
+Sorry for my grammar, English is not my native language.</p>
+<p><em>P.S. : I know that compromising the Kicksecure/Whonix source code would make this protection futile, but three-letters-agency-secret-supply-chain-attacks-operations aside this would allow a nearly invulnerable system against virus persistence.</em></p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/load-kicksecure-into-ram/1370">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/load-kicksecure-into-ram/1370</link>
+          <pubDate>Sat, 22 Nov 2025 11:58:13 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1370</guid>
+          <source url="https://forums.kicksecure.com/t/load-kicksecure-into-ram/1370.rss">Load Kicksecure into RAM</source>
+        </item>
+        <item>
+          <title>`sudo sgdisk -v /dev/sda` - `Caution: Partition 3 doesn&#39;t end on a 2048-sector boundary. This may result in problems with some disk encryption tools.`</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Minor issue.</p>
+<pre><code>sudo sgdisk -v /dev/sda
+</code></pre>
+<pre><code class="lang-auto">Caution: Partition 3 doesn't end on a 2048-sector boundary. This may
+result in problems with some disk encryption tools.
+
+No problems found. 2021 free sectors (1010.5 KiB) available in 2
+segments, the largest of which is 2014 (1007.0 KiB) in size.
+</code></pre>
+<p>Scary warning but no actual issue.</p>
+<p>Quote <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a></p>
+<blockquote>
+<ul>
+<li>Aaron: May be difficult to fix. grml-debootstrap uses parted for partition creation, and according to parted, partition 3 is optimally aligned. I find it somewhat unlikely grml-debootstrap would want to port to sgdisk.
+<ul>
+<li>Sent an email to the GPT fdisk mailing list to see if there’s a good way to fix the discrepancy between the behavior of GPT fdisk and Parted.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/">
+  <header class="source">
+      <img src="https://a.fsdn.com/con/img/sandiego/logo-180x180.png" class="site-icon" alt="" width="180" height="180">
+
+      <a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">sourceforge.net</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://sourceforge.net/p/gptfdisk/mailman/message/59257231/" target="_blank" rel="noopener">[Gptfdisk-general] Partition end sector alignment concerns with
+ partition...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363</link>
+          <pubDate>Fri, 14 Nov 2025 06:52:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1363</guid>
+          <source url="https://forums.kicksecure.com/t/sudo-sgdisk-v-dev-sda-caution-partition-3-doesnt-end-on-a-2048-sector-boundary-this-may-result-in-problems-with-some-disk-encryption-tools/1363.rss">`sudo sgdisk -v /dev/sda` - `Caution: Partition 3 doesn&#39;t end on a 2048-sector boundary. This may result in problems with some disk encryption tools.`</source>
+        </item>
+        <item>
+          <title>No UTC/Etc timezone from calamares installer</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/69032d4090c233c68f7c2beaa4ce1991481d853e.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/69032d4090c233c68f7c2beaa4ce1991481d853e" title="UTC"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg" alt="UTC" data-base62-sha1="eYYWjCqg28hHhDvIzW7vSetXur4" width="436" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_654x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_872x1000.jpeg 2x" data-dominant-color="7C87D3"></a></div><p></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357</link>
+          <pubDate>Sat, 08 Nov 2025 21:53:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1357</guid>
+          <source url="https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357.rss">No UTC/Etc timezone from calamares installer</source>
+        </item>
+        <item>
+          <title>Rename kicksecure-xfce-installer-cli whonix-xfce-installer-cli in Kicksecure 18</title>
+          <dc:creator><![CDATA[wrhjy]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/usability-misc/blob/master/debian/usability-misc.links">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/usability-misc/blob/master/debian/usability-misc.links" target="_blank" rel="noopener nofollow ugc">github.com/Kicksecure/usability-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/usability-misc/blob/master/debian/usability-misc.links" target="_blank" rel="noopener nofollow ugc">debian/usability-misc.links</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/usability-misc/blob/master/debian/usability-misc.links" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-links">## Copyright (C) 2019 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+
+/usr/bin/curl-download /usr/bin/curlget
+/usr/bin/scurl-download /usr/bin/scurlget
+
+/usr/share/man/man1/curl-download.1.gz /usr/share/man/man1/curlget.1.gz
+/usr/share/man/man1/scurl-download.1.gz /usr/share/man/man1/scurlget.1.gz
+
+/usr/bin/dist-installer-cli /usr/bin/virtualbox-installer-cli
+/usr/bin/dist-installer-cli /usr/bin/kicksecure-cli-installer-cli
+/usr/bin/dist-installer-cli /usr/bin/kicksecure-xfce-installer-cli
+/usr/bin/dist-installer-cli /usr/bin/whonix-cli-installer-cli
+/usr/bin/dist-installer-cli /usr/bin/whonix-xfce-installer-cli
+
+/etc/profile.d/50_default_editor.sh /etc/zprofile.d/50_default_editor.zsh
+/etc/profile.d/50_default_editor.sh /etc/X11/Xsession.d/50_default_editor
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>In Kicksecure 18 which comes with LXQt, but there are kicksecure-xfce-installer-cli and whonix-xfce-installer-cli.</p>
+<p>Will we rename kicksecure-xfce-installer-cli to kicksecure-lxqt-installer-cli or kicksecure-gui-installer-cli ? (rename whonix-xfce-installer-cli to whonix-lxqt-installer-cli or whonix-gui-installer-cli)</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/usability-misc/blob/master/man/dist-installer-cli.1.ronn">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/usability-misc/blob/master/man/dist-installer-cli.1.ronn" target="_blank" rel="noopener nofollow ugc">github.com/Kicksecure/usability-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/usability-misc/blob/master/man/dist-installer-cli.1.ronn" target="_blank" rel="noopener nofollow ugc">man/dist-installer-cli.1.ronn</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/usability-misc/blob/master/man/dist-installer-cli.1.ronn" rel="noopener nofollow ugc"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-ronn">dist-installer-cli(1) -- download and import Whonix/Kicksecure VMs
+=============================================
+
+&lt;!--
+# vim: tw=75 cc=76
+## ronn conversion of options description breaks lines horribly if longer
+## than 75 chars.
+## Copyright (C) 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+--&gt;
+
+## SYNOPSIS
+`dist-installer-cli` [options]
+
+## DESCRIPTION
+**dist-installer-cli** is an installer that automates the download and import
+of Kicksecure and Whonix VMs. It supports interfaces CLI or Xfce,
+and allows users to choose their preferred hypervisor, such as KVM or VirtualBox.
+
+## OPTIONS
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/usability-misc/blob/master/man/dist-installer-cli.1.ronn" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><code>dist-installer-cli –help </code> output description <code>Options: cli, xfce (default).</code></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/rename-kicksecure-xfce-installer-cli-whonix-xfce-installer-cli-in-kicksecure-18/1354">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/rename-kicksecure-xfce-installer-cli-whonix-xfce-installer-cli-in-kicksecure-18/1354</link>
+          <pubDate>Wed, 05 Nov 2025 09:07:26 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1354</guid>
+          <source url="https://forums.kicksecure.com/t/rename-kicksecure-xfce-installer-cli-whonix-xfce-installer-cli-in-kicksecure-18/1354.rss">Rename kicksecure-xfce-installer-cli whonix-xfce-installer-cli in Kicksecure 18</source>
+        </item>
+        <item>
+          <title>Support for hibernation?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>We need to decide what we’re doing with hibernation. Either we should determine how to set it up in a secure fashion and implement that, or we should remove hibernation-related documentation from the wiki and disable the hibernation button in LXQt.</p>
+<p>Hardware support challenges:</p>
+<ul>
+<li>Hibernation may or may not work properly on Linux. Many users seem to have it working without issues, I have yet to get it working on a machine here. From what I’ve heard, SteamOS supports hibernation and has it working reliably, so maybe it’s robust enough to deploy in general now.</li>
+</ul>
+<p>Security challenges:</p>
+<ul>
+<li>Hibernation takes data that is intended to be ephemeral, and makes it persistent. Any secrets, unsaved work, live-booted virtual machines, etc., are all dumped to a swapfile or swap partition when the system is hibernated, making them much easier for an attacker to access if they can get access to the volume containing the swap file/partition.</li>
+<li>This can be mitigated somewhat by using full disk encryption, however this is vulnerable to the possibility that the user will choose a weak encryption passphrase, and of course there’s always the <a href="https://xkcd.com/538/">$5 wrench problem</a>.</li>
+</ul>
+<p>Technical challenges:</p>
+<ul>
+<li>swap-file-creator would probably need to change in order to support hibernation. Right now we use an encrypted swapfile with an ephemeral encryption key, allowing swap to be used safely but also making it impossible to recover after a reboot. We may also need to do something with the way in which the swapfile is managed, since we need to have a single, static swapfile, we can’t be dynamically creating a new one on every boot or similar.</li>
+<li>Hibernation is not reliable if you are trying to hibernate into an existing swapfile. If memory is filled and swap is partially filled, there won’t be enough space left in the swapfile to save the remaining contents of RAM into. SteamOS reportedly gets around this by using a dedicated hibernation file (which I guess means they probably somehow give the resume mechanism multiple swapfiles?).</li>
+<li>Hibernation would need to be disabled when FDE was not in use, unless we want to implement something where the user is prompted for a one-time-use passphrase for securing the hibernation file, which is then prompted for upon resume. (Actually, that could be really neat, even with FDE, since it would mean an attacker would have to break both the FDE key and the hibernation key in order to get access to RAM contents. This would require the user to have a very good memory though.)</li>
+<li>Related: <a href="https://packages.debian.org/trixie/cryptsetup-suspend" class="inline-onebox">Debian -- Details of package cryptsetup-suspend in trixie</a> Unsure whether we’d want to use this with hibernation or not, or if it works with dracut.</li>
+</ul>
+            <p><small>8 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/support-for-hibernation/1349">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/support-for-hibernation/1349</link>
+          <pubDate>Sun, 02 Nov 2025 20:33:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1349</guid>
+          <source url="https://forums.kicksecure.com/t/support-for-hibernation/1349.rss">Support for hibernation?</source>
+        </item>
+        <item>
+          <title>Power management for physical hardware in Kicksecure 18</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Right now, idle power management is planned to be disabled under virtual machines, both Qubes and non-Qubes, in Kicksecure 18. However, it’s unclear how we want to handle power management on physical hardware.</p>
+<p>First off, a lot of the power management features of LXQt include the ability to suspend or hibernate the machine. Hibernation obviously has security risks because RAM contents are dumped to the disk, but hibernation likely doesn’t work out of the box on Kicksecure anyway, and LUKS can mitigate most of the concerns. What is more concerning is suspend, because LXQt unfortunately puts the system into suspend <em>before</em> locking the screen. This means if one wakes the system, they will be shown a flash of the user’s desktop before the screen locks. It’s extremely brief, but it’s more than long enough to capture a snapshot of the user’s screen with a camera (and depending on the speed of the system it might be enough to deploy a malware payload via a rubber ducky or similar before the screen locks).</p>
+<p>LXQt has a lot of power management features; going through each of them:</p>
+<ul>
+<li>Battery watcher. Allows the user to lock their screen, suspend, hibernate, shutdown, turn off external monitors, and/or receive a notification when the system’s power gets too low. Can warn users for some period of time before taking a power management action in response to a low battery. Also shows a battery level icon.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Battery level icon: Very little concerns. An attacker who gets access to an encrypted but unlocked system might use the charge level to decide whether or not they want to keep the system powered on while moving it to a more convenient attack location, or if they want to attempt an attack right where they’re at, but in all likelihood hiding this info likely won’t defend against most realistic attack scenarios.</li>
+<li>Battery low notifications: Same concerns as for battery level, this is probably even less worrisome.</li>
+<li>Warning (timeout before taking power management action): Same concerns as battery low notifications.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Security impact identical to battery low notifications.</li>
+<li>Lock screen: Minor positive security impact, though most users would be better served by automatically locking the screen after some duration of idle time.</li>
+<li>Suspend: Minor negative security impact (could be problematic if the battery reaches a low power level before the screen locks due to idleness, due to screen locking prevention discussed above).</li>
+<li>Hibernate: Security impact dependent upon setup. Usually not a concern because it doesn’t work out of the box.</li>
+<li>Shutdown: Minor positive security impact, though again this would be better handled by an idle timeout.</li>
+<li>Turn Off monitor(s): Very minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Battery level icon: Very useful for laptop users. Mobile users could run out of power mid-work without this.</li>
+<li>Battery low notifications: Useful for the same reason as the battery level icon.</li>
+<li>Warning (timeout before taking power management action): Positive usability impact. Mitigates issues introduced by automatic power management actions.</li>
+<li>Low power actions:
+<ul>
+<li>Ask: Annoying because it suddenly creates a popup window like so: <div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png" data-download-href="https://forums.kicksecure.com/uploads/default/d9fbf60da81a866fe3d4e66001491e061c3857cd" title="Screenshot_20251031_162822"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png" alt="Screenshot_20251031_162822" data-base62-sha1="v6nqZuM6SBVxaI1P7Qsp42TiPk9" width="568" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_568x500.png, https://forums.kicksecure.com/uploads/default/optimized/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd_2_852x750.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/d9fbf60da81a866fe3d4e66001491e061c3857cd.png 2x" data-dominant-color="9DA3C1"></a></div> Possibly dangerous, users could lose work if they tried to click inside a window right where the shutdown, reboot, or logout button appeared just as the window popped up. The power management warning is only a partial mitigation for this.</li>
+<li>Lock screen: Rather useless for preserving battery life, mildly annoying even with the warning timer.</li>
+<li>Suspend: Mildly annoying, but may prevent loss of work by preserving battery power. The warning timeout mitigates this. Overall, positive usability impact.</li>
+<li>Hibernate: Same usability impact as suspend, except it takes longer to enter and exit hibernate. Overall, possibly positive usability impact.</li>
+<li>Shutdown: Very annoying and dangerous, user will lose all unsaved work when the power level gets too low unless they are able to immediately plug in a source of power when the warning notification appears. Not sufficiently mitigated by the warning timeout, unless the timeout is made very long.</li>
+<li>Turn Off monitor(s): Possibly somewhat useful for avoiding data loss since powering off monitors may improve battery life, but this isn’t that useful. Mildly annoying. Attempts to use xset to power off monitors, thus it doesn’t even work under Wayland.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Lid watcher. Controls what happens when the user closes the lid of the system. Can lock the screen, suspend, hibernate, shutdown, or turn off monitors when the lid is closed. Supports separate settings for when on battery and when on AC power, and also support separate settings for when an external monitor isn’t attached and when it is.
+<ul>
+<li>Security concerns:
+<ul>
+<li>No difference in security concerns between the different customization possibilities (on battery / on AC / with external monitor connected / without external monitor connected) except in as much as each option applies to individual user threat models. For instance, a user might only plug their system in while at a location safe from physical attackers, thus their threat model would permit more convenient settings while plugged in and require more safe settings while unplugged.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive security impact. User can close lid to render whatever they were actively working on inaccessible to a physically present attacker, barring a screen lock bypass or vulnerability in another component of their installation.</li>
+<li>Suspend: Negative security impact. Closing the lid will indefinitely prevent the screen lock and allow a physically present attacker to capture a screenshot of their work as explained above.</li>
+<li>Hibernate: Security impact dependent upon setup. If user has unencrypted swap, this is virtually fatal when defending against a physically present attacker, as they can capture not only everything that was on the screen, but the full memory contents of everything on the system. If swap is encrypted and requires a passphrase to unlock, this probably won’t suffer from the indefinite screen lock pause issue because a password will be required to resume. If swap is encrypted but a TPM can unlock it, then this suffers from the same issues as suspend. (Note to readers: This is all theoretical, Kicksecure lacks features that would be needed to do things like unlocking an encrypted hibernation volume with a passphrase or TPM with a vanilla Kicksecure configuration.)</li>
+<li>Shutdown: Positive security impact. User can close lid to render everything they were doing inaccessible to a physically present attacker, even if their system contains vulnerable components. However, shutdown may be slow, giving an attacker a window of opportunity to extract useful data before the system shuts down (most attackers probably will not be able to act fast enough for this to be of any use to them). Would be better if there was a way to trigger emerg-shutdown when the lid was closed.</li>
+<li>Turn Off monitor(s): Extremely minor positive security impact, maybe, but so negligible as to call it nonexistent unless dealing with an attacker in possession of technology that can reconstruct screen contents based on the light coming from the screen’s reflection off the laptop chassis. Even then, some laptops turn off their screen in hardware when the lid is closed. Might have more of a positive impact if external monitors can be turned off also.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>The different customization possibilities have different usability concerns based on the action in question.</li>
+<li>Lid close actions:
+<ul>
+<li>Lock screen: Positive usability impact. Most users used to WIndows will expect that closing the lid will result in the screen being locked. (They would also expect the system to suspend, but at least this fulfills some of the expectation.)</li>
+<li>Suspend: Debatable usability impact. On one hand, most users used to Windows will expect taht closing the lid will result in the system going into suspend. On the other hand, suspend may interrupt actions such as software updates, downloads, long running processes, etc., and thus be undesirable for some users.</li>
+<li>Hibernate: Debatable but probably negative usability impact. User has to wait for RAM contents to be reloaded from swap upon resume, and may need to authenticate before the system fully resumes.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they or someone else (usually a pet) closes the lid unintentionally.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Idleness Watcher: Controls what happens when the system has been idle for some duration of time. Has the same set of power management actions as the lid watcher. Supports separate settings for when on battery and when on AC, and allows configuring the time before the system is considered idle. Can disable idleness checks when a fullscreen app is in use. Also offers backlight change settings, but these will almost certainly not work for users with user-sysmaint-split installed.
+<ul>
+<li>Security concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive security impact. Users who forget to lock their screen before walking away from their machine will be protected from a physically present attacker, if that attacker doesn’t manage to see the screen contents of the user’s system before the lock screen activates.</li>
+<li>Suspend: Negative security impact due to the locking issue described at the top of the post.</li>
+<li>Hibernate: Security impact dependent upon setup. Identical concerns as for the hibernate lid close action.</li>
+<li>Shutdown: Positive security impact for the same reasons as the lock screen idleness action. Protections against exploits are stronger.</li>
+<li>Turn Off monitor(s): Minor positive security impact. Attacker would need to be trying to physically observe user’s screen from some distance for this to matter.</li>
+</ul>
+</li>
+<li>Brightness controls: Same security impact as the “Turn Off monitor(s)” idleness action, but likely less effective than truly turning off the monitor.</li>
+</ul>
+</li>
+<li>Usability concerns:
+<ul>
+<li>Idleness actions:
+<ul>
+<li>Lock screen: Positive usability impact. Users used to Windows will not expect their system to be accessible to an adversary who shows up and looks at the system after some amount of time has passed.</li>
+<li>Suspend: Debatable usability impact. May improve battery life, but can also interrupt long-running processes, see usability concerns for suspend lid close action.</li>
+<li>Hibernate: Debatable but probably negative usability impact, see usability concerns for hibernate lid close action.</li>
+<li>Shutdown: Dangerous, negative usability impact. User will lose all unsaved work if they have to step away from the system for longer than the configured idle time.</li>
+<li>Turn Off monitor(s): Minor positive usability impact due to power savings.</li>
+</ul>
+</li>
+<li>Brightness controls: Positive usability impact due to power savings, but usually this won’t work as mentioned above.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Power keys: Allows configuring what to do when the user presses a power, suspend, or hibernate key. These options do nothing under Wayland, power keys are configured by the compositor instead, thus skipping this section.</li>
+</ul>
+<p>Personally, I’d recommend the following settings for physical hardware installations based on the above analysis:</p>
+<ul>
+<li>Battery Watcher:
+<ul>
+<li>Low power action: Nothing</li>
+<li>Warning timeout: 30 seconds</li>
+<li>Level is low at: 10%</li>
+<li>Show icon: Yes</li>
+<li>Icon for the icon: Whatever the default is</li>
+</ul>
+</li>
+<li>Lid Watcher:
+<ul>
+<li>When lid is closed on battery: Lock screen</li>
+<li>When lid is closed on AC power: Lock screen</li>
+<li>Disable the extra settings for when using external monitors</li>
+</ul>
+</li>
+<li>Idleness watcher:
+<ul>
+<li>When idle on AC: Lock screen</li>
+<li>AC idle time: Unsure. For paranoid setups, a very short time might be preferable (30 seconds is the shortest supported timeout), but IMO people should not be relying on the idle timeout for security anyway because it is by nature unreliable. Thus we can probably favor usability here since security is better obtained by other means. Maybe just accept the default of 15 minutes?</li>
+<li>When idle on battery: Lock screen</li>
+<li>Battery idle time: Unsure, maybe just accept the default of 15 minutes?</li>
+<li>Disable backlight change</li>
+<li>Do not disable idleness checks when fullscreen</li>
+</ul>
+</li>
+</ul>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344</link>
+          <pubDate>Fri, 31 Oct 2025 22:34:24 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1344</guid>
+          <source url="https://forums.kicksecure.com/t/power-management-for-physical-hardware-in-kicksecure-18/1344.rss">Power management for physical hardware in Kicksecure 18</source>
+        </item>
+        <item>
+          <title>Make the taskbar on the bottom not at the top</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>The default position of the lxqt taskbar on the bottom not top, preferable to have the same for ks/whonix.</p>
+            <p><small>9 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338</link>
+          <pubDate>Thu, 30 Oct 2025 16:06:36 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1338</guid>
+          <source url="https://forums.kicksecure.com/t/make-the-taskbar-on-the-bottom-not-at-the-top/1338.rss">Make the taskbar on the bottom not at the top</source>
+        </item>
+        <item>
+          <title>Disabling eBPF functionality completely for container software?</title>
+          <dc:creator><![CDATA[goose4]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>So I was wondering if Kicksecure should disable eBPF altogether for containers?</p>
+<p>Security-Misc already addresses 2 related BPF settings for the kernel hardening</p>
+<ol>
+<li>[Restrict usage of bpf() to CAP_BPF to prevent the loading of BPF programs by unprivileged users.]</li>
+</ol>
+<blockquote>
+<p><code>net.core.bpf_jit_harden=2</code></p>
+</blockquote>
+<ol start="2">
+<li>[Enable hardening of the BPF JIT compiler for all users.]</li>
+</ol>
+<blockquote>
+<p><code>kernel.unprivileged_bpf_disabled=1</code></p>
+</blockquote>
+<p>So I was wondering if some kind of drop in for container software like Podman and Docker could be made to disable eBPF altogether or certain aspects?</p>
+<p>Was looking at <code>/etc/containers/containers.conf.d/</code> for a drop in but I see no options that address them or are universally applied for all container software?</p>
+<blockquote>
+<p><code>/etc/containers</code> is a standard configuration directory used by several container‑related tools on Linux systems, most notably Podman, Buildah, Skopeo, and the CRI‑O runtime.</p>
+</blockquote>
+<p>Then when it comes to Docker the only idea I came up with is <code>/etc/systemd/system/docker.service.d/disable-bpf.conf</code> with <code>ExecStart=/usr/bin/dockerd --no-bpf</code></p>
+<p>What got me thinking about this was this proof on concept here:</p>
+<p>github. com/hackerschoice/bpfhacks</p>
+<p>Besides the two kernel related hardening is there really any other ways to mitigate this type of attack or is it a moot point since it requires attacker to gain root.</p>
+<p>These are just some thoughts that came to mind sorry if this post looks like security cosplay at first glance.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287</link>
+          <pubDate>Mon, 15 Sep 2025 20:15:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1287</guid>
+          <source url="https://forums.kicksecure.com/t/disabling-ebpf-functionality-completely-for-container-software/1287.rss">Disabling eBPF functionality completely for container software?</source>
+        </item>
+        <item>
+          <title>Request and Idea for including a tmpfs-setup package?</title>
+          <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>This idea was inspired by this users post:</p>
+<blockquote>
+<p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057" class="inline-onebox">Questions regarding use of tmpfs formatting and conflicts</a></p>
+</blockquote>
+<p>Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a <code>/etc/profile.d/</code> drop in to set the <code>XDG_CACHE_HOME=/tmp/.cache</code> variable for all users shell.</p>
+<h2><a name="p-3384-idea-for-etcprofiledxdg-cachesh-1" class="anchor" href="https://forums.kicksecure.com#p-3384-idea-for-etcprofiledxdg-cachesh-1" aria-label="Heading link"></a>Idea for /etc/profile.d/xdg-cache.sh</h2>
+<pre><code class="lang-auto">#!/bin/sh
+
+## Set XDG_CACHE_HOME to a per-user cache directory.
+#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
+#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
+#
+## Detect whether /tmp is a mount point (i.e. a separate filesystem).
+#    On most modern distros this will be a tmpfs, but on some it may
+#    be a regular disk partition.
+if grep -q "^tmpfs.*/tmp.*tmpfs" /proc/mounts || mountpoint -q /tmp; then
+
+    # /tmp is a mount point - assume it is a tmpfs.
+    BASE_ROOT="/tmp/${USER}"
+else
+    # /tmp is part of the root filesystem (disk based).
+    # Use the traditional default users /home based cache location instead.
+    BASE_ROOT="${HOME}"
+fi
+
+## Build the final cache directory path.
+#    We always put the cache in a ".cache" sub-folder so that tools
+#    that follow the XDG spec find what they expect.
+CACHE_DIR="${BASE_ROOT}/.cache"
+
+## Ensure the directory exists and is private to the user.
+#    /tmp is world-writable (drwxrwxrwt), so we must create a
+#    private subtree and lock it down with chmod 700.
+#
+# Create the parent directory (only needed when we are using /tmp)
+if [ "${BASE_ROOT}" != "${HOME}" ] &amp;&amp; [ ! -d "${BASE_ROOT}" ]; then
+    mkdir -p "${BASE_ROOT}"
+    chmod 700 "${BASE_ROOT}"          
+fi
+
+# Now create the .cache directory itself
+mkdir -p "${CACHE_DIR}"
+chmod 700 "${CACHE_DIR}"
+
+## Export the variable so the rest of the session sees it.
+export XDG_CACHE_HOME="${CACHE_DIR}"
+</code></pre>
+<p>For the above To make it more bullet‑proof, you could tighten the /tmp detection for the <code>export XDG_CAHCE_HOME="/tmp/${USER}/.cache</code> creation</p>
+<p>Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.<br>
+In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.<br>
+Either the package should detect this and not interfere. otherwise a more robust way would be to ship <code>/etc/fstab</code> to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?</p>
+<h2><a name="p-3384-package-structure-summary-idea-2" class="anchor" href="https://forums.kicksecure.com#p-3384-package-structure-summary-idea-2" aria-label="Heading link"></a>Package Structure Summary Idea</h2>
+<pre><code class="lang-auto">tmpfs-setup package/
+├── DEBIAN/
+│   ├── control
+│   ├── postinst
+|   └── prerm (depending on implementation)
+├── etc/
+│   ├── default/
+│   │   └── tmpfs-config
+│   └── profile.d/
+│       └── xdg-cache-home.sh
+└── usr/
+    └── share/doc/your-package/
+        └── README.Debian
+</code></pre>
+<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
+<blockquote>
+<p>fedoraproject . org/wiki/Features/tmp-on-tmpfs</p>
+<blockquote>
+<p>Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs</p>
+<blockquote>
+<p>From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</p>
+</blockquote>
+</blockquote>
+            <p><small>5 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277</link>
+          <pubDate>Sun, 07 Sep 2025 19:00:52 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1277</guid>
+          <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+        </item>
+        <item>
+          <title>Chvt - change foreground virtual terminal (VT) (tty) - prevent malware from forced tty change</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Issue:</p>
+<p>Malware could switch to another <code>tty</code>. Malware could pull the user from an emergency session <code>tty</code> back to the active VT used by the graphical session, where the malware runs.</p>
+<p>(But malware cannot attempt to log in to the other <code>tty</code> or feed any data.)</p>
+<p>This issue is unspecific to Kicksecure. Probably most Linux distributions are affected.</p>
+<p>Security impact:</p>
+<p>This is primarily an availability issue because malware can disrupt or interrupt use of another <code>tty</code> by forcibly switching the visible terminal. It can also aid social engineering by pulling the user back into a compromised graphical session, for example to increase the effectiveness of <a href="https://www.kicksecure.com/wiki/Login_spoofing">login spoofing</a> or other deceptive prompts. By itself, this does not appear to be a direct integrity issue, and any confidentiality impact would likely be indirect and only in combination with other attacks.</p>
+<p>How to reproduce:</p>
+<ol>
+<li>log in into a <code>tty3</code></li>
+<li>switch back to the graphical session <code>tty</code></li>
+<li><code>chvt 3 &amp;&amp; sleep 3 &amp;&amp; chvt 2</code></li>
+</ol>
+<p>This works which is a bit scary.</p>
+<p>(<code>chvt</code> can force a terminal switch even when the user is currently interacting with a root shell.)</p>
+<p>This forced terminal change is something I’d like to fix.</p>
+<p>Non-solutions:</p>
+<ul>
+<li>“Require sudo”: <code>chvt</code> does not require sudo/root.</li>
+<li>“Set chvt noSUID”: <code>chvt</code> is already non-suid.</li>
+<li>“Delete chvt”: <code>chvt</code> is a user-space utility. Malware could ship the same tool or malware could run the same syscall. Deleting <code>chvt</code> therefore does not accomplish very much.</li>
+<li><code>/etc/security/access.conf</code>: Is only PAM configuration file. Has no effect on <code>chvt</code>.</li>
+</ul>
+<p>Real solution:</p>
+<p>The only solution is a proper technical fix, such as a kernel or permissions fix, or distribution hardening. This remains unspecified because no known solution exists.</p>
+<p>Related wiki chapters:</p>
+<ul>
+<li>virtual terminal or also known as <a href="https://www.kicksecure.com/wiki/Desktop#Virtual_Consoles">Virtual Consoles</a>)</li>
+<li><a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation#Console_Login_Attacks">Console Login Attacks</a></li>
+</ul>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/chvt-change-foreground-virtual-terminal-vt-tty-prevent-malware-from-forced-tty-change/1274">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/chvt-change-foreground-virtual-terminal-vt-tty-prevent-malware-from-forced-tty-change/1274</link>
+          <pubDate>Fri, 05 Sep 2025 12:14:25 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1274</guid>
+          <source url="https://forums.kicksecure.com/t/chvt-change-foreground-virtual-terminal-vt-tty-prevent-malware-from-forced-tty-change/1274.rss">Chvt - change foreground virtual terminal (VT) (tty) - prevent malware from forced tty change</source>
+        </item>
+        <item>
+          <title>NetworkManager: Disable automatic connection to wired networks?</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Random idea that hit me while writing <a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/7:">https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/7:</a> one potential threat vector for USB devices is if they provide a virtual Ethernet interface. This would allow the device to attack arbitrary services with open ports on the host. A firewall would help here (maybe, depends on whether it blocked the LAN or not), but what might help even more is if NetworkManager didn’t automatically connect the system to any wired network interfaces it sees.</p>
+<p>Would it be desirable to turn off this wired autoconnect feature by default? Users could still use wired networks, they would just have to explicitly connect to them using the network management widget.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260</link>
+          <pubDate>Tue, 26 Aug 2025 03:20:15 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1260</guid>
+          <source url="https://forums.kicksecure.com/t/networkmanager-disable-automatic-connection-to-wired-networks/1260.rss">NetworkManager: Disable automatic connection to wired networks?</source>
+        </item>
+  </channel>
+</rss>

@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727</link>
+    <description>There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.
+
+This is useful for better display graphic and graphics related work.
+
+KS will boot into black screen if only nvidia installed, this is the log:
+
+```
+[sysmaint ~]% journalctl -b -1                                                                               
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups &#39;adm&#39;, &#39;systemd-journal&#39; can see all messages.
+      Pass -q to turn off this notice.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile &#39;main&#39;
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle &#39;api.libcamera.enum.manager&#39; could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire&#39;s libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service &#39;org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin &quot;wayland&quot; in &quot;&quot; even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result &#39;core-dump&#39;.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service &#39;org.freedesktop.portal.Documents&#39;
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin &quot;wayland&quot; in &quot;&quot; even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result &#39;exit-code&#39;.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile &#39;main&#39;
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle &#39;api.libcamera.enum.manager&#39; could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire&#39;s libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service &#39;org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin &quot;wayland&quot; in &quot;&quot; even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result &#39;core-dump&#39;.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service &#39;org.freedesktop.portal.Documents&#39;
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin &quot;wayland&quot; in &quot;&quot; even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name=&#39;org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result &#39;exit-code&#39;.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:43 localhost systemd[2038]: msgcollector-gui.service: Failed with result &#39;signal&#39;.
+May 14 14:06:43 localhost systemd[2038]: Stopped msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: disconnected from pipewire
+May 14 14:06:43 localhost systemd[2038]: Stopped wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:43 localhost systemd[2038]: wireplumber.service: Consumed 188ms CPU time, 101.8M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopping pipewire.service - PipeWire Multimedia Service...
+May 14 14:06:43 localhost systemd[2038]: Stopped pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:43 localhost systemd[2038]: Removed slice session.slice - User Core Session Slice.
+May 14 14:06:43 localhost systemd[2038]: session.slice: Consumed 348ms CPU time, 119.6M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopped target basic.target - Basic System.
+May 14 14:06:43 localhost systemd[2038]: Stopped target paths.target - Paths.
+May 14 14:06:43 localhost systemd[2038]: Stopped target sockets.target - Sockets.
+May 14 14:06:43 localhost systemd[2038]: Stopped target timers.target - Timers.
+May 14 14:06:43 localhost systemd[2038]: Closed dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:43 localhost systemd[2038]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:43 localhost systemd[2038]: Closed gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:43 localhost systemd[2038]: Closed keyboxd.socket - GnuPG public key management service.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:43 localhost systemd[2038]: Removed slice app.slice - User Application Slice.
+May 14 14:06:43 localhost systemd[2038]: app.slice: Consumed 780ms CPU time, 103.7M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Reached target shutdown.target - Shutdown.
+May 14 14:06:43 localhost systemd[2038]: Finished systemd-exit.service - Exit the Session.
+May 14 14:06:43 localhost systemd[2038]: Reached target exit.target - Exit the Session.
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_unix(systemd-user:session): session closed for user sysmaint
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement &quot;uid eq 0&quot; not met by user &quot;sysmaint&quot;
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement &quot;uid ne 0&quot; was met by user &quot;sysmaint&quot;
+lines 108-141/141 (END)
+```
+
+So there are flags need to be added to make it compatible with discrete mode:
+
+`sudo nano /etc/modprobe.d/nvidia-drm.conf`
+
+add:
+
+`options nvidia-drm modeset=1 fbdev=1` 
+
+Then regenerate:
+
+`sudo dracut --force --regenerate-all`
+
+The next reboot will lead to kernel panic, only way to bootup again it remove the flags from grub:
+
+Press e on grub window, search for the line starting with &quot;linux&quot;, and add to the end of it:
+
+`rd.driver.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm modprobe.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm module_blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm systemd.unit=multi-user.target`
+
+Then F10. 
+
+After that it will boot up, and you need to remove the added flags and regenerate dracut.
+
+Note: I have tested that with Debian 13 DVD image with LXQT (default going to be initramfs and xorg) + Nvidia setup as before = it will bootup normally without issues.</description>
+    
+    <lastBuildDate>Sun, 17 May 2026 02:04:07 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Good catch, yep it did <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/4</link>
+        <pubDate>Sun, 17 May 2026 02:04:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1727-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</source>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Related:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Panic-on-oops">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778923154" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener">panic-on-oops</a></h3>
+
+  <p>Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/3</link>
+        <pubDate>Sat, 16 May 2026 09:39:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1727-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</source>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Does disabling panic-on-oops fix the panic issue? There’s a button in the sysmaint panel for that.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/2</link>
+        <pubDate>Fri, 15 May 2026 18:04:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1727-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</source>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.</p>
+<p>This is useful for better display graphic and graphics related work.</p>
+<p>KS will boot into black screen if only nvidia installed, this is the log:</p>
+<pre><code class="lang-auto">[sysmaint ~]% journalctl -b -1                                                                               
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:43 localhost systemd[2038]: msgcollector-gui.service: Failed with result 'signal'.
+May 14 14:06:43 localhost systemd[2038]: Stopped msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: disconnected from pipewire
+May 14 14:06:43 localhost systemd[2038]: Stopped wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:43 localhost systemd[2038]: wireplumber.service: Consumed 188ms CPU time, 101.8M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopping pipewire.service - PipeWire Multimedia Service...
+May 14 14:06:43 localhost systemd[2038]: Stopped pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:43 localhost systemd[2038]: Removed slice session.slice - User Core Session Slice.
+May 14 14:06:43 localhost systemd[2038]: session.slice: Consumed 348ms CPU time, 119.6M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopped target basic.target - Basic System.
+May 14 14:06:43 localhost systemd[2038]: Stopped target paths.target - Paths.
+May 14 14:06:43 localhost systemd[2038]: Stopped target sockets.target - Sockets.
+May 14 14:06:43 localhost systemd[2038]: Stopped target timers.target - Timers.
+May 14 14:06:43 localhost systemd[2038]: Closed dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:43 localhost systemd[2038]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:43 localhost systemd[2038]: Closed gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:43 localhost systemd[2038]: Closed keyboxd.socket - GnuPG public key management service.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:43 localhost systemd[2038]: Removed slice app.slice - User Application Slice.
+May 14 14:06:43 localhost systemd[2038]: app.slice: Consumed 780ms CPU time, 103.7M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Reached target shutdown.target - Shutdown.
+May 14 14:06:43 localhost systemd[2038]: Finished systemd-exit.service - Exit the Session.
+May 14 14:06:43 localhost systemd[2038]: Reached target exit.target - Exit the Session.
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_unix(systemd-user:session): session closed for user sysmaint
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid eq 0" not met by user "sysmaint"
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid ne 0" was met by user "sysmaint"
+lines 108-141/141 (END)
+</code></pre>
+<p>So there are flags need to be added to make it compatible with discrete mode:</p>
+<p><code>sudo nano /etc/modprobe.d/nvidia-drm.conf</code></p>
+<p>add:</p>
+<p><code>options nvidia-drm modeset=1 fbdev=1</code></p>
+<p>Then regenerate:</p>
+<p><code>sudo dracut --force --regenerate-all</code></p>
+<p>The next reboot will lead to kernel panic, only way to bootup again it remove the flags from grub:</p>
+<p>Press e on grub window, search for the line starting with “linux”, and add to the end of it:</p>
+<p><code>rd.driver.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm modprobe.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm module_blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm systemd.unit=multi-user.target</code></p>
+<p>Then F10.</p>
+<p>After that it will boot up, and you need to remove the added flags and regenerate dracut.</p>
+<p>Note: I have tested that with Debian 13 DVD image with LXQT (default going to be initramfs and xorg) + Nvidia setup as before = it will bootup normally without issues.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727/1</link>
+        <pubDate>Fri, 15 May 2026 11:04:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1727-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727.rss">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</source>
+      </item>
+  </channel>
+</rss>

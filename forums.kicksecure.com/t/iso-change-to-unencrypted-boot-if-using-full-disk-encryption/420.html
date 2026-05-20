@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>ISO: Change to unencrypted /boot if using Full Disk Encryption - Development - Kicksecure Forums</title>
+    <meta name="description" content="Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues. 
+
+GRUB2 needs a very long time to decrypt the root disk.
+Need to enter full disk password twice, at grub boot menu and systemd du&amp;hellip;">
+    <meta name="generator" content="Discourse 2026.1.2 - https://github.com/discourse/discourse version 483b197ae963f83e5468c5320d5acae0f9f3656c">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="420.html" />
+
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_2398ec688c4e74ae2d12e2d0ec13359a211cbb9e.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_2398ec688c4e74ae2d1?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="../../stylesheets/mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile"  />
+  <link href="../../stylesheets/desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="../../stylesheets/checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="../../stylesheets/discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="../../stylesheets/discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="../../stylesheets/discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="../../stylesheets/discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="../../stylesheets/discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="../../stylesheets/discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="../../stylesheets/discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="../../stylesheets/discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="../../stylesheets/docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="../../stylesheets/footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="../../stylesheets/poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="../../stylesheets/discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-solved_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-topic-voting_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="../../stylesheets/poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e25914788.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e2591478861cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+    <link href="../../stylesheets/mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d.css_%3b%20filename_%3dUTF-8%27%27mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="3" data-theme-name="graceful"/>
+    <link href="../../stylesheets/desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a2215.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a221561cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="f3CSWLooBQOP1ChI2WMhVe5lj"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;ISO: Change to unencrypted /boot if using Full Disk Encryption&#39;" href="420.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/iso-change-to-unencrypted-boot-if-using-full-disk-encryption/420" />
+<meta property="og:title" content="ISO: Change to unencrypted /boot if using Full Disk Encryption" />
+<meta name="twitter:title" content="ISO: Change to unencrypted /boot if using Full Disk Encryption" />
+<meta property="og:description" content="Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.   GRUB2 needs a very long time to decrypt the root disk. Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug. And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivativ..." />
+<meta name="twitter:description" content="Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.   GRUB2 needs a very long time to decrypt the root disk. Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug. And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivativ..." />
+<meta property="og:article:section" content="Development" />
+<meta property="og:article:section:color" content="25AAE2" />
+<meta property="og:article:tag" content="status_closed_issue_implemented" />
+<meta property="article:published_time" content="2024-03-18T14:05:25+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="420.html">ISO: Change to unencrypted /boot if using Full Disk Encryption</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+      <div class="topic-category">
+        <div class='discourse-tags list-tags'>
+            <a href='../../tag/status_closed_issue_implemented.html' class='discourse-tag' rel="tag">status_closed_issue_implemented</a>
+        </div>
+      </div>
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='ISO: Change to unencrypted /boot if using Full Disk Encryption'>
+      <link itemprop='url' href='420.html'>
+      <meta itemprop='datePublished' content='2024-03-18T14:05:24Z'>
+        <meta itemprop='articleSection' content='Development'>
+      <meta itemprop='keywords' content='status_closed_issue_implemented'>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="420.html">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2024-03-18T14:05:25Z' class='post-time'>
+                    March 18, 2024,  2:05pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-09-14T14:18:06Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Calamares setting up encrpyted /boot (which gets decrypted with GRUB2) causes many issues.</p>
+<ul>
+<li>GRUB2 needs a very long time to decrypt the root disk.</li>
+<li>Need to enter full disk password twice, at grub boot menu and systemd during boot. This might be a missing dracut module or bug.</li>
+<li>And the worst issue: Keyboard layout issues. There is no way to define keyboard layout during GRUB2 pre-boot full disk encryption password entry. (If there is, these are very complicated, not suitable for a Debian derivative and also break SecureBoot.)</li>
+</ul>
+<p>This should be no security issue. This is what most distributions are using. The kernel image is not secret. Unencrypted /boot that Debian (CLI looking) installer (“DI”) is using that too. Encrypted /boot is simply not ready due to these upstream bugs which will very most likely not be resolved anytime soon.</p>
+<ul>
+<li><a href="../../../external.html?link=https://github.com/calamares/calamares/issues/1203" class="inline-onebox">Encryption does not work well with non-QWERTY keyboards · Issue #1203 · calamares/calamares · GitHub</a></li>
+<li><a href="../../../external.html?link=https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=686817" class="inline-onebox">#686817 - grub-pc: Add option to change keyboard layout - Debian Bug report logs</a></li>
+<li><a href="../../../external.html?link=https://savannah.gnu.org/bugs/index.php?65113" class="inline-onebox">GNU GRUB - Bugs: bug #65113, Add All Keyboard Layouts and... [Savannah]</a></li>
+</ul>
+<p>TODO:</p>
+<ul>
+<li>Find a distribution that uses Calamares and implemented unencrypted /boot.
+<ul>
+<li>Maybe Ubuntu? Check
+<ul>
+<li>
+<pre><code>git clone https://git.launchpad.net/~ubuntu-qt-code/+git/calamares-settings-ubuntu
+</code></pre>
+</li>
+</ul>
+</li>
+<li>Linux Mint?</li>
+<li>Elementary OS?</li>
+</ul>
+</li>
+<li>Copy over the Calamares config files to Kicksecure (if permissible by the license, which is probably the case).</li>
+<li>Change Kicksecure Calamares Installer to the usual unencrypted /boot partition.</li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+                <div class='crawler-linkback-list'>
+                    <div>
+                      <a href="../kicksecure-17-2-3-7-point-release/587.html">Kicksecure 17.2.3.7 - Point Release!</a>
+                    </div>
+                    <div>
+                      <a href="../no-disk-encryption-password/566/2.html">No disk encryption password</a>
+                    </div>
+                    <div>
+                      <a href="../kicksecure-no-password-prompt-on-gnu-grub/483/2.html">Kicksecure no password prompt on gnu grub</a>
+                    </div>
+                    <div>
+                      <a href="../calamares-installer-to-manual/843/4.html">Calamares installer to manual</a>
+                    </div>
+                    <div>
+                      <a href="../installing-fde-luks-with-detached-luks-header-option/907/5.html">Installing FDE LUKS with Detached LUKS header option</a>
+                    </div>
+                </div>
+
+            
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-04-01T05:19:17Z' class='post-time'>
+                    April 1, 2024,  5:19am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-04-01T05:19:17Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="onebox githubissue" data-onebox-src="../../../external.html?link=https://github.com/calamares/calamares/issues/2308">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/calamares/calamares/issues/2308" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/calamares/calamares/issues/2308" target="_blank" rel="noopener">document how to not encrypt /boot</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-04-01" data-time="05:18:31" data-timezone="UTC">05:18AM - 01 Apr 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="adrelanos" src="../../../external.html?link=https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">* https://github.com/calamares/calamares/issues/1311 implies that an option to h<span class="show-more-container"><a href="#" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">ave unencrypted `/boot` has been implemented.
+
+I couldn't find information on how to use that.
+
+Could you tell me please, what settings do need to be changed in `/etc/calamares` folder to have unencrypted `/boot` by default?</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-04-01T10:48:46Z' class='post-time'>
+                    April 1, 2024, 10:48am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-04-01T10:48:46Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="onebox githubblob" data-onebox-src="../../../external.html?link=https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="../../../external.html?link=https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf" target="_blank" rel="noopener">calamares/calamares/blob/calamares/src/modules/partition/partition.conf</a></h4>
+
+
+      <pre><code class="lang-conf"># SPDX-FileCopyrightText: no
+# SPDX-License-Identifier: CC0-1.0
+#
+
+# Options for EFI system partition.
+#
+# - *mountPoint*
+#   This setting specifies the mount point of the EFI system partition. Some
+#   distributions (Fedora, Debian, Manjaro, etc.) use /boot/efi, others (KaOS,
+#   etc.) use just /boot.
+#
+#   Defaults to "/boot/efi", may be empty (but weird effects ensue)
+# - *recommendedSize*
+#   This optional setting specifies the size of the EFI system partition.
+#   If nothing is specified, the default size of 300MiB will be used.
+#   When writing quantities here, M is treated as MiB, and if you really
+#   want one-million (10^6) bytes, use MB.
+# - *minimumSize*
+#   This optional setting specifies the absolute minimum size of the EFI
+#   system partition. If nothing is specified, the *recommendedSize*
+</code></pre>
+
+
+
+  This file has been truncated. <a href="../../../external.html?link=https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-04-16T08:15:16Z' class='post-time'>
+                    April 16, 2024,  8:15am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-04-16T08:15:16Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="onebox githubblob" data-onebox-src="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf</a></h4>
+
+
+      <pre><code class="lang-conf">## https://github.com/calamares/calamares/blob/calamares/src/modules/partition/partition.conf
+## https://github.com/bbqlinux/calamares-bbqlinux/blob/master/src/etc/calamares/modules/partition.conf
+
+efiSystemPartition:     "/boot/efi"
+
+## Size? See:
+## https://github.com/grml/grml-debootstrap/issues/221
+efi:
+    mountPoint:         "/boot/efi"
+    recommendedSize:    550MiB
+    minimumSize:        550MiB
+    label:              "EFI"
+
+efiSystemPartitionSize:     550MiB
+
+userSwapChoices:
+    - none      # Create no swap, use no swap
+    - reuse     # Re-use existing swap, but don't create any
+    - small     # Up to 4GB
+    - suspend   # At least main memory size
+</code></pre>
+
+
+
+  This file has been truncated. <a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/blob/master/etc/calamares/modules/partition.conf" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-04-16T08:15:23Z' class='post-time'>
+                    April 16, 2024,  8:15am
+                  </time>
+                  <meta itemprop='dateModified' content='2024-04-16T08:15:23Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Probably not possible as long as Kicksecure is based on Debian 12 / <code>bookworm</code>.</p>
+<p>Requires a newer calamares version which is only installable in Debian 13 / <code>trixie</code>.</p>
+<p>Very difficult to install the newer calamares version in Debian 13 due to dependency issues.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-07-26T18:53:07Z' class='post-time'>
+                    July 26, 2024,  6:53pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-07-26T18:53:07Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="onebox githubpullrequest" data-onebox-src="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/pull/5">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener">github.com/Kicksecure/live-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+
+
+
+    <div class="github-icon-container" title="Pull Request">
+      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
+    </div>
+
+  <div class="github-info-container">
+
+
+
+      <h4>
+        <a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener">[WIP] Improve localization and disk encryption</a>
+      </h4>
+
+    <div class="branches">
+      <code>Kicksecure:master</code> ← <code>ArrayBolt3:master</code>
+    </div>
+
+      <div class="github-info">
+        <div class="date">
+          opened <span class="discourse-local-date" data-format="ll" data-date="2024-07-24" data-time="01:15:29" data-timezone="UTC">01:15AM - 24 Jul 24 UTC</span>
+        </div>
+
+        <div class="user">
+          <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+            <img alt="ArrayBolt3" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+            ArrayBolt3
+          </a>
+        </div>
+
+        <div class="lines" title="1 commits changed 9 files with 80 additions and 42 deletions">
+          <a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/pull/5/files" target="_blank" rel="noopener">
+            <span class="added">+80</span>
+            <span class="removed">-42</span>
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container"># WARNING - WORK IN PROGRESS
+
+This pull request improves localization and full<span class="show-more-container"><a href="../../../external.html?link=https://github.com/Kicksecure/live-config-dist/pull/5" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> disk encryption for Kicksecure 17. **This PR is not suitable for merge yet - several prerequisites in Kicksecure are missing and there are several bits that need cleaned up.** This is pretty close to being done though.
+
+## Changes
+
+* `debian/changelog`:
+  * Bump version number. The Debian revision number is higher than necessary because I kept rebuilding things and incrementing the number for testing purposes - that will need reset to 1 before merging.
+* `etc/calamares/branding/Kicksecure/*`:
+  * Updated capitalization of style fields - this is necessary for Calamares 3.3.8 to parse them properly, failing to do so results in a solid black left sidebar.
+  * Fixed the absence of a Kicksecure logo in the upper-left corner of the installer. This is generally where distros put their logos and it seemed appropriate to me. The logo component was taken from the larger, complete Kicksecure logo in the same directory.
+  * Renamed logo.png to icon.png to fit with the terminology used by Calamares. This made room for a new logo.png to be created, which contains the logo which now appears in the upper-left corner of the installer.
+* `etc/calamares/modules/partition.conf`:
+  * Removed some obsolete fields that already have replacements integrated into the config file.
+* `etc/calamares/modules/users.conf.dist`:
+  * The changes here are vestigial and should be removed before merging this PR. I originally had attempted to add the ability for the end user to customize their user password and autologin status within Calamares, but as it turns out this results in Calamares trying to create a user account with a name that already exists (`user`), crashing the install. Ubuntu works around this by not having any user defined in the ISO itself, and dynamically creates a user account with casper upon ISO bootup. Kicksecure does not do this and thus this technique fails since the installed system has a user account before the users module ever runs, due to that user being hardcoded into the ISO. I considered some workarounds for this issue but ultimately decided that this was too much trouble for now and could be pursued at a later date.
+* `etc/calamares/settings.conf.dist`:
+    * Moved some fields down to the bottom of the file for readability. Not strictly necessary, but made working on the project easier.
+    * Added the `locale` and `keyboard` modules to the `show` component of the `sequence` section. This allows the user to customize their localization, timezone, and keyboard layout information at installation time.
+    * Added several modules to the `exec` component of the `sequence` section:
+      * `locale` - allows setting locale to work. The absence of this module results in language settings not carrying over into the installed system.
+      * `keyboard` - allows setting the keyboard layout to work.  The absence of this module results in keyboard layout settings not carrying over into the installed system.
+      * `localecfg` - not entirely sure if this is needed, but it appeared important and so I added it. This was when I was first trying to get localization working right. This might be able to be dropped.
+      * `displaymanager` - Vestigial, part of trying to get autologin working earlier. Should be dropped.
+      * `shellprocess@fixconkeys_part1` and `shellprocess@fixconkeys_part2` - Vital for disk encryption, explained later.
+    * Added two shellprocesses to the `instances` section. These are vital for disk encryption and are explained below.
+* `etc/calamares/modules/shellprocess_fixconkeys_part1.conf` and `etc/calamares/modules/shellprocess_fixconkeys_part2.conf`:
+  * Vital for disk encryption, explained below.
+
+## Disk Encryption Fixes
+
+In order for FDE to work ideally on Kicksecure, a newer version of Calamares than the one present in Bookworm is needed. I locally compiled Calamares 3.3.8 from Trixie for Bookworm and installed it into the live session for testing. This version of Calamares properly processes the `noEncrypt` parameter in `partitions.conf` and thus the `/boot` partition is excluded from encryption.
+
+However, **this did not entirely solve disk encryption issues** - when installing Kicksecure using a language with a keyboard layout different from `us` (I used German in my testing), the keyboard layout used by cryptsetup for decrypting the disk is different than the one used by Calamares for setting the encryption passphrase. This is a situation that I previously dealt with in Lubuntu, and is a result of the console keymap not being set correctly within the system's initramfs.
+
+Solving this issue requires changing the console keyboard layout within the initramfs at install time to match the keyboard layout chosen by the user. This is non-trivial and requires a pair of scripts (embedded into the `shellprocess_fixconkeys_part*.conf` configuration files) to accomplish.
+
+* The first script runs within the live system itself, NOT in the installed system chroot that Calamares creates. This script determines the keyboard layout in use by the user using `setxkbmap -query`, processes the output so as to extract the two-character keyboard layout code, and saves it to `/dev/shm/fixconkeys-layout`. (The reason for choosing `/dev/shm` is because it is a tmpfs that can be shared between the live and installed systems at installation time.) After doing this, the script bind-mounts `/dev/shm` from the live system into the installed system so that the second script can access the `fixconkeys-layout` file from within the installed system chroot.
+* The second script operates within the installed system via a chroot. It loads the keyboard layout from the `fixconkeys-layout` into the current console session, then saves the loaded settings into a system-wide location using `setupcon`. With this complete, it then regenerates all initramfs'es on the installed system using `dracut`, ensuring this configuration is installed into the initramfs. This ensures that when `cryptsetup` runs from within the initramfs to unlock the disk, the console keyboard layout is set properly, thus allowing the user to decrypt the disk using the same keyboard layout they used to encrypt it.
+
+This solution works well in my testing, however Kicksecure is currently missing critical packages necessary for this to work. The following packages will have to be installed into the Kicksecure ISO at ISO build time for this solution to work properly:
+
+* `console-common`
+* `console-data`
+* `console-setup-linux`
+* `console-setup`
+* `kbd`
+
+I used workarounds to locally install these packages into the live environment and into the installed system for testing purposes, and can confirm that these five packages are sufficient to allow the keyboard layout fix described above to function properly.
+
+Last but not least, the `calamares` and `calamares-settings-debian` packages from Trixie will need to be published in Debian's `bookworm-backports` repository before they are available for general use within Kicksecure. I filed a bug report for this in Debian to bring this to the `calamares` package maintainer's attention (and emailed him directly a day before), but have not heard back from him yet. Therefore I intend to attempt creating and maintaining the backport myself. The bug report is here: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1076740
+
+## Mandatory Checklist
+
+- [x] Legal agreements accepted. By contributing to this organisation, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+
+[Terms of Service](https://www.kicksecure.com/wiki/Terms_of_Service), [Privacy Policy](https://www.kicksecure.com/wiki/Privacy_Policy), [Cookie Policy](https://www.kicksecure.com/wiki/Cookie_Policy), [E-Sign Consent](https://www.kicksecure.com/wiki/E-Sign_Consent), [DMCA](https://www.kicksecure.com/wiki/DMCA), [Imprint](https://www.kicksecure.com/wiki/Imprint)
+
+## Optional Checklist
+The following items are optional but might be requested in certain cases.
+
+- [x] I have tested it locally
+- [x] I have reviewed and updated any documentation if relevant
+- [x] I am providing new code and test(s) for it
+  * Technically there aren't tests for this code other than manual checking, so while I am providing new code, I am not providing tests for it.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2024-09-14T14:18:42Z' class='post-time'>
+                    September 14, 2024,  2:18pm
+                  </time>
+                  <meta itemprop='dateModified' content='2024-09-14T14:18:42Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>This is implemented in <code>17.2.2.7</code> and above.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>

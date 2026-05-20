@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>QPS crashing on some hardware (hyperthreading-related?) - Support - Kicksecure Forums</title>
+    <meta name="description" content="Hi  there, 
+I have noticed that QPS, the system tool that displays and manage processes, installed by default cannot work when the CPU mitigation file is loaded by GRUB (/etc/default/grub.d/40_cpu_mitigations.cfg). 
+Once&amp;hellip;">
+    <meta name="generator" content="Discourse 3.5.3 - https://github.com/discourse/discourse version 06240420f449ca21d11714eea0ba09125e0f0310">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1588.html" />
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_b9defff21b08d13cc69fa671cf78b9adfd6d2d01.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_b9defff21b08d13cc69?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27common_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="../../stylesheets/desktop_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27desktop_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="../../stylesheets/checklist_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27checklist_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="../../stylesheets/discourse-details_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-details_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="../../stylesheets/discourse-lazy-videos_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="../../stylesheets/discourse-local-dates_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="../../stylesheets/discourse-narrative-bot_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_38444776255f14470443461f6df0a5b22686426b61cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="../../stylesheets/discourse-presence_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="../../stylesheets/discourse-solved_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="../../stylesheets/discourse-templates_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="../../stylesheets/discourse-topic-voting_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_38444776255f14470443461f6df0a5b22686426b61cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="../../stylesheets/docker_manager_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27docker_manager_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="../../stylesheets/footnote_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27footnote_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="../../stylesheets/poll_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27poll_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="../../stylesheets/discourse-topic-voting_desktop_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_desktop_38444776255f14470443461f6df0a5b?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="../../stylesheets/poll_desktop_38444776255f14470443461f6df0a5b22686426b.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_38444776255f14470443461f6df0a5b22686426b61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_eb6c45b414c47cf1d69cd19f601ff6a37d664a5e.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_eb6c45b414c47cf1d69cd19f601ff6a37d664a5e61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_32d30442083790f9d550ee2919afcddf99dd6419.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_32d30442083790f9d550ee2919afcddf99dd641961cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+    <link href="../../stylesheets/desktop_theme_3_e46f64db0c690b5427f0000b2db6865ee6f3cf78.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_e46f64db0c690b5427f0000b2db6865ee6f3cf7861cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="Qzjj0oRa42Q72rwEg0Qt9Euja"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;QPS crashing on some hardware (hyperthreading-related?)&#39;" href="1588.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/qps-crashing-on-some-hardware-hyperthreading-related/1588" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/qps-crashing-on-some-hardware-hyperthreading-related/1588" />
+<meta property="og:title" content="QPS crashing on some hardware (hyperthreading-related?)" />
+<meta name="twitter:title" content="QPS crashing on some hardware (hyperthreading-related?)" />
+<meta property="og:description" content="Hi  there,  I have noticed that QPS, the system tool that displays and manage processes, installed by default cannot work when the CPU mitigation file is loaded by GRUB (/etc/default/grub.d/40_cpu_mitigations.cfg).  Once this configuration file isn’t loaded by GRUB, the application QPS works fine." />
+<meta name="twitter:description" content="Hi  there,  I have noticed that QPS, the system tool that displays and manage processes, installed by default cannot work when the CPU mitigation file is loaded by GRUB (/etc/default/grub.d/40_cpu_mitigations.cfg).  Once this configuration file isn’t loaded by GRUB, the application QPS works fine." />
+<meta property="og:article:section" content="Support" />
+<meta property="og:article:section:color" content="0088CC" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="1 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="14 ❤" />
+<meta property="article:published_time" content="2026-02-07T10:04:40+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1588.html">QPS crashing on some hardware (hyperthreading-related?)</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/support/6.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #0088CC'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Support</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='QPS crashing on some hardware (hyperthreading-related?)'>
+      <link itemprop='url' href='1588.html'>
+      <meta itemprop='datePublished' content='2026-02-07T10:04:40Z'>
+        <meta itemprop='articleSection' content='Support'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1588.html">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2026-02-07T10:04:40Z' class='post-time'>
+                    February 7, 2026, 10:04am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-07T10:04:40Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Hi  there,</p>
+<p>I have noticed that QPS, the system tool that displays and manage processes, installed by default cannot work when the CPU mitigation file is loaded by GRUB (/etc/default/grub.d/40_cpu_mitigations.cfg).</p>
+<p>Once this configuration file isn’t loaded by GRUB, the application QPS works fine.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+                <div class='crawler-linkback-list' itemscope itemtype='../../../external.html?link=http://schema.org/ItemList'>
+                      <div itemprop='itemListElement' itemscope itemtype='../../../external.html?link=http://schema.org/ListItem'>
+                        <a itemprop='url' href="../some-default-apps-in-k18-just-cant-work/1420/17.html">Some default apps in K18 just can&#39;t work</a>
+                        <meta itemprop='position' content='1'>
+                      </div>
+                </div>
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+                <link itemprop="image" href="../../uploads/default/original/1X/5f527e7c327b2cd3e751e34886416504a7c96a96.png">
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T00:19:59Z' class='post-time'>
+                    February 8, 2026, 12:19am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T00:19:59Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>What in particular isn’t working? It seems fine here, and I have <code>40_cpu_mitigations.cfg</code> enabled.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/5f527e7c327b2cd3e751e34886416504a7c96a96.png" data-download-href="https://forums.kicksecure.com/uploads/default/5f527e7c327b2cd3e751e34886416504a7c96a96" title="image"><img src="../../uploads/default/optimized/1X/5f527e7c327b2cd3e751e34886416504a7c96a96_2_690x281.png" alt="image" data-base62-sha1="dBg6lOAdF54OSVFQfho86kxqc8S" width="690" height="281" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/5f527e7c327b2cd3e751e34886416504a7c96a96_2_690x281.png, https://forums.kicksecure.com/uploads/default/optimized/1X/5f527e7c327b2cd3e751e34886416504a7c96a96_2_1035x421.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/5f527e7c327b2cd3e751e34886416504a7c96a96.png 2x" data-dominant-color="C5C5C6"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">image</span><span class="informations">1113×454 82.9 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T00:31:56Z' class='post-time'>
+                    February 8, 2026, 12:31am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T00:31:56Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>When trying to launch QPS from terminal, it returns a message saying that CPU can’t be reached in its entirely. Sorry, not in front of the machine to reproduce it right now</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T00:47:25Z' class='post-time'>
+                    February 8, 2026, 12:47am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T00:47:25Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Hmm, ok. If you can take a screenshot once you can reproduce it, that would be quite useful.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+
+                <link itemprop="image" href="../../uploads/default/original/1X/42868a828d0052fbcc0caea33d8013c66164eab1.jpg">
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T02:25:00Z' class='post-time'>
+                    February 8, 2026,  2:25am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T02:25:00Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I have reproduced it once the CPU mitigations cfg file is again taken into account by GRUB. See image.</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/42868a828d0052fbcc0caea33d8013c66164eab1.jpg" data-download-href="https://forums.kicksecure.com/uploads/default/42868a828d0052fbcc0caea33d8013c66164eab1" title="1000003898"><img src="../../uploads/default/optimized/1X/42868a828d0052fbcc0caea33d8013c66164eab1_2_690x388.jpg" alt="1000003898" data-base62-sha1="9uvLuet46kd1xveZ7YHaQ4IvfOh" width="690" height="388" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/42868a828d0052fbcc0caea33d8013c66164eab1_2_690x388.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/42868a828d0052fbcc0caea33d8013c66164eab1_2_1035x582.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/42868a828d0052fbcc0caea33d8013c66164eab1_2_1380x776.jpeg 2x" data-dominant-color="3F3B49"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">1000003898</span><span class="informations">1920×1080 61.3 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+<p>Besides, htop and top work just fine, with or without the CPU mitigations cfg.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T02:39:02Z' class='post-time'>
+                    February 8, 2026,  2:39am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T02:39:02Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Can you run <code>cat /proc/stat</code> on the affected machine and share the output here?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+
+                <link itemprop="image" href="../../uploads/default/original/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2.jpg">
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T07:58:42Z' class='post-time'>
+                    February 8, 2026,  7:58am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T07:58:42Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Here is the result (picture from Mobile, can’t connect the machine to the net right now)</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2.jpg" data-download-href="https://forums.kicksecure.com/uploads/default/5d7e2f894b8f01b961ee47389bfe1cf5327183b2" title="1000003899"><img src="../../uploads/default/optimized/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2_2_625x499.jpg" alt="1000003899" data-base62-sha1="dl4KTnHRaf96kmxhiSiSFHVvrIC" width="625" height="499" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2_2_625x499.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2_2_937x748.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/5d7e2f894b8f01b961ee47389bfe1cf5327183b2_2_1250x998.jpeg 2x" data-dominant-color="3B3C42"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">1000003899</span><span class="informations">1920×1535 308 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-08T15:23:30Z' class='post-time'>
+                    February 8, 2026,  3:23pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-08T15:23:30Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>OK, I think I know what’s going on. One last test, can you please:</p>
+<ul>
+<li>Disable the CPU mitigations file the same way you did before (presumably something like <code>sudo mv /etc/default/grub.d/40_cpu_mitigations.cfg /home/sysmaint/; sudo update-grub</code>)</li>
+<li>Reboot the system, but then when the boot menu appears…</li>
+<li>…hover over <code>PERSISTENT Mode | USER Session | daily activities</code>, and then <strong>press <code>e</code> rather than pressing Enter.</strong></li>
+<li>Move the cursor to the line that starts with the word <code>linux</code>, then move it to the end of the line.</li>
+<li>Type a single space, then type <code>nosmt=force</code>.</li>
+<li>Press Ctrl+X to boot with the modified boot configuration.</li>
+<li>Try to launch QPS again and see if it fails with the same error.</li>
+</ul>
+<p>I think what’s happening is that your CPU doesn’t present all cores as contiguous when hyperthreading is turned off, and QPS doesn’t know how to handle gaps in the cores.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_9' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+
+                <link itemprop="image" href="../../uploads/default/original/1X/765391fb061b7aeaba44f36423d209afb05584df.jpg">
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-15T01:51:39Z' class='post-time'>
+                    February 15, 2026,  1:51am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-15T01:51:39Z'>
+              <span itemprop='position'>9</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Hello,</p>
+<p>Sorry for late reply.</p>
+<p>I did follow your instructions and QPS still falls to start with the same error:</p>
+<p><div class="lightbox-wrapper"><a class="lightbox" href="../../uploads/default/original/1X/765391fb061b7aeaba44f36423d209afb05584df.jpg" data-download-href="https://forums.kicksecure.com/uploads/default/765391fb061b7aeaba44f36423d209afb05584df" title="1000003933"><img src="../../uploads/default/optimized/1X/765391fb061b7aeaba44f36423d209afb05584df_2_690x245.jpg" alt="1000003933" data-base62-sha1="gSLoaQDiupGGu3LetAqJpplrK8v" width="690" height="245" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/765391fb061b7aeaba44f36423d209afb05584df_2_690x245.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/765391fb061b7aeaba44f36423d209afb05584df_2_1035x367.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/765391fb061b7aeaba44f36423d209afb05584df_2_1380x490.jpeg 2x" data-dominant-color="38353E"><div class="meta"><svg class="fa d-icon d-icon-far-image svg-icon" aria-hidden="true"><use href="#far-image"></use></svg><span class="filename">1000003933</span><span class="informations">3286×1170 503 KB</span><svg class="fa d-icon d-icon-discourse-expand svg-icon" aria-hidden="true"><use href="#discourse-expand"></use></svg></div></a></div></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+          </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-15T14:18:20Z' class='post-time'>
+                    February 15, 2026,  2:18pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-15T14:18:20Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Yeah, then that’s almost certainly what’s happening. I’ll report the issue to LXQt and Debian.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+          </div>
+          <div id='post_11' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/cookie.monster'><span itemprop='name'>cookie.monster</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-16T03:23:05Z' class='post-time'>
+                    February 16, 2026,  3:23am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-16T03:23:05Z'>
+              <span itemprop='position'>11</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Thanks, I hope this can help</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+          <div id='post_12' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-02-25T04:52:12Z' class='post-time'>
+                    February 25, 2026,  4:52am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-02-25T04:52:12Z'>
+              <span itemprop='position'>12</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Reproduced, reported upstream:</p>
+<aside class="onebox githubissue" data-onebox-src="../../../external.html?link=https://github.com/lxqt/qps/issues/528">
+  <header class="source">
+
+      <a href="../../../external.html?link=https://github.com/lxqt/qps/issues/528" target="_blank" rel="noopener">github.com/lxqt/qps</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="../../../external.html?link=https://github.com/lxqt/qps/issues/528" target="_blank" rel="noopener">Crashes on systems with non-contiguous CPU cores in /proc/stat</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-02-25" data-time="04:41:34" data-timezone="UTC">04:41AM - 25 Feb 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="../../../external.html?link=https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="../../../external.html?link=https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Disabling hyperthreading on some modern Intel Core CPUs can result in a system h<span class="show-more-container"><a href="#" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">aving a non-contiguous set of CPU cores in `/proc/stat`. On such systems, qps crashes immediately with an error like `Qps: Error reading info for cpu5 (/proc/stat)`.
+
+For instance, this is what my i9-14900HX system shows in `/proc/stat` when booted normally:
+
+```
+cpu  997 0 1235 861802 327 267 138 0 0 0
+cpu0 12 0 25 26869 21 56 32 0 0 0
+cpu1 11 0 35 26948 3 6 5 0 0 0
+cpu2 32 0 36 26924 9 10 4 0 0 0
+cpu3 5 0 14 26999 0 3 2 0 0 0
+cpu4 228 0 125 26604 26 14 7 0 0 0
+cpu5 20 0 19 26981 0 3 1 0 0 0
+cpu6 171 0 202 26565 44 13 7 0 0 0
+cpu7 11 0 78 26922 3 7 2 0 0 0
+cpu8 52 0 52 26849 55 7 4 0 0 0
+cpu9 5 0 15 26998 0 3 3 0 0 0
+cpu10 75 0 57 26780 59 24 14 0 0 0
+cpu11 3 0 15 26999 0 3 1 0 0 0
+cpu12 52 0 61 26866 28 6 3 0 0 0
+cpu13 3 0 25 26994 0 2 1 0 0 0
+cpu14 37 0 43 26920 10 7 3 0 0 0
+cpu15 3 0 17 27002 0 3 1 0 0 0
+cpu16 24 0 39 26946 8 6 3 0 0 0
+cpu17 22 0 24 26975 1 4 1 0 0 0
+cpu18 18 0 19 26970 14 3 1 0 0 0
+cpu19 14 0 20 26982 5 4 2 0 0 0
+cpu20 17 0 57 26943 1 4 2 0 0 0
+cpu21 12 0 20 26982 8 4 1 0 0 0
+cpu22 19 0 30 26967 5 4 1 0 0 0
+cpu23 20 0 23 26970 3 5 3 0 0 0
+cpu24 18 0 24 26978 2 3 1 0 0 0
+cpu25 16 0 25 26973 4 5 3 0 0 0
+cpu26 10 0 18 26994 0 4 1 0 0 0
+cpu27 14 0 21 26975 0 10 2 0 0 0
+cpu28 16 0 19 26981 1 5 2 0 0 0
+cpu29 15 0 20 26968 0 16 4 0 0 0
+cpu30 14 0 19 26985 1 4 2 0 0 0
+cpu31 15 0 22 26979 0 5 3 0 0 0
+intr 806041 0 749 0 0 0 0 0 0 0 139 0 0 140 0 0 0 0 0 30 0 0 0 0 0 0 0 0 5980 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 928 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0 27874 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 52 10 0 0 4 39 52 6 0 2 2 1 13 4 24 0 16 30 50 15 0 1 0 0 0 0 11 2 2 119 39 54 10 3 1652 49 123 123 0 0 0 0 0 0 0 0 0 0 0 0 0 0 490 4 12 4 0 2 45 2 21 3 6 1 3 5 34 5 0 1077 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 333100
+btime 1771993959
+processes 2384
+procs_running 1
+procs_blocked 1
+softirq 165204 208 26112 5 3844 9066 0 28100 56714 0 41155
+```
+
+This is what happens when starting `qps` in this configuration:
+
+```
+DEBUG: version = 61809
+Qps(0x55b565389d70, name="qps_main_window")
+```
+
+This is what `/proc/stat` looks like when booting the same system with the `nosmt=force` kernel parameter:
+
+```
+cpu  742 0 1269 83374 237 176 38 0 0 0
+cpu0 32 0 64 3423 4 41 4 0 0 0
+cpu2 44 0 39 3478 4 4 1 0 0 0
+cpu4 20 0 27 3512 1 5 1 0 0 0
+cpu6 22 0 72 3470 3 5 0 0 0 0
+cpu8 10 0 128 3429 4 3 0 0 0 0
+cpu10 11 0 40 3508 1 15 0 0 0 0
+cpu12 14 0 31 3524 0 3 0 0 0 0
+cpu14 9 0 32 3530 1 3 0 0 0 0
+cpu16 22 0 30 3518 2 3 0 0 0 0
+cpu17 16 0 49 3504 2 3 0 0 0 0
+cpu18 28 0 69 3416 24 21 10 0 0 0
+cpu19 38 0 59 3440 31 5 1 0 0 0
+cpu20 32 0 52 3482 3 5 1 0 0 0
+cpu21 31 0 48 3484 5 4 0 0 0 0
+cpu22 17 0 32 3521 2 3 0 0 0 0
+cpu23 24 0 42 3500 3 4 1 0 0 0
+cpu24 18 0 51 3486 4 7 1 0 0 0
+cpu25 14 0 35 3522 1 3 0 0 0 0
+cpu26 50 0 50 3462 4 5 1 0 0 0
+cpu27 59 0 60 3424 24 4 1 0 0 0
+cpu28 40 0 67 3444 13 6 1 0 0 0
+cpu29 62 0 83 3332 81 6 1 0 0 0
+cpu30 60 0 39 3461 6 4 1 0 0 0
+cpu31 57 0 49 3459 2 4 1 0 0 0
+intr 581777 0 145 0 0 0 0 0 0 0 140 0 0 140 0 0 0 0 0 30 0 0 0 0 0 0 0 0 8369 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1067 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0 1 0 0 21920 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 52 52 0 6 15 29 47 38 0 31 0 13 0 51 11 2 2 24 0 5 2 9 8 0 12 13 10 0 1 33 14 29 23 24 1098 0 49 123 123 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 142 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5 691 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ctxt 218994
+btime 1771993789
+processes 1187
+procs_running 1
+procs_blocked 0
+softirq 81458 167 5823 12 142 6981 8 21836 18391 0 28098
+```
+
+Note that every other CPU core up to cpu16 is missing. This is what happens when trying to start `qps` in this state:
+
+```
+DEBUG: version = 61809
+Qps: Error reading info for cpu5 (/proc/stat)
+Aborted                    (core dumped) qps
+```
+
+LXQt version: 2.3.0
+Qt version: 6.10.2
+Distribution: Arch Linux</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>

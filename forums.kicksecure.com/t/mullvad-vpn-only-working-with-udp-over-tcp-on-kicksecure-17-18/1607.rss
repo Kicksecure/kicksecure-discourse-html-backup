@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+    <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607</link>
+    <description>Mullvad VPN will only establish connections when the anti-censorship mode “UDP-over-TCP” is enabled. Using that mode produces very low internet speeds (\~2,000 kb/s) and an unstable link. This behavior occurs only on Kicksecure, so I suspect it’s caused by specific system hardening measures in this distribution.
+
+Has anyone found a fix or workaround?</description>
+    
+    <lastBuildDate>Tue, 12 May 2026 05:27:35 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/10</link>
+        <pubDate>Tue, 12 May 2026 05:27:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-10</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>Well I just got back to testing on my machine and enabled <code>mullvad log listen</code> to log-level of “trace” and didn’t see anything indicating that only UDP-over-TCP was being set. I even disabled anti-censorship entirely and can connect just fine. <em>This is on Kicksecure host install not a VM</em>.</p>
+<p>Didn’t see any errors about setting src_valid_mark=1 and talpid core firewall or tunnel indicating inefficient permissions in user mode to set this. Only a warning of inefficient permission about ping but this is normal. Unless I didn’t look hard enough I dont think this is the issue?</p>
+<p>If <a class="mention" href="https://forums.kicksecure.com/u/secure">@secure</a> <a class="mention" href="https://forums.kicksecure.com/u/cookie.monster">@cookie.monster</a> <a class="mention" href="https://forums.kicksecure.com/u/lacekim">@Lacekim</a> or someone could provide some more info most importantly.</p>
+<p><em>Is this encountered in Kicksecure Virtual Machines (KVM/Virtualbox/Qubes) or is this on Kicksecure host?</em></p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/9</link>
+        <pubDate>Tue, 12 May 2026 04:35:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-9</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>The semi conclusion for me after looking at wiki is ARP and IPv4 settings documented on that page are unlikely to directly cause the UDP-over-TCP issue.</p>
+<p>Mullvad VPN audit states they set <code>net.ipv4.conf.*.arp_ignore=2</code> \<br>
+just like what is already set in Networking documentation.</p>
+<blockquote>
+<p>On Linux we solved the issue by changing the kernel parameter <code>net.ipv4.conf.all.arp_ignore</code> to 2 whenever a VPN tunnel is established. This change was done in PR <span class="hashtag-raw">#7141</span> and is included in the desktop app release version 2024.8.<a href="https://github.com/mullvad/mullvadvpn-app/blob/main/audits/2024-12-10-X41-D-Sec.md#mllvd-cr-24-03-virtual-ip-address-of-tunnel-device-leaks-to-network-adjacent-participant-severity-medium" rel="noopener nofollow ugc">[1]</a></p>
+</blockquote>
+<p>I noticed that reverse path filtering (<code>rp_filter</code>) is <a href="https://github.com/Kicksecure/security-misc/blob/master/usr/lib/sysctl.d/990-security-misc.conf%23security-misc-shared#L475-L482" rel="noopener nofollow ugc">set on the distro</a>, and while I initially doubt it affects wiregaurd interfaces, the Mullvad documentation explicitly mentions it in relation to <code>src_valid_mark</code>.</p>
+<blockquote>
+<p><strong>TALPID_FIREWALL_DONT_SET_SRC_VALID_MARK</strong> - Set this variable to 1 to stop the daemon from setting the <code>net.ipv4.conf.all.src_valid_mark</code> kernel parameter to 1 on Linux when a tunnel is established. The kernel config parameter is set by default, because otherwise strict reverse path filtering may prevent relay traffic from reaching the daemon. If <code>rp_filter</code> is set to 1 on the interface that will be receiving relay traffic, and <code>src_valid_mark</code> is not set to 1, the daemon will not be able to receive relay traffic.<a href="https://github.com/mullvad/mullvadvpn-app#environment-variables-used-by-the-service" rel="noopener nofollow ugc">[2]</a></p>
+</blockquote>
+<p>This raises the question: Is <code>src_valid_mark=1</code> not being set correctly for Mullvad on KickSecure leading to UDP-over-TCP only?</p>
+<p>When I get in front of my workstation, I will check if this specific kernel parameter is the culprit to all this minutia. I’ll check my settings cause don’t recall experiencing this forced “UDP-over-TCP” personally.</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/8</link>
+        <pubDate>Mon, 11 May 2026 03:05:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-8</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>Could someone here add some clarity if this encountered specifically in Kicksecure VM’s / Qubes Templates or is this issue experienced on host installation?</p>
+<p>I’m using Mullvad VPN on host Kicksecure and I dont have this issue. I can double check what my settings are but I think standard UDP works for me.</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/7</link>
+        <pubDate>Mon, 11 May 2026 00:42:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-7</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m sorry for not posting it <a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607" class="inline-onebox">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</a></p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/6</link>
+        <pubDate>Sun, 03 May 2026 23:02:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-6</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Lacekim" data-post="4" data-topic="1607">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/l/54ee81/48.png" class="avatar"> Lacekim:</div>
+<blockquote>
+<p>I like most things I read up on. The thing that popped out are that mullvad vpn won’t work unless the comp is on a specific setting. That setting takes the speed you have and turns it to dialup. That brought me to the fact I’m questioning this if so.</p>
+</blockquote>
+</aside>
+<p>Could you share a link to where you saw this? I’m aware that there may be some difficulties with Mullvad VPN but I’m not sure I recognize this particular issue.</p>
+<p>(Edit: This post, and the one above it and below it were previously a separate post. Merged them here so that everything related to slow Mullvad VPN performance can be in a single thread.)</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/5</link>
+        <pubDate>Sun, 03 May 2026 14:16:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-5</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m between pop, Ubuntu or kicksecure. Ubuntu is looking more and more unusable because of AI integration. The pop seems better but lacks the security of kicksecure from what I have read.</p>
+<p>I like most things I read up on. The thing that popped out are that mullvad vpn won’t work unless the comp is on a specific setting. That setting takes the speed you have and turns it to dialup. That brought me to the fact I’m questioning this if so.</p>
+<p>I like this, it seems like a way I want to go. That scared me however. I need security, I don’t like things that aren’t as secure as they should be.</p>
+<p>Please help me out with this decision</p>
+<pre><code class="lang-auto">
+
+
+
+
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/4</link>
+        <pubDate>Sun, 03 May 2026 09:11:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-4</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Networking">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1771317014" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Networking" target="_blank" rel="noopener" title="11:29AM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Networking" target="_blank" rel="noopener">Networking</a></h3>
+
+  <p>Overview of Kicksecure's networking features, sysctl settings such as drop_gratuitous_arp, arp_ignore, arp_filter, and shared_media.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/3</link>
+        <pubDate>Tue, 17 Feb 2026 15:07:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-3</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[cookie.monster]]></dc:creator>
+        <description><![CDATA[
+            <p>I have experienced the same issue, even my speed is 20 times lower than yours because I am connecting from a coubtry wiyh heavily censorship.</p>
+<p>I can’t say it’s related to Kicksecure even though I can say that:</p>
+<ol>
+<li>
+<p>Since summer 2025, I could not even connect to Mullvad VPN withn Kicksecure 17, never being able to establish a connection</p>
+</li>
+<li>
+<p>Under Kicksecure 18 the VPN connects but it’s extremely slow and often disconnects</p>
+</li>
+</ol>
+<p>Maybe not related but as Tor is totally blocked here (I can’t for example run Whonix because of that or have always sdwdate time out), I may suspect some my ISP is blocking things so much that my internet connection is barely usable for privacy purposes, including the use of VPN</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/2</link>
+        <pubDate>Tue, 17 Feb 2026 03:28:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-2</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[secure]]></dc:creator>
+        <description><![CDATA[
+            <p>Mullvad VPN will only establish connections when the anti-censorship mode “UDP-over-TCP” is enabled. Using that mode produces very low internet speeds (~2,000 kb/s) and an unstable link. This behavior occurs only on Kicksecure, so I suspect it’s caused by specific system hardening measures in this distribution.</p>
+<p>Has anyone found a fix or workaround?</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607/1</link>
+        <pubDate>Mon, 16 Feb 2026 17:26:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1607-1</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607.rss">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</source>
+      </item>
+  </channel>
+</rss>

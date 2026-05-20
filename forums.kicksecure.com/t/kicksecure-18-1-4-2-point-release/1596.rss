@@ -1,0 +1,697 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure 18.1.4.2 - Point Release!</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-18-1-4-2-point-release/1596</link>
+    <description># Download
+
+https://www.kicksecure.com/wiki/Download
+
+([What is a point release?](https://www.kicksecure.com/wiki/Point_Release))
+
+----
+
+# Upgrade
+
+Alternatively, an in-place release upgrade is possible using the [Kicksecure repository](https://www.kicksecure.com/wiki/Project-APT-Repository).
+
+----
+
+This release would not have been possible without the numerous supporters of Kicksecure!
+
+----
+
+Please Donate!
+
+https://www.kicksecure.com/wiki/Donate
+
+----
+
+Please Contribute!
+
+https://www.kicksecure.com/wiki/Contribute
+
+----
+
+# Major Changes
+
+* Major Secure Boot and MOK usability improvements: new helper tools, safer DKMS handling during builds, richer UI controls, and improved detection/diagnostics.
+  * (Part of work towards https://www.kicksecure.com/wiki/Verified_Boot and https://www.kicksecure.com/wiki/Sovereign_Boot)
+* Removable media automount is now disabled by default (including for existing users via upgrade).
+* Desktop and installer polish focused on LXQt
+  * safer terminal UX (notably qterminal multi-line paste confirmation)
+  * screen resolution tooling (`kanshi`)
+* Better system maintenance and diagnostics: enhanced journal inspection (including previous-boot checks) via [https://www.kicksecure.com/wiki/Systemcheck](systemcheck)
+
+# Changelog
+
+* anon-shared-build-apt-sources-tpo:
+  * Run &lt;code&gt;sq cert lint&lt;/code&gt; with &lt;code&gt;--cert-file&lt;/code&gt;.
+  * Update the signing key.
+* browser-choice:
+  * Fix Qubes proxy handling.
+  * Enable installation of browsers in &lt;code&gt;ISO Live Mode&lt;/code&gt; - &lt;code&gt;user session&lt;/code&gt;.
+* desktop-config-dist:
+  * Add screen resolution tool &lt;code&gt;kanshi&lt;/code&gt; (configuration instructions and tools).
+  * Disable numlock by default.
+  * livecheck
+    * Add livecheck CLI mode.
+    * Improve error handling and logging.
+  * Simplify and improve robustness of volume fix code.
+  * Set speaker volume to 50% on login (one time).
+    * Non-Qubes only.
+    * (&lt;code&gt;/usr/libexec/desktop-config-dist/start-lxqt-session&lt;/code&gt;)
+    * (Using &lt;code&gt;pactl set-sink-volume @DEFAULT_SINK@ 50%&lt;/code&gt;.)
+  * Avoid setting an unnecessary system-wide location for qterminal&#39;s bookmarks file.
+     * (Remove &lt;code&gt;BookmarksFile=/home/user/.config/qterminal.org/qterminal_bookmarks.xml&lt;/code&gt; in file &lt;code&gt;/usr/share/desktop-config-dist/qterminal.org/qterminal.ini&lt;/code&gt;.)
+  * &lt;code&gt;qterminal&lt;/code&gt;: Require confirmation before allowing a multi-line paste.
+* dist-base-files:
+  * fix: Let &lt;code&gt;zsh&lt;/code&gt; pick up the &lt;code&gt;PROFILE_SCRIPTS_WERE_SOURCED&lt;/code&gt; variable.
+  * GRUB configuration: Document differences between our core boot menu generation scripts and Debian&#39;s original versions.
+  * Move &lt;code&gt;PROFILE_SCRIPTS_WERE_SOURCED&lt;/code&gt; variable to &lt;code&gt;dist-base-files&lt;/code&gt;.
+  * fix: Increase priority of &lt;code&gt;60-dist-base-files.conf&lt;/code&gt; to override &lt;code&gt;dracut-config-generic&lt;/code&gt;&#39;s &lt;code&gt;50-generic.conf&lt;/code&gt; file.
+* helper-scripts:
+  * Secure Boot usability improvements:
+    * shim-signed-mok-setup: Prepare Secure Boot module-signing keys (used only if Secure Boot is enabled).
+    * &lt;code&gt;shim-manage-mok&lt;/code&gt;: Enroll/delete MOK (machine owner key).
+    * Add &lt;code&gt;rebuild-dkms-modules&lt;/code&gt; for rebuilding all DKMS modules. (Integrated with &lt;code&gt;shim-manage-mok&lt;/code&gt;.)
+  * Allow users to provide environment variables to &lt;code&gt;gsudo-{wl,x}&lt;/code&gt;.
+  * &lt;code&gt;apt-key-install&lt;/code&gt;: Lint keys before and after copying.
+  * &lt;code&gt;apt-key-install&lt;/code&gt;: No longer use &lt;code&gt;gpg-dearmor&lt;/code&gt; since no longer required.
+  * &lt;code&gt;strings.bsh&lt;/code&gt;: Add &lt;code&gt;validate_safe_filename&lt;/code&gt;, &lt;code&gt;check_is_alpha_numeric&lt;/code&gt;.
+  * Add &lt;code&gt;gsudo-wl&lt;/code&gt; and &lt;code&gt;gsudo-x&lt;/code&gt; scripts, wrapper helper scripts to run graphical user interface (GUI) tools with administrative (&quot;[root](https://www.kicksecure.com/wiki/Root)&quot;) rights. (No influence, change of https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation design.) Documentation:   [Graphical Applications and Root Rights](https://www.kicksecure.com/wiki/Root#Graphical_Applications_and_Root_Rights)
+  * fix: &lt;code&gt;autologinchange&lt;/code&gt; disable mechanism for &lt;code&gt;greetd&lt;/code&gt;.
+  * fix: Take &lt;code&gt;greetd&lt;/code&gt; configuration into account when looking for autologin users.
+  * Avoid spurious &lt;code&gt;autologinchange&lt;/code&gt; error messages when &lt;code&gt;/etc/lightdm&lt;/code&gt; doesn&#39;t exist.
+  * &lt;code&gt;grep-find-unicode-wrapper&lt;/code&gt;: fix.
+  * Add &lt;code&gt;run-in-new-cgroup&lt;/code&gt; helper.
+  * &lt;code&gt;log_run_die.sh&lt;/code&gt;: Add support for logging of &lt;code&gt;who_ami&lt;/code&gt;, add &#39;log question&#39;.
+  * Allow &lt;code&gt;light_sleep&lt;/code&gt; to take a float as an argument.
+  * &lt;code&gt;/usr/libexec/helper-scripts/try_wait_for_audio_ready.bsh&lt;/code&gt;: Add library for waiting for audio to be functional.
+  * &lt;code&gt;pre.bsh&lt;/code&gt;, &lt;code&gt;get_colors.sh&lt;/code&gt;: Polish.
+  * &lt;code&gt;detect-ipv6-enabled-in-kernel.service&lt;/code&gt;: Add systemd service for detecting and notifying about the existence of in-kernel ipv6 support.
+  * fix: &lt;code&gt;lsmod_deterministic&lt;/code&gt; system locale independence.
+  * Improve usability and code style of LUKS check in &lt;code&gt;set-keyboard-layout.sh&lt;/code&gt;.
+  * Add a safeguard when changing the system or console keymap if LUKS is used on the root filesystem.
+  * new functions: &lt;code&gt;lsmod_deterministic&lt;/code&gt;, &lt;code&gt;kernel_module_loaded_check&lt;/code&gt;, &lt;code&gt;modprobe_remove&lt;/code&gt;.
+  * Add &lt;code&gt;strict_config_parser&lt;/code&gt; library.
+  * Remove obsolete script &lt;code&gt;desktop-background-skel-test&lt;/code&gt;, the default desktop background can now be configured system-wide in /usr/share with LXQt.
+  * Redistributable builds: Sort output of &#39;find&#39; when using &#39;genmkfile debinstfile&#39;.
+* initializer-dist:
+  * Add config snippet for disabling DKMS MOK generation to make sure DKMS signing keys are not created during the build process.
+    * DKMS bug report: https://github.com/dkms-project/dkms/issues/574
+    * DKMS pull request: https://github.com/dkms-project/dkms/pull/575
+* kicksecure-base-files:
+  * Disable removable media automount by default.
+* kicksecure-meta-packages:
+  * Make &lt;code&gt;-cli&lt;/code&gt; metapackages directly installable.
+    * &lt;code&gt;kicksecure-baremetal-cli&lt;/code&gt;
+    * &lt;code&gt;kicksecure-vm-cli&lt;/code&gt;
+  * Versus:
+    * &lt;code&gt;kicksecure-baremetal-server&lt;/code&gt;
+    * &lt;code&gt;kicksecure-vm-server&lt;/code&gt;
+  * Add &lt;code&gt;firmware-sof-signed&lt;/code&gt; to &lt;code&gt;firmware-nonfreedom&lt;/code&gt;.
+  * Remove &lt;code&gt;firmware-nonfreedom-network&lt;/code&gt; dependency from main package &lt;code&gt;kicksecure-qubes-cli&lt;/code&gt;. Instead, &lt;code&gt;firmware-nonfreedom-network&lt;/code&gt; is now installed during the build process of &lt;code&gt;qubes-template-kicksecure&lt;/code&gt;. Therefore, it can be easily uninstalled and simplifies custom user builds.
+  * Improved distribution morphing support:
+    * Remove dependencies on &lt;code&gt;tirdad&lt;/code&gt; (to avoid pulling kernel packages).
+    * Remove dependencies on &lt;code&gt;kicksecure-network-conf{,-gui}&lt;/code&gt; (to avoid breaking networking).
+  * Non-Qubes: Add LXQt localization packages.
+  * Add &lt;code&gt;gvfs-backends&lt;/code&gt; to &lt;code&gt;dist-general-gui-lxqt&lt;/code&gt;.
+* legacy-dist:
+  * Avoid &lt;code&gt;apt&lt;/code&gt; &lt;code&gt;autoremove&lt;/code&gt; but allow manual uninstallation by the system administrator.
+    * &lt;code&gt;apt-mark manual firmware-nonfreedom-network&lt;/code&gt;
+    * &lt;code&gt;apt-mark manual kicksecure-network-conf kicksecure-network-conf-gui tirdad tirdad-dkms&lt;/code&gt;
+  * MOK cleanup.
+  * Mark &lt;code&gt;dracut-config-generic&lt;/code&gt; for APT autoremoval since no longer required (see also package &lt;code&gt;dist-base-files&lt;/code&gt; file &lt;code&gt;/etc/dracut.conf.d/60-dist-base-files.conf&lt;/code&gt;).
+  * Disable removable media automount by default for existing users.
+  * Fix QTerminal being configured to always save bookmarks under /home/user, regardless of the user account it runs as.
+  * Enable qterminal &lt;code&gt;ConfirmMultilinePaste=true&lt;/code&gt; for all users.
+* libvirt-dist:
+  * Use _FLAVOR_ consistently in UTM files.
+* live-config-dist:
+  * Adjust keymap helper script to keep working with encrypted installations.
+* msgcollector:
+  * Repeatedly try to signal to systemd that msgdispatcher is ready until it works.
+* open-link-confirmation:
+  * Add &lt;code&gt;featherpad&lt;/code&gt; support.
+* privleap:
+  * Add the ability to parse config files in &#39;/usr/local/etc/privleap/conf.d&#39;.
+* repository-dist:
+  * Lint keyring.
+  * Extend signing key validity to infinite.
+* sdwdate:
+  * Add missing syscalls to seccomp filter (for ppc64).
+* sdwdate-gui:
+  * Fix log spam when sdwdate-gui is disabled on the gateway but not the workstation.
+  * Use &lt;code&gt;strict_config_parser&lt;/code&gt; library instead of built-in config parsing routine.
+* security-misc:
+  * Do not run emerg-shutdown.service in case &#39;rd.live.ram&#39; or &#39;rd.live.ram=1&#39; is set. https://forums.kicksecure.com/t/how-to-run-iso-live-mode-from-ram/1542/9
+  * Document why we disable sudo DNS.
+  * Disable sudo DNS lookups on desktop systems.
+  * Add references for AMD SME (Thanks to @raja!).
+  * Update option to &lt;code&gt;panic_on_taint&lt;/code&gt; (Thanks to @raja!).
+  * Update docs on CPU MSRs (Thanks to @raja!).
+  * Whitelist &lt;code&gt;9p&lt;/code&gt; module (Thanks to @raja!).
+  * Move &lt;code&gt;kernel.panic=-1&lt;/code&gt; setting to sysctl.
+  * Allow turning &lt;code&gt;panic-on-oops&lt;/code&gt; off with &lt;code&gt;systemctl&lt;/code&gt; for system administrator.
+  * Add reference for AMD SEV (Thanks to @raja!).
+  * Provide option to enable AMD SEV-SNP (Thanks to @raja!).
+  * Provide option to enable AMD SEV-ES (Thanks to @raja!).
+  * Move (optional) CPU MSR module disable list (Thanks to @raja!).
+  * Disable more file systems (Thanks to @raja!).
+  * Move &lt;code&gt;joydev&lt;/code&gt; from blacklist to disable (Thanks to @raja!).
+  * Update docs on CD-ROM/DVD blacklisting (Thanks to @raja!).
+  * Move superseded &lt;code&gt;brcm80211&lt;/code&gt; to disabled. Split and replaced by &lt;code&gt;brcmsmac&lt;/code&gt; and &lt;code&gt;brcmfmac&lt;/code&gt; in kernel 2.6.39 (Thanks to @raja!).
+  * Add CPU MSR modules (Thanks to @raja!).
+  * Update docs on CPU MSR disabling (Thanks to @raja!).
+  * Update docs on Vivid disabling (Thanks to @raja!).
+  * Sort RDNIS disabling and add docs (Thanks to @raja!).
+  * Update docs on Intel PMT disabling (Thanks to @raja!).
+  * Update docs on Bluetooth disabling (Thanks to @raja!).
+  * Provide option to &lt;code&gt;panic_on_taint&lt;/code&gt; (Thanks to @raja!).
+  * Re-set &lt;code&gt;net.ipv4.conf.*.log_martians=1&lt;/code&gt; (Thanks to @raja!).
+  * Update docs on CPU mitigations (Thanks to @raja!).
+  * Warnings about using &lt;code&gt;mitigations=auto,nosmt&lt;/code&gt; (Thanks to @raja!).
+  * README: Do not rely on &lt;code&gt;mitigations=auto&lt;/code&gt; (Thanks to @raja!).
+* setup-dist:
+  * Remove Tor enable/disable TUI (terminal user interface) feature https://forums.whonix.org/t/whonix-18-cli-setup-dist-fails-due-to-missing-anon-connection-wizard/22607
+* swap-file-creator:
+  * Reduce verbosity (no output during boot) when &lt;code&gt;ENOUGH_RAM&lt;/code&gt; is detected.
+* sysmaint-panel:
+  * Add &lt;code&gt;kanshi&lt;/code&gt; (screen resolution) configuration buttons.
+  * Add Secure Boot MOK (machine owner key) enrollment button.
+  * Add MOK reset button.
+  * Fix &quot;Install System&quot; button size.
+  * Add dynamic resolution config button to non-qubes VMs (related to https://www.whonix.org/wiki/Resize)
+  * Add button for toggling &lt;code&gt;panic-on-oops.service&lt;/code&gt; on and off.
+  * Restructure how sysmaint-panel&#39;s main window UI is built, polish create-user script, create delete-user script.
+* systemcheck:
+  * Vastly improved [Journal Inspection and Diagnostics Logs](https://www.kicksecure.com/wiki/Systemcheck#Journal_Inspection_and_Diagnostics_Logs).
+    * Add &quot;segfault&quot;, &quot;killed&quot;, and &quot;fault&quot; checks to the log checker.
+    * Check the previous boot&#39;s logs for alerts (useful in case of forced reboot and GUI crash issues).
+  * Add privleap group membership check.
+  * Check for a login environment, warn the user if one is absent.
+  * Add code for suggesting a MOK reset if necessary.
+  * Implement &lt;code&gt;torS0X&lt;/code&gt; stream isolation https://spec.torproject.org/socks-extensions.html
+  * Improved Secure Boot detection code.
+    * Add checks for mokutil, DKMS MOK key presence, and shim-signed MOK symlink presence.
+  * Add autostart functionality with limited functions and passive notifications to systemcheck.
+* tb-starter:
+  * Prevent starting Tor Browser in a sysmaint session by default with a better error message.
+    * allow overriding with configuration
+* tb-updater:
+  * Improve CLI output.
+  * fix &lt;code&gt;/var/cache/tb-binary&lt;/code&gt; folder permissions https://forums.whonix.org/t/tor-browser-error-in-whonix-18-appvm-user-home-folder-permission-issue/22800
+  * Fix onion downloads on non-Whonix systems.
+  * sandbox-update-torbrowser: isolate browser installation into dedicated user account if installing into /var/cache/tb-binary.
+  * Check version file using &lt;code&gt;grep-find-unicode-wrapper&lt;/code&gt;.
+  * Refuse running in sysmaint session as account other than &lt;code&gt;sysmaint&lt;/code&gt; or &lt;code&gt;root&lt;/code&gt;.
+  * Implement &lt;code&gt;torS0X&lt;/code&gt; stream isolation https://spec.torproject.org/socks-extensions.html
+  * fix local version number being truncated.
+  * version-parser: hardening; increase version string length in preparation to support aarch64 Tor Browser downloads.
+* tirdad:
+  * Moved documentation to wiki and improved: https://www.kicksecure.com/wiki/Tirdad
+* usability-misc:
+  * Use a more reliable way to suppress the zsh-newuser-install wizard (since we ship a full configuration).
+  * fix &lt;code&gt;/etc/dkms/framework.conf.d/30_usability-misc.conf&lt;/code&gt; for non-English locale.
+  * shutdown speed fix: &lt;code&gt;run orca-kill-at-shutdown.service&lt;/code&gt; only if file &lt;code&gt;/usr/bin/orca&lt;/code&gt; exists.
+  * &lt;code&gt;dist-installer-cli&lt;/code&gt;: point out if folder &lt;code&gt;/home/user&lt;/code&gt; does not exist, likely due to never having logged in under account &lt;code&gt;user&lt;/code&gt;.
+  * &lt;code&gt;dist-installer-cli&lt;/code&gt;: fix: honor &lt;code&gt;--user=user&lt;/code&gt; option in sysmaint session.
+  * &lt;code&gt;dist-installer-cli&lt;/code&gt;: implement &lt;code&gt;torS0X&lt;/code&gt; stream isolation https://spec.torproject.org/socks-extensions.html
+  * dist-installer-cli: improve kernel module handling.
+  * &lt;code&gt;dist-installer-cli&lt;/code&gt;: Xfce -&gt; LXQt.
+* user-sysmaint-split:
+  * Add a missing runtime dependency that provides the &#39;gio&#39; command used for launching session background services.
+  * fix: Remove Qubes sysmaint boot mode when &lt;code&gt;apt&lt;/code&gt; &lt;code&gt;remove&lt;/code&gt;d even if not fully &lt;code&gt;apt&lt;/code&gt; &lt;code&gt;purge&lt;/code&gt;d.
+  * Import environment variables from systemd after &lt;code&gt;labwc&lt;/code&gt; starts.
+  * Enable &lt;code&gt;usbguard-dbus.service&lt;/code&gt; in sysmaint sessions by default.
+  * Enable IPv6 detection unit in sysmaint session.
+* vm-config-dist:
+  * Implement &lt;code&gt;wlr-resize-watcher&lt;/code&gt; systemd user unit.
+  * Fix suppress-power-management-in-vms always thinking it&#39;s running on a VM.
+  * Add &lt;code&gt;virtiofs&lt;/code&gt; support to mount-shared.
+* qubes-template-kicksecure:
+  * Explicitly install firmware-nonfreedom-network on Kicksecure templates.
+* derivative-maker:
+  * Suppress MOK generation during ISO builds too.
+  * Suppress DKMS MOK generation during the build.
+  * Add &lt;code&gt;help-steps/codespell-wrapper&lt;/code&gt;.
+  * fix: Disable unnecessary mandatory &lt;code&gt;--architecture&lt;/code&gt; option for &lt;code&gt;--target source&lt;/code&gt;.
+  * fix: Don&#39;t append .raw to the flavor name for UTM builds.
+  * Add version number to Windows installer exe file name.
+  * ARM64 (non-Intel/AMD64 actually): fail open in case Tor Browser is unavailable to simplify custom user builds. (No stable builds available from The Tor Project yet at the time of writing)
+  * make &lt;code&gt;--arch&lt;/code&gt; option mandatory.
+
+----
+
+# Full difference of all changes
+
+[https://github.com/Kicksecure/derivative-maker/compare/18.0.8.7-developers-only...18.1.4.2-developers-only](https://github.com/Kicksecure/derivative-maker/compare/18.0.8.7-developers-only...18.1.4.2-developers-only)</description>
+    
+    <lastBuildDate>Sun, 15 Feb 2026 12:34:07 +0000</lastBuildDate>
+    <category>News</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-18-1-4-2-point-release/1596.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure 18.1.4.2 - Point Release!</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <h1><a name="p-4567-download-1" class="anchor" href="https://forums.kicksecure.com#p-4567-download-1" aria-label="Heading link"></a>Download</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1774769413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="05:55PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/6/63/Download-kicksecure.jpg?version=9adcc5bcba92e65719a7341228d32e1c" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
+
+  <p>FREE download of Kicksecure. Kicksecure can be installed on a physical machine as the host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
+<hr>
+<h1><a name="p-4567-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-4567-upgrade-2" aria-label="Heading link"></a>Upgrade</h1>
+<p>Alternatively, an in-place release upgrade is possible using the <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1774769413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="06:03PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1774769413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="02:15PM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" alt="" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="p-4567-major-changes-3" class="anchor" href="https://forums.kicksecure.com#p-4567-major-changes-3" aria-label="Heading link"></a>Major Changes</h1>
+<ul>
+<li>Major Secure Boot and MOK usability improvements: new helper tools, safer DKMS handling during builds, richer UI controls, and improved detection/diagnostics.
+<ul>
+<li>(Part of work towards <a href="https://www.kicksecure.com/wiki/Verified_Boot" class="inline-onebox">Verified Boot</a> and <a href="https://www.kicksecure.com/wiki/Sovereign_Boot" class="inline-onebox">Sovereign Boot</a>)</li>
+</ul>
+</li>
+<li>Removable media automount is now disabled by default (including for existing users via upgrade).</li>
+<li>Desktop and installer polish focused on LXQt
+<ul>
+<li>safer terminal UX (notably qterminal multi-line paste confirmation)</li>
+<li>screen resolution tooling (<code>kanshi</code>)</li>
+</ul>
+</li>
+<li>Better system maintenance and diagnostics: enhanced journal inspection (including previous-boot checks) via <a>https://www.kicksecure.com/wiki/Systemcheck</a></li>
+</ul>
+<h1><a name="p-4567-changelog-4" class="anchor" href="https://forums.kicksecure.com#p-4567-changelog-4" aria-label="Heading link"></a>Changelog</h1>
+<ul>
+<li>anon-shared-build-apt-sources-tpo:
+<ul>
+<li>Run <code>sq cert lint</code> with <code>–cert-file</code>.</li>
+<li>Update the signing key.</li>
+</ul>
+</li>
+<li>browser-choice:
+<ul>
+<li>Fix Qubes proxy handling.</li>
+<li>Enable installation of browsers in <code>ISO Live Mode</code> - <code>user session</code>.</li>
+</ul>
+</li>
+<li>desktop-config-dist:
+<ul>
+<li>Add screen resolution tool <code>kanshi</code> (configuration instructions and tools).</li>
+<li>Disable numlock by default.</li>
+<li>livecheck
+<ul>
+<li>Add livecheck CLI mode.</li>
+<li>Improve error handling and logging.</li>
+</ul>
+</li>
+<li>Simplify and improve robustness of volume fix code.</li>
+<li>Set speaker volume to 50% on login (one time).
+<ul>
+<li>Non-Qubes only.</li>
+<li>(<code>/usr/libexec/desktop-config-dist/start-lxqt-session</code>)</li>
+<li>(Using <code>pactl set-sink-volume <span class="mention">@DEFAULT_SINK</span>@ 50%</code>.)</li>
+</ul>
+</li>
+<li>Avoid setting an unnecessary system-wide location for qterminal’s bookmarks file.
+<ul>
+<li>(Remove <code>BookmarksFile=/home/user/.config/qterminal.org/qterminal_bookmarks.xml</code> in file <code>/usr/share/desktop-config-dist/qterminal.org/qterminal.ini</code>.)</li>
+</ul>
+</li>
+<li><code>qterminal</code>: Require confirmation before allowing a multi-line paste.</li>
+</ul>
+</li>
+<li>dist-base-files:
+<ul>
+<li>fix: Let <code>zsh</code> pick up the <code>PROFILE_SCRIPTS_WERE_SOURCED</code> variable.</li>
+<li>GRUB configuration: Document differences between our core boot menu generation scripts and Debian’s original versions.</li>
+<li>Move <code>PROFILE_SCRIPTS_WERE_SOURCED</code> variable to <code>dist-base-files</code>.</li>
+<li>fix: Increase priority of <code>60-dist-base-files.conf</code> to override <code>dracut-config-generic</code>'s <code>50-generic.conf</code> file.</li>
+</ul>
+</li>
+<li>helper-scripts:
+<ul>
+<li>Secure Boot usability improvements:
+<ul>
+<li>shim-signed-mok-setup: Prepare Secure Boot module-signing keys (used only if Secure Boot is enabled).</li>
+<li><code>shim-manage-mok</code>: Enroll/delete MOK (machine owner key).</li>
+<li>Add <code>rebuild-dkms-modules</code> for rebuilding all DKMS modules. (Integrated with <code>shim-manage-mok</code>.)</li>
+</ul>
+</li>
+<li>Allow users to provide environment variables to <code>gsudo-{wl,x}</code>.</li>
+<li><code>apt-key-install</code>: Lint keys before and after copying.</li>
+<li><code>apt-key-install</code>: No longer use <code>gpg-dearmor</code> since no longer required.</li>
+<li><code>strings.bsh</code>: Add <code>validate_safe_filename</code>, <code>check_is_alpha_numeric</code>.</li>
+<li>Add <code>gsudo-wl</code> and <code>gsudo-x</code> scripts, wrapper helper scripts to run graphical user interface (GUI) tools with administrative (“<a href="https://www.kicksecure.com/wiki/Root">root</a>”) rights. (No influence, change of <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation" class="inline-onebox">Strong Linux User Account Isolation</a> design.) Documentation:   <a href="https://www.kicksecure.com/wiki/Root#Graphical_Applications_and_Root_Rights">Graphical Applications and Root Rights</a></li>
+<li>fix: <code>autologinchange</code> disable mechanism for <code>greetd</code>.</li>
+<li>fix: Take <code>greetd</code> configuration into account when looking for autologin users.</li>
+<li>Avoid spurious <code>autologinchange</code> error messages when <code>/etc/lightdm</code> doesn’t exist.</li>
+<li><code>grep-find-unicode-wrapper</code>: fix.</li>
+<li>Add <code>run-in-new-cgroup</code> helper.</li>
+<li><code>log_run_die.sh</code>: Add support for logging of <code>who_ami</code>, add ‘log question’.</li>
+<li>Allow <code>light_sleep</code> to take a float as an argument.</li>
+<li><code>/usr/libexec/helper-scripts/try_wait_for_audio_ready.bsh</code>: Add library for waiting for audio to be functional.</li>
+<li><code>pre.bsh</code>, <code>get_colors.sh</code>: Polish.</li>
+<li><code>detect-ipv6-enabled-in-kernel.service</code>: Add systemd service for detecting and notifying about the existence of in-kernel ipv6 support.</li>
+<li>fix: <code>lsmod_deterministic</code> system locale independence.</li>
+<li>Improve usability and code style of LUKS check in <code>set-keyboard-layout.sh</code>.</li>
+<li>Add a safeguard when changing the system or console keymap if LUKS is used on the root filesystem.</li>
+<li>new functions: <code>lsmod_deterministic</code>, <code>kernel_module_loaded_check</code>, <code>modprobe_remove</code>.</li>
+<li>Add <code>strict_config_parser</code> library.</li>
+<li>Remove obsolete script <code>desktop-background-skel-test</code>, the default desktop background can now be configured system-wide in /usr/share with LXQt.</li>
+<li>Redistributable builds: Sort output of ‘find’ when using ‘genmkfile debinstfile’.</li>
+</ul>
+</li>
+<li>initializer-dist:
+<ul>
+<li>Add config snippet for disabling DKMS MOK generation to make sure DKMS signing keys are not created during the build process.
+<ul>
+<li>DKMS bug report: <a href="https://github.com/dkms-project/dkms/issues/574" class="inline-onebox">DKMS should not generate a MOK by default when running inside a chroot · Issue #574 · dkms-project/dkms · GitHub</a></li>
+<li>DKMS pull request: <a href="https://github.com/dkms-project/dkms/pull/575" class="inline-onebox">Add configuration option for enabling and disabling module signing by ArrayBolt3 · Pull Request #575 · dkms-project/dkms · GitHub</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>kicksecure-base-files:
+<ul>
+<li>Disable removable media automount by default.</li>
+</ul>
+</li>
+<li>kicksecure-meta-packages:
+<ul>
+<li>Make <code>-cli</code> metapackages directly installable.
+<ul>
+<li><code>kicksecure-baremetal-cli</code></li>
+<li><code>kicksecure-vm-cli</code></li>
+</ul>
+</li>
+<li>Versus:
+<ul>
+<li><code>kicksecure-baremetal-server</code></li>
+<li><code>kicksecure-vm-server</code></li>
+</ul>
+</li>
+<li>Add <code>firmware-sof-signed</code> to <code>firmware-nonfreedom</code>.</li>
+<li>Remove <code>firmware-nonfreedom-network</code> dependency from main package <code>kicksecure-qubes-cli</code>. Instead, <code>firmware-nonfreedom-network</code> is now installed during the build process of <code>qubes-template-kicksecure</code>. Therefore, it can be easily uninstalled and simplifies custom user builds.</li>
+<li>Improved distribution morphing support:
+<ul>
+<li>Remove dependencies on <code>tirdad</code> (to avoid pulling kernel packages).</li>
+<li>Remove dependencies on <code>kicksecure-network-conf{,-gui}</code> (to avoid breaking networking).</li>
+</ul>
+</li>
+<li>Non-Qubes: Add LXQt localization packages.</li>
+<li>Add <code>gvfs-backends</code> to <code>dist-general-gui-lxqt</code>.</li>
+</ul>
+</li>
+<li>legacy-dist:
+<ul>
+<li>Avoid <code>apt</code> <code>autoremove</code> but allow manual uninstallation by the system administrator.
+<ul>
+<li><code>apt-mark manual firmware-nonfreedom-network</code></li>
+<li><code>apt-mark manual kicksecure-network-conf kicksecure-network-conf-gui tirdad tirdad-dkms</code></li>
+</ul>
+</li>
+<li>MOK cleanup.</li>
+<li>Mark <code>dracut-config-generic</code> for APT autoremoval since no longer required (see also package <code>dist-base-files</code> file <code>/etc/dracut.conf.d/60-dist-base-files.conf</code>).</li>
+<li>Disable removable media automount by default for existing users.</li>
+<li>Fix QTerminal being configured to always save bookmarks under /home/user, regardless of the user account it runs as.</li>
+<li>Enable qterminal <code>ConfirmMultilinePaste=true</code> for all users.</li>
+</ul>
+</li>
+<li>libvirt-dist:
+<ul>
+<li>Use <em>FLAVOR</em> consistently in UTM files.</li>
+</ul>
+</li>
+<li>live-config-dist:
+<ul>
+<li>Adjust keymap helper script to keep working with encrypted installations.</li>
+</ul>
+</li>
+<li>msgcollector:
+<ul>
+<li>Repeatedly try to signal to systemd that msgdispatcher is ready until it works.</li>
+</ul>
+</li>
+<li>open-link-confirmation:
+<ul>
+<li>Add <code>featherpad</code> support.</li>
+</ul>
+</li>
+<li>privleap:
+<ul>
+<li>Add the ability to parse config files in ‘/usr/local/etc/privleap/conf.d’.</li>
+</ul>
+</li>
+<li>repository-dist:
+<ul>
+<li>Lint keyring.</li>
+<li>Extend signing key validity to infinite.</li>
+</ul>
+</li>
+<li>sdwdate:
+<ul>
+<li>Add missing syscalls to seccomp filter (for ppc64).</li>
+</ul>
+</li>
+<li>sdwdate-gui:
+<ul>
+<li>Fix log spam when sdwdate-gui is disabled on the gateway but not the workstation.</li>
+<li>Use <code>strict_config_parser</code> library instead of built-in config parsing routine.</li>
+</ul>
+</li>
+<li>security-misc:
+<ul>
+<li>Do not run emerg-shutdown.service in case ‘rd.live.ram’ or ‘rd.live.ram=1’ is set. <a href="https://forums.kicksecure.com/t/how-to-run-iso-live-mode-from-ram/1542/9" class="inline-onebox">How to run ISO Live Mode from RAM? - #9 by Patrick</a></li>
+<li>Document why we disable sudo DNS.</li>
+<li>Disable sudo DNS lookups on desktop systems.</li>
+<li>Add references for AMD SME (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update option to <code>panic_on_taint</code> (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on CPU MSRs (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Whitelist <code>9p</code> module (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Move <code>kernel.panic=-1</code> setting to sysctl.</li>
+<li>Allow turning <code>panic-on-oops</code> off with <code>systemctl</code> for system administrator.</li>
+<li>Add reference for AMD SEV (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Provide option to enable AMD SEV-SNP (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Provide option to enable AMD SEV-ES (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Move (optional) CPU MSR module disable list (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Disable more file systems (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Move <code>joydev</code> from blacklist to disable (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on CD-ROM/DVD blacklisting (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Move superseded <code>brcm80211</code> to disabled. Split and replaced by <code>brcmsmac</code> and <code>brcmfmac</code> in kernel 2.6.39 (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Add CPU MSR modules (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on CPU MSR disabling (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on Vivid disabling (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Sort RDNIS disabling and add docs (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on Intel PMT disabling (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on Bluetooth disabling (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Provide option to <code>panic_on_taint</code> (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Re-set <code>net.ipv4.conf.*.log_martians=1</code> (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Update docs on CPU mitigations (Thanks to <span class="mention">@raja</span>!).</li>
+<li>Warnings about using <code>mitigations=auto,nosmt</code> (Thanks to <span class="mention">@raja</span>!).</li>
+<li>README: Do not rely on <code>mitigations=auto</code> (Thanks to <span class="mention">@raja</span>!).</li>
+</ul>
+</li>
+<li>setup-dist:
+<ul>
+<li>Remove Tor enable/disable TUI (terminal user interface) feature <a href="https://forums.whonix.org/t/whonix-18-cli-setup-dist-fails-due-to-missing-anon-connection-wizard/22607" class="inline-onebox">Whonix 18 CLI — setup-dist fails due to missing anon_connection_wizard - Support - Whonix Forum</a></li>
+</ul>
+</li>
+<li>swap-file-creator:
+<ul>
+<li>Reduce verbosity (no output during boot) when <code>ENOUGH_RAM</code> is detected.</li>
+</ul>
+</li>
+<li>sysmaint-panel:
+<ul>
+<li>Add <code>kanshi</code> (screen resolution) configuration buttons.</li>
+<li>Add Secure Boot MOK (machine owner key) enrollment button.</li>
+<li>Add MOK reset button.</li>
+<li>Fix “Install System” button size.</li>
+<li>Add dynamic resolution config button to non-qubes VMs (related to <a href="https://www.whonix.org/wiki/Resize" class="inline-onebox">wlr-resize-watcher</a>)</li>
+<li>Add button for toggling <code>panic-on-oops.service</code> on and off.</li>
+<li>Restructure how sysmaint-panel’s main window UI is built, polish create-user script, create delete-user script.</li>
+</ul>
+</li>
+<li>systemcheck:
+<ul>
+<li>Vastly improved <a href="https://www.kicksecure.com/wiki/Systemcheck#Journal_Inspection_and_Diagnostics_Logs">Journal Inspection and Diagnostics Logs</a>.
+<ul>
+<li>Add “segfault”, “killed”, and “fault” checks to the log checker.</li>
+<li>Check the previous boot’s logs for alerts (useful in case of forced reboot and GUI crash issues).</li>
+</ul>
+</li>
+<li>Add privleap group membership check.</li>
+<li>Check for a login environment, warn the user if one is absent.</li>
+<li>Add code for suggesting a MOK reset if necessary.</li>
+<li>Implement <code>torS0X</code> stream isolation <a href="https://spec.torproject.org/socks-extensions.html" class="inline-onebox">Tor's extensions to the SOCKS protocol - Tor Specifications</a></li>
+<li>Improved Secure Boot detection code.
+<ul>
+<li>Add checks for mokutil, DKMS MOK key presence, and shim-signed MOK symlink presence.</li>
+</ul>
+</li>
+<li>Add autostart functionality with limited functions and passive notifications to systemcheck.</li>
+</ul>
+</li>
+<li>tb-starter:
+<ul>
+<li>Prevent starting Tor Browser in a sysmaint session by default with a better error message.
+<ul>
+<li>allow overriding with configuration</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>tb-updater:
+<ul>
+<li>Improve CLI output.</li>
+<li>fix <code>/var/cache/tb-binary</code> folder permissions <a href="https://forums.whonix.org/t/tor-browser-error-in-whonix-18-appvm-user-home-folder-permission-issue/22800" class="inline-onebox">Tor Browser Error in Whonix 18 AppVM: User Home Folder Permission Issue - Qubes-Whonix - Whonix Forum</a></li>
+<li>Fix onion downloads on non-Whonix systems.</li>
+<li>sandbox-update-torbrowser: isolate browser installation into dedicated user account if installing into /var/cache/tb-binary.</li>
+<li>Check version file using <code>grep-find-unicode-wrapper</code>.</li>
+<li>Refuse running in sysmaint session as account other than <code>sysmaint</code> or <code>root</code>.</li>
+<li>Implement <code>torS0X</code> stream isolation <a href="https://spec.torproject.org/socks-extensions.html" class="inline-onebox">Tor's extensions to the SOCKS protocol - Tor Specifications</a></li>
+<li>fix local version number being truncated.</li>
+<li>version-parser: hardening; increase version string length in preparation to support aarch64 Tor Browser downloads.</li>
+</ul>
+</li>
+<li>tirdad:
+<ul>
+<li>Moved documentation to wiki and improved: <a href="https://www.kicksecure.com/wiki/Tirdad" class="inline-onebox">tirdad - TCP ISN CPU Information Leak Protection</a></li>
+</ul>
+</li>
+<li>usability-misc:
+<ul>
+<li>Use a more reliable way to suppress the zsh-newuser-install wizard (since we ship a full configuration).</li>
+<li>fix <code>/etc/dkms/framework.conf.d/30_usability-misc.conf</code> for non-English locale.</li>
+<li>shutdown speed fix: <code>run orca-kill-at-shutdown.service</code> only if file <code>/usr/bin/orca</code> exists.</li>
+<li><code>dist-installer-cli</code>: point out if folder <code>/home/user</code> does not exist, likely due to never having logged in under account <code>user</code>.</li>
+<li><code>dist-installer-cli</code>: fix: honor <code>–user=user</code> option in sysmaint session.</li>
+<li><code>dist-installer-cli</code>: implement <code>torS0X</code> stream isolation <a href="https://spec.torproject.org/socks-extensions.html" class="inline-onebox">Tor's extensions to the SOCKS protocol - Tor Specifications</a></li>
+<li>dist-installer-cli: improve kernel module handling.</li>
+<li><code>dist-installer-cli</code>: Xfce → LXQt.</li>
+</ul>
+</li>
+<li>user-sysmaint-split:
+<ul>
+<li>Add a missing runtime dependency that provides the ‘gio’ command used for launching session background services.</li>
+<li>fix: Remove Qubes sysmaint boot mode when <code>apt</code> <code>remove</code>d even if not fully <code>apt</code> <code>purge</code>d.</li>
+<li>Import environment variables from systemd after <code>labwc</code> starts.</li>
+<li>Enable <code>usbguard-dbus.service</code> in sysmaint sessions by default.</li>
+<li>Enable IPv6 detection unit in sysmaint session.</li>
+</ul>
+</li>
+<li>vm-config-dist:
+<ul>
+<li>Implement <code>wlr-resize-watcher</code> systemd user unit.</li>
+<li>Fix suppress-power-management-in-vms always thinking it’s running on a VM.</li>
+<li>Add <code>virtiofs</code> support to mount-shared.</li>
+</ul>
+</li>
+<li>qubes-template-kicksecure:
+<ul>
+<li>Explicitly install firmware-nonfreedom-network on Kicksecure templates.</li>
+</ul>
+</li>
+<li>derivative-maker:
+<ul>
+<li>Suppress MOK generation during ISO builds too.</li>
+<li>Suppress DKMS MOK generation during the build.</li>
+<li>Add <code>help-steps/codespell-wrapper</code>.</li>
+<li>fix: Disable unnecessary mandatory <code>–architecture</code> option for <code>–target source</code>.</li>
+<li>fix: Don’t append .raw to the flavor name for UTM builds.</li>
+<li>Add version number to Windows installer exe file name.</li>
+<li>ARM64 (non-Intel/AMD64 actually): fail open in case Tor Browser is unavailable to simplify custom user builds. (No stable builds available from The Tor Project yet at the time of writing)</li>
+<li>make <code>–arch</code> option mandatory.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-4567-full-difference-of-all-changes-5" class="anchor" href="https://forums.kicksecure.com#p-4567-full-difference-of-all-changes-5" aria-label="Heading link"></a>Full difference of all changes</h1>
+<p><a href="https://github.com/Kicksecure/derivative-maker/compare/18.0.8.7-developers-only...18.1.4.2-developers-only">https://github.com/Kicksecure/derivative-maker/compare/18.0.8.7-developers-only…18.1.4.2-developers-only</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-18-1-4-2-point-release/1596/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-1-4-2-point-release/1596/1</link>
+        <pubDate>Sun, 15 Feb 2026 12:34:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1596-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-18-1-4-2-point-release/1596.rss">Kicksecure 18.1.4.2 - Point Release!</source>
+      </item>
+  </channel>
+</rss>

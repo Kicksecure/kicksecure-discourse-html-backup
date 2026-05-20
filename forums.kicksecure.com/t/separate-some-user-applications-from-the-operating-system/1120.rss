@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Separate (some) user applications from the operating system</title>
+    <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120</link>
+    <description>Android, iOS, macOS, and Chrome OS all provide a level of separation between user-installed applications and the operating system. The operating system may provide certain applications to the user, but those applications are not installed by the user and generally cannot be uninstalled or replaced. User-controllable applications are separated from the rest of the system, and generally are sandboxed to prevent them from doing damage if they turn out to be malicious or become compromised.
+
+Debian (and by extension, Kicksecure) doesn&#39;t do this so well. All packages in the repositories are essentially operating system components, with full permissions to do anything the user account the application is launched as allows. Core components like udev and systemd are installed directly alongside productivity apps like image viewers and web browsers. This is a bit messy from the standpoint of system organization, but it also poses a significant security hazard for obvious reasons ([XKCD 1200](https://xkcd.com/1200/) sums up the issue nicely).
+
+Users should be able to install arbitrary applications as OS components and give them elevated permissions, as they&#39;ve always been able to do on Kicksecure and Whonix. But users should also be able to wall off applications into a sandbox of sorts if they don&#39;t trust those applications or may have to process untrusted data with those applications.
+
+Flatpak and Snap are relatively well-known attempts at bringing sandboxing and application isolation to Linux. Both of these are not exactly awesome solutions, because:
+
+* Sandboxing controls under Linux can be somewhat flimsy without putting a great deal of work into doing things like whitelisting syscalls and the like. In some instances, Linux&#39;s sandboxing features actually worsen security (user namespaces in particular allow access to kernel facilities that aren&#39;t usually available to unprivileged users, exposing additional attack surface; this has been the source of numerous CVEs, but user namespaces are also required by applications that do sandboxing internally, like Chromium).
+* Users can loosen sandboxing very easily with Flatpak, and without too much effort with Snap, defeating the purpose of the sandbox.
+* Flatpak and Snap sandboxing oftentimes causes application malfunctions due to restricting resources that applications legitimately need access to.
+* Applications from the Flathub repository and Snap Store can be uploaded by arbitrary users. This is in contrast to the Debian archive, which requires some level of skill and trust for a packager to gain upload access to it, and where policies help to ensure better packaging quality in general. As a result, Flatpaks and Snaps are oftentimes more broken than apt packages, and it is easy to upload malware to the repositories.
+  * Malware actually has been uploaded to the Snap Store and has caused severe damage in the past, with at least one person [losing the equivalent of $490,000](https://blog.popey.com/2024/02/exodus-bitcoin-wallet-490k-swindle/) after plugging in cryptocurrency recovery data into a malicious Exodus Wallet snap. This particular incident underscores the fact that sandboxing apps isn&#39;t really enough, apps can still be malicious without having to break out of a sandbox at all. [This same kind of attack happened on the Snap Store multiple times.](https://blog.popey.com/2024/03/exodus-wallet-part-three/) This is why getting apps from a trusted repository is a good idea.
+
+What we really want is some sort of virtual machine that is integrated with the host *enough* to allow apps in the VM to feel native or close to native, but sufficiently walled off so that applications cannot do damage to the host system or escape the VM. This would allow running &quot;user applications&quot; in a very tight yet highly compatible sandbox, and would allow pulling those applications from trusted repositories like the Debian repos. It would also allow users to install applications without having to boot into a sysmaint session.
+
+Chrome OS has something similar to this with [Crostini](https://chromeos.dev/en/linux), and Windows has something similar to this with [WSLg](https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps). Something with a vaguely similar user experience would likely be acceptable, especially if an &quot;app store&quot; frontend of some sort was available so the user didn&#39;t have to use a terminal to install sandboxed applications.</description>
+    
+    <lastBuildDate>Fri, 08 May 2026 04:52:14 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>It will be quite a while before there’s a functional prototype to look at, but development of sandbox-manager-dist itself has started:</p>
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/ArrayBolt3/sandbox-manager-dist">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/sandbox-manager-dist" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/b0d71f107260c0674a9eba4c19be31d1/ArrayBolt3/sandbox-manager-dist" class="thumbnail">
+
+  <h3><a href="https://github.com/ArrayBolt3/sandbox-manager-dist" target="_blank" rel="noopener">GitHub - ArrayBolt3/sandbox-manager-dist: Namespace-based environment isolation for Linux</a></h3>
+
+    <p><span class="github-repo-description">Namespace-based environment isolation for Linux</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/29">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/29</link>
+        <pubDate>Fri, 08 May 2026 04:52:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-29</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="init38" data-post="27" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/c6cbf5/48.png" class="avatar"> init38:</div>
+<blockquote>
+<p>Well I must say that is a long read but will the “sandbox-manager” be able to achieve installing packages/apps per user instead of globally for all users?</p>
+</blockquote>
+</aside>
+<p>Yes, each user account will have its own set of sandboxes separate from other sets, and apps will be installed in those individual sandboxes.</p>
+<aside class="quote no-group" data-username="init38" data-post="27" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/c6cbf5/48.png" class="avatar"> init38:</div>
+<blockquote>
+<p>Wouldn’t VPN’s like in the case of having more then one VPN app benefit from a networknamespace? Only reason I ask is I have had <em>DNS Configuration Conflicts</em> (<code>/etc/resolv.conf</code>) when switching between ProtonVPN and MullvadVPN before for a stated example.</p>
+</blockquote>
+</aside>
+<p>VPNs within sandboxes isn’t really a use case I had in mind. It’s a good edge case to think about though, and since our goal is to provide something vaguely Android-like and Android has VPN apps, I’d say it’s in scope. I doubt it will be possible to adjust the host’s firewall from within the sandbox since adjusting the firewall is a root-only operation (I think) and the sandbox doesn’t have root privileges outside of its user namespace, so for VPN apps to work in a sandbox at all, a network namespace would probably be required. (That way the per-namespace firewall can be configured however the sandbox wants.) The VPN would only apply to applications inside the sandbox.</p>
+<aside class="quote no-group" data-username="init38" data-post="27" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/i/c6cbf5/48.png" class="avatar"> init38:</div>
+<blockquote>
+<p>Also what issues could arise with user Firewalls? Could host firewall rules (iptables/nftables) not apply correctly to container traffic because the traffic appears to originate from the host itself? No mention of integrating with host firewalls or conflicts user specific firewalls?</p>
+</blockquote>
+</aside>
+<p>nftables firewalls are per-namespace according to some pages I looked up. For instance, the Arch Wiki describes using a network namespace to contain Docker’s firewall changes. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://wiki.archlinux.org/title/Nftables#Working_with_Docker">
+  <header class="source">
+
+      <a href="https://wiki.archlinux.org/title/Nftables#Working_with_Docker" target="_blank" rel="noopener">wiki.archlinux.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://wiki.archlinux.org/title/Nftables#Working_with_Docker" target="_blank" rel="noopener">Working with Docker - nftables - ArchWiki</a></h3>
+
+  <p>Using nftables can interfere with Docker networking (and probably other container runtimes as well). You can find various workarounds on the internet which either involve patching iptables rules and ensuring a defined service start order or disabling...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/28">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/28</link>
+        <pubDate>Thu, 07 May 2026 23:55:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-28</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[init38]]></dc:creator>
+        <description><![CDATA[
+            <p>Well I must say that is a long read but will the “sandbox-manager” be able to achieve installing packages/apps per user instead of globally for all users?</p>
+<p>GUI screen design looks nice and the overall layout you have provided in this gist is nice if u get my gist <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>One thing though about systemd-nspawn and <code>--network-veth</code> part as mentioned…</p>
+<aside class="onebox githubgist" data-onebox-src="https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285#notes-on-getting-various-components-to-behave">
+  <header class="source">
+
+      <a href="https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285#notes-on-getting-various-components-to-behave" target="_blank" rel="noopener nofollow ugc">gist.github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285#notes-on-getting-various-components-to-behave" target="_blank" rel="noopener nofollow ugc">https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285#notes-on-getting-various-components-to-behave</a></h4>
+
+  <h5>design.md</h5>
+  <pre><code class="Markdown"># What's the goal for this to be a minimal viable product?
+
+Ultimately, we need it to be very easy and comfortable to use Tor Browser
+sandboxed. Users need to be able to run Tor Browser in a sandbox, interact
+with it the same way they'd interact with an unsandboxed browser, make files
+available to it, move files downloaded with it out of the sandbox, keep it
+updated properly, launch it from the Start Menu, etc., without any difficulty.
+
+Beyond that, we want this to become usable for general purpose, Android-like
+app sandboxing. Users should not *have* to mess with permissions in order to</code></pre>
+   This file has been truncated. <a href="https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285#notes-on-getting-various-components-to-behave" target="_blank" rel="noopener nofollow ugc">show original</a>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Wouldn’t VPN’s like in the case of having more then one VPN app benefit from a networknamespace? Only reason I ask is I have had <em>DNS Configuration Conflicts</em> (<code>/etc/resolv.conf</code>) when switching between ProtonVPN and MullvadVPN before for a stated example.</p>
+<p>Also what issues could arise with user Firewalls? Could host firewall rules (iptables/nftables) not apply correctly to container traffic because the traffic appears to originate from the host itself? No mention of integrating with host firewalls or conflicts user specific firewalls?</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/27">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/27</link>
+        <pubDate>Thu, 07 May 2026 22:05:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-27</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>The design is still far from finished, but it’s getting there. Those who are interested can look at the current state of the design here:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/ArrayBolt3/sandbox-manager-dist/blob/master/sandbox-manager-dist-design.md">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/sandbox-manager-dist/blob/master/sandbox-manager-dist-design.md" target="_blank" rel="noopener">github.com/ArrayBolt3/sandbox-manager-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/ArrayBolt3/sandbox-manager-dist/blob/master/sandbox-manager-dist-design.md" target="_blank" rel="noopener">sandbox-manager-dist-design.md</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/ArrayBolt3/sandbox-manager-dist/blob/master/sandbox-manager-dist-design.md" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-md"># What's the goal for this to be a minimal viable product?
+
+Ultimately, we need it to be very easy and comfortable to use Tor Browser
+sandboxed. Users need to be able to run Tor Browser in a sandbox, interact
+with it the same way they'd interact with an unsandboxed browser, make files
+available to it, move files downloaded with it out of the sandbox, keep it
+updated properly, launch it from the Start Menu, etc., without any difficulty.
+
+Beyond that, we want this to become usable for general purpose, Android-like
+app sandboxing. Users should not *have* to mess with permissions in order to
+get apps working. Users should not *have* to mess with manual software
+installation and the management of sandboxes if they don't want to. Users
+should be able to just install an app and *use* it. We're not going to be able
+to get a UX as smooth as Android simply because Linux applications are not
+(always) designed to be super smooth and easy to use sandboxed like Android
+applications, and the tools that do allow ease-of-use for sandboxed
+applications are less secure than would be hoped. (In particular
+xdg-desktop-portal has an architectural flaw in it that will likely prevent it
+from being safe to use for a long time.)
+
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/ArrayBolt3/sandbox-manager-dist/blob/master/sandbox-manager-dist-design.md" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(EDIT: Previously the design was in a Github gist here: <a href="https://gist.github.com/ArrayBolt3/dea970d5c4b3a476fa28e707c085e285" class="inline-onebox">Work-in-progress sandbox-manager-dist design · GitHub</a>, however it has now been moved into the Git repo for sandbox-manager-dist.)</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/26">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/26</link>
+        <pubDate>Tue, 05 May 2026 05:09:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-26</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Over the last few days, I’ve been spending a lot of time designing (not yet coding, just designing) the sandboxing framework, using the notes <a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/20">above</a> as a roadmap. Sharing the whole design here would be rather cumbersome (and the design is quickly evolving and is subject to change or overhaul at any moment), but a quick summary is:</p>
+<ul>
+<li>We have tentatively settled on systemd-nspawn as the underlying sandboxing framework. It is sufficiently feature-rich to do what we need to the best of our knowledge.</li>
+<li>We have a user interface somewhat mapped out. The UI design is heavily inspired by VirtualBox, and treats individual sandboxes as VM-like instances that can be powered on and off.</li>
+<li>Unfortunately, it looks like we’re going to have to run the core sandboxing engine <em>as root</em>. systemd-nspawn is non-functional under Qubes OS when run as a non-root user (apparently the Qubes kernel is missing a feature required to get unprivileged systemd-nspawn to work), and even outside of Qubes, I have not been able to get it to work unprivileged. Other unprivileged sandboxing frameworks use SUID executables to hack around the parts of sandboxing under Linux that require root privileges, so getting them to work without SUID would be, to say the least, quite difficult. The only engine we know of that could be used for that is Podman, and Podman simply does not seem to be designed to be used the way we intend on using containers (it could be used, but it would be unintuitive, difficult, and would “mess up” the Podman user interface for anyone who had a use for Podman other than using our sandboxing framework). It would also complicate file, folder, and device sharing, all of which are essential features.</li>
+<li>For now, validating proxies are being mostly skipped. It was a fun idea, but it will be very difficult to implement and maintain. In the short term, we may simply allow sandboxed apps to connect directly to Wayland and Pipewire. Longer term (or possibly now, if warranted), we may add a feature that allows a sandbox to run its own Wayland compositor, which can then be VNC’d to from the host, thus providing a good level of isolation without the complexity of a validating proxy. Something similar might be possible for audio, though this is unclear. We may end up with something similar to a validating proxy for console access.</li>
+</ul>
+<p>More details will be forthcoming once we have a design that looks solid enough to start implementing (which may still be a while, this is going to be a rather complex system no matter what we do, so we need to get the design right the first time if we want to avoid major refactoring headaches later).</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/25">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/25</link>
+        <pubDate>Mon, 04 May 2026 01:36:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-25</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>I was going to say something like that with UI, but I figured that would be a lot of work.</p>
+<p>But that was the idea I had in my mind, a sandboxer application where you could install other apps and run them into the main user, but with a sanboxing at user level, not application level as other sanboxers do and we know aren’t secure and optimous at all. Like termux in Android, is like a sandboxed terminal that run into an app but without root permissions</p>
+<p>We should find something intermediate between good security, good performance and user friendly. I don’t use qubeos for the overhead it have, is actually difficult to use it in a low resource pc (in my opinion).</p>
+<p>If this feature is implemented I would use it for example for close source applications that I use daily, like Discord, and I don’t trust anything. Don’t allow discord to access my files and daemons/bus of my main user, etc. It would be great</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/24">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/24</link>
+        <pubDate>Fri, 23 Jan 2026 01:19:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-24</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="spartack" data-post="22" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/209_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>The problem I see is having to restart or lose user sessions in order to access the untrusted-user.</p>
+<p>I don’t know if it’s possible or maybe is kind of per-application sandboxing. But I think the best would be to be able to run the <code>unstrusted-user</code> without having to close the user session. Like run the untrusted-user into the user environment but with so limited access, with independent home folder.</p>
+</blockquote>
+</aside>
+<p>Agreed. Introducing yet another boot mode with a new user type would be a bad user experience, and while we had to introduce a new boot mode to make the sysmaint privilege level safe, I don’t think we’ll need to do that here. My hope is to have the sandbox application provide a UX similar to a virtualization app like VirtualBox. It can then allow applications in the sandbox to run side-by-side with applications in other sandboxes and unsandboxed applications.</p>
+<aside class="quote no-group" data-username="spartack" data-post="22" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/209_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>I hope I have explained myself well; it’s difficult for me.</p>
+</blockquote>
+</aside>
+<p>I like your explanation a lot <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> I think the UX will hopefully be even better than the already good suggestion you have here. Ideally one should be able to open the sandboxer application, click on a sandbox they’ve created, open a terminal in the sandbox, and run <code>sudo apt install whatever</code>, installing the new application into the sandbox. Or, if the user has installed a GUI package manager like Synaptic into the sandbox, they can click a sandbox, click to open Synaptic, find the app they want, and install it that way. Then they wouldn’t need to log out even to install applications.</p>
+<p>We’ll probably draw inspiration from Qubes OS for this, since the idea above is essentially “Qubes OS, but minus a lot of the more complicated features, and implemented using containerization rather than VMs”. It won’t be nearly as feature-rich as Qubes at least to start with, and it won’t be able to match Qubes in terms of security, but for users who don’t use Qubes, or for users who want better security <em>within</em> an individual Qube, it should still help a lot.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/23">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/23</link>
+        <pubDate>Fri, 23 Jan 2026 00:58:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-23</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>Hi,<br>
+The idea is really great in my opinion, but any kind of sand boxing is a complex subject to any entry-level user, although necessary to avoid APTs. We should make it easy out of the box.</p>
+<p>The problem I see is having to restart or lose user sessions in order to access the untrusted-user.</p>
+<p>I don’t know if it’s possible or maybe is kind of per-application sandboxing. But I think the best would be to be able to run the <code>unstrusted-user</code> without having to close the user session. Like run the untrusted-user into the user environment but with so limited access, with independent home folder.</p>
+<p>Just imagine you are using the main user, you have multiple apps opened, you are in a video call and you need to open a secured browser for access some websites you don’t really trust at all. Be able to run the browser or any other app in the user session but with the <code>untrusted-user</code> permissions, and the application only with access to the /home/untrusted-user/ but not to /home/user/.</p>
+<p>Something like:<br>
+Log in in the unstrusted-user, download different applications, like the browser or any other close source app (unsecured), like discord/spotify, fill a list of installed apps with the path of them.<br>
+And later onto the user session, execute something like <code>open-untrusted-user</code> and after that a list of applications able to run with untrusted-user.</p>
+<p><code>——————————</code><br>
+<code>Select the application you want to run with low permissions</code><br>
+<code>——————————</code><br>
+<code>1. Browser → source of the bin with the permissions of unstrusted-user</code><br>
+<code>2. Spotify → source of the bin with the permissions of unstrusted-user</code><br>
+<code>……</code></p>
+<p>The unstrusted-user don’t have permissions to read or write in the user’s folders or daemons, like happen with the sysmaint user</p>
+<p>I hope I have explained myself well; it’s difficult for me.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/22">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/22</link>
+        <pubDate>Fri, 23 Jan 2026 00:51:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-22</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Probably relevant if we do eventually create a Wayland proxy:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/8990">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/8990" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/8990" target="_blank" rel="noopener">Decide which Wayland protocols to expose to guests</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2024-02-28" data-time="04:11:18" data-timezone="UTC">04:11AM - 28 Feb 24 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/DemiMarie" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/6395399?v=4" class="onebox-avatar-inline" width="20" height="20">
+          DemiMarie
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          affects-4.3
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          C: Wayland
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+###<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> Qubes OS release (if applicable)
+
+Design decision should be done before R4.3, feature might not ship by then.
+
+
+
+### Brief summary
+
+
+Not all Wayland protocols are safe to expose to a VM.  For instance, [wlr-layer-shell](https://wayland.app/protocols/wlr-layer-shell-unstable-v1) allows drawing anywhere on the screen with no borders.  However, a subset of protocols must be exposed to a VM so that Wayland applications in the VM can work.  This task is to decide which protocols should be exposed.
+
+The list below is preliminary.  Comments as to which protocols should and should not be exposed are encouraged.
+
+### Must be exposed
+
+These protocols are absolutely required to have a basic functioning desktop that supports server-side decorations, GPU acceleration, and languages requiring complex text input.
+
+- [Wayland core](https://wayland.app/protocols/wayland) — the core Wayland protocol, required (with a few exceptions) from _every_ compositor.
+- [XDG shell](https://wayland.app/protocols/xdg-shell): Required for desktop-style user interfaces.
+- [Linux DMA-BUF](https://wayland.app/protocols/linux-dmabuf-v1): Allows GPU buffers to be passed to the host, required by Mesa for GPU acceleration.
+- [XDG decoration](https://wayland.app/protocols/xdg-decoration): Needed to avoid duplicate decorations.
+- [Text input](https://wayland.app/protocols/text-input-unstable-v3): Allows input of languages requring input methods.
+- KDE server decoration: used by old GTK versions instead of XDG decoration.
+
+### Should be exposed
+
+These protocols provide features used by many applications, or which provide very significant benefit to applications used by a substantial number of people.  This benefit is judged to be worth the risk
+
+- [XDG activation](https://wayland.app/protocols/xdg-activation-v1): Allows a client to pass focus to another toplevel.
+- [Linux explicit synchronization (dma-fence)](https://wayland.app/protocols/linux-explicit-synchronization-unstable-v1): Support for explicit synchronization of GPU work.  This is the future of Linux graphics, so it ought to be exposed in the future despite its very limited adoption right now.
+- [Presentation time](https://wayland.app/protocols/presentation-time): Needed for accurate audio/video synchronization
+- [Viewporter](https://wayland.app/protocols/viewporter): Utility protocol; I’m not sure what it is used for but I think it is needed in practice.
+- Touchpad gestures.
+- Fractional scale.
+- [xdg-foreign](https://wayland.app/protocols/xdg-foreign-unstable-v2) (thanks @puckipedia!): This is needed for portals to work properly, but should probably be partially filtered so that one guest cannot reference a window belonging to the host or another guest.
+
+### Safe
+
+These protocols *can* be exposed, but might not have a strong reason to expose them.
+
+- KDE Idle
+- KDE blur
+- KDE contrast
+- KDE Slide: allows repositioning windows.
+- KDE Shadow: allows shadow control.
+- XDG Output: exposes information most clients have no interest in.
+
+### Must not be exposed
+
+Exposing any of these to a guest is a security vulnerability, unless otherwise specified.
+
+- Session lock: allows locking the screen &amp; displaying arbitrary graphics.
+- Xwayland shell: allows arbitrary positioning of arbitrary surfaces.
+- Security context: should not be exposed by the compositor to sandboxed clients, so if it is exposed, it means that the compositor thinks the client is not sandboxed.
+- Fullscreen shell: allows taking complete control of an output.  &lt;del&gt;There may need to be a way for certain programs (such as LibreOffice Impress) to take complete control of certain outputs (such as a projector), but only with user consent.&lt;/del&gt;  as per @puckipedia this is not needed.
+- Foreign toplevel list: allows listing all toplevel surfaces, including ones created by other clients.
+- Input method (all versions): allows arbitrary text injection.
+- XWayland keyboard grabbing: allows obtaining all keystrokes, must be restricted to Xwayland alone per specification.
+- wlr foreign toplevel management: allows acting as a window manager.
+- wlr layer shell: allows unrestricted drawing anywhere on the screen with no borders.
+- wlr screencopy: allows screen capture.
+- wlr gamma control: allows manipulating gamma tables
+- wlr input inhbitor: allows preventing input to be sent to other clients (also deprecated).
+- wlr output power management: allows controlling power management, probably denial of service only
+- wlr export DMA-BUF: allows screen capture
+- wlr virtual pointer: allows emulating a pointer device
+- KDE AppMenu: allows causing the compositor to make D-Bus requests.  It might be possible to proxy this with a D-Bus proxy, but the protocol must not be exposed directly.
+- KDE lockscreen overlay: Allows overlaying the lock screen.  There might be higher-level interfaces for e.g. VoIP calls, but the protocol itself must be privileged.
+- KDE DPMS: allows controlling power management, probably denial of service only
+- KDE output management (all versions): allows managing outputs, which is clearly bad even though I cannot think of an exploit right now.
+- KDE screencast: allows screen capture.
+- KDE server decoration pallete: allows changing server side decoration colors.
+- KDE Plasma shell: can be used to implement a window manager.
+- KDE Plasma Window Management: can be used to implement a window manager.
+- KDE Plasma Virtual Desktop: allows changing virtual desktop.
+- DRM lease.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/21">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/21</link>
+        <pubDate>Tue, 13 Jan 2026 01:30:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-21</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Discussed some aspects of this with Patrick more, I’m not sure if we’re getting closer to a concrete implementation plan or not, but here’s some rough notes about what we were thinking:</p>
+<p>Right now we have two privilege levels, <code>user</code> and <code>sysmaint</code>. <code>sysmaint</code> has the power most administrative users on other distros have; it’s “root with light safeguards to make it harder to do something foolish on accident”. <code>user</code> is more like what non-administrative users on Windows are; they can run arbitrary applications, work with files, use the network, etc., but they can’t mess with the guts of the system. This provides some additional security since it’s harder to get a foothold in the root account, but ultimately it doesn’t do much to fight malware that wants to steal or encrypt the user’s data, except for making it more likely that a user will be mindful about what they install.</p>
+<p>Our ultimate goal, however we implement it, is to add a third privilege level to this model. Let’s call it <code>untrusted-user</code> (bad name, but it gets the point across for now).</p>
+<ul>
+<li>The standard <code>user</code> privilege level will retain all of the power it currently has. It is also where all of the user’s trusted data will be stored.</li>
+<li>The <code>untrusted-user</code> privilege level is where more dangerous applications (such as web browsers) should run. This privilege level should be resistant to <em>attacker-incited</em> persistent compromise, while simultaneously expecting temporary compromise. That is, if an attacker manages to compromise a legitimate application running as <code>untrusted-user</code>, that compromise must be able to “just go away” somehow. While the attacker has a foothold in <code>untrusted-user</code>, our implementation must contain that compromise if at all possible so that it cannot gain access to <code>user</code> data.
+<ul>
+<li>This implies that <code>untrusted-user</code> will be at least semi-ephemeral; changes made by malware need to be able to be erased reliably in some fashion.</li>
+</ul>
+</li>
+<li>It is likely that the <code>untrusted-user</code> environment will suffer from <em>user-incited</em> persistent compromise (i.e. someone intentionally installed malware into the environment). It therefore must be possible to get rid of malware of this kind in some manner.</li>
+<li>Users may work with data they want to store long-term when using <code>untrusted-user</code>, so they must be able to save that data persistently. Some of that data may be trusted, in which case there needs to be a way to move it into the <code>user</code> privilege level (users will obviously have to be very careful about what data they move), while some of that data may be untrusted and needs to stay in the <code>untrusted-user</code> privilege level. Users will also need to be able to move files from the <code>user</code> privilege level to the <code>untrusted-user</code> level.</li>
+<li>Users will be running resource-intensive apps (most notably web browsers) in the <code>untrusted-user</code> privilege level. They will also be running these apps within potentially resource-constrained virtual machines. Thus, performance concerns have to be taken into account. Any solution based on virtualization will have to take into account the fact that nested virtualization may be disabled or may not be available at all (such as on current versions of Qubes OS).</li>
+<li>Users will be running apps that make use of Linux’s native sandboxing capabilities. The implementation of <code>untrusted-user</code> <strong>must not break or weaken these sandboxes if at all possible.</strong></li>
+<li>Applications running as <code>untrusted-user</code> are going to have to do IPC with things that run as <code>user</code> (most notably Wayland, Pipewire, and terminal emulator software, but probably also others). This provides substantial attack surface; Wayland is not a simple protocol, and labwc is not written in a memory-safe language, so I would not be surprised if a motivated attacker could attack the compositor to escape the sandbox.</li>
+<li>We do not know what applications the user will run in the sandbox. The sandbox should work transparently with as many existing applications as possible.</li>
+<li>Users will have legitimate reasons to run things in the <code>user</code> privilege level for compatibility or performance reasons. Not everything can be pushed into a container or VM and just work. However, a subset of users will only want to use the <code>user</code> privilege level for managing application that run as <code>untrusted-user</code>, or for very basic tasks. For those users who can afford to lock down <code>user</code>, there should be an option that uses a project like <a href="https://github.com/roddhjav/apparmor.d">apparmor.d</a> to lock down the <code>user</code> privilege level. This might be worth while to enable by default and make opt-out.</li>
+</ul>
+<p>There are two main sandboxing models that I can see, per-application sandboxing and per-usecase sandboxing. Firejail, Bubblewrap, Flatpak, and sandbox-app-launcher are examples of the former kind. I personally do not believe this is the best way of doing things, for a few reasons:</p>
+<ul>
+<li>Per-application sandboxing generally involves figuring out everything a particular application needs, allowlisting it, and then denying everything else. This means that a special profile has to be written for every application, and that lots of fiddling is needed to ensure good application compatibility. sandbox-app-launcher doesn’t seem to have had this problem, but Firejail and Bubblejail certainly do.</li>
+<li>Per-application sandboxing makes it confusing, difficult, or impossible to run the same app in two different “trust domains”. It causes similar implications when trying to run multiple apps in the same “trust domain”.</li>
+<li>Because each application is isolated independently of others, one cannot easily sandbox utilities that are primarily used as parts of larger systems. For instance, it’s hard to imagine a useful generic sandbox for <code>netcat</code>. Per-usecase sandboxing allows one to sandbox these lower-level utilities meaningfully (for instance, maybe my “software-dev” environment should only allow <code>netcat</code> to reach out to <code>termbin.com</code>, while my “document-processing” environment should allow it to reach out to a local network printer for… some reason… this is a bad example but you get my point).</li>
+<li>Because each application is isolated independently of others, IPC becomes a concern. Should a sandboxed Tor Browser be able to ask my file manager to open a directory and show me the contents? On the surface, the answer is “yes”, because I might want to use its “Open containing folder” feature after downloading something. But what if the browser is compromised, and it’s able to use the ability to open my file manager by itself as part of a social engineering attack, trying to convince me to upload sensitive data somewhere? It shouldn’t be able to do that. With per-usecase sandboxing, I can say that Tor Browser should be allowed to communicate with <em>anything</em> within its sandbox, for any reason, but <em>nothing</em> outside of its sandbox. If the browser then decides to open a file manager window out of nowhere, it will be recognizably not my normal file manager, and it won’t be able to show me any sensitive files, so the attack’s likelihood of success goes down.</li>
+<li>Sandboxing of server-like “applications” becomes harder, especially if they depend on and integrate with things like systemd.</li>
+</ul>
+<p>Per-usecase sandboxing is basically what containers and VMs give us. VMs are better from a security standpoint in a lot of ways, but due to resource constraints and compatibility issues, we can’t rely on them alone like I was suggesting previously. Containers are somewhat scary because they run directly on the host kernel, meaning that any host kernel bug in code accessible to the container can be exploited, potentially allowing an attacker to obtain kernel-level privileges. That being said, they’re better than nothing, and they allow working around many of the limitations of virtual machines (for instance, 3d acceleration can work inside containers).</p>
+<p>There are a lot of existing containerization systems out there; Docker, LXC, LXD, Incus, systemd-nspawn, libvirt-lxc, etc. Which one of these would be good to build on top of, I’m not quite sure yet, but I initially think either systemd-nspawn or libvirt-lxc would be a good option. One nice thing about libvirt-lxc is that it allows defining a container in much the same way one would define a virtual machine, and libvirt provides both container and virtual machine functionality. This might permit implementing both VM-based sandboxing and container-based sandboxing in the same application. Something similar could be done with systemd-nspawn and systemd-vmspawn possibly, but unfortunately systemd-vmspawn is not present in Debian Trixie, so this may not be the best option.</p>
+<p>In my mind, an ideal sandboxing solution would look something like this:</p>
+<ul>
+<li>There’s a privileged daemon (let’s call it <code>sandboxd</code>), which listens for requests to create and manage sandboxes. <code>sandboxd</code> creates sandboxes by using <code>mmdebstrap</code> to create a Debian rootfs with proper UIDs and GIDs so that an unprivileged sandbox can be booted. This daemon runs as root so that it can make the needed ownership changes after bootstrapping a new sandbox.</li>
+<li>There’s a user-accessible application (call it <code>sandboxctl</code>) that talks to the daemon in order to do things like create, delete, rename, query information about, start, and stop sandboxes. It can also request files to be moved between the user’s home folder and the sandbox’s home folder, or can request a directory to be transparently passed through.</li>
+<li>A number of validating proxies for basic, unavoidable IPC are provided with the system. These proxies do things like virtualize Wayland, Pipewire, and console access, preventing malicious interactions with parts of the system that run under the <code>user</code> privilege level.</li>
+<li>A number of basic permissions exist (“allow network”, “allow GUI”, “allow audio”, “allow mic”, “allow 3d accel”, etc.). These permissions can be toggled on or off at the trust domain level. Wherever possible, validating proxies are used to enable these permissions rather than just passing through bits of the host system to the container. In some situation though, host passthrough will likely be unavoidable, for instance for passing through something like <code>/dev/dri/renderD128</code> for 3d acceleration.</li>
+<li>A helper application using seccomp-bpf will be provided that will deny the ability to create user namespaces to most applications in some way (handwaving here, haven’t thought this through fully). Only specific applications that need user namespaces such as web browsers will be run without this application wrapping them, thus allowing us to have the lessened kernel attack surface of “no user namespaces”, and the better in-browser security that comes with user namespaces.</li>
+<li>Sandboxes can be booted with an optional RAM-based overlay within the sandbox to make them ephemeral. Only specific folders within the sandbox’s home folder such as Documents would be exempted (bind mounting would be needed for this). This would allow a user to make a sandbox “forget” a compromise, even one that used files like <code>~/.bashrc</code> for persistence, by simply rebooting the sandbox. For software updates and installation, the sandbox could be booted in a fully persistent mode.</li>
+</ul>
+<p>This is the basic architecture in my mind. This would meet all of the criteria above AFAICT.</p>
+<p>The hardest part of this is probably going to be the validating proxies. What might be doable instead is to run a real Wayland compositor and audio server within the sandbox, then use simpler protocols like VNC and audio streaming to get video and audio out of the container. A terminal emulator could then be run within the sandbox rather than using a <code>user</code>-privileged terminal emulator to interface with the sandbox. The performance impact of this might be substantial, and it could make things like the clipboard harder to use, but perhaps not impossible. Research would have to be done into this.</p>
+<p>Everything after this is research I did into a bunch of existing sandboxing mechanisms and why I think they probably aren’t suitable for what we want to do.</p>
+<ul>
+<li>VirtualBox and KVM are both very resource intensive. They require lots of disk space, lots of memory, lots of CPU power, and destroy the ability to use graphics hardware acceleration (which is necessary to do things like watch videos at reasonable resolutions). They require hardware virtualization features, making them unsuitable for use within Qubes or environments where nested virtualization isn’t available or is painfully slow.</li>
+<li>Flatpak uses a combination of namespaces, cgroups, and seccomp to sandbox applications. While good in theory, in practice this results in a lot of problems:
+<ul>
+<li>Many Flatpaks have very loose permissions, and those that don’t oftentimes don’t work right.</li>
+<li>seccomp is used to deny access to features that may increase kernel attack surface, like user namespaces. This breaks Chrome’s sandbox among other things, making it more dangerous to use a Flatpak-packaged browser than an apt-packaged one.</li>
+<li>Sandboxed applications connect directly to the Wayland compositor, which is unsafe as described above.</li>
+<li>The way in which Flatpaks bundle dependencies means that oftentimes Flatpaks can contain insecure dependencies, resulting in security problems. <a href="https://flatkill.org/">https://flatkill.org/</a> goes into a lot of detail on that.</li>
+</ul>
+</li>
+<li>Snap suffers from similar issues as Flatpak, though it may not be as bad from a dependency standpoint if it uses packages from the Ubuntu archive. It may also handle nested sandboxing better. It’s a semi-closed-source system dependent upon Canonical though, so it may be better avoided.</li>
+<li>Bubblewrap can be used on its own, without Flatpak. Depending on what exactly is being done, this <em>can</em> be a viable sandboxing mechanism, it might be usable instead of systemd-nspawn or libvirt-lxc. I’m not sure if it has advantages beyond these mechanisms yet, it might complicate attempts to make VM-based sandboxing work.</li>
+<li>I took a look at Landlock. It looks like a rather interesting way to do some of the things AppArmor does, but without needing privileges. It can be used to do things like make an application that says “I need to be able to read from this dir, read and write this other dir, and read, write, and execute this third dir, and that’s it.” Then the kernel will keep it from doing anything other than the things it locked itself into doing.
+<ul>
+<li>This isn’t really what we’re looking for I would argue. It might be interesting for some specific usecases, but… we already have AppArmor for this sort of thing. This is a variant on mandatory access control, which doesn’t provide the compatibility we’re looking for.</li>
+</ul>
+</li>
+<li>AppArmor is something we’re already familiar with, as we actively use it to do things like sandbox Tor Browser.
+<ul>
+<li>This requires a custom policy to be written for each sandboxed application, which is a pain, and it also doesn’t do much to work with applications that don’t work if you deny them resources that are potentially dangerous. It also doesn’t allow isolating data into separate <code>untrusted-user</code> environments.</li>
+</ul>
+</li>
+<li>Firejail is designed to sandbox individual applications using individually written profiles. It also allows the user to create custom profiles for applications that don’t have profiles written for them already. It sandboxes the applications that already exist on the root filesystem.
+<ul>
+<li>It’s SUID-root, which is problematic since we’re trying to get rid of such applications.</li>
+<li>While simple to use in theory, it seems to require the user to know that they’re doing a bit more than I personally would prefer. Rather than saying “this set of apps has its own environment”, it says “here are the parts of the <code>user</code> environment this particular app can access.” This is possibly dangerous since it blurs the lines between the privilege levels we want to establish. For instance, a browser should naturally be allowed to save things in Downloads, but what if you have sensitive company data in your Downloads folder, and your browser gets compromised and uploads it?</li>
+<li>There has been at least one TOCTOU vuln in Firejail which allowed an attacker to escalate their privileges to root. This is arguably proof that Firejail as an SUID application is a less-than-great idea. <a href="https://unparalleled.eu/blog/2021/20210208-rigged-race-against-firejail-for-local-root/" class="inline-onebox">Rigged Race Against Firejail for Local Root</a> is a good example. There have been other vulnerabilities in Firejail that make this look dangerous.</li>
+</ul>
+</li>
+</ul>
+<p>This is a bit long, but hopefully it will be useful.</p>
+<p>Edit: I read through a lot of <a href="https://wiki.archlinux.org/title/Systemd-nspawn" class="inline-onebox">systemd-nspawn - ArchWiki</a> and it looks like systemd-nspawn may be a very good tool to implement this with. I think the concept I’m describing above is a bit similar to Distrobox (<a href="https://distrobox.it/">https://distrobox.it/</a>) but security-focused, Debian-centric, and one-container-per-usecase rather than one-container-per-OS.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/20">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/20</link>
+        <pubDate>Mon, 12 Jan 2026 05:55:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-20</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I think there’s no question that if we ever implement a virtualization-based sandbox-app-launcher, we should use KVM or Xen as a backend. VirtualBox as a backend would probably be a bit of a mess. kvmtool is another KVM frontend, as is Cloud Hypervisor.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/19">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/19</link>
+        <pubDate>Wed, 05 Nov 2025 00:07:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-19</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <p>Only i see we can examine is KVM and Xen, others are messy to be used outside what it meant for.</p>
+<p>KVM: Smoothly working with any Linux version, which resolve the headache of vbox.</p>
+<p>Xen: Less attack surface than KVM but its an outsider package for linux which need its own changes and implementation with the kernel.</p>
+<p>The focus should be narrowed to these two hypervisors, which implementation can be done with, is a good one.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/18">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/18</link>
+        <pubDate>Tue, 04 Nov 2025 18:46:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-18</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Some thoughts I had on this recently:</p>
+<ul>
+<li>KVM and VirtualBox both support nested virt, it runs acceptably well on more recent CPUs and can limp along on older ones, and more recent CPUs are necessary to mitigate some side-channel attacks anyway.</li>
+<li>Xen will probably gain nested virt support soon, and it may already support it to some degree in the form of (less secure) PV virtualization, i.e. it might be possible to run PV guests within a PVH or HVM guest.</li>
+<li>QEMU’s attack surface is probably rather high, Cloud Hypervisor’s is probably lower but isn’t in Debian, but there’s also <a href="https://github.com/kvmtool/kvmtool">kvmtool</a> <s>which I believe is already in Debian</s> (edit: scratch that, I know it was in Ubuntu 16.04 but I guess it’s not in Debian any longer). It’s smaller than QEMU and a bit similar to Cloud Hypervisor, though it has the disadvantage of being written in C. Unsure if it’s intended for security-critical use cases, and it seems to be rather inactive upstream at the moment, but it might be safer than QEMU… not sure.</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/17</link>
+        <pubDate>Mon, 03 Nov 2025 17:42:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-17</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote" data-post="1" data-topic="1165">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar">
+    <a href="https://forums.kicksecure.com/t/for-apps-persmission-default-block-all/1165">For Apps Persmission: Default Block All</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category " title="Development of Kicksecure software and source code."><span class="badge-category__name">Development</span></span></a>
+  </div>
+  <blockquote>
+    By default, when any app is installed in the VM, nothing is allowed automatically. Every permission including internet access must be explicitly granted by the user. This approach prevents any unwanted permissions from being applied silently without the user’s notice or consent. 
+Inspiration for a graphical permission gears:
+  </blockquote>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/16</link>
+        <pubDate>Thu, 24 Jul 2025 17:07:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-16</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="14" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Google dictates how apps must be built, packaged, and behave if they want to be distributed through the Play Store. Google can reject apps that don’t comply with sandboxing or violate permissions. Google Android developers have to use SDK and libraries dictated by Google.</p>
+</blockquote>
+</aside>
+<p>Right, and beyond that the Android operating system is designed in such a way where you fundamentally can’t just “do whatever you want”. The way in which the typical Linux desktop works, if someone needs root access and doesn’t want to prompt for it, they can just install a polkit configuration snippet or similar as part of the installation process, and get that access. With Android, not only can you not do that by policy, you can’t do that by design. Furthermore, we have to work with an already-existing app ecosystem with Kicksecure, whereas Android was free to make their own ecosystem from scratch. They don’t need to retain compatibility with anything if they don’t want to, whereas we do have to do that.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/15</link>
+        <pubDate>Fri, 18 Jul 2025 20:23:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-15</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="9" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Android can get away with it because Google can enforce rules about how Android apps are written and we can’t do that with Linux apps.</p>
+</blockquote>
+</aside>
+<p>Could you elaborate a bit on that please?</p>
+<p>I guess…</p>
+<p>Google dictates how apps must be built, packaged, and behave if they want to be distributed through the Play Store. Google can reject apps that don’t comply with sandboxing or violate permissions. Google Android developers have to use SDK and libraries dictated by Google.</p>
+<p>Why we cannot do that on general purpose Linux distributions?</p>
+<ul>
+<li>There is no central authority. Anyone can write and distribute a Linux application however they want. No organization (like Google on Android) can enforce mandatory sandboxing or privilege separation. More on organizational background: <a href="https://www.kicksecure.com/wiki/Linux_User_Experience_versus_Commercial_Operating_Systems" class="inline-onebox">Linux User Experience versus Commercial Operating Systems</a></li>
+<li>Most Linux applications weren’t designed with sandboxing in mind. → <a href="https://www.kicksecure.com/wiki/Dev/About_Computer_(In)Security#Security_Mindset_of_Open_Source_Software_Ecosystem">Security Mindset of Open Source Software Ecosystem</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/14</link>
+        <pubDate>Fri, 18 Jul 2025 16:41:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-14</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Since Android is going for a virtualization based approach for some apps and since that’s more secure we might need to do the same.</p>
+<p>Perhaps if running on a host operating system, we’ll use per application virtualization.</p>
+<p>In case of nested virtualization (if we run already inside a VM), we’ll investigate that more. Provide a user configurable setting in that case perhaps. Or fallback to another solution (run without virtualization) because we’ll suggest to use multiple VMs.</p>
+<p>We’ll need a separate ticket to investigate the security impact of nested virtualization. We’ll weigh it against running applications inside a VM without nesting.</p>
+<p>That is, if even possible, such as slow performance making this infeasible.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/13</link>
+        <pubDate>Fri, 04 Jul 2025 10:41:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-13</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>One possible argument in favor of the VM-based approach is that we could run “unsafe” apps in sysmaint sessions safely. We went to a great deal of effort to prevent people from launching Firefox in a sysmaint session because of the dangers it poses, but launching a virtual machine sandbox with Firefox in it would be much safer than standard or sandboxed Firefox. The inability to safely use a web browser in a sysmaint session <a href="https://forums.kicksecure.com/t/panel-items-missing-feedback/1108/7">is causing some frustration</a>, and while we did see that coming and decided it was worth it, being able to remove that frustration would be nice.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/12</link>
+        <pubDate>Thu, 03 Jul 2025 23:17:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-12</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Moderation notice:</p>
+<ul>
+<li>This forum thread is not VirtualBox vs KVM support etc. VirtualBox support will remain. That decision is done and off-topic in this forum thread.</li>
+<li>Please use a separate thread for that if you must. Related:
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Dev/VirtualBox#Arguments_for_keeping_VirtualBox_Support">Kicksecure: Arguments for keeping VirtualBox Support</a></li>
+<li><a href="https://www.whonix.org/wiki/Dev/VirtualBox#Arguments_for_keeping_VirtualBox_Support">Whonix: Arguments for keeping VirtualBox Support</a></li>
+</ul>
+</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/11</link>
+        <pubDate>Thu, 03 Jul 2025 22:30:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-11</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>We can’t really not consider VirtualBox - it’s the primary supported platform for Kicksecure and Whonix, and the automated installer will install VirtualBox and a Kicksecure appliance by default.</p>
+</blockquote>
+</aside>
+<p>These were periodic time choices, meaning in 2013~ there wasnt much of choices for new project growing up, coming 2025 this is can be considered from the past.</p>
+<p>Switching to VM per app, this idea can even merge whonix into kicksecure, how? because what is whonix doing is taking OS in VM connecting it through another VM, what can be done on VM per App is that X app in VM can use Y anonymization app/s in VM or even GW in VM.</p>
+<p>To have these genius futuristic ideas coming to true without having virtualbox on the other hand = Be it.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/10</link>
+        <pubDate>Thu, 03 Jul 2025 22:23:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-10</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>My first thought looking at this is that user account isolation sounds neat but will probably be difficult to implement. Lots of file ownership changes would be required in order to allow the user to get files into and out of applications. AppArmor doesn’t have a sandboxing feature like SELinux appears to, though it does allow enforcing MAC. Seccomp is unsafe, Android can get away with it because Google can enforce rules about how Android apps are written and we can’t do that with Linux apps. It also sounds like Android is using some sort of chroot variant possibly (or some fancy feature of SELinux) to limit host file visibility, which would further complicate things.</p>
+<p>I guess it would be better than nothing though. I’m not sure if it would be easier to implement than using a containerization engine, maybe it would be.</p>
+<p>(I don’t like sandboxing approaches in general especially without seccomp, since any LPE vuln in the kernel will allow a sandbox escape, and there have been many LPE vulns in the kernel as I understand it. Virtualization would make that much, much harder.)</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/9</link>
+        <pubDate>Thu, 03 Jul 2025 15:54:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-9</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Would “do it similar to how Android is doing it” be an option?</p>
+<ul>
+<li>Separate Linux user account name.</li>
+<li>Separate folder.</li>
+<li>Mandatory access control.</li>
+<li>Secomp (optional, as feasible).</li>
+</ul>
+<p>Though, Android might be starting to use Android Virtualization Framework (AVF) for some apps.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/8</link>
+        <pubDate>Thu, 03 Jul 2025 13:16:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-8</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>We can’t really not consider VirtualBox - it’s the primary supported platform for Kicksecure and Whonix, and the automated installer will install VirtualBox and a Kicksecure appliance by default. It’s <em>the</em> Kicksecure platform. This is probably part of why the restrictions are a dealbreaker because of nested virtualization concerns (it will technically work but it will be painfully slow in many circumstances).</p>
+<p>Containers using the same system kernel won’t be a problem if the same OS is being used both on the host and in the container, which we can do. The security concerns of containerization are still there, but if we use a mature containerization platform like Incus rather than trying to roll our own (which is what I think we were doing with sandbox-app-launcher in the past), that might not be so bad.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/7</link>
+        <pubDate>Wed, 02 Jul 2025 18:44:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-7</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>virtualized apps and VirtualBox at the same time is a real issue</p>
+</blockquote>
+</aside>
+<p>I dont see the need to use virtualbox if we have KVM support. Virtualbox on gnu/linux is bad idea even more on debian.</p>
+<p>So i see that this can be avoided by not having virtualbox consideration.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Maybe it would be possible to allow the applications containers to function as either containers or VMs</p>
+</blockquote>
+</aside>
+<p>I think better to avoid the possibility to downgrade the model and allow application/s to use containers instead of being virtualized, because containers using the same system kernel will lead to bad results IMO.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/6</link>
+        <pubDate>Wed, 02 Jul 2025 18:21:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-6</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+      <item>
+        <title>Separate (some) user applications from the operating system</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1120">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>The <a href="https://www.kicksecure.com/wiki/Vm-app-manager#Limitations">Limitations</a> seem a deal-breaker.</p>
+</blockquote>
+</aside>
+<p>Yeah… containerization is so flimsy from what I’ve seen though that it seems like a dealbreaker to me. The limitations in nested virtualization scenarios aren’t really that bad since the user is already using virtual machines, they can use multiple VMs for isolation.</p>
+<p>Being unable to use virtualized apps and VirtualBox at the same time is a real issue, and one that is very hard to avoid. Maybe it would be possible to allow the applications containers to function as either containers or VMs, so that one could use containerization when necessary, and virtualization when possible.</p>
+<p>Incus considers container escape to be a security vulnerability: <a href="https://github.com/lxc/incus/security" class="inline-onebox">Security Overview · lxc/incus · GitHub</a> It’s an LXD fork (developed by the original LXD developers), and might be more workable (maybe even more secure?) than bwrap. I believe it’s present in Debian Trixie.</p>
+          <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120/5</link>
+        <pubDate>Wed, 02 Jul 2025 17:38:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1120-5</guid>
+        <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+      </item>
+  </channel>
+</rss>

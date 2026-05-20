@@ -1,0 +1,1581 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure Forums - Latest posts</title>
+    <link>https://forums.kicksecure.com</link>
+    <description>Latest posts</description>
+      <item>
+        <title>Vboxdrv.service fails to start</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Never mind systemcheck. It’s just the messenger and the messenger is right.</p>
+<p>vboxdrv / VirtualBox is the issue.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730#post_3</link>
+        <pubDate>Tue, 19 May 2026 18:50:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5044</guid>
+      </item>
+      <item>
+        <title>Vboxdrv.service fails to start</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>This one applicable?</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/VirtualBox/virtualbox/issues/639">
+  <header class="source">
+
+      <a href="https://github.com/VirtualBox/virtualbox/issues/639" target="_blank" rel="noopener">github.com/VirtualBox/virtualbox</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/VirtualBox/virtualbox/issues/639" target="_blank" rel="noopener">[Bug]: vboxdrv triggers a kernel BUG during load and all VMs fail to start if `kernel.kptr_restrict=2` sysctl is set</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-04-23" data-time="01:47:10" data-timezone="UTC">01:47AM - 23 Apr 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          bug
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          fixed in svn
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Version
+
+7.1.18
+
+### Host OS Type
+
+Linux
+
+### Host OS name + version
+
+Debian<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> 13.4
+
+### Host Architecture
+
+x86
+
+### Guest OS Type
+
+all
+
+### Guest Architecture
+
+x86
+
+### Guest OS name + version
+
+N/A
+
+### Component
+
+VMM
+
+### What happened?
+
+(Apologies if I have the component wrong, I wasn't sure whether to pick VMM or Host Support.)
+
+If a Debian system has the `kernel.kptr_restrict=2` sysctl set, VBoxDrv will trigger a kernel BUG on load. `vboxdrv.service` will show as failed in the output of `systemctl`. The module will technically be loaded into the kernel, but it is completely non-functional in this state, attempting to boot a VM always fails. If the user is unlucky enough to also have panic-on-oops enabled on their machine, this will result in the entire machine crashing.
+
+The relevant output from `dmesg` is:
+
+```
+[    4.956947] vboxdrv: loading out-of-tree module taints kernel.
+[    4.956953] vboxdrv: module verification failed: signature and/or required key missing - tainting kernel
+[    4.968023] vboxdrv: Found 8 processor cores/threads
+[    4.974793] RTR0DbgKrnlInfoOpen: /proc/kallsym method failed. get_user_pages address off by +0x74a91580
+[    5.006678] Missing ENDBR: kallsyms_lookup_name+0x0/0xd0
+[    5.007463] ------------[ cut here ]------------
+[    5.007464] kernel BUG at arch/x86/kernel/cet.c:132!
+[    5.008234] Oops: invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[    5.009003] CPU: 2 UID: 0 PID: 1232 Comm: modprobe Tainted: G           OE      6.12.74+deb13+1-amd64 #1  Debian 6.12.74-2
+[    5.009793] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[    5.010566] Hardware name: Notebook NV4XMB,ME,MZ/NV4XMB,ME,MZ, BIOS 1.07.13NMIN29 07/12/2021
+[    5.011434] RIP: 0010:exc_control_protection+0x29f/0x2b0
+[    5.012312] Code: d8 b9 09 00 00 00 48 8b 93 80 00 00 00 be 80 00 00 00 48 c7 c7 1a 6b 6e 8c e8 fd a9 3c ff 80 a3 8a 00 00 00 fb e9 38 fe ff ff &lt;0f&gt; 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 90 90 90 90 90
+[    5.013215] RSP: 0018:ffffd523c163b8c8 EFLAGS: 00010002
+[    5.014115] RAX: 000000000000002c RBX: ffffd523c163b8f8 RCX: 0000000000000000
+[    5.015024] RDX: 0000000000000000 RSI: ffff8f2451321780 RDI: ffff8f2451321780
+[    5.015936] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffd523c163b758
+[    5.016841] R10: ffffffff8ceb43c8 R11: 0000000000000003 R12: 0000000000000003
+[    5.017737] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[    5.018648] FS:  00007fbc4d69f5c0(0000) GS:ffff8f2451300000(0000) knlGS:0000000000000000
+[    5.019557] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    5.020460] CR2: 00007fbc4cef3cb0 CR3: 000000010d6ca005 CR4: 0000000000f72ef0
+[    5.021364] PKRU: 55555554
+[    5.022275] Call Trace:
+[    5.023183]  &lt;TASK&gt;
+[    5.024070]  asm_exc_control_protection+0x26/0x30
+[    5.024964] RIP: 0010:kallsyms_lookup_name+0x0/0xd0
+[    5.025844] Code: 79 0a 48 f7 d0 48 03 05 3e d9 29 01 c3 cc cc cc cc 66 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 &lt;66&gt; 0f 1f 00 0f 1f 44 00 00 53 48 83 ec 10 65 48 8b 04 25 28 00 00
+[    5.026768] RSP: 0018:ffffd523c163b9a0 EFLAGS: 00010282
+[    5.027690] RAX: ffffffff8b3c7c40 RBX: ffff8f1ccd908010 RCX: 0100000000000000
+[    5.028613] RDX: 00ffffffffdfffff RSI: 0000000000000000 RDI: ffffffffc243b6a7
+[    5.029529] RBP: ffffd523c163b9f8 R08: 0000000000000000 R09: 0000000000000001
+[    5.030445] R10: 0000000000000002 R11: 0000000000000001 R12: ffffd523c163ba08
+[    5.031362] R13: ffffffffc243b6a7 R14: 0000000000000000 R15: ffff8f1ccaca1368
+[    5.032275]  ? __pfx_kallsyms_lookup_name+0x10/0x10
+[    5.033188]  VBoxHost_RTR0DbgKrnlInfoQuerySymbol+0x19b/0x280 [vboxdrv]
+[    5.034130]  VBoxHost_RTR0DbgKrnlInfoGetSymbol+0x31/0x60 [vboxdrv]
+[    5.035063]  rtR0InitNative+0x7c/0xd0 [vboxdrv]
+[    5.035984]  VBoxHost_RTR0Init+0x3c/0x150 [vboxdrv]
+[    5.036904]  VBoxDrvLinuxInit+0x46/0xff0 [vboxdrv]
+[    5.037830]  ? __pfx_VBoxDrvLinuxInit+0x10/0x10 [vboxdrv]
+[    5.038750]  do_one_initcall+0x5b/0x310
+[    5.039643]  do_init_module+0x60/0x230
+[    5.040534]  init_module_from_file+0x89/0xe0
+[    5.041412]  idempotent_init_module+0x11e/0x310
+[    5.042292]  __x64_sys_finit_module+0x5e/0xb0
+[    5.043170]  do_syscall_64+0x82/0x190
+[    5.044043]  ? touch_atime+0x1e/0x120
+[    5.044904]  ? filemap_read+0x340/0x370
+[    5.045780]  ? vfs_read+0x15e/0x360
+[    5.046652]  ? vfs_read+0x15e/0x360
+[    5.047510]  ? __x64_sys_pread64+0x98/0xd0
+[    5.048360]  ? arch_exit_to_user_mode_prepare.isra.0+0x16/0xa0
+[    5.049222]  ? syscall_exit_to_user_mode+0x37/0x1b0
+[    5.050075]  ? clear_bhb_loop+0x40/0x90
+[    5.050924]  ? clear_bhb_loop+0x40/0x90
+[    5.051759]  ? clear_bhb_loop+0x40/0x90
+[    5.052581]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[    5.053402] RIP: 0033:0x7fbc4cf1a7b9
+[    5.054243] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 &lt;48&gt; 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 66 0d 00 f7 d8 64 89 01 48
+[    5.055107] RSP: 002b:00007fff9b269b78 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[    5.055986] RAX: ffffffffffffffda RBX: 00005641100d69d0 RCX: 00007fbc4cf1a7b9
+[    5.056854] RDX: 0000000000000000 RSI: 00005640f0a4632b RDI: 0000000000000003
+[    5.057727] RBP: 0000000000000000 R08: 0000000000000000 R09: 00005641100d9c00
+[    5.058603] R10: 0000000000000000 R11: 0000000000000246 R12: 00005640f0a4632b
+[    5.059464] R13: 0000000000040000 R14: 00005641100d6af0 R15: 0000000000000000
+[    5.060305]  &lt;/TASK&gt;
+[    5.061145] Modules linked in: vboxdrv(OE+) qrtr bnep binfmt_misc intel_rapl_msr intel_rapl_common nls_ascii intel_uncore_frequency nls_cp437 intel_uncore_frequency_common vfat x86_pkg_temp_thermal fat snd_sof_pci_intel_tgl snd_sof_pci_intel_cnl snd_sof_intel_hda_generic soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda_common snd_soc_hdac_hda snd_sof_intel_hda_mlink snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_codec_hdmi snd_sof_utils snd_soc_acpi_intel_match intel_powerclamp snd_soc_acpi coretemp soundwire_bus iwlmvm kvm_intel snd_soc_avs snd_soc_hda_codec snd_hda_ext_core snd_hda_codec_realtek kvm mac80211 snd_hda_codec_generic snd_soc_core snd_hda_scodec_component irqbypass snd_compress crct10dif_pclmul snd_pcm_dmaengine libarc4 ghash_clmulni_intel snd_hda_intel sha512_ssse3 uvcvideo sha256_ssse3 btusb snd_intel_dspcfg iwlwifi sha1_ssse3 snd_intel_sdw_acpi btrtl snd_hda_codec videobuf2_vmalloc aesni_intel btintel uvc videobuf2_memops videobuf2_v4l2 btbcm gf128mul
+[    5.061182]  btmtk crypto_simd snd_hda_core videodev cryptd mei_hdcp mei_pxp bluetooth snd_hwdep videobuf2_common cfg80211 rapl snd_pcm intel_cstate mc wmi_bmof ecdh_generic snd_timer mei_me intel_uncore snd pcspkr mei ee1004 soundcore rfkill intel_pmc_core igen6_edac joydev intel_hid intel_vsec ac sparse_keymap pmt_telemetry acpi_pad pmt_class evdev msr parport_pc ppdev lp parport configfs efi_pstore nfnetlink efivarfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic xe drm_gpuvm drm_exec gpu_sched drm_suballoc_helper drm_ttm_helper i915 drm_buddy i2c_algo_bit drm_display_helper cec hid_multitouch rc_core hid_generic ttm i2c_hid_acpi drm_kms_helper i2c_hid iTCO_wdt hid rtsx_pci_sdmmc intel_pmc_bxt r8169 xhci_pci iTCO_vendor_support mmc_core realtek xhci_hcd watchdog nvme psmouse mdio_devres ucsi_acpi drm thunderbolt libphy typec_ucsi crc32_pclmul serio_raw nvme_core usbcore crc32c_intel typec intel_lpss_pci i2c_i801 rtsx_pci intel_lpss i2c_smbus roles button video idma64 battery nvme_auth usb_common
+[    5.065862]  wmi
+[    5.071988] ---[ end trace 0000000000000000 ]---
+[    5.104282] iwlwifi 0000:00:14.3: Registered PHC clock: iwlwifi-PTP, with index: 0
+[    5.307927] RIP: 0010:exc_control_protection+0x29f/0x2b0
+[    5.309913] Code: d8 b9 09 00 00 00 48 8b 93 80 00 00 00 be 80 00 00 00 48 c7 c7 1a 6b 6e 8c e8 fd a9 3c ff 80 a3 8a 00 00 00 fb e9 38 fe ff ff &lt;0f&gt; 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 90 90 90 90 90
+[    5.311914] RSP: 0018:ffffd523c163b8c8 EFLAGS: 00010002
+[    5.313900] RAX: 000000000000002c RBX: ffffd523c163b8f8 RCX: 0000000000000000
+[    5.315871] RDX: 0000000000000000 RSI: ffff8f2451321780 RDI: ffff8f2451321780
+[    5.317860] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffd523c163b758
+[    5.319866] R10: ffffffff8ceb43c8 R11: 0000000000000003 R12: 0000000000000003
+[    5.321883] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[    5.323901] FS:  00007fbc4d69f5c0(0000) GS:ffff8f2451300000(0000) knlGS:0000000000000000
+[    5.325902] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    5.327892] CR2: 00007fbc4cef3cb0 CR3: 000000010d6ca005 CR4: 0000000000f72ef0
+[    5.329912] PKRU: 55555554
+[    5.331911] note: modprobe[1232] exited with irqs disabled
+```
+
+The following window appears when trying to launch a VM in this state:
+
+```
+VirtualBox - Error In suplibOsInit
+
+VERR_VM_DRIVER_OPEN_ERROR (rc=-1911)
+
+The VirtualBox Linux kernel driver is either not loaded or not
+set up correctly. Please try setting it up again by executing
+
+'/sbin/vboxconfig'
+
+as root.
+
+If your system has EFI Secure Boot enabled you may also need
+to sign the kernel modules (vboxdrv, vboxnetflt, vboxnetadp,
+vboxpci) before you can load them. Please see your Linux
+system's documentation for more information.
+
+where: suplibOsInit what: 3
+VERR_VM_DRIVER_OPEN_ERROR (-1911) - Was not able to
+open the support driver. Generic open error used when none
+of the other ones fit.
+```
+
+### How can we reproduce this?
+
+1. Install a fresh copy of Debian 13.4 with the GNOME desktop on a physical device. (I'm using a laptop with an i5-1135G7 processor.)
+2. Install VirtualBox 7.1 following the "Debian-based Linux distributions" instructions from https://www.virtualbox.org/wiki/Linux_Downloads.
+3. Run `sudo modprobe -r kvm_intel; sudo modprobe -r kvm` to make sure KVM doesn't get in the way of VirtualBox.
+4. Launch VirtualBox, and create a FreeDOS virtual machine.
+5. Verify that you can boot the VM successfully.
+6. Create a file at `/usr/lib/sysctl.d/990-crash-vbox.conf`, with the contents `kernel.kptr_restrict=2`.
+7. Reboot the device.
+8. Run `systemctl status vboxdrv.service`. Observe that it shows as `Active: failed`.
+9. Run `sudo dmesg`. You will see a kernel backtrace.
+10. Run `sudo modprobe -r kvm_intel; sudo modprobe -r kvm` to get KVM to go away again.
+11. Launch VirtualBox, and attempt to launch the FreeDOS virtual machine. The window described above will appear and the VM will not launch.
+
+### Did you upload *all* of your necessary log files, screenshots, etc.?
+
+- [x] Yes, I've uploaded all pertinent files to this issue.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730#post_2</link>
+        <pubDate>Tue, 19 May 2026 18:49:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5043</guid>
+      </item>
+      <item>
+        <title>Vboxdrv.service fails to start</title>
+        <dc:creator><![CDATA[@ValdemarJo]]></dc:creator>
+        <description><![CDATA[ <p>Hello! Help fix the problem, after the update there was an error and the virtualbox stopped working</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/e5ac8353d59462c21f8a82362635b7ba6fac7713.png" data-download-href="https://forums.kicksecure.com/uploads/default/e5ac8353d59462c21f8a82362635b7ba6fac7713" title="1"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/e5ac8353d59462c21f8a82362635b7ba6fac7713_2_380x500.png" alt="1" data-base62-sha1="wLMWMB3x4eOHpBL7mNP6KMgcDm3" width="380" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/e5ac8353d59462c21f8a82362635b7ba6fac7713_2_380x500.png, https://forums.kicksecure.com/uploads/default/optimized/1X/e5ac8353d59462c21f8a82362635b7ba6fac7713_2_570x750.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/e5ac8353d59462c21f8a82362635b7ba6fac7713_2_760x1000.png 2x" data-dominant-color="E4E4E5"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/c1afa83a11f5c6827c226a82d8eecbc67dc6aeab.png" data-download-href="https://forums.kicksecure.com/uploads/default/c1afa83a11f5c6827c226a82d8eecbc67dc6aeab" title="2"><img src="https://forums.kicksecure.com/uploads/default/original/1X/c1afa83a11f5c6827c226a82d8eecbc67dc6aeab.png" alt="2" data-base62-sha1="rDquIBzGh9dtfmi4NJvRnI9qo7p" width="490" height="437"></a></div><p></p>
+<p>degraded<br>
+zsh: exit 1     sudo systemctl --wait is-system-running<br>
+[user ~]% sudo systemctl --state=failed,activating,deactivating list-units<br>
+UNIT            LOAD   ACTIVE SUB    DESCRIPTION<br>
+● vboxdrv.service loaded failed failed VirtualBox Linux kernel module</p>
+<p>Legend: LOAD   → Reflects whether the unit definition was properly loaded.<br>
+ACTIVE → The high-level unit activation state, i.e. generalization of SUB.<br>
+SUB    → The low-level unit activation state, values depend on unit type.</p>
+<p>1 loaded units listed.<br>
+[user ~]%</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730#post_1</link>
+        <pubDate>Tue, 19 May 2026 17:56:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5042</guid>
+      </item>
+      <item>
+        <title>How do you turn on thunderbolt?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="SpecialBook" data-post="1" data-topic="1729">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/7feea3/48.png" class="avatar"> SpecialBook:</div>
+<blockquote>
+<p>How to disable the system setting blocking thunderbolt?</p>
+</blockquote>
+</aside>
+<p>Edit <code>/etc/modprobe.d/30_security-misc_disable.conf</code>, then look for the following block in the file:</p>
+<pre><code class="lang-auto">## Thunderbolt:
+## Disable Thunderbolt modules to prevent certain DMA attacks.
+##
+## https://en.wikipedia.org/wiki/Thunderbolt_(interface)#Security_vulnerabilities
+##
+install intel-wmi-thunderbolt /usr/bin/disabled-thunderbolt-by-security-misc
+install thunderbolt /usr/bin/disabled-thunderbolt-by-security-misc
+install thunderbolt_net /usr/bin/disabled-thunderbolt-by-security-misc
+</code></pre>
+<p>Comment out the three lines starting with <code>install</code> by adding a <code>#</code> character to the start of each line. Save your changes to the file, then reboot.</p>
+<aside class="quote no-group" data-username="SpecialBook" data-post="1" data-topic="1729">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/7feea3/48.png" class="avatar"> SpecialBook:</div>
+<blockquote>
+<p>What are the risks of enabling this setting considering I have a modern 2026 laptop with the latest bios update</p>
+</blockquote>
+</aside>
+<p>Unsure. It may depend on your specific hardware and hardware vendor (i.e. does the hardware’s IOMMU work right), and there may be unknown vulnerabilities in Thunderbolt in general. <a href="https://en.wikipedia.org/wiki/Thunderbolt_(interface)#Security_vulnerabilities" class="inline-onebox">Thunderbolt (interface) - Wikipedia</a> has a list of some known issues, which may or may not be mitigated on various machines. (Suffice to say, exposing a PCIe interface on a USB port has proven to be somewhat of a bad idea.)</p>
+<p>FWIW, I have a USB-C SSD enclosure that does not use Thunderbolt. It works without issues even when plugged into a Thunderbolt port. It obviously isn’t as fast, but it’s likely less of a security hazard.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-do-you-turn-on-thunderbolt/1729#post_2</link>
+        <pubDate>Sun, 17 May 2026 19:23:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5041</guid>
+      </item>
+      <item>
+        <title>How do you turn on thunderbolt?</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>Using USB4/Thunderbolt, I connect an external SSD drive to a laptop, but it is not detected in the system, and is determined via USB A.<br>
+In another linux distro on this laptop TB4 works.</p>
+<p>How to disable the system setting blocking thunderbolt?<br>
+What are the risks of enabling this setting considering I have a modern 2026 laptop with the latest bios update</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-do-you-turn-on-thunderbolt/1729#post_1</link>
+        <pubDate>Sun, 17 May 2026 18:21:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5040</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="anonx230" data-post="5" data-topic="1725">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/839c29/48.png" class="avatar"> anonx230:</div>
+<blockquote>
+<p>I’m trying to reduce my reliance on virtual machines for security.</p>
+</blockquote>
+</aside>
+<p>I’d encourage you to <em>not</em> do that <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> Kicksecure is very hardened in comparison to vanilla Debian, but even so, vulnerabilities can (and have) existed in system components like the Linux kernel that Kicksecure was vulnerable to, and where no major Linux distribution could have reasonably been immune to the vuln before it was found. (The recent Copy Fail and Dirty Frag vulns are good examples.) Using Kicksecure as a hardened virtual machine host is good defense-in-depth.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_6</link>
+        <pubDate>Sun, 17 May 2026 15:07:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5039</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <p>I dont use i2p but would like to voice my support for Librewolf <img src="https://forums.kicksecure.com/images/emoji/twitter/raising_hands.png?v=15" title=":raising_hands:" class="emoji" alt=":raising_hands:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_6</link>
+        <pubDate>Sun, 17 May 2026 03:08:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5037</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1724">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Didnt understand the question, i boot into sysmaint (persistent) if thats what you mean.</p>
+</blockquote>
+</aside>
+<p>Sryy what I meant is switching between modes. The behavior I noticed is the syncing of time between modes. Thus far live mode is what I use more. Time sync fails in live mode more then persistent. If I sync in persistent first before switching I don’t see a failure in sdwdate the next time I boot in live <img src="https://forums.kicksecure.com/images/emoji/twitter/person_shrugging.png?v=15" title=":person_shrugging:" class="emoji" alt=":person_shrugging:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_7</link>
+        <pubDate>Sun, 17 May 2026 02:53:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5036</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1725">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If you need to print but are also concerned about the security implications, you might be able to install a dedicated Kicksecure or Debian 13 virtual machine with CUPS installed within, then pass through your USB printer to the VM and print from there.</p>
+</blockquote>
+</aside>
+<p>I’m trying to reduce my reliance on virtual machines for security. The reason I’m trying Kicksecure <img src="https://forums.kicksecure.com/images/emoji/twitter/person_facepalming.png?v=15" title=":person_facepalming:" class="emoji" alt=":person_facepalming:" loading="lazy" width="20" height="20"> you know is partly this reason to do most on a secure host. Since you suggested it, I might give er a go and see what its like. Wish me luck <img src="https://forums.kicksecure.com/images/emoji/twitter/joy.png?v=15" title=":joy:" class="emoji" alt=":joy:" loading="lazy" width="20" height="20"> <img src="https://forums.kicksecure.com/images/emoji/twitter/zany_face.png?v=15" title=":zany_face:" class="emoji" alt=":zany_face:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_5</link>
+        <pubDate>Sun, 17 May 2026 02:40:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5035</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <p>Just looked through manpages and online documentation for cups. I take it CUPS does not natively support a <code>.d/ drop-in directory structure (like </code>/etc/cups/cups.d/`) right​<img src="https://forums.kicksecure.com/images/emoji/twitter/red_question_mark.png?v=15" title=":red_question_mark:" class="emoji" alt=":red_question_mark:" loading="lazy" width="20" height="20"></p>
+<p>To close the listening port you have to edit the <code>/etc/cups/cupsd.conf</code> directly I guess and <img src="https://forums.kicksecure.com/images/emoji/twitter/crossed_fingers.png?v=15" title=":crossed_fingers:" class="emoji" alt=":crossed_fingers:" loading="lazy" width="20" height="20"> that nothing is changed after updates.</p>
+<p>This <a href="https://github.com/apple/cups/issues/5556" rel="noopener nofollow ugc">GitHub</a> issue specifically addresses the removal and requested reinstatement of the <code>Include</code> directive in <code>cupsd.conf</code>. A feature that would allow one configuration file to reference another.</p>
+<p>Ok, this is for apple but looks like it could relate here. Uncertain if a <code>.d/</code> drop in directory support ever existed at all <img src="https://forums.kicksecure.com/images/emoji/twitter/person_shrugging.png?v=15" title=":person_shrugging:" class="emoji" alt=":person_shrugging:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_4</link>
+        <pubDate>Sun, 17 May 2026 02:27:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5034</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="anonx230" data-post="3" data-topic="1724">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/839c29/48.png" class="avatar"> anonx230:</div>
+<blockquote>
+<p>The second observation makes me wonder what mode you boot into more?</p>
+</blockquote>
+</aside>
+<p>Didnt understand the question, i boot into sysmaint (persistent) if thats what you mean.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="5" data-topic="1724" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I have a physical hardware Kicksecure machine that does not have these issues.</p>
+</blockquote>
+</aside>
+<p>No idea, but its reproducible from my end.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_6</link>
+        <pubDate>Sun, 17 May 2026 02:22:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5033</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>Good catch, yep it did <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727#post_4</link>
+        <pubDate>Sun, 17 May 2026 02:04:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5032</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>Related:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Panic-on-oops">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778923154" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener">panic-on-oops</a></h3>
+
+  <p>Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727#post_3</link>
+        <pubDate>Sat, 16 May 2026 09:39:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5031</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>cups isn’t installed by default because it opens a listening port by default.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_3</link>
+        <pubDate>Sat, 16 May 2026 09:38:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5030</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Does disabling panic-on-oops fix the panic issue? There’s a button in the sysmaint panel for that.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727#post_2</link>
+        <pubDate>Fri, 15 May 2026 18:04:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5029</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I have a physical hardware Kicksecure machine that does not have these issues.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_5</link>
+        <pubDate>Fri, 15 May 2026 18:01:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5028</guid>
+      </item>
+      <item>
+        <title>Multimedia keys don&#39;t work</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>I was never able to fix it. The keys don’t work exactly in kicksecure</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multimedia-keys-dont-work/1722#post_5</link>
+        <pubDate>Fri, 15 May 2026 11:48:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5027</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.</p>
+<p>This is useful for better display graphic and graphics related work.</p>
+<p>KS will boot into black screen if only nvidia installed, this is the log:</p>
+<pre><code class="lang-auto">[sysmaint ~]% journalctl -b -1                                                                               
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:43 localhost systemd[2038]: msgcollector-gui.service: Failed with result 'signal'.
+May 14 14:06:43 localhost systemd[2038]: Stopped msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: disconnected from pipewire
+May 14 14:06:43 localhost systemd[2038]: Stopped wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:43 localhost systemd[2038]: wireplumber.service: Consumed 188ms CPU time, 101.8M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopping pipewire.service - PipeWire Multimedia Service...
+May 14 14:06:43 localhost systemd[2038]: Stopped pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:43 localhost systemd[2038]: Removed slice session.slice - User Core Session Slice.
+May 14 14:06:43 localhost systemd[2038]: session.slice: Consumed 348ms CPU time, 119.6M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopped target basic.target - Basic System.
+May 14 14:06:43 localhost systemd[2038]: Stopped target paths.target - Paths.
+May 14 14:06:43 localhost systemd[2038]: Stopped target sockets.target - Sockets.
+May 14 14:06:43 localhost systemd[2038]: Stopped target timers.target - Timers.
+May 14 14:06:43 localhost systemd[2038]: Closed dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:43 localhost systemd[2038]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:43 localhost systemd[2038]: Closed gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:43 localhost systemd[2038]: Closed keyboxd.socket - GnuPG public key management service.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:43 localhost systemd[2038]: Removed slice app.slice - User Application Slice.
+May 14 14:06:43 localhost systemd[2038]: app.slice: Consumed 780ms CPU time, 103.7M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Reached target shutdown.target - Shutdown.
+May 14 14:06:43 localhost systemd[2038]: Finished systemd-exit.service - Exit the Session.
+May 14 14:06:43 localhost systemd[2038]: Reached target exit.target - Exit the Session.
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_unix(systemd-user:session): session closed for user sysmaint
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid eq 0" not met by user "sysmaint"
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid ne 0" was met by user "sysmaint"
+lines 108-141/141 (END)
+</code></pre>
+<p>So there are flags need to be added to make it compatible with discrete mode:</p>
+<p><code>sudo nano /etc/modprobe.d/nvidia-drm.conf</code></p>
+<p>add:</p>
+<p><code>options nvidia-drm modeset=1 fbdev=1</code></p>
+<p>Then regenerate:</p>
+<p><code>sudo dracut --force --regenerate-all</code></p>
+<p>The next reboot will lead to kernel panic, only way to bootup again it remove the flags from grub:</p>
+<p>Press e on grub window, search for the line starting with “linux”, and add to the end of it:</p>
+<p><code>rd.driver.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm modprobe.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm module_blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm systemd.unit=multi-user.target</code></p>
+<p>Then F10.</p>
+<p>After that it will boot up, and you need to remove the added flags and regenerate dracut.</p>
+<p>Note: I have tested that with Debian 13 DVD image with LXQT (default going to be initramfs and xorg) + Nvidia setup as before = it will bootup normally without issues.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727#post_1</link>
+        <pubDate>Fri, 15 May 2026 11:04:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5026</guid>
+      </item>
+      <item>
+        <title>Copy.fail / CVE-2026-31431: Linux kernel local privilege escalation vulnerability and help wanted</title>
+        <dc:creator><![CDATA[@FranklyFlawless]]></dc:creator>
+        <description><![CDATA[ <p>One more:</p>
+<aside class="onebox githubfolder" data-onebox-src="https://github.com/v12-security/pocs/tree/main/fragnesia">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://github.com/v12-security/pocs/tree/main/fragnesia" target="_blank" rel="noopener nofollow ugc">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h3><a href="https://github.com/v12-security/pocs/tree/main/fragnesia" target="_blank" rel="noopener nofollow ugc">pocs/fragnesia at main · v12-security/pocs</a></h3>
+
+
+  <p><span class="label1">poc it like it's hot. Contribute to v12-security/pocs development by creating an account on GitHub.</span></p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Small quote:</p>
+<aside class="quote no-group">
+<blockquote>
+<p>Fragnesia is a universal Linux local privilege escalation exploit, discovered with <a href="https://v12.sh" rel="noopener nofollow ugc">V12</a> by <a href="https://x.com/wcbowling?lang=en" rel="noopener nofollow ugc">William Bowling</a> with the <a href="https://x.com/v12sec" rel="noopener nofollow ugc">V12 team</a>. Fragnesia is a member of the <a href="https://github.com/V4bel/dirtyfrag" rel="noopener nofollow ugc">Dirty Frag</a> vulnerability class. This is a <strong>separate bug</strong> in the ESP/XFRM from dirtyfrag which has received <a href="https://lists.openwall.net/netdev/2026/05/13/79" rel="noopener nofollow ugc">its own patch</a>. However, it is in the same surface and the mitigation is the same as for dirtyfrag.</p>
+</blockquote>
+</aside>
+<ul>
+<li><a href="https://ubuntu.com/blog/fragnesia-linux-vulnerability-fixes-available" class="inline-onebox" rel="noopener nofollow ugc">Fragnesia Linux kernel local privilege escalation vulnerability mitigations | Ubuntu</a></li>
+<li><a href="https://www.cve.org/CVERecord?id=CVE-2026-46300" rel="noopener nofollow ugc">https://www.cve.org/CVERecord?id=CVE-2026-46300</a></li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/copy-fail-cve-2026-31431-linux-kernel-local-privilege-escalation-vulnerability-and-help-wanted/1704#post_5</link>
+        <pubDate>Fri, 15 May 2026 09:11:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5025</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>Try installing KS on external flash/hard drive fresh installation (default settings), should give you the same issue when first booting into sysmaint after installation.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_4</link>
+        <pubDate>Fri, 15 May 2026 07:10:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5024</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>It’s not entirely clear to me what “CUPS with hardening and isolation” would look like. Applying special configuration to CUPS would be likely undesirable in Kicksecure because it would diverge from upstream, in a way that would potentially incur greater maintenance effort. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778743812" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener" title="10:35AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener">Relationship With Upstream</a></h3>
+
+  <p>Kicksecure Relationship with Upstream Projects.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>If you need to print but are also concerned about the security implications, you might be able to install a dedicated Kicksecure or Debian 13 virtual machine with CUPS installed within, then pass through your USB printer to the VM and print from there.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_2</link>
+        <pubDate>Fri, 15 May 2026 03:43:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5023</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <p>Saw this and wanted to chime and say sdwdate from what I noticed so far will try to sync even before connected to a network. Also it appears that failure to sync when switching between live and persistent is more common. The second observation makes me wonder what mode you boot into more?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_3</link>
+        <pubDate>Fri, 15 May 2026 03:02:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5021</guid>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[@anonx230]]></dc:creator>
+        <description><![CDATA[ <p>Hello <img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face_with_smiling_eyes.png?v=15" title=":grinning_face_with_smiling_eyes:" class="emoji" alt=":grinning_face_with_smiling_eyes:" loading="lazy" width="20" height="20"> <img src="https://forums.kicksecure.com/images/emoji/twitter/waving_hand.png?v=15" title=":waving_hand:" class="emoji" alt=":waving_hand:" loading="lazy" width="20" height="20"></p>
+<p>So whats up with the printing situation in kicksecure?</p>
+<pre><code class="lang-auto">[user ~]% apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+[user ~]% 
+</code></pre>
+<p>If its just <code>libcups2t64</code> does this effectively mean at the minimum that CUPS is missing for local printing?</p>
+<p>Why is CUPS not included?</p>
+<p>Too much of an attack surface not worth maintaining for a small % of users?</p>
+<p>CUPS is often reachable over internal networks, and sometimes even the public internet. I have never seem a distro that distributes a hardened version of it. There was some new 2026 CVE’s that maybe you saw that are very similar to the 2024 CVE’s that are on official cups github security advisory section.</p>
+<hr>
+<p>My Debian 13 shows lots of cups packages man that are prob unnecessary for basic printing (no network printing):</p>
+<pre><code class="lang-auto">debian13@localhost:~$ apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+cups-client/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups-core-drivers/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-daemon/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-filters-core-drivers/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-filters/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-ipp-utils/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-pk-helper/stable,unstable,now 0.2.6-2.1 amd64 [installed]
+cups-ppdc/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-server-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups/stable,now 2.4.10-3+deb13u2 amd64 [installed]
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+libcupsfilters1t64/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+libcupsimage2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+printer-driver-hpcups/stable,unstable,now 3.22.10+dfsg0-8.1 amd64 [installed,automatic]
+python3-cups/stable,now 2.0.4-2+b2 amd64 [installed,automatic]
+python3-cupshelpers/stable,unstable,now 1.5.18-4 all [installed,automatic]
+debian13@localhost:~$
+</code></pre>
+<hr>
+<p>Network printing or printing to a remote cups server is like 1% of linux users if any at all lets be honest unless you are enterprise or advanced you are most likely not doing this.</p>
+<p>Currently I have a Brother printer that just worx out of the box on Debian 13. Most modern printers including Brother can use IPP-over-USB (Driverless Printing). Mine I just plugged in USB printer cable and it just worked either the driver was included by default or its using driverless printing.</p>
+<p>I’m just trying evaluate the printing situation in Kicksecures defaults. Modern brands work without needing network access. HP however, the brand has gone down hill tremendously, partly why I switched. Modern HP printers effectively require network access for cloud, updates and BS.</p>
+<p>Due to this fact, most security conscious are not going to mess with HP printers on linux and aren’t going to use a printer connected to a network either. So that makes this fall in the 1% of users again (my opinion).</p>
+<p>Would you say supporting printing in general would be 0.1% of kicksecure user base. Kicksecures wiki page on printing not very clear compared to Whonix’s page. Does anyone even print on Whonix? Again this prob a small % of users.</p>
+<p>My use case when printing is QR codes and things I’m studying.</p>
+<p>Would Kicksecure reconsidering shipping CUPS included with hardening and isolation <img src="https://forums.kicksecure.com/images/emoji/twitter/red_question_mark.png?v=15" title=":red_question_mark:" class="emoji" alt=":red_question_mark:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725#post_1</link>
+        <pubDate>Fri, 15 May 2026 02:55:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5020</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>There shouldn’t be any behavior difference in sdwdate when running on physical hardware as opposed to virtual hardware. Maybe your RTC is set to localtime while your Kicksecure installation expects it to be set to UTC? (I don’t know if that would cause this problem or not, but it kind of sounds plausible.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_2</link>
+        <pubDate>Fri, 15 May 2026 01:49:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5019</guid>
+      </item>
+      <item>
+        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>KS on VM is working good, but KS on direct hardware after fresh installation always suffering of clock gab between real UTC time and KS local time with 4 hours backward in KS case, leading to broken sdwdate (but there is an internet connection).</p>
+<p>Manual time adjustment will fix it but this is impractical.</p>
+<p>Either fixing the issue of why its not catching up or making NTP as fallback mechanism when needed to fix itself.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_1</link>
+        <pubDate>Thu, 14 May 2026 23:46:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5018</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[@Lacekim]]></dc:creator>
+        <description><![CDATA[ <p>Thank you</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607#post_10</link>
+        <pubDate>Tue, 12 May 2026 05:27:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5017</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>Well I just got back to testing on my machine and enabled <code>mullvad log listen</code> to log-level of “trace” and didn’t see anything indicating that only UDP-over-TCP was being set. I even disabled anti-censorship entirely and can connect just fine. <em>This is on Kicksecure host install not a VM</em>.</p>
+<p>Didn’t see any errors about setting src_valid_mark=1 and talpid core firewall or tunnel indicating inefficient permissions in user mode to set this. Only a warning of inefficient permission about ping but this is normal. Unless I didn’t look hard enough I dont think this is the issue?</p>
+<p>If <a class="mention" href="https://forums.kicksecure.com/u/secure">@secure</a> <a class="mention" href="https://forums.kicksecure.com/u/cookie.monster">@cookie.monster</a> <a class="mention" href="https://forums.kicksecure.com/u/lacekim">@Lacekim</a> or someone could provide some more info most importantly.</p>
+<p><em>Is this encountered in Kicksecure Virtual Machines (KVM/Virtualbox/Qubes) or is this on Kicksecure host?</em></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607#post_9</link>
+        <pubDate>Tue, 12 May 2026 04:35:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5016</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="monero-secure" data-post="4" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/monero-secure/48/163_2.png" class="avatar"> monero-secure:</div>
+<blockquote>
+<p>Why not just create a new user profile in<br>
+Firefox that uses 127.0.0.1:4444 as its HTTP/S proxy?</p>
+</blockquote>
+</aside>
+<p>Difficult to guarantee proxy obedience. The browser must not bypass proxy settings. Historically there have been leaks where applications such as browser did not obey proxy settings such as DNS leaks, browser plugins, WebRTC, and whatnot.</p>
+<p>Tor Browser - a browser optimized for use with Tor - does a lot more to protect user’s privacy and anonymity than routing traffic over Tor. References:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/Tor_Browser/Advanced_Users">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778484613" class="site-icon" alt="" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/Tor_Browser/Advanced_Users" target="_blank" rel="noopener" title="12:09PM - 22 February 2026">Whonix – 22 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/425;"><img src="https://www.whonix.org/w/images/e/ed/Toradvanced.jpg?version=639fe403f053c1f9fc48344a315dedaa" class="thumbnail" alt="" width="640" height="425"></div>
+
+<h3><a href="https://www.whonix.org/wiki/Tor_Browser/Advanced_Users" target="_blank" rel="noopener">Tor Browser Advanced Topics</a></h3>
+
+  <p>Tor Browser Adversary Model and Torbutton Design. Custom homepage, configurations and proxy settings. Tor Browser update technical details. Platform-specific issues.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I2P browser development is out-of-scope for Kicksecure. Related:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Privacy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778499182" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener" title="02:23PM - 12 December 2025">Kicksecure – 12 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/d/d4/Privacy_Goals_and_Non-Goals.png?version=c36df86a4b34cee817898b5c367669b6" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Privacy" target="_blank" rel="noopener">Privacy Goals and Non-Goals of Kicksecure</a></h3>
+
+  <p>An overview of the privacy goals and non-goals of Kicksecure, emphasizing its focus on security over privacy and anonymity.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_5</link>
+        <pubDate>Mon, 11 May 2026 21:57:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5015</guid>
+      </item>
+      <item>
+        <title>Multimedia keys don&#39;t work</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>I am using the root version of the system. I have disabled user-sysmaint-split (via the grub menu option)</p>
+<p>The Backlight Tool successfully changes the backlight.<br>
+The labwc settings that I changed: added a second layout and alt+shift to switch the language</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multimedia-keys-dont-work/1722#post_4</link>
+        <pubDate>Mon, 11 May 2026 10:43:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5014</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@monero-secure]]></dc:creator>
+        <description><![CDATA[ <blockquote>
+<p>[… 25 lines elided]</p>
+</blockquote>
+<blockquote>
+<p>Forgive me if I’m wrong on this, but last time I used i2p, I thought<br>
+all I had to do after launching the i2p client was point my browser’s<br>
+HTTP proxy at it. This was pretty trivial in Firefox</p>
+</blockquote>
+<p>This is how I use i2p proxy in Firefox, yes.  Does one really need a<br>
+special browser for that?  Why not just create a new user profile in<br>
+Firefox that uses 127.0.0.1:4444 as its HTTP/S proxy?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_4</link>
+        <pubDate>Mon, 11 May 2026 06:48:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5013</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>only a less-safe C++ implementation is available</p>
+</blockquote>
+</aside>
+<p>Honestly I like i2pd tbh but the Java version is more rich</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>According to <a href="https://librewolf.net/installation/debian/" rel="noopener nofollow ugc">Installation on Debian based systems – LibreWolf</a>, an extrepo is available for Librewolf, which would make it somewhat easy to create a browser-choice plugin for it. Making a plugin for Librewolf + i2p however is much more work as explained above.</p>
+</blockquote>
+</aside>
+<p>Well lets weigh in if including Librewolf installation to browser choice is worth it for starters. The i2p specifics could be discussed more and if anything a wiki documentation about how to set it up.<br>
+A plugin for i2p though would just be including a config file or policy file or both for Librewolf if checked. The maintainability of it though might not be worth the time or cost for Browser Choice.<br>
+If concluded that the final destination decided of not likely to due to the stated reasons and what you mentioned then I can understand. At the minimum installation of Librewolf would be a good add and leave it at that.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Forgive me if I’m wrong on this, but last time I used i2p, I thought all I had to do after launching the i2p client was point my browser’s HTTP proxy at it. This was pretty trivial in Firefox, which Mullvad Browser is based on. I don’t think that requires enterprise policies?</p>
+</blockquote>
+</aside>
+<p>You are correct that it is as simple as changing your browsers proxy setting but let me explain more here. For starters I forgot to mention that when I updated Mullvad Browser (in the past when using with i2p) it changed my DNS setting, one thing of which is <a href="https://mullvad.net/en/help/dns-over-https-and-dns-over-tls#browsers" rel="noopener nofollow ugc">they use DOH by default</a>. Even when you aren’t using the Mullvad VPN you are using DOH which is thier DNS unless you change it.</p>
+<p>I was unsure if DOH settings or other <code>about:config</code> DNS settings but, i2p was leaking DNS queries in my pihole log after a browser update. The policies is to lock the proxy and DNS settings from changing from possible updates or whatever.</p>
+<p>I’m unsure how and when things have changed with Mullvad Browser. I guess I could revisit i2p with Mullvad Browser but currently I have found Librewolf to be best browser choice for dedicated i2p use in my personal experience.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_3</link>
+        <pubDate>Mon, 11 May 2026 03:55:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5012</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>The semi conclusion for me after looking at wiki is ARP and IPv4 settings documented on that page are unlikely to directly cause the UDP-over-TCP issue.</p>
+<p>Mullvad VPN audit states they set <code>net.ipv4.conf.*.arp_ignore=2</code> \<br>
+just like what is already set in Networking documentation.</p>
+<blockquote>
+<p>On Linux we solved the issue by changing the kernel parameter <code>net.ipv4.conf.all.arp_ignore</code> to 2 whenever a VPN tunnel is established. This change was done in PR <span class="hashtag-raw">#7141</span> and is included in the desktop app release version 2024.8.<a href="https://github.com/mullvad/mullvadvpn-app/blob/main/audits/2024-12-10-X41-D-Sec.md#mllvd-cr-24-03-virtual-ip-address-of-tunnel-device-leaks-to-network-adjacent-participant-severity-medium" rel="noopener nofollow ugc">[1]</a></p>
+</blockquote>
+<p>I noticed that reverse path filtering (<code>rp_filter</code>) is <a href="https://github.com/Kicksecure/security-misc/blob/master/usr/lib/sysctl.d/990-security-misc.conf%23security-misc-shared#L475-L482" rel="noopener nofollow ugc">set on the distro</a>, and while I initially doubt it affects wiregaurd interfaces, the Mullvad documentation explicitly mentions it in relation to <code>src_valid_mark</code>.</p>
+<blockquote>
+<p><strong>TALPID_FIREWALL_DONT_SET_SRC_VALID_MARK</strong> - Set this variable to 1 to stop the daemon from setting the <code>net.ipv4.conf.all.src_valid_mark</code> kernel parameter to 1 on Linux when a tunnel is established. The kernel config parameter is set by default, because otherwise strict reverse path filtering may prevent relay traffic from reaching the daemon. If <code>rp_filter</code> is set to 1 on the interface that will be receiving relay traffic, and <code>src_valid_mark</code> is not set to 1, the daemon will not be able to receive relay traffic.<a href="https://github.com/mullvad/mullvadvpn-app#environment-variables-used-by-the-service" rel="noopener nofollow ugc">[2]</a></p>
+</blockquote>
+<p>This raises the question: Is <code>src_valid_mark=1</code> not being set correctly for Mullvad on KickSecure leading to UDP-over-TCP only?</p>
+<p>When I get in front of my workstation, I will check if this specific kernel parameter is the culprit to all this minutia. I’ll check my settings cause don’t recall experiencing this forced “UDP-over-TCP” personally.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607#post_8</link>
+        <pubDate>Mon, 11 May 2026 03:05:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5011</guid>
+      </item>
+      <item>
+        <title>Multimedia keys don&#39;t work</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>It might be worthwhile to look at the default labwc configuration in Kicksecure:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/share/desktop-config-dist/labwc/rc.xml">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/share/desktop-config-dist/labwc/rc.xml" target="_blank" rel="noopener">github.com/Kicksecure/desktop-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/share/desktop-config-dist/labwc/rc.xml" target="_blank" rel="noopener">usr/share/desktop-config-dist/labwc/rc.xml</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/share/desktop-config-dist/labwc/rc.xml" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-xml">&lt;?xml version="1.0"?&gt;
+
+&lt;!--
+  Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+  See the file COPYING for copying conditions.
+--&gt;
+
+&lt;!--
+  This file contains all supported config elements &amp; attributes with
+  default values. Some LXQt specific settings have been added. You may have a
+  updated version in /usr/share/docs/labwc/rc.xml.all
+--&gt;
+
+&lt;labwc_config&gt;
+
+  &lt;core&gt;
+    &lt;decoration&gt;server&lt;/decoration&gt;
+    &lt;gap&gt;0&lt;/gap&gt;
+    &lt;adaptiveSync&gt;no&lt;/adaptiveSync&gt;
+    &lt;allowTearing&gt;no&lt;/allowTearing&gt;
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/share/desktop-config-dist/labwc/rc.xml" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(This is a tweaked version of the configuration for labwc in upstream lxqt-wayland-session.)</p>
+<aside class="quote no-group" data-username="goose4" data-post="2" data-topic="1722">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>amixer (from alsa-utils)</p>
+</blockquote>
+</aside>
+<p>Kicksecure uses Pipewire and pipewire-pulse to provide audio, amixer might not be present. That’s what the labwc configuration is looking for, so that may well be the problem.</p>
+<aside class="quote no-group" data-username="goose4" data-post="2" data-topic="1722">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>brightnessctl</p>
+</blockquote>
+</aside>
+<p>brightnessctl (and most other brightness utilities) does not work on Kicksecure if you have <code>user-sysmaint-split</code> installed (it’s installed by default). These utilities have to run code as root to reconfigure the backlight, and <code>user-sysmaint-split</code> blocks this. A Kicksecure-specific screen brightness utility is provided which works around this limitation, and our labwc configuration is set to use it:</p>
+<pre><code class="lang-auto">    &lt;keybind key="XF86_MonBrightnessUp"&gt;
+      &lt;action name="Execute" command="/usr/bin/backlight-tool-dist-agent inc" /&gt;
+    &lt;/keybind&gt;
+    &lt;keybind key="XF86_MonBrightnessDown"&gt;
+      &lt;action name="Execute" command="/usr/bin/backlight-tool-dist-agent dec" /&gt;
+    &lt;/keybind&gt;
+</code></pre>
+<p>If the keys aren’t working, try configuring the backlight by clicking on the Start Menu → Preferences → Backlight Tool. If you can configure the backlight with this, it’s possible your system’s brightness keys are sending a weird keycode that labwc doesn’t recognize. If you can’t configure the backlight, either your hardware doesn’t support it, or there may be a bug in Kicksecure’s backlight tool.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multimedia-keys-dont-work/1722#post_3</link>
+        <pubDate>Mon, 11 May 2026 02:17:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5010</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="goose4" data-post="1" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>My 2¢ on the matter is can a dedicated browser for i2p be added?</p>
+</blockquote>
+</aside>
+<p>There was some work on getting a Tor Browser variant that would automatically interact with i2p in the past, but it seems to have stalled. See <a href="https://github.com/Kicksecure/tb-updater/blob/master/usr/bin/update-i2pbrowser" class="inline-onebox">tb-updater/usr/bin/update-i2pbrowser at master · Kicksecure/tb-updater · GitHub</a>, but note that last time I tried to use this, it “didn’t work” (don’t remember the exact error messages but I believe I couldn’t even launch the browser).</p>
+<p>One challenge with i2p is that the official Java client is not present in Debian, only a less-safe C++ implementation is available. The Java client is packaged in a way similar to Tor Browser (tarball that has to be extracted to disk, then the software within automatically updates itself), which may make it a serious pain to integrate into Kicksecure and/or Whonix. (Tor Browser uses this distribution method, and it requires a massive amount of code to download and install it safely.) Introducing an i2p-specific browser would require some way of actually installing i2p.</p>
+<aside class="quote no-group" data-username="goose4" data-post="1" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>Any chance of including Librewolf for this criteria?</p>
+</blockquote>
+</aside>
+<p>Unsure, see:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/browser-choice#criteria_for_inclusion_into_browser_choice">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778398212" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/browser-choice#criteria_for_inclusion_into_browser_choice" target="_blank" rel="noopener" title="10:35AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/browser-choice#criteria_for_inclusion_into_browser_choice" target="_blank" rel="noopener">criteria for inclusion into browser choice - Browser Choice</a></h3>
+
+  <p>Design and implementation overview of the browser selection interface, featuring randomized presentation, plugin architecture, and inclusion criteria.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>According to <a href="https://librewolf.net/installation/debian/" class="inline-onebox">Installation on Debian based systems – LibreWolf</a>, an extrepo is available for Librewolf, which would make it somewhat easy to create a browser-choice plugin for it. Making a plugin for Librewolf + i2p however is much more work as explained above.</p>
+<aside class="quote no-group" data-username="goose4" data-post="1" data-topic="1723">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p><strong>P.S.</strong> - <em>If Mullvad Browser can be used currently with custom prefs and enterprise policies to force i2p settings let me know how you got it to work in the comments thx</em> <img src="https://forums.kicksecure.com/images/emoji/twitter/woozy_face.png?v=15" title=":woozy_face:" class="emoji" alt=":woozy_face:" loading="lazy" width="20" height="20"></p>
+</blockquote>
+</aside>
+<p>Forgive me if I’m wrong on this, but last time I used i2p, I thought all I had to do after launching the i2p client was point my browser’s HTTP proxy at it. This was pretty trivial in Firefox, which Mullvad Browser is based on. I don’t think that requires enterprise policies?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_2</link>
+        <pubDate>Mon, 11 May 2026 02:10:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5009</guid>
+      </item>
+      <item>
+        <title>Multimedia keys don&#39;t work</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>You’re reporting that multimedia keys (volume, display brightness, etc.) worked in the Kicksecure Live CD but do not work after installation? Uhh what version is the Live CD on?</p>
+<p>labwc states it uses built-in default keybindings for multimedia keys  according to the documentation but, I’m not familiar with labwc so bare with me as I try to help or attempt to.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://labwc.github.io/labwc-config.5.html">
+  <header class="source">
+      <img src="https://labwc.github.io/img/labwc.png" class="site-icon" alt="" width="200" height="200">
+
+      <a href="https://labwc.github.io/labwc-config.5.html" target="_blank" rel="noopener nofollow ugc">labwc.github.io</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:199/61;"><img src="https://labwc.github.io/img/labwc3-with-text.png" class="thumbnail" alt="" width="199" height="61"></div>
+
+<h3><a href="https://labwc.github.io/labwc-config.5.html" target="_blank" rel="noopener nofollow ugc">labwc</a></h3>
+
+  <p>An Openbox inspired wlroots-based stacking Wayland compositor.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Huh I wonder if amixer (from alsa-utils), pactl (from pulseaudio-utils or pipewire-pulse), or brightnessctl is missing on Kicksecure?</p>
+<p>Can you check if those packages are missing and if they exist in the Live version you stated it worked before you installed?</p>
+<p><code>apt list --installed 2&gt;/dev/null | grep -E 'alsa-utils|brightnessctl|pulseaudio|pipewire'</code></p>
+<p><code>apt list --installed | grep pipewire</code></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multimedia-keys-dont-work/1722#post_2</link>
+        <pubDate>Mon, 11 May 2026 01:15:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5008</guid>
+      </item>
+      <item>
+        <title>Adding Librewolf to Browser Choice for I2P Use?</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>Was pondering what browser is best for using with i2p? You know that despite there not being a dedicated browser for i2p like there is Tor Browser with Tor.</p>
+<p>Constantly in discussions online I hear Librewolf being used as a dedicated i2p browser and I think this is valid. In the not so distant past I have tried using Tor Browser with i2p. However I felt the concern for opsec mistakes or mis-configurations was not worth changing my Tor Browser.</p>
+<p>Then I was ecstatic when Mullvad Browser was released but they now (last I tried) they block using policies and or custom prefs so this feels moot.</p>
+<p>My 2¢ on the matter is can a dedicated browser for i2p be added?</p>
+<p>Any chance of including Librewolf for this criteria?</p>
+<p>–<br>
+<strong>P.S.</strong>  - <em>If Mullvad Browser can be used currently with custom prefs and enterprise policies to force i2p settings let me know how you got it to work in the comments thx</em> <img src="https://forums.kicksecure.com/images/emoji/twitter/woozy_face.png?v=15" title=":woozy_face:" class="emoji" alt=":woozy_face:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/adding-librewolf-to-browser-choice-for-i2p-use/1723#post_1</link>
+        <pubDate>Mon, 11 May 2026 01:12:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5007</guid>
+      </item>
+      <item>
+        <title>Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</title>
+        <dc:creator><![CDATA[@goose4]]></dc:creator>
+        <description><![CDATA[ <p>Could someone here add some clarity if this encountered specifically in Kicksecure VM’s / Qubes Templates or is this issue experienced on host installation?</p>
+<p>I’m using Mullvad VPN on host Kicksecure and I dont have this issue. I can double check what my settings are but I think standard UDP works for me.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607#post_7</link>
+        <pubDate>Mon, 11 May 2026 00:42:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5006</guid>
+      </item>
+      <item>
+        <title>Multimedia keys don&#39;t work</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>Multimedia keyboard keys in kicksecure do not work: sound, display brightness, etc.<br>
+I remember for sure that they worked in the live cd version of kicksecure, but now they are not functioning in the installed system. How can this be fixed?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multimedia-keys-dont-work/1722#post_1</link>
+        <pubDate>Sun, 10 May 2026 18:30:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5005</guid>
+      </item>
+      <item>
+        <title>Copy.fail / CVE-2026-31431: Linux kernel local privilege escalation vulnerability and help wanted</title>
+        <dc:creator><![CDATA[@init38]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://security-tracker.debian.org/tracker/CVE-2026-43284">
+  <header class="source">
+
+      <a href="https://security-tracker.debian.org/tracker/CVE-2026-43284" target="_blank" rel="noopener nofollow ugc">security-tracker.debian.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://security-tracker.debian.org/tracker/CVE-2026-43284" target="_blank" rel="noopener nofollow ugc">CVE-2026-43284</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/copy-fail-cve-2026-31431-linux-kernel-local-privilege-escalation-vulnerability-and-help-wanted/1704#post_4</link>
+        <pubDate>Sun, 10 May 2026 03:36:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5004</guid>
+      </item>
+      <item>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
+        <dc:creator><![CDATA[@init38]]></dc:creator>
+        <description><![CDATA[ <p>Should’ve searched for this first before posting. Never saw the baremetal-server version in the past so I thought maybe it was related to work on RPI support.</p>
+<p>That would be utter ignorant of me now that I re-think it though since any computer can be a server. So I assume its for this and changed optimized settings for VPS morphing.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_7</link>
+        <pubDate>Sun, 10 May 2026 03:14:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5003</guid>
+      </item>
+      <item>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Correct.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_6</link>
+        <pubDate>Sun, 10 May 2026 02:59:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5002</guid>
+      </item>
+      <item>
+        <title>Distromorph a raspberry pi (raspbian, Pi OS) into kicksecure?</title>
+        <dc:creator><![CDATA[@init38]]></dc:creator>
+        <description><![CDATA[ <p>So <code>kicksecure-baremetal-server</code> has not been tested on Raspberry Pi?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/distromorph-a-raspberry-pi-raspbian-pi-os-into-kicksecure/1109#post_5</link>
+        <pubDate>Sun, 10 May 2026 02:55:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5001</guid>
+      </item>
+      <item>
+        <title>Browser installation does not work</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/browser-choice/commit/956ef92ef388c6e4499dc51dc082b6c9faedc2bc">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/browser-choice/commit/956ef92ef388c6e4499dc51dc082b6c9faedc2bc" target="_blank" rel="noopener">github.com/ArrayBolt3/browser-choice</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/browser-choice/commit/956ef92ef388c6e4499dc51dc082b6c9faedc2bc" target="_blank" rel="noopener">Fix logic bug that prevented use in unrestricted admin mode</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-05-10" data-time="02:48:00" data-timezone="UTC">02:48AM - 10 May 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 3 files with 7 additions and 5 deletions">
+        <a href="https://github.com/ArrayBolt3/browser-choice/commit/956ef92ef388c6e4499dc51dc082b6c9faedc2bc" target="_blank" rel="noopener">
+          <span class="added">+7</span>
+          <span class="removed">-5</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/browser-installation-does-not-work/1720#post_4</link>
+        <pubDate>Sun, 10 May 2026 02:54:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5000</guid>
+      </item>
+      <item>
+        <title>[multi-boot] / [dual-boot] - Kicksecure won&#39;t start - loading initial ramdisk</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="SpecialBook" data-post="14" data-topic="1699">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/7feea3/48.png" class="avatar"> SpecialBook:</div>
+<blockquote>
+<p>I have set GRUB_DISABLE_OS_PROBER-false<br>
+But grub kicksecure does not show fedora in the list.</p>
+</blockquote>
+</aside>
+<p>Not sure what to do then. Might be a limitation of Fedora or your particular Fedora installation.</p>
+<aside class="quote no-group" data-username="SpecialBook" data-post="14" data-topic="1699">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/7feea3/48.png" class="avatar"> SpecialBook:</div>
+<blockquote>
+<p>GRUB_CMDLINE_LINUX=“$(echo “$GRUB_CMDLINE_LINUX” | str_replace “efi=disable_early_pci_dma” “””)“”<br>
+This helped disable the setting and fixed the system startup.</p>
+</blockquote>
+</aside>
+<p>Great!</p>
+<aside class="quote no-group" data-username="SpecialBook" data-post="14" data-topic="1699">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/7feea3/48.png" class="avatar"> SpecialBook:</div>
+<blockquote>
+<p>RDSEED32 is broken. Disabling the corresponding CPUID bit<br>
+Should I ignore this error? bios updated</p>
+</blockquote>
+</aside>
+<p>If the system is otherwise functional, yes.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multi-boot-dual-boot-kicksecure-wont-start-loading-initial-ramdisk/1699#post_15</link>
+        <pubDate>Sun, 10 May 2026 02:53:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4999</guid>
+      </item>
+      <item>
+        <title>Install Mullvad GUI on Kicksecure VM on KVM</title>
+        <dc:creator><![CDATA[@init38]]></dc:creator>
+        <description><![CDATA[ <p>Also take a look at this</p>
+<blockquote>
+<p><a href="https://forums.kicksecure.com/t/mullvad-vpn-only-working-with-udp-over-tcp-on-kicksecure-17-18/1607" class="inline-onebox">Mullvad VPN only working with UDP-over-TCP on Kicksecure 17/18</a></p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/install-mullvad-gui-on-kicksecure-vm-on-kvm/1721#post_3</link>
+        <pubDate>Sun, 10 May 2026 02:47:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4998</guid>
+      </item>
+      <item>
+        <title>Install Mullvad GUI on Kicksecure VM on KVM</title>
+        <dc:creator><![CDATA[@init38]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://haseebmajid.dev/posts/2023-10-21-til-how-to-fix-networking-issues-in-a-libvirt-vm-and-mullvad-vpn/">
+  <header class="source">
+      <img src="https://haseebmajid.dev/favicon.ico" class="site-icon" alt="" width="48" height="48">
+
+      <a href="https://haseebmajid.dev/posts/2023-10-21-til-how-to-fix-networking-issues-in-a-libvirt-vm-and-mullvad-vpn/" target="_blank" rel="noopener nofollow ugc" title="12:00AM - 21 October 2023">Haseeb Majid – 21 Oct 23</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/361;"><img src="https://haseebmajid.dev/posts/2023-10-21-til-how-to-fix-networking-issues-in-a-libvirt-vm-and-mullvad-vpn/images/cover.png" class="thumbnail" alt="" width="690" height="361"></div>
+
+<h3><a href="https://haseebmajid.dev/posts/2023-10-21-til-how-to-fix-networking-issues-in-a-libvirt-vm-and-mullvad-vpn/" target="_blank" rel="noopener nofollow ugc">TIL: How to Fix Networking Issues in a Libvirt VM and Mullvad VPN | Haseeb Majid</a></h3>
+
+  <p>TIL: How to Fix Networking Issues in a Libvirt VM and Mullvad VPN
+Recently, I was trying to run a libvirt virtual machine, created using virt-manager.
+The VM was running NixOS and somehow no matter what I did it would not connect to the internet.
+I...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p><a href="https://discussion.fedoraproject.org/t/qemu-kvm-vm-loses-network-access-when-local-network-sharing-is-disabled-in-mullvad-vpn/146579" rel="noopener nofollow ugc">https://discussion.fedoraproject.org/t/qemu-kvm-vm-loses-network-access-when-local-network-sharing-is-disabled-in-mullvad-vpn/146579</a></p>
+</blockquote>
+<p>See if enabling this in mullvad settings works.</p>
+<p>If that is not it then I would look at look at what the NAT setting is in “Virtual Networks” tab next to Storage where you install the VM’s. If the VM network interface is configured as macvtap or bridge, the traffic won’t go through the host OS VPN. The default NAT setting should be fine in KVM, unless you changed it.</p>
+<p>Additionally I want to preface that I believe enabling local network sharing to be safe. Unless if you feel its not, it would require a setup of more complexity that I don’t know much about.</p>
+<p>See if this fixes the issue.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/install-mullvad-gui-on-kicksecure-vm-on-kvm/1721#post_2</link>
+        <pubDate>Sun, 10 May 2026 02:47:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4997</guid>
+      </item>
+      <item>
+        <title>Browser installation does not work</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Just tested on my end, was able to reproduce the issue. This is the result of a logic bug in browser-choice. I’ll create a fix.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/browser-installation-does-not-work/1720#post_3</link>
+        <pubDate>Sun, 10 May 2026 01:58:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4996</guid>
+      </item>
+      <item>
+        <title>Install Mullvad GUI on Kicksecure VM on KVM</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p>Hey! I have been trying to install Mullvad vpn on my Kicksecure VM for a while but I dont know how to get It to work! I managed to install the gui and mullvad pops upp but It only says “Connecting to mullvad system service “unable to contact the mullvad system service”</p>
+<p>Anyone know what Im doing wrong? Thanks!!<img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/5c813d18ca594f9f736cb4d174c13cbdb72357a3.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/5c813d18ca594f9f736cb4d174c13cbdb72357a3" title=""><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/5c813d18ca594f9f736cb4d174c13cbdb72357a3_2_690x288.jpeg" alt="" data-base62-sha1="dckOPqZSvc4dCLm7CK9XvAYF5OX" width="690" height="288" role="presentation" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/5c813d18ca594f9f736cb4d174c13cbdb72357a3_2_690x288.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/5c813d18ca594f9f736cb4d174c13cbdb72357a3_2_1035x432.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/5c813d18ca594f9f736cb4d174c13cbdb72357a3_2_1380x576.jpeg 2x" data-dominant-color="595F8E"></a></div><p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/install-mullvad-gui-on-kicksecure-vm-on-kvm/1721#post_1</link>
+        <pubDate>Sat, 09 May 2026 14:18:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4994</guid>
+      </item>
+      <item>
+        <title>[multi-boot] / [dual-boot] - Kicksecure won&#39;t start - loading initial ramdisk</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>I have set GRUB_DISABLE_OS_PROBER-false<br>
+But grub kicksecure does not show fedora in the list.</p>
+<hr>
+<p>GRUB_CMDLINE_LINUX=“$(echo “$GRUB_CMDLINE_LINUX” | str_replace “efi=disable_early_pci_dma” “””)“”<br>
+This helped disable the setting and fixed the system startup.</p>
+<hr>
+<p>RDSEED32 is broken. Disabling the corresponding CPUID bit<br>
+Should I ignore this error? bios updated</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/multi-boot-dual-boot-kicksecure-wont-start-loading-initial-ramdisk/1699#post_14</link>
+        <pubDate>Sat, 09 May 2026 09:07:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4993</guid>
+      </item>
+      <item>
+        <title>Browser installation does not work</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p>I am booted into persistent mode (root).<br>
+I run the browser choice tool, the internet works, I select any browser but the option to select the installation is not available</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/79197504b3b3344e08e20f8e6abd3adcb0b69252.png" data-download-href="https://forums.kicksecure.com/uploads/default/79197504b3b3344e08e20f8e6abd3adcb0b69252" title="1"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/79197504b3b3344e08e20f8e6abd3adcb0b69252_2_690x414.png" alt="1" data-base62-sha1="hhijyQhRizI82ed0S5kTuDUg0G6" width="690" height="414" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/79197504b3b3344e08e20f8e6abd3adcb0b69252_2_690x414.png, https://forums.kicksecure.com/uploads/default/optimized/1X/79197504b3b3344e08e20f8e6abd3adcb0b69252_2_1035x621.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/79197504b3b3344e08e20f8e6abd3adcb0b69252.png 2x" data-dominant-color="E0E1E3"></a></div><p></p>
+<p>Was able to install via the instructions from the wiki</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Mullvad_Browser">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778311812" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener nofollow ugc" title="11:20AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Mullvad_Browser" target="_blank" rel="noopener nofollow ugc">Mullvad Browser</a></h3>
+
+  <p>How to install Mullvad Browser in Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/browser-installation-does-not-work/1720#post_1</link>
+        <pubDate>Sat, 09 May 2026 08:56:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-4992</guid>
+      </item>
+  </channel>
+</rss>

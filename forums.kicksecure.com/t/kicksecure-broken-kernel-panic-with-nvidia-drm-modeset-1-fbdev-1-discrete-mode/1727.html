@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode) - Development - Kicksecure Forums</title>
+    <meta name="description" content="There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS. 
+This is useful for better display graphic and grap&amp;hellip;">
+    <meta name="generator" content="Discourse 2026.1.3 - https://github.com/discourse/discourse version b3f024ce9587e678216892cbd967201b2450e197">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1727.html" />
+
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_2398ec688c4e74ae2d12e2d0ec13359a211cbb9e.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_2398ec688c4e74ae2d1?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="../../stylesheets/mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile"  />
+  <link href="../../stylesheets/desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="../../stylesheets/checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="../../stylesheets/discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="../../stylesheets/discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="../../stylesheets/discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="../../stylesheets/discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="../../stylesheets/discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="../../stylesheets/discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="../../stylesheets/discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="../../stylesheets/discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="../../stylesheets/docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="../../stylesheets/footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="../../stylesheets/poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="../../stylesheets/discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-solved_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-topic-voting_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="../../stylesheets/poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e25914788.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e2591478861cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+    <link href="../../stylesheets/mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d.css_%3b%20filename_%3dUTF-8%27%27mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="3" data-theme-name="graceful"/>
+    <link href="../../stylesheets/desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a2215.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a221561cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="qxarTDudZJXrhg4bvBjNnWDFd"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)&#39;" href="1727.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727" />
+<meta property="og:title" content="Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)" />
+<meta name="twitter:title" content="Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)" />
+<meta property="og:description" content="There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.  This is useful for better display graphic and graphics related work.  KS will boot into black screen if only nvidia installed, this is the log:  [sysmaint ~]% journalctl -b -1                                                                                Hint: You are currently not seeing messages from other users and the system..." />
+<meta name="twitter:description" content="There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.  This is useful for better display graphic and graphics related work.  KS will boot into black screen if only nvidia installed, this is the log:  [sysmaint ~]% journalctl -b -1                                                                                Hint: You are currently not seeing messages from other users and the system..." />
+<meta property="og:article:section" content="Development" />
+<meta property="og:article:section:color" content="25AAE2" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="9 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="6 ❤" />
+<meta property="article:published_time" content="2026-05-15T11:04:22+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1727.html">Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='Kicksecure broken (kernel panic) with nvidia-drm modeset=1 fbdev=1 (discrete mode)'>
+      <link itemprop='url' href='1727.html'>
+      <meta itemprop='datePublished' content='2026-05-15T11:04:22Z'>
+        <meta itemprop='articleSection' content='Development'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1727.html">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2026-05-15T11:04:22Z' class='post-time'>
+                    May 15, 2026, 11:04am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-05-15T11:04:22Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>There are PCs were they have the option to boot with dGPU (e.g Nvidia) directly from the BIOS (called Discrete mode) instead of iGPU (CPU) called Hybrid Mode from BIOS.</p>
+<p>This is useful for better display graphic and graphics related work.</p>
+<p>KS will boot into black screen if only nvidia installed, this is the log:</p>
+<pre><code class="lang-auto">[sysmaint ~]% journalctl -b -1                                                                               
+Hint: You are currently not seeing messages from other users and the system.
+      Users in groups 'adm', 'systemd-journal' can see all messages.
+      Pass -q to turn off this notice.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd-xdg-autostart-generator[2049]: /etc/xdg/autostart/lxqt-panel.desktop:9: Key Name was defined multiple times, igno&gt;
+May 14 14:06:25 localhost systemd[2038]: Queued start job for default target default.target.
+May 14 14:06:25 localhost systemd[2038]: Created slice app.slice - User Application Slice.
+May 14 14:06:25 localhost systemd[2038]: Created slice session.slice - User Core Session Slice.
+May 14 14:06:25 localhost systemd[2038]: Reached target paths.target - Paths.
+May 14 14:06:25 localhost systemd[2038]: Reached target timers.target - Timers.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.socket - D-Bus User Message Bus Socket...
+May 14 14:06:25 localhost systemd[2038]: Listening on dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting gcr-ssh-agent.socket - GCR ssh-agent wrapper...
+May 14 14:06:25 localhost systemd[2038]: Listening on gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web bro&gt;
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:25 localhost systemd[2038]: Starting gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:25 localhost systemd[2038]: Listening on keyboxd.socket - GnuPG public key management service.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Listening on pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:25 localhost systemd[2038]: Listening on dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:25 localhost systemd[2038]: Listening on gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:25 localhost systemd[2038]: Listening on gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:25 localhost systemd[2038]: Reached target sockets.target - Sockets.
+May 14 14:06:25 localhost systemd[2038]: Reached target basic.target - Basic System.
+May 14 14:06:25 localhost systemd[2038]: Starting dbus.service - D-Bus User Message Bus...
+May 14 14:06:25 localhost systemd[2038]: Starting fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:25 localhost systemd[2038]: Started pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:25 localhost systemd[2038]: Started filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:25 localhost systemd[2038]: Starting usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:25 localhost systemd[2038]: Started wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:25 localhost systemd[2038]: Started pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:25 localhost systemd[2038]: Started dbus.service - D-Bus User Message Bus.
+May 14 14:06:25 localhost systemd[2038]: Started fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:25 localhost systemd[2038]: Started usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:25 localhost systemd[2038]: Reached target default.target - Main User Target.
+May 14 14:06:25 localhost systemd[2038]: Startup finished in 255ms.
+May 14 14:06:25 localhost wireplumber[2075]: wp-internal-comp-loader: Loading profile 'main'
+May 14 14:06:25 localhost usbguard-notifier[2094]: Connection has been established
+May 14 14:06:26 localhost wireplumber[2075]: spa.bluez5: BlueZ system service is not available
+May 14 14:06:26 localhost wireplumber[2075]: wp-device: SPA handle 'api.libcamera.enum.manager' could not be loaded; is it installed?
+May 14 14:06:26 localhost wireplumber[2075]: s-monitors-libcamera: PipeWire's libcamera SPA plugin is missing or broken. Some camera types may not &gt;
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:27 localhost systemd[2038]: Starting xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:27 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.impl.portal.Permis&gt;
+May 14 14:06:27 localhost systemd[2038]: Started xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:29 localhost systemd[2038]: Starting livecheck.service - Live status monitor (user service)...
+May 14 14:06:29 localhost systemd[2038]: Starting sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:29 localhost systemd[2038]: Starting updatecheck.service - System update checker (user service)...
+May 14 14:06:29 localhost systemd[2038]: Started wlr-resize-watcher.service - wlr-resize-watcher dynamic screen resolution adjustment.
+May 14 14:06:29 localhost systemd[2038]: Starting msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:29 localhost systemd[2038]: Started livecheck.service - Live status monitor (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: start.
+May 14 14:06:29 localhost systemd[2038]: Started updatecheck.service - System update checker (user service).
+May 14 14:06:29 localhost updatecheck-daemon[2574]: /usr/libexec/systemcheck/updatecheck-daemon: INFO: First start. Therefore waiting for 2 minutes&gt;
+May 14 14:06:29 localhost systemd[2038]: Finished sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:30 localhost spice-vdagent[2547]: vdagent virtio channel /dev/virtio-ports/com.redhat.spice.0 does not exist, exiting
+May 14 14:06:30 localhost systemd[2038]: Started msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Deskt&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal.service - Portal service...
+May 14 14:06:30 localhost livecheck[2571]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost livecheck[2571]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost livecheck[2571]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the ap&gt;
+May 14 14:06:30 localhost livecheck[2571]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, waylan&gt;
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Main process exited, code=dumped, status=6/ABRT
+May 14 14:06:30 localhost systemd[2038]: livecheck.service: Failed with result 'core-dump'.
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.portal.Docum&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:30 localhost sdwdate-gui[2593]: Failed to create wl_display (No such file or directory)
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Successfully activated service 'org.freedesktop.portal.Documents'
+May 14 14:06:30 localhost systemd[2038]: Started xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:30 localhost sdwdate-gui[2593]: qt.qpa.plugin: Could not load the Qt platform plugin "wayland" in "" even though it was found.
+May 14 14:06:30 localhost sdwdate-gui[2593]: This application failed to start because no Qt platform plugin could be initialized. Reinstalling the &gt;
+May 14 14:06:30 localhost sdwdate-gui[2593]: Available platform plugins are: eglfs, linuxfb, minimal, minimalegl, offscreen, vnc, wayland-egl, wayl&gt;
+May 14 14:06:30 localhost xdg-desktop-por[2616]: Choosing gtk.portal for org.freedesktop.impl.portal.Lockdown as a last-resort fallback
+May 14 14:06:30 localhost dbus-daemon[2067]: [session uid=1001 pid=2067 pidfd=5] Activating via systemd: service name='org.freedesktop.impl.portal.&gt;
+May 14 14:06:30 localhost systemd[2038]: Starting xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation)...
+May 14 14:06:30 localhost wlr-resize-watcher[2575]: INFO: Running on physical hardware, exiting.
+May 14 14:06:30 localhost xdg-desktop-por[2649]: cannot open display: 
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Main process exited, code=exited, status=1/FAILURE
+May 14 14:06:30 localhost systemd[2038]: xdg-desktop-portal-gtk.service: Failed with result 'exit-code'.
+May 14 14:06:30 localhost systemd[2038]: Failed to start xdg-desktop-portal-gtk.service - Portal service (GTK/GNOME implementation).
+May 14 14:06:42 localhost systemd[2038]: Activating special unit exit.target...
+May 14 14:06:42 localhost systemd[2038]: Stopped target default.target - Main User Target.
+May 14 14:06:42 localhost systemd[2038]: Stopping filter-chain.service - PipeWire filter chain daemon...
+May 14 14:06:42 localhost systemd[2038]: Stopping fm-shim.service - org.freedesktop.FileManager1 handler...
+May 14 14:06:42 localhost systemd[2038]: Stopping msgcollector-gui.service - msgcollector msgdispatcher...
+May 14 14:06:42 localhost systemd[2038]: Stopping pipewire-pulse.service - PipeWire PulseAudio...
+May 14 14:06:42 localhost systemd[2038]: Stopping sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface...
+May 14 14:06:42 localhost systemd[2038]: Stopping updatecheck.service - System update checker (user service)...
+May 14 14:06:42 localhost systemd[2038]: Stopping usbguard-notifier.service - USBGuard Notifier...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-document-portal.service - flatpak document portal service...
+May 14 14:06:42 localhost systemd[2038]: Stopping xdg-permission-store.service - sandboxed app permission store...
+May 14 14:06:42 localhost systemd[2038]: Stopped fm-shim.service - org.freedesktop.FileManager1 handler.
+May 14 14:06:42 localhost systemd[2038]: Stopped filter-chain.service - PipeWire filter chain daemon.
+May 14 14:06:42 localhost systemd[2038]: Stopped pipewire-pulse.service - PipeWire PulseAudio.
+May 14 14:06:42 localhost systemd[2038]: Stopped usbguard-notifier.service - USBGuard Notifier.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-permission-store.service - sandboxed app permission store.
+May 14 14:06:42 localhost systemd[2038]: Stopped updatecheck.service - System update checker (user service).
+May 14 14:06:42 localhost systemd[2038]: msgcollector-gui.service: Main process exited, code=killed, status=9/KILL
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-desktop-portal.service - Portal service.
+May 14 14:06:42 localhost systemd[2038]: Stopped sdwdate-gui.service - Secure Distributed Web Date Graphical User Interface.
+May 14 14:06:42 localhost systemd[2038]: Stopped xdg-document-portal.service - flatpak document portal service.
+May 14 14:06:42 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; DBus connection closed: Underlying GIOStream retu&gt;
+May 14 14:06:42 localhost systemd[2038]: Stopping dbus.service - D-Bus User Message Bus...
+May 14 14:06:42 localhost systemd[2038]: Stopping wireplumber.service - Multimedia Service Session Manager...
+May 14 14:06:43 localhost wireplumber[2075]: m-dbus-connection: &lt;WpDBusConnection:0x5af2def97430&gt; Trying to reconnect after core sync
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: stopped by signal: Terminated
+May 14 14:06:43 localhost systemd[2038]: Stopped dbus.service - D-Bus User Message Bus.
+May 14 14:06:43 localhost systemd[2038]: msgcollector-gui.service: Failed with result 'signal'.
+May 14 14:06:43 localhost systemd[2038]: Stopped msgcollector-gui.service - msgcollector msgdispatcher.
+May 14 14:06:43 localhost wireplumber[2075]: wireplumber: disconnected from pipewire
+May 14 14:06:43 localhost systemd[2038]: Stopped wireplumber.service - Multimedia Service Session Manager.
+May 14 14:06:43 localhost systemd[2038]: wireplumber.service: Consumed 188ms CPU time, 101.8M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopping pipewire.service - PipeWire Multimedia Service...
+May 14 14:06:43 localhost systemd[2038]: Stopped pipewire.service - PipeWire Multimedia Service.
+May 14 14:06:43 localhost systemd[2038]: Removed slice session.slice - User Core Session Slice.
+May 14 14:06:43 localhost systemd[2038]: session.slice: Consumed 348ms CPU time, 119.6M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Stopped target basic.target - Basic System.
+May 14 14:06:43 localhost systemd[2038]: Stopped target paths.target - Paths.
+May 14 14:06:43 localhost systemd[2038]: Stopped target sockets.target - Sockets.
+May 14 14:06:43 localhost systemd[2038]: Stopped target timers.target - Timers.
+May 14 14:06:43 localhost systemd[2038]: Closed dbus.socket - D-Bus User Message Bus Socket.
+May 14 14:06:43 localhost systemd[2038]: Closed dirmngr.socket - GnuPG network certificate management daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gcr-ssh-agent.socket - GCR ssh-agent wrapper.
+May 14 14:06:43 localhost systemd[2038]: Closed gnome-keyring-daemon.socket - GNOME Keyring daemon.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-browser.socket - GnuPG cryptographic agent and passphrase cache (access for web browsers).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-extra.socket - GnuPG cryptographic agent and passphrase cache (restricted).
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation)...
+May 14 14:06:43 localhost systemd[2038]: Stopping gpg-agent.socket - GnuPG cryptographic agent and passphrase cache...
+May 14 14:06:43 localhost systemd[2038]: Closed keyboxd.socket - GnuPG public key management service.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire-pulse.socket - PipeWire PulseAudio.
+May 14 14:06:43 localhost systemd[2038]: Closed pipewire.socket - PipeWire Multimedia System Sockets.
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent-ssh.socket - GnuPG cryptographic agent (ssh-agent emulation).
+May 14 14:06:43 localhost systemd[2038]: Closed gpg-agent.socket - GnuPG cryptographic agent and passphrase cache.
+May 14 14:06:43 localhost systemd[2038]: Removed slice app.slice - User Application Slice.
+May 14 14:06:43 localhost systemd[2038]: app.slice: Consumed 780ms CPU time, 103.7M memory peak.
+May 14 14:06:43 localhost systemd[2038]: Reached target shutdown.target - Shutdown.
+May 14 14:06:43 localhost systemd[2038]: Finished systemd-exit.service - Exit the Session.
+May 14 14:06:43 localhost systemd[2038]: Reached target exit.target - Exit the Session.
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_unix(systemd-user:session): session closed for user sysmaint
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid eq 0" not met by user "sysmaint"
+May 14 14:06:43 localhost (sd-pam)[2042]: pam_succeed_if(systemd-user:session): requirement "uid ne 0" was met by user "sysmaint"
+lines 108-141/141 (END)
+</code></pre>
+<p>So there are flags need to be added to make it compatible with discrete mode:</p>
+<p><code>sudo nano /etc/modprobe.d/nvidia-drm.conf</code></p>
+<p>add:</p>
+<p><code>options nvidia-drm modeset=1 fbdev=1</code></p>
+<p>Then regenerate:</p>
+<p><code>sudo dracut --force --regenerate-all</code></p>
+<p>The next reboot will lead to kernel panic, only way to bootup again it remove the flags from grub:</p>
+<p>Press e on grub window, search for the line starting with “linux”, and add to the end of it:</p>
+<p><code>rd.driver.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm modprobe.blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm module_blacklist=nvidia,nvidia_drm,nvidia_modeset,nvidia_uvm systemd.unit=multi-user.target</code></p>
+<p>Then F10.</p>
+<p>After that it will boot up, and you need to remove the added flags and regenerate dracut.</p>
+<p>Note: I have tested that with Debian 13 DVD image with LXQT (default going to be initramfs and xorg) + Nvidia setup as before = it will bootup normally without issues.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-05-15T18:04:43Z' class='post-time'>
+                    May 15, 2026,  6:04pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-05-15T18:04:43Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Does disabling panic-on-oops fix the panic issue? There’s a button in the sysmaint panel for that.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-05-16T09:39:36Z' class='post-time'>
+                    May 16, 2026,  9:39am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-05-16T09:39:36Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Related:</p><aside class="onebox allowlistedgeneric" data-onebox-src="../../../external.html?link=https://www.kicksecure.com/wiki/Panic-on-oops">
+  <header class="source">
+      <img src="../../../external.html?link=https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778923154" class="site-icon" alt="" width="151" height="151">
+
+      <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="../../../external.html?link=https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener">panic-on-oops</a></h3>
+
+  <p>Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-05-17T02:04:07Z' class='post-time'>
+                    May 17, 2026,  2:04am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-05-17T02:04:07Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Good catch, yep it did <img src="../../images/emoji/twitter/slight_smile8e5e.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>

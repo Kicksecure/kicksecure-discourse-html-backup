@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</title>
+    <link>https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683</link>
+    <description>Note that the issue described here is a VirtualBox bug, it is not a Kicksecure bug.
+
+If you use `virtualbox-installer-cli` to install VirtualBox, you will get a recent version of VirtualBox from Oracle&#39;s repository. VirtualBox 7.1.18 and VirtualBox 7.2.6 (the two latest versions at the time of this writing) both have a bug that results in a kernel oops when the `vboxdrv` kernel module is loaded if a particular hardening setting (`kernel.kptr_restrict=2`) is enabled. This setting is [enabled by default](https://github.com/Kicksecure/security-misc/blob/11a5c33a566cc5280ee0b5984850ba05c716c106/usr/lib/sysctl.d/990-security-misc.conf%23security-misc-shared#L41) in Kicksecure.
+
+What this means in concrete terms is:
+
+* If you try to install Debian package software updates (i.e. using `apt`, `upgrade-nonroot`, or the &quot;Install Updates&quot; button in the System Maintenance Panel), your system will crash and reboot in the middle of the upgrade process. Attempting to finish the failed upgrade will result in another crash and reboot. This is because [panic-on-oops](https://www.kicksecure.com/wiki/Panic-on-oops) is also enabled by default in Kicksecure.
+* The system *should* boot into user mode without crashing, however you will be unable to start any VirtualBox VMs.
+
+Until a proper fix is available, there are workarounds you can use.
+
+1. Change kernel configuration.
+  **A.** If you don&#39;t need VMs to work and just need the upgrade to finish without crashing, you can disable panic-on-oops. To do this, boot into `PERSISTENT Mode | SYSMAINT Session`&lt;sup&gt;1&lt;/sup&gt;, then click the &quot;Toggle Panic-on-Oops&quot; button under &quot;System Administration&quot;. This will prevent system crashes, but VirtualBox will still be unusable.
+  **B.** If you do need VMs to work, boot into `PERSISTENT Mode | SYSMAINT Session`&lt;sup&gt;1&lt;/sup&gt;, click &quot;Open Terminal&quot; in the &quot;Misc&quot; section, then run `echo &#39;kernel.kptr_restrict=1&#39; | sudo tee /usr/lib/sysctl.d/991_user.conf`. Then reboot into `PERSISTENT Mode | SYSMAINT Session` again&lt;sup&gt;2&lt;/sup&gt;. This will loosen the hardening setting that causes VirtualBox to crash.
+2. In the System Maintenance Panel, click &quot;Open Terminal&quot; in the &quot;Misc&quot; section, then run `sudo dpkg --configure -a &amp;&amp; sudo apt --fix-broken install` to finish the failed software update.
+
+Note that both options A and B above result in lessened security. Which one you should pick will depend on your needs and threat model, or you may elect to simply uninstall VirtualBox entirely.
+
+The full details of the issue are in this bug report:
+
+https://github.com/VirtualBox/virtualbox/issues/639
+
+---
+
+&lt;sup&gt;1&lt;/sup&gt; If you are using [Unrestricted Admin Mode](https://www.kicksecure.com/wiki/Unrestricted_admin_mode), open the System Maintenance Panel from the start menu instead.
+
+&lt;sup&gt;2&lt;/sup&gt; If you are using Unrestricted Admin Mode, reboot into `PERSISTENT Mode | USER Session` here, then open the System Maintenance Panel from the start menu.</description>
+    
+    <lastBuildDate>Sun, 26 Apr 2026 00:32:59 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>Another workaround: If you have an old version (e.g. <code>7.2.6</code>) and haven’t upgraded yet, you can <code>sudo apt-mark hold virtualbox-7.1 virtualbox-7.2</code> until this is resolved. It lets you run full upgrades (with GUI or CLI) without upgrading virtualbox.</p>
+<p>Based on the response on the bug report, this may get fixed in the next version or so though.</p>
+          <p><a href="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683/2</link>
+        <pubDate>Sun, 26 Apr 2026 00:32:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1683-2</guid>
+        <source url="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683.rss">Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</source>
+      </item>
+      <item>
+        <title>Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Note that the issue described here is a VirtualBox bug, it is not a Kicksecure bug.</p>
+<p>If you use <code>virtualbox-installer-cli</code> to install VirtualBox, you will get a recent version of VirtualBox from Oracle’s repository. VirtualBox 7.1.18 and VirtualBox 7.2.6 (the two latest versions at the time of this writing) both have a bug that results in a kernel oops when the <code>vboxdrv</code> kernel module is loaded if a particular hardening setting (<code>kernel.kptr_restrict=2</code>) is enabled. This setting is <a href="https://github.com/Kicksecure/security-misc/blob/11a5c33a566cc5280ee0b5984850ba05c716c106/usr/lib/sysctl.d/990-security-misc.conf%23security-misc-shared#L41">enabled by default</a> in Kicksecure.</p>
+<p>What this means in concrete terms is:</p>
+<ul>
+<li>If you try to install Debian package software updates (i.e. using <code>apt</code>, <code>upgrade-nonroot</code>, or the “Install Updates” button in the System Maintenance Panel), your system will crash and reboot in the middle of the upgrade process. Attempting to finish the failed upgrade will result in another crash and reboot. This is because <a href="https://www.kicksecure.com/wiki/Panic-on-oops">panic-on-oops</a> is also enabled by default in Kicksecure.</li>
+<li>The system <em>should</em> boot into user mode without crashing, however you will be unable to start any VirtualBox VMs.</li>
+</ul>
+<p>Until a proper fix is available, there are workarounds you can use.</p>
+<ol>
+<li>Change kernel configuration.<br>
+<strong>A.</strong> If you don’t need VMs to work and just need the upgrade to finish without crashing, you can disable panic-on-oops. To do this, boot into <code>PERSISTENT Mode | SYSMAINT Session</code><sup>1</sup>, then click the “Toggle Panic-on-Oops” button under “System Administration”. This will prevent system crashes, but VirtualBox will still be unusable.<br>
+<strong>B.</strong> If you do need VMs to work, boot into <code>PERSISTENT Mode | SYSMAINT Session</code><sup>1</sup>, click “Open Terminal” in the “Misc” section, then run <code>echo 'kernel.kptr_restrict=1' | sudo tee /usr/lib/sysctl.d/991_user.conf</code>. Then reboot into <code>PERSISTENT Mode | SYSMAINT Session</code> again<sup>2</sup>. This will loosen the hardening setting that causes VirtualBox to crash.</li>
+<li>In the System Maintenance Panel, click “Open Terminal” in the “Misc” section, then run <code>sudo dpkg --configure -a &amp;&amp; sudo apt --fix-broken install</code> to finish the failed software update.</li>
+</ol>
+<p>Note that both options A and B above result in lessened security. Which one you should pick will depend on your needs and threat model, or you may elect to simply uninstall VirtualBox entirely.</p>
+<p>The full details of the issue are in this bug report:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/VirtualBox/virtualbox/issues/639">
+  <header class="source">
+
+      <a href="https://github.com/VirtualBox/virtualbox/issues/639" target="_blank" rel="noopener">github.com/VirtualBox/virtualbox</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/VirtualBox/virtualbox/issues/639" target="_blank" rel="noopener">[Bug]: vboxdrv triggers a kernel BUG during load and all VMs fail to start if `kernel.kptr_restrict=2` sysctl is set</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-04-23" data-time="01:47:10" data-timezone="UTC">01:47AM - 23 Apr 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          bug
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Version
+
+7.1.18
+
+### Host OS Type
+
+Linux
+
+### Host OS name + version
+
+Debian<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> 13.4
+
+### Host Architecture
+
+x86
+
+### Guest OS Type
+
+all
+
+### Guest Architecture
+
+x86
+
+### Guest OS name + version
+
+N/A
+
+### Component
+
+VMM
+
+### What happened?
+
+(Apologies if I have the component wrong, I wasn't sure whether to pick VMM or Host Support.)
+
+If a Debian system has the `kernel.kptr_restrict=2` sysctl set, VBoxDrv will trigger a kernel BUG on load. `vboxdrv.service` will show as failed in the output of `systemctl`. The module will technically be loaded into the kernel, but it is completely non-functional in this state, attempting to boot a VM always fails. If the user is unlucky enough to also have panic-on-oops enabled on their machine, this will result in the entire machine crashing.
+
+The relevant output from `dmesg` is:
+
+```
+[    4.956947] vboxdrv: loading out-of-tree module taints kernel.
+[    4.956953] vboxdrv: module verification failed: signature and/or required key missing - tainting kernel
+[    4.968023] vboxdrv: Found 8 processor cores/threads
+[    4.974793] RTR0DbgKrnlInfoOpen: /proc/kallsym method failed. get_user_pages address off by +0x74a91580
+[    5.006678] Missing ENDBR: kallsyms_lookup_name+0x0/0xd0
+[    5.007463] ------------[ cut here ]------------
+[    5.007464] kernel BUG at arch/x86/kernel/cet.c:132!
+[    5.008234] Oops: invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+[    5.009003] CPU: 2 UID: 0 PID: 1232 Comm: modprobe Tainted: G           OE      6.12.74+deb13+1-amd64 #1  Debian 6.12.74-2
+[    5.009793] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[    5.010566] Hardware name: Notebook NV4XMB,ME,MZ/NV4XMB,ME,MZ, BIOS 1.07.13NMIN29 07/12/2021
+[    5.011434] RIP: 0010:exc_control_protection+0x29f/0x2b0
+[    5.012312] Code: d8 b9 09 00 00 00 48 8b 93 80 00 00 00 be 80 00 00 00 48 c7 c7 1a 6b 6e 8c e8 fd a9 3c ff 80 a3 8a 00 00 00 fb e9 38 fe ff ff &lt;0f&gt; 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 90 90 90 90 90
+[    5.013215] RSP: 0018:ffffd523c163b8c8 EFLAGS: 00010002
+[    5.014115] RAX: 000000000000002c RBX: ffffd523c163b8f8 RCX: 0000000000000000
+[    5.015024] RDX: 0000000000000000 RSI: ffff8f2451321780 RDI: ffff8f2451321780
+[    5.015936] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffd523c163b758
+[    5.016841] R10: ffffffff8ceb43c8 R11: 0000000000000003 R12: 0000000000000003
+[    5.017737] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[    5.018648] FS:  00007fbc4d69f5c0(0000) GS:ffff8f2451300000(0000) knlGS:0000000000000000
+[    5.019557] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    5.020460] CR2: 00007fbc4cef3cb0 CR3: 000000010d6ca005 CR4: 0000000000f72ef0
+[    5.021364] PKRU: 55555554
+[    5.022275] Call Trace:
+[    5.023183]  &lt;TASK&gt;
+[    5.024070]  asm_exc_control_protection+0x26/0x30
+[    5.024964] RIP: 0010:kallsyms_lookup_name+0x0/0xd0
+[    5.025844] Code: 79 0a 48 f7 d0 48 03 05 3e d9 29 01 c3 cc cc cc cc 66 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 &lt;66&gt; 0f 1f 00 0f 1f 44 00 00 53 48 83 ec 10 65 48 8b 04 25 28 00 00
+[    5.026768] RSP: 0018:ffffd523c163b9a0 EFLAGS: 00010282
+[    5.027690] RAX: ffffffff8b3c7c40 RBX: ffff8f1ccd908010 RCX: 0100000000000000
+[    5.028613] RDX: 00ffffffffdfffff RSI: 0000000000000000 RDI: ffffffffc243b6a7
+[    5.029529] RBP: ffffd523c163b9f8 R08: 0000000000000000 R09: 0000000000000001
+[    5.030445] R10: 0000000000000002 R11: 0000000000000001 R12: ffffd523c163ba08
+[    5.031362] R13: ffffffffc243b6a7 R14: 0000000000000000 R15: ffff8f1ccaca1368
+[    5.032275]  ? __pfx_kallsyms_lookup_name+0x10/0x10
+[    5.033188]  VBoxHost_RTR0DbgKrnlInfoQuerySymbol+0x19b/0x280 [vboxdrv]
+[    5.034130]  VBoxHost_RTR0DbgKrnlInfoGetSymbol+0x31/0x60 [vboxdrv]
+[    5.035063]  rtR0InitNative+0x7c/0xd0 [vboxdrv]
+[    5.035984]  VBoxHost_RTR0Init+0x3c/0x150 [vboxdrv]
+[    5.036904]  VBoxDrvLinuxInit+0x46/0xff0 [vboxdrv]
+[    5.037830]  ? __pfx_VBoxDrvLinuxInit+0x10/0x10 [vboxdrv]
+[    5.038750]  do_one_initcall+0x5b/0x310
+[    5.039643]  do_init_module+0x60/0x230
+[    5.040534]  init_module_from_file+0x89/0xe0
+[    5.041412]  idempotent_init_module+0x11e/0x310
+[    5.042292]  __x64_sys_finit_module+0x5e/0xb0
+[    5.043170]  do_syscall_64+0x82/0x190
+[    5.044043]  ? touch_atime+0x1e/0x120
+[    5.044904]  ? filemap_read+0x340/0x370
+[    5.045780]  ? vfs_read+0x15e/0x360
+[    5.046652]  ? vfs_read+0x15e/0x360
+[    5.047510]  ? __x64_sys_pread64+0x98/0xd0
+[    5.048360]  ? arch_exit_to_user_mode_prepare.isra.0+0x16/0xa0
+[    5.049222]  ? syscall_exit_to_user_mode+0x37/0x1b0
+[    5.050075]  ? clear_bhb_loop+0x40/0x90
+[    5.050924]  ? clear_bhb_loop+0x40/0x90
+[    5.051759]  ? clear_bhb_loop+0x40/0x90
+[    5.052581]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[    5.053402] RIP: 0033:0x7fbc4cf1a7b9
+[    5.054243] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 &lt;48&gt; 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 66 0d 00 f7 d8 64 89 01 48
+[    5.055107] RSP: 002b:00007fff9b269b78 EFLAGS: 00000246 ORIG_RAX: 0000000000000139
+[    5.055986] RAX: ffffffffffffffda RBX: 00005641100d69d0 RCX: 00007fbc4cf1a7b9
+[    5.056854] RDX: 0000000000000000 RSI: 00005640f0a4632b RDI: 0000000000000003
+[    5.057727] RBP: 0000000000000000 R08: 0000000000000000 R09: 00005641100d9c00
+[    5.058603] R10: 0000000000000000 R11: 0000000000000246 R12: 00005640f0a4632b
+[    5.059464] R13: 0000000000040000 R14: 00005641100d6af0 R15: 0000000000000000
+[    5.060305]  &lt;/TASK&gt;
+[    5.061145] Modules linked in: vboxdrv(OE+) qrtr bnep binfmt_misc intel_rapl_msr intel_rapl_common nls_ascii intel_uncore_frequency nls_cp437 intel_uncore_frequency_common vfat x86_pkg_temp_thermal fat snd_sof_pci_intel_tgl snd_sof_pci_intel_cnl snd_sof_intel_hda_generic soundwire_intel soundwire_generic_allocation soundwire_cadence snd_sof_intel_hda_common snd_soc_hdac_hda snd_sof_intel_hda_mlink snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp snd_sof snd_hda_codec_hdmi snd_sof_utils snd_soc_acpi_intel_match intel_powerclamp snd_soc_acpi coretemp soundwire_bus iwlmvm kvm_intel snd_soc_avs snd_soc_hda_codec snd_hda_ext_core snd_hda_codec_realtek kvm mac80211 snd_hda_codec_generic snd_soc_core snd_hda_scodec_component irqbypass snd_compress crct10dif_pclmul snd_pcm_dmaengine libarc4 ghash_clmulni_intel snd_hda_intel sha512_ssse3 uvcvideo sha256_ssse3 btusb snd_intel_dspcfg iwlwifi sha1_ssse3 snd_intel_sdw_acpi btrtl snd_hda_codec videobuf2_vmalloc aesni_intel btintel uvc videobuf2_memops videobuf2_v4l2 btbcm gf128mul
+[    5.061182]  btmtk crypto_simd snd_hda_core videodev cryptd mei_hdcp mei_pxp bluetooth snd_hwdep videobuf2_common cfg80211 rapl snd_pcm intel_cstate mc wmi_bmof ecdh_generic snd_timer mei_me intel_uncore snd pcspkr mei ee1004 soundcore rfkill intel_pmc_core igen6_edac joydev intel_hid intel_vsec ac sparse_keymap pmt_telemetry acpi_pad pmt_class evdev msr parport_pc ppdev lp parport configfs efi_pstore nfnetlink efivarfs ip_tables x_tables autofs4 ext4 crc16 mbcache jbd2 crc32c_generic xe drm_gpuvm drm_exec gpu_sched drm_suballoc_helper drm_ttm_helper i915 drm_buddy i2c_algo_bit drm_display_helper cec hid_multitouch rc_core hid_generic ttm i2c_hid_acpi drm_kms_helper i2c_hid iTCO_wdt hid rtsx_pci_sdmmc intel_pmc_bxt r8169 xhci_pci iTCO_vendor_support mmc_core realtek xhci_hcd watchdog nvme psmouse mdio_devres ucsi_acpi drm thunderbolt libphy typec_ucsi crc32_pclmul serio_raw nvme_core usbcore crc32c_intel typec intel_lpss_pci i2c_i801 rtsx_pci intel_lpss i2c_smbus roles button video idma64 battery nvme_auth usb_common
+[    5.065862]  wmi
+[    5.071988] ---[ end trace 0000000000000000 ]---
+[    5.104282] iwlwifi 0000:00:14.3: Registered PHC clock: iwlwifi-PTP, with index: 0
+[    5.307927] RIP: 0010:exc_control_protection+0x29f/0x2b0
+[    5.309913] Code: d8 b9 09 00 00 00 48 8b 93 80 00 00 00 be 80 00 00 00 48 c7 c7 1a 6b 6e 8c e8 fd a9 3c ff 80 a3 8a 00 00 00 fb e9 38 fe ff ff &lt;0f&gt; 0b 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 90 90 90 90 90
+[    5.311914] RSP: 0018:ffffd523c163b8c8 EFLAGS: 00010002
+[    5.313900] RAX: 000000000000002c RBX: ffffd523c163b8f8 RCX: 0000000000000000
+[    5.315871] RDX: 0000000000000000 RSI: ffff8f2451321780 RDI: ffff8f2451321780
+[    5.317860] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffd523c163b758
+[    5.319866] R10: ffffffff8ceb43c8 R11: 0000000000000003 R12: 0000000000000003
+[    5.321883] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+[    5.323901] FS:  00007fbc4d69f5c0(0000) GS:ffff8f2451300000(0000) knlGS:0000000000000000
+[    5.325902] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[    5.327892] CR2: 00007fbc4cef3cb0 CR3: 000000010d6ca005 CR4: 0000000000f72ef0
+[    5.329912] PKRU: 55555554
+[    5.331911] note: modprobe[1232] exited with irqs disabled
+```
+
+The following window appears when trying to launch a VM in this state:
+
+```
+VirtualBox - Error In suplibOsInit
+
+VERR_VM_DRIVER_OPEN_ERROR (rc=-1911)
+
+The VirtualBox Linux kernel driver is either not loaded or not
+set up correctly. Please try setting it up again by executing
+
+'/sbin/vboxconfig'
+
+as root.
+
+If your system has EFI Secure Boot enabled you may also need
+to sign the kernel modules (vboxdrv, vboxnetflt, vboxnetadp,
+vboxpci) before you can load them. Please see your Linux
+system's documentation for more information.
+
+where: suplibOsInit what: 3
+VERR_VM_DRIVER_OPEN_ERROR (-1911) - Was not able to
+open the support driver. Generic open error used when none
+of the other ones fit.
+```
+
+### How can we reproduce this?
+
+1. Install a fresh copy of Debian 13.4 with the GNOME desktop on a physical device. (I'm using a laptop with an i5-1135G7 processor.)
+2. Install VirtualBox 7.1 following the "Debian-based Linux distributions" instructions from https://www.virtualbox.org/wiki/Linux_Downloads.
+3. Run `sudo modprobe -r kvm_intel; sudo modprobe -r kvm` to make sure KVM doesn't get in the way of VirtualBox.
+4. Launch VirtualBox, and create a FreeDOS virtual machine.
+5. Verify that you can boot the VM successfully.
+6. Create a file at `/usr/lib/sysctl.d/990-crash-vbox.conf`, with the contents `kernel.kptr_restrict=2`.
+7. Reboot the device.
+8. Run `systemctl status vboxdrv.service`. Observe that it shows as `Active: failed`.
+9. Run `sudo dmesg`. You will see a kernel backtrace.
+10. Run `sudo modprobe -r kvm_intel; sudo modprobe -r kvm` to get KVM to go away again.
+11. Launch VirtualBox, and attempt to launch the FreeDOS virtual machine. The window described above will appear and the VM will not launch.
+
+### Did you upload *all* of your necessary log files, screenshots, etc.?
+
+- [x] Yes, I've uploaded all pertinent files to this issue.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p><sup>1</sup> If you are using <a href="https://www.kicksecure.com/wiki/Unrestricted_admin_mode">Unrestricted Admin Mode</a>, open the System Maintenance Panel from the start menu instead.</p>
+<p><sup>2</sup> If you are using Unrestricted Admin Mode, reboot into <code>PERSISTENT Mode | USER Session</code> here, then open the System Maintenance Panel from the start menu.</p>
+          <p><a href="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683/1</link>
+        <pubDate>Thu, 23 Apr 2026 02:26:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1683-1</guid>
+        <source url="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683.rss">Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</source>
+      </item>
+  </channel>
+</rss>

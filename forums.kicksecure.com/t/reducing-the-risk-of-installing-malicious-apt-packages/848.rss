@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Reducing the risk of installing malicious apt packages?</title>
+    <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848</link>
+    <description>(Was waiting for a very long software build to finish and this idea popped into my head, so I decided to write it up and post it.)
+
+A distro&#39;s package manager is an interesting potential malware vector for a number of reasons. They are implicitly trusted by the distribution as being a safe source of software. The fact that these repositories are maintained by distributions and don&#39;t simply allow anyone to throw software onto them increases their trustworthiness, and thus increases a user&#39;s likelihood to treat them as entirely safe. Even though I do not (any longer) trust a distro&#39;s official repos to be totally safe, I do generally trust `sudo apt install` to be more safe than most other ways of obtaining software.
+
+However, while a distro&#39;s repositories are indeed *more* safe than using the Internet at large as your software repository (thanks Windows for proving that), that doesn&#39;t mean that a package manager is entirely safe:
+
+* Very little code review is generally done when packaging a software application for several major distributions, including Debian. Debian does not require (or even particularly encourage) packagers to do a code review, and the people who review new packages to ensure they are suitable for inclusion into the Debian archives mostly check that the *packaging* looks good, not the code of the application. As a result it is very possible for a malicious package to be introduced into the archive on accident. Similarly, it&#39;s possible for malicious code to be introduced into a previously legitimate application without anyone noticing. (This has happened at least twice before, once very notably in the xz-utils incident, and once in a [lesser-known backdoor attack on the UnrealIRCD server, which affected Gentoo](https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/). That second attack [went undetected for six or seven months](https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/).)
+* Once a packager gets a package into the archive, they can provide updates for it *in Debian Unstable* with no or very little supervision. This is especially true if the packager is a Debian Maintainer (thus able to upload specific packages without needing a sponsor) or a Debian Developer (thus able to upload an update to any package without needing a sponsor). A malicious or compromised DM or DD could thus potentially introduce malicious code into the archive without being noticed. Supplying updates for a package in a stable release is harder and would probably not be so easy to compromise in this way thankfully, but you still are putting your trust in the DMs and DDs of Debian, which could be poorly placed. Remember that Jia Tan was fully trusted and that turned out to be a bad idea.
+* Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code. The Chromium browser package is a good example of this - it was so often out-of-date that the Linux Mint developers [decided to build it themselves for LMDE](https://blog.linuxmint.com/?p=3978). Chromium, despite its apparently good security design, is also a massive source of security vulnerabilities probably because it is such a popular application and thus everyone&#39;s looking for vulnerabilities in it. The problems with Chromium might not be as bad now as they were back then, but this kind of thing is still worrying.
+* There are also packages that Debian just refuses to provide security support for because they&#39;re so hard to support. I can&#39;t remember an example right off the top of my head, but `check-support-status` can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.
+* Users may enable third-party repositories to get software that isn&#39;t available from the Debian archives, or that is outdated in Debian. These repositories are probably OK if the user is installing software from an official upstream source, but there&#39;s nothing stopping someone from making a malicious Debian repo that advertises newer versions of outdated software to make itself attractive. There&#39;s also the incident with a [malicious third-party repo for Free Download Manager](https://debugpointnews.com/free-download-manager-debian/), which involved a compromise of the authentic Free Download Manager website. (That attack went undetected for [around two years](https://www.freedownloadmanager.org/blog/?p=664).)
+
+All of these issues could potentially cause serious trouble even for a security-conscious user, and to my awareness no major operating system (Linux or otherwise) makes any attempt to significantly mitigate the risks these kinds of attacks introduce. (Debian&#39;s `check-support-status` *helps*, but it only helps with one particular scenario, and it&#39;s not even installed by default on Debian systems as far as I know. Similarly Windows&#39; and MacOS&#39;s restrictions related to signed code can make it more difficult to run code by people who don&#39;t provide a clear link between their software and their identity, but there&#39;s nothing stopping someone from just publishing signed malicious code, plus identity theft is a thing.) The user is left to figure out what they do or don&#39;t trust by themselves, and while the user should **always** be the final authority on what is or isn&#39;t trusted, it should be recognized that some users are just plain bad at making good decisions about what to trust. As the saying goes, [&quot;Given a choice between dancing pigs and security, users will pick dancing pigs every time.&quot;](https://en.wikipedia.org/wiki/Dancing_pigs)
+
+How could we harden apt in order to make this problem less of a problem? We **absolutely should not block users from installing software** regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn&#39;t do. One potential idea might be to wrap `apt install` commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of &quot;known good software&quot; and another database of &quot;known bad software&quot;. If the user is trying to install something that isn&#39;t explicitly trusted, they&#39;ll get a warning they can click through, and if they&#39;re trying to install something that is explicitly distrusted, they&#39;ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don&#39;t get backlash for &quot;locking down&quot; the OS if we go that route, then again I don&#39;t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn&#39;t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it&#39;s intrinsically dangerous or not, but you get my point.) We&#39;d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don&#39;t know for sure if this is the best way of doing this, but it might work.</description>
+    
+    <lastBuildDate>Sat, 25 Jan 2025 20:34:39 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[anon68665882]]></dc:creator>
+        <description><![CDATA[
+            <p>Also there is <code>apt-listbugs</code> and <code>cve-search</code>, although cve-search is not installable via the debian package manager.</p>
+<p>github. com/cve-search/cve-search/wiki/Install-instructions-using-Linux-Debian-6.0</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/5</link>
+        <pubDate>Sat, 25 Jan 2025 20:34:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-5</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="anon92632958" data-post="3" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.</p>
+</blockquote>
+</aside>
+<p>Does Kicksecure ISO use debian unstable?</p>
+</blockquote>
+</aside>
+<p>It doesn’t.</p>
+<p>“Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.” was only an accurate description/reminder how Linux distributions such as Debian are generally designed, describing general computer security issues. This doesn’t directly relate to derivatives such as Kicksecure repository default settings.</p>
+<aside class="quote no-group" data-username="anon92632958" data-post="3" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>That makes sense but would that be easy to maintain is there a database that could easily be queried of some sort.</p>
+</blockquote>
+</aside>
+<p>This might be a really hard problem to solve.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://wiki.debian.org/DebianSecurity/debsecan">
+  <header class="source">
+      <img src="https://wiki.debian.org/htdocs/favicon.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://wiki.debian.org/DebianSecurity/debsecan" target="_blank" rel="noopener">wiki.debian.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://wiki.debian.org/DebianSecurity/debsecan" target="_blank" rel="noopener">DebianSecurity/debsecan - Debian Wiki</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><code>debsecan</code> outputs a few thousand CVEs, but that’s overwhelming and not actionable.</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/4</link>
+        <pubDate>Fri, 10 Jan 2025 09:37:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-4</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>This idea reminds me of F-droid’s warning about anti-features.<br>
+I do however like this idea and the key points you raised.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision.</p>
+</blockquote>
+</aside>
+<p>Does Kicksecure ISO use debian unstable? I thought it used stable repository.</p>
+<blockquote>
+<p>Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code</p>
+</blockquote>
+<p>That a fair point also</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Or by looking into (Debian) CVE databases and warn against installing packages with known unpatched CVEs.</p>
+</blockquote>
+</aside>
+<p>That makes sense but would that be easy to maintain is there a database that could easily be queried of some sort.</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/3</link>
+        <pubDate>Fri, 10 Jan 2025 02:02:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-3</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
+</ul>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>(Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know.</p>
+</blockquote>
+</aside>
+<p>Related: There’s a ticket for <code>check-support-status</code>.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener" title="05:52PM - 19 February 2024">Whonix Forum – 19 Feb 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default/19262" target="_blank" rel="noopener">find packages without security support / consider installation of...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #0088CC;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Phabricator Tickets</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">status_open_issue_todo</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>Information ID: 135  PHID: PHID-TASK-tdyojm657xusmg66py6f  Author: Patrick  Status at Migration Time: open  Priority at Migration Time: Normal  Description When the Debian security team ends security support for packages, and an affected package...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>One potential idea might be to wrap <code>apt install</code> commands</p>
+</blockquote>
+</aside>
+<p>In case we implement this: Or we could keep <code>apt</code> unmodified and instead teach users to use our APT wrapper program instead with a name yet to be invented? (This is to avoid breaking existing scripts.)</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="848">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>we could always expand the database if people find things that we can determine are widely used</p>
+</blockquote>
+</aside>
+<p>This assumes, popular application = more secure?</p>
+<p>I am worried to become something similar to a certificate authority. Becoming an entity that makes complicated decisions on “trustworthy” and “untrustworthy”. That seems difficult, opinionated to argue about without good reasons to back it up such as code audits, which we cannot provide due to lack of resources. Imagine software projects contacting us, asking why they’re on the bad list, why that is and how to get off the list.</p>
+<p>Then imagine users wanting to install a program of their use case. A calculator or so. Our program would warn “this program has low popularity”. Then the user would ask in the forums what should be used instead. What’s the answer? Maybe there isn’t any popular calculator. The calculator is just a made up example. Could be any use case.</p>
+<p>Can it be based on objective data? For example, if popularity is the primary decider, then we could base it on <a href="https://popcon.debian.org">https://popcon.debian.org</a> or other similar databases?</p>
+<p>Or by looking into (Debian) CVE databases and warn against installing packages with known unpatched CVEs.</p>
+<p>Why only about installing? It seems a tool that can also audit an already installed system would be useful as well. Similar to check-support-status but better.</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/2</link>
+        <pubDate>Sun, 05 Jan 2025 09:47:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-2</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
+      <item>
+        <title>Reducing the risk of installing malicious apt packages?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>(Was waiting for a very long software build to finish and this idea popped into my head, so I decided to write it up and post it.)</p>
+<p>A distro’s package manager is an interesting potential malware vector for a number of reasons. They are implicitly trusted by the distribution as being a safe source of software. The fact that these repositories are maintained by distributions and don’t simply allow anyone to throw software onto them increases their trustworthiness, and thus increases a user’s likelihood to treat them as entirely safe. Even though I do not (any longer) trust a distro’s official repos to be totally safe, I do generally trust <code>sudo apt install</code> to be more safe than most other ways of obtaining software.</p>
+<p>However, while a distro’s repositories are indeed <em>more</em> safe than using the Internet at large as your software repository (thanks Windows for proving that), that doesn’t mean that a package manager is entirely safe:</p>
+<ul>
+<li>Very little code review is generally done when packaging a software application for several major distributions, including Debian. Debian does not require (or even particularly encourage) packagers to do a code review, and the people who review new packages to ensure they are suitable for inclusion into the Debian archives mostly check that the <em>packaging</em> looks good, not the code of the application. As a result it is very possible for a malicious package to be introduced into the archive on accident. Similarly, it’s possible for malicious code to be introduced into a previously legitimate application without anyone noticing. (This has happened at least twice before, once very notably in the xz-utils incident, and once in a <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">lesser-known backdoor attack on the UnrealIRCD server, which affected Gentoo</a>. That second attack <a href="https://www.zdnet.com/article/linux-infection-proves-windows-malware-monopoly-is-over-gentoo-ships-backdoor-updated/" rel="noopener nofollow ugc">went undetected for six or seven months</a>.)</li>
+<li>Once a packager gets a package into the archive, they can provide updates for it <em>in Debian Unstable</em> with no or very little supervision. This is especially true if the packager is a Debian Maintainer (thus able to upload specific packages without needing a sponsor) or a Debian Developer (thus able to upload an update to any package without needing a sponsor). A malicious or compromised DM or DD could thus potentially introduce malicious code into the archive without being noticed. Supplying updates for a package in a stable release is harder and would probably not be so easy to compromise in this way thankfully, but you still are putting your trust in the DMs and DDs of Debian, which could be poorly placed. Remember that Jia Tan was fully trusted and that turned out to be a bad idea.</li>
+<li>Many software applications in Debian are outdated, meaning they could carry severe security-related bugs that make them unsafe to use even if they contain no intentionally malicoius code. The Chromium browser package is a good example of this - it was so often out-of-date that the Linux Mint developers <a href="https://blog.linuxmint.com/?p=3978" rel="noopener nofollow ugc">decided to build it themselves for LMDE</a>. Chromium, despite its apparently good security design, is also a massive source of security vulnerabilities probably because it is such a popular application and thus everyone’s looking for vulnerabilities in it. The problems with Chromium might not be as bad now as they were back then, but this kind of thing is still worrying.</li>
+<li>There are also packages that Debian just refuses to provide security support for because they’re so hard to support. I can’t remember an example right off the top of my head, but <code>check-support-status</code> can be used to find packages one has installed that fall into this category. I seem to remember something WebKit related warning me about this once.</li>
+<li>Users may enable third-party repositories to get software that isn’t available from the Debian archives, or that is outdated in Debian. These repositories are probably OK if the user is installing software from an official upstream source, but there’s nothing stopping someone from making a malicious Debian repo that advertises newer versions of outdated software to make itself attractive. There’s also the incident with a <a href="https://debugpointnews.com/free-download-manager-debian/" rel="noopener nofollow ugc">malicious third-party repo for Free Download Manager</a>, which involved a compromise of the authentic Free Download Manager website. (That attack went undetected for <a href="https://www.freedownloadmanager.org/blog/?p=664" rel="noopener nofollow ugc">around two years</a>.)</li>
+</ul>
+<p>All of these issues could potentially cause serious trouble even for a security-conscious user, and to my awareness no major operating system (Linux or otherwise) makes any attempt to significantly mitigate the risks these kinds of attacks introduce. (Debian’s <code>check-support-status</code> <em>helps</em>, but it only helps with one particular scenario, and it’s not even installed by default on Debian systems as far as I know. Similarly Windows’ and MacOS’s restrictions related to signed code can make it more difficult to run code by people who don’t provide a clear link between their software and their identity, but there’s nothing stopping someone from just publishing signed malicious code, plus identity theft is a thing.) The user is left to figure out what they do or don’t trust by themselves, and while the user should <strong>always</strong> be the final authority on what is or isn’t trusted, it should be recognized that some users are just plain bad at making good decisions about what to trust. As the saying goes, <a href="https://en.wikipedia.org/wiki/Dancing_pigs" rel="noopener nofollow ugc">“Given a choice between dancing pigs and security, users will pick dancing pigs every time.”</a></p>
+<p>How could we harden apt in order to make this problem less of a problem? We <strong>absolutely should not block users from installing software</strong> regardless of what that software is, but it might be a good idea to do something so that the user is given some pause for thought before doing something they probably shouldn’t do. One potential idea might be to wrap <code>apt install</code> commands to see what packages a user is trying to install, determine what sources apt will choose for installing these applications, and then check them against a database of “known good software” and another database of “known bad software”. If the user is trying to install something that isn’t explicitly trusted, they’ll get a warning they can click through, and if they’re trying to install something that is explicitly distrusted, they’ll get a dire warning that requires some effort to bypass. (Or maybe we make all warnings like this require some effort to bypass, although we do have to be careful that we don’t get backlash for “locking down” the OS if we go that route, then again I don’t think users expect us to be trying to mess up our users like Microsoft or Apple might do.) As for how these databases are built, we could add everything that is part of Kicksecure by default to the database, plus a bunch of widely-used software that isn’t suspected to be intrinsically dangerous. Specific third party repos for software like Element, Google Chrome, or Visual Studio Code could also be added. (Yes, I know that Google Chrome is debatable when it comes to whether it’s intrinsically dangerous or not, but you get my point.) We’d probably get some user complaints if we did this sort of thing, but we could always expand the database if people find things that we can determine are widely used, and for those who are using niche applications, they can expand the database themselves. This is just one potential application, I don’t know for sure if this is the best way of doing this, but it might work.</p>
+          <p><a href="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848/1</link>
+        <pubDate>Fri, 03 Jan 2025 02:55:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-848-1</guid>
+        <source url="https://forums.kicksecure.com/t/reducing-the-risk-of-installing-malicious-apt-packages/848.rss">Reducing the risk of installing malicious apt packages?</source>
+      </item>
+  </channel>
+</rss>

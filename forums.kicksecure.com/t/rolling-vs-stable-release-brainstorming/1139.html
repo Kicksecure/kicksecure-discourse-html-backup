@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Rolling vs. Stable release brainstorming - Development - Kicksecure Forums</title>
+    <meta name="description" content="Detailed overview of the issues with stable and rolling release distributions: Stable vs Rolling Distributions - Security Analysis 
+Kicksecure’s current development strategy for the most part has been to harden Debian as&amp;hellip;">
+    <meta name="generator" content="Discourse 2026.1.2 - https://github.com/discourse/discourse version 483b197ae963f83e5468c5320d5acae0f9f3656c">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1139.html" />
+
+
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_2398ec688c4e74ae2d12e2d0ec13359a211cbb9e.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_2398ec688c4e74ae2d1?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27common_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+  <link href="../../stylesheets/mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile"  />
+  <link href="../../stylesheets/desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop"  />
+
+
+
+    <link href="../../stylesheets/checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27checklist_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+    <link href="../../stylesheets/discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-details_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+    <link href="../../stylesheets/discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+    <link href="../../stylesheets/discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+    <link href="../../stylesheets/discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+    <link href="../../stylesheets/discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+    <link href="../../stylesheets/discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+    <link href="../../stylesheets/discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+    <link href="../../stylesheets/discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+    <link href="../../stylesheets/docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27docker_manager_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+    <link href="../../stylesheets/footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27footnote_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+    <link href="../../stylesheets/poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+    <link href="../../stylesheets/discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-solved_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_mobile_fcb1bbdbaf20ccd5630487986874533dc?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="discourse-topic-voting_mobile"  />
+    <link href="../../stylesheets/discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_desktop_fcb1bbdbaf20ccd5630487986874533?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="discourse-topic-voting_desktop"  />
+    <link href="../../stylesheets/poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_fcb1bbdbaf20ccd5630487986874533dc27a4bfa61cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e25914788.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_fed481d9c9fb31f9d86f588b53a4dc9e2591478861cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_a45a7153408e852f2477de3bc7ec3d777180442a61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+    <link href="../../stylesheets/mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d.css_%3b%20filename_%3dUTF-8%27%27mobile_theme_3_162b89818970c1976583198800293ff3f1cf745d61cf.css?__ws=forums.kicksecure.com" media="(max-width: 39.99999rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="3" data-theme-name="graceful"/>
+    <link href="../../stylesheets/desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a2215.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_aec06e8e4ce09af88eaadf6d59b23ec64b5a221561cf.css?__ws=forums.kicksecure.com" media="(min-width: 40rem)" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="5CIfdIF4gW0619Ki1DNBYEuco"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;Rolling vs. Stable release brainstorming&#39;" href="1139.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/rolling-vs-stable-release-brainstorming/1139" />
+<meta property="og:title" content="Rolling vs. Stable release brainstorming" />
+<meta name="twitter:title" content="Rolling vs. Stable release brainstorming" />
+<meta property="og:description" content="Detailed overview of the issues with stable and rolling release distributions: Stable vs Rolling Distributions - Security Analysis  Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:   Critical, extremely complicated software like Firefox ESR and Th..." />
+<meta name="twitter:description" content="Detailed overview of the issues with stable and rolling release distributions: Stable vs Rolling Distributions - Security Analysis  Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:   Critical, extremely complicated software like Firefox ESR and Th..." />
+<meta property="og:article:section" content="Development" />
+<meta property="og:article:section:color" content="25AAE2" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="9 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="11 ❤" />
+<meta property="article:published_time" content="2025-07-18T01:30:18+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+        <link rel="next" href="11394658.html?page=2">
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1139.html">Rolling vs. Stable release brainstorming</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/development/7.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #25AAE2'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Development</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope itemtype='../../../external.html?link=http://schema.org/DiscussionForumPosting'>
+      <meta itemprop='headline' content='Rolling vs. Stable release brainstorming'>
+      <link itemprop='url' href='1139.html'>
+      <meta itemprop='datePublished' content='2025-07-18T01:30:18Z'>
+        <meta itemprop='articleSection' content='Development'>
+      <meta itemprop='keywords' content=''>
+      <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+        <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+          <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+            <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+          </div>
+      </div>
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1139.html">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2025-07-18T01:30:18Z' class='post-time'>
+                    July 18, 2025,  1:30am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-18T01:30:18Z'>
+              <span itemprop='position'>1</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Detailed overview of the issues with stable and rolling release distributions: <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Dev/Stable_vs_Rolling_Distributions" class="inline-onebox" rel="noopener nofollow ugc">Stable vs Rolling Distributions - Security Analysis</a></p>
+<p>Kicksecure’s current development strategy for the most part has been to harden Debian as much as is practically possible. This seems to have been working well for the most part, but there are some worries about the safety of some of the rather outdated software that Debian provides us. In particular:</p>
+<ul>
+<li>Critical, extremely complicated software like Firefox ESR and Thunderbird can sometimes get stuck with a known-vulnerable version in the latest version of Debian Stable for as long as a month.</li>
+<li>Software that isn’t well-maintained may be left in a vulnerable state for long after the vulnerability is made public. (This happened with the zuluCrypt vulnerability discovered in Debian’s zuluCrypt packaging a couple weeks ago or so.)</li>
+<li>Tangential to the above, bugs that aren’t considered to be that big of a deal may not be fixed in a stable release of Debian ever. This isn’t really a security issue necessarily, but it is a problem from a usability standpoint.</li>
+</ul>
+<p>These things would be more-or-less resolved if Kicksecure was a rolling-release distro, for instance by rebasing our code onto a rolling-release variant of Debian (if one were to exist - we sort of almost have one with Debian Testing, but it doesn’t quite serve the desired purpose perfectly). This however is not necessarily more secure:</p>
+<ul>
+<li>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release.</li>
+<li>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.) For software that isn’t so complex as to be riddled with unknown vulnerabilities like web browsers, this is a potentially increased danger.</li>
+<li>Rolling releases can break a lot. An experienced user can go years or even over a decade without breaking a rolling release install beyond repair, but an inexperienced user can end up with a broken system within a few weeks if they accidentally do something like upgrade their system without checking what packages will be removed in the process. (I’d like to think I’m an experienced user, and I’ve nuked Debian Sid virtual machines multiple times doing this. Not fun.)</li>
+</ul>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc. Anything that has to handle highly complex untrusted data would be a good candidate for this sort of thing, especially software with a rapid-release cycle. We’re already moving in this direction to some decree with <a>Browser Choice</a>, which is in active development.</p>
+<p>What are everyone’s thoughts on the above? Where could our docs use improvement? Are there ideas for how to get the best of both worlds (rolling and stable) other than just a stable base with specific rolling apps? What are some other apps we should probably think about making rolling or recommending that people install rolling versions of if they use those apps? Are there potential pitfalls we need to avoid with rolling apps? (On this last point, we probably should not do what KDE neon did to try to make the Qt and KDE stacks rolling on top of base Ubuntu - that way of doing things kept breaking things for people alarmingly frequently.)</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+                <div class='crawler-linkback-list'>
+                    <div>
+                      <a href="../packages-source-for-app-per-vm/1167.html">Packages Source for App-per-VM</a>
+                    </div>
+                    <div>
+                      <a href="../secure-and-trustless-trust-minimal-package-policy/1157/2.html">Secure and Trustless/Trust Minimal Package Policy</a>
+                    </div>
+                </div>
+
+            
+          </div>
+          <div id='post_2' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T11:00:43Z' class='post-time'>
+                    July 24, 2025, 11:00am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-24T13:57:19Z'>
+              <span itemprop='position'>2</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>related prerequisite knowledge:<br>
+<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Dev/About_Debian_Packaging#Purpose_of_Packaging">Purpose of Packaging</a></p>
+<hr>
+<aside class="onebox allowlistedgeneric" data-onebox-src="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience">
+  <header class="source">
+      <img src="../../../external.html?link=https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1753349424" class="site-icon" width="40" height="40">
+
+      <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener" title="10:41AM - 28 April 2025">Kicksecure – 28 Apr 25</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Stable_Version_User_Experience" target="_blank" rel="noopener">Kicksecure Stable Version User Experience</a></h3>
+
+  <p>Aims for a seamless and robust user experience in the stable release of Kicksecure</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T14:26:53Z' class='post-time'>
+                    July 24, 2025,  2:26pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-24T14:26:53Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling-release distros rolled out backdoored XZ code to end-users during the xz-utils attack. Thankfully (most of) those distros don’t seem to have been targeted by the backdoor at all, but in principle a backdoored upstream or similar supply chain attack can have a much worse impact when using a rolling release</p>
+</blockquote>
+</aside>
+<p>There is an issue with this assumption:</p>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling releases steadily introduce the latest bugs and vulnerabilities from upstream into the distro on a regular basis. (There isn’t really any way around this, this isn’t a criticism half so much of a statement of fact.)</p>
+</blockquote>
+</aside>
+<p>Yep this is the reality but how this point is not against stable as well? because what is stable? stable software (specially in debian context) is a bunch of code which likely still have vulnerabilities/bugs frozen at certain state. So is having stable prevent security issues? no. prevent bugs? no. actually it introduces a new dilemma which is frozen software with bugs (graphical or so) will not be fixed even if its fixed upstream.</p>
+<p>Bottom line is that the software you are using either good or a mess, and this is only to blame the upstream developer with. on the edge fixes of features and vulnerability is better than sitting old and dirty waiting for fixes (which some released for years already).</p>
+<p>Note about Debian: Debian even modify the software and makes it act stupidly/introduce new bug that the upstream of the package has no idea why its doing what is doing e.g <a href="../../../external.html?link=https://gitlab.com/libvirt/libvirt/-/issues/406#note_1176654618">KVM + Debian with nftable</a> (debian modified it to worse/backward solely for its own desire).</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>It might be possible to combine the advantages of both stable and rolling releases, by keeping Kicksecure’s stable base, but offering “rolling” versions of specific packages like web browsers, email clients, (maybe?) media viewers, etc.</p>
+</blockquote>
+</aside>
+<p>Stable base system with rolling software for the user is the industry level technology (Android, IOS, Almost Windows…), even Fedora and Opensuse went into this direction.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>other than just a stable base with specific rolling apps?</p>
+</blockquote>
+</aside>
+<p>Probably having a microkernel + native apps like harmonyos, but this isnt achievable by small development circle or community or hobbyists.</p>
+<p>(Although even with this design, separating base from user apps can still give better security specially if they are in VM)</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T14:44:23Z' class='post-time'>
+                    July 24, 2025,  2:44pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-24T14:44:23Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+</blockquote>
+</aside>
+<p>I think you’re confusing bugs and backdoors here. It’s true that vulns that end up in software with Debian or other stable releases are liable to remain unpatched in various ways, and I explicitly list this as a downside of stable releases in the linked document. But the xz-utils “vuln” wasn’t a vuln, it was deliberate malware introduced to cause harm. Debian and other stable-release distros didn’t update to it immediately, so there was time for the security community to notice and raise alerts about the backdoor before it trickled down the pipeline to stable release users. Rolling release users got the backdoored version.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>So is having stable prevent security issues? no. prevent bugs? no. actually it introduces a new dilemma which is frozen software with bugs (graphical or so) will not be fixed even if its fixed upstream.</p>
+</blockquote>
+</aside>
+<p>True, and again, I point that out in the linked document.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Bottom line is that the software you are using either good or a mess, and this is only to blame the upstream developer with. on the edge fixes of features and vulnerability is better than sitting old and dirty waiting for fixes (which some released for years already).</p>
+</blockquote>
+</aside>
+<p>This is a very valid argument (more-or-less the same one I’m making) for some software like Firefox. But for, say, SSH, do I really want to always pull in the latest shiny new thing, complete with new vulns like regreSSHion? Probably not. The codebase doesn’t move nearly as fast, and so it’s practical to just backport fixes as necessary.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Note about Debian: Debian even modify the software and makes it act stupidly/introduce new bug</p>
+</blockquote>
+</aside>
+<p>Indeed. Virtually all distros do that, including rolling and semi-rolling releases.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_5' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T15:16:09Z' class='post-time'>
+                    July 24, 2025,  3:16pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-24T15:16:09Z'>
+              <span itemprop='position'>5</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group quote-modified" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<aside class="quote no-group" data-username="nurmagoz" data-post="3" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>You assumed xz has only this vulnerability which didnt pass because it was not on the latest version, ok but how about xz which is already inside debian? just because a vulnerability widely exposed and didnt pass doesnt mean the software you are running is secure to begin with. Let alone how many bugs or vulnerabilities got fixed without debian (or any stable) got notified with (until its too late).</p>
+</blockquote>
+</aside>
+<p>I think you’re confusing bugs and backdoors here. It’s true that vulns that end up in software with Debian or other stable releases are liable to remain unpatched in various ways, and I explicitly list this as a downside of stable releases in the linked document. But the xz-utils “vuln” wasn’t a vuln, it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>The difference between these two is a bit difficult to explain. Therefore explained, documented, compared here:<br>
+<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Backdoor#Vulnerability_versus_Malicious_Backdoor">Vulnerability versus Malicious Backdoor</a></p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>regreSSHion</p>
+</blockquote>
+</aside>
+<p>For reference:</p>
+<ul>
+<li><a href="../../../external.html?link=https://en.wikipedia.org/wiki/RegreSSHion" class="inline-onebox">RegreSSHion - Wikipedia</a></li>
+<li><a href="../../../external.html?link=https://blog.qualys.com/vulnerabilities-threat-research/2024/07/01/regresshion-remote-unauthenticated-code-execution-vulnerability-in-openssh-server" class="inline-onebox">OpenSSH CVE-2024-6387 RCE Vulnerability: Risk &amp; Mitigation | Qualys</a></li>
+<li><a href="../../../external.html?link=https://www.qualys.com/2024/07/01/cve-2024-6387/regresshion.txt">https://www.qualys.com/2024/07/01/cve-2024-6387/regresshion.txt</a></li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_6' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T15:39:31Z' class='post-time'>
+                    July 24, 2025,  3:39pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-08-22T15:31:24Z'>
+              <span itemprop='position'>6</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>And when an RCE discovered in an app and the developers say oh sorry this is a bad bug, i should assume this wasnt a backdoor because they phrased it nicely? It looks more of a wording/phrasing to me, yes i would believe their claim if there is no bad history or any reason to believe otherwise, but technically speaking i cant verify their claim.</p>
+<p>What we should do instead is:</p>
+<ul>
+<li>Assume every software is bad, except the few software that we either develop or we know its unlikely to be backdoored.</li>
+<li>Sandbox (socially in VM) every software since its bad.</li>
+<li>Find an automated mechanism to examine the code whether in the repository or when its installed (with scanner searching for malicious patterns or so)</li>
+<li>Add policies which prevent bad apps with certain behaviors like using unicodes in suspicious ways or xyz, or at least flagging them (similar to flatpak package flags).</li>
+</ul>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Rolling release users got the backdoored version.</p>
+</blockquote>
+</aside>
+<p>Thats correct and the stable release got the backdoors which are not discovered yet. e.g:</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>regreSSHion</p>
+</blockquote>
+</aside>
+<p>Which effected <a href="../../../external.html?link=https://security-tracker.debian.org/tracker/source-package/openssh">bookworm</a> when it was stable.</p>
+<p>And if you look into this example they removed a crucial directive that had mitigated an earlier vulnerability. If you tell me this isnt backdoor because of xyz, from technical point view this doesnt differ from xz issue.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>do I really want to always pull in the latest shiny new thing</p>
+</blockquote>
+</aside>
+<p>Future answer to this question: Yes, there is no better way around.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-24T17:02:48Z' class='post-time'>
+                    July 24, 2025,  5:02pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-24T17:02:48Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>it was deliberate malware introduced to cause harm.</p>
+</blockquote>
+</aside>
+<p>And when an RCE discovered in an app and the developers say oh sorry this is a bad bug, i should assume this wasnt a backdoor because they phrased it nicely?</p>
+</blockquote>
+</aside>
+<p>Not a malicious backdoor because it looks similar to this:<br>
+<a href="../../../external.html?link=https://www.kicksecure.com/wiki/Backdoor#Vulnerability_Example">Vulnerability Example</a></p>
+<p><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Backdoor#Malicious_Backdoor">Malicious Backdoor</a> is much worse.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>It looks more of a wording/phrasing to me,</p>
+</blockquote>
+</aside>
+<p>Wiki table improved just now to explain the differences better.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Sandbox every software since its bad.</li>
+</ul>
+</blockquote>
+</aside>
+<p>Sandboxing is great, but also not a magic bullet fixing all issues, even if functional.</p>
+<p>In case of SSH:</p>
+<ul>
+<li>(1) vulnerability “regreSSHion”</li>
+<li>(2) malicious backdoor “xz backdoor”</li>
+</ul>
+<p>sandboxing did not help. SSH is sandboxed.</p>
+<p>SSH is very popular and its security very important. Therefore unsurprisnig, sandboxing has already been implemented.<br>
+(<a href="../../../external.html?link=https://jfrog.com/blog/examining-openssh-sandboxing-and-privilege-separation-attack-surface-analysis/" class="inline-onebox">OpenSSH Privilege Separation and Sandbox - Attack Surface Analysis</a>)</p>
+<p>Sandboxing:</p>
+<ul>
+<li>Sandboxing protects the system from the application.</li>
+<li>Sandbox can prevent exploitation of some types of vulnerabilities. (Such as when using a seccomp sandbox and any exploitation attempt requiring a disallowed seccomp syscall.)</li>
+<li>Sandboxing (at least upstream/distribution default sandboxing) cannot prevent backdoor exploitation. For example, I don’t see how any sandboxing could have stopped the <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Backdoor#Bitpay_Wallet_Malicious_Backdoor">Bitpay Wallet Malicious Backdoor</a>.</li>
+</ul>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Find an automated mechanism to examine the code whether in the repository or when its installed (with scanner searching for malicious patterns or so)</li>
+</ul>
+</blockquote>
+</aside>
+<p>Also nice but wouldn’t have found above 2 examples. In fact, it didn’t find it fast enough.</p>
+<p>Static Analysis and what not. But it produces false-positives. Static analysis output often requires manual review to confirm true positives.</p>
+<p>So that cannot be fully automated either. Nice to perhaps find vulnerabilities but not backdoors.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="6" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<ul>
+<li>Add policies which prevent bad apps with certain behaviors like using unicodes in suspicious ways or xyz, or at least flagging them (similar to flatpak package flags).</li>
+</ul>
+</blockquote>
+</aside>
+<p><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Unicode" class="inline-onebox">Invisible Malicious Unicode Risks</a> - Then we can flag large percentage (guesstimated, could be easily 50-90%) of all source code files and packages.</p>
+<ul>
+<li>Some letter such as <code>ó</code> in a developers name in the source code file?</li>
+<li>That’s unicode. Applications with mulit-language support? A ton of unicode.</li>
+</ul>
+<p>Unfortunately, these are hard engineering problems.</p>
+<p>If it was easy to fix, projects would have taken action. Bug reports:</p>
+<ul>
+<li><a href="../../../external.html?link=https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1014029">invisible malicious unicode in source code - detection and prevention</a></li>
+<li><a href="../../../external.html?link=https://github.com/QubesOS/qubes-issues/issues/7556" class="inline-onebox">audit and protect from Qubes source code for malicious unicode - CVE-2021-42574 · Issue #7556 · QubesOS/qubes-issues · GitHub</a></li>
+<li>more here: <a href="../../../external.html?link=https://forums.whonix.org/t/detecting-malicious-unicode-in-source-code-and-pull-requests/13754" class="inline-onebox">Detecting Malicious Unicode in Source Code and Pull Requests - Development - Whonix Forum</a></li>
+</ul>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-25T14:34:05Z' class='post-time'>
+                    July 25, 2025,  2:34pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-25T14:34:05Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>it looks</p>
+</blockquote>
+</aside>
+<p>Yeah it “looks” something, its for “sure” something else. regreSSHion how can you verify its not a backdoor?</p>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Backdoor#Malicious_Backdoor">Malicious Backdoor</a> is much worse.</p>
+</blockquote>
+</aside>
+<p>Whether xz or pegasus or..etc are much more complex/sophisticated than this, we just cant know except by guess/people say/website announcement or so that its not done intentionally, these are unverifiable claims and from technical point view are the same thing (you break it intentionally or not, doesnt matter, only different phrases used but its same end result).</p>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Sandboxing is great, but also not a magic bullet fixing all issues, even if functional.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Static Analysis and what not. But it produces false-positives. Static analysis output often requires manual review to confirm true positives.</p>
+<p>So that cannot be fully automated either. Nice to perhaps find vulnerabilities but not backdoors.</p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="Patrick" data-post="7" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Unfortunately, these are hard engineering problems.</p>
+</blockquote>
+</aside>
+<p>True, true, true, but thats the maximum you can have. Keep improving these areas because there is no better way exist. These solutions are not the 100% but nothing exist better than them specially when you have shattered apps/code developed by different people, different languages used, developers doesnt always follow instructions or steps of best practices..etc, so to somewhat control this mess there isnt in my knowledge better ways to handle that rather than the suggestions i posted.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_9' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/extraextra'><span itemprop='name'>extraextra</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-25T15:04:38Z' class='post-time'>
+                    July 25, 2025,  3:04pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-25T15:04:38Z'>
+              <span itemprop='position'>9</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>watch this <a href="../../../external.html?link=https://www.youtube.com/watch?v=sq0TaUfkAW8" rel="noopener nofollow ugc">https://www.youtube.com/watch?v=sq0TaUfkAW8</a></p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_10' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-27T12:26:13Z' class='post-time'>
+                    July 27, 2025, 12:26pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-27T12:28:46Z'>
+              <span itemprop='position'>10</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Thank you for the video, actually it aligned with my suggestions:</p>
+<ul>
+<li>Update forward</li>
+<li>Roll backward</li>
+<li>Scanners</li>
+<li>(I even added more measurements above)</li>
+</ul>
+<p>All covered. He as well differ between intentional VS non-intentional in terminological way, and didnt show a practical way and thats what i said before.</p>
+<p>He talked about other suggestions like pinning certain dependencies or manual remove the infected dependency… but we have seen how this is impractical in case of OS level.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_11' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-28T14:24:03Z' class='post-time'>
+                    July 28, 2025,  2:24pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-28T14:24:03Z'>
+              <span itemprop='position'>11</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>Sudo as an example of Upstream VS Debian security:</p>
+<h2><a name="p-3109-sudo-in-debian-stable-1" class="anchor" href="#p-3109-sudo-in-debian-stable-1" aria-label="Heading link"></a>sudo in debian stable</h2>
+<p>sudo version <a href="../../../external.html?link=https://packages.debian.org/bookworm/sudo">1.9.13</a> used which is vulnerable to <a href="../../../external.html?link=https://security-tracker.debian.org/tracker/CVE-2023-42465">CVE-2023-42465</a> (cve since 22/12/2023 and we are now in 2025).</p>
+<h2><a name="p-3109-sudo-in-debian-not-stable-2" class="anchor" href="#p-3109-sudo-in-debian-not-stable-2" aria-label="Heading link"></a>sudo in debian not stable</h2>
+<p>sudo has released 2 security fixes (one of them is critical) with version 1.9.17p1 released in <a href="../../../external.html?link=https://www.sudo.ws/pipermail/sudo-announce/2025-June/000222.html">30 of june</a> effecting 1.9.14 to 19.17.</p>
+<p>Debian still using <a href="../../../external.html?link=https://tracker.debian.org/pkg/sudo">outdated version</a> and we are now at the end of july (<a href="../../../external.html?link=https://packages.debian.org/sid/sudo">not even in sid</a> yet).</p>
+<h2><a name="p-3109-sudo-in-rolling-distros-3" class="anchor" href="#p-3109-sudo-in-rolling-distros-3" aria-label="Heading link"></a>sudo in rolling distros</h2>
+<p><a href="../../../external.html?link=https://search.nixos.org/packages?channel=25.05&amp;show=sudo&amp;from=0&amp;size=50&amp;sort=relevance&amp;type=packages&amp;query=sudo">Nix</a>, <a href="../../../external.html?link=https://packages.guix.gnu.org/packages/sudo/">Guix</a>, <a href="../../../external.html?link=https://archlinux.org/packages/core/x86_64/sudo/">Arch</a>, <a href="../../../external.html?link=https://gitweb.gentoo.org/repo/gentoo.git/tree/app-admin/sudo/sudo-1.9.17_p1.ebuild">Gentoo</a> has sudo 1.9.17p1.</p>
+<p>Though im not a fan of sudo/su/root, this stupid tool and concept should be removed altogether. But is this is just critical tiny example, which can ruin many users life because they are depending on this obsolete stable concept.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_12' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop='name'>arraybolt3</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-28T16:02:16Z' class='post-time'>
+                    July 28, 2025,  4:02pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-28T16:09:30Z'>
+              <span itemprop='position'>12</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="nurmagoz" data-post="11" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>CVE-2023-42465</p>
+</blockquote>
+</aside>
+<p>wha… ok, excuse me for a moment, but this CVE is just patently ridiculous. Since when is it a software security vulnerability if a randomly flipped bit in RAM can cause a bypass? If the hardware fails or behaves in a completely unexpected way, that is firmly the hardware’s fault. I am not about to, and I expect no one else to, start programming effectively <a href="../../../external.html?link=https://codegolf.stackexchange.com/questions/57257/radiation-hardened-quine" rel="noopener nofollow ugc">radiation-hardened software</a> because of RowHammer, unless that is explicitly marked as my job. Either an OS-level mitigation or a hardware replacement needs to be responsible for this. The solution to RowHammer is not to make software resistant to bit flips, it’s to keep the bits from flipping in the first place.</p>
+<p>(sorry for the rant, you do have a decent point in general, just this particular CVE is crazy.)</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_13' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-28T16:55:56Z' class='post-time'>
+                    July 28, 2025,  4:55pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-28T16:55:56Z'>
+              <span itemprop='position'>13</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>just this particular CVE is crazy</p>
+</blockquote>
+</aside>
+<p>The concept itself what matters, upstream <a href="../../../external.html?link=https://www.sudo.ws/releases/stable/#1.9.15">done something to it</a> which is not included in debian since 2 years, that is more crazy.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_14' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-28T17:08:40Z' class='post-time'>
+                    July 28, 2025,  5:08pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-28T17:08:40Z'>
+              <span itemprop='position'>14</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>A ton of software would require massive refactoring to follow that more rowhammer resistant style. A ton of CVEs could be filled in a ton of projects. Makes no sense.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Either an OS-level mitigation or a hardware replacement needs to be responsible for this.</p>
+</blockquote>
+</aside>
+<p>Or a compiler hardening feature to automate this style.</p>
+<aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="13" data-topic="1139" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<aside class="quote no-group" data-username="arraybolt3" data-post="12" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>just this particular CVE is crazy</p>
+</blockquote>
+</aside>
+<p>The concept itself what matters, upstream <a href="../../../external.html?link=https://www.sudo.ws/releases/stable/#1.9.15">done something to it</a> which is not included in debian since 2 years, that is more crazy.</p>
+</blockquote>
+</aside>
+<p>Because of the judgement of the Debian security team.</p>
+<p>quote</p>
+<p><a href="../../../external.html?link=https://security-tracker.debian.org/tracker/CVE-2023-42465" class="onebox" target="_blank" rel="noopener">https://security-tracker.debian.org/tracker/CVE-2023-42465</a></p>
+<blockquote>
+<p>is more an hardening against hardware bug (rowhammer) than a security fix per se<br>
+part of the code in the fix commit are not built because debian use PAM: plugins/sudoers/auth/sudo_auth.[ch]</p>
+</blockquote>
+<p>i.e. not applicable.</p>
+<p>Which seems correct and unopposed.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="13" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>upstream <a href="../../../external.html?link=https://www.sudo.ws/releases/stable/#1.9.15">done something to it</a></p>
+</blockquote>
+</aside>
+<p>They got talked into it, and changed something on the level of sudo that should be fixed at lower level instead. So none of this makes any sense.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_15' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-28T17:58:07Z' class='post-time'>
+                    July 28, 2025,  5:58pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-28T17:58:07Z'>
+              <span itemprop='position'>15</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="14" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>They got talked into it, and changed something on the level of sudo that should be fixed at lower level instead. So none of this makes any sense.</p>
+</blockquote>
+</aside>
+<p><a href="../../../external.html?link=https://arxiv.org/pdf/2309.02545">POC</a> submitted, upstream <a href="../../../external.html?link=https://github.com/sudo-project/sudo/commit/7873f8334c8d31031f8cfa83bd97ac6029309e4f">addressed it</a>.</p>
+<p>Debian can say whatever they want, its minor or not, unrelated to the concept (though they didnt say like debian is immune to this or so, its <a href="../../../external.html?link=https://security-tracker.debian.org/tracker/source-package/sudo">vulnerable (no DSA)</a>, its like saying yeah, not a big deal.. ok.. LulzSec).</p>
+<p>Focus on the concept, concept is flawed, unrelated to the impact.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_16' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-29T12:35:02Z' class='post-time'>
+                    July 29, 2025, 12:35pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-29T12:35:02Z'>
+              <span itemprop='position'>16</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p><a href="../../../external.html?link=https://arxiv.org/pdf/2309.02545">POC</a> submitted, upstream <a href="../../../external.html?link=https://github.com/sudo-project/sudo/commit/7873f8334c8d31031f8cfa83bd97ac6029309e4f">addressed it</a>.</p>
+</blockquote>
+</aside>
+<p>And now one could go to 1000s of other projects and report CVEs because they’re using a similar more rowhammer vulnerable coding style.</p>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Debian can say whatever they want, its minor or not, unrelated to the concept (though they didnt say like debian is immune to this or so, its <a href="../../../external.html?link=https://security-tracker.debian.org/tracker/source-package/sudo">vulnerable (no DSA)</a>, its like saying yeah, not a big deal… ok… LulzSec).</p>
+</blockquote>
+</aside>
+<p>Wrong interpretation.</p>
+<p>Because you don’t know what this means:</p>
+<blockquote>
+<p>part of the code in the fix commit are not built because debian use PAM: plugins/sudoers/auth/sudo_auth.[ch]</p>
+</blockquote>
+<aside class="quote no-group" data-username="nurmagoz" data-post="15" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Focus on the concept, concept is flawed, unrelated to the impact.</p>
+</blockquote>
+</aside>
+<p>It’s going to be difficult to find a real CVE that doesn’t get addressed by Debian security team without knowing how.</p>
+<p><code>check-support-status</code> can do. See:<br>
+<a href="../../../external.html?link=https://forums.whonix.org/t/find-packages-without-security-support-consider-installation-of-debian-security-support-by-default-check-support-status/19262" class="inline-onebox">Find packages without security support / consider installation of debian-security-support by default / `check-support-status` - Phabricator Tickets - Whonix Forum</a></p>
+<hr>
+<p>As for exploitable security issues in Debian stable but unfixed because no CVE has been issued, I couldn’t find any examples.</p>
+<p>Quote <a href="../../../external.html?link=https://security-team.debian.org/security_tracker.html" class="inline-onebox">Debian Security Team</a></p>
+<blockquote>
+<p>Vulnerabilities without an assigned CVE id</p>
+<p>If you learn of a vulnerability to which no CVE id has been assigned yet, you can request one. In the meantime, you can add an entry of the form</p>
+<p>CVE-2009-XXXX [optipng array overflow]<br>
+- optipng 0.6.2.1-1 (low)<br>
+NOTE: <a href="../../../external.html?link=https://secunia.com/advisories/34035/" class="inline-onebox">About Secunia Research | Flexera</a></p>
+<p>It is desirable to include references which uniquely identify the issue, such as a permanent link to an entry in the upstream bug tracker, or a bug in the Debian BTS. If the issue is likely present in unstable, a bug should be filed to help the maintainer to track it.</p>
+<p>Lack of CVE entries should not block advisory publication which are otherwise ready, but we should strive to release fully cross-referenced advisories nevertheless.</p>
+</blockquote>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_17' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-29T19:38:52Z' class='post-time'>
+                    July 29, 2025,  7:38pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-29T19:38:52Z'>
+              <span itemprop='position'>17</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="16" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>And now one could go to 1000s of other projects and report CVEs because they’re using a similar more rowhammer vulnerable coding style.</p>
+</blockquote>
+</aside>
+<p>It should be if possible.</p>
+<aside class="quote no-group quote-modified" data-username="Patrick" data-post="16" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Wrong interpretation.</p>
+<p>Because you don’t know what this means:</p>
+<blockquote>
+<p>part of the code in the fix commit are not built because debian use PAM: plugins/sudoers/auth/sudo_auth.[ch]</p>
+</blockquote>
+</blockquote>
+</aside>
+<p>Read the research paper, the study done by attacking Ubuntu 20.04.01 LTS (yeah with PAM..), they gained root access, period. (the Y intermediary/package manager can BS whatever they want)</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_18' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-30T09:34:36Z' class='post-time'>
+                    July 30, 2025,  9:34am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-30T09:34:36Z'>
+              <span itemprop='position'>18</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group quote-modified" data-username="nurmagoz" data-post="17" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="16" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>And now one could go to 1000s of other projects and report CVEs because they’re using a similar more rowhammer vulnerable coding style.</p>
+</blockquote>
+</aside>
+<p>It should be if possible.</p>
+</blockquote>
+</aside>
+<p>Should also go report 100 of CVEs to implement <a href="../../../external.html?link=https://codegolf.stackexchange.com/questions/57257/radiation-hardened-quine">radiation hardening</a> to have better security on airplanes and space vehicles and against radiation based attacks?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_19' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/nurmagoz'><span itemprop='name'>nurmagoz</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-30T11:16:55Z' class='post-time'>
+                    July 30, 2025, 11:16am
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-30T11:16:55Z'>
+              <span itemprop='position'>19</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="18" data-topic="1139">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Should also go report 100 of CVEs to implement <a href="../../../external.html?link=https://codegolf.stackexchange.com/questions/57257/radiation-hardened-quine">radiation hardening</a> to have better security on airplanes and space vehicles and against radiation based attacks?</p>
+</blockquote>
+</aside>
+<p>You mean lets say a research institute found a vulnerability effecting 1000s of projects because they are using the same library or code issue..etc, the research institute if they can inform all of them this is a bad thing?</p>
+<p>And if not by them, someone saw the study and informed other.. this is good thing, im not sure hows that can be bad.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_20' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2025-07-30T12:41:25Z' class='post-time'>
+                    July 30, 2025, 12:41pm
+                  </time>
+                  <meta itemprop='dateModified' content='2025-07-30T12:41:25Z'>
+              <span itemprop='position'>20</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>No, that’s not what I meant. There’s no such obligation.</p>
+<p>I am not going around telling all projects of some issue that applies to them. For example:</p>
+<ul>
+<li><a href="../../../external.html?link=https://github.com/QubesOS/qubes-issues/issues/7556" class="inline-onebox">audit and protect from Qubes source code for malicious unicode - CVE-2021-42574 · Issue #7556 · QubesOS/qubes-issues · GitHub</a> or</li>
+<li><a href="../../../external.html?link=https://github.com/onionshare/onionshare/issues/221" class="inline-onebox">sign all git commits · Issue #221 · onionshare/onionshare · GitHub</a></li>
+<li>or similar.</li>
+</ul>
+<p>But anyone else can feel free to do this.</p>
+<hr>
+<p>What I was asking was…</p>
+<p>Should Kicksecure <a href="../../../external.html?link=https://codegolf.stackexchange.com/questions/57257/radiation-hardened-quine">implement radiation</a> hardening to have better security on airplanes and space vehicles and against radiation based attacks?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+    </div>
+
+      <div role='navigation' itemscope itemtype='http://schema.org/SiteNavigationElement' class="topic-body crawler-post">
+            <span itemprop='name'><b><a rel="next" itemprop="url" href="11394658.html?page=2">next page →</a></b></span>
+      </div>
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>

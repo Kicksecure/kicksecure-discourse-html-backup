@@ -1,0 +1,1141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>USBGuard - what should we allow or disallow by default?</title>
+    <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248</link>
+    <description>Kicksecure 18 is intended to ship USBGuard by default, with a configuration that should block likely-malicious, unknown, and unusual devices. The hope is that it won’t block so much as to significantly increase the difficulty of using Kicksecure, while also making it more difficult to use devices such as the Hak5 rubber ducky or O.MG plug (popular keystroke injection devices).
+
+Our current USBGuard configuration is visible at https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/rules.d/30_security-misc.conf. The original intent was to allow everything connected at boot, and then disallow everything other than mass storage devices, keyboards, and mice, while also not allowing keyboards or mice to be combined with other interfaces, and not allowing additional keyboards and mice to be attached if one is already present. However, as pointed out by Marek (the lead Qubes OS developer), this is going to cause *tons* of legitimate devices to be blocked: https://github.com/Kicksecure/security-misc/commit/cba16879eff9d3d998c127e41c38d2067cdf04cc#r164474977
+
+We have a pretty classic security vs. usability tradeoff here. We don&#39;t want to block so much that users disable USBGuard because they can&#39;t live with it, but we also don&#39;t want to allow so much that malicious devices work in common configurations. It&#39;s already risky enough allowing keyboards and mice to be attached after bootup, since if the only keyboard and mouse present on bootup is non-USB (as is the case with most laptops if you don&#39;t plug additional devices into them), keystroke injection devices that present themselves as only a keyboard will be able to attack the system and succeed. But blocking *everything* other than keyboards, mice, and storage devices may be overkill also.
+
+Does anyone have input on what should be blocked or not blocked by default? Some USB devices to think about here are:
+
+* Webcams
+  * On its own, a webcam probably can&#39;t cause too much trouble... the worst it could do is video the user on the user&#39;s own machine, it would probably be much more useful for an attacker to record the user with an *attacker-controlled* machine, which of course USBGuard can&#39;t do anything about.
+* Microphones
+  * Similar situation as webcams.
+* Headsets/speakers/miscellaneous other USB audio devices
+  * Similar situation as webcams.
+* Printers
+  * Could introduce attack surface that we don&#39;t want, see https://www.evilsocket.net/2024/09/26/Attacking-UNIX-systems-via-CUPS-Part-I/
+* MIDI interfaces
+  * Probably pretty rare, no idea what the risks are of allowing these to be used by default, would probably block them just in case.
+* Touchscreens
+  * Input device, similar to a mouse, might even be handled already by allowing mice in the system. Dangers are similar or identical to allowing mice.
+* Android devices
+  * Uses or at least used to use Media Transfer Protocol. Unsure what the risks are here.
+* USB Ethernet
+  * Oftentimes uses RNDIS, which the Linux kernel maintainer Greg Kroah-Hartman has tried to get disabled in Linux at least *three times* due to supposedly unfixable security issues. (https://www.phoronix.com/news/Linux-Disabling-RNDIS-Drivers, https://www.phoronix.com/news/Linux-Disable-RNDIS-Drivers, https://www.phoronix.com/news/Linux-RNDIS-Removal-EOY2024) I would consider this very high-risk and would NOT enable it.
+* Bluetooth dongles
+  * Could be used to attach arbitrary devices to systems remotely, but this would require some user interaction. Unsure what the implications of a malicious Bluetooth dongle would be. Internal Bluetooth cards actually use the USB bus, but they&#39;ll be present on boot and thus allowed, if everything works as expected.
+* 2FA keys
+  * I believe these present themselves as a human interface device, not sure how safe or unsafe this is or if it&#39;s feasible to allow it by default.
+* Anything else we should consider allowing or not allowing by default?</description>
+    
+    <lastBuildDate>Sat, 11 Apr 2026 16:16:35 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>Wanted to mention <code>hid-omg-detect</code> is in the works:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.phoronix.com/news/hid-omg-detect-Malicious-HID">
+  <header class="source">
+      <img src="https://www.phoronix.com/favicon.ico" class="site-icon" alt="" width="48" height="48">
+
+      <a href="https://www.phoronix.com/news/hid-omg-detect-Malicious-HID" target="_blank" rel="noopener nofollow ugc">phoronix.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:666/500;"><img src="https://www.phoronix.net/image.php?id=183&amp;image=logisys_mice_size" class="thumbnail" alt="" width="666" height="500"></div>
+
+<h3><a href="https://www.phoronix.com/news/hid-omg-detect-Malicious-HID" target="_blank" rel="noopener nofollow ugc">hid-omg-detect: Linux Driver In Development To Detect Malicious HID Devices</a></h3>
+
+  <p>Zubeyr Almaho has been leading work on a new HID driver named hid-omg-detect with an intent on passive monitoring to watch out for any malicious HID devices being connected to the system.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/66">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/66</link>
+        <pubDate>Sat, 11 Apr 2026 16:16:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-66</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>6 posts were split to a new topic: <a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521">Yubikey - USBGuard - IPC call failed while trying to apply device policy ‘allow’ over device with ID xxxx with message:</a></p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/65">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/65</link>
+        <pubDate>Sun, 25 Jan 2026 08:33:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-65</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">github.com/ArrayBolt3/user-sysmaint-split</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">Enable usbguard-dbus.service in sysmaint sessions by default</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-01-13" data-time="01:21:20" data-timezone="UTC">01:21AM - 13 Jan 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 3 additions and 0 deletions">
+        <a href="https://github.com/ArrayBolt3/user-sysmaint-split/commit/dcaf6b7a924e832e646023fc8f81865389e50764" target="_blank" rel="noopener">
+          <span class="added">+3</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/64">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/64</link>
+        <pubDate>Tue, 13 Jan 2026 01:22:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-64</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/Kicksecure/security-misc/issues/342">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/issues/342" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/issues/342" target="_blank" rel="noopener">Evaluate Blocking vendor‑specific USB Classes (e.g., FFh) in USBGuard?</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-12-15" data-time="16:13:44" data-timezone="UTC">04:13PM - 15 Dec 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/Gerry-Manders" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/225925156?v=4" class="onebox-avatar-inline" width="20" height="20">
+          Gerry-Manders
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">My ethernet usb adapter shows `with-interface ff:ff:00 with-connect-type "hotplu<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">g"`
+
+&gt;Base Class FFh (Vendor Specific)
+&gt;&gt; This base class is defined for vendors to use as they please. These class codes can be used in both Device and Interface Descriptors.
+
+`ff:*:*` is the vendor‑specific class code (class 0xFF) with a vendor‑specific subclass (0xFF) and protocol 0x00. It is commonly used by USB‑Ethernet chips (e.g., ASIX AX88179, Realtek RTL8153) and other devices that provide their own *proprietary protocol* over USB.
+
+https://www.asix.com.tw/en/product/USBEthernet/Super-Speed_USB_Ethernet/AX88179A
+
+https://devicehunt.com/view/type/usb/vendor/0B95
+
+https://forum.openwrt.org/t/usb-to-ethernet-adapter-asix-elec-corp-ax88x72a/164968/7
+
+F****** proprietary should I be concerned now or what? Because the class is undefined by the USB‑IF, can it also be abused to hide unexpected functionality? 
+
+With so much proprietary today is it only generic adapters that use this? Do you think its commonplace with name brand Ethernet adapters commonly found in box stores to also use vendor-specific aka proprietary?
+
+
+Also both my mouse and keyboard I bought in person say HID? ( I bought in person not online)
+
+Wired optical mouse (Walmart ONN brand) output: `with-interface 03:01:02 with-connect-type "hotplug"`
+
+Wired keyboard output: `with-interface { 03:01:01 03:00:00 } with-connect-type "hotplug"`
+
+The USB Ethernet Adapter I bought on Amazon so...kinda worried here
+
+Does the driver listed with usbcore mean that it can secretly use HID or is that global dependency for the whole USB stack of all active USB devices?
+
+```
+user@host:~$ lsmod | grep ax88179
+ax88179_178a           36864  0
+usbnet                 57344  1 ax88179_178a
+mii                    16384  2 usbnet,ax88179_178a
+usbcore               348160  9 xhci_hcd,ehci_pci,usbnet,usbhid,usb_storage,ehci_hcd,xhci_pci,uas,ax88179_178a
+```
+
+Can udev be used to see which kernel driver was selected. Like If a device that should be a plain mouse or ethernet ends up bound to a generic driver that accepts vendor‑specific control transfers would that indicate a red flag?
+
+---
+## Key points
+### Security surface
+&gt; Vendor‑specific class FFh lets a device define its own protocol. An attacker could craft a malicious dongle that pretends to be a harmless peripheral (network card, storage, etc.) while actually executing hidden commands.
+
+
+### Device compatibility
+&gt; A portion of consumer‑grade USB‑Ethernet adapters (ASIX AX88179, Realtek RTL8153, etc.) use class FFh. \
+How much that is undetermined and needs more research.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/63">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/63</link>
+        <pubDate>Fri, 19 Dec 2025 08:46:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-63</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/29685938bdfd5c14828091342dbe21283ed45fd1">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/29685938bdfd5c14828091342dbe21283ed45fd1" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/29685938bdfd5c14828091342dbe21283ed45fd1" target="_blank" rel="noopener">move usbguard reject rules to the top</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-11-02" data-time="10:57:52" data-timezone="UTC">10:57AM - 02 Nov 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 22 additions and 22 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/29685938bdfd5c14828091342dbe21283ed45fd1" target="_blank" rel="noopener">
+          <span class="added">+22</span>
+          <span class="removed">-22</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/5121f80f28d374d78bb3897a46fe924d750f4643">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/5121f80f28d374d78bb3897a46fe924d750f4643" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/5121f80f28d374d78bb3897a46fe924d750f4643" target="_blank" rel="noopener">comment</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-11-02" data-time="11:00:24" data-timezone="UTC">11:00AM - 02 Nov 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/adrelanos" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/1985040?v=4" class="onebox-avatar-inline" width="20" height="20">
+          adrelanos
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 5 additions and 0 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/5121f80f28d374d78bb3897a46fe924d750f4643" target="_blank" rel="noopener">
+          <span class="added">+5</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/62">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/62</link>
+        <pubDate>Sun, 02 Nov 2025 11:42:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-62</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="anon92632958" data-post="60" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>next to <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/12-usbguard">Tails</a> (Theirs only protects against Scenario 1),</p>
+</blockquote>
+</aside>
+<p>The Tails configuration seems to be:</p>
+<blockquote>
+<p>Allow all devices that are already connected when the daemon starts</p>
+</blockquote>
+<p>If I am not mistaken, that means if a BadUSB such as a mass storage device also having a hidden keyboard is connected when Tails is booting, that device would be permitted.</p>
+<p>I’ve searched the Tails website.</p>
+<blockquote>
+<p>site:<a href="https://tails.net/">https://tails.net/</a> usbguard</p>
+</blockquote>
+<p>I haven’t found any documentation by Tails on USBGuard. Related documentation:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://tails.net/doc/about/warnings/computer/">
+  <header class="source">
+      <img src="https://tails.net/favicon.ico" class="site-icon" alt="" width="37" height="48">
+
+      <a href="https://tails.net/doc/about/warnings/computer/" target="_blank" rel="noopener">tails.net</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://tails.net/doc/about/warnings/computer/" target="_blank" rel="noopener">Tails - Reducing risks when using untrusted computers</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I found some noteworthy Tails tickets.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/issues/9569">
+  <header class="source">
+      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://gitlab.tails.boum.org/tails/tails/-/issues/9569" target="_blank" rel="noopener">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/issues/9569" target="_blank" rel="noopener">Protect against rogue USB devices with the GNOME USB protection feature...</a></h3>
+
+  <p>Originally created by @intrigeri on #9569 (Redmine) By “rogue USB”...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/issues/20421">
+  <header class="source">
+      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://gitlab.tails.boum.org/tails/tails/-/issues/20421" target="_blank" rel="noopener">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/issues/20421" target="_blank" rel="noopener">USBGuard bypass (#20421) · Issues · tails / tails · GitLab</a></h3>
+
+  <p>Full Description: https://pulsesecurity.co.nz/advisories/usbguard-bypass GNOME issue: https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/issues/780</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Something to be considered.</p>
+<p>At time of writing, we have the same issue. Consideration on how to fix this below. [1]</p>
+<aside class="quote no-group" data-username="anon92632958" data-post="60" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>They then precede to plug in USB device. Since user can now allow/deny, the device in theory could load code that auto allows since it now has sudo privlages via the change to allow sudo privalges to user for usbguard?</p>
+</blockquote>
+</aside>
+<p>There may be a misunderstanding on your side or my side here.</p>
+<p>usbguard-notifier is <strong>not</strong> sudo and does not give account <code>user</code> general sudo/root privileges in user session.</p>
+<p>The usbguard daemon runs as root and exposes an IPC interface. Kicksecure adds an IPCAccessControl rule that says “users in this group are allowed to tell usbguard to accept/reject a device.” The daemon enforces that itself.</p>
+<p>So the desktop user only gets a narrow capability (authorize/reject USB devices). Not full sudo/root.</p>
+<aside class="quote no-group" data-username="anon92632958" data-post="60" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>Scenario Targeted: user buys USB peripheral online (ie. charging cable, adapter, or mass storage). The USB is swapped with a malicious one in via mail tampering and is swapped for a BadUSB.</p>
+</blockquote>
+</aside>
+<p>For example, a malicious keyboard could always inject extra malicious keystrokes. I.e. inject a unicode character that makes the text that follows invisible, then inject malicious commands to install malware.</p>
+<p>Expanded <a href="https://www.kicksecure.com/wiki/USBGuard#Limitations">USBGuard, Limitations</a> just now:</p>
+<blockquote>
+<p>USBGuard is a device-level gate, not a keystroke-level firewall. Once you have decided “this is a keyboard, and I will allow it,” the operating system intentionally trusts it exactly like a real human typing. At that point:</p>
+<ul>
+<li>it can send any keystrokes,</li>
+<li>including weird Unicode/control sequences,</li>
+<li>including opening a terminal and pasting a malicious payload.</li>
+</ul>
+<p>USBGuard can help before that point (by refusing extra/composite/suspicious HIDs, or “second keyboard” devices). It cannot help after you have allowed a malicious keyboard.</p>
+<p>The only protection is “do not allow the wrong keyboard be accepted in the first place”. “Accept a malicious keyboard and hope USBGuard filters bad keystrokes” is impossible.</p>
+</blockquote>
+<p>Related:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unicode">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1777979737" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Unicode" target="_blank" rel="noopener" title="11:46AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/314;"><img src="https://www.kicksecure.com/w/images/6/69/Unicode123123.png?version=4ba16a3bc989d8453f231f7c07edb359" class="thumbnail" alt="" width="640" height="314"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unicode" target="_blank" rel="noopener">Invisible Malicious Unicode Risks</a></h3>
+
+  <p>Invisible textual characters that leading to security compromises during copy and paste.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Back to your scenario.</p>
+<ul>
+<li>Charging cable:
+<ul>
+<li>In a good case, that should be invisible and only show up as the device that is actually connected to it.</li>
+<li>In a bad case, it’s emulates a second keyboard.</li>
+</ul>
+</li>
+<li>Adapter: Same as above.</li>
+<li>mass storage: If one USB keyboard is already connected before one plugs in a BadUSB that pretends to be mass storage but also has a hidden keyboard - and suppose our USBGuard rules are set up correctly, then that hidden keyboard interface will be rejected.</li>
+</ul>
+<hr>
+<p>[1] Let’s suppose a user is using their notebooks internal keyboard (not USB) only but unknowingly has a BadUSB mass storage device that also comes with a hidden keyboard connected at boot time.</p>
+<p>How to prevent this?</p>
+<p>Default configuration could disallow all USB devices by default unless explicitly, manually allowed by the user.</p>
+<p>That wouldn’t work if the notebook internal keyboard is USB based. In that case, we would have to allow 1 USB keyboard at boot time. Can probably be scripted.</p>
+<p>But even if we had this. For best protection, the user would then have to review their USB devices and create their own configuration file. The user would need to have advanced knowledge about USBGuard.</p>
+<p>But if the user has advanced knowledge of USBGuard does really our existing configuration get into the way?</p>
+<p>This is a clear case of <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience#Security_versus_Usability">Security versus Usability</a> / <a href="https://www.kicksecure.com/wiki/Reasonable_Security" class="inline-onebox">Reasonable Security</a>.</p>
+<p>This is exactly the security vs. usability point: a distribution default has to stay usable for people who just plug in keyboards, mice, webcams, storage. An expert user who’s worried about mail-swapped cables can (and should) tighten the rules to “no HID at boot except this exact device.”</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/61">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/61</link>
+        <pubDate>Sat, 01 Nov 2025 19:24:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-61</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="59" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>What’s your threat model?</p>
+</blockquote>
+</aside>
+<p>Ok so here me out my threat model is a targeted attack via a Bad USB charging cable or USB type adapter that gets around the rules somehow. Since Kicksecure is one of the few projects that does ship USB guard that I know of next to <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/12-usbguard" rel="noopener nofollow ugc">Tails</a> (Theirs only protects against Scenario 1), I feel woried an advanced adversary could target this towards Kicksecure (rejecting HID is honestly the strongest protection <img src="https://forums.kicksecure.com/images/emoji/twitter/+1.png?v=14" title=":+1:" class="emoji" alt=":+1:" loading="lazy" width="20" height="20"> )</p>
+<p>Scenario Targeted: user buys USB peripheral online (ie. charging cable, adapter, or mass storage). The USB is swapped with a malicious one in via mail tampering and is swapped for a BadUSB. The user then logs in as USER not SYSMAINT. They then precede to plug in USB device. Since user can now allow/deny, the device in theory could load code that auto allows since it now has sudo privlages via the change to allow sudo privalges to user for usbguard?</p>
+<p>Is my understanding correct that Bad USB could therefore persist across reboots if the attacker manages to get the user to run the allow (whitelists device) command once via some BadUSB that get around the rules? Then user goes logs into SYSMAINT the root account with a now malicious USB whitelisted could do more damage?</p>
+<p><em>potential for silent whitelisting</em>?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/60">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/60</link>
+        <pubDate>Sat, 01 Nov 2025 17:15:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-60</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="anon92632958" data-post="56" data-topic="1248" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="51" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
+</blockquote>
+</aside>
+<p>USBGuard-Notifier is great but I dont think <code>user</code> account should have ability to accept / reject in all do respect.</p>
+</blockquote>
+</aside>
+<p>What’s your threat model? Why should account <code>user</code> not have the ability to accept / reject?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/59">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/59</link>
+        <pubDate>Wed, 22 Oct 2025 16:46:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-59</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Some of the configuration in security-misc is only suitable for some installations for one reason or another (for instance MAC randomization is unsuitable for servers, see <a href="https://github.com/Kicksecure/security-misc/issues/184" class="inline-onebox" rel="noopener nofollow ugc">MAC randomization breaks root server and VirtualBox DHCP / IPv6PrivacyExtensions might be problematic · Issue #184 · Kicksecure/security-misc · GitHub</a>). We split the security-misc package up into “shared”, “desktop”, and “server” packages so that we can add hardening config that is applicable to some scenarios while omitting it from others where it doesn’t work.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/58">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/58</link>
+        <pubDate>Sun, 19 Oct 2025 16:16:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-58</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>Also what happened to the config file in the <code>security-misc</code> repo and whats this change about “Split the security-misc into security-misc-shared”? I’m quite confused here can you explain the changes?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/57">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/57</link>
+        <pubDate>Sun, 19 Oct 2025 15:48:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-57</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="51" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
+</blockquote>
+</aside>
+<p>USBGuard-Notifier is great but I dont think <code>user</code> account should have ability to accept / reject in all do respect.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/56">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/56</link>
+        <pubDate>Sun, 19 Oct 2025 15:44:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-56</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Main use case for USBGuard?<br>
+Is the goal to have USBGuard protect the system only while the screen is locked, relying on users not to authorize unexpected USB devices when logged in?</p>
+</blockquote>
+</aside>
+<p>Main use should be to mitigate possible Bad USB cables/peripherals which almost always have HID. The other use should be like redhat corporate where only trusted USB peripherals allowed. Just like a DoD skiff where a narrow, well monitored entry point for personnel and equipment, keeping the interior protected from anything that shouldn’t be there.</p>
+<p>Also wanted to chime in about I think allowing only devices plugged in USB peripherals before starting the OS is enough I don’t think <code>sudo</code> should be granted to user to override this.</p>
+<p>If a user needs to allow a device other then a mass storage they should 1. reboot with plugged in device or 2. use sysmaint to allow the USB device so that the system applies to the config to explicitly allow said device when they use “user” account.</p>
+<p>The only hole in this is mass storage devices with infected or altered firmware. This isn’t a USBGuard issue though. This could be covered in another thread but two things come to mind The F3 (Fight Flash Fraud) Utility <code>f3</code> that detects if drive really is the amount of space it claims (fake advertised storage devices sold on Amazon, Aliexpress, Etc.). The second is <code>hdparm</code> and <code>smartctl</code> which can I believe  can SHA256 hash the firmware on a drive.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/55">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/55</link>
+        <pubDate>Sun, 19 Oct 2025 15:41:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-55</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[geller]]></dc:creator>
+        <description><![CDATA[
+            <p>Got it, thanks</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/54">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/54</link>
+        <pubDate>Sun, 19 Oct 2025 14:56:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-54</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>USBGuard is only going to be a feature in Kicksecure 18 and higher. Kicksecure 17 does not have it and it isn’t planned to be added to Kicksecure 17.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/53">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/53</link>
+        <pubDate>Sun, 19 Oct 2025 14:40:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-53</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[geller]]></dc:creator>
+        <description><![CDATA[
+            <p>Sorry to interrupt but is usbguard implemented in kicksecure if I do debian morphing for a template in Qubes OS?</p>
+<p>It seems like I don’t have it. I checked the<br>
+dpkg -l | grep usbguard - nothing<br>
+systemctl status usbguard - not found<br>
+/etc/usbguard/ - non existen</p>
+<p>I currently use debian 12 xfce template morphed to kicksecure for my sys-usb and I really like it</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/52">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/52</link>
+        <pubDate>Sun, 19 Oct 2025 14:06:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-52</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Upon reflection, our current USBGuard already attempts to strike a balance, i.e. <a href="https://www.kicksecure.com/wiki/Stable_Version_User_Experience" class="inline-onebox">Kicksecure Stable Version User Experience</a> / <a href="https://www.kicksecure.com/wiki/Reasonable_Security" class="inline-onebox">Reasonable Security</a>.</p>
+<blockquote>
+<ul>
+<li>Boot time devices allowed: Any devices attached before system boot are accepted.</li>
+</ul>
+</blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Scenario 2: trusted user with unlocked screen:<br>
+Or is the assumption that if the screen is unlocked, the logged-in user is trusted and should be allowed to authorize new USB devices by clicking <code>yes</code>? This would align more with a personal computer context, where only trusted users can unlock the screen.</p>
+</blockquote>
+</aside>
+<p>This seems to be the most appropriate threat model.</p>
+<p>USBGuard is already intrusive enough. Making it even more complicated by breaking the USBGuard-Notifier <code>accept</code> / <code>reject</code> buttons seems the wrong.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Scenario 1: untrusted user with unlocked screen:<br>
+Is someone physically present at the computer with an unlocked screen considered a threat? For example, in a corporate environment, an untrusted employee might insert a malicious USB device.</p>
+</blockquote>
+</aside>
+<p>For this scenario, a custom USBGuard configuration and uninstallation USBGuard-Notifier might be appropriate. (<code>sudo dummy-dependency usbguard-notifier</code>)</p>
+<hr>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">Allow listing USB devices via usbguard</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-15" data-time="22:53:26" data-timezone="UTC">10:53PM - 15 Oct 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 2 additions and 2 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/4f63af4200de23e2216be6d3e7f1055af02dbc3b" target="_blank" rel="noopener">
+          <span class="added">+2</span>
+          <span class="removed">-2</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">Set USBGuard settings to permit USB hubs and Qubes USB passthrough</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-10-17" data-time="20:49:42" data-timezone="UTC">08:49PM - 17 Oct 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 3 additions and 0 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/70fbbc230c0c5366b7a09d531012d18b1e88e07b" target="_blank" rel="noopener">
+          <span class="added">+3</span>
+          <span class="removed">-0</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/51">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/51</link>
+        <pubDate>Sun, 19 Oct 2025 08:24:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-51</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="49" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<ul>
+<li>Pressing <code>no</code>: nothing happens (default behavior)</li>
+<li>Pressing <code>yes</code>: the USB device is allowed</li>
+</ul>
+</blockquote>
+</aside>
+<p>Slight correction, the buttons are labeled <code>accept</code> and <code>reject</code>, and clicking <code>reject</code> is not a no-op. When a device is denied access, it still is “seen” by USBGuard and the kernel, but it isn’t used. When a user clicks <code>reject</code>, the kernel actually disconnects the USB device (not sure if that’s a purely software thing or if it involves hardware also, but a message appears in dmesg stating <code>USB disconnect, device number X</code> upon pressing the <code>reject</code> button). In theory a fully rejected device might be less of a threat than a recognized but unauthorized device?</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/50">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/50</link>
+        <pubDate>Fri, 17 Oct 2025 19:48:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-50</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <ul>
+<li>
+<p>Should account <code>user</code> (in <code>USER</code> session) be able to use usbguard-notifier <code>yes</code> / <code>no</code> buttons?<br>
+When a new USB device is attached, USBGuard Notifier shows a passive popup with <code>yes</code> / <code>no</code> buttons.</p>
+</li>
+<li>
+<p>Behavior of the buttons:</p>
+<ul>
+<li>Pressing <code>no</code>: nothing happens (default behavior)</li>
+<li>Pressing <code>yes</code>: the USB device is allowed</li>
+</ul>
+</li>
+<li>
+<p>Alternative policy option:<br>
+It could be configured so that only the <code>sysmaint</code> account (in the <code>SYSMAINT</code> session) is allowed to authorize devices using the <code>yes</code> button.</p>
+</li>
+<li>
+<p>Question about the threat model:<br>
+What threat model are we actually trying to address with USBGuard?</p>
+</li>
+<li>
+<p>Scenario 1: untrusted user with unlocked screen:<br>
+Is someone physically present at the computer with an unlocked screen considered a threat? For example, in a corporate environment, an untrusted employee might insert a malicious USB device.</p>
+</li>
+<li>
+<p>Scenario 2: trusted user with unlocked screen:<br>
+Or is the assumption that if the screen is unlocked, the logged-in user is trusted and should be allowed to authorize new USB devices by clicking <code>yes</code>? This would align more with a personal computer context, where only trusted users can unlock the screen.</p>
+</li>
+<li>
+<p>Main use case for USBGuard?<br>
+Is the goal to have USBGuard protect the system only while the screen is locked, relying on users not to authorize unexpected USB devices when logged in?</p>
+</li>
+</ul>
+<blockquote>
+<p>Aaron: usbguard-notifier allows users to ad-hoc allow and deny USB devices when they are attached. Should we allow the <code>qubes</code> and <code>sudo</code> groups to have <code>modify</code> permissions in usbguard as well to allow this to work?</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/49">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/49</link>
+        <pubDate>Fri, 17 Oct 2025 15:09:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-49</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="goose4" data-post="46" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>The Wireless Controller base class <code>0xE0</code> defines a small set of standard subclasses. <code>0x01</code> appears to almost always be bluetooth and <code>0x02</code> for USB devices that implement a (IEEE 802.11) WiFi radio interface.</p>
+</blockquote>
+</aside>
+<p>Noted, I can test how true that statement is since I have a wireless wifi adapter, and old wireless Logitech mouse and a old TP-Link bluetooth adapter sitting around. When I say “old” I mean like bought new within the last 6 years so.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/48">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/48</link>
+        <pubDate>Fri, 17 Oct 2025 05:09:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-48</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="NTH9R6" data-post="38" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>What does this command show?</p>
+<pre><code class="lang-auto">lsusb -v | awk '/0002:0002/ {found=1} found &amp;&amp; /bInterfaceClass/ {print; exit}'
+</code></pre>
+<p><em>replace <code>/0002:0002/</code> with the device ID that <code>lsusb</code> shows for the device ID</em> in your case it would be <code>/0e8d:7612/</code></p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="goose4" data-post="44" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/g/dc4da7/48.png" class="avatar"> goose4:</div>
+<blockquote>
+<p>you can also do <code>sudo usbguard list-devices -v</code></p>
+</blockquote>
+</aside>
+<p>Hey just checkin in here but I will give you the outputs of those commands after I reinstall Kicksecure and download the raw USBGuard configs. My wife has been in the hospital so my time has been spent elsewhere.</p>
+<p>Hope recent developments are going well with USBGuard</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/47">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/47</link>
+        <pubDate>Fri, 17 Oct 2025 05:00:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-47</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>The Wireless Controller base class <code>0xE0</code> defines a small set of standard subclasses. <code>0x01</code> appears to almost always be bluetooth and <code>0x02</code> for USB devices that implement a (IEEE 802.11) WiFi radio interface. How would go about rejecting the <code>0x01</code> subclass while allowing the <code>0x02</code> subclass without outright rejecting the whole wireless controller class <code>0xe0</code> <img src="https://forums.kicksecure.com/images/emoji/twitter/thinking.png?v=14" title=":thinking:" class="emoji" alt=":thinking:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/46">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/46</link>
+        <pubDate>Mon, 15 Sep 2025 21:17:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-46</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>So much intriguing lore in this discussion.</p>
+<p>Here is my 2cents, I think bluetooth USB class should either be rejected altogether or a commented out line that rejects them should be there for common ground like other of the lines in configs related to bluetooth. Since kicksecure doesn’t disable bluetooth altogether it does have lines that do if you need to.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/45">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/45</link>
+        <pubDate>Mon, 15 Sep 2025 21:05:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-45</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[goose4]]></dc:creator>
+        <description><![CDATA[
+            <p>lol no disrespect but you can also do <code>sudo usbguard list-devices -v</code></p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/44">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/44</link>
+        <pubDate>Mon, 15 Sep 2025 20:58:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-44</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/IPCAccessControl.d/%3Asudo">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/IPCAccessControl.d/%3Asudo" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/IPCAccessControl.d/%3Asudo" target="_blank" rel="noopener">etc/usbguard/IPCAccessControl.d/%3Asudo</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/usbguard/IPCAccessControl.d/%3Asudo" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-d/%3asudo">Devices=listen
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/Kicksecure/security-misc/commit/90b6486ffe95bf50bbf1fa60964c80853917c3c8">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/commit/90b6486ffe95bf50bbf1fa60964c80853917c3c8" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/Kicksecure/security-misc/commit/90b6486ffe95bf50bbf1fa60964c80853917c3c8" target="_blank" rel="noopener">Allow users in the sudo group to use usbguard-notifier</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-09-12" data-time="23:08:00" data-timezone="UTC">11:08PM - 12 Sep 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 11 additions and 6 deletions">
+        <a href="https://github.com/Kicksecure/security-misc/commit/90b6486ffe95bf50bbf1fa60964c80853917c3c8" target="_blank" rel="noopener">
+          <span class="added">+11</span>
+          <span class="removed">-6</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group quote-modified" data-username="NTH9R6" data-post="35" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Yes the debian wiki suggests installing usbguard alongside GUI notifier <code>usbguard-notifier</code></p>
+<p><a href="https://wiki.debian.org/USBGuard" class="inline-onebox">USBGuard - Debian Wiki</a></p>
+</blockquote>
+</aside>
+<p><code>usbguard-notifier</code> will be installed by default in Kicksecure 18 and above.</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/43">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/43</link>
+        <pubDate>Sat, 13 Sep 2025 08:31:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-43</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+      <item>
+        <title>USBGuard - what should we allow or disallow by default?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="NTH9R6" data-post="37" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>Reason I’m curious being that I noticed that I was able to plug in a non storage device after login screen before the desktop screen was loaded?<br>
+I’ll test it again it could just be something else with my system specific to my morph.</p>
+</blockquote>
+</aside>
+<p>Some devices other than storage devices are allowed by the configuration as detailed above. In particular, keyboards and mice can be attached if no other USB keyboard or mouse is attached yet. Additionally, camera and audio devices are now allowed.</p>
+<p><code>vim /usr/lib/systemd/system/usbguard.service</code> shows that USBGuard is <code>WantedBy=basic.target</code>, which means it starts pretty early in the boot process (after the core system is operational but before users can log in and a graphical session appears). It might not <em>finish</em> initializing by the time login prompts appear and a GUI works, but it starts early.</p>
+<aside class="quote no-group" data-username="NTH9R6" data-post="41" data-topic="1248">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/b2d939/48.png" class="avatar"> NTH9R6:</div>
+<blockquote>
+<p>The manpage <code>man usbguard-rules.conf</code> lists more rules and documentation then the USBGuard Rule Language on their webpage.</p>
+</blockquote>
+</aside>
+<p>Good to know, thank you!</p>
+          <p><a href="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/42">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248/42</link>
+        <pubDate>Wed, 10 Sep 2025 00:14:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1248-42</guid>
+        <source url="https://forums.kicksecure.com/t/usbguard-what-should-we-allow-or-disallow-by-default/1248.rss">USBGuard - what should we allow or disallow by default?</source>
+      </item>
+  </channel>
+</rss>

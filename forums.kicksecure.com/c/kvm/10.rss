@@ -1,0 +1,558 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>KVM - Kicksecure Forums</title>
+    <link>https://forums.kicksecure.com/c/kvm/10</link>
+    <description>Topics in the &#39;KVM&#39; category Everything specific to &lt;a target=&quot;_blank&quot; href=&quot;https://www.kicksecure.com/wiki/KVM&quot; rel=&quot;noopener&quot;&gt;Kicksecure KVM&lt;/a&gt;.</description>
+    
+      <lastBuildDate>Wed, 15 Apr 2026 21:17:26 +0000</lastBuildDate>
+      <atom:link href="https://forums.kicksecure.com/c/kvm/10.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Nested virtualization shortcut keys</title>
+          <dc:creator><![CDATA[remsa]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>Just testing how well does one system inside another works.I noticed in the one nested shortcuts do not work as they apply to the upper level, same with the grab keys. Is there a way to make them work on the nested unit?</p>
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/nested-virtualization-shortcut-keys/1674">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/nested-virtualization-shortcut-keys/1674</link>
+          <pubDate>Wed, 15 Apr 2026 21:17:26 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1674</guid>
+          <source url="https://forums.kicksecure.com/t/nested-virtualization-shortcut-keys/1674.rss">Nested virtualization shortcut keys</source>
+        </item>
+        <item>
+          <title>Resizing disk for guest in KVM</title>
+          <dc:creator><![CDATA[remsa]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>I would like to increase the size of my KVM guest (Kicksecure) and for some to me obscure reason I am not able to. It would be easier and faster to do a fresh install (which I will likely do anyway later) but I like to understand the why.</p>
+<p>I’m new to it, here is what I have done so far.<br>
+Let’s begin with</p>
+<pre><code class="lang-auto">\[user \~\]% lsblk
+NAME                                          MAJ:MIN RM SIZE RO TYPE  MOUNTPOINTS
+vda                                           253:0    0  50G  0 disk
+├─vda1                                        253:1    0   4G  0 part  /boot
+└─vda2                                        253:2    0  46G  0 part
+└─luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9 254:0    0  46G  0 crypt /
+</code></pre>
+<pre><code class="lang-auto"> \[user \~\]% df -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+/dev/dm-0      ext4       16G  6,1G  8,8G  42% /
+devtmpfs       devtmpfs  4,0M     0  4,0M   0% /dev
+tmpfs          tmpfs     7,2G  6,3M  7,2G   1% /dev/shm
+tmpfs          tmpfs     2,9G  1,9M  2,9G   1% /run
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-cryptsetup@luks\\x2d1ed83f00\\x2d4659\\x2d4ef8\\x2d812a\\x2d3abd18f4d7d9.service
+tmpfs          tmpfs     5,0M     0  5,0M   0% /run/lock
+tmpfs          tmpfs     7,2G  188K  7,2G   1% /tmp
+/dev/vda1      ext4      3,9G   42M  3,7G   2% /boot
+shared         virtiofs  7,3T  4,5T  2,9T  62% /mnt/shared
+tmpfs          tmpfs     1,5G  140K  1,5G   1% /run/user/1000
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/getty@tty1.service
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service
+</code></pre>
+<p>As you can see I already succeeded at, I guess, one stage of the process (done with <code>qemu-img resize</code>) by resizing the virtual size  <code>/dev/vda</code> it was 20G now is 50G (done with <code>fdisk</code>). My first target was <code>/dev/dm-0</code> but for the reasons below my next possible choice went to <code>/dev/vda</code>.</p>
+<p>Fine. But that should be the VM’s Physical Volume, now I have to resize the Logical Volume, wrap the FS around the new size.<br>
+Since none of <code>sudo lvdisplay &amp; sudo vgdisplay</code> showed anything I could only try with <code>dm-0</code> which is what I see in <code>df -Th</code> and that shows still 16G.<br>
+`<br>
+I tried first with</p>
+<pre><code class="lang-auto">sudo resize2fs /dev/dm-0 
+resize2fs 1.47.2 (1-Jan-2025)
+open: Device or resource busy while opening /dev/dm-0
+zsh: exit 1     sudo resize2fs /dev/dm-0
+</code></pre>
+<p>Then I thought maybe I needed to</p>
+<pre><code class="lang-auto">[user ~]% fdisk /dev/dm-0 
+
+Welcome to fdisk (util-linux 2.41).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Permission denied
+zsh: exit 1     fdisk /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo fdisk /dev/dm-0
+
+Welcome to fdisk (util-linux 2.41).                                                                                                                                                                               
+Changes will remain in memory only, until you decide to write them.                                                                                                                                               
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Device or resource busy
+zsh: exit 1     sudo fdisk /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo dmsetup info /dev/dm-0
+Name:              luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+State:             ACTIVE
+Read Ahead:        256
+Tables present:    LIVE
+Open count:        1
+Event number:      0
+Major, minor:      254, 0
+Number of targets: 1
+UUID: CRYPT-LUKS2-1ed83f0046594ef8812a3abd18f4d7d9-luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+
+</code></pre>
+<p>After more research</p>
+<pre><code class="lang-auto">[user ~]% sudo lvextend -L +100%FREE /dev/dm-0
+  Can't parse size argument.
+  Invalid argument for --size: +100%FREE
+  Error during parsing of command line.
+zsh: exit 3     sudo lvextend -L +100%FREE /dev/dm-0
+
+</code></pre>
+<pre><code class="lang-auto">sudo lvextend -L +30 /dev/dm-0
+  Volume group "dm-0" not found
+  Cannot process volume group dm-0
+zsh: exit 5     sudo lvextend -L +30 /dev/dm-0
+</code></pre>
+<p>Like I said <code>vgs</code> and <code>lvs</code> don’t show a thing.<br>
+And to top it all off</p>
+<pre><code class="lang-auto">[user ~]% sudo lsof /dev/dm-0
+lsof: WARNING: can't stat() fuse.portal file system /run/user/1000/doc
+      Output information may be incomplete.
+zsh: exit 1     sudo lsof /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo fuser -v /dev/dm-0
+zsh: exit 1     sudo fuser -v /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo unmount -f /dev/dm-0
+sudo: unmount: command not found
+zsh: exit 1     sudo unmount -f /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo umount -l /dev/dm-0
+_zsh_highlight_main__precmd_hook:4: permission denied: /dev/null 
+</code></pre>
+<p>Any Idea what to do next?</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657</link>
+          <pubDate>Mon, 06 Apr 2026 21:22:07 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1657</guid>
+          <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+        </item>
+        <item>
+          <title>Kicksecure scale issue</title>
+          <dc:creator><![CDATA[suse211213]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>It seems that KVM Kicksecure guest auto-scaling doesn’t work after first boot . but auto-scaling  works only after reboot.<br>
+After shutdown it needs to be restarted again after first boot .</p>
+<p>The following is configured in virt-manager:</p>
+<ul>
+<li>
+<p>Graphical console scaling: Always</p>
+</li>
+<li>
+<p>Resize guest with window: unchecked</p>
+</li>
+</ul>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/ddd7808412ed29108b6e56236d5a07c1bd3557aa.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/ddd7808412ed29108b6e56236d5a07c1bd3557aa" title="screen"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/ddd7808412ed29108b6e56236d5a07c1bd3557aa_2_690x471.jpeg" alt="screen" data-base62-sha1="vEvens4JtAvcVrCV3O7aQKK8LFw" width="690" height="471" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/ddd7808412ed29108b6e56236d5a07c1bd3557aa_2_690x471.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/ddd7808412ed29108b6e56236d5a07c1bd3557aa_2_1035x706.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/ddd7808412ed29108b6e56236d5a07c1bd3557aa.jpeg 2x" data-dominant-color="40455F"></a></div><p></p>
+<pre><code class="lang-auto">
+</code></pre>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-scale-issue/1446">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-scale-issue/1446</link>
+          <pubDate>Fri, 02 Jan 2026 03:40:17 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1446</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-scale-issue/1446.rss">Kicksecure scale issue</source>
+        </item>
+        <item>
+          <title>Kicksecure Kvm install mullvad vpn</title>
+          <dc:creator><![CDATA[whistleblow]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>Hey when I try to install Mullvadvpn and importing their pgp key I get the following error–-</p>
+<p>“curl: (35) OpenSSL/3.0.17: error:0A00010B:SSL routines::wrong version number<br>
+zsh: exit 35    sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc”</p>
+<p>Whats the solution to this?</p>
+<p>Thanks!</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-kvm-install-mullvad-vpn/1399">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-kvm-install-mullvad-vpn/1399</link>
+          <pubDate>Thu, 18 Dec 2025 22:21:41 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1399</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-kvm-install-mullvad-vpn/1399.rss">Kicksecure Kvm install mullvad vpn</source>
+        </item>
+        <item>
+          <title>Kicksecure inside KVM/qemu,Linux mint HOST OS</title>
+          <dc:creator><![CDATA[nolimit]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>hey I cant configure to get a network connection with KVM even tho It says I have a active connection and an ip but when starting the browser no internet at all… , When i run system check this error comes up</p>
+<pre><code class="lang-auto"> "ERROR: check network interfaces Result: No external network interface found.
+
+Debugging information:
+Command
+ip -o addr show scope global
+did not show any output
+
+If this error happens only during upgrading or is transient this error can be safely ignored. 
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: " 
+
+
+And when i run systemctl this is what I get --
+
+UNIT FILE                                                                           STATE           PRESET  
+proc-sys-fs-binfmt_misc.automount                                                   static          -       
+-.mount                                                                             generated       -       
+boot.mount                                                                          generated       -       
+dev-hugepages.mount                                                                 static          -       
+dev-mqueue.mount                                                                    static          -       
+proc-sys-fs-binfmt_misc.mount                                                       disabled        disabled
+sys-fs-fuse-connections.mount                                                       static          -       
+sys-kernel-config.mount                                                             static          -       
+sys-kernel-debug.mount                                                              static          -       
+sys-kernel-tracing.mount                                                            static          -       
+acpid.path                                                                          enabled         enabled 
+systemd-ask-password-console.path                                                   static          -       
+systemd-ask-password-wall.path                                                      static          -       
+session-1.scope                                                                     transient       -       
+accounts-daemon.service                                                             enabled         enabled 
+acpi-support.service                                                                enabled         enabled 
+acpid.service                                                                       disabled        enabled 
+apparmor.service                                                                    enabled         enabled 
+apt-daily-upgrade.service                                                           static          -       
+apt-daily.service                                                                   static          -       
+autovt@.service                                                                     alias           -       
+blk-availability.service                                                            enabled         enabled 
+bootclockrandomization.service                                                      enabled         enabled 
+canary.service                                                                      enabled         enabled 
+console-getty.service                                                               disabled        disabled
+console-setup.service                                                               enabled         enabled 
+container-getty@.service                                                            static          -       
+cryptdisks-early.service                                                            masked          enabled 
+cryptdisks.service                                                                  masked          enabled 
+dbus-fi.w1.wpa_supplicant1.service                                                  alias           -       
+dbus-org.freedesktop.hostname1.service                                              alias           -       
+dbus-org.freedesktop.locale1.service                                                alias           -       
+dbus-org.freedesktop.login1.service                                                 alias           -       
+dbus-org.freedesktop.nm-dispatcher.service                                          alias           -       
+dbus-org.freedesktop.timedate1.service                                              alias           -       
+dbus.service                                                                        static          -       
+debug-shell.service                                                                 disabled        disabled
+display-manager.service                                                             alias           -       
+dist-skel-first-boot.service                                                        enabled         enabled 
+dm-event.service                                                                    static          -       
+dpkg-db-backup.service                                                              static          -       
+dracut-cmdline.service                                                              static          -       
+dracut-initqueue.service                                                            static          -       
+dracut-mount.service                                                                static          -       
+dracut-pre-mount.service                                                            static          -       
+dracut-pre-pivot.service                                                            static          -       
+dracut-pre-trigger.service                                                          static          -       
+dracut-pre-udev.service                                                             static          -       
+dracut-shutdown-onfailure.service                                                   static          -       
+dracut-shutdown.service                                                             static          -       
+e2scrub@.service                                                                    static          -       
+e2scrub_all.service                                                                 static          -       
+e2scrub_fail@.service                                                               static          -       
+e2scrub_reap.service                                                                enabled         enabled 
+emergency.service                                                                   static          -       
+flatpak-system-helper.service                                                       static          -       
+fstrim.service                                                                      static          -       
+fwupd-offline-update.service                                                        static          -       
+fwupd-refresh.service                                                               static          -       
+fwupd.service                                                                       static          -       
+gdomap.service                                                                      generated       -       
+getty-static.service                                                                static          -       
+getty@.service                                                                      enabled         enabled 
+harden-module-loading.service                                                       disabled        disabled
+haveged.service                                                                     enabled         enabled 
+hide-hardware-info.service                                                          disabled        disabled
+hwclock.service                                                                     masked          enabled 
+initrd-cleanup.service                                                              static          -       
+initrd-parse-etc.service                                                            static          -       
+initrd-switch-root.service                                                          static          -       
+initrd-udevadm-cleanup-db.service                                                   static          -       
+jitterentropy-rngd.service                                                          alias           -       
+jitterentropy.service                                                               enabled         enabled 
+keyboard-setup.service                                                              enabled         enabled 
+kmod-static-nodes.service                                                           static          -       
+kmod.service                                                                        alias           -       
+leapctl@.service                                                                    enabled         enabled 
+legacy-dist.service                                                                 enabled         enabled 
+lightdm.service                                                                     enabled         enabled 
+live-config.service                                                                 enabled         enabled 
+live-mode-apparmor.service                                                          enabled         enabled 
+livecheck-lsblk.service                                                             enabled         enabled 
+lm-sensors.service                                                                  enabled         enabled 
+lvm2-lvmpolld.service                                                               static          -       
+lvm2-monitor.service                                                                enabled         enabled 
+man-db.service                                                                      static          -       
+modprobe@.service                                                                   static          -       
+NetworkManager-dispatcher.service                                                   enabled         enabled 
+NetworkManager-wait-online.service                                                  enabled         enabled 
+NetworkManager.service                                                              enabled         enabled 
+nm-priv-helper.service                                                              static          -       
+nvmefc-boot-connections.service                                                     enabled         enabled 
+nvmf-autoconnect.service                                                            enabled         enabled 
+nvmf-connect@.service                                                               static          -       
+openvpn-client@.service                                                             disabled        enabled 
+openvpn-server@.service                                                             disabled        enabled 
+openvpn.service                                                                     enabled         enabled 
+openvpn@.service                                                                    disabled        enabled 
+orca-kill-at-shutdown.service                                                       disabled        disabled
+pam_namespace.service                                                               static          -       
+panic-on-oops.service                                                               enabled         enabled 
+permission-hardener.service                                                         disabled        disabled
+polkit.service                                                                      static          -       
+privleapd.service                                                                   enabled         enabled 
+proc-hidepid.service                                                                disabled        disabled
+procps.service                                                                      alias           -       
+quotaon.service                                                                     static          -       
+rads-block-display-manger.service                                                   enabled         enabled 
+rads.service                                                                        enabled         enabled 
+rc-local.service                                                                    static          -       
+rc.service                                                                          masked          enabled 
+rcS.service                                                                         masked          enabled 
+remount-secure.service                                                              disabled        disabled
+remove-system-map.service                                                           enabled         enabled 
+repository-dist-initializer.service                                                 enabled         enabled 
+rescue.service                                                                      static          -       
+rtkit-daemon.service                                                                disabled        enabled 
+sdwdate-gui-shutdown-notify.service                                                 enabled         enabled 
+sdwdate-pre.service                                                                 enabled         enabled 
+sdwdate-start-anondate-set-file-watcher.service                                     enabled         enabled 
+sdwdate.service                                                                     enabled         enabled 
+serial-getty@.service                                                               disabled        enabled 
+smartd.service                                                                      alias           -       
+smartmontools.service                                                               enabled         enabled 
+spice-vdagent.service                                                               alias           -       
+spice-vdagentd.service                                                              indirect        enabled 
+sudo.service                                                                        masked          enabled 
+swap-file-creator.service                                                           enabled         enabled 
+sysfsconf.service                                                                   alias           -       
+sysfsutils.service                                                                  generated       -       
+system-update-cleanup.service                                                       static          -       
+systemd-ask-password-console.service                                                static          -       
+systemd-ask-password-wall.service                                                   static          -       
+systemd-backlight@.service                                                          static          -       
+systemd-binfmt.service                                                              static          -       
+systemd-boot-check-no-failures.service                                              disabled        disabled
+systemd-cryptsetup@luks\x2d1e928d4d\x2d106e\x2d42ab\x2db638\x2d220de0196d7c.service generated       -       
+systemd-exit.service                                                                static          -       
+systemd-firstboot.service                                                           static          -       
+systemd-fsck-root.service                                                           enabled-runtime enabled 
+systemd-fsck@.service                                                               static          -       
+systemd-fsckd.service                                                               static          -       
+systemd-halt.service                                                                static          -       
+systemd-hibernate-resume@.service                                                   static          -       
+systemd-hibernate.service                                                           static          -       
+systemd-hostnamed.service                                                           static          -       
+systemd-hybrid-sleep.service                                                        static          -       
+systemd-initctl.service                                                             static          -       
+systemd-journal-flush.service                                                       static          -       
+systemd-journald.service                                                            static          -       
+systemd-journald@.service                                                           static          -       
+systemd-kexec.service                                                               static          -       
+systemd-localed.service                                                             static          -       
+systemd-logind.service                                                              static          -       
+systemd-machine-id-commit.service                                                   static          -       
+systemd-modules-load.service                                                        static          -       
+systemd-network-generator.service                                                   disabled        enabled 
+systemd-networkd-wait-online.service                                                disabled        disabled
+systemd-networkd-wait-online@.service                                               disabled        enabled 
+systemd-networkd.service                                                            disabled        enabled 
+systemd-pcrphase-initrd.service                                                     static          -       
+systemd-pcrphase-sysinit.service                                                    static          -       
+systemd-pcrphase.service                                                            static          -       
+systemd-poweroff.service                                                            static          -       
+systemd-pstore.service                                                              enabled         enabled 
+systemd-quotacheck.service                                                          static          -       
+systemd-random-seed.service                                                         static          -       
+systemd-reboot.service                                                              static          -       
+systemd-remount-fs.service                                                          enabled-runtime enabled 
+systemd-repart.service                                                              static          -       
+systemd-rfkill.service                                                              static          -       
+systemd-suspend-then-hibernate.service                                              static          -       
+systemd-suspend.service                                                             static          -       
+systemd-sysctl.service                                                              static          -       
+systemd-sysext.service                                                              disabled        enabled 
+systemd-sysusers.service                                                            static          -       
+systemd-time-wait-sync.service                                                      disabled        disabled
+systemd-timedated.service                                                           static          -       
+systemd-tmpfiles-clean.service                                                      static          -       
+systemd-tmpfiles-setup-dev.service                                                  static          -       
+systemd-tmpfiles-setup.service                                                      static          -       
+systemd-udev-settle.service                                                         static          -       
+systemd-udev-trigger.service                                                        static          -       
+systemd-udevd.service                                                               static          -       
+systemd-update-utmp-runlevel.service                                                static          -       
+systemd-update-utmp.service                                                         static          -       
+systemd-user-sessions.service                                                       static          -       
+systemd-volatile-root.service                                                       static          -       
+timesanitycheck.service                                                             enabled         enabled 
+tor.service                                                                         enabled         enabled 
+tor@.service                                                                        indirect        enabled 
+tor@default.service                                                                 enabled-runtime enabled 
+udev.service                                                                        alias           -       
+udisks2.service                                                                     enabled         enabled 
+upower.service                                                                      disabled        enabled 
+user-runtime-dir@.service                                                           static          -       
+user@.service                                                                       static          -       
+uuidd.service                                                                       indirect        enabled 
+virtualbox-guest-utils.service                                                      enabled         enabled 
+wpa_supplicant-nl80211@.service                                                     disabled        enabled 
+wpa_supplicant-wired@.service                                                       disabled        enabled 
+wpa_supplicant.service                                                              enabled         enabled 
+wpa_supplicant@.service                                                             disabled        enabled 
+x11-common.service                                                                  masked          enabled 
+machine.slice                                                                       static          -       
+system-systemd\x2dcryptsetup.slice                                                  static          -       
+user.slice                                                                          static          -       
+acpid.socket                                                                        enabled         enabled 
+dbus.socket                                                                         static          -       
+dm-event.socket                                                                     enabled         enabled 
+lvm2-lvmpolld.socket                                                                enabled         enabled 
+spice-vdagentd.socket                                                               static          -       
+syslog.socket                                                                       static          -       
+systemd-fsckd.socket                                                                static          -       
+systemd-initctl.socket                                                              static          -       
+systemd-journald-audit.socket                                                       static          -       
+systemd-journald-dev-log.socket                                                     static          -       
+systemd-journald-varlink@.socket                                                    static          -       
+systemd-journald.socket                                                             static          -       
+systemd-journald@.socket                                                            static          -       
+systemd-networkd.socket                                                             disabled        enabled 
+systemd-rfkill.socket                                                               static          -       
+systemd-udevd-control.socket                                                        static          -       
+systemd-udevd-kernel.socket                                                         static          -       
+uuidd.socket                                                                        enabled         enabled 
+basic.target                                                                        static          -       
+blockdev@.target                                                                    static          -       
+bluetooth.target                                                                    static          -       
+boot-complete.target                                                                static          -       
+cryptsetup-pre.target                                                               static          -       
+cryptsetup.target                                                                   static          -       
+ctrl-alt-del.target                                                                 alias           -       
+default.target                                                                      alias           -       
+emergency.target                                                                    static          -       
+exit.target                                                                         disabled        disabled
+factory-reset.target                                                                static          -       
+final.target                                                                        static          -       
+first-boot-complete.target                                                          static          -       
+getty-pre.target                                                                    static          -       
+getty.target                                                                        static          -       
+graphical.target                                                                    static          -       
+halt.target                                                                         disabled        disabled
+hibernate.target                                                                    static          -       
+hybrid-sleep.target                                                                 static          -       
+initrd-fs.target                                                                    static          -       
+initrd-root-device.target                                                           static          -       
+initrd-root-fs.target                                                               static          -       
+initrd-switch-root.target                                                           static          -       
+initrd-usr-fs.target                                                                static          -       
+initrd.target                                                                       static          -       
+initrd.target                                                                       static          -       
+integritysetup-pre.target                                                           static          -       
+integritysetup.target                                                               static          -       
+kexec.target                                                                        disabled        disabled
+local-fs-pre.target                                                                 static          -       
+local-fs.target                                                                     static          -       
+multi-user.target                                                                   static          -       
+network-online.target                                                               static          -       
+network-pre.target                                                                  static          -       
+network.target                                                                      static          -       
+nss-lookup.target                                                                   static          -       
+nss-user-lookup.target                                                              static          -       
+nvmf-connect.target                                                                 static          -       
+paths.target                                                                        static          -       
+poweroff.target                                                                     disabled        disabled
+printer.target                                                                      static          -       
+reboot.target                                                                       disabled        enabled 
+remote-cryptsetup.target                                                            disabled        enabled 
+remote-fs-pre.target                                                                static          -       
+remote-fs.target                                                                    enabled         enabled 
+remote-veritysetup.target                                                           disabled        enabled 
+rescue.target                                                                       static          -       
+rpcbind.target                                                                      static          -       
+runlevel0.target                                                                    alias           -       
+runlevel1.target                                                                    alias           -       
+runlevel2.target                                                                    alias           -       
+runlevel3.target                                                                    alias           -       
+runlevel4.target                                                                    alias           -       
+runlevel5.target                                                                    alias           -       
+runlevel6.target                                                                    alias           -       
+shutdown.target                                                                     static          -       
+sigpwr.target                                                                       static          -       
+sleep.target                                                                        static          -       
+slices.target                                                                       static          -       
+smartcard.target                                                                    static          -       
+sockets.target                                                                      static          -       
+sound.target                                                                        static          -       
+suspend-then-hibernate.target                                                       static          -       
+suspend.target                                                                      static          -       
+swap.target                                                                         static          -       
+sysinit-post.target                                                                 enabled         enabled 
+sysinit.target                                                                      static          -       
+system-update-pre.target                                                            static          -       
+system-update.target                                                                static          -       
+time-set.target                                                                     static          -       
+time-sync.target                                                                    static          -       
+timers.target                                                                       static          -       
+umount.target                                                                       static          -       
+usb-gadget.target                                                                   static          -       
+veritysetup-pre.target                                                              static          -
+</code></pre>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206</link>
+          <pubDate>Sun, 10 Aug 2025 00:43:19 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1206</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-inside-kvm-qemu-linux-mint-host-os/1206.rss">Kicksecure inside KVM/qemu,Linux mint HOST OS</source>
+        </item>
+        <item>
+          <title>Qemu and KVM tutorial</title>
+          <dc:creator><![CDATA[SlowMoe]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>Maybe I’m missing it but does anyone have a good tutorial for the complete installation of the qemu KVM virtual manager stack? I am having a problem with libvirtd or libvirt. I hope to see a good tutorial. Thank you.</p>
+            <p><small>6 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/qemu-and-kvm-tutorial/665">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/qemu-and-kvm-tutorial/665</link>
+          <pubDate>Mon, 04 Nov 2024 06:02:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-665</guid>
+          <source url="https://forums.kicksecure.com/t/qemu-and-kvm-tutorial/665.rss">Qemu and KVM tutorial</source>
+        </item>
+        <item>
+          <title>About the KVM category</title>
+          <dc:creator><![CDATA[Hans]]></dc:creator>
+          <category>KVM</category>
+          <description><![CDATA[
+            <p>Everything specific to <a target="_blank" href="https://www.kicksecure.com/wiki/KVM" rel="noopener">Kicksecure KVM</a>.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/about-the-kvm-category/142">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/about-the-kvm-category/142</link>
+          <pubDate>Thu, 03 Nov 2022 12:06:56 +0000</pubDate>
+          <discourse:topicPinned>Yes</discourse:topicPinned>
+          <discourse:topicClosed>Yes</discourse:topicClosed>
+          <discourse:topicArchived>Yes</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-142</guid>
+          <source url="https://forums.kicksecure.com/t/about-the-kvm-category/142.rss">About the KVM category</source>
+        </item>
+  </channel>
+</rss>

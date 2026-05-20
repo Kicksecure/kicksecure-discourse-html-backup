@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>The CUPS and Printing Support in Kicksecure</title>
+    <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725</link>
+    <description>Hello 😄 👋
+
+So whats up with the printing situation in kicksecure?
+
+```
+[user ~]% apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+[user ~]% 
+```
+
+If its just `libcups2t64` does this effectively mean at the minimum that CUPS is missing for local printing?
+
+Why is CUPS not included?
+
+Too much of an attack surface not worth maintaining for a small % of users?
+
+CUPS is often reachable over internal networks, and sometimes even the public internet. I have never seem a distro that distributes a hardened version of it. There was some new 2026 CVE’s that maybe you saw that are very similar to the 2024 CVE’s that are on official cups github security advisory section.
+
+---
+
+My Debian 13 shows lots of cups packages man that are prob unnecessary for basic printing (no network printing):
+
+```
+debian13@localhost:~$ apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+cups-client/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups-core-drivers/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-daemon/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-filters-core-drivers/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-filters/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-ipp-utils/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-pk-helper/stable,unstable,now 0.2.6-2.1 amd64 [installed]
+cups-ppdc/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-server-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups/stable,now 2.4.10-3+deb13u2 amd64 [installed]
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+libcupsfilters1t64/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+libcupsimage2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+printer-driver-hpcups/stable,unstable,now 3.22.10+dfsg0-8.1 amd64 [installed,automatic]
+python3-cups/stable,now 2.0.4-2+b2 amd64 [installed,automatic]
+python3-cupshelpers/stable,unstable,now 1.5.18-4 all [installed,automatic]
+debian13@localhost:~$
+```
+
+---
+
+Network printing or printing to a remote cups server is like 1% of linux users if any at all lets be honest unless you are enterprise or advanced you are most likely not doing this.
+
+Currently I have a Brother printer that just worx out of the box on Debian 13. Most modern printers including Brother can use IPP-over-USB (Driverless Printing). Mine I just plugged in USB printer cable and it just worked either the driver was included by default or its using driverless printing.
+
+I’m just trying evaluate the printing situation in Kicksecures defaults. Modern brands work without needing network access. HP however, the brand has gone down hill tremendously, partly why I switched. Modern HP printers effectively require network access for cloud, updates and BS.
+
+Due to this fact, most security conscious are not going to mess with HP printers on linux and aren’t going to use a printer connected to a network either. So that makes this fall in the 1% of users again (my opinion).
+
+Would you say supporting printing in general would be 0.1% of kicksecure user base. Kicksecures wiki page on printing not very clear compared to Whonix’s page. Does anyone even print on Whonix? Again this prob a small % of users.
+
+My use case when printing is QR codes and things I’m studying.
+
+Would Kicksecure reconsidering shipping CUPS included with hardening and isolation ❓</description>
+    
+    <lastBuildDate>Sun, 17 May 2026 15:07:46 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="anonx230" data-post="5" data-topic="1725">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/839c29/48.png" class="avatar"> anonx230:</div>
+<blockquote>
+<p>I’m trying to reduce my reliance on virtual machines for security.</p>
+</blockquote>
+</aside>
+<p>I’d encourage you to <em>not</em> do that <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"> Kicksecure is very hardened in comparison to vanilla Debian, but even so, vulnerabilities can (and have) existed in system components like the Linux kernel that Kicksecure was vulnerable to, and where no major Linux distribution could have reasonably been immune to the vuln before it was found. (The recent Copy Fail and Dirty Frag vulns are good examples.) Using Kicksecure as a hardened virtual machine host is good defense-in-depth.</p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/6</link>
+        <pubDate>Sun, 17 May 2026 15:07:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-6</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[anonx230]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1725">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>If you need to print but are also concerned about the security implications, you might be able to install a dedicated Kicksecure or Debian 13 virtual machine with CUPS installed within, then pass through your USB printer to the VM and print from there.</p>
+</blockquote>
+</aside>
+<p>I’m trying to reduce my reliance on virtual machines for security. The reason I’m trying Kicksecure <img src="https://forums.kicksecure.com/images/emoji/twitter/person_facepalming.png?v=15" title=":person_facepalming:" class="emoji" alt=":person_facepalming:" loading="lazy" width="20" height="20"> you know is partly this reason to do most on a secure host. Since you suggested it, I might give er a go and see what its like. Wish me luck <img src="https://forums.kicksecure.com/images/emoji/twitter/joy.png?v=15" title=":joy:" class="emoji" alt=":joy:" loading="lazy" width="20" height="20"> <img src="https://forums.kicksecure.com/images/emoji/twitter/zany_face.png?v=15" title=":zany_face:" class="emoji" alt=":zany_face:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/5</link>
+        <pubDate>Sun, 17 May 2026 02:40:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-5</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[anonx230]]></dc:creator>
+        <description><![CDATA[
+            <p>Just looked through manpages and online documentation for cups. I take it CUPS does not natively support a <code>.d/ drop-in directory structure (like </code>/etc/cups/cups.d/`) right​<img src="https://forums.kicksecure.com/images/emoji/twitter/red_question_mark.png?v=15" title=":red_question_mark:" class="emoji" alt=":red_question_mark:" loading="lazy" width="20" height="20"></p>
+<p>To close the listening port you have to edit the <code>/etc/cups/cupsd.conf</code> directly I guess and <img src="https://forums.kicksecure.com/images/emoji/twitter/crossed_fingers.png?v=15" title=":crossed_fingers:" class="emoji" alt=":crossed_fingers:" loading="lazy" width="20" height="20"> that nothing is changed after updates.</p>
+<p>This <a href="https://github.com/apple/cups/issues/5556" rel="noopener nofollow ugc">GitHub</a> issue specifically addresses the removal and requested reinstatement of the <code>Include</code> directive in <code>cupsd.conf</code>. A feature that would allow one configuration file to reference another.</p>
+<p>Ok, this is for apple but looks like it could relate here. Uncertain if a <code>.d/</code> drop in directory support ever existed at all <img src="https://forums.kicksecure.com/images/emoji/twitter/person_shrugging.png?v=15" title=":person_shrugging:" class="emoji" alt=":person_shrugging:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/4</link>
+        <pubDate>Sun, 17 May 2026 02:27:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-4</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>cups isn’t installed by default because it opens a listening port by default.</p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/3</link>
+        <pubDate>Sat, 16 May 2026 09:38:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-3</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>It’s not entirely clear to me what “CUPS with hardening and isolation” would look like. Applying special configuration to CUPS would be likely undesirable in Kicksecure because it would diverge from upstream, in a way that would potentially incur greater maintenance effort. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1778743812" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener" title="10:35AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Relationship_With_Upstream" target="_blank" rel="noopener">Relationship With Upstream</a></h3>
+
+  <p>Kicksecure Relationship with Upstream Projects.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>If you need to print but are also concerned about the security implications, you might be able to install a dedicated Kicksecure or Debian 13 virtual machine with CUPS installed within, then pass through your USB printer to the VM and print from there.</p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/2</link>
+        <pubDate>Fri, 15 May 2026 03:43:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-2</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+      <item>
+        <title>The CUPS and Printing Support in Kicksecure</title>
+        <dc:creator><![CDATA[anonx230]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello <img src="https://forums.kicksecure.com/images/emoji/twitter/grinning_face_with_smiling_eyes.png?v=15" title=":grinning_face_with_smiling_eyes:" class="emoji" alt=":grinning_face_with_smiling_eyes:" loading="lazy" width="20" height="20"> <img src="https://forums.kicksecure.com/images/emoji/twitter/waving_hand.png?v=15" title=":waving_hand:" class="emoji" alt=":waving_hand:" loading="lazy" width="20" height="20"></p>
+<p>So whats up with the printing situation in kicksecure?</p>
+<pre><code class="lang-auto">[user ~]% apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+[user ~]% 
+</code></pre>
+<p>If its just <code>libcups2t64</code> does this effectively mean at the minimum that CUPS is missing for local printing?</p>
+<p>Why is CUPS not included?</p>
+<p>Too much of an attack surface not worth maintaining for a small % of users?</p>
+<p>CUPS is often reachable over internal networks, and sometimes even the public internet. I have never seem a distro that distributes a hardened version of it. There was some new 2026 CVE’s that maybe you saw that are very similar to the 2024 CVE’s that are on official cups github security advisory section.</p>
+<hr>
+<p>My Debian 13 shows lots of cups packages man that are prob unnecessary for basic printing (no network printing):</p>
+<pre><code class="lang-auto">debian13@localhost:~$ apt list --installed | grep cups
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+cups-client/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups-core-drivers/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-daemon/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-filters-core-drivers/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-filters/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+cups-ipp-utils/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-pk-helper/stable,unstable,now 0.2.6-2.1 amd64 [installed]
+cups-ppdc/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+cups-server-common/stable,now 2.4.10-3+deb13u2 all [installed,automatic]
+cups/stable,now 2.4.10-3+deb13u2 amd64 [installed]
+libcups2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+libcupsfilters1t64/stable,now 1.28.17-6+deb13u1 amd64 [installed,automatic]
+libcupsimage2t64/stable,now 2.4.10-3+deb13u2 amd64 [installed,automatic]
+printer-driver-hpcups/stable,unstable,now 3.22.10+dfsg0-8.1 amd64 [installed,automatic]
+python3-cups/stable,now 2.0.4-2+b2 amd64 [installed,automatic]
+python3-cupshelpers/stable,unstable,now 1.5.18-4 all [installed,automatic]
+debian13@localhost:~$
+</code></pre>
+<hr>
+<p>Network printing or printing to a remote cups server is like 1% of linux users if any at all lets be honest unless you are enterprise or advanced you are most likely not doing this.</p>
+<p>Currently I have a Brother printer that just worx out of the box on Debian 13. Most modern printers including Brother can use IPP-over-USB (Driverless Printing). Mine I just plugged in USB printer cable and it just worked either the driver was included by default or its using driverless printing.</p>
+<p>I’m just trying evaluate the printing situation in Kicksecures defaults. Modern brands work without needing network access. HP however, the brand has gone down hill tremendously, partly why I switched. Modern HP printers effectively require network access for cloud, updates and BS.</p>
+<p>Due to this fact, most security conscious are not going to mess with HP printers on linux and aren’t going to use a printer connected to a network either. So that makes this fall in the 1% of users again (my opinion).</p>
+<p>Would you say supporting printing in general would be 0.1% of kicksecure user base. Kicksecures wiki page on printing not very clear compared to Whonix’s page. Does anyone even print on Whonix? Again this prob a small % of users.</p>
+<p>My use case when printing is QR codes and things I’m studying.</p>
+<p>Would Kicksecure reconsidering shipping CUPS included with hardening and isolation <img src="https://forums.kicksecure.com/images/emoji/twitter/red_question_mark.png?v=15" title=":red_question_mark:" class="emoji" alt=":red_question_mark:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725/1</link>
+        <pubDate>Fri, 15 May 2026 02:55:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1725-1</guid>
+        <source url="https://forums.kicksecure.com/t/the-cups-and-printing-support-in-kicksecure/1725.rss">The CUPS and Printing Support in Kicksecure</source>
+      </item>
+  </channel>
+</rss>
