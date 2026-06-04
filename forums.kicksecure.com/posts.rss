@@ -5,6 +5,242 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Include Feather Wallet in next release?</title>
+        <dc:creator><![CDATA[@kick]]></dc:creator>
+        <description><![CDATA[ <p>Feather as nice as Cake, btw?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/include-feather-wallet-in-next-release/1744#post_7</link>
+        <pubDate>Wed, 03 Jun 2026 18:07:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5114</guid>
+      </item>
+      <item>
+        <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+        <dc:creator><![CDATA[@kick]]></dc:creator>
+        <description><![CDATA[ <p>eglinfo reports multiple EGL contexts, including llvmpipe fallback renderers, causing a false positive in a simplistic detection script.</p>
+<p>“Suggested improvement generated with assistance from ChatGPT and refined for correctness.”</p>
+<p>#!/bin/sh</p>
+<h1><a name="p-5112-require-eglinfo-1" class="anchor" href="https://forums.kicksecure.com#p-5112-require-eglinfo-1" aria-label="Heading link"></a>Require eglinfo</h1>
+<p>if ! command -v eglinfo &gt;/dev/null 2&gt;&amp;1; then<br>
+true “$0 ERROR: eglinfo not found. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" class="anchor" href="https://forums.kicksecure.com#p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" aria-label="Heading link"></a>Capture primary OpenGL renderer (more meaningful than scanning all contexts)</h1>
+<p>primary_renderer=“$(eglinfo 2&gt;/dev/null | grep -m 1 “OpenGL core profile renderer”)”</p>
+<p>if [ -z “$primary_renderer” ]; then<br>
+true “$0 INFO: No OpenGL renderer detected. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-check-for-full-software-rendering-only-3" class="anchor" href="https://forums.kicksecure.com#p-5112-check-for-full-software-rendering-only-3" aria-label="Heading link"></a>Check for full software rendering ONLY</h1>
+<h1><a name="p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" class="anchor" href="https://forums.kicksecure.com#p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" aria-label="Heading link"></a>(must be explicitly llvmpipe as primary renderer)</h1>
+<p>echo “$primary_renderer” | grep “llvmpipe” &gt;/dev/null 2&gt;&amp;1<br>
+if [ $? -eq 0 ]; then<br>
+software_rendering_use=true<br>
+fi</p>
+<h1><a name="p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" class="anchor" href="https://forums.kicksecure.com#p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" aria-label="Heading link"></a>If not explicitly software-rendered system → do nothing</h1>
+<p>if [ ! “$software_rendering_use” = “true” ]; then<br>
+true “$0 INFO: Hardware rendering detected. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-respect-existing-user-overrides-6" class="anchor" href="https://forums.kicksecure.com#p-5112-respect-existing-user-overrides-6" aria-label="Heading link"></a>Respect existing user overrides</h1>
+<p>if [ ! -z “$QMLSCENE_DEVICE” ]; then<br>
+true “$0 INFO: QMLSCENE_DEVICE already set. Not changing.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<p>export QMLSCENE_DEVICE=softwarecontext</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755#post_2</link>
+        <pubDate>Wed, 03 Jun 2026 17:06:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5112</guid>
+      </item>
+      <item>
+        <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+        <dc:creator><![CDATA[@kick]]></dc:creator>
+        <description><![CDATA[ <h1><a name="p-5111-title-1" class="anchor" href="https://forums.kicksecure.com#p-5111-title-1" aria-label="Heading link"></a><strong>Title</strong></h1>
+<p>Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext</p>
+<hr>
+<h1><a name="p-5111-summary-2" class="anchor" href="https://forums.kicksecure.com#p-5111-summary-2" aria-label="Heading link"></a><strong>Summary</strong></h1>
+<p>After applying Kicksecure/Whonix environment hardening (specifically the script <code>/etc/profile.d/20_software_rendering_in_vms.sh</code>), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.</p>
+<p>The issue occurred across:</p>
+<ul>
+<li>
+<p>Debian-packaged Kdenlive</p>
+</li>
+<li>
+<p>Flatpak version</p>
+</li>
+<li>
+<p>AppImage version</p>
+</li>
+</ul>
+<p>So it was not package-specific.</p>
+<hr>
+<h1><a name="p-5111-system-context-3" class="anchor" href="https://forums.kicksecure.com#p-5111-system-context-3" aria-label="Heading link"></a><strong>System context</strong></h1>
+<ul>
+<li>
+<p>Debian-based system with Kicksecure hardening</p>
+</li>
+<li>
+<p>KDE Plasma / Qt-based desktop</p>
+</li>
+<li>
+<p>AMD Radeon Graphics (radeonsi, Renoir)</p>
+</li>
+<li>
+<p>OpenGL working normally (<code>glxinfo</code> shows AMD renderer)</p>
+</li>
+<li>
+<p>VAAPI functional (verified via <code>vainfo</code>)</p>
+</li>
+<li>
+<p>MLT works correctly (<code>melt</code> runs SDL/XGL consumers)</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-symptom-4" class="anchor" href="https://forums.kicksecure.com#p-5111-symptom-4" aria-label="Heading link"></a><strong>Symptom</strong></h1>
+<ul>
+<li>
+<p>Kdenlive starts normally</p>
+</li>
+<li>
+<p>Project opens</p>
+</li>
+<li>
+<p>Timeline works</p>
+</li>
+<li>
+<p>Audio playback works</p>
+</li>
+<li>
+<p><strong>Video monitors (Clip/Project) are missing or grey</strong></p>
+</li>
+<li>
+<p>Multiple QML warnings appear</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-debug-findings-5" class="anchor" href="https://forums.kicksecure.com#p-5111-debug-findings-5" aria-label="Heading link"></a><strong>Debug findings</strong></h1>
+<p>The key issue was an environment variable:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+<p>This was set globally by:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">/etc/profile.d/20_software_rendering_in_vms.sh
+</code></pre>
+<p>Script logic summary:</p>
+<ul>
+<li>
+<p>checks <code>eglinfo</code></p>
+</li>
+<li>
+<p>if it detects <code>llvmpipe</code>, forces:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">export QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+</li>
+<li>
+<p>intended for VM fallback rendering safety</p>
+</li>
+</ul>
+<p>However on this system:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">eglinfo shows BOTH:
+- AMD Radeon (radeonsi)
+- llvmpipe (secondary contexts)
+</code></pre>
+<p>This caused a <strong>false positive detection</strong>, triggering software rendering mode even though hardware acceleration is available.</p>
+<hr>
+<h1><a name="p-5111-root-cause-6" class="anchor" href="https://forums.kicksecure.com#p-5111-root-cause-6" aria-label="Heading link"></a><strong>Root cause</strong></h1>
+<p>The script assumes:</p>
+<blockquote>
+<p>if ANY llvmpipe appears → system is software-rendered → force Qt software rendering</p>
+</blockquote>
+<p>But modern systems may show:</p>
+<ul>
+<li>
+<p>multiple EGL contexts</p>
+</li>
+<li>
+<p>mixed renderer outputs</p>
+</li>
+<li>
+<p>fallback llvmpipe contexts alongside real GPU contexts</p>
+</li>
+</ul>
+<p>This results in incorrect global environment override.</p>
+<hr>
+<h1><a name="p-5111-fix-7" class="anchor" href="https://forums.kicksecure.com#p-5111-fix-7" aria-label="Heading link"></a><strong>Fix</strong></h1>
+<p>Temporary per-session fix:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">unset QMLSCENE_DEVICE
+kdenlive
+</code></pre>
+<p>Or safer launch wrapper:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">alias kdenlive='env -u QMLSCENE_DEVICE kdenlive'
+</code></pre>
+<hr>
+<h1><a name="p-5111-result-8" class="anchor" href="https://forums.kicksecure.com#p-5111-result-8" aria-label="Heading link"></a><strong>Result</strong></h1>
+<p>After unsetting <code>QMLSCENE_DEVICE</code>, Kdenlive monitors immediately worked again (Clip + Project Monitor restored, GPU rendering functional).</p>
+<hr>
+<h1><a name="p-5111-recommendation-9" class="anchor" href="https://forums.kicksecure.com#p-5111-recommendation-9" aria-label="Heading link"></a><strong>Recommendation</strong></h1>
+<ul>
+<li>
+<p>Avoid global forcing of <code>QMLSCENE_DEVICE=softwarecontext</code> on hybrid systems</p>
+</li>
+<li>
+<p>Improve EGL detection logic to ensure:</p>
+<ul>
+<li>
+<p>AMD/NVIDIA GPU presence takes priority over llvmpipe fallback contexts</p>
+</li>
+<li>
+<p>or require <em>only llvmpipe</em>, not “any occurrence”</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-optional-note-10" class="anchor" href="https://forums.kicksecure.com#p-5111-optional-note-10" aria-label="Heading link"></a><strong>Optional note</strong></h1>
+<p>This likely affects other Qt Quick / QML applications, not only Kdenlive.</p>
+<hr> ]]></description>
+        <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755#post_1</link>
+        <pubDate>Wed, 03 Jun 2026 16:54:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5111</guid>
+      </item>
+      <item>
+        <title>Cannot download Kicksecure because of popup</title>
+        <dc:creator><![CDATA[@taoeffect]]></dc:creator>
+        <description><![CDATA[ <p>I see. You think this isn’t a problem. Well, in that case, good luck with your OS, I appreciate that you’re trying to make Linux more secure, but your response above doesn’t instill confidence.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-download-kicksecure-because-of-popup/1748#post_7</link>
+        <pubDate>Wed, 03 Jun 2026 15:59:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5110</guid>
+      </item>
+      <item>
+        <title>Cannot download Kicksecure because of popup</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <p>That is an <code>instant.page</code> popup if you hover “too long” over a link to show a useful preview.</p>
+<p>Options:</p>
+<ul>
+<li>A) Ignore the popup and left click the <code>Download</code> button in the header navigation bar. That will lead to <a href="https://www.kicksecure.com/wiki/Download">https://www.kicksecure.com/wiki/Download</a>, which also has all download options.</li>
+<li>B) Scroll down into the white space below the letter <code>D</code> in <code>Download</code>. That will terminate that specific <code>instant.page</code> poup</li>
+<li>C) Go to <a href="https://www.kicksecure.com/wiki/Download">https://www.kicksecure.com/wiki/Download</a>.</li>
+<li>D) Click the <code>Download</code> button in this forum header.</li>
+<li>E) Disable JavaScript because then <code>instant.page</code> won’t run.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/cannot-download-kicksecure-because-of-popup/1748#post_6</link>
+        <pubDate>Wed, 03 Jun 2026 15:41:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5109</guid>
+      </item>
+      <item>
         <title>Cannot download Kicksecure because of popup</title>
         <dc:creator><![CDATA[@taoeffect]]></dc:creator>
         <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.imagebam.com/view/ME1DK5XZ">
@@ -905,200 +1141,6 @@ I restored the standard file and it worked</p>
         <link>https://forums.kicksecure.com/t/external-monitor-control-and-keyboard-layout-widget/1732#post_2</link>
         <pubDate>Wed, 20 May 2026 23:01:11 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5050</guid>
-      </item>
-      <item>
-        <title>Dracut --force --regenerate-all will give &quot;libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0...&quot;</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Lots of missing modules… maybe you have a linux image package for an older kernel installed but the corresponding linux modules package isn’t installed?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dracut-force-regenerate-all-will-give-libkmod-error-kmod-module-parse-depline-ctx-0x584cfad876d0/1731#post_2</link>
-        <pubDate>Wed, 20 May 2026 22:54:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5049</guid>
-      </item>
-      <item>
-        <title>External monitor control and keyboard layout widget</title>
-        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
-        <description><![CDATA[ <p>I connect an external monitor to my laptop, how do I turn only the external monitor on and the laptop screen off?<br>
-also the multimedia keys on the laptop don’t work. F1-F12 do work</p>
-<p>Second question: how to add a widget to display the language of the current layout? kbindicator widget is not added to the panel</p>
-<blockquote>
-<p>kicksecure 18 kvm</p>
-</blockquote> ]]></description>
-        <link>https://forums.kicksecure.com/t/external-monitor-control-and-keyboard-layout-widget/1732#post_1</link>
-        <pubDate>Wed, 20 May 2026 18:44:29 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5048</guid>
-      </item>
-      <item>
-        <title>Dracut --force --regenerate-all will give &quot;libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0...&quot;</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>KS on direct hardware.</p>
-<pre><code class="lang-auto">[sysmaint ~]% sudo dracut --force --regenerate-all
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/seq/snd-seq.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-timer.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-seq-device.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/intel/boards/snd-soc-intel-sof-board-helpers.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/intel/boards/snd-soc-intel-hda-dsp-common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/pci/hda/snd-hda-codec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/snd-sof.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm_gpuvm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/pci/hda/snd-hda-codec-generic.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/pci/hda/snd-hda-codec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/snd-soc-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/intel/snd-sof-pci-intel-cnl.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/intel/snd-sof-intel-hda-generic.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/soundwire/soundwire-intel.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/soundwire/soundwire-generic-allocation.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/fs/fat/fat.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/soundwire/soundwire-bus.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/soundwire/soundwire-bus.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm_exec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/codecs/snd-soc-hdac-hda.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/ext/snd-hda-ext-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/ext/snd-hda-ext-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/ttm/ttm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/snd-sof.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/snd-sof.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/sof/snd-sof-utils.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-pcm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/snd-soc-acpi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/platform/x86/intel/uncore-frequency/intel-uncore-frequency-common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soc/codecs/snd-soc-hda-codec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/ext/snd-hda-ext-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/snd-hda-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/net/wireless/intel/iwlwifi/iwlwifi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-compress.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm_buddy.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/arch/x86/kvm/kvm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-pcm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/lib/crypto/libarc4.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/pci/hda/snd-hda-codec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-pcm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/snd-intel-dspcfg.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/virt/lib/irqbypass.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/bluetooth/btrtl.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/common/videobuf2/videobuf2-vmalloc.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/snd-intel-sdw-acpi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/bluetooth/bluetooth.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/bluetooth/bluetooth.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/common/videobuf2/videobuf2-memops.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/hda/snd-hda-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/mfd/intel_pmc_bxt.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/bluetooth/bluetooth.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/bluetooth/bluetooth.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/common/videobuf2/videobuf2-common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/platform/x86/firmware_attributes_class.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/wireless/cfg80211.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/v4l2-core/videodev.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-pcm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/powercap/intel_rapl_common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/crypto/ecdh_generic.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_device.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/misc/mei/mei.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/mc/mc.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/misc/mei/mei.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/net/phy/mdio_devres.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/cec/core/cec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_wt_hint.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/input/sparse-keymap.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd-timer.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/net/phy/libphy.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/rfkill/rfkill.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/scsi/scsi_mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/platform/x86/wmi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/mc/mc.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/core/snd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/net/phy/libphy.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/i2c/i2c-smbus.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/media/rc/rc-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/powercap/intel_rapl_common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/sound/soundcore.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/gpu/drm/drm.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/processor_thermal_mbox.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/thermal/intel/int340x_thermal/acpi_thermal_rel.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/input/sparse-keymap.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/misc/mei/mei.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/net/netfilter/x_tables.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/lib/crc16.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/md/dm-mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/scsi/scsi_mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/storage/usb-storage.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/scsi/scsi_mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/hid/hid.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/spi/spi-pxa2xx-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/dma/dw/dw_dmac_core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/ata/libahci.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/hid/hid.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/ata/libata.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/hid/hid.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/host/xhci-hcd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/scsi/scsi_mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/hid/i2c-hid/i2c-hid.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/nvme/host/nvme-core.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/core/usbcore.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/typec/ucsi/typec_ucsi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/hid/hid.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/crypto/cryptd.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/mfd/intel-lpss.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/typec/typec.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/scsi/scsi_common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/nvme/common/nvme-auth.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/usb/common/usb-common.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/platform/x86/wmi.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/md/dm-region-hash.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/md/dm-log.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/drivers/md/dm-mod.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/lib/crypto/gf128mul.ko.xz error=No such file or directory
-libkmod: ERROR: kmod_module_parse_depline: ctx=0x584cfad876d0 path=/lib/modules/6.12.74+deb13+1-amd64//kernel/crypto/cryptd.ko.xz error=No such file or directory
-dracut[I]: Executing: /usr/bin/dracut --kver=6.12.74+deb13+1-amd64 --force
-dracut[F]: Can't write to /boot/efi/846b9587b808496b93ddf08c8c297f47/6.12.74+deb13+1-amd64: Directory /boot/efi/846b9587b808496b93ddf08c8c297f47/6.12.74+deb13+1-amd64 does not exist or is not accessible.
-dracut[I]: Executing: /usr/bin/dracut --kver=6.12.85+deb13-amd64 --force
-dracut[I]: 62bluetooth: Could not find any command of '/usr/lib/bluetooth/bluetoothd /usr/libexec/bluetooth/bluetoothd'!
-dracut[I]: 62bluetooth: Could not find any command of '/usr/lib/bluetooth/bluetoothd /usr/libexec/bluetooth/bluetoothd'!
-</code></pre>
-<p>Nothing special done, just needed this command <a href="https://forums.kicksecure.com/t/kicksecure-broken-kernel-panic-with-nvidia-drm-modeset-1-fbdev-1-discrete-mode/1727">for nvidia test</a>, always reproducible.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dracut-force-regenerate-all-will-give-libkmod-error-kmod-module-parse-depline-ctx-0x584cfad876d0/1731#post_1</link>
-        <pubDate>Wed, 20 May 2026 11:50:05 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5047</guid>
-      </item>
-      <item>
-        <title>Kicksecure on hardware - sdwdate clock always broken on direct hard drive</title>
-        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
-        <description><![CDATA[ <p>Yep saw this behavior, something is lacking sdwdate from connecting properly. But more importantly is the issue above, where first time fresh installation sdwdate has clock issue which will never be fixed unless handled manually.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-on-hardware-sdwdate-clock-always-broken-on-direct-hard-drive/1724#post_8</link>
-        <pubDate>Wed, 20 May 2026 08:23:56 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5046</guid>
-      </item>
-      <item>
-        <title>Vboxdrv.service fails to start</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>While waiting for Oracle to publish a new version of VirtualBox with the issue fixed, some workarounds are documented here:</p>
-<aside class="quote quote-modified" data-post="1" data-topic="1683">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar">
-    <div class="quote-title__text-content">
-      <a href="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683">Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category --style-square " title="User support for the Kicksecure operating system."><span class="badge-category__name">Support</span></span></a>
-    </div>
-  </div>
-  <blockquote>
-    Note that the issue described here is a VirtualBox bug, it is not a Kicksecure bug. 
-If you use virtualbox-installer-cli to install VirtualBox, you will get a recent version of VirtualBox from Oracle’s repository. VirtualBox 7.1.18 and VirtualBox 7.2.6 (the two latest versions at the time of this writing) both have a bug that results in a kernel oops when the vboxdrv kernel module is loaded if a particular hardening setting (kernel.kptr_restrict=2) is enabled. This setting is <a href="https://github.com/Kicksecure/security-misc/blob/11a5c33a566cc5280ee0b5984850ba05c716c106/usr/lib/sysctl.d/990-security-misc.conf%23security-misc-shared#L41">enabled by default</a> …
-  </blockquote>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730#post_4</link>
-        <pubDate>Tue, 19 May 2026 23:12:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5045</guid>
       </item>
   </channel>
 </rss>

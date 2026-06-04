@@ -5,8 +5,179 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Tue, 02 Jun 2026 02:43:06 +0000</lastBuildDate>
+      <lastBuildDate>Wed, 03 Jun 2026 16:54:47 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+          <dc:creator><![CDATA[kick]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <h1><a name="p-5111-title-1" class="anchor" href="https://forums.kicksecure.com#p-5111-title-1" aria-label="Heading link"></a><strong>Title</strong></h1>
+<p>Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext</p>
+<hr>
+<h1><a name="p-5111-summary-2" class="anchor" href="https://forums.kicksecure.com#p-5111-summary-2" aria-label="Heading link"></a><strong>Summary</strong></h1>
+<p>After applying Kicksecure/Whonix environment hardening (specifically the script <code>/etc/profile.d/20_software_rendering_in_vms.sh</code>), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.</p>
+<p>The issue occurred across:</p>
+<ul>
+<li>
+<p>Debian-packaged Kdenlive</p>
+</li>
+<li>
+<p>Flatpak version</p>
+</li>
+<li>
+<p>AppImage version</p>
+</li>
+</ul>
+<p>So it was not package-specific.</p>
+<hr>
+<h1><a name="p-5111-system-context-3" class="anchor" href="https://forums.kicksecure.com#p-5111-system-context-3" aria-label="Heading link"></a><strong>System context</strong></h1>
+<ul>
+<li>
+<p>Debian-based system with Kicksecure hardening</p>
+</li>
+<li>
+<p>KDE Plasma / Qt-based desktop</p>
+</li>
+<li>
+<p>AMD Radeon Graphics (radeonsi, Renoir)</p>
+</li>
+<li>
+<p>OpenGL working normally (<code>glxinfo</code> shows AMD renderer)</p>
+</li>
+<li>
+<p>VAAPI functional (verified via <code>vainfo</code>)</p>
+</li>
+<li>
+<p>MLT works correctly (<code>melt</code> runs SDL/XGL consumers)</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-symptom-4" class="anchor" href="https://forums.kicksecure.com#p-5111-symptom-4" aria-label="Heading link"></a><strong>Symptom</strong></h1>
+<ul>
+<li>
+<p>Kdenlive starts normally</p>
+</li>
+<li>
+<p>Project opens</p>
+</li>
+<li>
+<p>Timeline works</p>
+</li>
+<li>
+<p>Audio playback works</p>
+</li>
+<li>
+<p><strong>Video monitors (Clip/Project) are missing or grey</strong></p>
+</li>
+<li>
+<p>Multiple QML warnings appear</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-debug-findings-5" class="anchor" href="https://forums.kicksecure.com#p-5111-debug-findings-5" aria-label="Heading link"></a><strong>Debug findings</strong></h1>
+<p>The key issue was an environment variable:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+<p>This was set globally by:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">/etc/profile.d/20_software_rendering_in_vms.sh
+</code></pre>
+<p>Script logic summary:</p>
+<ul>
+<li>
+<p>checks <code>eglinfo</code></p>
+</li>
+<li>
+<p>if it detects <code>llvmpipe</code>, forces:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">export QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+</li>
+<li>
+<p>intended for VM fallback rendering safety</p>
+</li>
+</ul>
+<p>However on this system:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">eglinfo shows BOTH:
+- AMD Radeon (radeonsi)
+- llvmpipe (secondary contexts)
+</code></pre>
+<p>This caused a <strong>false positive detection</strong>, triggering software rendering mode even though hardware acceleration is available.</p>
+<hr>
+<h1><a name="p-5111-root-cause-6" class="anchor" href="https://forums.kicksecure.com#p-5111-root-cause-6" aria-label="Heading link"></a><strong>Root cause</strong></h1>
+<p>The script assumes:</p>
+<blockquote>
+<p>if ANY llvmpipe appears → system is software-rendered → force Qt software rendering</p>
+</blockquote>
+<p>But modern systems may show:</p>
+<ul>
+<li>
+<p>multiple EGL contexts</p>
+</li>
+<li>
+<p>mixed renderer outputs</p>
+</li>
+<li>
+<p>fallback llvmpipe contexts alongside real GPU contexts</p>
+</li>
+</ul>
+<p>This results in incorrect global environment override.</p>
+<hr>
+<h1><a name="p-5111-fix-7" class="anchor" href="https://forums.kicksecure.com#p-5111-fix-7" aria-label="Heading link"></a><strong>Fix</strong></h1>
+<p>Temporary per-session fix:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">unset QMLSCENE_DEVICE
+kdenlive
+</code></pre>
+<p>Or safer launch wrapper:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">alias kdenlive='env -u QMLSCENE_DEVICE kdenlive'
+</code></pre>
+<hr>
+<h1><a name="p-5111-result-8" class="anchor" href="https://forums.kicksecure.com#p-5111-result-8" aria-label="Heading link"></a><strong>Result</strong></h1>
+<p>After unsetting <code>QMLSCENE_DEVICE</code>, Kdenlive monitors immediately worked again (Clip + Project Monitor restored, GPU rendering functional).</p>
+<hr>
+<h1><a name="p-5111-recommendation-9" class="anchor" href="https://forums.kicksecure.com#p-5111-recommendation-9" aria-label="Heading link"></a><strong>Recommendation</strong></h1>
+<ul>
+<li>
+<p>Avoid global forcing of <code>QMLSCENE_DEVICE=softwarecontext</code> on hybrid systems</p>
+</li>
+<li>
+<p>Improve EGL detection logic to ensure:</p>
+<ul>
+<li>
+<p>AMD/NVIDIA GPU presence takes priority over llvmpipe fallback contexts</p>
+</li>
+<li>
+<p>or require <em>only llvmpipe</em>, not “any occurrence”</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-optional-note-10" class="anchor" href="https://forums.kicksecure.com#p-5111-optional-note-10" aria-label="Heading link"></a><strong>Optional note</strong></h1>
+<p>This likely affects other Qt Quick / QML applications, not only Kdenlive.</p>
+<hr>
+            <p><small>2 posts - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755</link>
+          <pubDate>Wed, 03 Jun 2026 16:54:47 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1755</guid>
+          <source url="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755.rss">Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</source>
+        </item>
         <item>
           <title>Adding an active window viewer to sysmaint panel?</title>
           <dc:creator><![CDATA[Takahashi]]></dc:creator>
@@ -51,7 +222,7 @@
           <description><![CDATA[
             <p>I try to download kicksecure and get this:</p>
 <p>[Forum won’t let me upload screenshot, get “An error occurred: Sorry, you can’t embed media items in a post.” — the screenshot shows a popup that appears over the menu dropdown]</p>
-            <p><small>5 posts - 2 participants</small></p>
+            <p><small>7 posts - 2 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/cannot-download-kicksecure-because-of-popup/1748">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/cannot-download-kicksecure-because-of-popup/1748</link>
@@ -81,7 +252,7 @@
 <p>Let’s not pretend crypto wallets are all the same. Feather’s been around since 2020, it’s fully open-source, no bloat, and clean and arguably better then Monero GUI unless you a mad lad with a bloodly full node. As a byproduct it would attract the exact user base who care about actual security and boost kicksecure usage. Kicksecure it kinda niche and I’m just now really tinkering with it. Up until now I last used it in a VM on 17 which wasn’t really a stable experience but alot has changed since and feeling more nice.</p>
 <p>What do you reckon? Anyone else keen on this, or am I barking up the wrong tree?</p>
 <p>In closing for the love of all that is holy, don’t go slapping it in as a Flatpak install that would be absolutely gross, that proper cringe mate.</p>
-            <p><small>6 posts - 4 participants</small></p>
+            <p><small>7 posts - 5 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/include-feather-wallet-in-next-release/1744">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/include-feather-wallet-in-next-release/1744</link>
@@ -1181,23 +1352,6 @@ ext4 / - all</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1704</guid>
           <source url="https://forums.kicksecure.com/t/copy-fail-cve-2026-31431-linux-kernel-local-privilege-escalation-vulnerability-and-help-wanted/1704.rss">Copy.fail / CVE-2026-31431: Linux kernel local privilege escalation vulnerability and help wanted</source>
-        </item>
-        <item>
-          <title>Does Kicksecure block receiving connections via qvm-connect-tcp?</title>
-          <dc:creator><![CDATA[gasull]]></dc:creator>
-          <category>Qubes</category>
-          <description><![CDATA[
-            <p>I asked on the Qubes OS Forum, but this seems to be specific to Kicksecure.  Maybe this is intended by design.  Is it?</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/does-kicksecure-block-receiving-connections-via-qvm-connect-tcp/1703">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/does-kicksecure-block-receiving-connections-via-qvm-connect-tcp/1703</link>
-          <pubDate>Thu, 30 Apr 2026 09:26:00 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1703</guid>
-          <source url="https://forums.kicksecure.com/t/does-kicksecure-block-receiving-connections-via-qvm-connect-tcp/1703.rss">Does Kicksecure block receiving connections via qvm-connect-tcp?</source>
         </item>
   </channel>
 </rss>

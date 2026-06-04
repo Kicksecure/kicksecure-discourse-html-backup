@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+    <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755</link>
+    <description># **Title**
+
+Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext
+
+---
+
+# **Summary**
+
+After applying Kicksecure/Whonix environment hardening (specifically the script `/etc/profile.d/20_software_rendering_in_vms.sh`), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.
+
+The issue occurred across:
+
+* Debian-packaged Kdenlive
+
+* Flatpak version
+
+* AppImage version
+
+So it was not package-specific.
+
+---
+
+# **System context**
+
+* Debian-based system with Kicksecure hardening
+
+* KDE Plasma / Qt-based desktop
+
+* AMD Radeon Graphics (radeonsi, Renoir)
+
+* OpenGL working normally (`glxinfo` shows AMD renderer)
+
+* VAAPI functional (verified via `vainfo`)
+
+* MLT works correctly (`melt` runs SDL/XGL consumers)
+
+---
+
+# **Symptom**
+
+* Kdenlive starts normally
+
+* Project opens
+
+* Timeline works
+
+* Audio playback works
+
+* **Video monitors (Clip/Project) are missing or grey**
+
+* Multiple QML warnings appear
+
+---
+
+# **Debug findings**
+
+The key issue was an environment variable:
+
+```
+
+```
+
+```
+QMLSCENE_DEVICE=softwarecontext
+```
+
+This was set globally by:
+
+```
+
+```
+
+```
+/etc/profile.d/20_software_rendering_in_vms.sh
+```
+
+Script logic summary:
+
+* 
+  checks `eglinfo`
+
+* if it detects `llvmpipe`, forces:
+
+  ```
+  
+  ```
+
+  ```
+  export QMLSCENE_DEVICE=softwarecontext
+  ```
+
+* 
+  intended for VM fallback rendering safety
+
+However on this system:
+
+```
+
+```
+
+```
+eglinfo shows BOTH:
+- AMD Radeon (radeonsi)
+- llvmpipe (secondary contexts)
+```
+
+This caused a **false positive detection**, triggering software rendering mode even though hardware acceleration is available.
+
+---
+
+# **Root cause**
+
+The script assumes:
+
+&gt; if ANY llvmpipe appears → system is software-rendered → force Qt software rendering
+
+But modern systems may show:
+
+* 
+  multiple EGL contexts
+
+* 
+  mixed renderer outputs
+
+* 
+  fallback llvmpipe contexts alongside real GPU contexts
+
+This results in incorrect global environment override.
+
+---
+
+# **Fix**
+
+Temporary per-session fix:
+
+```
+
+```
+
+```
+unset QMLSCENE_DEVICE
+kdenlive
+```
+
+Or safer launch wrapper:
+
+```
+
+```
+
+```
+alias kdenlive=&#39;env -u QMLSCENE_DEVICE kdenlive&#39;
+```
+
+---
+
+# **Result**
+
+After unsetting `QMLSCENE_DEVICE`, Kdenlive monitors immediately worked again (Clip + Project Monitor restored, GPU rendering functional).
+
+---
+
+# **Recommendation**
+
+* 
+  Avoid global forcing of `QMLSCENE_DEVICE=softwarecontext` on hybrid systems
+
+* 
+  Improve EGL detection logic to ensure:
+
+  * 
+    AMD/NVIDIA GPU presence takes priority over llvmpipe fallback contexts
+
+  * 
+    or require *only llvmpipe*, not “any occurrence”
+
+---
+
+# **Optional note**
+
+This likely affects other Qt Quick / QML applications, not only Kdenlive.
+
+---</description>
+    
+    <lastBuildDate>Wed, 03 Jun 2026 17:06:34 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+        <dc:creator><![CDATA[kick]]></dc:creator>
+        <description><![CDATA[
+            <p>eglinfo reports multiple EGL contexts, including llvmpipe fallback renderers, causing a false positive in a simplistic detection script.</p>
+<p>“Suggested improvement generated with assistance from ChatGPT and refined for correctness.”</p>
+<p>#!/bin/sh</p>
+<h1><a name="p-5112-require-eglinfo-1" class="anchor" href="https://forums.kicksecure.com#p-5112-require-eglinfo-1" aria-label="Heading link"></a>Require eglinfo</h1>
+<p>if ! command -v eglinfo &gt;/dev/null 2&gt;&amp;1; then<br>
+true “$0 ERROR: eglinfo not found. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" class="anchor" href="https://forums.kicksecure.com#p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" aria-label="Heading link"></a>Capture primary OpenGL renderer (more meaningful than scanning all contexts)</h1>
+<p>primary_renderer=“$(eglinfo 2&gt;/dev/null | grep -m 1 “OpenGL core profile renderer”)”</p>
+<p>if [ -z “$primary_renderer” ]; then<br>
+true “$0 INFO: No OpenGL renderer detected. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-check-for-full-software-rendering-only-3" class="anchor" href="https://forums.kicksecure.com#p-5112-check-for-full-software-rendering-only-3" aria-label="Heading link"></a>Check for full software rendering ONLY</h1>
+<h1><a name="p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" class="anchor" href="https://forums.kicksecure.com#p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" aria-label="Heading link"></a>(must be explicitly llvmpipe as primary renderer)</h1>
+<p>echo “$primary_renderer” | grep “llvmpipe” &gt;/dev/null 2&gt;&amp;1<br>
+if [ $? -eq 0 ]; then<br>
+software_rendering_use=true<br>
+fi</p>
+<h1><a name="p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" class="anchor" href="https://forums.kicksecure.com#p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" aria-label="Heading link"></a>If not explicitly software-rendered system → do nothing</h1>
+<p>if [ ! “$software_rendering_use” = “true” ]; then<br>
+true “$0 INFO: Hardware rendering detected. Stop.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<h1><a name="p-5112-respect-existing-user-overrides-6" class="anchor" href="https://forums.kicksecure.com#p-5112-respect-existing-user-overrides-6" aria-label="Heading link"></a>Respect existing user overrides</h1>
+<p>if [ ! -z “$QMLSCENE_DEVICE” ]; then<br>
+true “$0 INFO: QMLSCENE_DEVICE already set. Not changing.”<br>
+return 0<br>
+exit 0<br>
+fi</p>
+<p>export QMLSCENE_DEVICE=softwarecontext</p>
+          <p><a href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755/2</link>
+        <pubDate>Wed, 03 Jun 2026 17:06:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1755-2</guid>
+        <source url="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755.rss">Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</source>
+      </item>
+      <item>
+        <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+        <dc:creator><![CDATA[kick]]></dc:creator>
+        <description><![CDATA[
+            <h1><a name="p-5111-title-1" class="anchor" href="https://forums.kicksecure.com#p-5111-title-1" aria-label="Heading link"></a><strong>Title</strong></h1>
+<p>Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext</p>
+<hr>
+<h1><a name="p-5111-summary-2" class="anchor" href="https://forums.kicksecure.com#p-5111-summary-2" aria-label="Heading link"></a><strong>Summary</strong></h1>
+<p>After applying Kicksecure/Whonix environment hardening (specifically the script <code>/etc/profile.d/20_software_rendering_in_vms.sh</code>), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.</p>
+<p>The issue occurred across:</p>
+<ul>
+<li>
+<p>Debian-packaged Kdenlive</p>
+</li>
+<li>
+<p>Flatpak version</p>
+</li>
+<li>
+<p>AppImage version</p>
+</li>
+</ul>
+<p>So it was not package-specific.</p>
+<hr>
+<h1><a name="p-5111-system-context-3" class="anchor" href="https://forums.kicksecure.com#p-5111-system-context-3" aria-label="Heading link"></a><strong>System context</strong></h1>
+<ul>
+<li>
+<p>Debian-based system with Kicksecure hardening</p>
+</li>
+<li>
+<p>KDE Plasma / Qt-based desktop</p>
+</li>
+<li>
+<p>AMD Radeon Graphics (radeonsi, Renoir)</p>
+</li>
+<li>
+<p>OpenGL working normally (<code>glxinfo</code> shows AMD renderer)</p>
+</li>
+<li>
+<p>VAAPI functional (verified via <code>vainfo</code>)</p>
+</li>
+<li>
+<p>MLT works correctly (<code>melt</code> runs SDL/XGL consumers)</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-symptom-4" class="anchor" href="https://forums.kicksecure.com#p-5111-symptom-4" aria-label="Heading link"></a><strong>Symptom</strong></h1>
+<ul>
+<li>
+<p>Kdenlive starts normally</p>
+</li>
+<li>
+<p>Project opens</p>
+</li>
+<li>
+<p>Timeline works</p>
+</li>
+<li>
+<p>Audio playback works</p>
+</li>
+<li>
+<p><strong>Video monitors (Clip/Project) are missing or grey</strong></p>
+</li>
+<li>
+<p>Multiple QML warnings appear</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-debug-findings-5" class="anchor" href="https://forums.kicksecure.com#p-5111-debug-findings-5" aria-label="Heading link"></a><strong>Debug findings</strong></h1>
+<p>The key issue was an environment variable:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+<p>This was set globally by:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">/etc/profile.d/20_software_rendering_in_vms.sh
+</code></pre>
+<p>Script logic summary:</p>
+<ul>
+<li>
+<p>checks <code>eglinfo</code></p>
+</li>
+<li>
+<p>if it detects <code>llvmpipe</code>, forces:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">export QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+</li>
+<li>
+<p>intended for VM fallback rendering safety</p>
+</li>
+</ul>
+<p>However on this system:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">eglinfo shows BOTH:
+- AMD Radeon (radeonsi)
+- llvmpipe (secondary contexts)
+</code></pre>
+<p>This caused a <strong>false positive detection</strong>, triggering software rendering mode even though hardware acceleration is available.</p>
+<hr>
+<h1><a name="p-5111-root-cause-6" class="anchor" href="https://forums.kicksecure.com#p-5111-root-cause-6" aria-label="Heading link"></a><strong>Root cause</strong></h1>
+<p>The script assumes:</p>
+<blockquote>
+<p>if ANY llvmpipe appears → system is software-rendered → force Qt software rendering</p>
+</blockquote>
+<p>But modern systems may show:</p>
+<ul>
+<li>
+<p>multiple EGL contexts</p>
+</li>
+<li>
+<p>mixed renderer outputs</p>
+</li>
+<li>
+<p>fallback llvmpipe contexts alongside real GPU contexts</p>
+</li>
+</ul>
+<p>This results in incorrect global environment override.</p>
+<hr>
+<h1><a name="p-5111-fix-7" class="anchor" href="https://forums.kicksecure.com#p-5111-fix-7" aria-label="Heading link"></a><strong>Fix</strong></h1>
+<p>Temporary per-session fix:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">unset QMLSCENE_DEVICE
+kdenlive
+</code></pre>
+<p>Or safer launch wrapper:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">alias kdenlive='env -u QMLSCENE_DEVICE kdenlive'
+</code></pre>
+<hr>
+<h1><a name="p-5111-result-8" class="anchor" href="https://forums.kicksecure.com#p-5111-result-8" aria-label="Heading link"></a><strong>Result</strong></h1>
+<p>After unsetting <code>QMLSCENE_DEVICE</code>, Kdenlive monitors immediately worked again (Clip + Project Monitor restored, GPU rendering functional).</p>
+<hr>
+<h1><a name="p-5111-recommendation-9" class="anchor" href="https://forums.kicksecure.com#p-5111-recommendation-9" aria-label="Heading link"></a><strong>Recommendation</strong></h1>
+<ul>
+<li>
+<p>Avoid global forcing of <code>QMLSCENE_DEVICE=softwarecontext</code> on hybrid systems</p>
+</li>
+<li>
+<p>Improve EGL detection logic to ensure:</p>
+<ul>
+<li>
+<p>AMD/NVIDIA GPU presence takes priority over llvmpipe fallback contexts</p>
+</li>
+<li>
+<p>or require <em>only llvmpipe</em>, not “any occurrence”</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-optional-note-10" class="anchor" href="https://forums.kicksecure.com#p-5111-optional-note-10" aria-label="Heading link"></a><strong>Optional note</strong></h1>
+<p>This likely affects other Qt Quick / QML applications, not only Kdenlive.</p>
+<hr>
+          <p><a href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755/1</link>
+        <pubDate>Wed, 03 Jun 2026 16:54:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1755-1</guid>
+        <source url="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755.rss">Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</source>
+      </item>
+  </channel>
+</rss>
