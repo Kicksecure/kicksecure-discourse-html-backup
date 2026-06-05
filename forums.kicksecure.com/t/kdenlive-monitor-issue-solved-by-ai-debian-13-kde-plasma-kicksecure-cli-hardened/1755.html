@@ -124,7 +124,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="86OinawqO6Csq1uq9nfSu17ax"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="pJa3zQ8rbcV36rBe2e1gngmEt"></script>
 
 <!-- END End of Year Banner -->
 
@@ -147,6 +147,10 @@ END custom CSS / JS
 <meta name="twitter:description" content="Title Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext   Summary After applying Kicksecure/Whonix environment hardening (specifically the script /etc/profile.d/20_software_rendering_in_vms.sh), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.  The issue occurred across:    Debian-packaged Kdenlive    Flatpak..." />
 <meta property="og:article:section" content="Support" />
 <meta property="og:article:section:color" content="0088CC" />
+<meta name="twitter:label1" value="Reading time" />
+<meta name="twitter:data1" value="1 mins 🕑" />
+<meta name="twitter:label2" value="Likes" />
+<meta name="twitter:data2" value="1 ❤" />
 <meta property="article:published_time" content="2026-06-03T16:54:47+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -405,46 +409,159 @@ kdenlive
                   <time itemprop='datePublished' datetime='2026-06-03T17:06:34Z' class='post-time'>
                     June 3, 2026,  5:06pm
                   </time>
-                  <meta itemprop='dateModified' content='2026-06-03T17:12:14Z'>
+                  <meta itemprop='dateModified' content='2026-06-04T08:48:07Z'>
               <span itemprop='position'>2</span>
               </span>
             </div>
             <div class='post' itemprop='text'>
               <p>eglinfo reports multiple EGL contexts, including llvmpipe fallback renderers, causing a false positive in a simplistic detection script.</p>
 <p>“Suggested improvement generated with assistance from ChatGPT and refined for correctness.”</p>
-<p>#!/bin/sh</p>
-<h1><a name="p-5112-require-eglinfo-1" class="anchor" href="#p-5112-require-eglinfo-1" aria-label="Heading link"></a>Require eglinfo</h1>
-<p>if ! command -v eglinfo &gt;/dev/null 2&gt;&amp;1; then<br>
-true “$0 ERROR: eglinfo not found. Stop.”<br>
-return 0<br>
-exit 0<br>
-fi</p>
-<h1><a name="p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" class="anchor" href="#p-5112-capture-primary-opengl-renderer-more-meaningful-than-scanning-all-contexts-2" aria-label="Heading link"></a>Capture primary OpenGL renderer (more meaningful than scanning all contexts)</h1>
-<p>primary_renderer=“$(eglinfo 2&gt;/dev/null | grep -m 1 “OpenGL core profile renderer”)”</p>
-<p>if [ -z “$primary_renderer” ]; then<br>
-true “$0 INFO: No OpenGL renderer detected. Stop.”<br>
-return 0<br>
-exit 0<br>
-fi</p>
-<h1><a name="p-5112-check-for-full-software-rendering-only-3" class="anchor" href="#p-5112-check-for-full-software-rendering-only-3" aria-label="Heading link"></a>Check for full software rendering ONLY</h1>
-<h1><a name="p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" class="anchor" href="#p-5112-must-be-explicitly-llvmpipe-as-primary-renderer-4" aria-label="Heading link"></a>(must be explicitly llvmpipe as primary renderer)</h1>
-<p>echo “$primary_renderer” | grep “llvmpipe” &gt;/dev/null 2&gt;&amp;1<br>
-if [ $? -eq 0 ]; then<br>
-software_rendering_use=true<br>
-fi</p>
-<h1><a name="p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" class="anchor" href="#p-5112-if-not-explicitly-software-rendered-system-do-nothing-5" aria-label="Heading link"></a>If not explicitly software-rendered system → do nothing</h1>
-<p>if [ ! “$software_rendering_use” = “true” ]; then<br>
-true “$0 INFO: Hardware rendering detected. Stop.”<br>
-return 0<br>
-exit 0<br>
-fi</p>
-<h1><a name="p-5112-respect-existing-user-overrides-6" class="anchor" href="#p-5112-respect-existing-user-overrides-6" aria-label="Heading link"></a>Respect existing user overrides</h1>
-<p>if [ ! -z “$QMLSCENE_DEVICE” ]; then<br>
-true “$0 INFO: QMLSCENE_DEVICE already set. Not changing.”<br>
-return 0<br>
-exit 0<br>
-fi</p>
-<p>export QMLSCENE_DEVICE=softwarecontext</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+# Require eglinfo
+
+if ! command -v eglinfo &gt;/dev/null 2&gt;&amp;1; then
+true “$0 ERROR: eglinfo not found. Stop.”
+return 0
+exit 0
+fi
+
+# Capture primary OpenGL renderer (more meaningful than scanning all contexts)
+
+primary_renderer=“$(eglinfo 2&gt;/dev/null | grep -m 1 “OpenGL core profile renderer”)”
+
+if \[ -z “$primary_renderer” \]; then
+true “$0 INFO: No OpenGL renderer detected. Stop.”
+return 0
+exit 0
+fi
+
+# Check for full software rendering ONLY
+
+# (must be explicitly llvmpipe as primary renderer)
+
+echo “$primary_renderer” | grep “llvmpipe” &gt;/dev/null 2&gt;&amp;1
+if \[ $? -eq 0 \]; then
+software_rendering_use=true
+fi
+
+# If not explicitly software-rendered system → do nothing
+
+if \[ ! “$software_rendering_use” = “true” \]; then
+true “$0 INFO: Hardware rendering detected. Stop.”
+return 0
+exit 0
+fi
+
+# Respect existing user overrides
+
+if \[ ! -z “$QMLSCENE_DEVICE” \]; then
+true “$0 INFO: QMLSCENE_DEVICE already set. Not changing.”
+return 0
+exit 0
+fi
+
+export QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_3' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/Patrick'><span itemprop='name'>Patrick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-06-04T09:23:16Z' class='post-time'>
+                    June 4, 2026,  9:23am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-06-04T09:23:16Z'>
+              <span itemprop='position'>3</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>ChatGPT is impressive but for this kind of operating system problems it,</p>
+<ul>
+<li>lacks access to the tools such as <code>eglinfo</code></li>
+<li>lacks access to comparable environments (Kicksecure, virtualizers such as VirtualBox, graphic cards),</li>
+</ul>
+<p>hence ChatGPT can only talk from theory and not test any code in all environments end-to-end.</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1755">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>This caused a <strong>false positive detection</strong>, triggering software rendering mode even though hardware acceleration is available.</p>
+</blockquote>
+</aside>
+<p>Are you using a hardware or a VM?</p>
+<p>Because if using hardware, source file <a href="../../../external.html?link=https://github.com/Kicksecure/vm-config-dist/blob/master/etc/profile.d/20_software_rendering_in_vms.sh" class="inline-onebox">vm-config-dist/etc/profile.d/20_software_rendering_in_vms.sh at master · Kicksecure/vm-config-dist · GitHub</a> isn’t installed by default as package vm-config-dist is installed by default inside VMs only.</p>
+<p>If you are using a VM, then related documentation chapters are:</p>
+<ul>
+<li><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Tuning#Hardware-accelerated_Graphics">Hardware-accelerated Graphics</a></li>
+<li><a href="../../../external.html?link=https://www.kicksecure.com/wiki/Tuning#Renderer">Renderer</a></li>
+</ul>
+<p>Related forum thread:</p>
+<ul>
+<li><a href="../3d-acceleration-for-kicksecure-vms/1393.html" class="inline-onebox">3D acceleration for Kicksecure VMs</a></li>
+</ul>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1755">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>OpenGL working normally (<code>glxinfo</code> shows AMD renderer)</p>
+</blockquote>
+</aside>
+<p><a href="../../../external.html?link=https://discussion.fedoraproject.org/t/gbm-fails-with-egl-on-amd-kaveri/132087" class="inline-onebox">GBM fails with EGL on AMD Kaveri - Fedora Discussion</a> shows eglinfo output with both.</p>
+<pre><code class="lang-auto">OpenGL core profile renderer: llvmpipe
+</code></pre>
+<pre><code class="lang-auto">OpenGL core profile renderer: AMD
+</code></pre>
+<p>So <code>grep</code>ing for AMD (and others) is a good idea. Will implement.</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="1" />
+              <span class='post-likes'>1 Like</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_4' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/kick'><span itemprop='name'>kick</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-06-04T10:47:29Z' class='post-time'>
+                    June 4, 2026, 10:47am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-06-04T11:14:05Z'>
+              <span itemprop='position'>4</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>runs on Hardware per Debian Distro Morphing - iGPU AMD Radeon Graphics + Geforce RTX xxxx (Compute Only Nvidia Open Drivers).</p>
+<p>20_software_rendering_in_vms.sh exists in my /etc/profile.d, btw</p>
             </div>
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
