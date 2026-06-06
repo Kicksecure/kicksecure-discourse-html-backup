@@ -124,7 +124,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="xEw37nAGOs1DUYkymM0g8TgIW"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="3Wn2wdZStizg9Qh6TneJygvea"></script>
 
 <!-- END End of Year Banner -->
 
@@ -150,7 +150,7 @@ END custom CSS / JS
 <meta name="twitter:label1" value="Reading time" />
 <meta name="twitter:data1" value="2 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="6 ❤" />
+<meta name="twitter:data2" value="7 ❤" />
 <meta property="article:published_time" content="2026-05-15T02:55:43+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -475,8 +475,103 @@ debian13@localhost:~$
 
             <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
               <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
-              <meta itemprop="userInteractionCount" content="1" />
-              <span class='post-likes'>1 Like</span>
+              <meta itemprop="userInteractionCount" content="2" />
+              <span class='post-likes'>2 Likes</span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_7' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/anonx230'><span itemprop='name'>anonx230</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-06-05T04:52:11Z' class='post-time'>
+                    June 5, 2026,  4:52am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-06-05T04:52:11Z'>
+              <span itemprop='position'>7</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1725">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>cups isn’t installed by default because it opens a listening port by default.</p>
+</blockquote>
+</aside>
+<pre><code class="lang-auto">$ ss -l | grep -E "cups|ipp|631"
+u_str LISTEN 0      4096                                                                                            /run/cups/cups.sock 17283                            * 0          
+tcp   LISTEN 0      128                                                                                                       127.0.0.1:ipp                        0.0.0.0:*  
+</code></pre>
+<p>Is that this?</p>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
+            </div>
+
+
+            
+          </div>
+          <div id='post_8' itemprop='comment' itemscope itemtype='http://schema.org/Comment' class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope itemtype="../../../external.html?link=http://schema.org/Person">
+                <a itemprop="url" rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/anonx230'><span itemprop='name'>anonx230</span></a>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop='datePublished' datetime='2026-06-05T04:54:22Z' class='post-time'>
+                    June 5, 2026,  4:54am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-06-05T04:54:22Z'>
+              <span itemprop='position'>8</span>
+              </span>
+            </div>
+            <div class='post' itemprop='text'>
+              <p>I was reading about Unix socket handling on GitHub (possibly related to privleap or other kick documentation), and it made me look at more how CUPS handles its sockets and configuration on Debian/Ubuntu. Here’s what I’m seeing on my debian system:</p>
+<p><strong>Socket unit location:</strong></p>
+<pre><code class="lang-auto">$ systemctl show cups.socket -p FragmentPath
+FragmentPath=/lib/systemd/system/cups.socket
+</code></pre>
+<p><strong>Socket file locations:</strong></p>
+<pre><code class="lang-auto">$ find /usr/lib/systemd /lib/systemd -name "cups.socket" 2&gt;/dev/null
+/usr/lib/systemd/system/cups.socket
+/lib/systemd/system/cups.socket
+</code></pre>
+<p><strong>CUPS configuration directory:</strong></p>
+<pre><code class="lang-auto">$ ls -a /etc/cups
+.                  cups-files.conf  raw.types           subscriptions.conf.O
+..                 interfaces       snmp.conf
+cups-browsed.conf  ppd              ssl
+cupsd.conf         raw.convs        subscriptions.conf
+</code></pre>
+<p>Something I learned about <code>cupsd.conf</code> packaging. On Debian/Ubuntu, <code>cupsd.conf</code> is not treated as a proper dpkg conffile. Instead, the <code>cups-daemon.postinst</code> script checks whether cupsd.conf exists, if it doesn’t, it copies from <code>/usr/share/cups/cupsd.conf.default</code>. This means the file gets created on initial install but isn’t updated during package upgrades via dpkg’s normal conffile mechanism, even if the admin never modified it.</p>
+<p>Upstream CUPS rejected a request to move <code>cupsd.conf.default</code> out of <code>/etc/cups/</code>, though for a different reason than user confusion.<br>
+<a href="../../../external.html?link=https://github.com/OpenPrinting/cups/pull/26" rel="noopener nofollow ugc">non-CUPS code expects to find <code>cupsd.conf.default</code> in SERVERROOT.</a></p>
+<p><strong>Default config template location:</strong></p>
+<pre><code class="lang-auto">$ find /usr/share/ -name "cups-files.conf.default" 2&gt;/dev/null
+/usr/share/cups/cups-files.conf.default
+</code></pre>
+            </div>
+
+            <div itemprop="interactionStatistic" itemscope itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+              <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+              <meta itemprop="userInteractionCount" content="0" />
+              <span class='post-likes'></span>
             </div>
 
 
