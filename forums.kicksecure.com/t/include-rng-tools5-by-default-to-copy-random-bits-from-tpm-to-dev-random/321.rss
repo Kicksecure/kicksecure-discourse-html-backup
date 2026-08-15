@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Include rng-tools5 by default to copy random bits from TPM to /dev/random</title>
+    <link>https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321</link>
+    <description>TPMs are becoming ubiquitous in new computers, especially with fTPM, so this might be worth it. 
+
+
+Kernel docs indicate rng-tools is the best way to make use of trng entropy (writes from /dev/hwrng to /dev/random)
+docs.kernel.org/admin-guide/hw_random.html
+
+Seems to be the currently most popular package:
+packages.debian.org/bookworm/rng-tools5
+
+Considerations to test:
+How does this behave with devices that do not have hardware rngs? 
+
+Does xen provide virtio-rng to guests by default?</description>
+    
+    <lastBuildDate>Mon, 04 Sep 2023 14:56:53 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Include rng-tools5 by default to copy random bits from TPM to /dev/random</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>First blocker, horribly outdated in Debian as per Debian upstream bug report:<br>
+<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=922677">Please consider using rng-tools &gt;= 6</a></p>
+<aside class="quote no-group" data-username="trekkinjuju" data-post="1" data-topic="321">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/ea666f/48.png" class="avatar"> trekkinjuju:</div>
+<blockquote>
+<p>Does xen provide virtio-rng to guests by default?</p>
+</blockquote>
+</aside>
+<p>Not that I can find.</p>
+<p>search term:<br>
+site:xen.org virtio-rng</p>
+<ul>
+<li><a href="https://lists.xen.org/archives/html/xen-devel/2016-10/msg01416.html" class="inline-onebox">Xen project Mailing List</a></li>
+</ul>
+<p>That’s why Qubes has this:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/QubesOS/qubes-core-agent-linux/blob/master/vm-systemd/systemd-random-seed.service.d/30_qubes.conf">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-core-agent-linux/blob/master/vm-systemd/systemd-random-seed.service.d/30_qubes.conf" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/QubesOS/qubes-core-agent-linux/blob/master/vm-systemd/systemd-random-seed.service.d/30_qubes.conf" target="_blank" rel="noopener">QubesOS/qubes-core-agent-linux/blob/master/vm-systemd/systemd-random-seed.service.d/30_qubes.conf</a></h4>
+
+
+      <pre><code class="lang-conf">[Unit]
+After=qubes-db.service
+Before=sysinit.target
+
+[Service]
+ExecStartPre=/usr/lib/qubes/init/qubes-random-seed.sh
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321/2</link>
+        <pubDate>Mon, 04 Sep 2023 14:56:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-321-2</guid>
+        <source url="https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321.rss">Include rng-tools5 by default to copy random bits from TPM to /dev/random</source>
+      </item>
+      <item>
+        <title>Include rng-tools5 by default to copy random bits from TPM to /dev/random</title>
+        <dc:creator><![CDATA[trekkinjuju]]></dc:creator>
+        <description><![CDATA[
+            <p>TPMs are becoming ubiquitous in new computers, especially with fTPM, so this might be worth it.</p>
+<p>Kernel docs indicate rng-tools is the best way to make use of trng entropy (writes from /dev/hwrng to /dev/random)<br>
+<a href="http://docs.kernel.org/admin-guide/hw_random.html" class="onebox" target="_blank" rel="noopener nofollow ugc">docs.kernel.org/admin-guide/hw_random.html</a></p>
+<p>Seems to be the currently most popular package:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://packages.debian.org/bookworm/rng-tools5">
+  <header class="source">
+
+      <a href="https://packages.debian.org/bookworm/rng-tools5" target="_blank" rel="noopener nofollow ugc">packages.debian.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://packages.debian.org/bookworm/rng-tools5" target="_blank" rel="noopener nofollow ugc">Debian -- Details of package rng-tools5 in bookworm</a></h3>
+
+  <p>Daemon to use a Hardware TRNG</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Considerations to test:<br>
+How does this behave with devices that do not have hardware rngs?</p>
+<p>Does xen provide virtio-rng to guests by default?</p>
+          <p><a href="https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321/1</link>
+        <pubDate>Mon, 04 Sep 2023 09:16:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-321-1</guid>
+        <source url="https://forums.kicksecure.com/t/include-rng-tools5-by-default-to-copy-random-bits-from-tpm-to-dev-random/321.rss">Include rng-tools5 by default to copy random bits from TPM to /dev/random</source>
+      </item>
+  </channel>
+</rss>

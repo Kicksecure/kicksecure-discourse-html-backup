@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Hard Drive Partition</title>
+    <link>https://forums.kicksecure.com/t/hard-drive-partition/666</link>
+    <description>I have 2 partitions that seem to live off my only drive that has kicksecure on. These 2 partitions are 42 GIG each. What are these for? They say they are swap partitions but Ive never seen something like that and can I reallocate them to the main partition?</description>
+    
+    <lastBuildDate>Sat, 09 Nov 2024 22:56:22 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/hard-drive-partition/666.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[SlowMoe]]></dc:creator>
+        <description><![CDATA[
+            <p>32GIG. I don’t think I need the swap unless I wanted to do like you suggest, (stolenkey)</p>
+<p>ty</p>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/6</link>
+        <pubDate>Sat, 09 Nov 2024 22:56:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-6</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Swap-file-creator">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1730799025" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Swap-file-creator" target="_blank" rel="noopener" title="06:29AM - 30 October 2024">Kicksecure – 30 Oct 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/7/7b/File-swap-promo.jpg?version=ad5b78bc0f15f2b366f4da0b185a2102" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Swap-file-creator" target="_blank" rel="noopener">swap-file-creator</a></h3>
+
+  <p>Adds encrypted swap file to the system.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Swap-file-creator#Disable">Disable</a></li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/5</link>
+        <pubDate>Tue, 05 Nov 2024 13:44:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-5</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>That looks fairly normal.</p>
+<ul>
+<li>The <code>/boot/efi</code> partition is an EFI System Partition. This is used to store the GRUB bootloader. It is required for the system to be able to boot.</li>
+<li>The <code>/boot</code> partition is used for storing the kernel, initramfs, and bootloader configuration. It is intentionally separate from the rest of the system in order to allow for more secure drive encryption.</li>
+<li>Then you have your crypt partition, which contains your root filesystem. That stores the rest of the OS.</li>
+<li>The 38.8G swap partition isn’t actually a partition, but is a swap <em>file</em>. Kicksecure’s <code>swap-file-creator</code> creates an encrypted volume within a file, and then uses that encrypted volume for swap, thus providing encrypted swap that is secure even if the rest of your system is unencrypted or if your system’s decryption key is ever stolen. It appears that <code>swap-file-creator</code> is making a swapfile based on the size of your system’s RAM, and you have a lot of RAM? How much RAM does this system have?</li>
+</ul>
+<p>At any rate, if you don’t want swap at all, I believe you can use <code>sudo systemctl disable swap-file-creator</code> and then reboot.</p>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/4</link>
+        <pubDate>Mon, 04 Nov 2024 19:26:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-4</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[SlowMoe]]></dc:creator>
+        <description><![CDATA[
+            <p>This is what lsblk provided: the 4gig partion is odd? its a boot partion, I have one and that is 500 MB</p>
+<p>NAME                                      MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINTS<br>
+loop0                                       7:0    0  38.8G  0 loop<br>
+└─swapfile                                254:1    0  38.8G  0 crypt [SWAP]<br>
+nvme0n1                                   259:0    0 931.5G  0 disk<br>
+├─nvme0n1p1                               259:1    0   550M  0 part  /boot/efi<br>
+├─nvme0n1p2                               259:2    0     4G  0 part  /boot<br>
+└─nvme0n1p3                               259:3    0   927G  0 part<br>
+└─luks-5a57aff4-79d2-47ba-abb0-1a7f1e52ee01<br>
+254:0    0   927G  0 crypt /<br>
+nvme1n1                                   259:4    0 931.5G  0 disk</p>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/3</link>
+        <pubDate>Mon, 04 Nov 2024 19:09:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-3</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Could you share the output of <code>sudo fdisk -l</code> so we can see your partition layout?</p>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/2</link>
+        <pubDate>Mon, 04 Nov 2024 15:20:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-2</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+      <item>
+        <title>Hard Drive Partition</title>
+        <dc:creator><![CDATA[SlowMoe]]></dc:creator>
+        <description><![CDATA[
+            <p>I have 2 partitions that seem to live off my only drive that has kicksecure on. These 2 partitions are 42 GIG each. What are these for? They say they are swap partitions but Ive never seen something like that and can I reallocate them to the main partition?</p>
+          <p><a href="https://forums.kicksecure.com/t/hard-drive-partition/666/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hard-drive-partition/666/1</link>
+        <pubDate>Mon, 04 Nov 2024 13:25:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-666-1</guid>
+        <source url="https://forums.kicksecure.com/t/hard-drive-partition/666.rss">Hard Drive Partition</source>
+      </item>
+  </channel>
+</rss>

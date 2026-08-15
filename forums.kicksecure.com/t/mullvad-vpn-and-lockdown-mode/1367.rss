@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Mullvad VPN and Lockdown mode</title>
+    <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367</link>
+    <description>First post, genuine question
+
+I come from Fedora and heard about KickSecure. It definitely piqued my curiosity. So I did a bare metal installation on an old Toshiba Satellite AMD4, UEFI &amp; Btrfs
+
+I am trying to button down the sysmaint profile but keep finding obstacles. So I have reinstalled it twice. I&#39;ve been using ChatGPT for help…. works 50% of the time when it&#39;s not hallucinating 
+
+My question (and I have hundreds) can I get Mullvad VPN on Lockdown mode to connect before the ISP connects? 
+
+Just one idea I had 
+
+\[Unit\]
+Description=Override to enforce early Mullvad lockdown
+Before=network-pre.target network.target network-online.target
+Wants=network-pre.target
+
+\[Service\]
+ExecStartPost=/usr/bin/mullvad connect
+
+But it failed</description>
+    
+    <lastBuildDate>Fri, 23 Jan 2026 00:07:40 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>I suppose you are you using user-sysmaint-split. In that case is relatively simple, you need to configure the Mullvand vpn to autostart with the system for both users, is what I have.</p>
+<p>If it’s autostarting correctly for non root user, you should have a <strong>.desktop</strong> file for mullvand in the <strong>.config/autostart</strong>. You should copy this file for the sysmaint user too and authenticate because the keyrings aren’t shared obviously.</p>
+<p><code>/home/user/.config/autostart/…mulvand.desktop</code></p>
+<p>and</p>
+<p><code>/home/sysmaint/.config/autostart/</code></p>
+<p>Check if you have the file in the main user:</p>
+<p><code>ls -la ~/.config/autostart | grep -i mullvand</code></p>
+<p>If you have a file I would say that just copying it to the sysmaint folder would work. Boot with sysmaint user and copy it, you would need root permissions.</p>
+<p><code>cp /home/user/.config/&lt;mullvand&gt;.desktop /home/sysmaint/.config/autstart</code></p>
+<p>I think it could work for you. I use ProtonVPN and I have killswitch option, so I can’t access internet through ISP without the VPN connection.</p>
+<p>Good luck</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/8</link>
+        <pubDate>Thu, 22 Jan 2026 23:55:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-8</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
+        <description><![CDATA[
+            <p>I removed the entire MullvadVPN from sysmaint. It was a horrible idea. But I do use it on user side and run Whonix thru it</p>
+<p>Also, I have an HP Elitebook for my KickSecure/Whonix setup. Its working fine</p>
+<p>I did try updating via CLI, it ran into xscreensaver issues and locked me out so I had to do a fresh install on bare metal</p>
+<p>Life with Linux</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/7</link>
+        <pubDate>Mon, 12 Jan 2026 00:00:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-7</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
+        <description><![CDATA[
+            <p>my old laptop was not able to properly use kicksecure. VM lacking certain required settings. But if you ask ChatGPT, it will write up the script.  Basically, it was installing it on sysmaint, which allowed user to access it. then set it up on user with autostart, login, kill switch and lockdown.</p>
+<p>On sysmaint, you have to write a script that allows connection. but on systmaint, you do not set it up within the app, but you do not connect to the internet immediately,  after kicksecure sysmaint is operational. start mullvad, then turn on your router</p>
+<p>Hope this helps</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/6</link>
+        <pubDate>Fri, 05 Dec 2025 17:06:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-6</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[Fazeclan]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/justpassinthru">@JustPassinThru</a></p>
+<p>Do you mind posting a guide how to do it?</p>
+<p>Would like the same setup!</p>
+<p>I managed to install mullvad vpn in sys-maint but unable to start it at all there. In the user profile however, it works as expected!</p>
+<p>But I would like it to work in sysmaint aswell, thus having Sysmaint → Vpn → Tor also for updates/installing new software.</p>
+<p>Please help me out if you can. Im a linux newb.</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/5</link>
+        <pubDate>Thu, 04 Dec 2025 19:34:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-5</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
+        <description><![CDATA[
+            <p>I actually got it to work in both user &amp; sysmaint</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/4</link>
+        <pubDate>Sun, 23 Nov 2025 23:46:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-4</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks for the input</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/3</link>
+        <pubDate>Thu, 20 Nov 2025 02:13:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-3</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>This might be a better question for Mullvad’s support. What you’re trying to do basically is start Mullvad as a systemd service before any other network traffic occurs (at least that’s what it looks like you’re doing), so it would probably be best to ask them how to do that. user-sysmaint-split shouldn’t affect how (or if) this works, at least in user sessions. Whatever solution you find may or may not automatically work in sysmaint sessions, depending on which unit you’re overriding.</p>
+<p>You shouldn’t worry about this part until you have a solution that works in a user session, but once you have that working, you <em>might</em> end up needing to add a <code>WantedBy=sysmaint-boot.target</code> to whatever unit you’re overriding (see <code>/usr/lib/systemd/system/mullvad-daemon.service.d/99_sysmaint.conf</code> for an example of how to do this). If you do this, you’ll need to use <code>sudo systemctl daemon-reload; sudo systemctl disable whatever.service; sudo systemctl enable whatever.service</code> to get that override to fully apply.</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/2</link>
+        <pubDate>Thu, 20 Nov 2025 00:05:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-2</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+      <item>
+        <title>Mullvad VPN and Lockdown mode</title>
+        <dc:creator><![CDATA[JustPassinThru]]></dc:creator>
+        <description><![CDATA[
+            <p>First post, genuine question</p>
+<p>I come from Fedora and heard about KickSecure. It definitely piqued my curiosity. So I did a bare metal installation on an old Toshiba Satellite AMD4, UEFI &amp; Btrfs</p>
+<p>I am trying to button down the sysmaint profile but keep finding obstacles. So I have reinstalled it twice. I’ve been using ChatGPT for help…. works 50% of the time when it’s not hallucinating</p>
+<p>My question (and I have hundreds) can I get Mullvad VPN on Lockdown mode to connect before the ISP connects?</p>
+<p>Just one idea I had</p>
+<p>[Unit]<br>
+Description=Override to enforce early Mullvad lockdown<br>
+Before=network-pre.target network.target network-online.target<br>
+Wants=network-pre.target</p>
+<p>[Service]<br>
+ExecStartPost=/usr/bin/mullvad connect</p>
+<p>But it failed</p>
+          <p><a href="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367/1</link>
+        <pubDate>Wed, 19 Nov 2025 23:31:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1367-1</guid>
+        <source url="https://forums.kicksecure.com/t/mullvad-vpn-and-lockdown-mode/1367.rss">Mullvad VPN and Lockdown mode</source>
+      </item>
+  </channel>
+</rss>

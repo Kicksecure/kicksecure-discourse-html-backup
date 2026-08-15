@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Questions regarding use of tmpfs formatting and conflicts</title>
+    <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057</link>
+    <description>Hello Kicksecure Community,
+
+I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like `grub-live`, `systemd-fstab-generator`, and `swap-file-creator`.
+What lead me down this rabit hole was how someone in a &quot;group chat&quot; mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don&#39;t swap.
+
+I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see `fstab-vm` bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.
+
+Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into &quot;Live Mode&quot; but I tested that theory my booting normally and it showed both ways.
+
+`journalctl -b -p err | head -n 3`
+
+```
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file &#39;/run/systemd/generator/-.mount&#39;, as it already exists. Duplicate entry in &#39;/etc/fstab&#39;?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file &#39;/run/systemd/generator/tmp.mount&#39;, as it already exists. Duplicate entry in &#39;/etc/fstab&#39;?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+```
+
+`cat /etc/fstab`
+
+
+```
+# /etc/fstab: static file system information.
+#
+# Use &#39;blkid&#39; to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+```
+
++ **Whats better?**
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab
+
+```
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+```
+
+I distro morphed this install so I&#39;m not sure what came with debian and what came with kicksecure. 
+
+Looking at fstab-vm file in the `security-misc` repository made me look into if that this the incorrect way to mount and confusion? 
+
+Looking at line #23 doesn&#39;t seem right in formatting and why use bind in conjunction wouldn&#39;t that not align with creating a new tmpfs instance?
+
+
+```
+tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+```
+
++ **~/.cache mounted to tmpfs**
+
+What is better for mounting user cache to tmpfs?
+Is it or rather would it be better to just mount /tmp to tmpfs then `symlink ~/.cache to /temp`
+
+`sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache`
+
+Or should setting the `XDG_CACHE_HOME` variable to /tmp/$USER/.cache be better? 
+
+`export XDG_CACHE_HOME=&quot;/tmp/$USER/.cache&quot;`
+
+However don&#39;t most apps not always respect the xdg spec always?
+
++ **Can I have my cake and eat it too?**
+
+Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?
+
++ **Issues related to &quot;Live Mode&quot; and encrypted swap with tmpfs mounts?**
+
+Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with `grub-live` implementation?
+
+If I or another user have these mount points is there gonna be existing issue when the times I might boot into &quot;Live Mode&quot;?</description>
+    
+    <lastBuildDate>Sat, 28 Jun 2025 18:48:25 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="FlapJacket" data-post="5" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/a3d4f5/48.png" class="avatar"> FlapJacket:</div>
+<blockquote>
+<p>My use case is having certain applications like messaging apps and browsers store cache in RAM even when not in live mode so I things I’m working on still their while maintaining protection when communicating with randoms and online communities in public chats on messaging apps.</p>
+</blockquote>
+</aside>
+<p>Didn’t yo mama tell you not to talk to strangers on the internet lol<br>
+I get you though that makes sense not wanting to boot into Live Mode and only mount certain confidential or places in memory so that the stuff your working on persists.<br>
+Not to mention Live Mode drains your battery quicker in my experiences/observations but that seems to be expected.</p>
+<blockquote>
+<p>Syslinks might get corrupted or overided by updates too right?</p>
+</blockquote>
+<p>Yes that correct I would just mount it the way you are already are doing it in fstab.<br>
+Reason being I can’t say for sure if a application stores files in .cache and you syslink .cache to /tmp though, that if an update to a software that using .cache would remove the syslink?</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/9</link>
+        <pubDate>Sat, 28 Jun 2025 18:48:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-9</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="FlapJacket" data-post="4" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/a3d4f5/48.png" class="avatar"> FlapJacket:</div>
+<blockquote>
+<p>It appears that grub-live dracut mounts half the system memory for system &amp; home folders /run etc. then the rest of free space is the other half of RAM. If I boot into live mode and look at download directory it says somewhere around 5GB of free space and my total RAM is roughly around 12GB. <em>I don’t think many users might know this about live mode.</em></p>
+</blockquote>
+</aside>
+<p>Is this true?.. I need to test this <img src="https://forums.kicksecure.com/images/emoji/twitter/thinking.png?v=12" title=":thinking:" class="emoji" alt=":thinking:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/8</link>
+        <pubDate>Sat, 28 Jun 2025 18:40:14 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-8</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Chapter <a href="https://www.kicksecure.com/wiki/Git#Put_folder_under_Git_Version_Control">Put folder under Git Version Control</a> might be useful so you can monitor which files actually change in the home folder.</p>
+<hr>
+<aside class="quote no-group quote-modified" data-username="FlapJacket" data-post="4" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/a3d4f5/48.png" class="avatar"> FlapJacket:</div>
+<blockquote>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Did you perform a Functionality Test of Live mode and found unexpected persistence?</p>
+</blockquote>
+</aside>
+<p>Yes, and no I have not found any unexpected persistence with tests.</p>
+</blockquote>
+</aside>
+<p>Great!</p>
+<aside class="quote no-group" data-username="FlapJacket" data-post="5" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/a3d4f5/48.png" class="avatar"> FlapJacket:</div>
+<blockquote>
+<p>My use case is having certain applications like messaging apps and browsers store cache in RAM even when not in live mode</p>
+</blockquote>
+</aside>
+<p>Unsupported.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Unsupported">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1766827824" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener" title="06:16PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/426;"><img src="https://www.kicksecure.com/w/images/0/0a/Unsupported.jpg?version=4c03a6d49994df75ba2ec2ce26d99988" class="thumbnail" alt="" width="640" height="426"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Unsupported" target="_blank" rel="noopener">Undocumented, Untested or Unsupported Features</a></h3>
+
+  <p>This feature is either undocumented, untested, or unsupported. Options: Become a Contributor / Apply Self Support First Policy / Purchase Support.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/7</link>
+        <pubDate>Mon, 23 Jun 2025 06:00:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-7</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+        <description><![CDATA[
+            <p>Many messaging applications stores files/avatars in .cache or follow the XDG env specifications. I will put this here but feel free to keep it or move it to another thread or use for wiki. Also if anything is incorrect though I researched this pretty well also feel free to correct it.</p>
+<hr>
+<ul>
+<li><strong>XMPP</strong></li>
+</ul>
+<p><em>Gajim</em> client handles avatars and cached files shared or opened chats in <code>~/.cache/gajim/</code> following XDG Base Directory Specification</p>
+<p><em>Dino</em> (version 0.4.5 or later) client only caches avatars in <code>~/.cache/dino</code> partially following XDG specifications.</p>
+<p>Both Gajim and Dino have automatic previews turned off meaning that files shared in public chats are not automatically downloaded by the client simply by being in a public chat room. <br>
+The user has to specifically click on them to or prompt to download them. <br>
+Dino will auto download shared files in private chats, Gajim on the other hand does not.</p>
+<hr>
+<ul>
+<li><strong>IRC</strong></li>
+</ul>
+<p><em>Hexchat</em> saves shared files in local Downloads folder typically.</p>
+<p>Hexchat does not have auto downloads for shared images in IRC chats by default. However below is a defense in depth config to download files in RAM following the theme of this thread. Though its better advised to rely on <em>“Live-Mode”</em>:</p>
+<pre><code class="lang-auto"># Directory for initial file downloads
+## Default download location is ~/Downloads
+# Save to .tmp if mounted to tmpfs
+dcc_dir = ./tmp
+## Save to ~/.cache
+## Not needed if tmp is mounted to tmpfs or also cache is mounted to tmp and tmp is mounted to tmpfs
+#dcc_dir = ~/.cache
+## Toggles automatic removal of finished/failed transfers when set to 1
+#dcc_remove = 1 
+# Disable automatic opening for received files
+## Asks for confirmation before downloading (default behavior).
+dcc_auto_recv = 0
+## Disables auto-opening for incoming file transfers.
+#gui_autoopen_recv =0 
+</code></pre>
+<hr>
+<ul>
+<li><strong>Matrix</strong></li>
+</ul>
+<p><em>Element</em> client follows XDG specifications for caching shared files and avatars in <code>~/.cache/Element/</code></p>
+<p><em>Nheko</em> client typically caches shared images and avatars in the <code>~/.cache/nheko/</code> adhering to the XDG Base Directory Specification however I’m not sure if that is correct since its been ahile since I used this client.</p>
+<hr>
+<ul>
+<li><strong>SimpleX Chat</strong></li>
+</ul>
+<p><em>SimpleX</em> Sends link previews by default and auto accept images is enabled by default as of v6.3.5 release.</p>
+<p>It also appears they don’t follow XDG specification (atleast for the AppImage version)</p>
+<p>Files shared/opened are stored here: <code>~/.local/share/simplex/simplex_v1_files</code></p>
+<p>To make turn these settings off make sure you go to config <code>~/.config/simplex/properties</code> check these lines are set:</p>
+<pre><code class="lang-auto">PrivacyAcceptImages=false
+PrivacyLinkPreviews=false
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/6</link>
+        <pubDate>Sun, 22 Jun 2025 19:17:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-6</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="anon92632958" data-post="3" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>First let me ask what is your use case for wanting to mount .cache to RAM?</p>
+</blockquote>
+</aside>
+<p>My use case is having certain applications like messaging apps and browsers store cache in RAM even when not in live mode so I things I’m working on still their while maintaining protection when communicating with randoms and online communities in public chats on messaging apps.</p>
+<p>Really trying to not have to worry about people spamming weirdo sh*t or malware and my device saving these files just cause I joined a group chat or clicked open preview of something that someone shared in a chat.</p>
+<p>Most applications are pretty good now in regards to not having auto previews turned on since its a security risk. Not all applications are made equally though. iMessage on iOS was exploited many times via auto-previews or links previews since it would auto download a image/file or a url link that would exploit a zero day. Not to mention someone could send you something illegal and it would be downloaded to your phone automatically, though this has been patched its still a concern with open source privacy based communications.</p>
+<aside class="quote no-group" data-username="anon92632958" data-post="3" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>The other method you mentioned you would prob have to rm and recreate the directory before you syslink it</p>
+</blockquote>
+</aside>
+<p>Thanks thats what I was thinking also. Syslinks might get corrupted or overided by updates too right?</p>
+<p>Like when updating applications for example.</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/5</link>
+        <pubDate>Sun, 22 Jun 2025 19:12:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-5</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>As distribution developers, it’s hard for us to control the environment in this setup.</p>
+</blockquote>
+</aside>
+<p>Makes sense I understand that. To further clarify what I mean and what I’m trying to understand is if I have <code>XDG_CACHE_HOME=/tmp</code> set and .cache mounted to tmpfs/tmp will there be any gotchas footguns or bottlenecks with Live Mode also?</p>
+<p>It appears that grub-live dracut mounts half the system memory for system &amp; home folders /run etc. then the rest of free space is the other half of RAM. If I boot into live mode and look at download directory it says somewhere around 5GB of free space and my total RAM is roughly around 12GB. <em>I don’t think many users might know this about live mode.</em></p>
+<p>This is also the same with Tails given you can’t download anything bigger then the free RAM available, around half is used in there implementation. Otherwise you have to select the persistent directory if you have it enabled to save files bigger since that directory is not in memory.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>No need for any <code>/etc/fstab</code> modifications or anything.</p>
+</blockquote>
+</aside>
+<p>But onto the <code>fstab-vm</code> file line L23 that line doesn’t seem correct the line commited out below (L24) does look correct?</p>
+<p>I also am no way implying that Kicksecure should mount or syslink .cache to tmpfs/tmp by default configuration.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Did you perform a Functionality Test of Live mode and found unexpected persistence?</p>
+</blockquote>
+</aside>
+<p>Yes, and no I have not found any unexpected persistence with tests.<br>
+I will be installing via the ISO here though to look at defaults that are separate from distro morphing.</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/4</link>
+        <pubDate>Sun, 22 Jun 2025 19:09:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-4</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>First let me ask what is your use case for wanting to mount .cache to RAM?</p>
+<blockquote>
+<p>What is better for mounting user cache to tmpfs?</p>
+</blockquote>
+<p>I would say the fstab and reboot method.<br>
+The other method you mentioned you would prob have to rm and recreate the directory before you syslink it</p>
+<aside class="quote no-group" data-username="FlapJacket" data-post="1" data-topic="1057">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/f/a3d4f5/48.png" class="avatar"> FlapJacket:</div>
+<blockquote>
+<p>Issues related to “Live Mode”</p>
+</blockquote>
+</aside>
+<p>Well since Live mode uses memory and you only have X amount RAM I would assume that half the amount of RAM would be used for the file system and the rest for free space. So it might reduce the RAM more?</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/3</link>
+        <pubDate>Mon, 02 Jun 2025 22:23:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-3</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Distribution Morphing:</p>
+<p>If non-persistent live mode is a priority, I don’t recommend <a href="https://www.kicksecure.com/wiki/Distribution_Morphing">distribution morphing</a>.</p>
+<p>Quote <a href="https://www.kicksecure.com/wiki/Debian#Distribution_Morphing_versus_ISO_-_Differences">Distribution Morphing versus ISO - Differences</a>:</p>
+<blockquote>
+<ul>
+<li><strong>Swap / mount / fstab related:</strong> Swap partition / swap files, mounts, <code>/etc/fstab</code> set up by Debian installer or the user are not disabled or modified during distribution morphing. This might be a concern for users interested in non-persistent <a href="https://www.kicksecure.com/wiki/Live_Mode">live mode</a>.</li>
+</ul>
+</blockquote>
+<p>As distribution developers, it’s hard for us to control the environment in this setup.</p>
+<hr>
+<p>ISO:</p>
+<p>When installing using the <a href="https://www.kicksecure.com/wiki/ISO">ISO</a> (or installing to hard drive by using the ISO installer), there should be no such issues. No need for any <code>/etc/fstab</code> modifications or anything.</p>
+<p>(<a href="https://www.kicksecure.com/wiki/Swap-file-creator" class="inline-onebox">swap-file-creator</a> does not run in live mode. (<a href="https://www.kicksecure.com/wiki/Swap-file-creator#Live_Mode">swap-file-creator, Live Mode</a>))</p>
+<hr>
+<p>In any case, live mode indicator systray should be pointing out if there are any disks mounted as read-write.</p>
+<hr>
+<p>Did you perform a <a href="https://www.kicksecure.com/wiki/Live_Mode#Functionality_Test_of_Live_mode">Functionality Test of Live mode</a> and found unexpected persistence?</p>
+<hr>
+<p>Recommended reading: <a href="https://www.kicksecure.com/wiki/Grub-live#Security_Considerations">grub-live, Security Considerations</a></p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/2</link>
+        <pubDate>Mon, 19 May 2025 00:02:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-2</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+      <item>
+        <title>Questions regarding use of tmpfs formatting and conflicts</title>
+        <dc:creator><![CDATA[FlapJacket]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello Kicksecure Community,</p>
+<p>I have been researching tmpfs and optimal ways to mount places to it in my Kicksecure morph install without conflicting with anything like <code>grub-live</code>, <code>systemd-fstab-generator</code>, and <code>swap-file-creator</code>.<br>
+What lead me down this rabit hole was how someone in a “group chat” mentioned how they mounted their /tmp and their /.cache directories to tmpfs essentially making them in volatile memory given they don’t swap.</p>
+<p>I dont believe I did it correctly which is leading me to ask here. While some of this might or might not be Kicksecure specific see <code>fstab-vm</code> bellow, I felt this would be a good place to ask since it seems like alot of security researchers and people that know better about linux are here. Who knows maybe this might help someone else or start a wiki entry about this topic.</p>
+<p>Alrighty then, I first noticed a error message at boot which I thought at the time was a related conflict to booting into “Live Mode” but I tested that theory my booting normally and it showed both ways.</p>
+<p><code>journalctl -b -p err | head -n 3</code></p>
+<pre><code class="lang-auto">May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/-.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop systemd-fstab-generator[394]: Failed to create unit file '/run/systemd/generator/tmp.mount', as it already exists. Duplicate entry in '/etc/fstab'?
+May 04 21:26:43 laptop (sd-execut[390]: /usr/lib/systemd/system-generators/systemd-fstab-generator failed with exit status 1.
+</code></pre>
+<p><code>cat /etc/fstab</code></p>
+<pre><code class="lang-auto"># /etc/fstab: static file system information.
+#
+# Use 'blkid' to print the universally unique identifier for a device; this may
+# be used with UUID= as a more robust way to name devices that works even if
+# disks are added and removed. See fstab(5).
+#
+# &lt;file system&gt;             &lt;mount point&gt;  &lt;type&gt;  &lt;options&gt;  &lt;dump&gt;  &lt;pass&gt;
+UUID=7908-0C4D                            /boot/efi      vfat    defaults,noatime 0 2
+/dev/mapper/luks-90aa4338-82d9-4f48-97f1-ad86a6dfc4bf /              ext4    defaults,noatime,discard 0 1
+/dev/mapper/luks-a3e63f9c-a3bb-4414-b1c4-f08ade4ca71d swap           swap    defaults,noatime,discard 0 0
+tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+# .cache
+tmpfs                                     /home/user/.cache           tmpfs    defaults,noatime,mode=1777 0 0
+overlay / overlay rw 0 0
+tmpfs /tmp tmpfs nosuid,nodev 0 0
+</code></pre>
+<ul>
+<li><strong>Whats better?</strong><br>
+Is the duplicate entry line better for /tmp to tmpfs in /etc/fstab</li>
+</ul>
+<pre><code class="lang-auto">tmpfs                                     /tmp           tmpfs    defaults,noatime,mode=1777 0 0
+</code></pre>
+<p>I distro morphed this install so I’m not sure what came with debian and what came with kicksecure.</p>
+<p>Looking at fstab-vm file in the <code>security-misc</code> repository made me look into if that this the incorrect way to mount and confusion?</p>
+<p>Looking at line <span class="hashtag-raw">#23</span> doesn’t seem right in formatting and why use bind in conjunction wouldn’t that not align with creating a new tmpfs instance?</p>
+<pre><code class="lang-auto">tmpfs 							    /tmp 	      tmpfs     defaults,nosuid,nodev,noexec             0      0
+</code></pre>
+<ul>
+<li><strong>~/.cache mounted to tmpfs</strong></li>
+</ul>
+<p>What is better for mounting user cache to tmpfs?<br>
+Is it or rather would it be better to just mount /tmp to tmpfs then <code>symlink ~/.cache to /temp</code></p>
+<p><code>sudo mount -t tmpfs -o defaults,nosuid,nodev,noexec tmpfs /tmp &amp;&amp; ln -s /tmp/.cache ~/.cache</code></p>
+<p>Or should setting the <code>XDG_CACHE_HOME</code> variable to /tmp/$USER/.cache be better?</p>
+<p><code>export XDG_CACHE_HOME="/tmp/$USER/.cache"</code></p>
+<p>However don’t most apps not always respect the xdg spec always?</p>
+<ul>
+<li><strong>Can I have my cake and eat it too?</strong></li>
+</ul>
+<p>Can I have both the /tmp to /tmpfs and XDG_CACHE_HOME set without issue or is it unnecessary?</p>
+<ul>
+<li><strong>Issues related to “Live Mode” and encrypted swap with tmpfs mounts?</strong></li>
+</ul>
+<p>Is there any issue/bottleneck/conflicts with mounting .cache and /tmp to tmpfs with <code>grub-live</code> implementation?</p>
+<p>If I or another user have these mount points is there gonna be existing issue when the times I might boot into “Live Mode”?</p>
+          <p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057/1</link>
+        <pubDate>Sun, 18 May 2025 23:35:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1057-1</guid>
+        <source url="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057.rss">Questions regarding use of tmpfs formatting and conflicts</source>
+      </item>
+  </channel>
+</rss>

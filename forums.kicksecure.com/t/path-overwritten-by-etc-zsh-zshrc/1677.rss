@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>PATH overwritten by /etc/zsh/zshrc</title>
+    <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677</link>
+    <description>I saw safe-rm (the package) installed in Kicksecure and was trying to test that when I discovered that my PATH doesn’t actually contain it:
+
+```shell
+% echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+```
+
+A bit of digging led me to this line in `/etc/zsh/zshrc`
+
+```shell
+## Use root path from /etc/profile so programs in /sbin are highlighted in green
+PATH=&quot;/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin&quot;
+```
+
+Since zshrc runs after zprofile, this line, upon each interactive zsh shell, overwrites all PATH modifications done so far, including `/etc/profile.d/safe-rm.sh`, which I believe was sourced much earlier by greetd upon login. (Even if I copy / symlink this file to `/etc/zprofile.d`, the modifications to PATH still won’t survive the line in `zshrc` above.)
+
+Per self-support-first policy, I tried to workaround this myself, but I wasn’t able to undo this in `~/.zshrc`. Despite home being sourced later than etc, once the PATH is overwritten there’s no easy way to restore it or even know the previous value. I thought about editing `/etc/zsh/zshrc` but once I do this I’ll miss all future Kicksecure updates to this file, which may bring more security or usability features. I also thought about hard-coding my own PATH but that won’t reflect future changes to `/etc/profile.d` and `/etc/zprofile.d` automatically.
+
+I also believe this problem is specific to Kicksecure (and Whonix) since this file came from one of Kicksecure APT packages, `usability-misc`. This problem is not reproducible in Debian.
+
+Q: As a user, is there a good (clean) way to workaround this and preserve $PATH, or should this be patched by the Kicksecure distro?
+
+One final thought: How important / useful is it to highlight programs in `/sbin` in green? Those are programs I normally won’t invoke unless with `sudo`. But `sudo &lt;command&gt;` makes the whole line `magenta` so the green won’t show anyway.
+
+```shell
+ZSH_HIGHLIGHT_PATTERNS+=(&#39;sudo*&#39; &#39;fg=magenta&#39;)
+```</description>
+    
+    <lastBuildDate>Sun, 26 Apr 2026 03:46:39 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Should be resolved in this commit (pending merge):</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/usability-misc/commit/55c2586de04f5ab59c3179b94594d5a318978992">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/usability-misc/commit/55c2586de04f5ab59c3179b94594d5a318978992" target="_blank" rel="noopener">github.com/ArrayBolt3/usability-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/usability-misc/commit/55c2586de04f5ab59c3179b94594d5a318978992" target="_blank" rel="noopener">Squashed commit of the following:</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-04-26" data-time="03:05:18" data-timezone="UTC">03:05AM - 26 Apr 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 2 files with 6 additions and 4 deletions">
+        <a href="https://github.com/ArrayBolt3/usability-misc/commit/55c2586de04f5ab59c3179b94594d5a318978992" target="_blank" rel="noopener">
+          <span class="added">+6</span>
+          <span class="removed">-4</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">commit 59dc09abfa56ab45164426d827419d196b43b785
+Author: Claude &lt;noreply@anthropi<span class="show-more-container"><a href="https://github.com/ArrayBolt3/usability-misc/commit/55c2586de04f5ab59c3179b94594d5a318978992" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">c.com&gt;
+Date:   Fri Apr 24 09:38:14 2026 +0000
+
+    zsh: consolidate PATH setup in zshenv
+
+    Per the zsh manual, zshenv is the file for setting the command search
+    path. The previous layout split PATH across two files:
+
+      - zshenv set a minimal fallback (no sbin dirs)
+      - zshrc unconditionally reassigned PATH for interactive shells
+
+    This clobbered any PATH set by the user's ~/.zshenv / ~/.zprofile in
+    interactive shells, and left non-interactive shells with a weaker PATH
+    than interactive ones.
+
+    Move the full PATH into zshenv's existing fallback (still guarded so
+    users can override), drop the zshrc assignment, and add
+    `typeset -U PATH path` to keep entries deduplicated across reloads.
+
+    Drop /bin and /sbin from the fallback: on usrmerged Debian (12+,
+    which Kicksecure targets) these are symlinks to /usr/bin and /usr/sbin,
+    so listing both is redundant. typeset -U dedups by string, not by
+    resolved path, so the legacy entries have to be removed explicitly.
+    Matches the direction of Debian bug #1041362.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/8</link>
+        <pubDate>Sun, 26 Apr 2026 03:46:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-8</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>For safe-rm as a rm replacement, please create a dedicated forum thread if interested in that.</p>
+</blockquote>
+</aside>
+<p>I don’t feel strongly about it. I misunderstood the point of <code>safe-rm</code> being preinstalled. Thanks for your explanation. Now I understand Kicksecure just uses <code>safe-rm</code> as a dependency, as in, Kicksecure scripts call <code>/bin/safe-rm</code> as a binary. It’s not meant to be preinstalled for the end user as a usability improvement. I can agree with that stance.</p>
+<p>I think the confusion came from the fact that the Debian <code>safe-rm</code> package focuses quite heavily on the benefits to the end user in the package description. But it in fact has dual intention. There’s no good way to install it just for the binary but not <code>/etc/profile.d/safe-rm.sh</code>. Well, not unless a Kicksecure package adds a diversion.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Packages injecting things into $PATH is a bit weird</p>
+</blockquote>
+</aside>
+<p>Debian could have split it into two packages, one for the binary and one for the <code>profile.d</code> stuff but that’s an issue with upstream. We don’t have to debate it here. Maybe the package maintainer don’t see the binary being useful on its own or maybe they don’t like the overhead.</p>
+<p>Those topics aside, I only feel strongly about PATH overwrites in zshrc since that’s the only Kicksecure-specific part and it affects more than <code>safe-rm</code>. And that’s the point of this thread I guess.</p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/7</link>
+        <pubDate>Sun, 26 Apr 2026 00:24:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-7</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>We might be able to fix this by no longer force overwriting PATH.</p>
+<p>Developer information:</p>
+<aside class="onebox githubpullrequest" data-onebox-src="https://github.com/assisted-by-ai/usability-misc/pull/5">
+  <header class="source">
+
+      <a href="https://github.com/assisted-by-ai/usability-misc/pull/5" target="_blank" rel="noopener">github.com/assisted-by-ai/usability-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+
+
+
+    <div class="github-icon-container" title="Pull Request">
+      <svg width="60" height="60" class="github-icon" viewBox="0 0 12 16" aria-hidden="true"><path fill-rule="evenodd" d="M11 11.28V5c-.03-.78-.34-1.47-.94-2.06C9.46 2.35 8.78 2.03 8 2H7V0L4 3l3 3V4h1c.27.02.48.11.69.31.21.2.3.42.31.69v6.28A1.993 1.993 0 0 0 10 15a1.993 1.993 0 0 0 1-3.72zm-1 2.92c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zM4 3c0-1.11-.89-2-2-2a1.993 1.993 0 0 0-1 3.72v6.56A1.993 1.993 0 0 0 2 15a1.993 1.993 0 0 0 1-3.72V4.72c.59-.34 1-.98 1-1.72zm-.8 10c0 .66-.55 1.2-1.2 1.2-.65 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z"></path></svg>
+    </div>
+
+  <div class="github-info-container">
+
+
+
+      <h4>
+        <a href="https://github.com/assisted-by-ai/usability-misc/pull/5" target="_blank" rel="noopener">zsh: consolidate PATH setup in zshenv</a>
+      </h4>
+
+    <div class="branches">
+      <code>master</code> ← <code>claude/investigate-zsh-path-Vsz3a</code>
+    </div>
+
+      <div class="github-info">
+        <div class="date">
+          opened <span class="discourse-local-date" data-format="ll" data-date="2026-04-24" data-time="10:12:15" data-timezone="UTC">10:12AM - 24 Apr 26 UTC</span>
+        </div>
+
+        <div class="user">
+          <a href="https://github.com/assisted-by-ai" target="_blank" rel="noopener">
+            <img alt="" src="https://avatars.githubusercontent.com/u/228987186?v=4" class="onebox-avatar-inline" width="20" height="20">
+            assisted-by-ai
+          </a>
+        </div>
+
+        <div class="lines" title="1 commits changed 2 files with 6 additions and 4 deletions">
+          <a href="https://github.com/assisted-by-ai/usability-misc/pull/5/files" target="_blank" rel="noopener">
+            <span class="added">+6</span>
+            <span class="removed">-4</span>
+          </a>
+        </div>
+      </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Per the zsh manual, zshenv is the file for setting the command search path. The <span class="show-more-container"><a href="https://github.com/assisted-by-ai/usability-misc/pull/5" target="_blank" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">previous layout split PATH across two files:
+
+  - zshenv set a minimal fallback (no sbin dirs)
+  - zshrc unconditionally reassigned PATH for interactive shells
+
+This clobbered any PATH set by the user's ~/.zshenv / ~/.zprofile in interactive shells, and left non-interactive shells with a weaker PATH than interactive ones.
+
+Move the full PATH into zshenv's existing fallback (still guarded so users can override), drop the zshrc assignment, and add `typeset -U PATH path` to keep entries deduplicated across reloads.
+
+Drop /bin and /sbin from the fallback: on usrmerged Debian (12+, which Kicksecure targets) these are symlinks to /usr/bin and /usr/sbin, so listing both is redundant. typeset -U dedups by string, not by resolved path, so the legacy entries have to be removed explicitly. Matches the direction of Debian bug #1041362.</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Replacing rm with safe-rm might be a bit heavy and break things. For safe-rm as a rm replacement, please create a dedicated forum thread if interested in that.</p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/6</link>
+        <pubDate>Fri, 24 Apr 2026 10:14:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-6</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Can you just source <code>/etc/profile.d/safe-rm.sh</code> in <code>~/.zshrc</code>?</p>
+</blockquote>
+</aside>
+<p>This works for my use case. Consider my problem solved. The rest of this post is just some personal opinions while we’re at the topic.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Having <code>/sbin</code> in <code>$PATH</code> is useful for more than just highlighting, it’s also useful so that people can just run <code>shutdown now</code> rather than <code>/sbin/shutdown now</code> and the like.</p>
+</blockquote>
+</aside>
+<p>As a user, I’d vote for adding <code>/sbin</code> to PATH without removing other things in PATH. That’d be a pure usability improvement for me.</p>
+<p>On the topic of <code>safe-rm</code>, it’s quite surprising that Kicksecure comes with <code>safe-rm</code> preinstalled but it doesn’t work most of the time because of a side-effect of another line in another distro config. Especially so when <code>safe-rm</code> is supposed to protect me from silly mistakes by default but I have to deliberately re-enable it in an obscure way. As a user, this kinda feels like a regression during Kicksecure moving from bash to zsh as the default shell.</p>
+<p>With that being said, I appreciate the move to zsh overall and I really love how the Kicksecure team spent a lot of time shipping usability improvements by default.</p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/5</link>
+        <pubDate>Fri, 24 Apr 2026 04:16:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-5</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="3" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>As a user you should at least be able to use <code>/etc/environment</code>. Does it work for you?</p>
+</blockquote>
+</aside>
+<p>It works in the sense that the PATH env var can be set and modified (in the compositor and other programs). But that doesn’t help with my use case, which is, running commands in a terminal emulator running zsh. As explained above, when zsh starts, it reads <code>/etc/zsh/zshrc</code>, which overwrites PATH, so the environment setup so far (regardless of method) are effectively ignored. <code>/etc/environment.d/*.conf</code> and its equivalent in $HOME is helpful for other env vars though.</p>
+<p>EDIT to clarify: Suppose I change my terminal emulator to run <code>bash</code> instead of <code>zsh</code>, then yes the environment variable updates so far are inherited, not overridden, and works as expected. It’s only <code>zsh</code> . I earlier said “overwrite” but it’s probably not the the right word. It’s more like a local override that only works for that one zsh program and whatever spawned from it, but that’s enough to ruin the experience for the majority of use cases. (Don’t get me wrong, I don’t want to change back to Bash)</p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/4</link>
+        <pubDate>Fri, 24 Apr 2026 04:16:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-4</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>There are 2 different topics.</p>
+<ul>
+<li>A) How users can reliably configure environment variables without packages reverting with these.</li>
+<li>B) How Linux distribution developers can reliably configure environment variables without packages reverting with these.</li>
+</ul>
+<p>As a user you should at least be able to use <code>/etc/environment</code>. Does it work for you? Packages are not allowed to touch it. At least Kicksecure won’t touch it. It’s not a written down policy yet. But it is obvious in my mind. <a href="https://www.kicksecure.com/wiki/Dev/About_Debian_Packaging" class="inline-onebox">Dev/About Debian Packaging</a> should lead to that conclusion. Can be more explicit in the future.</p>
+<p>Even custom packages outside of Kicksecure and <a href="http://packages.debian.org">packages.debian.org</a> should not modify <code>/etc/environment</code>. But if they do, yeah, hope they don’t mess up user environment variables.</p>
+<p>I would like to say, use drop a snippet in folder <code>/etc/environment.d</code> but unfortunately on Linux <code>/etc/environment</code> versus <code>/etc/environment.d</code> is inconsistent, messy and weird.</p>
+<aside class="quote no-group" data-username="chatgpt">
+<div class="title">
+<div class="quote-controls"></div>
+ chatgpt:</div>
+<blockquote>
+<ul>
+<li><code>/etc/environment.d/*.conf</code> is read by <strong>systemd’s environment.d generator</strong> and applies to the environment exported by the <strong>systemd user instance</strong>, which is then inherited by services started by that user manager.</li>
+<li><code>/etc/environment</code> is also commonly read by <strong>PAM’s <code>pam_env</code></strong> at login time on systems that use PAM, so it can affect login sessions more broadly.</li>
+</ul>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="chatgpt">
+<div class="title">
+<div class="quote-controls"></div>
+ chatgpt:</div>
+<blockquote>
+<p><code>/etc/environment.d/</code> is <strong>similar in format and purpose</strong> to <code>/etc/environment</code>: both use <code>KEY=VALUE</code> assignments, and systemd’s <code>environment.d</code> even lists <code>/etc/environment</code> in its input set for backward compatibility.</p>
+</blockquote>
+</aside>
+<p>Matches my knowledge.</p>
+<hr>
+<p>Information for developers:</p>
+<p>Related:</p>
+<ul>
+<li><a href="https://www.freedesktop.org/software/systemd/man/environment.d.html">environment.d</a></li>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=704054"><code>/etc/environment.d</code> Debian feature request</a></li>
+<li><a href="https://github.com/Kicksecure/proposals/blob/master/634-stackable-wrappers.md#amend-path-environment-variable-by-package" class="inline-onebox">proposals/634-stackable-wrappers.md at master · Kicksecure/proposals · GitHub</a></li>
+<li><a href="https://forums.whonix.org/t/stackable-wrappers/7944" class="inline-onebox">Stackable Wrappers - Development - Whonix Forum</a></li>
+</ul>
+<p>pam_env:</p>
+<ul>
+<li><a href="https://github.com/linux-pam/linux-pam/issues/932" class="inline-onebox">Request: read all files in `/etc/environment.d` for environment variables · Issue #932 · linux-pam/linux-pam · GitHub</a></li>
+</ul>
+<p>In Debian <a href="https://sources.debian.org/src/pam/1.7.0-5/meson.build">src/pam/1.7.0-5/meson.build </a> file might be the reason why Debian <code>pam_env</code> does not enable <code>/etc/environment.d</code> by default.</p>
+<pre><code class="lang-auto">if libeconf.found()
+  cdata.set('USE_ECONF', 1)
+</code></pre>
+<p>But the <code>debian/control</code> file lacks <code>Build-Depends:</code> <code>libeconf</code>.</p>
+<p>Debian feature request:<br>
+<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1134703">enable pam_env /etc/environment.d support</a></p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/3</link>
+        <pubDate>Thu, 23 Apr 2026 12:45:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-3</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="eternity" data-post="1" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>Q: As a user, is there a good (clean) way to workaround this and preserve $PATH, or should this be patched by the Kicksecure distro?</p>
+</blockquote>
+</aside>
+<p>We talked a bit about this internally, I don’t think we came to a good conclusion about whether preserving this is a good idea or not. Packages injecting things into $PATH is a bit weird, but on the other hand overriding it results in issues like what you’re seeing.</p>
+<aside class="quote no-group" data-username="eternity" data-post="1" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>Q: As a user, is there a good (clean) way to workaround this and preserve $PATH, or should this be patched by the Kicksecure distro?</p>
+</blockquote>
+</aside>
+<p>Can you just source <code>/etc/profile.d/safe-rm.sh</code> in <code>~/.zshrc</code>? It’s true that you won’t be able to restore the old <code>$PATH</code> exactly as it was pre-overwrite, but you can always augment it post-overwrite, and all <code>/etc/profile.d/safe-rm.sh</code> does is augment <code>$PATH</code>.</p>
+<aside class="quote no-group" data-username="eternity" data-post="1" data-topic="1677">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>One final thought: How important / useful is it to highlight programs in <code>/sbin</code> in green?</p>
+</blockquote>
+</aside>
+<p>I think the comment there is somewhat misleading. Having <code>/sbin</code> in <code>$PATH</code> is useful for more than just highlighting, it’s also useful so that people can just run <code>shutdown now</code> rather than <code>/sbin/shutdown now</code> and the like. Changing this to be more like Debian (requiring <code>/sbin/shutdown now</code>) might have technical merit, but we’ll probably frustrate users who are used to just typing <code>shutdown now</code>.</p>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/2</link>
+        <pubDate>Wed, 22 Apr 2026 21:56:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-2</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+      <item>
+        <title>PATH overwritten by /etc/zsh/zshrc</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>I saw safe-rm (the package) installed in Kicksecure and was trying to test that when I discovered that my PATH doesn’t actually contain it:</p>
+<pre data-code-wrap="shell"><code class="lang-shell">% echo $PATH
+/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+</code></pre>
+<p>A bit of digging led me to this line in <code>/etc/zsh/zshrc</code></p>
+<pre data-code-wrap="shell"><code class="lang-shell">## Use root path from /etc/profile so programs in /sbin are highlighted in green
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+</code></pre>
+<p>Since zshrc runs after zprofile, this line, upon each interactive zsh shell, overwrites all PATH modifications done so far, including <code>/etc/profile.d/safe-rm.sh</code>, which I believe was sourced much earlier by greetd upon login. (Even if I copy / symlink this file to <code>/etc/zprofile.d</code>, the modifications to PATH still won’t survive the line in <code>zshrc</code> above.)</p>
+<p>Per self-support-first policy, I tried to workaround this myself, but I wasn’t able to undo this in <code>~/.zshrc</code>. Despite home being sourced later than etc, once the PATH is overwritten there’s no easy way to restore it or even know the previous value. I thought about editing <code>/etc/zsh/zshrc</code> but once I do this I’ll miss all future Kicksecure updates to this file, which may bring more security or usability features. I also thought about hard-coding my own PATH but that won’t reflect future changes to <code>/etc/profile.d</code> and <code>/etc/zprofile.d</code> automatically.</p>
+<p>I also believe this problem is specific to Kicksecure (and Whonix) since this file came from one of Kicksecure APT packages, <code>usability-misc</code>. This problem is not reproducible in Debian.</p>
+<p>Q: As a user, is there a good (clean) way to workaround this and preserve $PATH, or should this be patched by the Kicksecure distro?</p>
+<p>One final thought: How important / useful is it to highlight programs in <code>/sbin</code> in green? Those are programs I normally won’t invoke unless with <code>sudo</code>. But <code>sudo &lt;command&gt;</code> makes the whole line <code>magenta</code> so the green won’t show anyway.</p>
+<pre data-code-wrap="shell"><code class="lang-shell">ZSH_HIGHLIGHT_PATTERNS+=('sudo*' 'fg=magenta')
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677/1</link>
+        <pubDate>Wed, 22 Apr 2026 03:35:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1677-1</guid>
+        <source url="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677.rss">PATH overwritten by /etc/zsh/zshrc</source>
+      </item>
+  </channel>
+</rss>

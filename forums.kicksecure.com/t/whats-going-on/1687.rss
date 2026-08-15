@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>What&#39;s going on?</title>
+    <link>https://forums.kicksecure.com/t/whats-going-on/1687</link>
+    <description>I used Linux Mint: Debian Edition with Kicksecure CLI installed. Every time I boot up, it says systemd-modules-load.service failed to load 3 times before booting. I searched up here and I enabled Secure Boot, enrolled the MOKs and DKMS or whatever, rebuilt all the packages and it all seemed to work swimmingly but it still says that.
+
+When I run updatecheck it tells me to run systemcheck, and when I run systemcheck this is what appears:
+
+```
+[WARNING] [systemcheck] System ready check (system) Result: Failed.
+
+Debugging information:
+Command:
+‘sudo systemctl --wait is-system-running’
+(same as ‘leaprun system-ready-check’)
+result: ‘degraded’
+[WARNING] [systemcheck] systemd ‘system’ units check result: One or more units failed to load.
+
+A possible system issue was detected. There is no need to panic. This is not a serious security problem. However, it may impact other system checks.
+
+Some systemd ‘system’ units may be stuck in a failed, activating, or deactivating state.
+
+Output of ‘leaprun read-systemctl-logs-failed-units-pretty’: (equivalent to: sudo systemctl --state=failed,activating,deactivating list-units)
+
+########################################
+UNIT                         LOAD   ACTIVE SUB    DESCRIPTION
+
+systemd-modules-load.service loaded failed failed Load Kernel Modules
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+SUB    → The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed.
+########################################
+
+To check manually:
+
+Open a terminal. (Start Menu → System → Terminal)
+
+Run:
+leaprun read-systemctl-logs-failed-units-pretty
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=&quot; check_services_do &quot;
+[INFO] [systemcheck] Connected to Tor.
+[WARNING] [systemcheck] Kicksecure Meta Packages Test Result: No meta package is installed.
+Did you accidentally uninstall it?
+
+Make sure any of the following meta packages is installed.
+
+kicksecure-vm-gui-lxqt kicksecure-vm-server kicksecure-baremetal-gui-lxqt kicksecure-baremetal-server
+
+See also: 
+
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=&quot; check_meta_packages &quot;
+[INFO] [systemcheck] Kicksecure is a research project.
+[INFO] [systemcheck] Operating system (OS) (Debian) support status: Unsupported (as of 2018-05-31)
+Your system is likely vulnerable to malware infection due to missing security updates.
+Upgrade to a newer version of Kicksecure as soon as possible. You should limit continued online use of this machine until it is upgraded.
+See also: 
+
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Absent[LINK]
+[INFO] [systemcheck] user-sysmaint-split session detection result: USER Session.
+[INFO] [systemcheck] Full Disk Encryption (FDE): Absent
+See also: 
+
+[INFO] [systemcheck] GRUB bootloader password: Absent
+See also: 
+
+[INFO] [systemcheck] Kicksecure Login Security Check (Colors)
+:
+±------±-------------------------------------+
+| Users | Password               GUI Autologin |
+±------±-------------------------------------+
+| root  | Locked (Absent)        Disabled      |
+| user  | Present                Enabled       |
+±------±-------------------------------------+
+
+You can adjust these settings using “Manage Passwords” and “Manage GUI Autologin”
+in the System Maintenance Panel.
+See also:
+[LINK]
+[LINK]
+[INFO] [systemcheck] Secure Boot: Enabled
+See also: 
+
+[INFO] [systemcheck] tirdad - TCP ISN CPU Information Leak Protection: Enabled
+For details, see: 
+
+[INFO] [systemcheck] Kicksecure APT Repository: Enabled.
+When the Kicksecure team releases GIGI updates,
+they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)
+along with updated packages from the Debian team. Please read 
+ to understand the risk.
+If you want to change this, use:
+sudo repository-dist
+[INFO] [systemcheck] Debian Package Update Check: Checking for software updates via apt-get… ( Documentation: [LINK])
+E: The repository ‘tor+https://deb.kicksecure.com gigi Release’ does not have a Release file.
+[WARNING] [systemcheck] Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100)
+Please manually check:
+(Open a terminal, Start Menu → System → Terminal.)
+upgrade-nonroot
+```
+
+I’m confused what’s even going on, what do I do?</description>
+    
+    <lastBuildDate>Mon, 27 Apr 2026 16:15:57 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/whats-going-on/1687.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p>Alright, thanks for your help.</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/11</link>
+        <pubDate>Mon, 27 Apr 2026 16:15:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-11</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Hmm, none of those look particularly useful, they’re talking about PAM modules.</p>
+<p>To my awareness, this doesn’t occur on vanilla Debian 13, so it’s possible that distribution-morphing LMDE to Kicksecure simply doesn’t work. You might consider switching to vanilla Debian 13 with the Cinnamon desktop environment, then installing <code>kicksecure-baremetal-cli</code> on top of that. Or, alternatively, consider using the Kicksecure ISO directly.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/ISO">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1777188612" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener" title="06:02PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/ISO" target="_blank" rel="noopener">Kicksecure Live ISO (via USB) and Installation</a></h3>
+
+  <p>Kicksecure Installation Guide. This guide will help you download the ISO image, create your bootable media, and install Kicksecure on your computer.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/10</link>
+        <pubDate>Mon, 27 Apr 2026 01:05:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-10</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p>I turned Secure Boot off:<br>
+<code>[   32.835286] audit: type=1110 audit(1777247280.501:299): pid=3579 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs,pam_cap acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   32.837817] audit: type=1105 audit(1777247280.501:300): pid=3579 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:session_open grantors=pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   32.843436] audit: type=1106 audit(1777247280.509:301): pid=3579 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:session_close grantors=pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   32.843498] audit: type=1104 audit(1777247280.509:302): pid=3579 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   50.285266] audit: type=1110 audit(1777247336.907:341): pid=4670 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs,pam_cap acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   50.287911] audit: type=1105 audit(1777247336.911:342): pid=4670 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:session_open grantors=pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   50.874117] audit: type=1106 audit(1777247337.495:344): pid=4670 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:session_close grantors=pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   50.874337] audit: type=1104 audit(1777247337.495:345): pid=4670 uid=0 auid=4294967295 ses=4294967295 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs acct=“root” exe=“/usr/bin/python3.13” hostname=? addr=? terminal=? res=success’</code><br>
+<code>[   64.689608] audit: type=1110 audit(1777247351.311:352): pid=4810 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs,pam_cap acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code><br>
+<code>[   64.696641] audit: type=1105 audit(1777247351.319:353): pid=4810 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:session_open grantors=pam_limits,pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code><br>
+<code>[   66.062425] audit: type=1106 audit(1777247352.683:354): pid=4810 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:session_close grantors=pam_limits,pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code><br>
+<code>[   66.062557] audit: type=1104 audit(1777247352.683:355): pid=4810 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code><br>
+<code>[   78.707277] audit: type=1110 audit(1777247365.331:358): pid=4843 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:setcred grantors=pam_wheel,pam_faillock,pam_faillock,pam_permit,pam_permit,pam_ecryptfs,pam_cap acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code><br>
+<code>[   78.714478] audit: type=1105 audit(1777247365.335:359): pid=4843 uid=1000 auid=1000 ses=2 subj=unconfined msg=‘op=PAM:session_open grantors=pam_limits,pam_permit,pam_umask,pam_unix,pam_umask,pam_tmpdir,pam_ecryptfs acct=“root” exe=“/usr/bin/sudo” hostname=? addr=? terminal=/dev/pts/0 res=success’</code></p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/9</link>
+        <pubDate>Sun, 26 Apr 2026 23:50:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-9</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>OK, so you currently have two problems. One is that Secure Boot is now on, so tirdad can’t load. You didn’t have Secure Boot on to begin with, so probably start by turning that off. (Alternatively, try to run through MOK setup again if you want Secure Boot on.)</p>
+<p>The other problem is that “ecryptfs” is failing to load for… some reason. Do you see any relevant error messages in <code>sudo dmesg | grep ecrypt</code>?</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/8</link>
+        <pubDate>Sun, 26 Apr 2026 20:06:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-8</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p><code>Apr 25 01:18:11 debian systemd-modules-load[273]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:18:24 debian systemd-modules-load[1106]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:18:25 debian systemd-modules-load[1301]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:18:27 debian systemd-modules-load[1716]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:22:48 debian systemd-modules-load[1320]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:22:49 debian systemd-modules-load[1501]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 01:22:51 debian systemd-modules-load[1912]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 02:21:29 debian systemd-modules-load[274]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 02:21:53 debian systemd-modules-load[1345]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 02:21:54 debian systemd-modules-load[1541]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 02:21:56 debian systemd-modules-load[1775]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:23:04 debian systemd-modules-load[276]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:23:18 debian systemd-modules-load[1135]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:23:19 debian systemd-modules-load[1366]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:23:21 debian systemd-modules-load[1719]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:29:41 debian systemd-modules-load[271]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:30:10 debian systemd-modules-load[1527]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:30:11 debian systemd-modules-load[1711]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 08:30:13 debian systemd-modules-load[2116]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:00:13 debian systemd-modules-load[277]: Failed to insert module ‘tirdad’: Key was rejected by service</code><br>
+<code>Apr 25 10:00:13 debian systemd-modules-load[277]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:00:23 debian systemd-modules-load[1042]: Failed to insert module ‘tirdad’: Key was rejected by service</code><br>
+<code>Apr 25 10:00:23 debian systemd-modules-load[1042]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:00:24 debian systemd-modules-load[1241]: Failed to insert module ‘tirdad’: Key was rejected by service</code><br>
+<code>Apr 25 10:00:24 debian systemd-modules-load[1241]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:05:42 debian systemd-modules-load[277]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:05:52 debian systemd-modules-load[1026]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:05:52 debian systemd-modules-load[1214]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:05:55 debian systemd-modules-load[1614]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:09:38 debian systemd-modules-load[275]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:09:48 debian systemd-modules-load[1038]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:09:49 debian systemd-modules-load[1221]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 10:09:51 debian systemd-modules-load[1635]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 17:32:38 debian systemd-modules-load[275]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 17:32:53 debian systemd-modules-load[1148]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 17:32:54 debian systemd-modules-load[1396]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 20:51:19 debian systemd-modules-load[277]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 20:51:38 debian systemd-modules-load[1276]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 20:51:39 debian systemd-modules-load[1469]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 21:07:52 debian systemd-modules-load[278]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 21:08:23 debian systemd-modules-load[1745]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 21:08:24 debian systemd-modules-load[1941]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 23:11:20 debian systemd-modules-load[277]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 23:11:39 debian systemd-modules-load[1441]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 23:11:40 debian systemd-modules-load[1636]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 25 23:11:42 debian systemd-modules-load[2035]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 08:02:38 debian systemd-modules-load[276]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 08:02:58 debian systemd-modules-load[1264]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 08:02:59 debian systemd-modules-load[1463]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 08:03:01 debian systemd-modules-load[1918]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 09:02:04 debian systemd-modules-load[277]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 09:02:26 debian systemd-modules-load[1316]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 09:02:27 debian systemd-modules-load[1500]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 09:02:30 debian systemd-modules-load[1965]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 11:51:21 debian systemd-modules-load[274]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 11:51:42 debian systemd-modules-load[1257]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 11:51:43 debian systemd-modules-load[1448]: Failed to insert module ‘ecryptfs’: Invalid argument</code><br>
+<code>Apr 26 11:51:45 debian systemd-modules-load[1908]: Failed to insert module ‘ecryptfs’: Invalid argument</code></p>
+<p>Only /etc/apt/sources.list.d/derivative.sources had gigi. /etc/apt/sources.list had no text at all.</p>
+<p><code>[INFO] [systemcheck] Kicksecure APT Repository: Enabled.</code><br>
+<code>When the Kicksecure team releases TRIXIE updates,</code><br>
+<code>they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)</code><br>
+<code>along with updated packages from the Debian team. Please read https://www.kicksecure.com/wiki/Trust to understand the risk.</code></p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/7</link>
+        <pubDate>Sun, 26 Apr 2026 17:30:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-7</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="kpfwpoefpopd" data-post="4" data-topic="1687">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/c77e96/48.png" class="avatar"> kpfwpoefpopd:</div>
+<blockquote>
+<p>Apr 25 01:22:51 debian systemd-modules-load[1912]: Failed to insert module 'ecr&gt;</p>
+</blockquote>
+</aside>
+<p>The output got cut off here because of journalctl’s pager feature. Can you run <code>sudo journalctl | grep 'Failed to insert module'</code> and paste the output of that?</p>
+<aside class="quote no-group" data-username="kpfwpoefpopd" data-post="5" data-topic="1687" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/c77e96/48.png" class="avatar"> kpfwpoefpopd:</div>
+<blockquote>
+<p>How would I do that last part?</p>
+</blockquote>
+</aside>
+<p>Look at <code>/etc/apt/sources.list</code> and all files under <code>/etc/apt/sources.list.d</code>. If you see a line that looks similar to <code>deb tor+https://deb.kicksecure.com gigi main</code>, or a section that looks similar to:</p>
+<pre><code class="lang-auto">Types: deb
+URIs: tor+https://deb.kicksecure.com
+Suites: gigi
+Components: main
+</code></pre>
+<p>Change “gigi” to “trixie”. (I’m guessing our distribution morphing tooling is not able to handle the codenames of some Debian derivatives.)</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/6</link>
+        <pubDate>Sun, 26 Apr 2026 14:20:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-6</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p>How would I do that last part?</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/5</link>
+        <pubDate>Sun, 26 Apr 2026 08:39:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-5</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p>The first command output this:</p>
+<pre><code class="lang-auto">× systemd-modules-load.service - Load Kernel Modules
+Loaded: loaded (/usr/lib/systemd/system/systemd-modules-load.service; stat&gt;
+Active: failed (Result: exit-code) since Sun 2026-04-26 09:02:30 BST; 31mi&gt;
+Invocation: 669dbdbee5194a688f9e4139fe943f74
+Docs: man:systemd-modules-load.service(8)
+man:modules-load.d(5)
+Process: 1965 ExecStart=/usr/lib/systemd/systemd-modules-load (code=exited,&gt;
+Main PID: 1965 (code=exited, status=1/FAILURE)
+Mem peak: 2M
+CPU: 17ms
+
+Apr 26 09:02:28 debian systemd[1]: Starting systemd-modules-load.service - Load&gt;
+Apr 26 09:02:30 debian systemd-modules-load[1965]: Module ‘jitterentropy_rng’ i&gt;
+Apr 26 09:02:30 debian systemd-modules-load[1994]: /usr/bin/disabled-filesys-by&gt;
+Apr 26 09:02:30 debian systemd-modules-load[1965]: Error running install comman&gt;
+Apr 26 09:02:30 debian systemd-modules-load[1965]: Failed to insert module 'ecr&gt;
+Apr 26 09:02:30 debian systemd[1]: systemd-modules-load.service: Main process e&gt;
+Apr 26 09:02:30 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;
+Apr 26 09:02:30 debian systemd[1]: Failed to start systemd-modules-load.service&gt;
+lines 1-19/19 (END)
+</code></pre>
+<p>The second command printed out too many lines of text for me to copy and paste to you, but I will paste one chunk:<br>
+<code>Apr 25 01:18:10 debian systemd-modules-load[273]: Module ‘jitterentropy_rng’ is&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Inserted module ‘tirdad’</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Inserted module ‘lp’</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[379]: sh: 1: /usr/bin/disabled-file&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Inserted module ‘ppdev’</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Inserted module ‘parport_pc’</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Error running install command&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Failed to insert module 'ecry&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd-modules-load[273]: Inserted module ‘msr’</code><br>
+<code>Apr 25 01:18:11 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:18:11 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code><br>
+<code>Apr 25 01:18:24 debian systemd-modules-load[1117]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd[1]: Starting systemd-modules-load.service - Load&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd-modules-load[1301]: Module ‘jitterentropy_rng’ i&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd-modules-load[1306]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd-modules-load[1301]: Error running install comman&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd-modules-load[1301]: Failed to insert module 'ecr&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:18:25 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd[1]: Starting systemd-modules-load.service - Load&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd-modules-load[1716]: Module ‘jitterentropy_rng’ i&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd-modules-load[1735]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd-modules-load[1716]: Error running install comman&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd-modules-load[1716]: Failed to insert module 'ecr&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:18:27 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code><br>
+<code>– Boot c61ca587ff5648508f5faabb6ba954de –</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Module ‘jitterentropy_rng’ is&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Inserted module ‘tirdad’</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Inserted module ‘lp’</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[375]: sh: 1: /usr/bin/disabled-file&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Inserted module ‘ppdev’</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Inserted module ‘parport_pc’</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Error running install command&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Failed to insert module 'ecry&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd-modules-load[275]: Inserted module ‘msr’</code><br>
+<code>Apr 25 01:22:27 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:22:27 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code><br>
+<code>Apr 25 01:22:48 debian systemd-modules-load[1330]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd[1]: Starting systemd-modules-load.service - Load&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd-modules-load[1501]: Module ‘jitterentropy_rng’ i&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd-modules-load[1509]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd-modules-load[1501]: Error running install comman&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd-modules-load[1501]: Failed to insert module 'ecr&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:22:49 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code><br>
+<code>Apr 25 01:22:50 debian systemd[1]: Starting systemd-modules-load.service - Load&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd-modules-load[1912]: Module ‘jitterentropy_rng’ i&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd-modules-load[1947]: /usr/bin/disabled-filesys-by&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd-modules-load[1912]: Error running install comman&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd-modules-load[1912]: Failed to insert module 'ecr&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd[1]: systemd-modules-load.service: Main process e&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd[1]: systemd-modules-load.service: Failed with re&gt;</code><br>
+<code>Apr 25 01:22:51 debian systemd[1]: Failed to start systemd-modules-load.service&gt;</code></p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/4</link>
+        <pubDate>Sun, 26 Apr 2026 08:37:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-4</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>There’s quite a bit that looks weird here:</p>
+<ul>
+<li>systemd-modules-load.service failing is bad, the log output <a class="mention" href="https://forums.kicksecure.com/u/eternity">@eternity</a> asked for will help.</li>
+<li>The meta package test failing is a bug, I’ll make a fix for that.</li>
+<li>The OS showing up as EOL is probably an LMDE bug.</li>
+<li>“gigi” is not a release of Debian, but a release of LMDE. The corresponding Debian release is “trixie”. You should replace all instances of “gigi” with “trixie” in apt source lines referring to <a href="http://deb.kicksecure.com">deb.kicksecure.com</a>. (Keep “gigi” in lines referring to LMDE’s repositories though.)</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/3</link>
+        <pubDate>Sun, 26 Apr 2026 01:47:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-3</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>What’s the output of <code>systemctl status systemd-modules-load</code>? And what about <code>sudo journalctl -u systemd-modules-load</code>? Note that you may have to reboot into a SYSMAINT session for the latter. While you’re there, try <code>sudo systemctl status systemd-modules-load</code> too since it sometimes prints more logs as root / <code>adm</code> group.</p>
+<p>I don’t know much about the meta packages warning though.</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/2</link>
+        <pubDate>Sun, 26 Apr 2026 00:29:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-2</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+      <item>
+        <title>What&#39;s going on?</title>
+        <dc:creator><![CDATA[kpfwpoefpopd]]></dc:creator>
+        <description><![CDATA[
+            <p>I used Linux Mint: Debian Edition with Kicksecure CLI installed. Every time I boot up, it says systemd-modules-load.service failed to load 3 times before booting. I searched up here and I enabled Secure Boot, enrolled the MOKs and DKMS or whatever, rebuilt all the packages and it all seemed to work swimmingly but it still says that.</p>
+<p>When I run updatecheck it tells me to run systemcheck, and when I run systemcheck this is what appears:</p>
+<pre><code class="lang-auto">[WARNING] [systemcheck] System ready check (system) Result: Failed.
+
+Debugging information:
+Command:
+‘sudo systemctl --wait is-system-running’
+(same as ‘leaprun system-ready-check’)
+result: ‘degraded’
+[WARNING] [systemcheck] systemd ‘system’ units check result: One or more units failed to load.
+
+A possible system issue was detected. There is no need to panic. This is not a serious security problem. However, it may impact other system checks.
+
+Some systemd ‘system’ units may be stuck in a failed, activating, or deactivating state.
+
+Output of ‘leaprun read-systemctl-logs-failed-units-pretty’: (equivalent to: sudo systemctl --state=failed,activating,deactivating list-units)
+
+########################################
+UNIT                         LOAD   ACTIVE SUB    DESCRIPTION
+
+systemd-modules-load.service loaded failed failed Load Kernel Modules
+
+Legend: LOAD   → Reflects whether the unit definition was properly loaded.
+ACTIVE → The high-level unit activation state, i.e. generalization of SUB.
+SUB    → The low-level unit activation state, values depend on unit type.
+
+1 loaded units listed.
+########################################
+
+To check manually:
+
+Open a terminal. (Start Menu → System → Terminal)
+
+Run:
+leaprun read-systemctl-logs-failed-units-pretty
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=" check_services_do "
+[INFO] [systemcheck] Connected to Tor.
+[WARNING] [systemcheck] Kicksecure Meta Packages Test Result: No meta package is installed.
+Did you accidentally uninstall it?
+
+Make sure any of the following meta packages is installed.
+
+kicksecure-vm-gui-lxqt kicksecure-vm-server kicksecure-baremetal-gui-lxqt kicksecure-baremetal-server
+
+See also: 
+
+
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=" check_meta_packages "
+[INFO] [systemcheck] Kicksecure is a research project.
+[INFO] [systemcheck] Operating system (OS) (Debian) support status: Unsupported (as of 2018-05-31)
+Your system is likely vulnerable to malware infection due to missing security updates.
+Upgrade to a newer version of Kicksecure as soon as possible. You should limit continued online use of this machine until it is upgraded.
+See also: 
+
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Absent[LINK]
+[INFO] [systemcheck] user-sysmaint-split session detection result: USER Session.
+[INFO] [systemcheck] Full Disk Encryption (FDE): Absent
+See also: 
+
+[INFO] [systemcheck] GRUB bootloader password: Absent
+See also: 
+
+[INFO] [systemcheck] Kicksecure Login Security Check (Colors)
+:
+±------±-------------------------------------+
+| Users | Password               GUI Autologin |
+±------±-------------------------------------+
+| root  | Locked (Absent)        Disabled      |
+| user  | Present                Enabled       |
+±------±-------------------------------------+
+
+You can adjust these settings using “Manage Passwords” and “Manage GUI Autologin”
+in the System Maintenance Panel.
+See also:
+[LINK]
+[LINK]
+[INFO] [systemcheck] Secure Boot: Enabled
+See also: 
+
+[INFO] [systemcheck] tirdad - TCP ISN CPU Information Leak Protection: Enabled
+For details, see: 
+
+[INFO] [systemcheck] Kicksecure APT Repository: Enabled.
+When the Kicksecure team releases GIGI updates,
+they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)
+along with updated packages from the Debian team. Please read 
+ to understand the risk.
+If you want to change this, use:
+sudo repository-dist
+[INFO] [systemcheck] Debian Package Update Check: Checking for software updates via apt-get… ( Documentation: [LINK])
+E: The repository ‘tor+https://deb.kicksecure.com gigi Release’ does not have a Release file.
+[WARNING] [systemcheck] Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100)
+Please manually check:
+(Open a terminal, Start Menu → System → Terminal.)
+upgrade-nonroot
+</code></pre>
+<p>I’m confused what’s even going on, what do I do?</p>
+          <p><a href="https://forums.kicksecure.com/t/whats-going-on/1687/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/whats-going-on/1687/1</link>
+        <pubDate>Sat, 25 Apr 2026 09:20:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1687-1</guid>
+        <source url="https://forums.kicksecure.com/t/whats-going-on/1687.rss">What&#39;s going on?</source>
+      </item>
+  </channel>
+</rss>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Issue installing KS on NovaCustom laptop</title>
+    <link>https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798</link>
+    <description>Try as I might, I am unable to install from usb kicksecure on a Nova Custom V56 (dasharo coreboot firmware with UEFI).
+
+The system will boot from the USB and reach the KS menu options however will go no farther after selecting any option and simply reboots without presenting any errors.
+
+I have tried the following:
+
+* testing usb on other systems. (no issue installing on other devices)
+* modifying the boot parameters according to the kicksecure troubleshooting wiki to see if anything is stopping the installation process. 
+* contacted NovaCustom support who were unable to assist.
+* tried many different linux distros to confirm boot-ability (tails, qubes etc..)
+
+Does anyone have any experience with booting and installing to a nova custom device, what do I need to do to get it going?
+
+cheers.</description>
+    
+    <lastBuildDate>Sun, 19 Jul 2026 02:27:54 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Issue installing KS on NovaCustom laptop</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="wheelofdoom" data-post="1" data-topic="1798">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/35a633/48.png" class="avatar"> wheelofdoom:</div>
+<blockquote>
+<p>The system will boot from the USB and reach the KS menu options however will go no farther after selecting any option and simply reboots without presenting any errors.</p>
+</blockquote>
+</aside>
+<p>This sounds like it is most likely the result of panic-on-oops (which kernel panics and restarts the system if an OOPS or WARN occurs). We enable it as a security feature, but it can do annoying things like this. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Panic-on-oops">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784359813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener" title="10:25PM - 28 May 2026">Kicksecure – 28 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Panic-on-oops" target="_blank" rel="noopener">panic-on-oops</a></h3>
+
+  <p>Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Since you need to disable it during early boot, the usual GUI way of doing it won’t work, so instead, try the pre-boot method:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Panic-on-oops#recovery_kernel_boot_parameter_change">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784359813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Panic-on-oops#recovery_kernel_boot_parameter_change" target="_blank" rel="noopener" title="10:25PM - 28 May 2026">Kicksecure – 28 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Panic-on-oops#recovery_kernel_boot_parameter_change" target="_blank" rel="noopener">recovery kernel boot parameter change - panic-on-oops</a></h3>
+
+  <p>Temporary Kernel Boot Parameter Change and remove kernel.oops_limit=1 and kernel.warn_limit=1. | Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(I.e., select your desired boot mode, hit <code>e</code>, move your cursor to the end of the <code>linux</code> line, and append <code> panic-on-oops=0</code> to the line. Then press Ctrl+X to boot.)</p>
+<p>If that lets you boot the ISO, you can install the OS, then use the same technique to boot the installed OS for the first time. If you boot the installed system into sysmaint mode, you can then permanently disable panic-on-oops using the GUI:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Panic-on-oops#GUI">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784359813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Panic-on-oops#GUI" target="_blank" rel="noopener" title="10:25PM - 28 May 2026">Kicksecure – 28 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Panic-on-oops#GUI" target="_blank" rel="noopener">GUI - panic-on-oops</a></h3>
+
+  <p>System Maintenance Panel provides a button Toggle Panic-on-Oops.[1] | Configure kernel panic behavior on oopses and warnings using panic-on-oops.service.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798/2</link>
+        <pubDate>Sun, 19 Jul 2026 02:27:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1798-2</guid>
+        <source url="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798.rss">Issue installing KS on NovaCustom laptop</source>
+      </item>
+      <item>
+        <title>Issue installing KS on NovaCustom laptop</title>
+        <dc:creator><![CDATA[wheelofdoom]]></dc:creator>
+        <description><![CDATA[
+            <p>Try as I might, I am unable to install from usb kicksecure on a Nova Custom V56 (dasharo coreboot firmware with UEFI).</p>
+<p>The system will boot from the USB and reach the KS menu options however will go no farther after selecting any option and simply reboots without presenting any errors.</p>
+<p>I have tried the following:</p>
+<ul>
+<li>testing usb on other systems. (no issue installing on other devices)</li>
+<li>modifying the boot parameters according to the kicksecure troubleshooting wiki to see if anything is stopping the installation process.</li>
+<li>contacted NovaCustom support who were unable to assist.</li>
+<li>tried many different linux distros to confirm boot-ability (tails, qubes etc..)</li>
+</ul>
+<p>Does anyone have any experience with booting and installing to a nova custom device, what do I need to do to get it going?</p>
+<p>cheers.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798/1</link>
+        <pubDate>Sat, 18 Jul 2026 00:04:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1798-1</guid>
+        <source url="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798.rss">Issue installing KS on NovaCustom laptop</source>
+      </item>
+  </channel>
+</rss>

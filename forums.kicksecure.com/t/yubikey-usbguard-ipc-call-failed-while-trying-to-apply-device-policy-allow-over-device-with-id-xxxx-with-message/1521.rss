@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+    <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521</link>
+    <description>How can I order USBGuard to don’t reject my Yubikey or any other device?
+
+I’ve installed usbguard-notifier, when I connect my yubikey I select to allow it, but it ignore me xd.
+I can’t use the yubikey unless pluged in in the boot, but even then if i disconnect it and reconnect, usbguard reject it continously.
+
+Any way to resolve that?</description>
+    
+    <lastBuildDate>Tue, 27 Jan 2026 00:40:11 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>Okey I’ve tried and this is working. But I don’t know which configuration is more secure, decide your self.</p>
+<p><strong>Sudo is required</strong><br>
+Run <code>usbguard watch</code> in a terminal and plug-in the Yubikey.<br>
+After that, the policies and rules applied to the device will be printed, if it’s allowed, blocked or rejected. Something like that:</p>
+<pre><code class="lang-auto">[device] PresenceChanged: id=xx
+ event=Insert
+ target=block
+ device_rule=block id 1050:0407 serial "" name "YubiKey OTP+FIDO+CCID" hash "xxxxx" parent-hash "xxxxx" via-port "xxx" with-interface { 03:01:01 03:00:00 0b:00:00 } with-connect-type "hotplug"
+</code></pre>
+<p>Copying all the text after <code>device_rule=</code> and changing the block/reject of the beginning with “allow” will be enough.<br>
+Add it to the <code>/etc/usbguard/rules.conf</code></p>
+<p>Example:</p>
+<pre><code class="lang-auto">echo 'allow id 1050:0407 serial "" name "YubiKey OTP+FIDO+CCID" hash "xxxxx" parent-hash "xxxxx" via-port "xxx" with-interface { 03:01:01 03:00:00 0b:00:00 } with-connect-type "hotplug"
+</code></pre>
+<p>What I’ve realized is that just adding <code>allow id 1050:0407</code> replacing the ID with yours, is enough.<br>
+So the following fields are optional, while more fields you add, the more accurate you are, the safer it is.</p>
+<ol>
+<li><strong>serial:</strong> not necessary, but is empty in other rules in my case so I set it</li>
+<li><strong>name:</strong> the yubikey name should me exactly the same</li>
+<li><strong>hash and parent-hash:</strong> if you set it, you allow only this exactly yubikey</li>
+<li><strong>with-interface:</strong> if you set it, you will only allow yubikeys with the same interface</li>
+<li><strong>with-connect-type:</strong> specify the connection type, in this case hotplug because is after the power on.</li>
+<li><strong>via-port:</strong> if you set it you are specifying a specific USB port for the device, if you try to use the Yubikey in a different port the rule will be ignored. In my case I’ve omitted this option.</li>
+</ol>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/9</link>
+        <pubDate>Tue, 27 Jan 2026 00:40:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-9</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>OK, that makes sense. I don’t have a “real” Yubikey handy, but I might get one at some point in the future. In the mean time, if you can give exact commands or configuration that lets you explicitly allow-list a specific device, we might be able to add that to our documentation.</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/8</link>
+        <pubDate>Sun, 25 Jan 2026 18:59:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-8</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>I’ve found the probably cause of the issue.</p>
+<p>I’ve tested other USBs, Wi-Fi adapters and the notifier is working well. In the first instance the device is blocked but I can allow it and is added correctly to the devices-list.</p>
+<p>What I have detected with my yubikey is the following:</p>
+<ul>
+<li><a>VID:PID</a> is <a href="https://the-sz.com/products/usbid/index.php?v=1050&amp;p=0407&amp;n=" rel="noopener nofollow ugc">1050:0407</a></li>
+<li>Interface: with-interface { 03:01:01 03:00:00 0b:00:00 }</li>
+</ul>
+<p>The rule number 22 of the rules.conf is rejecting the interface. Unlike the other devices, it is directly rejected and removed from the devices-list, for this reason I can’t see it after connecting it.</p>
+<pre data-code-wrap="shell"><code class="lang-shell">## Explicitly reject any device with a mouse/keyboard interface in
+## combination with some other interface.
+## Mice and keyboards should likely never have non-HID interfaces provided
+## alongside them.
+22: reject with-interface all-of { 03:: 0b:: }
+</code></pre>
+<p>This is what I suppose is removing the device before the notifier appear. But the other error I see in the logs is that the ID that appear in the journal isn’t the same of the ID I see when executing <code>usbguard watch</code>. One ID is counter that increase by 1 (40,41,42) while I connect and disconnect different devices. But the ID I see in the logs is totally difference, I don’t know from where the notifier could be taking it.</p>
+<p>The most viable solutions I see is to add the allow string with the hash and all I see from the <code>watch</code> command, to the rules.conf. Or just add the device with the id <code>usbguard allow-device -p  1050:0407</code></p>
+<pre data-code-wrap="shell"><code class="lang-shell">reject id &lt;VENDOR_ID&gt;:&lt;PRODUCT_ID&gt; \
+       serial "&lt;SERIAL&gt;" \
+       name "&lt;DEVICE_NAME&gt;" \
+       hash "&lt;HASH&gt;" \
+       parent-hash "&lt;PARENT_HASH&gt;" \
+       with-interface { &lt;CLASS_1&gt;:&lt;SUBCLASS_1&gt;:&lt;PROTOCOL_1&gt; \
+                        &lt;CLASS_2&gt;:&lt;SUBCLASS_2&gt;:&lt;PROTOCOL_2&gt; } \
+       with-connect-type "hotplug"
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/7</link>
+        <pubDate>Sun, 25 Jan 2026 17:12:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-7</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Very odd. Do you have any other rejected-by-default devices (perhaps a second USB mouse or keyboard, or a MIDI interface) that you can test with? On my end, I’ve been able to accept additional USB input devices, a Yubikey Security Key (slightly different from a usual Yubikey), and a Midisport device, so I’m wondering if this is machine-specific or device-specific.</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/6</link>
+        <pubDate>Sun, 25 Jan 2026 00:39:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-6</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1521">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>journalctl --user --boot -u usbguard-notifier.service</p>
+</blockquote>
+</aside>
+<pre><code class="lang-auto">Starting usbguard-notifier.service - USBGuard Notifier...
+Started usbguard-notifier.service - USBGuard Notifier.
+Connection has been established
+IPC call failed while trying to apply device policy 'allow' over device with ID xxxx with message:
+Device lookup: device id: id doesn't exist
+IPC call failed while trying to apply device policy 'allow' over device with ID xxxxx with message:
+Device lookup: device id: id doesn't exist
+</code></pre>
+<p>Is like it doesn’t identify the device immediately after connecting it. I get the same error whether I accept or reject it.</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/5</link>
+        <pubDate>Sat, 24 Jan 2026 19:39:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-5</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Can you do the following:</p>
+<ul>
+<li>Insert your Yubikey</li>
+<li>When the notifier prompt appears, click the button to accept the device</li>
+<li>In a terminal, <code>journalctl --user --boot -u usbguard-notifier.service</code></li>
+<li>Share the output here (after making sure no personally identifying information is present)</li>
+</ul>
+<p>That will show the notifier’s logs, so we can see why the button isn’t working.</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/4</link>
+        <pubDate>Fri, 23 Jan 2026 01:35:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-4</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1521">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>/etc/usbguard/rules.d/</p>
+</blockquote>
+</aside>
+<p>I am not using sysmaint split. In groups I have sudo and in the  <code>/etc/usbguard/IPCAccessControl.d/:sudo</code> I have the following.<br>
+<code>sudo cat /etc/usbguard/IPCAccessControl.d/:sudo</code><br>
+<code>Devices=listen,list,modify</code></p>
+<p>The only issue I can see if that in terminal I need sudo authentication for run the command. And maybe the popup isn’t running correctly because my user doesn’t have the necessary permissions.<br>
+There is any way to watch logs or execute the “Allow” command from CMD, maybe there I can get some feedback about why the Notifier isn’t working.</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/3</link>
+        <pubDate>Fri, 23 Jan 2026 01:28:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-3</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="spartack" data-post="1" data-topic="1521">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/209_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>I’ve installed usbguard-notifier, when I connect my yubikey I select to allow it, but it ignore me xd.</p>
+</blockquote>
+</aside>
+<p>That’s weird, it shouldn’t do that. If you run <code>groups</code> in a terminal, does your account show up in the <code>sudo</code> group? If so, can you boot into sysmaint mode and see if <code>/etc/usbguard/IPCAccessControl.d/:sudo</code> contains the string <code>Devices=listen,list,modify</code>? If the answer to either of these questions is “no”, that’s why you aren’t able to tell USBGuard to allow your Yubikey.</p>
+<aside class="quote no-group" data-username="spartack" data-post="1" data-topic="1521">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/209_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>Any way to resolve that?</p>
+</blockquote>
+</aside>
+<p>The intended way to work around the USBGuard limitations in a secure way is to use the notifier popups, or to plug the device in before boot. It’s probably better to figure out why the popups aren’t working as expected before trying to change the settings to allow the device to be accepted automatically.</p>
+<p>If you do want to try to configure USBGuard to allow your device automatically, you’ll probably want to modify its configuration by writing a file at <code>/etc/usbguard/rules.d/50-user.conf</code>. For details about USBGuard’s rules language, see:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://usbguard.github.io/documentation/rule-language.html">
+  <header class="source">
+      <img src="https://usbguard.github.io/favicon.ico" class="site-icon" alt="" width="64" height="64">
+
+      <a href="https://usbguard.github.io/documentation/rule-language.html" target="_blank" rel="noopener">usbguard.github.io</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://usbguard.github.io/documentation/rule-language.html" target="_blank" rel="noopener">Rule Language | USBGuard</a></h3>
+
+  <p>USBGuard project site.
+</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/2</link>
+        <pubDate>Fri, 23 Jan 2026 01:03:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-2</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+      <item>
+        <title>Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <p>How can I order USBGuard to don’t reject my Yubikey or any other device?</p>
+<p>I’ve installed usbguard-notifier, when I connect my yubikey I select to allow it, but it ignore me xd.<br>
+I can’t use the yubikey unless pluged in in the boot, but even then if i disconnect it and reconnect, usbguard reject it continously.</p>
+<p>Any way to resolve that?</p>
+          <p><a href="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521/1</link>
+        <pubDate>Fri, 23 Jan 2026 00:56:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1521-1</guid>
+        <source url="https://forums.kicksecure.com/t/yubikey-usbguard-ipc-call-failed-while-trying-to-apply-device-policy-allow-over-device-with-id-xxxx-with-message/1521.rss">Yubikey - USBGuard - IPC call failed while trying to apply device policy &#39;allow&#39; over device with ID xxxx with message:</source>
+      </item>
+  </channel>
+</rss>

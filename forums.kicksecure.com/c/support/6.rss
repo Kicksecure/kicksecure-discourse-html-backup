@@ -1,0 +1,1027 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Support - Kicksecure Forums</title>
+    <link>https://forums.kicksecure.com/c/support/6</link>
+    <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
+    
+      <lastBuildDate>Sun, 09 Aug 2026 22:58:12 +0000</lastBuildDate>
+      <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Should users use htpdate rather then NTP if they cant use sdwdate?</title>
+          <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>So in this thread I will propose that <strong>htpdate</strong> is better option then NTP for users that can’t use Tor (even though I don’t fit in this group).</p>
+<p>A Kicksecure user may not be able to use Tor and by extension sdwdate for various reasons:</p>
+<ul>
+<li>Cant use Tor as it is blocked (Oppressive Govt or Strict ISP)</li>
+<li>Doesn’t want to use Tor but wants everything else that kicksecure provides as a hardened Debian distro (Freedom &amp; User Choice)</li>
+<li>Prefers to not use Tor on kicksecure HOST. Would rather use Tor in VM like Whonix or TBB only (Freedom &amp; User Choice)</li>
+</ul>
+<hr>
+<p><strong>Htpdate vs NTP</strong></p>
+<ul>
+<li>Avoids government time servers</li>
+</ul>
+<blockquote>
+<p>You can use pool of HTTP or HTTPS websites rather then rather than  NIST, USNO, or other government-run NTP pools.</p>
+</blockquote>
+<ul>
+<li>Firewall-friendly</li>
+</ul>
+<blockquote>
+<p>Uses TCP ports 80/443 (regular web traffic), not UDP 123. Passes through firewall setups that block NTP.</p>
+</blockquote>
+<ul>
+<li>No reliance on third party repos</li>
+</ul>
+<blockquote>
+<p>Available directly in Debian apt without enabling additional repos<br>
+<a href="https://packages.debian.org/trixie/htpdate" class="inline-onebox" rel="noopener nofollow ugc">I Challenge Thee</a></p>
+</blockquote>
+<ul>
+<li>Can check against multiple sources like sdwdate</li>
+</ul>
+<blockquote>
+<p>htpdate accepts up to 16 hosts on the command line, though 3 to 5 servers are recommended for redundancy and accuracy</p>
+</blockquote>
+<ul>
+<li>Traffic identification</li>
+</ul>
+<blockquote>
+<p>Looks like regular web browsing (TCP port 80/443) rather then NTP via UDP/123 which is instantly recognizable.</p>
+</blockquote>
+<ul>
+<li>Correlation risk</li>
+</ul>
+<blockquote>
+<p>Duplicate of above it blends into normal web traffic, doesn’t signify that someone is just booting up their device or syncing time.</p>
+</blockquote>
+<ul>
+<li>Participation barrier</li>
+</ul>
+<blockquote>
+<p>Duplicate of previouslt mentioned. Any web server can participate as compared to only NTP configured servers and pools.</p>
+</blockquote>
+<hr>
+<p>Ultimately what it comes down to how htpdate is <strong>Decentralized</strong> rather then NTP unauthenticated which structure is highly centralized.</p>
+<p>Best defense against active attackers is with authentication (htpdate + HTTPS or NTP + NTS) but if clock is way off CA certs will break.</p>
+<hr>
+<ul>
+<li>Fallback Methods?<br>
+I dont see a fallback method if HTTPS fails to resort to HTTP. Maybe setting HTTPS servers first then HTTP last so first it tries more secure method and if time is too old it with go the HTTP route.</li>
+</ul>
+<hr>
+<ul>
+<li>Boot Clock Randomization</li>
+</ul>
+<blockquote>
+<p>Using Boot Clock Randomization, i.e. after boot, the clock is set randomly between 0 and 180 seconds into the past or future.<br>
+<a href="https://www.kicksecure.com/wiki/Boot_Clock_Randomization#Introduction" class="inline-onebox" rel="noopener nofollow ugc">Boot Clock Randomization</a></p>
+</blockquote>
+<p>Both HTTP and HTTPS should still work with this unless the user/code changes to make the randomization longer.</p>
+            <p><small>8 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/should-users-use-htpdate-rather-then-ntp-if-they-cant-use-sdwdate/1826">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/should-users-use-htpdate-rather-then-ntp-if-they-cant-use-sdwdate/1826</link>
+          <pubDate>Sun, 09 Aug 2026 22:58:12 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1826</guid>
+          <source url="https://forums.kicksecure.com/t/should-users-use-htpdate-rather-then-ntp-if-they-cant-use-sdwdate/1826.rss">Should users use htpdate rather then NTP if they cant use sdwdate?</source>
+        </item>
+        <item>
+          <title>Sys-net as ClockVM with sdwdate in Qubes</title>
+          <dc:creator><![CDATA[riffi12]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Quote from the documentation (<a href="http://www.w5j6stm77zs6652pgsij4awcjeel3eco7kvipheu6mtr623eyyehj4yd.onion/wiki/Qubes#ClockVM" rel="noopener nofollow ugc">http://www.w5j6stm77zs6652pgsij4awcjeel3eco7kvipheu6mtr623eyyehj4yd.onion/wiki/Qubes#ClockVM</a>):</p>
+<blockquote>
+<p>A ClockVM based on the Kicksecure Template is functional out of the box.<br>
+The only requirement is that the ClockVM uses Kicksecure as its Template. For example, if using Qubes’ default settings, where ClockVM is set to sys-net by default and sys-net has been configured by the user to use the kicksecure-18 Template, then ClockVM will be functional out of the box and use sdwdate for clock synchronization.</p>
+</blockquote>
+<p>My <code>sys-net</code> and <code>sys-firewall</code> VM are both Kicksecure-based. <code>sys-net</code> is my ClockVM. My time is always off though.<br>
+I just took the time to dig into that and noticed that sdwdate isn’t even running in <code>sys-net</code>.</p>
+<p>Service status:</p>
+<blockquote>
+<p>Process: 1460 ExecCondition=/usr/libexec/helper-scripts/has_netvm_on_qubes (code=exited, status=1/FAILURE)</p>
+</blockquote>
+<p>The condition requires the VM to have a NetVM as the name suggests, which is not true for <code>sys-net</code> in a normal default setup, so I think the documentation is not correct.</p>
+<p>How is it supposed to work? What’s the officially recommended way, make <code>sys-firewall</code>  the ClockVM? Thanks</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/sys-net-as-clockvm-with-sdwdate-in-qubes/1825">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/sys-net-as-clockvm-with-sdwdate-in-qubes/1825</link>
+          <pubDate>Sun, 09 Aug 2026 15:30:36 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1825</guid>
+          <source url="https://forums.kicksecure.com/t/sys-net-as-clockvm-with-sdwdate-in-qubes/1825.rss">Sys-net as ClockVM with sdwdate in Qubes</source>
+        </item>
+        <item>
+          <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+          <dc:creator><![CDATA[eternity]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I’ve been trying to upgrade my bare metal Kicksecure and want to report the confusing experience lately.</p>
+<p>I first clicked on the “Install Updates” button by habit and got this.</p>
+<pre><code class="lang-auto">/usr/bin/upgrade-nonroot
+&lt;snip&gt;
+The following packages have been kept back:
+  kicksecure-baremetal-gui-lxqt
+&lt;snip&gt;
+</code></pre>
+<p>I tried to manually run <code>sudo apt full-upgrade</code> and even <code>dist-upgrade</code> but those didn’t do the trick either.</p>
+<pre><code class="lang-auto">% sudo apt dist-upgrade
+Not upgrading:                  
+  kicksecure-baremetal-gui-lxqt
+
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 1
+</code></pre>
+<p>On top of that, <code>sudo apt upgrade --with-newpkgs</code> gave the exact same result. (FWIW, <code>--with-newpkgs</code> is not valid with <code>full-upgrade</code> or <code>dist-upgrade</code>.)</p>
+<p>I ended up having to explicitly type the name of the meta package.</p>
+<pre><code class="lang-auto">% sudo apt install kicksecure-baremetal-gui-lxqt
+Upgrading:                      
+  kicksecure-baremetal-gui-lxqt
+
+Installing dependencies:
+  dist-baremetal-gui-all
+
+REMOVING:
+  virtualbox-guest-utils  virtualbox-guest-x11
+
+Summary:
+  Upgrading: 1, Installing: 1, Removing: 2, Not Upgrading: 0
+</code></pre>
+<p>If I understand correctly, the usual workarounds don’t work because the new version both <strong>adds and removes</strong> dependencies. Compare this to <code>whonix-gateway-vm-gui-lxqt</code> on my VM, which worked just fine. <code>/usr/bin/upgrade-nonroot</code> called <code>apt full-upgrade</code> and correctly removed <code>virtualbox-guest-utils</code> and <code>virtualbox-guest-x11</code>.</p>
+<p>For bare metal, I imagine most people not too familiar with APT may be stuck on the old package version for quite long. Missing out <code>dist-baremetal-gui-all</code> seems not ideal to me. It may even affect an in-place major Kicksecure/Debian release upgrade, given that <code>apt dist-upgrade</code> won’t upgrade it either. Thoughts?</p>
+<p>Idea: Can <code>upgrade-nonroot</code> handle this for me or at least print a hint on how to resolve it? Previously, a similar idea has been suggested for a different problem.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5" target="_blank" rel="noopener nofollow ugc" title="11:59PM - 30 October 2025">Whonix Forum – 30 Oct 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5" target="_blank" rel="noopener nofollow ugc">Should `apt-get autoremove` be automated during `release-upgrade` and/or...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I’ve seen (and lived through) enough horror stories of autoremove completely destroying an operating system that I’m a bit leery of doing it automatically.  What might be possible is to simulate an autoremove, make upgradecheck notify about...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>5 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818</link>
+          <pubDate>Tue, 04 Aug 2026 23:19:52 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1818</guid>
+          <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+        </item>
+        <item>
+          <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+          <dc:creator><![CDATA[halivatar]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello,</p>
+<p>I am running a freshly morphed Kicksecure system on my PC with the LXQt desktop environment and a dedicated Nvidia GPU (RTX 3060 12GB).</p>
+<p>I am facing a persistent issue where the display manager fails to start upon every boot, dropping me into a TTY login loop.</p>
+<p>System Configuration:</p>
+<p>OS: Debian Morphing process bare-metal<br>
+Desktop Environment: LXQt withgreetd + wlgreet stack as mentioned in the docs<br>
+Driver: Proprietary Nvidia driver installed and loaded. Unfortunately I need that fir running AI.<br>
+Monitor Connection: Exclusively connected to the Nvidia GPU port.</p>
+<p>What I have tried so far:</p>
+<p>Commented out the auth optional pam_exec.so… pam-info line in /etc/pam.d/common-auth. Ran sudo faillock --user _greetd --reset to clear any lockouts.</p>
+<p>Since Kicksecure uses dracut on this setup, I forced Early KMS by creating /etc/dracut.conf.d/nvidia.conf with force_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "<br>
+Added options nvidia_drm modeset=1 fbdev=0 and options nvidia NVreg_EnableGpuFirmware=0 into /etc/modprobe.d/.</p>
+<p>Regenerated the initramfs via sudo dracut -f --regenerate-all.</p>
+<p>Both parameters verified active (modeset returns Y, EnableGpuFirmware returns 0).</p>
+<p>Noticed that RADS was skipping greetd startup. I added rads_block_display_manager_startup=0 to /etc/rads.d/50_user.conf</p>
+<p>I cannot use my monitors (2 monitors with displayport) with my card, always looping in tty.<br>
+I got an old monitor from my garage so I could use my integrated graphics, just a bit frustated.</p>
+<p>Could you please advise on what the proper, hardened way is to make Kicksecure  (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors? Thanks a lot.</p>
+            <p><small>4 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816</link>
+          <pubDate>Tue, 04 Aug 2026 02:03:10 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1816</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss">Kicksecure (Debian Morph) - Display Manager loops to TTY</source>
+        </item>
+        <item>
+          <title>Why copy vs dd for writing the ISO to the USB?</title>
+          <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>On the installation page for ISO from terminal I just noticed it says:</p>
+<p><code>sudo cp Kicksecure-LXQt-18.2.1.9.Intel_AMD64.iso /dev/disk/by-id/usb-My_own_drive</code></p>
+<p>Why <code>cp</code> instead of <code>dd</code>?</p>
+<p>Just curious is it faster more secure or just easier and does the same thing?</p>
+<p>I have always used <code>dd</code> specifically with <code>bs=16M</code> <code>oflag=direct</code> <code>status=progress</code></p>
+<p>(example):</p>
+<p>dd if=/Home/desi_fubu/Downloads/Kicksecure-LXQt-18.2.1.9.Intel_AMD64.iso bs=16M of=/dev/sda oflag=direct status=progress</p>
+<hr>
+<p>Does copying ensure that the exact bytes (<code>stat -c %s Kicksecure-LXQt-18.2.1.9.Intel_AMD64.iso</code>) are written so when re-verifying installation media USB you get the same byte size?</p>
+            <p><small>4 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/why-copy-vs-dd-for-writing-the-iso-to-the-usb/1810">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/why-copy-vs-dd-for-writing-the-iso-to-the-usb/1810</link>
+          <pubDate>Tue, 28 Jul 2026 03:38:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1810</guid>
+          <source url="https://forums.kicksecure.com/t/why-copy-vs-dd-for-writing-the-iso-to-the-usb/1810.rss">Why copy vs dd for writing the ISO to the USB?</source>
+        </item>
+        <item>
+          <title>Cant install Tor browser</title>
+          <dc:creator><![CDATA[kylineo]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>i was trying install tor browser, but i get this error when open Tor Browser Downloader:</p>
+<p><strong>ERROR</strong>: torproject org could not be reached.</p>
+<p>Possible reasons:</p>
+<ul>
+<li>www torproject org /dist/ torbrowser is down</li>
+<li>download location changed</li>
+</ul>
+<p>Please check:</p>
+<p>Start menu → System → systemcheck<br>
+or in Terminal: systemcheck<br>
+or in Terminal with debugging: systemcheck -v</p>
+<p>If systemcheck reports no problems with internet activity and downloading Tor Browser keeps failing, please report a bug!</p>
+<p>(Debugging information: curl_status_message: [112] - [helper-scripts curl-prgs (not curl!) reports: statusfile does not exist.])</p>
+<p>i dont find any information how to fix this issue, thank you</p>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/cant-install-tor-browser/1806">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/cant-install-tor-browser/1806</link>
+          <pubDate>Tue, 21 Jul 2026 17:26:44 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1806</guid>
+          <source url="https://forums.kicksecure.com/t/cant-install-tor-browser/1806.rss">Cant install Tor browser</source>
+        </item>
+        <item>
+          <title>Load kickscure from grub?</title>
+          <dc:creator><![CDATA[GillanH4]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>kicksecure was working for a while on my nvme drive that is in a separate enclosure connected via usb c to my laptop. but this time it didnt automatically boot from the connected drive, and i had to press f12 for the boot menu, and the only option other than my windows OS native to my laptop, was the grub menu. Is there a way to boot from grub? or a way to ensure kicksecure boots correctly? without reinstalling kicksecure preferably.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/load-kickscure-from-grub/1803">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/load-kickscure-from-grub/1803</link>
+          <pubDate>Mon, 20 Jul 2026 18:05:24 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1803</guid>
+          <source url="https://forums.kicksecure.com/t/load-kickscure-from-grub/1803.rss">Load kickscure from grub?</source>
+        </item>
+        <item>
+          <title>Windows key to search through apps or bring up the main menu</title>
+          <dc:creator><![CDATA[rop]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Is there a way to have the Super-L / windows key bring up the app menu / search? Thankyou! I created a folder ~/.config/labwc and a file rc.xml but can’t seem to have anything I put into it work.</p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802</link>
+          <pubDate>Mon, 20 Jul 2026 13:34:23 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1802</guid>
+          <source url="https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802.rss">Windows key to search through apps or bring up the main menu</source>
+        </item>
+        <item>
+          <title>Strange line when verifying software: not human readable (32 bytes</title>
+          <dc:creator><![CDATA[shaylabeige]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Ok so when i verify the signatures i get:</p>
+<p>gpg: Signature made Wed 15 Jul 2026 04:37:04 AM EEST<br>
+gpg:                using RSA key 6E979B28A6F37C43BE30AFA1CB8D50BB77BB3C48<br>
+gpg: Good signature from “Patrick Schleizer <a href="mailto:adrelanos@whonix.org">adrelanos@whonix.org</a>” [ultimate]<br>
+gpg:                 aka “Patrick Schleizer <a href="mailto:adrelanos@kicksecure.com">adrelanos@kicksecure.com</a>” [ultimate]<br>
+gpg:                 aka “Patrick Schleizer <a href="mailto:adrelanos@riseup.net">adrelanos@riseup.net</a>” [ultimate]<br>
+gpg: Signature notation: salt@notations.sequoia-pgp.org=[ not human readable (32 bytes: Ey??D???IGR???&gt;???..) ]<br>
+gpg: Signature notation: file@name=Kicksecure-LXQt-18.2.1.9.Intel_AMD64.iso</p>
+<p>My question is about this line:<br>
+gpg: Signature notation: salt@notations.sequoia-pgp.org=[ not human readable (32 bytes: Ey??D???IGR???&gt;???..) ]</p>
+<p>I have not seen it before is it something to worry about or just ignore. Everything else goes as described in the validation process.</p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/strange-line-when-verifying-software-not-human-readable-32-bytes/1801">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/strange-line-when-verifying-software-not-human-readable-32-bytes/1801</link>
+          <pubDate>Mon, 20 Jul 2026 06:05:53 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1801</guid>
+          <source url="https://forums.kicksecure.com/t/strange-line-when-verifying-software-not-human-readable-32-bytes/1801.rss">Strange line when verifying software: not human readable (32 bytes</source>
+        </item>
+        <item>
+          <title>Systemcheck python3-pip is not secure</title>
+          <dc:creator><![CDATA[spartack]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I get this message from systemcheck, what should I do?</p>
+<blockquote>
+<p>WARNING: Kicksecure Unwanted Packages Test Result: 1 unwanted package(s) installed. It is recommended that you remove them from this machine.</p>
+<ol>
+<li>Open a terminal. (Start Menu → System → Terminal)</li>
+<li>Purge.</li>
+</ol>
+<p>sudo apt-get purge python3-pip</p>
+</blockquote>
+            <p><small>15 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799</link>
+          <pubDate>Sat, 18 Jul 2026 18:56:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1799</guid>
+          <source url="https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799.rss">Systemcheck python3-pip is not secure</source>
+        </item>
+        <item>
+          <title>Issue installing KS on NovaCustom laptop</title>
+          <dc:creator><![CDATA[wheelofdoom]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Try as I might, I am unable to install from usb kicksecure on a Nova Custom V56 (dasharo coreboot firmware with UEFI).</p>
+<p>The system will boot from the USB and reach the KS menu options however will go no farther after selecting any option and simply reboots without presenting any errors.</p>
+<p>I have tried the following:</p>
+<ul>
+<li>testing usb on other systems. (no issue installing on other devices)</li>
+<li>modifying the boot parameters according to the kicksecure troubleshooting wiki to see if anything is stopping the installation process.</li>
+<li>contacted NovaCustom support who were unable to assist.</li>
+<li>tried many different linux distros to confirm boot-ability (tails, qubes etc..)</li>
+</ul>
+<p>Does anyone have any experience with booting and installing to a nova custom device, what do I need to do to get it going?</p>
+<p>cheers.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798</link>
+          <pubDate>Sat, 18 Jul 2026 00:04:26 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1798</guid>
+          <source url="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798.rss">Issue installing KS on NovaCustom laptop</source>
+        </item>
+        <item>
+          <title>Updating error</title>
+          <dc:creator><![CDATA[tamiworldwide]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello</p>
+<p>I tried to update my kicksecure templates including whonix 18 and I get error of something like: release file for https… blablabla/trixie-fasttrack/InRelease is expired (invalid since 8h … blablabla) Updates for this repository will not be applied</p>
+            <p><small>7 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/updating-error/1791">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/updating-error/1791</link>
+          <pubDate>Fri, 03 Jul 2026 13:17:34 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1791</guid>
+          <source url="https://forums.kicksecure.com/t/updating-error/1791.rss">Updating error</source>
+        </item>
+        <item>
+          <title>Issue, update not working</title>
+          <dc:creator><![CDATA[Lacekim]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>kick secure I ran system check. It printed out a page of lines. within that it has a box with root - locked - disabled<br>
+user - Absent - enabled<br>
+sysmaint - Absent - enabled</p>
+<p>then further down it says warning system check can not check for system update</p>
+<p>That output means you currently have these accounts/tokens in this state:</p>
+<ul>
+<li>
+<p>root: locked/disabled</p>
+</li>
+<li>
+<p>sysmaint: Absent/enabled (not actually present, but the “enabled” flag is showing as enabled—so it’s likelya config state mismatch or just how the checker reports it)</p>
+</li>
+<li>
+<p>user: Absent/enabled (same note)</p>
+</li>
+</ul>
+<p>And the checker can’t verify OS/package updates (“cannot check for system update”).</p>
+<p>To get you unstuck, do these quick checks:</p>
+<ol>
+<li>
+<p>Confirm what accounts exist right now</p>
+<ul>
+<li>
+<p>Run: <code>getent passwd | egrep '^(root|user|sysmaint):'</code></p>
+</li>
+<li>
+<p>Run: `getent shadow | egrep ‘^(root|user|sysmaint):’</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Check whether “user” is actually missing</p>
+<ul>
+<li>
+<p>Run: <code>id user</code></p>
+</li>
+<li>
+<p>Run: <code>id sysmaint</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Look for update-check failure cause</p>
+<ul>
+<li>
+<p>If this is Linux: run <code>cat /etc/os-release</code> and check if your system has working repos/clock:</p>
+<ul>
+<li>
+<p><code>date</code></p>
+</li>
+<li>
+<p><code>ls /etc/apt/sources.list.d 2&gt;/dev/null || true</code></p>
+</li>
+<li>
+<p>For Debian/Ubuntu: <code>apt update</code> (or <code>apt-get update</code>)</p>
+</li>
+<li>
+<p>For RHEL/CentOS/Fedora: <code>dnf check-update</code> or <code>yum check-update</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>If you paste (1) the OS distro (output of <code>/etc/os-release</code>) and (2) the exact command you ran for “system check” plus the first ~30 lines of its output (redact hostnames if needed), I can tell you whether the “Absent/enabled” lines are benign reporting or indicate a broken account/state—and what exact fix to apply.</p>
+            <p><small>8 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/issue-update-not-working/1790</link>
+          <pubDate>Fri, 03 Jul 2026 06:37:12 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1790</guid>
+          <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+        </item>
+        <item>
+          <title>About new grub-live mechanism and install grub-live on debian trixie</title>
+          <dc:creator><![CDATA[sam]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi. I installed grub-live on friend’s debian 13 and noticed that grub-live no linger works with initramfs. And it seems now this doesn’t work in Debian (I don’t see the new options in GRUB) after install grub-live and reboot (add “rootovl” option also doesn’t work now). <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/about-new-grub-live-mechanism-and-install-grub-live-on-debian-trixie/1786">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/about-new-grub-live-mechanism-and-install-grub-live-on-debian-trixie/1786</link>
+          <pubDate>Wed, 01 Jul 2026 06:58:14 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1786</guid>
+          <source url="https://forums.kicksecure.com/t/about-new-grub-live-mechanism-and-install-grub-live-on-debian-trixie/1786.rss">About new grub-live mechanism and install grub-live on debian trixie</source>
+        </item>
+        <item>
+          <title>Help Understanding the Project&#39;s Direction and Target Audience</title>
+          <dc:creator><![CDATA[questionnaire]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I’ve been following Kicksecure’s development with genuine interest. From Debian morphing a Debian install to v17 and hardening Debian VM’s. To more recently just now doing a bare metal Kicksecure installation on my laptop.</p>
+<p>I wanted to share some perspective as a relatively new user and perhaps get clarity on the project’s broader vision. Kicksecure clearly prioritizes security hardening, but I’m trying to understand who the intended audience is beyond “security focused” individuals. Is the project positioning itself as a production ready daily driver, or is it currently more of a WIP/hobby project that evolved from the Whonix ecosystem?</p>
+<p>In all honesty Kicksecure feels like it’s in a state of continuous active maintenance rather than settled stability point. It’s not unusable, but I dont think it’s quite there yet. Reasonably around 75% to being at a point where it will be less maintenance/patches IMO. In all honestly this is probably largely in part of the DE switch from XFCE to LXQt and integration of sysmaint.</p>
+<p>The base DE was a learning curve for me as it’s the first time I have used<br>
+LXQt at the same time as fully Kicksecure. This prob increases the learning curve of those that want to make the full switch.</p>
+<p>I’m also curious about the current user base composition.<br>
+<strong>What is the majority of the user base?</strong></p>
+<ul>
+<li>Qubes/VM users with templates or VM installs?</li>
+<li>Morphed or hardened Debian derivatives?</li>
+<li>Bare metal Kicksecure host installations?</li>
+</ul>
+<p>Understanding this would help me (and potentially others) better evaluate whether Kicksecure aligns with our needs and how we might contribute feedback or support. I ask respectfully because I believe the project has significant potential to reach a wider audience with some additional clarity around its goals and roadmap. Not too many people know about this niche (awesome) distro.</p>
+            <p><small>11 posts - 6 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/help-understanding-the-projects-direction-and-target-audience/1784">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/help-understanding-the-projects-direction-and-target-audience/1784</link>
+          <pubDate>Sat, 27 Jun 2026 02:40:06 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1784</guid>
+          <source url="https://forums.kicksecure.com/t/help-understanding-the-projects-direction-and-target-audience/1784.rss">Help Understanding the Project&#39;s Direction and Target Audience</source>
+        </item>
+        <item>
+          <title>Permissions and 3D renderization errors after full-upgrade</title>
+          <dc:creator><![CDATA[spartack]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I’m trying to make a full upgrade of my laptop, but after update I have some error of cpu dump and some apps exit with error, for example neovim with lazyvim and signal application. I get an error in signal that I didn’t have before the update at the same than neovim, it exists with a “core dump” error.</p>
+<p>My cpu is last generation and the laptop doesn’t have GPU, so it’s not from drivers or incompatibility between cpu and some new feature.</p>
+<p>I’ve tried removing grub boot params and adding user to <strong>video</strong> and <strong>render</strong> groups. It looks that it¡s an error of permissions or compatibility with some package I already had installed. These are the package installed in the full-upgrade.<br>
+Any idea which could be the cause? I will try to debug it anyway but I don’t see errors in journal related with this.</p>
+<pre data-code-wrap="shell"><code class="lang-shell">Install: 
+kicksecure-nonqubes-cli:amd64 (3:36.7-1, automatic), 
+sequoia-git:amd64 (0.4.0-4+b5, automatic), 
+tor-ctrl:amd64 (3:6.6-1, automatic), 
+dist-general-cli:amd64 (3:36.7-1, automatic), 
+dist-nonqubes-cli:amd64 (3:36.7-1, automatic), 
+nmap-common:amd64 (7.95+dfsg-3, automatic), 
+kicksecure-general-cli:amd64 (3:36.7-1, automatic), 
+vm-config-dist:amd64 (3:16.0-1, automatic), 
+dummy-dependency-mta:amd64 (3:36.7-1, automatic), 
+python3-pyudev:amd64 (0.24.3-1, automatic), 
+htop:amd64 (3.4.1-5, automatic), 
+nmap:amd64 (7.95+dfsg-3, automatic), 
+sequoia-chameleon-gnupg:amd64 (0.13.1-3, automatic), 
+liblinear4:amd64 (2.3.0+dfsg-5+b2, automatic), 
+dist-baremetal-cli:amd64 (3:36.7-1, automatic)
+
+Upgrade: kicksecure-baremetal-cli:amd64 (3:36.0-1, 3:36.7-1)
+
+Remove: 
+kicksecure-cli:amd64 (3:32.3-1), 
+non-qubes-enhancements-cli:amd64 (3:32.3-1), 
+non-qubes-enhancements-gui:amd64 (3:32.3-1), 
+linux-headers-6.12.86+deb13-amd64:amd64 (6.12.86-1), 
+kicksecure-recommended-cli:amd64 (3:32.3-1), 
+kicksecure-dependencies-cli:amd64 (3:32.3-1), 
+linux-image-6.12.86+deb13-amd64:amd64 (6.12.86-1), 
+kicksecure-dependencies-system:amd64 (3:32.3-1), 
+exim4-daemon-light:amd64 (4.98.2-1), 
+kicksecure-default-applications-cli:amd64 (3:32.3-1)
+</code></pre>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/permissions-and-3d-renderization-errors-after-full-upgrade/1778">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/permissions-and-3d-renderization-errors-after-full-upgrade/1778</link>
+          <pubDate>Mon, 22 Jun 2026 12:08:11 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1778</guid>
+          <source url="https://forums.kicksecure.com/t/permissions-and-3d-renderization-errors-after-full-upgrade/1778.rss">Permissions and 3D renderization errors after full-upgrade</source>
+        </item>
+        <item>
+          <title>Failed load Kernel Modules</title>
+          <dc:creator><![CDATA[ValdemarJo]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hello. There was an error after the update, how to fix it? The same problem appeared in whonix.</p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/0ede85933409099338a061ac011117be86be74f7.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/0ede85933409099338a061ac011117be86be74f7" title="1"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/0ede85933409099338a061ac011117be86be74f7_2_357x500.jpeg" alt="1" data-base62-sha1="27xqZh84mnHEYuL8NdNrs3gtbzp" width="357" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/0ede85933409099338a061ac011117be86be74f7_2_357x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/0ede85933409099338a061ac011117be86be74f7_2_535x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/0ede85933409099338a061ac011117be86be74f7_2_714x1000.jpeg 2x" data-dominant-color="E4E4E4"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/494e38efa74d3389e7d16f07b9c89b6530ad98bf.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/494e38efa74d3389e7d16f07b9c89b6530ad98bf" title="2"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/494e38efa74d3389e7d16f07b9c89b6530ad98bf_2_690x123.jpeg" alt="2" data-base62-sha1="asurEIvV3pu2B09isQBkhJioFcP" width="690" height="123" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/494e38efa74d3389e7d16f07b9c89b6530ad98bf_2_690x123.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/494e38efa74d3389e7d16f07b9c89b6530ad98bf_2_1035x184.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/494e38efa74d3389e7d16f07b9c89b6530ad98bf.jpeg 2x" data-dominant-color="575453"></a></div><p></p>
+            <p><small>8 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/failed-load-kernel-modules/1777">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/failed-load-kernel-modules/1777</link>
+          <pubDate>Sun, 21 Jun 2026 17:14:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1777</guid>
+          <source url="https://forums.kicksecure.com/t/failed-load-kernel-modules/1777.rss">Failed load Kernel Modules</source>
+        </item>
+        <item>
+          <title>Can I use sudo in daily use</title>
+          <dc:creator><![CDATA[Lacekim]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <div class="md-table">
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><code>user-sysmaint-split</code>: multiple boot modes for better security</th>
+<th>Kicksecure increases safety by enforcing use of separate accounts for daily use and administrative tasks. This is called <a href="https://www.kicksecure.com/wiki/Sysmaint" title="Sysmaint" rel="noopener nofollow ugc">user-sysmaint-split</a>. It prevents daily used, high-risk software with large attack surface that can be hacked such as a web <a href="https://www.kicksecure.com/wiki/Browser" title="Browser" rel="noopener nofollow ugc">browser</a> from gaining full administrative (“<a href="https://www.kicksecure.com/wiki/Root" title="Root" rel="noopener nofollow ugc">root</a>”) access. Therefore, otherwise trivial deployment of rootkits and <a href="https://www.kicksecure.com/wiki/Backdoor#Firmware_Trojan" title="Backdoor" rel="noopener nofollow ugc">firmware trojans</a> (a type of <a href="https://www.kicksecure.com/wiki/Malware" title="Malware" rel="noopener nofollow ugc">malware</a> / <a href="https://www.kicksecure.com/wiki/Backdoor#Hardware_Backdoor" title="Backdoor" rel="noopener nofollow ugc">hardware backdoor</a>) is prevented.</th>
+</tr>
+</thead>
+</table>
+</div><p>Everything im doing is the normal way, go into main system to check/update. However, does that mean I cant install things from the daily use instance?</p>
+<p>Sorry, im just trying to grasp everything about this system, please forgive me.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775</link>
+          <pubDate>Sun, 14 Jun 2026 20:58:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1775</guid>
+          <source url="https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775.rss">Can I use sudo in daily use</source>
+        </item>
+        <item>
+          <title>No offline boot mode for generating wallets and private keys?</title>
+          <dc:creator><![CDATA[Takahashi]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Right then, before I get started, I ought to acknowledge that soft blocking isn’t quite as foolproof as proper air-gapping (removing wireless cards and the like). That might be straightforward enough on older hardware, mind you, but a fair few newer commercial laptops have their WiFi modules soldered directly onto the board. Just like RAM, I’m afraid so removing them is rather a blunder and not worth the bother for most users.</p>
+<p>Now then, when I was setting up a new BTC view only wallet, I couldn’t for the life of me find a sensible way to disable networking without first booting into sysmaint to switch it off, which is a bit of a nuisance, to say the least. I had to install <code>rfkill</code> to manage it, as it isn’t included by default.</p>
+<p>You can disable networking for Electrum when creating wallets from the command line with <code>electrum --offline</code> and <code>-w</code> to point where you’d like the wallet created, though I shan’t go into all that part. Electrum offline isn’t quite enough, you see, when the rest of the computer can still have a wag with the network stack.</p>
+<hr>
+<hr>
+<p>On <strong>Windows 11/10</strong>, safe mode quite deliberately doesn’t load network adapter drivers, the Wi-Fi stack, or networking services, which effectively software air-gaps the computer from any local network or internet connection.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f">
+  <header class="source">
+      <img src="https://support.microsoft.com/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f" target="_blank" rel="noopener nofollow ugc">support.microsoft.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f" target="_blank" rel="noopener nofollow ugc">Windows Startup Settings - Microsoft Support</a></h3>
+
+  <p>Learn how to change Windows startup settings, including enabling Safe Mode.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>TailsOS</strong>, for its part, offers an additional option for booting with all networking disabled:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network">
+  <header class="source">
+      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network" target="_blank" rel="noopener nofollow ugc">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network" target="_blank" rel="noopener nofollow ugc">config/chroot_local-hooks/80-block-network · stable · tails / tails · GitLab</a></h3>
+
+  <p>Welcome to the Tails project GitLab instance!</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>Qubes</strong> has its Vault qubes, which disable networking entirely—rather perfect for generating wallets and GPG split or private keys.</p>
+<h2><a name="p-5175-h-1" class="anchor" href="https://forums.kicksecure.com#p-5175-h-1" aria-label="Heading link"></a></h2>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes">
+  <header class="source">
+      <img src="https://richard-sebos.github.io/sebostechnology/assets/img/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes" target="_blank" rel="noopener nofollow ugc" title="04:00AM - 11 October 2025">Sebos Technology – 11 Oct 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/460;"><img src="https://richard-sebos.github.io/sebostechnology/assets/img/HV-Desktop.png" class="thumbnail" alt="" width="690" height="460"></div>
+
+<h3><a href="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes" target="_blank" rel="noopener nofollow ugc">Vault Qubes - QubesOS A Hypervisor as a Desktop</a></h3>
+
+  <p>Running a desktop environment inside a hypervisor isn’t new. Tech enthusiasts and home lab users have been doing it for years with tools like VMware Workstation and VirtualBox. These run on top of existing operating systems like Windows, Linux, or...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>So my question is why on earth does Kicksecure not offer something similar for an easy workflow and a bit of adaptability for those of us mates on limited, non-legacy hardware?</p>
+            <p><small>10 posts - 5 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774</link>
+          <pubDate>Sun, 14 Jun 2026 19:18:38 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1774</guid>
+          <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+        </item>
+        <item>
+          <title>Torified updates in Kicksecure</title>
+          <dc:creator><![CDATA[Lacekim]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>So when I update, does it go over tor? or am I going to have to do more like this <a href="https://www.kicksecure.com/wiki/Onionizing_Repositories" rel="noopener nofollow ugc">https://www.kicksecure.com/wiki/Onionizing_Repositories</a> ? I noticed it was under this tor+https but is that also applying for updates manually through the terminal?</p>
+            <p><small>19 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/torified-updates-in-kicksecure/1773">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/torified-updates-in-kicksecure/1773</link>
+          <pubDate>Sun, 14 Jun 2026 01:07:06 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1773</guid>
+          <source url="https://forums.kicksecure.com/t/torified-updates-in-kicksecure/1773.rss">Torified updates in Kicksecure</source>
+        </item>
+        <item>
+          <title>Encryption password</title>
+          <dc:creator><![CDATA[Lacekim]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Is there a way to change your encryption password?</p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/encryption-password/1768">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/encryption-password/1768</link>
+          <pubDate>Sat, 13 Jun 2026 05:38:35 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1768</guid>
+          <source url="https://forums.kicksecure.com/t/encryption-password/1768.rss">Encryption password</source>
+        </item>
+        <item>
+          <title>Can&#39;t download Browser in live version</title>
+          <dc:creator><![CDATA[Jules]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi,  I have put your live version on usb stick but the option to download any browser in the system maintenance boot is greyed out.</p>
+<p>As a general comment, my threat risk is severe and I would therefore prefer not to install the system on usb stick.  It would be really helpful if the original image could come with a default browser so there is no need to download anything in the live version.<br>
+I would be very grateful if you would consider adding that feature - I believe it would enhance security even further.  Like Tails, without Tor - which unfortunately my banks won’t allow.</p>
+<p>Thanks</p>
+<p>Jules</p>
+<p>UPDATE: I may have been too quick to request support.  I can now download browsers.  I think it was a problem with my ethernet over usb adapter and your usb guard.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/cant-download-browser-in-live-version/1764">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/cant-download-browser-in-live-version/1764</link>
+          <pubDate>Wed, 10 Jun 2026 10:31:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1764</guid>
+          <source url="https://forums.kicksecure.com/t/cant-download-browser-in-live-version/1764.rss">Can&#39;t download Browser in live version</source>
+        </item>
+        <item>
+          <title>USB installation crashing</title>
+          <dc:creator><![CDATA[Guest]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I have installed the latest version of Kicksecure onto a Sandisk USB, from a live ISO system, but while booting, it freezes at the screen that says “…loading initial initramfs…”.</p>
+<p>I have tried the fix of removing the entries after ‘ro’ in the “linux /vmlinuz-… root=UUID=… ro” line, but it loaded a new page that just crashed.</p>
+<p>From what I can gather, it has something to do with the root partition not being read as it is encrypted, I could be wrong.</p>
+<p>I have also tried adding the “nomodeset”, also the “efi=disable_early_pci_dma” commands to grub, no luck.</p>
+<p>Please assist as I had it working on version 17 and want to install to my HD, but not willing to take on that headache if it won’t even work on a USB.</p>
+<p>My USB is GPT and so was the one that I installed it from. It works fine in a BIOS VM, but my machine only supports UEFI.</p>
+<p>Thanks in advance.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/usb-installation-crashing/1758">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/usb-installation-crashing/1758</link>
+          <pubDate>Thu, 04 Jun 2026 16:39:42 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1758</guid>
+          <source url="https://forums.kicksecure.com/t/usb-installation-crashing/1758.rss">USB installation crashing</source>
+        </item>
+        <item>
+          <title>Dual NTP software run at the same time</title>
+          <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Hi all!</p>
+<p>I am running Kicksecure on my servers. But all of my servers needs NTP to be the same.</p>
+<p>Does Kicksecure allow me to config like this?</p>
+<p>[Internet NTP] ←(Tor+swdate fetch time data from the internet) [NTP server] (Chrony/NTPD Provide NTP to other machine on local internet)</p>
+<p>Thanks in advance!</p>
+            <p><small>5 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/dual-ntp-software-run-at-the-same-time/1757">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/dual-ntp-software-run-at-the-same-time/1757</link>
+          <pubDate>Thu, 04 Jun 2026 15:12:28 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1757</guid>
+          <source url="https://forums.kicksecure.com/t/dual-ntp-software-run-at-the-same-time/1757.rss">Dual NTP software run at the same time</source>
+        </item>
+        <item>
+          <title>Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</title>
+          <dc:creator><![CDATA[kick]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <h1><a name="p-5111-title-1" class="anchor" href="https://forums.kicksecure.com#p-5111-title-1" aria-label="Heading link"></a><strong>Title</strong></h1>
+<p>Kdenlive Clip/Project Monitor missing or grey after Kicksecure/Whonix “software rendering in VMs” profile sets QMLSCENE_DEVICE=softwarecontext</p>
+<hr>
+<h1><a name="p-5111-summary-2" class="anchor" href="https://forums.kicksecure.com#p-5111-summary-2" aria-label="Heading link"></a><strong>Summary</strong></h1>
+<p>After applying Kicksecure/Whonix environment hardening (specifically the script <code>/etc/profile.d/20_software_rendering_in_vms.sh</code>), Kdenlive started launching but the Clip Monitor and Project Monitor were either missing or showed a grey/empty area. Audio playback still worked.</p>
+<p>The issue occurred across:</p>
+<ul>
+<li>
+<p>Debian-packaged Kdenlive</p>
+</li>
+<li>
+<p>Flatpak version</p>
+</li>
+<li>
+<p>AppImage version</p>
+</li>
+</ul>
+<p>So it was not package-specific.</p>
+<hr>
+<h1><a name="p-5111-system-context-3" class="anchor" href="https://forums.kicksecure.com#p-5111-system-context-3" aria-label="Heading link"></a><strong>System context</strong></h1>
+<ul>
+<li>
+<p>Debian-based system with Kicksecure hardening</p>
+</li>
+<li>
+<p>KDE Plasma / Qt-based desktop</p>
+</li>
+<li>
+<p>AMD Radeon Graphics (radeonsi, Renoir)</p>
+</li>
+<li>
+<p>OpenGL working normally (<code>glxinfo</code> shows AMD renderer)</p>
+</li>
+<li>
+<p>VAAPI functional (verified via <code>vainfo</code>)</p>
+</li>
+<li>
+<p>MLT works correctly (<code>melt</code> runs SDL/XGL consumers)</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-symptom-4" class="anchor" href="https://forums.kicksecure.com#p-5111-symptom-4" aria-label="Heading link"></a><strong>Symptom</strong></h1>
+<ul>
+<li>
+<p>Kdenlive starts normally</p>
+</li>
+<li>
+<p>Project opens</p>
+</li>
+<li>
+<p>Timeline works</p>
+</li>
+<li>
+<p>Audio playback works</p>
+</li>
+<li>
+<p><strong>Video monitors (Clip/Project) are missing or grey</strong></p>
+</li>
+<li>
+<p>Multiple QML warnings appear</p>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-debug-findings-5" class="anchor" href="https://forums.kicksecure.com#p-5111-debug-findings-5" aria-label="Heading link"></a><strong>Debug findings</strong></h1>
+<p>The key issue was an environment variable:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+<p>This was set globally by:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">/etc/profile.d/20_software_rendering_in_vms.sh
+</code></pre>
+<p>Script logic summary:</p>
+<ul>
+<li>
+<p>checks <code>eglinfo</code></p>
+</li>
+<li>
+<p>if it detects <code>llvmpipe</code>, forces:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">export QMLSCENE_DEVICE=softwarecontext
+</code></pre>
+</li>
+<li>
+<p>intended for VM fallback rendering safety</p>
+</li>
+</ul>
+<p>However on this system:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">eglinfo shows BOTH:
+- AMD Radeon (radeonsi)
+- llvmpipe (secondary contexts)
+</code></pre>
+<p>This caused a <strong>false positive detection</strong>, triggering software rendering mode even though hardware acceleration is available.</p>
+<hr>
+<h1><a name="p-5111-root-cause-6" class="anchor" href="https://forums.kicksecure.com#p-5111-root-cause-6" aria-label="Heading link"></a><strong>Root cause</strong></h1>
+<p>The script assumes:</p>
+<blockquote>
+<p>if ANY llvmpipe appears → system is software-rendered → force Qt software rendering</p>
+</blockquote>
+<p>But modern systems may show:</p>
+<ul>
+<li>
+<p>multiple EGL contexts</p>
+</li>
+<li>
+<p>mixed renderer outputs</p>
+</li>
+<li>
+<p>fallback llvmpipe contexts alongside real GPU contexts</p>
+</li>
+</ul>
+<p>This results in incorrect global environment override.</p>
+<hr>
+<h1><a name="p-5111-fix-7" class="anchor" href="https://forums.kicksecure.com#p-5111-fix-7" aria-label="Heading link"></a><strong>Fix</strong></h1>
+<p>Temporary per-session fix:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">unset QMLSCENE_DEVICE
+kdenlive
+</code></pre>
+<p>Or safer launch wrapper:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">alias kdenlive='env -u QMLSCENE_DEVICE kdenlive'
+</code></pre>
+<hr>
+<h1><a name="p-5111-result-8" class="anchor" href="https://forums.kicksecure.com#p-5111-result-8" aria-label="Heading link"></a><strong>Result</strong></h1>
+<p>After unsetting <code>QMLSCENE_DEVICE</code>, Kdenlive monitors immediately worked again (Clip + Project Monitor restored, GPU rendering functional).</p>
+<hr>
+<h1><a name="p-5111-recommendation-9" class="anchor" href="https://forums.kicksecure.com#p-5111-recommendation-9" aria-label="Heading link"></a><strong>Recommendation</strong></h1>
+<ul>
+<li>
+<p>Avoid global forcing of <code>QMLSCENE_DEVICE=softwarecontext</code> on hybrid systems</p>
+</li>
+<li>
+<p>Improve EGL detection logic to ensure:</p>
+<ul>
+<li>
+<p>AMD/NVIDIA GPU presence takes priority over llvmpipe fallback contexts</p>
+</li>
+<li>
+<p>or require <em>only llvmpipe</em>, not “any occurrence”</p>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5111-optional-note-10" class="anchor" href="https://forums.kicksecure.com#p-5111-optional-note-10" aria-label="Heading link"></a><strong>Optional note</strong></h1>
+<p>This likely affects other Qt Quick / QML applications, not only Kdenlive.</p>
+<hr>
+            <p><small>13 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755</link>
+          <pubDate>Wed, 03 Jun 2026 16:54:47 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1755</guid>
+          <source url="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755.rss">Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</source>
+        </item>
+  </channel>
+</rss>

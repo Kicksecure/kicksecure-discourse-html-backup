@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+    <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818</link>
+    <description>I&#39;ve been trying to upgrade my bare metal Kicksecure and want to report the confusing experience lately.
+
+I first clicked on the &quot;Install Updates&quot; button by habit and got this.
+
+```
+/usr/bin/upgrade-nonroot
+&lt;snip&gt;
+The following packages have been kept back:
+  kicksecure-baremetal-gui-lxqt
+&lt;snip&gt;
+```
+
+I tried to manually run `sudo apt full-upgrade` and even `dist-upgrade` but those didn&#39;t do the trick either.
+
+```
+% sudo apt dist-upgrade
+Not upgrading:                  
+  kicksecure-baremetal-gui-lxqt
+
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 1
+```
+
+On top of that, `sudo apt upgrade --with-newpkgs` gave the exact same result. (FWIW, `--with-newpkgs` is not valid with `full-upgrade` or `dist-upgrade`.)
+
+I ended up having to explicitly type the name of the meta package.
+
+```
+% sudo apt install kicksecure-baremetal-gui-lxqt
+Upgrading:                      
+  kicksecure-baremetal-gui-lxqt
+
+Installing dependencies:
+  dist-baremetal-gui-all
+
+REMOVING:
+  virtualbox-guest-utils  virtualbox-guest-x11
+
+Summary:
+  Upgrading: 1, Installing: 1, Removing: 2, Not Upgrading: 0
+```
+
+If I understand correctly, the usual workarounds don&#39;t work because the new version both **adds and removes** dependencies. Compare this to `whonix-gateway-vm-gui-lxqt` on my VM, which worked just fine. `/usr/bin/upgrade-nonroot` called `apt full-upgrade` and correctly removed `virtualbox-guest-utils` and `virtualbox-guest-x11`.
+
+For bare metal, I imagine most people not too familiar with APT may be stuck on the old package version for quite long. Missing out `dist-baremetal-gui-all` seems not ideal to me. It may even affect an in-place major Kicksecure/Debian release upgrade, given that `apt dist-upgrade` won&#39;t upgrade it either. Thoughts?
+
+Idea: Can `upgrade-nonroot` handle this for me or at least print a hint on how to resolve it? Previously, a similar idea has been suggested for a different problem.
+
+https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5</description>
+    
+    <lastBuildDate>Sun, 09 Aug 2026 02:07:57 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>I have good reasons to believe it happens to everyone upgrading Kicksecure on bare metal recently.</p>
+</blockquote>
+</aside>
+<p>I have good reasons to believe it isn’t, namely that multiple Whonix users got the upgrade automatically and it broke things a bit due to a staggered update. A package was held back on one upgrade but then allowed through on the next, and the staggered nature of the upgrade managed to dodge installation of newer Guest Additions, but still removed the old ones, thus causing issues. That bug has a fix for it in our Git repos already.</p>
+<aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>To reproduce this issue</p>
+</blockquote>
+</aside>
+<p>Thanks, that looks useful, I’ll likely try that soon.</p>
+<aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
+<blockquote>
+<p>This particular issue is predictable, in the sense that it happens when a new package version <strong>both adds and removes</strong> dependencies compared to a previous version.</p>
+</blockquote>
+</aside>
+<p>I don’t know of any documentation that states that adding and removing dependencies causes apt to hold packages back. Furthermore, it looks like it doesn’t (at least not always) due to the Whonix bug mentioned above.</p>
+          <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/5</link>
+        <pubDate>Sun, 09 Aug 2026 02:07:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1818-5</guid>
+        <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+      </item>
+      <item>
+        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1818">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>It is very unlikely the problem you’re looking at is universal</p>
+</blockquote>
+</aside>
+<p>I have good reasons to believe it happens to everyone upgrading Kicksecure on bare metal recently. Yeah it’s not “universal” in the sense that every single APT user in this universe running all sorts of package upgrades will run into this, but it is a general problem that happens to other Kicksecure users too.</p>
+<p>To reproduce this issue, first download a Kicksecure ISO before the 18.2.1.9 point release. For example, <a href="https://www.kicksecure.com/download/iso/18.1.6.4/Kicksecure-LXQt-18.1.6.4.Intel_AMD64.iso" rel="noopener nofollow ugc">https://www.kicksecure.com/download/iso/18.1.6.4/Kicksecure-LXQt-18.1.6.4.Intel_AMD64.iso</a></p>
+<p>Then in VirtualBox, create a new VM using the ISO. Detailed steps:</p>
+<ol>
+<li>On the Home tab, click on the <code>Create a new virtual machine (VM)</code> link</li>
+<li>Put whatever as the VM name</li>
+<li>In ISO Image, open dropdown, select <code>Other</code> and locate the ISO just downloaded</li>
+<li>OS settings don’t matter, just don’t do unattended installation</li>
+<li>Expand <code>Specify virtual hardware</code> and specify enough virtual memory (e.g. 2Gi) so that Kicksecure ISO boots into graphics session</li>
+</ol>
+<p>Then start the VM and select sysmaint session. (This can also be done using USB sticks on bare metal but using VirtualBox for better reproducibility.)</p>
+<p>Once the sysmaint panel shows up, there’s no need to install the system. The Live ISO is good enough to reproduce this issue. Simply click the “Install Updates” button. I know, tor can be unreliable from time to time. But after a few tries and/or restarting tor, it will download packages and you’ll see the below, among lots of other outputs.</p>
+<pre><code class="lang-auto">Not upgrading:                  
+  kicksecure-baremetal-gui-lxqt
+</code></pre>
+<p>If you see something about not enough disk space (a limitation of the Live ISO), it may be necessary to move the cache directory printed out to <code>/dev/shm</code> or somewhere else with more capacity. e.g.</p>
+<pre data-code-wrap="sh"><code class="lang-sh">sudo mv /var/cache/apt/archives /dev/shm
+sudo ln -s /dev/shm/archives /var/cache/apt
+# Then try upgrading again using the button or
+sudo apt upgrade
+</code></pre>
+<p>Once you got here, you can try all the commands like I did in the original post and you’ll get the same results, except there will be a lot of noise cause by other packages.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1818">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Apt sometimes just behaves weird. It’s difficult-to-impossible to predict when it will, and there seems to be no general solution to this.</p>
+</blockquote>
+</aside>
+<p>This particular issue is predictable, in the sense that it happens when a new package version <strong>both adds and removes</strong> dependencies compared to a previous version. I agree it’s hard to predict other issues preventing <code>apt full-upgrade</code> from completing and there’s no general solution. There’s a whole StackOverflow question discussing various ways how “Not upgrading” can show up. I lost the link but I believe the OP captures the most common workarounds already. Explicitly typing the name of the meta package works is one of them.</p>
+          <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/4</link>
+        <pubDate>Sat, 08 Aug 2026 20:15:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1818-4</guid>
+        <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+      </item>
+      <item>
+        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Apt sometimes just behaves weird. It’s difficult-to-impossible to predict when it will, and there seems to be no general solution to this. Some of the issues that have prevented us from enabling automatic updates are documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Automatic_Updates">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1785828613" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Automatic_Updates" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Automatic_Updates" target="_blank" rel="noopener">Dev/Automatic Updates</a></h3>
+
+  <p>Why does Kicksecure (not) use Automatic Updates? Why does Kicksecure (not) use a GUI Update Notifier or GUI Updater?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>As such, users are required to update manually, using a CLI interface that shows up problems like this. It is very unlikely the problem you’re looking at is universal, and for those who are affected, the existing update mechanisms ensure users notice oddities like this.</p>
+<p>It might be possible to notice this situation in upgrade-nonroot and warn about it (perhaps directing users to a Wiki page to help them solve it).</p>
+          <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/3</link>
+        <pubDate>Tue, 04 Aug 2026 23:59:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1818-3</guid>
+        <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+      </item>
+      <item>
+        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>For future reference, this change seems to be introduced between</p>
+<pre><code class="lang-auto">% apt list kicksecure-baremetal-gui-lxqt -a
+kicksecure-baremetal-gui-lxqt/unknown 3:37.0-1 all [upgradable from: 3:36.7-1]
+kicksecure-baremetal-gui-lxqt/now 3:36.7-1 all [installed,upgradable to: 3:37.0-1]
+</code></pre>
+<p>And later announced in releate notes section “VirtualBox”</p>
+<aside class="quote no-group" data-username="Patrick" data-post="1" data-topic="1797">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"><a href="https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797/1">Kicksecure 18.2.1.9 - Point Release!</a></div>
+<blockquote>
+<ul>
+<li>Replace virtualbox-guest-x11 and virtualbox-guest-utils with virtualbox-guest-additions-iso or a sufficiently new Oracle build of VirtualBox (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>new package uploaded to Kicksecure repository: virtualbox-guest-additions-iso (from Oracle)</li>
+</ul>
+</blockquote>
+</aside>
+<p><code>kicksecure-meta-packages</code> has also been mentioned in release notes but I haven’t looked at GitHub on what exactly has changed. (To be clear, I’m just trying to find out when and how this happened. Not trying to blame anyone.)</p>
+          <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/2</link>
+        <pubDate>Tue, 04 Aug 2026 23:32:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1818-2</guid>
+        <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+      </item>
+      <item>
+        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>I’ve been trying to upgrade my bare metal Kicksecure and want to report the confusing experience lately.</p>
+<p>I first clicked on the “Install Updates” button by habit and got this.</p>
+<pre><code class="lang-auto">/usr/bin/upgrade-nonroot
+&lt;snip&gt;
+The following packages have been kept back:
+  kicksecure-baremetal-gui-lxqt
+&lt;snip&gt;
+</code></pre>
+<p>I tried to manually run <code>sudo apt full-upgrade</code> and even <code>dist-upgrade</code> but those didn’t do the trick either.</p>
+<pre><code class="lang-auto">% sudo apt dist-upgrade
+Not upgrading:                  
+  kicksecure-baremetal-gui-lxqt
+
+Summary:
+  Upgrading: 0, Installing: 0, Removing: 0, Not Upgrading: 1
+</code></pre>
+<p>On top of that, <code>sudo apt upgrade --with-newpkgs</code> gave the exact same result. (FWIW, <code>--with-newpkgs</code> is not valid with <code>full-upgrade</code> or <code>dist-upgrade</code>.)</p>
+<p>I ended up having to explicitly type the name of the meta package.</p>
+<pre><code class="lang-auto">% sudo apt install kicksecure-baremetal-gui-lxqt
+Upgrading:                      
+  kicksecure-baremetal-gui-lxqt
+
+Installing dependencies:
+  dist-baremetal-gui-all
+
+REMOVING:
+  virtualbox-guest-utils  virtualbox-guest-x11
+
+Summary:
+  Upgrading: 1, Installing: 1, Removing: 2, Not Upgrading: 0
+</code></pre>
+<p>If I understand correctly, the usual workarounds don’t work because the new version both <strong>adds and removes</strong> dependencies. Compare this to <code>whonix-gateway-vm-gui-lxqt</code> on my VM, which worked just fine. <code>/usr/bin/upgrade-nonroot</code> called <code>apt full-upgrade</code> and correctly removed <code>virtualbox-guest-utils</code> and <code>virtualbox-guest-x11</code>.</p>
+<p>For bare metal, I imagine most people not too familiar with APT may be stuck on the old package version for quite long. Missing out <code>dist-baremetal-gui-all</code> seems not ideal to me. It may even affect an in-place major Kicksecure/Debian release upgrade, given that <code>apt dist-upgrade</code> won’t upgrade it either. Thoughts?</p>
+<p>Idea: Can <code>upgrade-nonroot</code> handle this for me or at least print a hint on how to resolve it? Previously, a similar idea has been suggested for a different problem.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5" target="_blank" rel="noopener nofollow ugc" title="11:59PM - 30 October 2025">Whonix Forum – 30 Oct 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/should-apt-get-autoremove-be-automated-during-release-upgrade-and-or-upgrade-nonroot/22340/5" target="_blank" rel="noopener nofollow ugc">Should `apt-get autoremove` be automated during `release-upgrade` and/or...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I’ve seen (and lived through) enough horror stories of autoremove completely destroying an operating system that I’m a bit leery of doing it automatically.  What might be possible is to simulate an autoremove, make upgradecheck notify about...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818/1</link>
+        <pubDate>Tue, 04 Aug 2026 23:19:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1818-1</guid>
+        <source url="https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818.rss">Not upgrading: kicksecure-baremetal-gui-lxqt</source>
+      </item>
+  </channel>
+</rss>
