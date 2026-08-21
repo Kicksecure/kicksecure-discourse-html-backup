@@ -5,6 +5,64 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener" title="10:50AM - 19 August 2026">Whonix Forum – 19 Aug 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener">Issue mounting a disk in "user daily" mode</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #283890;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">VirtualBox</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I am using it with AxCrypt. It could work with LUKS, but we couldn’t get past the 3rd-party software on the user session side.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I replied, explaining that they could use LUKS instead and could set it up with a number of tools built into the OS, but in the process realized that adding a <em>new</em> encrypted volume to an existing system or VM (which may or may not have full disk encryption enabled on it) is a pain:</p>
+<ul>
+<li>First you have to partition the disk with <code>parted</code>. I expect a significant portion of our userbase doesn’t even know what a partition is.</li>
+<li>Then you have to format a partition on the disk with <code>cryptsetup</code>. This is not particularly easy, especially since you now have to grapple with the details of device-mapper thanks to how LUKS works under the hood and how cryptsetup exposes that.</li>
+<li>Then you have to open the newly created encrypted volume.</li>
+<li>Then you have to format the encrypted volume with a filesystem using something like <code>mkfs.ext4</code>.</li>
+<li>Then you have to mount that filesystem with <code>mount</code>.</li>
+<li>Then you have to fix permissions on the filesystem with <code>chown</code>, since by default it won’t let your standard user write to it.</li>
+<li>Then you have to add a line for the encrypted volume to <code>/etc/crypttab</code> using either <code>vim</code> or <code>nano</code>, which has to be done carefully to avoid breaking things, and is not intuitive at all.</li>
+<li>Then you have to add a line for mounting the encrypted volume to <code>/etc/fstab</code>, which is again unintuitive and requires care.</li>
+<li>Then you have to regenerate the initramfs with <code>dracut</code> (this might be optional but might not be).</li>
+</ul>
+<p>Requiring users to juggle seven command-line utilities and two critical configuration files to set up a new encrypted disk seems like a lot. The steps for setting up encryption on a USB drive are similarly complicated, but you get to omit the crypttab and fstab stuff since you don’t want that automounted on boot.</p>
+<p>There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don’t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.</p>
+<p>Given that users are resorting to proprietary software for this use case, potentially because they can’t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there’s an existing utility for this, that would be awesome, otherwise I don’t think it would be <em>that</em> hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_1</link>
+        <pubDate>Thu, 20 Aug 2026 00:14:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5462</guid>
+      </item>
+      <item>
         <title>Xorriso for file transfer</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="suse211213" data-post="3" data-topic="1831">
@@ -1592,34 +1650,6 @@ I got an old monitor from my garage so I could use my integrated graphics, just 
         <link>https://forums.kicksecure.com/t/dist-vm-gui-all-dependency-on-virtualbox-breaks-installation-on-ppc64/1815#post_3</link>
         <pubDate>Sun, 02 Aug 2026 22:22:21 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5397</guid>
-      </item>
-      <item>
-        <title>Tor Project is resurrecting SecBrowser as Mullvad Browser</title>
-        <dc:creator><![CDATA[@FranklyFlawless]]></dc:creator>
-        <description><![CDATA[ <p>Here is the information I have about Base Browser in one of my LLM project notes:</p>
-<aside class="quote no-group" data-username="Kimi K2.6">
-<div class="title">
-<div class="quote-controls"></div>
- Kimi K2.6:</div>
-<blockquote>
-<h2>What Base Browser Is</h2>
-<p>BB is a logical partition within tor-browser’s commit history, not a standalone product. The <code>base-browser-*-buildN</code> tag marks the end of the BB baseline.</p>
-<ul>
-<li><strong>Backported Mozilla security patches</strong> (<code>Bug XXXXXXX</code> prefix) — part of the BB baseline</li>
-<li><strong>Uplift candidates</strong> for upstream Firefox — part of the BB baseline</li>
-<li><strong>Reverts</strong> of undesirable Firefox patches — part of the BB baseline</li>
-<li><strong>Commits prefixed</strong> <code>BB NNNNN:</code> — Base Browser (shared by TB + MB)</li>
-<li><strong>Commits prefixed</strong> <code>TB NNNNN:</code> — Tor Browser only</li>
-<li><strong>Commits prefixed</strong> <code>MB NNNNN:</code> — Mullvad Browser only</li>
-<li>Mullvad Browser rebases from the <code>base-browser-*-buildN</code> tag</li>
-</ul>
-<p><strong>Corollary:</strong> Any tooling that extracts, catalogs, or verifies BB must operate on the FULL commit range from <code>FIREFOX_TAG</code> to <code>base-browser-*-buildN</code>. Filtering only for <code>^BB NNNNN:</code> prefixes will silently drop security backports, uplifts, and reverts — producing an incomplete catalog and a meaningless verification.</p>
-</blockquote>
-</aside>
-<p>I am not going to dump every technical detail unless you want to cherry pick against Base Browser commits among multiple Firefox forks.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/tor-project-is-resurrecting-secbrowser-as-mullvad-browser/101?page=2#post_22</link>
-        <pubDate>Sun, 02 Aug 2026 17:38:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5396</guid>
       </item>
   </channel>
 </rss>

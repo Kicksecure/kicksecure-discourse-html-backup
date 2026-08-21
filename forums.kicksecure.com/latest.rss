@@ -5,8 +5,75 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Tue, 18 Aug 2026 01:32:46 +0000</lastBuildDate>
+      <lastBuildDate>Thu, 20 Aug 2026 00:14:10 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener" title="10:50AM - 19 August 2026">Whonix Forum – 19 Aug 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener">Issue mounting a disk in "user daily" mode</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #283890;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">VirtualBox</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I am using it with AxCrypt. It could work with LUKS, but we couldn’t get past the 3rd-party software on the user session side.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I replied, explaining that they could use LUKS instead and could set it up with a number of tools built into the OS, but in the process realized that adding a <em>new</em> encrypted volume to an existing system or VM (which may or may not have full disk encryption enabled on it) is a pain:</p>
+<ul>
+<li>First you have to partition the disk with <code>parted</code>. I expect a significant portion of our userbase doesn’t even know what a partition is.</li>
+<li>Then you have to format a partition on the disk with <code>cryptsetup</code>. This is not particularly easy, especially since you now have to grapple with the details of device-mapper thanks to how LUKS works under the hood and how cryptsetup exposes that.</li>
+<li>Then you have to open the newly created encrypted volume.</li>
+<li>Then you have to format the encrypted volume with a filesystem using something like <code>mkfs.ext4</code>.</li>
+<li>Then you have to mount that filesystem with <code>mount</code>.</li>
+<li>Then you have to fix permissions on the filesystem with <code>chown</code>, since by default it won’t let your standard user write to it.</li>
+<li>Then you have to add a line for the encrypted volume to <code>/etc/crypttab</code> using either <code>vim</code> or <code>nano</code>, which has to be done carefully to avoid breaking things, and is not intuitive at all.</li>
+<li>Then you have to add a line for mounting the encrypted volume to <code>/etc/fstab</code>, which is again unintuitive and requires care.</li>
+<li>Then you have to regenerate the initramfs with <code>dracut</code> (this might be optional but might not be).</li>
+</ul>
+<p>Requiring users to juggle seven command-line utilities and two critical configuration files to set up a new encrypted disk seems like a lot. The steps for setting up encryption on a USB drive are similarly complicated, but you get to omit the crypttab and fstab stuff since you don’t want that automounted on boot.</p>
+<p>There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don’t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.</p>
+<p>Given that users are resorting to proprietary software for this use case, potentially because they can’t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there’s an existing utility for this, that would be awesome, otherwise I don’t think it would be <em>that</em> hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832</link>
+          <pubDate>Thu, 20 Aug 2026 00:14:10 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1832</guid>
+          <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+        </item>
         <item>
           <title>Xorriso for file transfer</title>
           <dc:creator><![CDATA[suse211213]]></dc:creator>
@@ -1367,33 +1434,6 @@ kicksecure-default-applications-cli:amd64 (3:32.3-1)
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1776</guid>
           <source url="https://forums.kicksecure.com/t/use-github-issues-tickets-roadmap-feature/1776.rss">Use GitHub Issues / Tickets / Roadmap Feature?</source>
-        </item>
-        <item>
-          <title>Can I use sudo in daily use</title>
-          <dc:creator><![CDATA[Lacekim]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <div class="md-table">
-<table>
-<thead>
-<tr>
-<th style="text-align:center"><code>user-sysmaint-split</code>: multiple boot modes for better security</th>
-<th>Kicksecure increases safety by enforcing use of separate accounts for daily use and administrative tasks. This is called <a href="https://www.kicksecure.com/wiki/Sysmaint" title="Sysmaint" rel="noopener nofollow ugc">user-sysmaint-split</a>. It prevents daily used, high-risk software with large attack surface that can be hacked such as a web <a href="https://www.kicksecure.com/wiki/Browser" title="Browser" rel="noopener nofollow ugc">browser</a> from gaining full administrative (“<a href="https://www.kicksecure.com/wiki/Root" title="Root" rel="noopener nofollow ugc">root</a>”) access. Therefore, otherwise trivial deployment of rootkits and <a href="https://www.kicksecure.com/wiki/Backdoor#Firmware_Trojan" title="Backdoor" rel="noopener nofollow ugc">firmware trojans</a> (a type of <a href="https://www.kicksecure.com/wiki/Malware" title="Malware" rel="noopener nofollow ugc">malware</a> / <a href="https://www.kicksecure.com/wiki/Backdoor#Hardware_Backdoor" title="Backdoor" rel="noopener nofollow ugc">hardware backdoor</a>) is prevented.</th>
-</tr>
-</thead>
-</table>
-</div><p>Everything im doing is the normal way, go into main system to check/update. However, does that mean I cant install things from the daily use instance?</p>
-<p>Sorry, im just trying to grasp everything about this system, please forgive me.</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775</link>
-          <pubDate>Sun, 14 Jun 2026 20:58:55 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1775</guid>
-          <source url="https://forums.kicksecure.com/t/can-i-use-sudo-in-daily-use/1775.rss">Can I use sudo in daily use</source>
         </item>
   </channel>
 </rss>
