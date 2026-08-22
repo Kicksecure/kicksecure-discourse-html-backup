@@ -5,6 +5,384 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/USBGuard">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1787297414" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/USBGuard" target="_blank" rel="noopener" title="07:33AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:533/112;"><img src="https://www.kicksecure.com/w/images/6/60/Usbguard-banner-400.svg?version=451e092ddad11b54ccbdb19891dd1990" class="thumbnail" alt="" width="400" height="84"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/USBGuard" target="_blank" rel="noopener">USBGuard - protect your computer against rogue USB devices</a></h3>
+
+  <p>Enable and disable USBGuard on Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<ol>
+<li>Is rule 39 (<code>reject with-interface ... ff:*:*</code>) expected to reject the Ledger’s <code>ff:ff:ff</code> interface?</li>
+</ol>
+</blockquote>
+</aside>
+<p>Yes.</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<ol start="2">
+<li>Should there be a Ledger-specific exception that takes precedence over this rule?</li>
+</ol>
+</blockquote>
+</aside>
+<p>Probably not. Every additional device we allow adds more attack surface to the system.</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<ol start="3">
+<li>Why does a reboot allow the Ledger to become usable despite the same generic reject rule being present?</li>
+</ol>
+</blockquote>
+</aside>
+<p>Because devices present during bootup are always allowed. This is so we don’t break internal hardware devices on systems that happen to use the USB bus for those devices. (Things like touchscreens, Bluetooth, webcams, etc. often use USB even though they’re internal devices.)</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<ol start="4">
+<li>What is the recommended way under Kicksecure to permanently allow this specific Ledger while keeping:</li>
+</ol>
+</blockquote>
+</aside>
+<p>The recommended workflow is to not permanently allow it at all. You should get a desktop notification when you plug the device in that a) tells you the device is blocked, and b) provides you a button you can click to temporarily unblock it. Plug in your device, then click the “Allow” button in the popup, and you should be set.</p>
+<p>If you really want to allow it permanently, you probably will want to add a new rule to USBGuard’s configuration. A good resource for that is here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://usbguard.github.io/documentation/rule-language.html">
+  <header class="source">
+      <img src="https://usbguard.github.io/favicon.ico" class="site-icon" alt="" width="64" height="64">
+
+      <a href="https://usbguard.github.io/documentation/rule-language.html" target="_blank" rel="noopener">usbguard.github.io</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://usbguard.github.io/documentation/rule-language.html" target="_blank" rel="noopener">Rule Language | USBGuard</a></h3>
+
+  <p>USBGuard project site.
+</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>And see also:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/USBGuard#Troubleshooting">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1787297414" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/USBGuard#Troubleshooting" target="_blank" rel="noopener" title="07:33AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:533/112;"><img src="https://www.kicksecure.com/w/images/6/60/Usbguard-banner-400.svg?version=451e092ddad11b54ccbdb19891dd1990" class="thumbnail" alt="" width="400" height="84"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/USBGuard#Troubleshooting" target="_blank" rel="noopener">Troubleshooting - USBGuard - protect your computer against rogue USB devices</a></h3>
+
+  <p>If you use less common USB devices (USB microphones, MIDI devices, touchscreens, etc.), USBGuard will most likely block your ability to use them. To work around this: | Enable and disable USBGuard on Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835#post_3</link>
+        <pubDate>Fri, 21 Aug 2026 20:29:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5470</guid>
+      </item>
+      <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[@kick]]></dc:creator>
+        <description><![CDATA[ <p><strong>Update:</strong> I have now tested both of my Ledger Nano S+ devices. Both exhibit exactly the same behavior. Hot-plugging either device results in the same USBGuard <code>rule_id=39</code> rejection (<code>ff:ff:ff</code> interface), followed by kernel <code>Device is not authorized for usage</code>.</p>
+<p>The same devices become usable after the previously described reboot procedure (Ledger connected, PIN entered, then system reboot). Ledger Live subsequently detects and verifies both devices.</p>
+<p>This therefore does not appear to be specific to one Ledger device. The behavior is reproducible with two independent Nano S+ devices.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835#post_2</link>
+        <pubDate>Fri, 21 Aug 2026 20:17:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5469</guid>
+      </item>
+      <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[@kick]]></dc:creator>
+        <description><![CDATA[ <p>Hi,</p>
+<p>I’m running <strong>Debian 13 (Trixie) with Kicksecure hardening</strong> on bare metal, and I’m troubleshooting a Ledger Nano S+ USB authorization problem.</p>
+<p>The Ledger itself is working correctly. I have tested <strong>two different Nano S+ devices</strong>, two original Ledger USB cables, and three different USB ports.</p>
+<p>The interesting part is that the kernel detects the Ledger correctly, but USBGuard rejects it.</p>
+<h3><a name="p-5468-usbguard-configuration-1" class="anchor" href="https://forums.kicksecure.com#p-5468-usbguard-configuration-1" aria-label="Heading link"></a>USBGuard configuration</h3>
+<p>USBGuard is active:</p>
+<pre><code class="lang-auto">usbguard.service - USBGuard daemon
+Active: active (running)
+</code></pre>
+<p>The kernel USB authorization default is:</p>
+<pre><code class="lang-auto">$ cat /sys/module/usbcore/parameters/authorized_default
+1
+</code></pre>
+<p>USBGuard is configured with:</p>
+<pre><code class="lang-auto">$ sudo usbguard get-parameter ImplicitPolicyTarget
+block
+</code></pre>
+<p>So the default policy is to block unknown USB devices.</p>
+<h3><a name="p-5468-ledger-detection-2" class="anchor" href="https://forums.kicksecure.com#p-5468-ledger-detection-2" aria-label="Heading link"></a>Ledger detection</h3>
+<p>When I plug in the Ledger, <code>dmesg</code> shows:</p>
+<pre><code class="lang-auto">usb 1-2: new full-speed USB device number 5 using xhci_hcd
+usb 1-2: New USB device found, idVendor=2c97, idProduct=5000, bcdDevice= 2.01
+usb 1-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-2: Product: Nano S+
+usb 1-2: Manufacturer: Ledger
+usb 1-2: SerialNumber: 0001
+usb 1-2: Device is not authorized for usage
+usb 1-2: USB disconnect, device number 5
+</code></pre>
+<p>The same happens on a second connection attempt.</p>
+<h3><a name="p-5468-usbguard-watch-shows-the-reason-3" class="anchor" href="https://forums.kicksecure.com#p-5468-usbguard-watch-shows-the-reason-3" aria-label="Heading link"></a>USBGuard <code>watch</code> shows the reason</h3>
+<p>Running:</p>
+<pre><code class="lang-auto">sudo usbguard watch
+</code></pre>
+<p>produces:</p>
+<pre><code class="lang-auto">[device] PresenceChanged: id=63
+ event=Insert
+ target=block
+ device_rule=block id 2c97:5000 serial "0001" name "Nano S+"
+ ...
+ with-interface { 03:00:00 ff:ff:ff 03:01:01 }
+
+[device] PolicyChanged: id=63
+ target_old=block
+ target_new=reject
+ ...
+ rule_id=39
+
+[device] PolicyApplied: id=63
+ target_new=reject
+ ...
+ rule_id=39
+
+[device] PresenceChanged: id=63
+ event=Remove
+ target=reject
+</code></pre>
+<p>I then checked the actual USBGuard policy:</p>
+<pre><code class="lang-auto">$ sudo usbguard list-rules | nl -ba | sed -n '35,42p'
+
+35  35: reject with-interface all-of { 03:*:* dc:*:* }
+36  36: reject with-interface all-of { 03:*:* e0:*:* }
+37  37: reject with-interface all-of { 03:*:* ef:*:* }
+38  38: reject with-interface all-of { 03:*:* fe:*:* }
+39  39: reject with-interface all-of { 03:*:* ff:*:* }
+40  40: reject with-interface one-of { ef:04:* }
+41  41: allow with-interface 03:01:01 if !allowed-matches(with-interface equals { 03:01:01 })
+42  42: allow with-interface 03:01:02 if !allowed-matches(with-interface equals { 03:01:02 })
+</code></pre>
+<p>The Ledger reports these interfaces:</p>
+<pre><code class="lang-auto">{ 03:00:00 ff:ff:ff 03:01:01 }
+</code></pre>
+<p>Therefore rule 39 appears to match the Ledger because of:</p>
+<pre><code class="lang-auto">ff:ff:ff
+</code></pre>
+<p>and USBGuard changes the device from <code>block</code> to <code>reject</code>.</p>
+<p>The kernel then reports:</p>
+<pre><code class="lang-auto">Device is not authorized for usage
+</code></pre>
+<p>and disconnects it.</p>
+<h3><a name="p-5468-however-rebooting-changes-the-situation-4" class="anchor" href="https://forums.kicksecure.com#p-5468-however-rebooting-changes-the-situation-4" aria-label="Heading link"></a>However, rebooting changes the situation</h3>
+<p>I discovered an interesting workaround.</p>
+<p>If I connect the Ledger, enter the PIN, and then <strong>reboot the system</strong>, after reboot the Nano can become available.</p>
+<p>In the working state:</p>
+<pre><code class="lang-auto">$ lsusb | grep -i -E 'ledger|2c97'
+Bus 001 Device 002: ID 2c97:5000 Ledger Nano S+
+</code></pre>
+<p>and USBGuard shows:</p>
+<pre><code class="lang-auto">55: allow id 2c97:5000 serial "0001" name "Nano S+"
+    ...
+    via-port "1-2"
+    with-interface { 03:00:00 ff:ff:ff 03:01:01 }
+</code></pre>
+<p>Ledger Live then recognizes the device and I have verified the backup.</p>
+<p>Interestingly, <code>ImplicitPolicyTarget</code> is still:</p>
+<pre><code class="lang-auto">block
+</code></pre>
+<p>so I am <strong>not</strong> using <code>ImplicitPolicyTarget=allow</code> as a permanent workaround.</p>
+<p>I also tested temporarily setting:</p>
+<pre><code class="lang-auto">sudo usbguard set-parameter ImplicitPolicyTarget allow
+</code></pre>
+<p>but I don’t want to weaken the USB security policy just to make the Ledger work.</p>
+<h3><a name="p-5468-question-5" class="anchor" href="https://forums.kicksecure.com#p-5468-question-5" aria-label="Heading link"></a>Question</h3>
+<p>Could someone explain the intended USBGuard/Kicksecure configuration for a Ledger Nano S+ in this situation?</p>
+<p>Specifically:</p>
+<ol>
+<li>Is rule 39 (<code>reject with-interface ... ff:*:*</code>) expected to reject the Ledger’s <code>ff:ff:ff</code> interface?</li>
+<li>Should there be a Ledger-specific exception that takes precedence over this rule?</li>
+<li>Why does a reboot allow the Ledger to become usable despite the same generic reject rule being present?</li>
+<li>What is the recommended way under Kicksecure to permanently allow this specific Ledger while keeping:</li>
+</ol>
+<pre><code class="lang-auto">ImplicitPolicyTarget=block
+</code></pre>
+<p>?</p>
+<p>I would prefer <strong>not to remove rule 39 globally</strong>, since it appears to be a security rule for a reason.</p>
+<p>Thanks!</p>
+<p><strong>Note:</strong> This investigation and forum post were prepared with assistance from ChatGPT.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835#post_1</link>
+        <pubDate>Fri, 21 Aug 2026 19:56:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5468</guid>
+      </item>
+      <item>
+        <title>Start a service if not running live mode</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Something like this should do the trick:</p>
+<pre><code class="lang-auto">[Unit]
+ConditionKernelCommandLine=!rootovl
+ConditionKernelCommandLine=!rd.live.overlay.overlayfs=1
+</code></pre>
+<p>Add those keys to the appropriate place in your service’s unit file, or drop the above snippet into the service’s configuration directory (i.e. <code>/usr/lib/systemd/system/my.service.d</code>, replacing <code>my.service</code> as appropriate) if you didn’t write the service yourself. See:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/grub-live/blob/master/usr/lib/systemd/system/systemd-repart.service.d/30_grub-live.conf">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/grub-live/blob/master/usr/lib/systemd/system/systemd-repart.service.d/30_grub-live.conf" target="_blank" rel="noopener">github.com/Kicksecure/grub-live</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/grub-live/blob/master/usr/lib/systemd/system/systemd-repart.service.d/30_grub-live.conf" target="_blank" rel="noopener">usr/lib/systemd/system/systemd-repart.service.d/30_grub-live.conf</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/grub-live/blob/master/usr/lib/systemd/system/systemd-repart.service.d/30_grub-live.conf" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-conf">## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+
+[Unit]
+
+## Debian forked upstream module 90overlay-root
+ConditionKernelCommandLine=!rootovl
+
+## dracut upstream module 90overlayfs - grub-live / ISO
+ConditionKernelCommandLine=!rd.live.overlay.overlayfs=1
+</code></pre>
+
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/start-a-service-if-not-running-live-mode/1833#post_2</link>
+        <pubDate>Fri, 21 Aug 2026 19:23:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5467</guid>
+      </item>
+      <item>
+        <title>Start a service if not running live mode</title>
+        <dc:creator><![CDATA[@spartack]]></dc:creator>
+        <description><![CDATA[ <p>I need to run a service after start up but becayse issues of RAM I can’t run it in live mode.</p>
+<p>I need anyway to only run a service if the system is not running in live mode, I’ve been reading the <code>systemctl --user status livecheck.service</code> and the <code>/usr/share/livecheck/livecheck-lsblk</code> but i haven’t come to the conclusion of how i can do it or if it’s possible.</p>
+<p>As far I have understood the service run a log of 0 or 1 in a log and that log have to be used by the livecheck service that launch the notification icon, but I wasn’t able to find it.</p>
+<p>Any idea or documentation about it?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/start-a-service-if-not-running-live-mode/1833#post_1</link>
+        <pubDate>Fri, 21 Aug 2026 18:01:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5465</guid>
+      </item>
+      <item>
+        <title>Include Feather Wallet in next release?</title>
+        <dc:creator><![CDATA[@spartack]]></dc:creator>
+        <description><![CDATA[ <p>Monero GUI can run with a simple script and with desktop integration, where is the issue about using directly the official wallet?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/include-feather-wallet-in-next-release/1744#post_18</link>
+        <pubDate>Fri, 21 Aug 2026 17:11:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5464</guid>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a> found a tool named SiriKali that can act as a frontend for CryFS. It might be suitable for this.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109" target="_blank" rel="noopener" title="01:55AM - 21 August 2026">Whonix Forum – 21 Aug 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109" target="_blank" rel="noopener">Rootless virtual machines with KVM and QEMU</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #9EB83B;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">KVM</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I dont see it a good idea to keep stuff for people who wants to go and do gymnastics with the OS, because if we keep the sudo parts and the split parts and try to keeps them up to date (generally for the wiki not just kvm wiki) the wiki gonna...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_2</link>
+        <pubDate>Fri, 21 Aug 2026 02:05:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5463</guid>
+      </item>
+      <item>
         <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption:</p>
@@ -1361,295 +1739,6 @@ Summary:
         <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818#post_1</link>
         <pubDate>Tue, 04 Aug 2026 23:19:52 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5405</guid>
-      </item>
-      <item>
-        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Hmm, that looks a bit like perhaps the drivers weren’t built by DKMS for the version of the kernel you currently have booted. Try fully updating the system, then remove all NVIDIA-related packages. Reboot the system, ensure you are booted into the latest installed kernel, and then install the <code>nvidia-driver-full</code> package. Reboot again once that’s done and see if that resolves the issue.</p>
-<p>Also, do you have Secure Boot enabled by any chance? That <em>might</em> cause DKMS to not build drivers. If that’s the case, you may want to disable Secure Boot before taking the above steps. Or alternately, run <code>sudo shim-manage-mok --enroll</code> in a sysmaint terminal and follow the on-screen instructions; that will allow you to use third-party drivers with Secure Boot enabled.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816#post_4</link>
-        <pubDate>Tue, 04 Aug 2026 23:15:15 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5404</guid>
-      </item>
-      <item>
-        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
-        <dc:creator><![CDATA[@halivatar]]></dc:creator>
-        <description><![CDATA[ <p>here is everything with ERROR:</p>
-<p>aug 04 17:55:01 USER systemd-modules-load[404]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER systemd-modules-load[316]: Inserted module ‘ppdev’<br>
-aug 04 17:55:01 USER systemd-modules-load[397]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
-aug 04 17:55:01 USER systemd-modules-load[397]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
-aug 04 17:55:01 USER dracut-cmdline[333]: Using kernel command line parameters:  rd.driver.pre=nvidia rd.driver.pre=nvidia_modeset rd.driver.pre=nvidia_uvm rd.driver.pre=nvidia_drm rd.luks.uuid=luks-f32b658f-b8f3-4f3b-b93d-950ee8647a65 rd.lvm.lv=USER-vg/root   rd.lvm.lv=USER-vg/swap_1 root=/dev/mapper/USER–vg-root rootfstype=ext4 rootflags=rw,relatime,errors=remount-ro   BOOT_IMAGE=/vmlinuz-6.12.100+deb13-amd64 root=/dev/mapper/USER–vg-root ro mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on kpti=1 pti=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force kvm-intel.vmentry_l1d_flush=always mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt kvm.mitigate_smt_rsb=1 gather_data_sampling=force reg_file_data_sampling=on indirect_target_selection=force vmscape=force slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 cfi=kcfi ia32_emulation=0 efi_pstore.pstore_disable=1 erst_disable proc_mem.force_override=ptrace bdev_allow_write_mounted=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_cpu=off random.trust_bootloader=off extra_latent_entropy init_on_alloc=1 init_on_free=1 loglevel=0 quiet rd.emergency=halt rd.shell=0<br>
-aug 04 17:55:01 USER systemd[1]: Started systemd-journald.service - Journal Service.<br>
-aug 04 17:55:01 USER systemd-modules-load[316]: Inserted module ‘parport_pc’<br>
-aug 04 17:55:01 USER systemd[1]: Starting systemd-tmpfiles-setup.service - Create System Files and Directories…<br>
-aug 04 17:55:01 USER systemd-modules-load[408]: modprobe: FATAL: Module nvidia-current-modeset not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER systemd-modules-load[392]: modprobe: ERROR: Error running install command 'modprobe nvidia ; modprobe -i nvidia-current-modeset ’ for module nvidia_modeset: retcode 1<br>
-aug 04 17:55:01 USER systemd-modules-load[392]: modprobe: ERROR: could not insert ‘nvidia_modeset’: Invalid argument<br>
-aug 04 17:55:01 USER systemd-modules-load[416]: modprobe: FATAL: Module nvidia-current-drm not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER systemd-modules-load[316]: Error running install command 'modprobe nvidia-modeset ; modprobe -i nvidia-current-drm ’ for module nvidia_drm: retcode 1<br>
-aug 04 17:55:01 USER systemd-modules-load[316]: Failed to insert module ‘nvidia_drm’: Invalid argument<br>
-aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
-aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
-aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
-aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
-aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: FATAL: Module nvidia-current-modeset not found in directory /lib/modules/6.12.100+deb13-amd64<br>
-aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: Error running install command 'modprobe nvidia ; modprobe -i nvidia-current-modeset ’ for module nvidia_modeset: retcode 1</p>
-<p>aug 04 17:55:19 USER (udev-worker)[1384]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1<br>
-aug 04 17:55:19 USER (udev-worker)[1392]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1<br>
-aug 04 17:55:19 USER (udev-worker)[1410]: Error running install command ‘/usr/bin/disabled-miscellaneous-by-security-misc’ for module joydev: retcode 1<br>
-aug 04 17:55:19 USER (udev-worker)[1405]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1</p>
-<p>aug 04 17:57:01 USER polkitd[1992]: Error opening rules directory: Error opening directory “/run/polkit-1/rules.d”: No such file or directory (g-file-error-quark, 4)<br>
-aug 04 17:57:01 USER polkitd[1992]: Error opening rules directory: Error opening directory “/usr/local/share/polkit-1/rules.d”: No such file or directory (g-file-error-quark, 4)</p>
-<p>aug 04 17:57:05 USER labwc[2410]: 00:00:00.014 [ERROR] [backend/backend.c:253] Found 0 GPUs, cannot create backend<br>
-aug 04 17:57:05 USER labwc[2410]: 00:00:00.014 [ERROR] [backend/backend.c:428] Failed to open any DRM device<br>
-aug 04 17:57:05 USER labwc[2410]: 00:00:00.015 [ERROR] [../src/server.c:466] unable to create backend</p>
-<p>aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Mapping hdmi-surround71-extra2: snd_pcm_info() failed Permission denied:<br>
-aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Error fetching PCM info: Engedély megtagadva<br>
-aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Error opening low-level control device ‘hw:1’: No such file or directory<br>
-aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: can’t open control for card hw:1: No such file or directory</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816#post_3</link>
-        <pubDate>Tue, 04 Aug 2026 16:09:54 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5402</guid>
-      </item>
-      <item>
-        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="halivatar" data-post="1" data-topic="1816">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/h/71e660/48.png" class="avatar"> halivatar:</div>
-<blockquote>
-<p>Noticed that RADS was skipping greetd startup.</p>
-</blockquote>
-</aside>
-<p>Could you share the logs that you read when you noticed this? RADS is supposed to not skip display manager startup unless you have very low RAM (which you almost certainly do not if you’re using an RTX 3060).</p>
-<aside class="quote no-group" data-username="halivatar" data-post="1" data-topic="1816">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/h/71e660/48.png" class="avatar"> halivatar:</div>
-<blockquote>
-<p>Could you please advise on what the proper, hardened way is to make Kicksecure (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors?</p>
-</blockquote>
-</aside>
-<p>The proprietary NVIDIA drivers work out of the box with no special configuration on a laptop with an RTX 4070 for me. Something about your setup is likely broken. Reboot the system into sysmaint mode, switch to a TTY if needed (it sounds like you’re dropped to one anyway), then dump the current boot logs using <code>sudo journalctl --boot</code>. Redact any sensitive info in the logs, then share them here.</p>
-<p>(You might consider undoing all of the changes you made in an attempt to fix the issue. None of those changes should usually be necessary, to my awareness. The PAM changes sound especially worrying.)</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816#post_2</link>
-        <pubDate>Tue, 04 Aug 2026 02:12:17 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5401</guid>
-      </item>
-      <item>
-        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
-        <dc:creator><![CDATA[@halivatar]]></dc:creator>
-        <description><![CDATA[ <p>Hello,</p>
-<p>I am running a freshly morphed Kicksecure system on my PC with the LXQt desktop environment and a dedicated Nvidia GPU (RTX 3060 12GB).</p>
-<p>I am facing a persistent issue where the display manager fails to start upon every boot, dropping me into a TTY login loop.</p>
-<p>System Configuration:</p>
-<p>OS: Debian Morphing process bare-metal<br>
-Desktop Environment: LXQt withgreetd + wlgreet stack as mentioned in the docs<br>
-Driver: Proprietary Nvidia driver installed and loaded. Unfortunately I need that fir running AI.<br>
-Monitor Connection: Exclusively connected to the Nvidia GPU port.</p>
-<p>What I have tried so far:</p>
-<p>Commented out the auth optional pam_exec.so… pam-info line in /etc/pam.d/common-auth. Ran sudo faillock --user _greetd --reset to clear any lockouts.</p>
-<p>Since Kicksecure uses dracut on this setup, I forced Early KMS by creating /etc/dracut.conf.d/nvidia.conf with force_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "<br>
-Added options nvidia_drm modeset=1 fbdev=0 and options nvidia NVreg_EnableGpuFirmware=0 into /etc/modprobe.d/.</p>
-<p>Regenerated the initramfs via sudo dracut -f --regenerate-all.</p>
-<p>Both parameters verified active (modeset returns Y, EnableGpuFirmware returns 0).</p>
-<p>Noticed that RADS was skipping greetd startup. I added rads_block_display_manager_startup=0 to /etc/rads.d/50_user.conf</p>
-<p>I cannot use my monitors (2 monitors with displayport) with my card, always looping in tty.<br>
-I got an old monitor from my garage so I could use my integrated graphics, just a bit frustated.</p>
-<p>Could you please advise on what the proper, hardened way is to make Kicksecure  (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors? Thanks a lot.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816#post_1</link>
-        <pubDate>Tue, 04 Aug 2026 02:03:10 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5400</guid>
-      </item>
-      <item>
-        <title>Dist-vm-gui-all dependency on VirtualBox breaks installation on ppc64</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="JeremyRand" data-post="4" data-topic="1815">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/j/f475e1/48.png" class="avatar"> JeremyRand:</div>
-<blockquote>
-<p>I’m not 100% sure on this, but my understanding is that per Debian policy, freedom software that is not built from source would go in <code>contrib</code>, not <code>main</code>.</p>
-</blockquote>
-</aside>
-<p>That is my understanding also, but our archive doesn’t need to adhere to Debian’s repository structure entirely. On architectures where Guest Additions are supported, it is important that it is easily installable, and this is the easiest way to do that (especially given that we already have a <a href="https://www.kicksecure.com/wiki/Reasons_for_Freedom_Software">very strong “everything we distribute is open source” policy</a>).</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dist-vm-gui-all-dependency-on-virtualbox-breaks-installation-on-ppc64/1815#post_5</link>
-        <pubDate>Mon, 03 Aug 2026 01:31:16 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5399</guid>
-      </item>
-      <item>
-        <title>Dist-vm-gui-all dependency on VirtualBox breaks installation on ppc64</title>
-        <dc:creator><![CDATA[@JeremyRand]]></dc:creator>
-        <description><![CDATA[ <blockquote>
-<p>Comment: This package has no real reason to be in non-free other than that it</p>
-<p>is not built from source</p>
-</blockquote>
-<p>I’m not 100% sure on this, but my understanding is that per Debian policy, freedom software that is not built from source would go in <code>contrib</code>, not <code>main</code>. That said, making the dependency specific to amd64+arm64 works for me; anyone using KVM on those two architectures who’s unhappy about the dependency can file their own complaint if they care enough. <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dist-vm-gui-all-dependency-on-virtualbox-breaks-installation-on-ppc64/1815#post_4</link>
-        <pubDate>Mon, 03 Aug 2026 01:19:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5398</guid>
-      </item>
-      <item>
-        <title>Dist-vm-gui-all dependency on VirtualBox breaks installation on ppc64</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/virtualbox-guest-additions-iso/commit/46cee54fe39688427960005d7429e5903cbcb32b">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/virtualbox-guest-additions-iso/commit/46cee54fe39688427960005d7429e5903cbcb32b" target="_blank" rel="noopener">github.com/ArrayBolt3/virtualbox-guest-additions-iso</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/virtualbox-guest-additions-iso/commit/46cee54fe39688427960005d7429e5903cbcb32b" target="_blank" rel="noopener">Move Guest Additions out of non-free, it is freedom software</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-08-02" data-time="15:45:17" data-timezone="UTC">03:45PM - 02 Aug 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 3 files with 1 additions and 7 deletions">
-        <a href="https://github.com/ArrayBolt3/virtualbox-guest-additions-iso/commit/46cee54fe39688427960005d7429e5903cbcb32b" target="_blank" rel="noopener">
-          <span class="added">+1</span>
-          <span class="removed">-7</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/developer-meta-files/commit/aa45322d83b221c7912bfa6488d60dc6f95d66d2">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/developer-meta-files/commit/aa45322d83b221c7912bfa6488d60dc6f95d66d2" target="_blank" rel="noopener">github.com/ArrayBolt3/developer-meta-files</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/developer-meta-files/commit/aa45322d83b221c7912bfa6488d60dc6f95d66d2" target="_blank" rel="noopener">Make VirtualBox Guest Additions dependencies arch-specific</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-08-02" data-time="22:20:35" data-timezone="UTC">10:20PM - 02 Aug 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 2 additions and 2 deletions">
-        <a href="https://github.com/ArrayBolt3/developer-meta-files/commit/aa45322d83b221c7912bfa6488d60dc6f95d66d2" target="_blank" rel="noopener">
-          <span class="added">+2</span>
-          <span class="removed">-2</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/kicksecure-meta-packages/commit/7b0f66db11580cb663c36da4c4b1ec343c2c8c5f">
-  <header class="source">
-
-      <a href="https://github.com/ArrayBolt3/kicksecure-meta-packages/commit/7b0f66db11580cb663c36da4c4b1ec343c2c8c5f" target="_blank" rel="noopener">github.com/ArrayBolt3/kicksecure-meta-packages</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="github-row">
-  <div class="github-icon-container" title="Commit">
-    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
-  </div>
-
-  <div class="github-info-container">
-    <h4>
-      <a href="https://github.com/ArrayBolt3/kicksecure-meta-packages/commit/7b0f66db11580cb663c36da4c4b1ec343c2c8c5f" target="_blank" rel="noopener">Make VirtualBox Guest Additions dependencies arch-specific</a>
-    </h4>
-
-    <div class="github-info">
-      <div class="date">
-        committed <span class="discourse-local-date" data-format="ll" data-date="2026-08-02" data-time="22:20:23" data-timezone="UTC">10:20PM - 02 Aug 26 UTC</span>
-      </div>
-
-      <div class="user">
-        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
-          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
-          ArrayBolt3
-        </a>
-      </div>
-
-      <div class="lines" title="changed 1 files with 2 additions and 2 deletions">
-        <a href="https://github.com/ArrayBolt3/kicksecure-meta-packages/commit/7b0f66db11580cb663c36da4c4b1ec343c2c8c5f" target="_blank" rel="noopener">
-          <span class="added">+2</span>
-          <span class="removed">-2</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>This should resolve the issue once merged and published.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/dist-vm-gui-all-dependency-on-virtualbox-breaks-installation-on-ppc64/1815#post_3</link>
-        <pubDate>Sun, 02 Aug 2026 22:22:21 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5397</guid>
       </item>
   </channel>
 </rss>
