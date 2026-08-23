@@ -187,9 +187,153 @@ Thanks!
 
 **Note:** This investigation and forum post were prepared with assistance from ChatGPT.</description>
     
-    <lastBuildDate>Fri, 21 Aug 2026 20:29:30 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 22 Aug 2026 18:28:16 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="kick" data-post="5" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>However, when the device is unplugged and reconnected <strong>after the system has booted</strong>, it is immediately rejected.</p>
+</blockquote>
+</aside>
+<p>It forms part of the Kicksecure configuration for USBGuard</p>
+<pre><code class="lang-auto">#
+# Present device policy.
+#
+# How to treat devices that are already connected when the
+# daemon starts. One of:
+#
+# * allow        - authorize every present device
+# * block        - deauthorize every present device
+# * reject       - remove every present device
+# * keep         - just sync the internal state and leave it
+# * apply-policy - evaluate the ruleset for every present
+#                  device
+#
+# Overridden by Kicksecure to allow all devices that are connected at startup.
+#
+PresentDevicePolicy=allow
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/6</link>
+        <pubDate>Sat, 22 Aug 2026 18:28:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1835-6</guid>
+        <source url="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835.rss">Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</source>
+      </item>
+      <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[kick]]></dc:creator>
+        <description><![CDATA[
+            <p>I tested <strong>both of my Ledger Nano S+ devices</strong>, and both behave identically.</p>
+<p>When the Ledger is connected <strong>before boot</strong>, it works normally:</p>
+<pre><code class="lang-auto">lsusb | grep -i -E 'ledger|2c97'
+Bus 001 Device 002: ID 2c97:5000 Ledger Nano S+
+</code></pre>
+<p>However, when the device is unplugged and reconnected <strong>after the system has booted</strong>, it is immediately rejected.</p>
+<p><code>usbguard watch</code> shows:</p>
+<pre><code class="lang-auto">PresenceChanged: id=63
+event=Insert
+target=block
+</code></pre>
+<p>followed by:</p>
+<pre><code class="lang-auto">PolicyChanged: id=63
+target_old=block
+target_new=reject
+rule_id=39
+</code></pre>
+<p>and:</p>
+<pre><code class="lang-auto">PolicyApplied: id=63
+target_new=reject
+</code></pre>
+<p>followed by the device removal event.</p>
+<p>The kernel confirms the same:</p>
+<pre><code class="lang-auto">usb 1-2: New USB device found, idVendor=2c97, idProduct=5000
+usb 1-2: Product: Nano S+
+usb 1-2: Manufacturer: Ledger
+usb 1-2: SerialNumber: 0001
+usb 1-2: Device is not authorized for usage
+usb 1-2: USB disconnect
+</code></pre>
+<p>KDE Plasma shows <strong>no USB authorization notification</strong>, and the device does not remain visible in KDE Info.</p>
+<p>Rule 39 is:</p>
+<pre><code class="lang-auto">39: reject with-interface all-of { 03:*:* ff:*:* }
+</code></pre>
+<p>The Ledger reports:</p>
+<pre><code class="lang-auto">{ 03:00:00 ff:ff:ff 03:01:01 }
+</code></pre>
+<p>Therefore, rule 39 appears to match the Ledger’s <code>ff:*:*</code> interface and reject the device during hotplug.</p>
+<p><strong>Conclusion:</strong> Both Nano S+ devices reproduce exactly the same behavior. This appears to be a USBGuard policy/interface-matching issue rather than a hardware, cable, or Ledger-device problem.</p>
+<hr>
+          <p><a href="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/5</link>
+        <pubDate>Sat, 22 Aug 2026 14:44:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1835-5</guid>
+        <source url="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835.rss">Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</source>
+      </item>
+      <item>
+        <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
+        <dc:creator><![CDATA[spartack]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>Could someone explain the intended USBGuard/Kicksecure configuration for a Ledger Nano S+ in this situation?</p>
+</blockquote>
+</aside>
+<p>I had a similar issue with my wallets, I had to add them to the rules to allow permanently. I just run usbguard watch, copy all the description of the device and replace the block/request with allow.</p>
+
+These commands allow you that <a href="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/4">(click for more details)</a>
+<aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The recommended workflow is to not permanently allow it at all. You should get a desktop notification when you plug the device in that a) tells you the device is blocked, and b) provides you a button you can click to temporarily unblock it. Plug in your device, then click the “Allow” button in the popup, and you should be set.</p>
+</blockquote>
+</aside>
+<p>In my case the notification buttons don’t work because before be able to allow it, the wallet has already been blocked and removed from the system so it isn’t detecting it yet.<br>
+Test it if you can but it doesn’t happen with other blocked devices I’ve.</p>
+<p>With the wallets the flow is:</p>
+<ol>
+<li>event=Insert</li>
+<li>target=block</li>
+<li>target_new=reject</li>
+<li>event=Remove</li>
+</ol>
+<p>But with other devices the flow is:</p>
+<ol>
+<li>event=Insert</li>
+<li>target=block</li>
+<li>HEAR I SEE THE NOTIFICATION AND PRESS ALLOW</li>
+<li>target_old=block<br>
+target_new=allow</li>
+</ol>
+<p>The device is not rejected automatically like in the log of <a class="mention" href="https://forums.kicksecure.com/u/kick">@kick</a> , which is the same I’ve with other wallets I’ve tested</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>produces:</p>
+</blockquote>
+</aside>
+          <p><a href="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835/4</link>
+        <pubDate>Sat, 22 Aug 2026 09:41:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1835-4</guid>
+        <source url="https://forums.kicksecure.com/t/ledger-nano-s-2c97-5000-rejected-by-usbguard-rule-39-on-hotplug-reboot-makes-it-work/1835.rss">Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</source>
+      </item>
       <item>
         <title>Ledger Nano S+ (2c97:5000) rejected by USBGuard rule 39 on hotplug — reboot makes it work</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>

@@ -17,7 +17,7 @@ The Ledger itself is working correctly. I have tested two different Nano S…">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
 <link rel="canonical" href="1835.html" />
 
-<meta name="discourse-track-view-session-id" content="W2tWP5BgxFmQhd1wlv6cMAFC6efcZzXg"><meta name="discourse-beacon-pageview-enabled" content="true"><meta name="discourse-engagement-tracking-enabled" content="true">
+<meta name="discourse-track-view-session-id" content="PF1y0AK4OYeQ3IUD8nUHsck14NC6Yny8"><meta name="discourse-beacon-pageview-enabled" content="true"><meta name="discourse-engagement-tracking-enabled" content="true">
 <link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
 
     
@@ -119,7 +119,7 @@ https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
 
 </style>
 
-<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="8mrFDSF9u5x0WZKPEa9UVdf40"></script>
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="osqj2UrpLkaLYPZ4dQ7rj85uZ"></script>
 
 <!-- END End of Year Banner -->
 
@@ -143,9 +143,9 @@ END custom CSS / JS
 <meta property="og:article:section" content="Support" />
 <meta property="og:article:section:color" content="0088CC" />
 <meta name="twitter:label1" value="Reading time" />
-<meta name="twitter:data1" value="2 mins 🕑" />
+<meta name="twitter:data1" value="3 mins 🕑" />
 <meta name="twitter:label2" value="Likes" />
-<meta name="twitter:data2" value="1 ❤" />
+<meta name="twitter:data2" value="3 ❤" />
 <meta property="article:published_time" content="2026-08-21T19:56:35+00:00" />
 <meta property="og:ignore_canonical" content="true" />
 
@@ -538,8 +538,222 @@ Bus 001 Device 002: ID 2c97:5000 Ledger Nano S+
 
               <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
                   <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+                  <meta itemprop="userInteractionCount" content="2" />
+                <span class='post-likes'>2 Likes</span>
+              </div>
+
+
+            
+
+
+          </div>
+          <div id='post_4' itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/Person">
+                <a rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/spartack'><span itemprop="name">spartack</span></a>
+                  <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/u/spartack'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-08-22T09:41:07Z' class='post-time'>
+                    August 22, 2026,  9:41am
+                  </time>
+                  <meta itemprop='dateModified' content='2026-08-22T09:41:07Z'>
+              <span itemprop="position">4</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>Could someone explain the intended USBGuard/Kicksecure configuration for a Ledger Nano S+ in this situation?</p>
+</blockquote>
+</aside>
+<p>I had a similar issue with my wallets, I had to add them to the rules to allow permanently. I just run usbguard watch, copy all the description of the device and replace the block/request with allow.</p>
+<details>
+<summary>
+These commands allow you that</summary>
+<pre data-code-wrap="bash"><code class="lang-bash">sudo usbguard --help
+sudo usbguard allow-device --permanent &lt;rule&gt;
+sudo usbguard append-rule &lt;rule&gt;  
+sudoedit /etc/usbguard/rules.conf
+</code></pre>
+</details>
+<aside class="quote no-group" data-username="arraybolt3" data-post="3" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The recommended workflow is to not permanently allow it at all. You should get a desktop notification when you plug the device in that a) tells you the device is blocked, and b) provides you a button you can click to temporarily unblock it. Plug in your device, then click the “Allow” button in the popup, and you should be set.</p>
+</blockquote>
+</aside>
+<p>In my case the notification buttons don’t work because before be able to allow it, the wallet has already been blocked and removed from the system so it isn’t detecting it yet.<br>
+Test it if you can but it doesn’t happen with other blocked devices I’ve.</p>
+<p>With the wallets the flow is:</p>
+<ol>
+<li>event=Insert</li>
+<li>target=block</li>
+<li>target_new=reject</li>
+<li>event=Remove</li>
+</ol>
+<p>But with other devices the flow is:</p>
+<ol>
+<li>event=Insert</li>
+<li>target=block</li>
+<li>HEAR I SEE THE NOTIFICATION AND PRESS ALLOW</li>
+<li>target_old=block<br>
+target_new=allow</li>
+</ol>
+<p>The device is not rejected automatically like in the log of <a class="mention" href="../../../external.html?link=https://forums.kicksecure.com/u/kick">@kick</a> , which is the same I’ve with other wallets I’ve tested</p>
+<aside class="quote no-group" data-username="kick" data-post="1" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>produces:</p>
+</blockquote>
+</aside>
+            </div>
+
+              <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                  <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
                   <meta itemprop="userInteractionCount" content="1" />
                 <span class='post-likes'>1 Like</span>
+              </div>
+
+
+            
+
+
+          </div>
+          <div id='post_5' itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/Person">
+                <a rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/kick'><span itemprop="name">kick</span></a>
+                  <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/u/kick'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-08-22T14:44:29Z' class='post-time'>
+                    August 22, 2026,  2:44pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-08-22T14:44:29Z'>
+              <span itemprop="position">5</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>I tested <strong>both of my Ledger Nano S+ devices</strong>, and both behave identically.</p>
+<p>When the Ledger is connected <strong>before boot</strong>, it works normally:</p>
+<pre><code class="lang-auto">lsusb | grep -i -E 'ledger|2c97'
+Bus 001 Device 002: ID 2c97:5000 Ledger Nano S+
+</code></pre>
+<p>However, when the device is unplugged and reconnected <strong>after the system has booted</strong>, it is immediately rejected.</p>
+<p><code>usbguard watch</code> shows:</p>
+<pre><code class="lang-auto">PresenceChanged: id=63
+event=Insert
+target=block
+</code></pre>
+<p>followed by:</p>
+<pre><code class="lang-auto">PolicyChanged: id=63
+target_old=block
+target_new=reject
+rule_id=39
+</code></pre>
+<p>and:</p>
+<pre><code class="lang-auto">PolicyApplied: id=63
+target_new=reject
+</code></pre>
+<p>followed by the device removal event.</p>
+<p>The kernel confirms the same:</p>
+<pre><code class="lang-auto">usb 1-2: New USB device found, idVendor=2c97, idProduct=5000
+usb 1-2: Product: Nano S+
+usb 1-2: Manufacturer: Ledger
+usb 1-2: SerialNumber: 0001
+usb 1-2: Device is not authorized for usage
+usb 1-2: USB disconnect
+</code></pre>
+<p>KDE Plasma shows <strong>no USB authorization notification</strong>, and the device does not remain visible in KDE Info.</p>
+<p>Rule 39 is:</p>
+<pre><code class="lang-auto">39: reject with-interface all-of { 03:*:* ff:*:* }
+</code></pre>
+<p>The Ledger reports:</p>
+<pre><code class="lang-auto">{ 03:00:00 ff:ff:ff 03:01:01 }
+</code></pre>
+<p>Therefore, rule 39 appears to match the Ledger’s <code>ff:*:*</code> interface and reject the device during hotplug.</p>
+<p><strong>Conclusion:</strong> Both Nano S+ devices reproduce exactly the same behavior. This appears to be a USBGuard policy/interface-matching issue rather than a hardware, cable, or Ledger-device problem.</p>
+<hr>
+            </div>
+
+              <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                  <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+                  <meta itemprop="userInteractionCount" content="0" />
+                <span class='post-likes'></span>
+              </div>
+
+
+            
+
+
+          </div>
+          <div id='post_6' itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/Person">
+                <a rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/spartack'><span itemprop="name">spartack</span></a>
+                  <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/u/spartack'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-08-22T18:28:16Z' class='post-time'>
+                    August 22, 2026,  6:28pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-08-22T18:28:16Z'>
+              <span itemprop="position">6</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <aside class="quote no-group" data-username="kick" data-post="5" data-topic="1835">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="../../letter_avatar_proxy/v4/letter/k/ecae2f/48.png" class="avatar"> kick:</div>
+<blockquote>
+<p>However, when the device is unplugged and reconnected <strong>after the system has booted</strong>, it is immediately rejected.</p>
+</blockquote>
+</aside>
+<p>It forms part of the Kicksecure configuration for USBGuard</p>
+<pre><code class="lang-auto">#
+# Present device policy.
+#
+# How to treat devices that are already connected when the
+# daemon starts. One of:
+#
+# * allow        - authorize every present device
+# * block        - deauthorize every present device
+# * reject       - remove every present device
+# * keep         - just sync the internal state and leave it
+# * apply-policy - evaluate the ruleset for every present
+#                  device
+#
+# Overridden by Kicksecure to allow all devices that are connected at startup.
+#
+PresentDevicePolicy=allow
+</code></pre>
+            </div>
+
+              <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                  <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+                  <meta itemprop="userInteractionCount" content="0" />
+                <span class='post-likes'></span>
               </div>
 
 
