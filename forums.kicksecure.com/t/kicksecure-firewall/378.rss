@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure Firewall</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-firewall/378</link>
+    <description>What is the Firewall comes with Kicksecure on CLI? `ufw` was not included anywhere in any metapackage.</description>
+    
+    <lastBuildDate>Sat, 16 Aug 2025 18:01:26 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>The only issue from research is I’m not sure how you would go about enabling the custom ruleset by default?</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/17">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/17</link>
+        <pubDate>Sat, 16 Aug 2025 18:01:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-17</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <ul>
+<li>Add Firewall option to sysmaint pannel</li>
+</ul>
+<p>I think the best way would be to add nftables rules sets for different usecases but the default being blocking incoming and forwarding and allow outgoing by default.</p>
+<p>Another menu in sysmaint panel for firewalls could be added to select or manage firewall rulesets.</p>
+<p><code>/etc/nftables/kicksecure_default.nft</code></p>
+<pre><code class="lang-auto">#!/usr/sbin/nft -f
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0;
+        policy drop;
+    }
+
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+    }
+
+    chain output {
+        type filter hook output priority 0;
+        policy accept;
+    }
+}
+</code></pre>
+<p>Another example these rules Blocks all incoming and forwarding traffic and allows HTTP, HTTPS, DNS, and limited SSH traffic. Also allows Tor port to ensure it continues to work correctly for torified apt and time sync via sdwdate.</p>
+<p><code>/etc/nftables/kicksecure_restrictive.nft</code></p>
+<pre><code class="lang-auto">#!/usr/sbin/nft -f
+
+table inet filter {
+    chain input {
+        type filter hook input priority 0;
+        policy drop;
+
+        # Allow loopback interface
+        iif "lo" accept
+
+        # Allow established connections
+        ct state {established, related} accept
+    }
+
+    chain forward {
+        type filter hook forward priority 0;
+        policy drop;
+
+        # Allow established connections
+        ct state {established, related} accept
+    }
+
+    chain output {
+        type filter hook output priority 0;
+        policy drop;
+
+        # Allow loopback interface
+        oif "lo" accept
+
+        # Allow HTTP (port 80)
+        tcp dport 80 accept
+
+        # Allow HTTPS (port 443)
+        tcp dport 443 accept
+
+        # Allow DNS (port 53)
+        udp dport 53 accept
+        tcp dport 53 accept
+
+        # Allow SSH (port 22) but limit it to a specific number of connections per minute
+        tcp dport 22 limit rate 5/minute accept
+
+        # Allow Tor (port 9050)
+        tcp dport 9050 accept
+    }
+}
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/16">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/16</link>
+        <pubDate>Sat, 16 Aug 2025 17:59:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-16</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="SteveK1978" data-post="14" data-topic="378" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/8491ac/48.png" class="avatar"> SteveK1978:</div>
+<blockquote>
+<p>I don’t think Tor is necessary for Kicksecure. We can have everything Tor into a separate package and allow user to not install it by default.</p>
+</blockquote>
+</aside>
+<p>Not planned due to:<br>
+<a href="https://www.kicksecure.com/wiki/About#torified_updates">Protection from Targeted Malicious Updates</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/15">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/15</link>
+        <pubDate>Sat, 16 Aug 2025 16:53:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-15</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <p>We can have per-application level firewall control. I am currently using Kicksecure as virtual machines. I don’t think Tor is necessary for Kicksecure. We can have everything Tor into a separate package and allow user to not install it by default.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/14</link>
+        <pubDate>Sat, 16 Aug 2025 14:12:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-14</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Desirable features:</p>
+<ul>
+<li>restrict outgoing traffic to a configurable list of Linux users accounts</li>
+<li>restrict outgoing traffic to a configurable list of IPs only</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/13</link>
+        <pubDate>Sun, 11 May 2025 09:03:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-13</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you. I don’t really want this feature to be enabled by default. I mainly use Kicksecure as server or virtualization host.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/12</link>
+        <pubDate>Tue, 17 Sep 2024 16:03:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-12</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>How could Kicksecure be configured to have a firewall enabled by default for Kicksecure desktop but at the same time do not enable the firewall by default for users installing using distribution morphing method?</p>
+<p>Why not enable Kicksecure firewall by default for users installing using distribution morphing method? It’s a too intrusive change. Because if they are distribution morphing a server, they might lock themselves out from SSH and other services such as their webserver might become unreachable.</p>
+<p>What’s the solution?</p>
+<p>A Kicksecure systemd unit which comes disabled by default using systemd presets. It would be enabled by default for Kicksecure for desktop using calamares but users using distribution morphing would need to run <code>sudo systemctl enable --now kicksecure-firewall</code> (not yet implemented at time of writing).</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/11</link>
+        <pubDate>Sat, 14 Sep 2024 14:28:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-11</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Of course.</p>
+<p>iptables is deprecated. iptables → nftables.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/10</link>
+        <pubDate>Sat, 29 Jun 2024 12:37:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-10</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Based on web search, seems newer ufw versions support also nftables.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/8</link>
+        <pubDate>Fri, 28 Jun 2024 11:10:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-8</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <p>Sorry for late reply, isn’t <code>ufw</code> just a front-end of <code>iptables</code>?</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/7</link>
+        <pubDate>Thu, 27 Jun 2024 14:35:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-7</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Note on UFW by default in Kicksecure:<br>
+Still depends on <code>iptables</code>. This seems outdated. Waiting at least until it has been ported to <code>nftables</code>.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/6</link>
+        <pubDate>Tue, 28 May 2024 11:33:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-6</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <p>No worries.<br>
+I can use <code>firewalld</code> or <code>ufw</code> myself.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/5</link>
+        <pubDate>Mon, 25 Mar 2024 14:10:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-5</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>While Kicksecure comes with no open ports by default, a firewall would be useful to protect the user from unwanted, unexpected ports opened by third-party software.</p>
+<p>How this could be structured:</p>
+<ul>
+<li>kicksecure-shared-firewall</li>
+<li>kicksecure-desktop-firewall [block all ports by default]</li>
+<li>kicksecure-server-firewall [open port 22, which is SSH’s default port by default]
+<ul>
+<li>Maybe the server firewall should come last. If ever. Much later. Maybe not at all. Maybe server operators should take care of a firewall themselves.</li>
+</ul>
+</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/4</link>
+        <pubDate>Mon, 18 Mar 2024 13:21:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="378">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>None yet. None has been developed yet.</p>
+</blockquote>
+</aside>
+<p>I am OK with current state, I don’t think we need extra Firewall.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/3</link>
+        <pubDate>Fri, 16 Feb 2024 15:56:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>None yet. None has been developed yet.</p>
+<hr>
+<p>related:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Host_Firewall">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion=2" class="site-icon" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener" title="07:38PM - 01 October 2023">Kicksecure – 1 Oct 23</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/384;"><img src="https://www.kicksecure.com/w/images/e/e1/Hostfirewall213213.jpg?version=d8e6516bf2e52ac018dab56b395ed915" class="thumbnail" width="640" height="384"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Host_Firewall" target="_blank" rel="noopener">Host Firewall</a></h3>
+
+  <p>Host Firewall Settings and Testing</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/2</link>
+        <pubDate>Fri, 16 Feb 2024 07:11:02 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+      <item>
+        <title>Kicksecure Firewall</title>
+        <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+        <description><![CDATA[
+            <p>What is the Firewall comes with Kicksecure on CLI? <code>ufw</code> was not included anywhere in any metapackage.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-firewall/378/1</link>
+        <pubDate>Thu, 15 Feb 2024 19:42:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-378-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+      </item>
+  </channel>
+</rss>

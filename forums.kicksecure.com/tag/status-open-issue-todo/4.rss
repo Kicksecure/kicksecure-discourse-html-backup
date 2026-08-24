@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure Forums - Topics tagged status_open_issue_todo</title>
+    <link>https://forums.kicksecure.com/tag/status-open-issue-todo/4</link>
+    <description>Topics tagged status_open_issue_todo</description>
+    
+      <lastBuildDate>Fri, 30 May 2025 00:37:23 +0000</lastBuildDate>
+      <atom:link href="https://forums.kicksecure.com/tag/status-open-issue-todo/4.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Ephemeral Port Randomization Questions?</title>
+          <dc:creator><![CDATA[anon92632958]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Should Kicksecure stick with the default that Linux defaults to?</p>
+<p><code>cat /proc/sys/net/ipv4/ip_local_port_range</code></p>
+<p>The default range is 32768 - 60999<br>
+I’m not sure why this reasoning and is the RFC-compliant recommended range outdated?</p>
+<p>RFC-compliant ephemeral port range <a href="https://datatracker.ietf.org/doc/html/rfc6335.html#section-6" rel="noopener nofollow ugc">(RFC 6335)</a></p>
+<blockquote>
+<p>The Dynamic Ports, also known as the Private or Ephemeral Ports, from 49152-65535</p>
+</blockquote>
+<p>Would changing the range to something Kicksecure specific increase Fingerprinting?</p>
+<p><strong>Should it be increased to 65535?</strong> <code>net.ipv4.ip_local_port_range = 32768    65535</code><br>
+Increased entropy equals better protection against port prediction?<br>
+More ports equals less chance of port collisions under high loads?<br>
+Does changing it increase attack surface?</p>
+<p>What are your thoughts on this since Kicksecure is also a consideration for server use?</p>
+            <p><small>3 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ephemeral-port-randomization-questions/1070">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ephemeral-port-randomization-questions/1070</link>
+          <pubDate>Fri, 30 May 2025 00:37:23 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1070</guid>
+          <source url="https://forums.kicksecure.com/t/ephemeral-port-randomization-questions/1070.rss">Ephemeral Port Randomization Questions?</source>
+        </item>
+        <item>
+          <title>Separate (some) user applications from the operating system</title>
+          <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Android, iOS, macOS, and Chrome OS all provide a level of separation between user-installed applications and the operating system. The operating system may provide certain applications to the user, but those applications are not installed by the user and generally cannot be uninstalled or replaced. User-controllable applications are separated from the rest of the system, and generally are sandboxed to prevent them from doing damage if they turn out to be malicious or become compromised.</p>
+<p>Debian (and by extension, Kicksecure) doesn’t do this so well. All packages in the repositories are essentially operating system components, with full permissions to do anything the user account the application is launched as allows. Core components like udev and systemd are installed directly alongside productivity apps like image viewers and web browsers. This is a bit messy from the standpoint of system organization, but it also poses a significant security hazard for obvious reasons (<a href="https://xkcd.com/1200/" rel="noopener nofollow ugc">XKCD 1200</a> sums up the issue nicely).</p>
+<p>Users should be able to install arbitrary applications as OS components and give them elevated permissions, as they’ve always been able to do on Kicksecure and Whonix. But users should also be able to wall off applications into a sandbox of sorts if they don’t trust those applications or may have to process untrusted data with those applications.</p>
+<p>Flatpak and Snap are relatively well-known attempts at bringing sandboxing and application isolation to Linux. Both of these are not exactly awesome solutions, because:</p>
+<ul>
+<li>Sandboxing controls under Linux can be somewhat flimsy without putting a great deal of work into doing things like whitelisting syscalls and the like. In some instances, Linux’s sandboxing features actually worsen security (user namespaces in particular allow access to kernel facilities that aren’t usually available to unprivileged users, exposing additional attack surface; this has been the source of numerous CVEs, but user namespaces are also required by applications that do sandboxing internally, like Chromium).</li>
+<li>Users can loosen sandboxing very easily with Flatpak, and without too much effort with Snap, defeating the purpose of the sandbox.</li>
+<li>Flatpak and Snap sandboxing oftentimes causes application malfunctions due to restricting resources that applications legitimately need access to.</li>
+<li>Applications from the Flathub repository and Snap Store can be uploaded by arbitrary users. This is in contrast to the Debian archive, which requires some level of skill and trust for a packager to gain upload access to it, and where policies help to ensure better packaging quality in general. As a result, Flatpaks and Snaps are oftentimes more broken than apt packages, and it is easy to upload malware to the repositories.
+<ul>
+<li>Malware actually has been uploaded to the Snap Store and has caused severe damage in the past, with at least one person <a href="https://blog.popey.com/2024/02/exodus-bitcoin-wallet-490k-swindle/" rel="noopener nofollow ugc">losing the equivalent of $490,000</a> after plugging in cryptocurrency recovery data into a malicious Exodus Wallet snap. This particular incident underscores the fact that sandboxing apps isn’t really enough, apps can still be malicious without having to break out of a sandbox at all. <a href="https://blog.popey.com/2024/03/exodus-wallet-part-three/" rel="noopener nofollow ugc">This same kind of attack happened on the Snap Store multiple times.</a> This is why getting apps from a trusted repository is a good idea.</li>
+</ul>
+</li>
+</ul>
+<p>What we really want is some sort of virtual machine that is integrated with the host <em>enough</em> to allow apps in the VM to feel native or close to native, but sufficiently walled off so that applications cannot do damage to the host system or escape the VM. This would allow running “user applications” in a very tight yet highly compatible sandbox, and would allow pulling those applications from trusted repositories like the Debian repos. It would also allow users to install applications without having to boot into a sysmaint session.</p>
+<p>Chrome OS has something similar to this with <a href="https://chromeos.dev/en/linux" rel="noopener nofollow ugc">Crostini</a>, and Windows has something similar to this with <a href="https://learn.microsoft.com/en-us/windows/wsl/tutorials/gui-apps" rel="noopener nofollow ugc">WSLg</a>. Something with a vaguely similar user experience would likely be acceptable, especially if an “app store” frontend of some sort was available so the user didn’t have to use a terminal to install sandboxed applications.</p>
+            <p><small>36 posts - 7 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120</link>
+          <pubDate>Wed, 02 Jul 2025 03:21:55 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1120</guid>
+          <source url="https://forums.kicksecure.com/t/separate-some-user-applications-from-the-operating-system/1120.rss">Separate (some) user applications from the operating system</source>
+        </item>
+        <item>
+          <title>Wayland only or Noland</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>There shouldnt be x11/xorg nor xwayland, either wayland or no land.</p>
+<p>Otherwise we gonna face the loop of legacy and <a href="https://www.gamingonlinux.com/2025/06/multiple-security-issues-in-the-x-org-x-server-and-xwayland-disclosed-new-versions-released/">unwanted vulnerabilities</a>.</p>
+            <p><small>11 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/wayland-only-or-noland/1170">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/wayland-only-or-noland/1170</link>
+          <pubDate>Thu, 24 Jul 2025 18:41:05 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1170</guid>
+          <source url="https://forums.kicksecure.com/t/wayland-only-or-noland/1170.rss">Wayland only or Noland</source>
+        </item>
+        <item>
+          <title>Harden GRUB bootloader using bootloader password</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>It does not help too much. Documented already. But for completeness sake, first step might be documenting how to configure a <a href="https://www.kicksecure.com/wiki/Protection_Against_Physical_Attacks#Bootloader_Password">Bootloader Password</a>.</p>
+<p>Second step might be development of a tool which simplifies adding a bootloader password.</p>
+<p>There is <code>grub2-setpassword</code> but unavailable in Debian.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.gnu.org/software/grub/manual/grub/html_node/Authentication-and-authorisation.html">
+  <header class="source">
+
+      <a href="https://www.gnu.org/software/grub/manual/grub/html_node/Authentication-and-authorisation.html" target="_blank" rel="noopener">gnu.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.gnu.org/software/grub/manual/grub/html_node/Authentication-and-authorisation.html" target="_blank" rel="noopener">GNU GRUB Manual 2.12: Authentication and authorisation</a></h3>
+
+  <p>GNU GRUB Manual 2.12: Authentication and authorisation</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>14 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723</link>
+          <pubDate>Fri, 22 Nov 2024 16:48:20 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-723</guid>
+          <source url="https://forums.kicksecure.com/t/harden-grub-bootloader-using-bootloader-password/723.rss">Harden GRUB bootloader using bootloader password</source>
+        </item>
+        <item>
+          <title>Emergency key press shutdown sequence</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-doesnt-trigger-a-shutdown/994" class="inline-onebox">Unplugging external drive should trigger a shutdown</a> → this will be implemented soon: Removal of boot device will result in emergency shutdown. This will become available in Kicksecure 18 most likely.</p>
+<p>As an additional feature, at the same time, we can provide an emergency key combination. Once pressed, a force shutdown sequence can be triggered.</p>
+<p>We’re wondering about which key combination to use for that?</p>
+<p><strong>Ctrl+Alt+Del</strong> (sometimes called the “<a href="https://en.wikipedia.org/wiki/Control-Alt-Delete">three-finger salute</a>”): May not be the most suitable. Different plans for this: <a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197" class="inline-onebox">Ctrl+Alt+Del (three-finger salute) action</a></p>
+<p>Potential choices:</p>
+<ul>
+<li><strong>Ctrl+Shift+Esc</strong></li>
+<li><strong>Ctrl+Alt+Esc</strong></li>
+<li><strong>Ctrl+Alt+Backspace</strong></li>
+</ul>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/emergency-key-press-shutdown-sequence/1199">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/emergency-key-press-shutdown-sequence/1199</link>
+          <pubDate>Tue, 05 Aug 2025 10:22:46 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1199</guid>
+          <source url="https://forums.kicksecure.com/t/emergency-key-press-shutdown-sequence/1199.rss">Emergency key press shutdown sequence</source>
+        </item>
+        <item>
+          <title>No UTC/Etc timezone from calamares installer</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/69032d4090c233c68f7c2beaa4ce1991481d853e.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/69032d4090c233c68f7c2beaa4ce1991481d853e" title="UTC"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg" alt="UTC" data-base62-sha1="eYYWjCqg28hHhDvIzW7vSetXur4" width="436" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_436x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_654x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/69032d4090c233c68f7c2beaa4ce1991481d853e_2_872x1000.jpeg 2x" data-dominant-color="7C87D3"></a></div><p></p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357</link>
+          <pubDate>Sat, 08 Nov 2025 21:53:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1357</guid>
+          <source url="https://forums.kicksecure.com/t/no-utc-etc-timezone-from-calamares-installer/1357.rss">No UTC/Etc timezone from calamares installer</source>
+        </item>
+        <item>
+          <title>Add a “Privacy Settings” Section to Kicksecure’s System‑Maintenance Panel</title>
+          <dc:creator><![CDATA[exfil]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Kicksecure’s primary focus is rock solid security out of the box, and its close ties to Whonix and the wider privacy community are impossible to ignore. In practice, today’s Kicksecure installation feels much like a Whonix workstation acting as the host, with a handful of extra hardening tweaks.</p>
+<p>Because many Kicksecure users (myself included) come from Whonix or other privacy centric ecosystems communities, a consolidated Privacy panel would be a welcome addition. It would give privacy focused users a single place to fine tune their system after install (post install), while preserving the <em>security first</em> and user choice philosophy that defines Kicksecure. This would help point users that ask repeated questions “about why is xyz privacy feature or setting not in Kicksecure” to go there to enable them if they need them.</p>
+<p>Most mainstream distributions ship a “Privacy” section in settings in their DE, but those menus rarely expose the full set of controls that power users expect. Adding a dedicated privacy section to the sysmaint‑panel would let users adjust these options on demand, without enabling them by default. This also benefits anyone who runs Kicksecure as the host OS and then layers Whonix (or another VM) on top via VirtualBox or KVM.</p>
+<p>Below is idea for each item could be presented as a simple checkbox (or switch) that toggles the corresponding setting:</p>
+<pre><code class="lang-auto">[ ] Set the system timezone to UTC
+[ ] Enable/Disabe Boot Clock Randomization
+[ ] Fully Disable Bluetooth
+[ ] Enable/Disable MAC address spoofing
+[ ] Disable sending hostname with DHCP requests (reduces some fingerprintability when combined with mac spoofing)
+[ ] Activate/Deactivate IPv6 Privacy Extensions
+[ ] Check if GeoClue is removed and install dummy dependencies
+</code></pre>
+<p>What are your thoughts on this? Would is blur the line between Kicksecure and Whonix too much or would it be a nice addition?</p>
+            <p><small>6 posts - 5 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490</link>
+          <pubDate>Sat, 10 Jan 2026 17:25:30 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1490</guid>
+          <source url="https://forums.kicksecure.com/t/add-a-privacy-settings-section-to-kicksecure-s-system-maintenance-panel/1490.rss">Add a “Privacy Settings” Section to Kicksecure’s System‑Maintenance Panel</source>
+        </item>
+        <item>
+          <title>Unplugging external drive should trigger a shutdown</title>
+          <dc:creator><![CDATA[NTH9R6]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Hello Kicksecure folks,</p>
+<p>I installed Debian on my brand new Western Digital external SSD drive. Then I proceeded to distro morph it following the guide (prob should have went with the ISO route) and everything works as intended.</p>
+<p>However when I unplug my SSD or it comes unplugged somehow (has happened before) it doesn’t trigger a full shutdown?</p>
+<p>Why doesn’t it fully shutdown when unplugged?<br>
+I do want to add that also set up LUKS when I installed Debian.</p>
+<p>Do I need to create a udev rule that runs a shutdown script (unmount, cryptsetup luksClose, and sync)?</p>
+            <p><small>34 posts - 7 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994</link>
+          <pubDate>Wed, 09 Apr 2025 10:04:28 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-994</guid>
+          <source url="https://forums.kicksecure.com/t/unplugging-external-drive-should-trigger-a-shutdown/994.rss">Unplugging external drive should trigger a shutdown</source>
+        </item>
+        <item>
+          <title>Use Btrfs as the default journaling file system</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Btrfs provide easy roll back snapshots compatible with timeshift or snapper.</p>
+<p>Good explanation about it:</p>
+<p><a href="https://www.youtube.com/watch?v=J2QP4onqJKI">BTRFS Guide | The Best Desktop File System</a></p>
+
+<p>Atm it needs some manual work to make btrfs, good explanation can be found here:</p>
+<aside class="onebox githubrepo" data-onebox-src="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks">
+  <header class="source">
+
+      <a href="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row" data-github-private-repo="false">
+  <img width="690" height="344" src="https://opengraph.githubassets.com/11efe0685f78d2cfb3622cf41fb7f1fb/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" class="thumbnail">
+
+  <h3><a href="https://github.com/david-cortes/snapper-in-debian-guide?tab=readme-ov-file#debian-with-automated-snapper-rollbacks" target="_blank" rel="noopener">GitHub - david-cortes/snapper-in-debian-guide: Step-by-step guide for configuring Debian with...</a></h3>
+
+    <p><span class="github-repo-description">Step-by-step guide for configuring Debian with automated BTRFS snapshots and rollbacks from the boot menu</span></p>
+</div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Many suggest to not use swap since you are on SSD e.g:</p>
+<p><a href="https://www.youtube.com/watch?v=MoWApyUb5w8&amp;t=404">Debian 12 Bookworm Minimal Install w/BTRFS</a></p>
+
+<p><a href="https://www.youtube.com/watch?v=b4vTKg-qW_0&amp;t=260">Debian 12: Fighting with OpenSUSE Snapper!</a></p>
+
+<p>(Suggest to use <a href="https://en.wikipedia.org/wiki/Zram">zRAM</a> instead, known to be even faster).</p>
+            <p><small>19 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626</link>
+          <pubDate>Sat, 19 Oct 2024 18:42:58 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-626</guid>
+          <source url="https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626.rss">Use Btrfs as the default journaling file system</source>
+        </item>
+        <item>
+          <title>Onionize The Repositories</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Will harden the avoidance of targeted attack (<a href="https://www.kicksecure.com/wiki/Onionizing_Repositories#Introduction">explained here</a>).</p>
+            <p><small>4 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/onionize-the-repositories/1181">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/onionize-the-repositories/1181</link>
+          <pubDate>Fri, 25 Jul 2025 21:06:40 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1181</guid>
+          <source url="https://forums.kicksecure.com/t/onionize-the-repositories/1181.rss">Onionize The Repositories</source>
+        </item>
+        <item>
+          <title>Systemd Service Hardening?</title>
+          <dc:creator><![CDATA[goose4]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>So I was learning about the options for Systemd services for restricting or in another word “hardening” services.</p>
+<p>This made me question does Kicksecure deploy certain hardening for it’s services or certain Kicksecure specific services?</p>
+<p>These are some interesting options I will note here:</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateNetwork=" rel="noopener nofollow ugc"><code>PrivateNetwork=yes/no</code></a><br>
+Gives the service its own network namespace. It can’t see or use the host’s network interfaces unless you explicitly bind sockets. Seems useful to prevent leaks or prevent services from being ran without networking?</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivatePIDs=" rel="noopener nofollow ugc"><code>PrivatePIDs=yes/no</code></a><br>
+Gives a service an isolated view of the process table, which is a useful “defense in depth” measure, especially for daemons that don’t need to inspect or manage other system processes.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#PrivateTmp=" rel="noopener nofollow ugc"><code>PrivateTmp=yes/no</code></a><br>
+Provides a private /tmp and /var/tmp for the service, isolating it from the host’s temporary directories. One service can’t read temporary files left by another service, which mitigates attacks that rely on guessing or stealing temp‑file names.</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#MemoryDenyWriteExecute=" rel="noopener nofollow ugc"><code>MemoryDenyWriteExecute=yes/no</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service. (helps mitigate code‑injection attacks).</p>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/systemd.exec.html#ProtectSystem=" rel="noopener nofollow ugc"><code>ProtectSystem=full/strict/yes</code></a><br>
+Remounts parts of the filesystem read‑only (or makes the whole tree read‑only) for the service.</p>
+<p>There is many others but these few caught my eye.</p>
+            <p><small>13 posts - 4 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/systemd-service-hardening/1258">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/systemd-service-hardening/1258</link>
+          <pubDate>Tue, 26 Aug 2025 01:47:58 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1258</guid>
+          <source url="https://forums.kicksecure.com/t/systemd-service-hardening/1258.rss">Systemd Service Hardening?</source>
+        </item>
+        <item>
+          <title>Meta Packages: Kicksecure Desktop versus Kicksecure Server</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><a href="https://github.com/Kicksecure/kicksecure-meta-packages" class="inline-onebox">GitHub - Kicksecure/kicksecure-meta-packages</a> needs improvements:</p>
+<ul>
+<li><code>kicksecure-cli</code> - keep existing package as is</li>
+<li><code>kicksecure-cli-server</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code>
+<ul>
+<li>includes firewall that by default opens port 22 (SSH’s default port)</li>
+</ul>
+</li>
+<li>security-misc-server [no MAC address randomization]</li>
+</ul>
+</li>
+<li><code>kicksecure-cli-desktop</code> - new package to be added to kicksecure-meta-packages
+<ul>
+<li><code>Depends: kicksecure-desktop-firewall</code> - new package to be created
+<ul>
+<li>Comes with all ports closed by default.</li>
+</ul>
+</li>
+<li><code>Depends: security-misc-desktop</code> - new package to be created
+<ul>
+<li>Might come with MAC address randomization. → <a href="https://github.com/Kicksecure/security-misc/issues/184">ticket</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>kicksecure-xfce</code> - keep existing package as is</li>
+<li><code>kicksecure-xfce-server</code> [Will not be created.]</li>
+<li><code>kicksecure-xfce-desktop</code> - new package to be created
+<ul>
+<li><code>Depends: kicksecure-cli-desktop</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<p>related:</p>
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Debian_Packages" class="inline-onebox">Debian Packages - Kicksecure</a></li>
+<li><a href="https://github.com/Kicksecure/security-misc/issues/187" class="inline-onebox">Split the `security-misc` into `security-misc-shared`, `security-misc-desktop` and `security-misc-server` · Issue #187 · Kicksecure/security-misc · GitHub</a></li>
+<li><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378" class="inline-onebox">Kicksecure Firewall</a></li>
+</ul>
+            <p><small>4 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415</link>
+          <pubDate>Mon, 18 Mar 2024 13:23:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-415</guid>
+          <source url="https://forums.kicksecure.com/t/meta-packages-kicksecure-desktop-versus-kicksecure-server/415.rss">Meta Packages: Kicksecure Desktop versus Kicksecure Server</source>
+        </item>
+        <item>
+          <title>Rollback to older version (if available)</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>We can also support App-per-VM rollback, or install older version directly, if these (old) packages already exists in the repository (in case we gonna use something similar to nix or arch).</p>
+<p>This approach doesn’t conflict with the core philosophy of keep it updated, as the primary focus remains on using updated software, not rollbacks.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/rollback-to-older-version-if-available/1178">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/rollback-to-older-version-if-available/1178</link>
+          <pubDate>Thu, 24 Jul 2025 19:56:28 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1178</guid>
+          <source url="https://forums.kicksecure.com/t/rollback-to-older-version-if-available/1178.rss">Rollback to older version (if available)</source>
+        </item>
+        <item>
+          <title>Protecting the Kernel Command Line</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>new wiki chapter:<br>
+<a href="https://www.kicksecure.com/wiki/Verified_Boot#Protecting_the_Kernel_Command_Line">Protecting the Kernel Command Line</a></p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/protecting-the-kernel-command-line/1251">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/protecting-the-kernel-command-line/1251</link>
+          <pubDate>Mon, 25 Aug 2025 14:31:35 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1251</guid>
+          <source url="https://forums.kicksecure.com/t/protecting-the-kernel-command-line/1251.rss">Protecting the Kernel Command Line</source>
+        </item>
+        <item>
+          <title>Kicksecure Firewall</title>
+          <dc:creator><![CDATA[SteveK1978]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>What is the Firewall comes with Kicksecure on CLI? <code>ufw</code> was not included anywhere in any metapackage.</p>
+            <p><small>16 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-firewall/378">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-firewall/378</link>
+          <pubDate>Thu, 15 Feb 2024 19:42:04 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-378</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-firewall/378.rss">Kicksecure Firewall</source>
+        </item>
+        <item>
+          <title>Ctrl+Alt+Del (three-finger salute) action</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p><strong>Ctrl+Alt+Del</strong> (sometimes called the “<a href="https://en.wikipedia.org/wiki/Control-Alt-Delete">three-finger salute</a>”):</p>
+<p>On Windows, the three-finger does something useful. Noways, shows a menu:</p>
+<ul>
+<li>Lock</li>
+<li>Switch user</li>
+<li>Sign out</li>
+<li>Change a password</li>
+<li>Task manager</li>
+<li>Cancel</li>
+</ul>
+<p>On Qubes, simply activates the screen lock.</p>
+<p>On Kicksecure, we could also provide similar options such as:</p>
+<ul>
+<li>Task manager</li>
+<li>Lock</li>
+<li>Regular shutdown</li>
+<li>Emergency shutdown</li>
+</ul>
+            <p><small>10 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197</link>
+          <pubDate>Tue, 05 Aug 2025 08:57:51 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1197</guid>
+          <source url="https://forums.kicksecure.com/t/ctrl-alt-del-three-finger-salute-action/1197.rss">Ctrl+Alt+Del (three-finger salute) action</source>
+        </item>
+        <item>
+          <title>Nested Virtualization Support</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>This feature will be the responsibility of the hypervisor provider like seL4 team or KVM or Xen…etc, whether they implement it correctly and securely or not. It’s particularly relevant in scenarios involving running an OS + VM inside another VM, or using a virtualizer/hypervisor within a VM (e.g. VirtualBox-in-VM).</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/nested-virtualization-support/1183">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/nested-virtualization-support/1183</link>
+          <pubDate>Fri, 25 Jul 2025 21:12:29 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1183</guid>
+          <source url="https://forums.kicksecure.com/t/nested-virtualization-support/1183.rss">Nested Virtualization Support</source>
+        </item>
+        <item>
+          <title>Systemcheck: add file permissions audit</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>How to check if all files in Debian are installed with the correct permissions? For example, consider a case where a command was accidentally run, such as:</p>
+<pre><code>sudo chmod -x /usr/libexec/package-name/script-name
+</code></pre>
+<p>Tools like <code>dpkg --audit</code>, <code>debsums</code>, <code>dpkg --verify</code> do not detect this kind of issue.</p>
+<p>Which tool can verify file permissions against the expected values from the package?</p>
+<hr>
+<p>Background of this question: <a href="https://forums.whonix.org/t/leaprun-executable-cannot-be-found-cannot-use-privleap/21949" class="inline-onebox">Leaprun executable cannot be found. Cannot use privleap - Support - Whonix Forum</a></p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/systemcheck-add-file-permissions-audit/1184">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/systemcheck-add-file-permissions-audit/1184</link>
+          <pubDate>Sat, 26 Jul 2025 05:31:34 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1184</guid>
+          <source url="https://forums.kicksecure.com/t/systemcheck-add-file-permissions-audit/1184.rss">Systemcheck: add file permissions audit</source>
+        </item>
+        <item>
+          <title>Offline/No Internet Accessible for System Base/Core</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Similar to Qubes OS, the system core/base should not be connected to the internet (essential for security purposes).</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/offline-no-internet-accessible-for-system-base-core/1176">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/offline-no-internet-accessible-for-system-base-core/1176</link>
+          <pubDate>Thu, 24 Jul 2025 19:39:22 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1176</guid>
+          <source url="https://forums.kicksecure.com/t/offline-no-internet-accessible-for-system-base-core/1176.rss">Offline/No Internet Accessible for System Base/Core</source>
+        </item>
+        <item>
+          <title>Bootstrappability Builds</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>It should be ideally possible to build up your OS from source code. I think this is can be possible, if the OS will be by default with minimal core packages (system level). More info:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/bootstrappable_builds">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1753349424" class="site-icon" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/bootstrappable_builds" target="_blank" rel="noopener" title="01:59PM - 18 May 2025">Kicksecure – 18 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/bootstrappable_builds" target="_blank" rel="noopener">Dev/bootstrappable builds</a></h3>
+
+  <p>Overview of bootstrappability challenges in Linux distributions</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/bootstrappability-builds/1169">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/bootstrappability-builds/1169</link>
+          <pubDate>Thu, 24 Jul 2025 18:37:32 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1169</guid>
+          <source url="https://forums.kicksecure.com/t/bootstrappability-builds/1169.rss">Bootstrappability Builds</source>
+        </item>
+        <item>
+          <title>For Apps Persmission: Default Block All</title>
+          <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>By default, when any app is installed in the VM, nothing is allowed automatically. Every permission including internet access must be explicitly granted by the user. This approach prevents any unwanted permissions from being applied silently without the user’s notice or consent.</p>
+<p>Inspiration for a graphical permission gears:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://flathub.org/apps/com.github.tchx84.Flatseal">
+  <header class="source">
+      <img src="https://flathub.org/favicon.svg" class="site-icon" width="16" height="16">
+
+      <a href="https://flathub.org/apps/com.github.tchx84.Flatseal" target="_blank" rel="noopener">Flathub - Apps for Linux</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/360;"><img src="https://flathub.org/api/appOgImage/com.github.tchx84.Flatseal?locale=en" class="thumbnail" width="690" height="361"></div>
+
+<h3><a href="https://flathub.org/apps/com.github.tchx84.Flatseal" target="_blank" rel="noopener">Install Flatseal on Linux | Flathub</a></h3>
+
+  <p>Manage Flatpak permissions</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/for-apps-persmission-default-block-all/1165">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/for-apps-persmission-default-block-all/1165</link>
+          <pubDate>Thu, 24 Jul 2025 16:27:32 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1165</guid>
+          <source url="https://forums.kicksecure.com/t/for-apps-persmission-default-block-all/1165.rss">For Apps Persmission: Default Block All</source>
+        </item>
+        <item>
+          <title>Investigate security (SUID) impact of polkitd and policykit libraries</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Todo: research</p>
+<p>We still have SUID (alike) functionality due to the following packages / libraries?</p>
+<ul>
+<li><code>polkitd</code></li>
+<li><code>libpolkit-agent-1-0</code></li>
+<li><code>libpolkit-gobject-1-0</code></li>
+</ul>
+<p>Potential consumers:</p>
+<ul>
+<li><code>udisksd</code></li>
+<li><code>accounts-daemon</code></li>
+</ul>
+<p>context: <a href="https://www.kicksecure.com/wiki/SUID_Disabler_and_Permission_Hardener" class="inline-onebox">SUID Disabler and Permission Hardener</a></p>
+<p>Originally brought up by <a href="https://www.reddit.com/user/Hizonner/">Hizonner</a> on <a href="https://www.reddit.com/r/Whonix/comments/1ktc1nb/comment/mvrnj3e/">https://www.reddit.com/r/Whonix/comments/1ktc1nb/comment/mvrnj3e/</a></p>
+            <p><small>4 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075</link>
+          <pubDate>Tue, 03 Jun 2025 19:03:31 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1075</guid>
+          <source url="https://forums.kicksecure.com/t/investigate-security-suid-impact-of-polkitd-and-policykit-libraries/1075.rss">Investigate security (SUID) impact of polkitd and policykit libraries</source>
+        </item>
+        <item>
+          <title>Onion APT repositories connection timeouts solution?</title>
+          <dc:creator><![CDATA[anon92632958]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Tor onion APT repositories can sometimes fail when updating. This can can happen due to the slowness of generated onion circuits or having a custom <code>/etc/tor/torrc</code> can cause them to timeout when updating.</p>
+<p>In fact the Tails project since 6.4 removed the onion Debian repositories</p>
+<blockquote>
+<p>Switch to using HTTPS addresses instead of an onion addresses for the Debian and Tails APT repositories. This makes the Additional Software feature more reliable.</p>
+<blockquote>
+<p><a href="https://tails.net/news/version_6.4/index.en.html" class="inline-onebox" rel="noopener nofollow ugc">Tails - Tails 6.4</a></p>
+</blockquote>
+</blockquote>
+<p>I created a config <code>/etc/apt/apt.conf.d/99timeout</code></p>
+<p>(15 seconds till timeout, 5 seconds till retry, and retries 3 times.)</p>
+<pre><code class="lang-auto">Acquire::http::Timeout "15";
+Acquire::http::Retry-After "5";
+Acquire::Retries "3";
+</code></pre>
+<p>I’m not sure how the integration tor and APT works but this would only effect http repos which also are what onions are.</p>
+<p>This configuration seemed to work for me but I’m not sure if this fix is placebo?</p>
+<p>In closing I don’t think Kicksecure should follow the same route of removing Onion repositories or Onion Debian repositories as thats one thing i strongly disagree with choice of the other project.</p>
+            <p><small>1 post - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900</link>
+          <pubDate>Mon, 20 Jan 2025 05:13:21 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-900</guid>
+          <source url="https://forums.kicksecure.com/t/onion-apt-repositories-connection-timeouts-solution/900.rss">Onion APT repositories connection timeouts solution?</source>
+        </item>
+        <item>
+          <title>ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>Does not have any known bad effects but is an optical issue that many users will report, therefore needs to be fixed.</p>
+<pre><code class="lang-auto">Mar 12 12:51:24 localhost systemd[1]: run-initramfs-squashfs.mount: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Mounting sysroot.mount - /sysroot...
+Mar 12 12:51:24 localhost mount[545]: mount: /sysroot: special device LiveOS_rootfs does not exist.
+Mar 12 12:51:24 localhost mount[545]:        dmesg(1) may have more information after failed mount system call.
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Mount process exited, code=exited, status=32/n/a
+Mar 12 12:51:24 localhost systemd[1]: sysroot.mount: Failed with result 'exit-code'.
+Mar 12 12:51:24 localhost systemd[1]: Failed to mount sysroot.mount - /sysroot.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-root-fs.target - Initrd Root File System.
+Mar 12 12:51:24 localhost systemd[1]: Starting initrd-parse-etc.service - Mountpoints Configured in the Real Root...
+Mar 12 12:51:24 localhost kernel: overlayfs: failed to resolve '/run/overlayfs': -2
+Mar 12 12:51:24 localhost systemd[1]: initrd-parse-etc.service: Deactivated successfully.
+Mar 12 12:51:24 localhost systemd[1]: Finished initrd-parse-etc.service - Mountpoints Configured in the Real Root.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd-fs.target - Initrd File Systems.
+Mar 12 12:51:24 localhost systemd[1]: Reached target initrd.target - Initrd Default Target.
+</code></pre>
+            <p><small>7 posts - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418</link>
+          <pubDate>Mon, 18 Mar 2024 13:50:50 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-418</guid>
+          <source url="https://forums.kicksecure.com/t/iso-error-message-during-boot-mount-sysroot-special-device-liveos-rootfs-does-not-exist/418.rss">ISO error message during boot: mount: /sysroot: special device LiveOS_rootfs does not exist</source>
+        </item>
+        <item>
+          <title>ISO - cryptsetup Full Disk Encryption (FDE) - set more secure default encryption settings</title>
+          <dc:creator><![CDATA[Patrick]]></dc:creator>
+          <category>Development</category>
+          <description><![CDATA[
+            <p>cryptsetup defaults:</p>
+<pre><code>cryptsetup --help
+</code></pre>
+<blockquote>
+<pre><code class="lang-auto">Default compiled-in device cipher parameters:
+        loop-AES: aes, Key 256 bits
+        plain: aes-cbc-essiv:sha256, Key: 256 bits, Password hashing: ripemd160
+        LUKS: aes-xts-plain64, Key: 256 bits, LUKS header hashing: sha256, RNG: /dev/urandom
+        LUKS: Default keysize with XTS mode (two internal keys) will be doubled.
+</code></pre>
+</blockquote>
+<hr>
+<p>More secure command currently documented on <a href="https://www.kicksecure.com/wiki/Full_Disk_Encryption:">https://www.kicksecure.com/wiki/Full_Disk_Encryption:</a></p>
+<blockquote>
+<p>sudo cryptsetup --verbose --use-random --cipher aes-xts-plain64 --key-size 512 --hash sha512 --use-random luksFormat </p>
+</blockquote>
+<hr>
+<p>Differences - cryptsetup default versus hardened cryptsetup command line options:</p>
+<p>TODO</p>
+<hr>
+<p>Calamare (ISO installer used by Kicksecure) uses cryptsetup default settings.</p>
+<p>Upstream issue, discussion:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/calamares/calamares/issues/1452">
+  <header class="source">
+
+      <a href="https://github.com/calamares/calamares/issues/1452" target="_blank" rel="noopener">github.com/calamares/calamares</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/calamares/calamares/issues/1452" target="_blank" rel="noopener">What algorithm the "Encrypt system" is using, and where are the configuration options?</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2020-07-03" data-time="09:46:56" data-timezone="UTC">09:46AM - 03 Jul 20 UTC</span>
+      </div>
+
+        <div class="date">
+          closed <span class="discourse-local-date" data-format="ll" data-date="2022-09-13" data-time="17:47:57" data-timezone="UTC">05:47PM - 13 Sep 22 UTC</span>
+        </div>
+
+      <div class="user">
+        <a href="https://github.com/informer2016" target="_blank" rel="noopener">
+          <img alt="informer2016" src="https://avatars.githubusercontent.com/u/26509528?v=4" class="onebox-avatar-inline" width="20" height="20">
+          informer2016
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">Is there any possibility to choose the custom LUKS cryptsetup strong encryption <span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">flags in a Calamares installer, like ```--verbose --type luks1 --cipher serpent-xts-plain64 --key-size 512 --hash whirlpool --iter-time 10000 --use-random --verify-passphrase luksFormat /dev/sdX2``` mentioned in this thread? [**Artix Linux** _(great Arch with OpenRC or runit/s6 instead of SystemD)_ - **Full Disk Encryption for a new install**](https://forum.artixlinux.org/index.php/topic,1541.0.html)
+Because, going through these lengthy manuals is time consuming and a bit intimidating for the new users, who would like a **much stronger encryption at cost of some performance.**
+
+Right now, Calamares just gives a **[ ] Encrypt system**, without any custom options or even a description of used encryption method!
+
+Would be nice if there'd be some button which **gives you a list of available encryption methods &amp; options** : i.e. I had to figure out why a usual "serpent-xts" cryptsetup option didn't work in this time - now it seems to require something like -plain64 at the end</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox discoursetopic" data-onebox-src="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764">
+  <header class="source">
+      <img src="https://discuss-cdn.kde.org/uploads/default/optimized/1X/599b31392e96cf986f7dfc9140ad79978ad02f01_2_32x32.png" class="site-icon" width="32" height="32">
+
+      <a href="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764" target="_blank" rel="noopener" title="01:03AM - 26 September 2024">KDE Discuss – 26 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/391;"><img src="https://discuss-cdn.kde.org/uploads/default/original/1X/a25519d8b97012edf525491aaa53b6cd59c4fc09.png" class="thumbnail" width="690" height="391"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://discuss.kde.org/t/making-libkpmcores-luks2-settings-more-secure/21764" target="_blank" rel="noopener">Making libkpmcore's LUKS2 settings more secure</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #652D90;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+    <div class="topic-header-extra">
+      <div class="list-tags">
+        <div class="discourse-tags">
+          <svg class="fa d-icon d-icon-tag svg-icon svg-string"><use href="#tag"></use></svg>
+            <span class="discourse-tag simple">partitionmanager</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <p>libkpmcore is capable of making LUKS2 encrypted volumes. This is done ultimately by calling cryptsetup with some hardcoded arguments that should provide reasonably secure disk encryption settings.  There are a few things that are non-ideal here:  ...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Dev todo:<br>
+<a href="https://www.kicksecure.com/wiki/Dev/todo#ISO_-_calamares_encryption_settings">ISO - calamares encryption settings</a></p>
+            <p><small>3 posts - 1 participant</small></p>
+            <p><a href="https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588</link>
+          <pubDate>Mon, 30 Sep 2024 08:45:33 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-588</guid>
+          <source url="https://forums.kicksecure.com/t/iso-cryptsetup-full-disk-encryption-fde-set-more-secure-default-encryption-settings/588.rss">ISO - cryptsetup Full Disk Encryption (FDE) - set more secure default encryption settings</source>
+        </item>
+  </channel>
+</rss>

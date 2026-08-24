@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816</link>
+    <description>Hello,
+
+I am running a freshly morphed Kicksecure system on my PC with the LXQt desktop environment and a dedicated Nvidia GPU (RTX 3060 12GB).
+
+I am facing a persistent issue where the display manager fails to start upon every boot, dropping me into a TTY login loop.
+
+System Configuration:
+
+OS: Debian Morphing process bare-metal
+Desktop Environment: LXQt withgreetd + wlgreet stack as mentioned in the docs
+Driver: Proprietary Nvidia driver installed and loaded. Unfortunately I need that fir running AI.
+Monitor Connection: Exclusively connected to the Nvidia GPU port.
+
+What I have tried so far:
+
+Commented out the auth optional pam_exec.so... pam-info line in /etc/pam.d/common-auth. Ran sudo faillock --user \_greetd --reset to clear any lockouts.
+
+Since Kicksecure uses dracut on this setup, I forced Early KMS by creating /etc/dracut.conf.d/nvidia.conf with force_drivers+=&quot; nvidia nvidia_modeset nvidia_uvm nvidia_drm &quot;
+Added options nvidia_drm modeset=1 fbdev=0 and options nvidia NVreg_EnableGpuFirmware=0 into /etc/modprobe.d/.
+
+Regenerated the initramfs via sudo dracut -f --regenerate-all.
+
+Both parameters verified active (modeset returns Y, EnableGpuFirmware returns 0).
+
+Noticed that RADS was skipping greetd startup. I added rads_block_display_manager_startup=0 to /etc/rads.d/50_user.conf
+
+I cannot use my monitors (2 monitors with displayport) with my card, always looping in tty.
+I got an old monitor from my garage so I could use my integrated graphics, just a bit frustated.
+
+Could you please advise on what the proper, hardened way is to make Kicksecure  (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors? Thanks a lot.</description>
+    
+    <lastBuildDate>Tue, 04 Aug 2026 23:15:15 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Hmm, that looks a bit like perhaps the drivers weren’t built by DKMS for the version of the kernel you currently have booted. Try fully updating the system, then remove all NVIDIA-related packages. Reboot the system, ensure you are booted into the latest installed kernel, and then install the <code>nvidia-driver-full</code> package. Reboot again once that’s done and see if that resolves the issue.</p>
+<p>Also, do you have Secure Boot enabled by any chance? That <em>might</em> cause DKMS to not build drivers. If that’s the case, you may want to disable Secure Boot before taking the above steps. Or alternately, run <code>sudo shim-manage-mok --enroll</code> in a sysmaint terminal and follow the on-screen instructions; that will allow you to use third-party drivers with Secure Boot enabled.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/4</link>
+        <pubDate>Tue, 04 Aug 2026 23:15:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1816-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss">Kicksecure (Debian Morph) - Display Manager loops to TTY</source>
+      </item>
+      <item>
+        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+        <dc:creator><![CDATA[halivatar]]></dc:creator>
+        <description><![CDATA[
+            <p>here is everything with ERROR:</p>
+<p>aug 04 17:55:01 USER systemd-modules-load[404]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER systemd-modules-load[316]: Inserted module ‘ppdev’<br>
+aug 04 17:55:01 USER systemd-modules-load[397]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
+aug 04 17:55:01 USER systemd-modules-load[397]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
+aug 04 17:55:01 USER dracut-cmdline[333]: Using kernel command line parameters:  rd.driver.pre=nvidia rd.driver.pre=nvidia_modeset rd.driver.pre=nvidia_uvm rd.driver.pre=nvidia_drm rd.luks.uuid=luks-f32b658f-b8f3-4f3b-b93d-950ee8647a65 rd.lvm.lv=USER-vg/root   rd.lvm.lv=USER-vg/swap_1 root=/dev/mapper/USER–vg-root rootfstype=ext4 rootflags=rw,relatime,errors=remount-ro   BOOT_IMAGE=/vmlinuz-6.12.100+deb13-amd64 root=/dev/mapper/USER–vg-root ro mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on kpti=1 pti=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force kvm-intel.vmentry_l1d_flush=always mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt kvm.mitigate_smt_rsb=1 gather_data_sampling=force reg_file_data_sampling=on indirect_target_selection=force vmscape=force slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 cfi=kcfi ia32_emulation=0 efi_pstore.pstore_disable=1 erst_disable proc_mem.force_override=ptrace bdev_allow_write_mounted=0 amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_cpu=off random.trust_bootloader=off extra_latent_entropy init_on_alloc=1 init_on_free=1 loglevel=0 quiet rd.emergency=halt rd.shell=0<br>
+aug 04 17:55:01 USER systemd[1]: Started systemd-journald.service - Journal Service.<br>
+aug 04 17:55:01 USER systemd-modules-load[316]: Inserted module ‘parport_pc’<br>
+aug 04 17:55:01 USER systemd[1]: Starting systemd-tmpfiles-setup.service - Create System Files and Directories…<br>
+aug 04 17:55:01 USER systemd-modules-load[408]: modprobe: FATAL: Module nvidia-current-modeset not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER systemd-modules-load[392]: modprobe: ERROR: Error running install command 'modprobe nvidia ; modprobe -i nvidia-current-modeset ’ for module nvidia_modeset: retcode 1<br>
+aug 04 17:55:01 USER systemd-modules-load[392]: modprobe: ERROR: could not insert ‘nvidia_modeset’: Invalid argument<br>
+aug 04 17:55:01 USER systemd-modules-load[416]: modprobe: FATAL: Module nvidia-current-drm not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER systemd-modules-load[316]: Error running install command 'modprobe nvidia-modeset ; modprobe -i nvidia-current-drm ’ for module nvidia_drm: retcode 1<br>
+aug 04 17:55:01 USER systemd-modules-load[316]: Failed to insert module ‘nvidia_drm’: Invalid argument<br>
+aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
+aug 04 17:55:01 USER dracut-pre-udev[479]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
+aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: FATAL: Module nvidia-current not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: Error running install command 'modprobe -i nvidia-current ’ for module nvidia: retcode 1<br>
+aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: could not insert ‘nvidia’: Invalid argument<br>
+aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: FATAL: Module nvidia-current-modeset not found in directory /lib/modules/6.12.100+deb13-amd64<br>
+aug 04 17:55:01 USER dracut-pre-udev[484]: modprobe: ERROR: Error running install command 'modprobe nvidia ; modprobe -i nvidia-current-modeset ’ for module nvidia_modeset: retcode 1</p>
+<p>aug 04 17:55:19 USER (udev-worker)[1384]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1<br>
+aug 04 17:55:19 USER (udev-worker)[1392]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1<br>
+aug 04 17:55:19 USER (udev-worker)[1410]: Error running install command ‘/usr/bin/disabled-miscellaneous-by-security-misc’ for module joydev: retcode 1<br>
+aug 04 17:55:19 USER (udev-worker)[1405]: Error running install command ‘/usr/bin/disabled-intelpmt-by-security-misc’ for module pmt_class: retcode 1</p>
+<p>aug 04 17:57:01 USER polkitd[1992]: Error opening rules directory: Error opening directory “/run/polkit-1/rules.d”: No such file or directory (g-file-error-quark, 4)<br>
+aug 04 17:57:01 USER polkitd[1992]: Error opening rules directory: Error opening directory “/usr/local/share/polkit-1/rules.d”: No such file or directory (g-file-error-quark, 4)</p>
+<p>aug 04 17:57:05 USER labwc[2410]: 00:00:00.014 [ERROR] [backend/backend.c:253] Found 0 GPUs, cannot create backend<br>
+aug 04 17:57:05 USER labwc[2410]: 00:00:00.014 [ERROR] [backend/backend.c:428] Failed to open any DRM device<br>
+aug 04 17:57:05 USER labwc[2410]: 00:00:00.015 [ERROR] [../src/server.c:466] unable to create backend</p>
+<p>aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Mapping hdmi-surround71-extra2: snd_pcm_info() failed Permission denied:<br>
+aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Error fetching PCM info: Engedély megtagadva<br>
+aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: Error opening low-level control device ‘hw:1’: No such file or directory<br>
+aug 04 17:57:07 USER wireplumber[2413]: spa.alsa: can’t open control for card hw:1: No such file or directory</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/3</link>
+        <pubDate>Tue, 04 Aug 2026 16:09:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1816-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss">Kicksecure (Debian Morph) - Display Manager loops to TTY</source>
+      </item>
+      <item>
+        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="halivatar" data-post="1" data-topic="1816">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/h/71e660/48.png" class="avatar"> halivatar:</div>
+<blockquote>
+<p>Noticed that RADS was skipping greetd startup.</p>
+</blockquote>
+</aside>
+<p>Could you share the logs that you read when you noticed this? RADS is supposed to not skip display manager startup unless you have very low RAM (which you almost certainly do not if you’re using an RTX 3060).</p>
+<aside class="quote no-group" data-username="halivatar" data-post="1" data-topic="1816">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/h/71e660/48.png" class="avatar"> halivatar:</div>
+<blockquote>
+<p>Could you please advise on what the proper, hardened way is to make Kicksecure (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors?</p>
+</blockquote>
+</aside>
+<p>The proprietary NVIDIA drivers work out of the box with no special configuration on a laptop with an RTX 4070 for me. Something about your setup is likely broken. Reboot the system into sysmaint mode, switch to a TTY if needed (it sounds like you’re dropped to one anyway), then dump the current boot logs using <code>sudo journalctl --boot</code>. Redact any sensitive info in the logs, then share them here.</p>
+<p>(You might consider undoing all of the changes you made in an attempt to fix the issue. None of those changes should usually be necessary, to my awareness. The PAM changes sound especially worrying.)</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/2</link>
+        <pubDate>Tue, 04 Aug 2026 02:12:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1816-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss">Kicksecure (Debian Morph) - Display Manager loops to TTY</source>
+      </item>
+      <item>
+        <title>Kicksecure (Debian Morph) - Display Manager loops to TTY</title>
+        <dc:creator><![CDATA[halivatar]]></dc:creator>
+        <description><![CDATA[
+            <p>Hello,</p>
+<p>I am running a freshly morphed Kicksecure system on my PC with the LXQt desktop environment and a dedicated Nvidia GPU (RTX 3060 12GB).</p>
+<p>I am facing a persistent issue where the display manager fails to start upon every boot, dropping me into a TTY login loop.</p>
+<p>System Configuration:</p>
+<p>OS: Debian Morphing process bare-metal<br>
+Desktop Environment: LXQt withgreetd + wlgreet stack as mentioned in the docs<br>
+Driver: Proprietary Nvidia driver installed and loaded. Unfortunately I need that fir running AI.<br>
+Monitor Connection: Exclusively connected to the Nvidia GPU port.</p>
+<p>What I have tried so far:</p>
+<p>Commented out the auth optional pam_exec.so… pam-info line in /etc/pam.d/common-auth. Ran sudo faillock --user _greetd --reset to clear any lockouts.</p>
+<p>Since Kicksecure uses dracut on this setup, I forced Early KMS by creating /etc/dracut.conf.d/nvidia.conf with force_drivers+=" nvidia nvidia_modeset nvidia_uvm nvidia_drm "<br>
+Added options nvidia_drm modeset=1 fbdev=0 and options nvidia NVreg_EnableGpuFirmware=0 into /etc/modprobe.d/.</p>
+<p>Regenerated the initramfs via sudo dracut -f --regenerate-all.</p>
+<p>Both parameters verified active (modeset returns Y, EnableGpuFirmware returns 0).</p>
+<p>Noticed that RADS was skipping greetd startup. I added rads_block_display_manager_startup=0 to /etc/rads.d/50_user.conf</p>
+<p>I cannot use my monitors (2 monitors with displayport) with my card, always looping in tty.<br>
+I got an old monitor from my garage so I could use my integrated graphics, just a bit frustated.</p>
+<p>Could you please advise on what the proper, hardened way is to make Kicksecure  (LXQt) cooperate with a proprietary Nvidia driver on a morphed bare-metal machine to use my monitors? Thanks a lot.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816/1</link>
+        <pubDate>Tue, 04 Aug 2026 02:03:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1816-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-debian-morph-display-manager-loops-to-tty/1816.rss">Kicksecure (Debian Morph) - Display Manager loops to TTY</source>
+      </item>
+  </channel>
+</rss>
