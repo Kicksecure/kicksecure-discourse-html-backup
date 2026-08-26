@@ -7,6 +7,26 @@
       <item>
         <title>PCI pass through and USB isolation</title>
         <dc:creator><![CDATA[@suse211213]]></dc:creator>
+        <description><![CDATA[ <p>That makes sense. I hadn’t considered using a separate USB controller with VFIO passthrough.</p>
+<p>There are enough USB controllers on the device.</p>
+<p>I’ll consider Qubes later after HW upgrade, as KVM provides better performance on my current HW.</p>
+<p>Thanks for  explanation!</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/pci-pass-through-and-usb-isolation/1837#post_3</link>
+        <pubDate>Tue, 25 Aug 2026 00:39:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5482</guid>
+      </item>
+      <item>
+        <title>PCI pass through and USB isolation</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>The KVM guest requirement is a bit problematic here. Qubes OS is designed to deal with this using its <code>sys-usb</code> system, which is particularly effective if you have a non-USB keyboard and mouse (or have a separate USB controller for the keyboard and mouse vs. everything else).</p>
+<p>If you need to use KVM, you can use the Kicksecure ISO to install Kicksecure into a root KVM virtual machine, then use VFIO passthrough to give a spare USB controller to the guest. Then you can attach the disk to that USB controller and it shouldn’t (to my awareness) be able to do anything to the host. Obviously, that controller will be inaccessible to the host, so if you only have one USB controller, and your mouse and keyboard attach via USB, you will probably (hopefully temporarily) lock yourself out of the host doing this, so proceed with caution.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/pci-pass-through-and-usb-isolation/1837#post_2</link>
+        <pubDate>Mon, 24 Aug 2026 23:34:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5481</guid>
+      </item>
+      <item>
+        <title>PCI pass through and USB isolation</title>
+        <dc:creator><![CDATA[@suse211213]]></dc:creator>
         <description><![CDATA[ <p>Related to</p>
 <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Computer_Security_Introduction#Recommended_workflow_for_unknown_files">
   <header class="source">
@@ -1618,60 +1638,6 @@ I dont see a fallback method if HTTPS fails to resort to HTTP. Maybe setting HTT
         <link>https://forums.kicksecure.com/t/sys-net-as-clockvm-with-sdwdate-in-qubes/1825#post_2</link>
         <pubDate>Sun, 09 Aug 2026 15:46:01 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5423</guid>
-      </item>
-      <item>
-        <title>Sys-net as ClockVM with sdwdate in Qubes</title>
-        <dc:creator><![CDATA[@riffi12]]></dc:creator>
-        <description><![CDATA[ <p>Quote from the documentation (<a href="http://www.w5j6stm77zs6652pgsij4awcjeel3eco7kvipheu6mtr623eyyehj4yd.onion/wiki/Qubes#ClockVM" rel="noopener nofollow ugc">http://www.w5j6stm77zs6652pgsij4awcjeel3eco7kvipheu6mtr623eyyehj4yd.onion/wiki/Qubes#ClockVM</a>):</p>
-<blockquote>
-<p>A ClockVM based on the Kicksecure Template is functional out of the box.<br>
-The only requirement is that the ClockVM uses Kicksecure as its Template. For example, if using Qubes’ default settings, where ClockVM is set to sys-net by default and sys-net has been configured by the user to use the kicksecure-18 Template, then ClockVM will be functional out of the box and use sdwdate for clock synchronization.</p>
-</blockquote>
-<p>My <code>sys-net</code> and <code>sys-firewall</code> VM are both Kicksecure-based. <code>sys-net</code> is my ClockVM. My time is always off though.<br>
-I just took the time to dig into that and noticed that sdwdate isn’t even running in <code>sys-net</code>.</p>
-<p>Service status:</p>
-<blockquote>
-<p>Process: 1460 ExecCondition=/usr/libexec/helper-scripts/has_netvm_on_qubes (code=exited, status=1/FAILURE)</p>
-</blockquote>
-<p>The condition requires the VM to have a NetVM as the name suggests, which is not true for <code>sys-net</code> in a normal default setup, so I think the documentation is not correct.</p>
-<p>How is it supposed to work? What’s the officially recommended way, make <code>sys-firewall</code>  the ClockVM? Thanks</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/sys-net-as-clockvm-with-sdwdate-in-qubes/1825#post_1</link>
-        <pubDate>Sun, 09 Aug 2026 15:30:36 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5422</guid>
-      </item>
-      <item>
-        <title>Not upgrading: kicksecure-baremetal-gui-lxqt</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
-<blockquote>
-<p>I have good reasons to believe it happens to everyone upgrading Kicksecure on bare metal recently.</p>
-</blockquote>
-</aside>
-<p>I have good reasons to believe it isn’t, namely that multiple Whonix users got the upgrade automatically and it broke things a bit due to a staggered update. A package was held back on one upgrade but then allowed through on the next, and the staggered nature of the upgrade managed to dodge installation of newer Guest Additions, but still removed the old ones, thus causing issues. That bug has a fix for it in our Git repos already.</p>
-<aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
-<blockquote>
-<p>To reproduce this issue</p>
-</blockquote>
-</aside>
-<p>Thanks, that looks useful, I’ll likely try that soon.</p>
-<aside class="quote no-group" data-username="eternity" data-post="4" data-topic="1818">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/e/0ea827/48.png" class="avatar"> eternity:</div>
-<blockquote>
-<p>This particular issue is predictable, in the sense that it happens when a new package version <strong>both adds and removes</strong> dependencies compared to a previous version.</p>
-</blockquote>
-</aside>
-<p>I don’t know of any documentation that states that adding and removing dependencies causes apt to hold packages back. Furthermore, it looks like it doesn’t (at least not always) due to the Whonix bug mentioned above.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/not-upgrading-kicksecure-baremetal-gui-lxqt/1818#post_5</link>
-        <pubDate>Sun, 09 Aug 2026 02:07:57 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5421</guid>
       </item>
   </channel>
 </rss>
