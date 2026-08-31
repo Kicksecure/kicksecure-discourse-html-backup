@@ -25,9 +25,80 @@ There are tools that can do a lot of this already (KDE Partition manager for ins
 
 Given that users are resorting to proprietary software for this use case, potentially because they can&#39;t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there&#39;s an existing utility for this, that would be awesome, otherwise I don&#39;t think it would be *that* hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</description>
     
-    <lastBuildDate>Wed, 26 Aug 2026 20:03:24 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 30 Aug 2026 23:02:48 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>SO is a filesystem, not just a filename convention, so your “.iso” file isn’t an ISO file at all</p>
+</blockquote>
+</aside>
+<p>Right but disk burning software from what I have tried wont recognize it as a ISO to burn to the disk based on the filename extension. If it was not .iso or .img regardless if it was a true ISO filesystem, the option to burn as disk image via Brasero wont allow/work.  I’ll have to try mkisofs, but generally I think most burning software relies on the convention first and foremost before checking the filesystem format type.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But yes, the ability to create encrypted container images would be something I would want this tool to have. If such an image can be burned to a disc and just work, awesome.</p>
+</blockquote>
+</aside>
+<p>Indeed, and I would say it did manually <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/8</link>
+        <pubDate>Sun, 30 Aug 2026 23:02:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-8</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Hmm, sounds like you’re burning a filesystem image to the disk, but not an ISO filesystem image. ISO is a filesystem, not just a filename convention, so your “.iso” file isn’t an ISO file at all <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>But yes, the ability to create encrypted container images would be something I would want this tool to have. If such an image can be burned to a disc and just work, awesome.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/7</link>
+        <pubDate>Sun, 30 Aug 2026 22:44:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-7</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p><strong>Yes and maybe no?</strong>…</p>
+<p>I would begin by generating an .iso file using fallocate (though I later switched to /dev/urandom in an attempt to increase entropy). The process then proceeds as follows after generating a file with a .iso extension:</p>
+<pre><code>- Encrypt the file using cryptsetup
+- Open the LUKS container
+- Create a filesystem with mkfs.ext4
+- Mount the container
+- Adjust permissions with chown
+- Transfer files into it (waiting for the process to complete)
+- Close the LUKS container
+</code></pre>
+<p><strong>Burning via Brasero</strong></p>
+<p>I have successfully used two methods:</p>
+<pre><code>- *Burn the container as a file* via a data CD option.
+- *Select "Burn Disk Image"* and write the ISO directly to the disc.
+</code></pre>
+<p>With the first option, the disc does not appear as a mounted volume until you manually open the file. With the second option, inserting the CD/DVD causes the entire disc to be recognized as an encrypted volume.</p>
+<p>This was tested on Kicksecure 17. I have not revisited the process in version 18. Now I also hope &amp; question if disk burning software like Brasero can operate with enuff permissions due to sysmaint change?</p>
+<p>I’ll revist this later this week when I get some time.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/6</link>
+        <pubDate>Sun, 30 Aug 2026 22:40:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-6</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
       <item>
         <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
