@@ -9,9 +9,77 @@ whonix-lxqt-installer-cli
 
 I know I have had it installed maybe a year or so ago but I can&#39;t work out what I have done differently...</description>
     
-    <lastBuildDate>Sat, 29 Aug 2026 00:40:49 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 02 Sep 2026 00:37:36 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Does whonix still run in Kicksecure?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>So it turns out this is a bit of a mess, but thankfully also an easy fix (for now…).</p>
+<ul>
+<li>Linux 6.12 takes control of virtualization features of the CPU even when no KVM virtual machines are running. This prevents VirtualBox VMs from running unless the kernel module option <code>kvm.enable_virt_at_load=0</code> is set. Kicksecure previously set this option by default since it ships kernel 6.12.</li>
+<li>Virtualbox 7.2.2 implemented a fix for this, but it only works with kernel 6.16.0 and higher. I did not realize there was a kernel version limitation here.</li>
+<li>VirtualBox later introduced a bug where trying to start a VM while <code>kvm.enable_virt_at_load=0</code> was set would trigger a kernel panic.</li>
+<li>In response, I submitted a change to Kicksecure that make <code>kvm.enable_virt_at_load=0</code> no longer set by default, thinking that modern VirtualBox didn’t need it anymore.</li>
+<li>Apparently no one noticed this was an issue until just recently? Maybe an older Debian kernel has the APIs from kernel 6.16.0 backported into it, but the most recent kernels don’t? I have no idea, but in any event, now we’re in a situation where VirtualBox VMs just don’t start.</li>
+</ul>
+<p>As a temporary stop-gap solution, boot into a sysmaint session, run <code>sudo nano /etc/modprobe.d/fix-vbox.conf</code>, then type in <code>options kvm enable_virt_at_load=0</code>. Press Ctrl+S to save, press Ctrl+X to exit, and then reboot into a user session. VirtualBox should now work normally, as long as you have a new enough version of VirtualBox installed.</p>
+<p>I’ll submit a change to re-add the option. Hopefully VirtualBox won’t start triggering kernel panics because of it again.</p>
+          <p><a href="https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841/13</link>
+        <pubDate>Wed, 02 Sep 2026 00:37:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1841-13</guid>
+        <source url="https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841.rss">Does whonix still run in Kicksecure?</source>
+      </item>
+      <item>
+        <title>Does whonix still run in Kicksecure?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Whonix-side discussion:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/cant-start-whonix-vms-after-installing-them-on-kicksecure-host/23523/3">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/cant-start-whonix-vms-after-installing-them-on-kicksecure-host/23523/3" target="_blank" rel="noopener" title="11:06PM - 01 September 2026">Whonix Forum – 1 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/cant-start-whonix-vms-after-installing-them-on-kicksecure-host/23523/3" target="_blank" rel="noopener">Can't start Whonix VMs after installing them on Kicksecure host</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #283890;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">VirtualBox</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>whonix-lxqt-installer-cli doesn’t install KVM virtual machines, the issue is almost certainly with VirtualBox. Another user reported this issue, so I’m guessing it will be fairly easy to reproduce.  Beyond that, we also use user-session libvirt in...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841/12</link>
+        <pubDate>Wed, 02 Sep 2026 00:29:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1841-12</guid>
+        <source url="https://forums.kicksecure.com/t/does-whonix-still-run-in-kicksecure/1841.rss">Does whonix still run in Kicksecure?</source>
+      </item>
       <item>
         <title>Does whonix still run in Kicksecure?</title>
         <dc:creator><![CDATA[kranked]]></dc:creator>
