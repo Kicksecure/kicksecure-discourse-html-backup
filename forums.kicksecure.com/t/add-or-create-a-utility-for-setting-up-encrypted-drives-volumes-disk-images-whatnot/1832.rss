@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+    <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832</link>
+    <description>Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption:
+
+https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7
+
+I replied, explaining that they could use LUKS instead and could set it up with a number of tools built into the OS, but in the process realized that adding a *new* encrypted volume to an existing system or VM (which may or may not have full disk encryption enabled on it) is a pain:
+
+* First you have to partition the disk with `parted`. I expect a significant portion of our userbase doesn&#39;t even know what a partition is.
+* Then you have to format a partition on the disk with `cryptsetup`. This is not particularly easy, especially since you now have to grapple with the details of device-mapper thanks to how LUKS works under the hood and how cryptsetup exposes that.
+* Then you have to open the newly created encrypted volume.
+* Then you have to format the encrypted volume with a filesystem using something like `mkfs.ext4`.
+* Then you have to mount that filesystem with `mount`.
+* Then you have to fix permissions on the filesystem with `chown`, since by default it won&#39;t let your standard user write to it.
+* Then you have to add a line for the encrypted volume to `/etc/crypttab` using either `vim` or `nano`, which has to be done carefully to avoid breaking things, and is not intuitive at all.
+* Then you have to add a line for mounting the encrypted volume to `/etc/fstab`, which is again unintuitive and requires care.
+* Then you have to regenerate the initramfs with `dracut` (this might be optional but might not be).
+
+Requiring users to juggle seven command-line utilities and two critical configuration files to set up a new encrypted disk seems like a lot. The steps for setting up encryption on a USB drive are similarly complicated, but you get to omit the crypttab and fstab stuff since you don&#39;t want that automounted on boot.
+
+There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don&#39;t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.
+
+Given that users are resorting to proprietary software for this use case, potentially because they can&#39;t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there&#39;s an existing utility for this, that would be awesome, otherwise I don&#39;t think it would be *that* hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</description>
+    
+    <lastBuildDate>Sun, 30 Aug 2026 23:02:48 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>SO is a filesystem, not just a filename convention, so your “.iso” file isn’t an ISO file at all</p>
+</blockquote>
+</aside>
+<p>Right but disk burning software from what I have tried wont recognize it as a ISO to burn to the disk based on the filename extension. If it was not .iso or .img regardless if it was a true ISO filesystem, the option to burn as disk image via Brasero wont allow/work.  I’ll have to try mkisofs, but generally I think most burning software relies on the convention first and foremost before checking the filesystem format type.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="7" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>But yes, the ability to create encrypted container images would be something I would want this tool to have. If such an image can be burned to a disc and just work, awesome.</p>
+</blockquote>
+</aside>
+<p>Indeed, and I would say it did manually <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/8</link>
+        <pubDate>Sun, 30 Aug 2026 23:02:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-8</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Hmm, sounds like you’re burning a filesystem image to the disk, but not an ISO filesystem image. ISO is a filesystem, not just a filename convention, so your “.iso” file isn’t an ISO file at all <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+<p>But yes, the ability to create encrypted container images would be something I would want this tool to have. If such an image can be burned to a disc and just work, awesome.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/7</link>
+        <pubDate>Sun, 30 Aug 2026 22:44:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-7</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p><strong>Yes and maybe no?</strong>…</p>
+<p>I would begin by generating an .iso file using fallocate (though I later switched to /dev/urandom in an attempt to increase entropy). The process then proceeds as follows after generating a file with a .iso extension:</p>
+<pre><code>- Encrypt the file using cryptsetup
+- Open the LUKS container
+- Create a filesystem with mkfs.ext4
+- Mount the container
+- Adjust permissions with chown
+- Transfer files into it (waiting for the process to complete)
+- Close the LUKS container
+</code></pre>
+<p><strong>Burning via Brasero</strong></p>
+<p>I have successfully used two methods:</p>
+<pre><code>- *Burn the container as a file* via a data CD option.
+- *Select "Burn Disk Image"* and write the ISO directly to the disc.
+</code></pre>
+<p>With the first option, the disc does not appear as a mounted volume until you manually open the file. With the second option, inserting the CD/DVD causes the entire disc to be recognized as an encrypted volume.</p>
+<p>This was tested on Kicksecure 17. I have not revisited the process in version 18. Now I also hope &amp; question if disk burning software like Brasero can operate with enuff permissions due to sysmaint change?</p>
+<p>I’ll revist this later this week when I get some time.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/6</link>
+        <pubDate>Sun, 30 Aug 2026 22:40:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-6</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="desi_fubu" data-post="3" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>TBH I like this idea but wouldn’t this mean another utility for the project to maintain?</p>
+</blockquote>
+</aside>
+<p>Yes, unless someone already made one which is the hope.</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="3" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Is there anything in the LXQT sphere?</p>
+</blockquote>
+</aside>
+<p>As far as I’m aware, no (and due to my involvement in Lubuntu, I’m pretty aware of what they provide).</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="4" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>So will give you a use case here not being mentioned from my personal experience. Encrypted disk images or ISO’s for burning to encrypted CD/DVD backups. I like to backup keys (ssh &amp; GPG) and hoard data and CD/DVD’s play a role as backup next to HDD. Given how if the media is R and not RW it also a security benefit.</p>
+</blockquote>
+</aside>
+<p>My knowledge of how optical media works is quite shaky, so I don’t know what all is possible here. Were you creating a LUKS volume with an ISO filesystem in it, then burning the container image directly to the disk?</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/5</link>
+        <pubDate>Wed, 26 Aug 2026 20:03:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-5</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>So will give you a use case here not being mentioned from my personal experience. Encrypted disk images or ISO’s for burning to encrypted CD/DVD backups. I like to backup keys (ssh &amp; GPG) and hoard data and CD/DVD’s play a role as backup next to HDD. Given how if the media is R and not RW it also a security benefit.</p>
+<p>Anyhow people often suggest to just to make compressed archive that is password protected since its AES256 and burn it. I dont think this is anywhere as strong as LUKS encrypted disk or ISO image.</p>
+<p>Previously would use zulucrypt to meet my needs for this.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<ul>
+<li>First you have to partition the disk with <code>parted</code>. I expect a significant portion of our userbase doesn’t even know what a partition is.</li>
+</ul>
+</blockquote>
+</aside>
+<p>Also experimented the manual method to create the *.iso and use dd /dev/urandom to generate that first istead of parted or trucate/fallocate:</p>
+<pre><code class="lang-auto"># this example creates a 4 GiB image (lots of disks are roughly 4.7GB)
+# 16 MiB × 256 = 4096 MiB
+dd if=/dev/urandom of=backup.iso bs=16M count=256 status=progress
+</code></pre>
+<p>Then do everything else but I would call the pcmanfm-qt to open the mounted container to copy data to it before closing it.</p>
+<p>This made me come to the same conclusion as you if it was worth creating a new tool to do this or if there was something to fork and build off of. It wouldn’t be hard to pass cryptsetup commands to a GUI and depending on the programming lang there might already be tools that call it like with python.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/4</link>
+        <pubDate>Wed, 26 Aug 2026 16:42:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-4</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>TBH I like this idea but wouldn’t this mean another utility for the project to maintain?</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="1" data-topic="1832">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don’t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.</p>
+</blockquote>
+</aside>
+<p>Is there anything in the LXQT sphere?</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/3</link>
+        <pubDate>Wed, 26 Aug 2026 15:52:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-3</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/nurmagoz">@nurmagoz</a> found a tool named SiriKali that can act as a frontend for CryFS. It might be suitable for this.</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109" target="_blank" rel="noopener" title="01:55AM - 21 August 2026">Whonix Forum – 21 Aug 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/rootless-virtual-machines-with-kvm-and-qemu/20952/109" target="_blank" rel="noopener">Rootless virtual machines with KVM and QEMU</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #9EB83B;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">KVM</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I dont see it a good idea to keep stuff for people who wants to go and do gymnastics with the OS, because if we keep the sudo parts and the split parts and try to keeps them up to date (generally for the wiki not just kvm wiki) the wiki gonna...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/2</link>
+        <pubDate>Fri, 21 Aug 2026 02:05:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-2</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener" title="10:50AM - 19 August 2026">Whonix Forum – 19 Aug 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/issue-mounting-a-disk-in-user-daily-mode/23495/7" target="_blank" rel="noopener">Issue mounting a disk in "user daily" mode</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #283890;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">VirtualBox</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I am using it with AxCrypt. It could work with LUKS, but we couldn’t get past the 3rd-party software on the user session side.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>I replied, explaining that they could use LUKS instead and could set it up with a number of tools built into the OS, but in the process realized that adding a <em>new</em> encrypted volume to an existing system or VM (which may or may not have full disk encryption enabled on it) is a pain:</p>
+<ul>
+<li>First you have to partition the disk with <code>parted</code>. I expect a significant portion of our userbase doesn’t even know what a partition is.</li>
+<li>Then you have to format a partition on the disk with <code>cryptsetup</code>. This is not particularly easy, especially since you now have to grapple with the details of device-mapper thanks to how LUKS works under the hood and how cryptsetup exposes that.</li>
+<li>Then you have to open the newly created encrypted volume.</li>
+<li>Then you have to format the encrypted volume with a filesystem using something like <code>mkfs.ext4</code>.</li>
+<li>Then you have to mount that filesystem with <code>mount</code>.</li>
+<li>Then you have to fix permissions on the filesystem with <code>chown</code>, since by default it won’t let your standard user write to it.</li>
+<li>Then you have to add a line for the encrypted volume to <code>/etc/crypttab</code> using either <code>vim</code> or <code>nano</code>, which has to be done carefully to avoid breaking things, and is not intuitive at all.</li>
+<li>Then you have to add a line for mounting the encrypted volume to <code>/etc/fstab</code>, which is again unintuitive and requires care.</li>
+<li>Then you have to regenerate the initramfs with <code>dracut</code> (this might be optional but might not be).</li>
+</ul>
+<p>Requiring users to juggle seven command-line utilities and two critical configuration files to set up a new encrypted disk seems like a lot. The steps for setting up encryption on a USB drive are similarly complicated, but you get to omit the crypttab and fstab stuff since you don’t want that automounted on boot.</p>
+<p>There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don’t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.</p>
+<p>Given that users are resorting to proprietary software for this use case, potentially because they can’t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there’s an existing utility for this, that would be awesome, otherwise I don’t think it would be <em>that</em> hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</p>
+          <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832/1</link>
+        <pubDate>Thu, 20 Aug 2026 00:14:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1832-1</guid>
+        <source url="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832.rss">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</source>
+      </item>
+  </channel>
+</rss>
