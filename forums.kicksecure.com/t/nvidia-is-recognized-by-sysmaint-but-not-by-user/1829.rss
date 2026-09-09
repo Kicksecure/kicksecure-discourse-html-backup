@@ -11,9 +11,90 @@ Then nvidia will be recognized when running `sudo nvidia-smi` on sysmaint side.
 
 But on user side nvidia is not usable by user because nvidia is within admin level not user.</description>
     
-    <lastBuildDate>Sat, 29 Aug 2026 20:53:58 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 07 Sep 2026 12:09:59 +0000</lastBuildDate>
     <category>Development</category>
     <atom:link href="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Nvidia is recognized by sysmaint but not by user</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1829">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>although I’m a bit hesitant to do that given that it’s a proprietary and therefore very difficult-to-audit binary.</p>
+</blockquote>
+</aside>
+<p>Will test and report back.</p>
+<p>(You can test it on KVM (passing GPU to the VM) or external hardware just for testing (Install KS on the hardware, test then you can format it)).</p>
+          <p><a href="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/6</link>
+        <pubDate>Mon, 07 Sep 2026 12:09:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1829-6</guid>
+        <source url="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829.rss">Nvidia is recognized by sysmaint but not by user</source>
+      </item>
+      <item>
+        <title>Nvidia is recognized by sysmaint but not by user</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Documented how to manually whitelist the binary:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#nvidia-smi_and_other_NVIDIA_management_tools_don't_work">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1788679813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#nvidia-smi_and_other_NVIDIA_management_tools_don't_work" target="_blank" rel="noopener" title="03:42AM - 07 September 2026">Kicksecure – 7 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#nvidia-smi_and_other_NVIDIA_management_tools_don't_work" target="_blank" rel="noopener">nvidia-smi and other NVIDIA management tools don't work - NVIDIA</a></h3>
+
+  <p>While applications should be able to use the NVIDIA GPU right away once the drivers are installed, some applications that manage or monitor the GPU may be broken by default. nvidia-smi for instance will display the following message when run: |...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Also discovered that the version of NVIDIA’s drivers in Debian Trixie is sorely out of date and added an extra security warning to that wiki page.</p>
+          <p><a href="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/5</link>
+        <pubDate>Mon, 07 Sep 2026 03:42:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1829-5</guid>
+        <source url="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829.rss">Nvidia is recognized by sysmaint but not by user</source>
+      </item>
+      <item>
+        <title>Nvidia is recognized by sysmaint but not by user</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="nurmagoz" data-post="1" data-topic="1829">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/n/8e7dd6/48.png" class="avatar"> nurmagoz:</div>
+<blockquote>
+<p>Then nvidia will be recognized when running <code>sudo nvidia-smi</code> on sysmaint side.</p>
+<p>But on user side nvidia is not usable by user because nvidia is within admin level not user.</p>
+</blockquote>
+</aside>
+<p>Turns out this is because <code>nvidia-modprobe</code> is having its SUID bit stripped by permission-hardener. NVIDIA’s driver can’t create some device files itself due to GPL compliance issues (probably GPL symbols strikes again), so instead they have a SUID userland helper to do it, see <a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/device-nodes-and-capabilities.html" class="inline-onebox">Device Nodes and Capabilities — NVIDIA Multi-Instance GPU User Guide</a>.</p>
+<p>It might make sense to enable an exception in permission-hardener for this, although I’m a bit hesitant to do that given that it’s a proprietary and therefore very difficult-to-audit binary.</p>
+          <p><a href="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829/4</link>
+        <pubDate>Mon, 07 Sep 2026 03:09:20 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1829-4</guid>
+        <source url="https://forums.kicksecure.com/t/nvidia-is-recognized-by-sysmaint-but-not-by-user/1829.rss">Nvidia is recognized by sysmaint but not by user</source>
+      </item>
       <item>
         <title>Nvidia is recognized by sysmaint but not by user</title>
         <dc:creator><![CDATA[nite_route]]></dc:creator>
