@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Resizing disk for guest in KVM</title>
+    <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657</link>
+    <description>I would like to increase the size of my KVM guest (Kicksecure) and for some to me obscure reason I am not able to. It would be easier and faster to do a fresh install (which I will likely do anyway later) but I like to understand the why.
+
+I’m new to it, here is what I have done so far.
+Let’s begin with
+
+
+```
+\[user \~\]% lsblk
+NAME                                          MAJ:MIN RM SIZE RO TYPE  MOUNTPOINTS
+vda                                           253:0    0  50G  0 disk
+├─vda1                                        253:1    0   4G  0 part  /boot
+└─vda2                                        253:2    0  46G  0 part
+└─luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9 254:0    0  46G  0 crypt /
+```
+
+
+```
+ \[user \~\]% df -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+/dev/dm-0      ext4       16G  6,1G  8,8G  42% /
+devtmpfs       devtmpfs  4,0M     0  4,0M   0% /dev
+tmpfs          tmpfs     7,2G  6,3M  7,2G   1% /dev/shm
+tmpfs          tmpfs     2,9G  1,9M  2,9G   1% /run
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-cryptsetup@luks\\x2d1ed83f00\\x2d4659\\x2d4ef8\\x2d812a\\x2d3abd18f4d7d9.service
+tmpfs          tmpfs     5,0M     0  5,0M   0% /run/lock
+tmpfs          tmpfs     7,2G  188K  7,2G   1% /tmp
+/dev/vda1      ext4      3,9G   42M  3,7G   2% /boot
+shared         virtiofs  7,3T  4,5T  2,9T  62% /mnt/shared
+tmpfs          tmpfs     1,5G  140K  1,5G   1% /run/user/1000
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/getty@tty1.service
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service
+```
+
+As you can see I already succeeded at, I guess, one stage of the process (done with `qemu-img resize`) by resizing the virtual size  `/dev/vda` it was 20G now is 50G (done with `fdisk`). My first target was `/dev/dm-0` but for the reasons below my next possible choice went to `/dev/vda`.
+
+Fine. But that should be the VM&#39;s Physical Volume, now I have to resize the Logical Volume, wrap the FS around the new size. 
+Since none of `sudo lvdisplay &amp; sudo vgdisplay` showed anything I could only try with `dm-0` which is what I see in `df -Th` and that shows still 16G.  
+`
+ I tried first with 
+```
+sudo resize2fs /dev/dm-0 
+resize2fs 1.47.2 (1-Jan-2025)
+open: Device or resource busy while opening /dev/dm-0
+zsh: exit 1     sudo resize2fs /dev/dm-0
+```
+Then I thought maybe I needed to 
+```
+[user ~]% fdisk /dev/dm-0 
+
+Welcome to fdisk (util-linux 2.41).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Permission denied
+zsh: exit 1     fdisk /dev/dm-0
+```
+```
+[user ~]% sudo fdisk /dev/dm-0
+
+Welcome to fdisk (util-linux 2.41).                                                                                                                                                                               
+Changes will remain in memory only, until you decide to write them.                                                                                                                                               
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Device or resource busy
+zsh: exit 1     sudo fdisk /dev/dm-0
+```
+```
+[user ~]% sudo dmsetup info /dev/dm-0
+Name:              luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+State:             ACTIVE
+Read Ahead:        256
+Tables present:    LIVE
+Open count:        1
+Event number:      0
+Major, minor:      254, 0
+Number of targets: 1
+UUID: CRYPT-LUKS2-1ed83f0046594ef8812a3abd18f4d7d9-luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+
+```
+After more research
+```
+[user ~]% sudo lvextend -L +100%FREE /dev/dm-0
+  Can&#39;t parse size argument.
+  Invalid argument for --size: +100%FREE
+  Error during parsing of command line.
+zsh: exit 3     sudo lvextend -L +100%FREE /dev/dm-0
+
+```
+```
+sudo lvextend -L +30 /dev/dm-0
+  Volume group &quot;dm-0&quot; not found
+  Cannot process volume group dm-0
+zsh: exit 5     sudo lvextend -L +30 /dev/dm-0
+```
+Like I said `vgs` and `lvs` don&#39;t show a thing.
+And to top it all off 
+
+```
+[user ~]% sudo lsof /dev/dm-0
+lsof: WARNING: can&#39;t stat() fuse.portal file system /run/user/1000/doc
+      Output information may be incomplete.
+zsh: exit 1     sudo lsof /dev/dm-0
+```
+```
+[user ~]% sudo fuser -v /dev/dm-0
+zsh: exit 1     sudo fuser -v /dev/dm-0
+```
+```
+[user ~]% sudo unmount -f /dev/dm-0
+sudo: unmount: command not found
+zsh: exit 1     sudo unmount -f /dev/dm-0
+```
+```
+[user ~]% sudo umount -l /dev/dm-0
+_zsh_highlight_main__precmd_hook:4: permission denied: /dev/null 
+```
+
+Any Idea what to do next?</description>
+    
+    <lastBuildDate>Fri, 10 Apr 2026 14:26:21 +0000</lastBuildDate>
+    <category>KVM</category>
+    <atom:link href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[remsa]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><code>/etc/default/grub.d</code> folder</p>
+</blockquote>
+</aside>
+<p>I see</p>
+<aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><a href="https://www.kicksecure.com/wiki/Grub" class="inline-onebox" rel="noopener nofollow ugc">grub bootloader Configuration Changes</a></p>
+</blockquote>
+</aside>
+<aside class="quote no-group" data-username="remsa" data-post="3" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e19adc/48.png" class="avatar"> remsa:</div>
+<blockquote>
+<p>I tried to add it with value <code>1</code> but that didn’t change the state of things.</p>
+</blockquote>
+</aside>
+<p>Tried one more time and it worked …<br>
+Then it was enough to run <code>sudo resize2fs /dev/dm-0 </code> and</p>
+<pre><code class="lang-auto">[user ~]% df -Th                  
+Filesystem     Type      Size  Used Avail Use% Mounted on
+/dev/dm-0      ext4       46G  6,4G   37G  15% /
+</code></pre>
+<p>Thanks <span class="mention">@araraybolt3</span> and <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p>
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/7</link>
+        <pubDate>Fri, 10 Apr 2026 14:26:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-7</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="remsa" data-post="3" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e19adc/48.png" class="avatar"> remsa:</div>
+<blockquote>
+<p>Still, how do I resize it? Should I remove LUKS, resize it and encrypt it back again?</p>
+</blockquote>
+</aside>
+<p>Not quite. Grow the partition the cryptsetup volume resides on, then grow the cryptsetup volume, then grow the filesystem within the cryptsetup volume.</p>
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/6</link>
+        <pubDate>Fri, 10 Apr 2026 01:56:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-6</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Documentation updated just now:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grow_Virtual_Harddisk">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1775719812" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Grow_Virtual_Harddisk" target="_blank" rel="noopener" title="01:09PM - 09 April 2026">Kicksecure – 9 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/480;"><img src="https://www.kicksecure.com/w/images/6/6c/Blocks-968874640.jpg?version=5adfd7322538612dd341fa6b892b2daa" class="thumbnail" alt="" width="640" height="480"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Grow_Virtual_Harddisk" target="_blank" rel="noopener">Virtual Hard Disk Size Increase</a></h3>
+
+  <p>Get more disk space. Increase the size of a virtual disk. Expand virtual machine storage capacity. Possible with Qubes, Kicksecure for Qubes, Kicksecure KVM, and Kicksecure VirtualBox.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/5</link>
+        <pubDate>Thu, 09 Apr 2026 13:09:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-5</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="remsa" data-post="3" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e19adc/48.png" class="avatar"> remsa:</div>
+<blockquote>
+<p>No such kernel parameter in <code>/etc/default/grub</code>.</p>
+</blockquote>
+</aside>
+<p><code>/etc/default/grub.d</code> folder</p>
+<p>See:</p><aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grub">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1775719812" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Grub" target="_blank" rel="noopener" title="10:24AM - 12 February 2026">Kicksecure – 12 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" alt="" width="690" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Grub" target="_blank" rel="noopener">grub bootloader Configuration Changes</a></h3>
+
+  <p>Kernel Boot Parameter Changes</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/4</link>
+        <pubDate>Thu, 09 Apr 2026 11:59:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-4</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[remsa]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>unless this is a distribution-morphed LVM install of Debian</p>
+</blockquote>
+</aside>
+<p>It is a freshly download Kicksecure-LXQt-18.1.4.2.Intel_AMD64.iso. I just got rid of <code>sysmaint</code> but that should’t affect any of the avobe.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>You’re probably running into problems with resizing things because of the kernel parameter <code>bdev_allow_write_mounted=0</code> in the kernel command line. Try booting without that kernel parameter and see if things start working.</p>
+</blockquote>
+</aside>
+<p>No such kernel parameter in <code>/etc/default/grub</code>. I tried to add it with value <code>1</code> but that didn’t change the state of things.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Are you sure that <code>/dev/dm-0</code> is an LVM device?</p>
+</blockquote>
+</aside>
+<p>Good question.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>“plain” LUKS volumes on top of partitions also show up as device-mapper</p>
+</blockquote>
+</aside>
+<p>Yes, I have a feeling it has something to do with LUKS</p>
+<aside class="quote no-group" data-username="remsa" data-post="1" data-topic="1657">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/r/e19adc/48.png" class="avatar"> remsa:</div>
+<blockquote>
+<pre><code class="lang-auto">[user ~]% sudo dmsetup info /dev/dm-0
+Name:              luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+State:             ACTIVE
+Read Ahead:        256
+Tables present:    LIVE
+Open count:        1
+Event number:      0
+Major, minor:      254, 0
+Number of targets: 1
+UUID: CRYPT-LUKS2-1ed83f0046594ef8812a3abd18f4d7d9-luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+</code></pre>
+</blockquote>
+</aside>
+<p>Still, how do I resize it? Should I remove LUKS, resize it and encrypt it back again?</p>
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/3</link>
+        <pubDate>Wed, 08 Apr 2026 16:27:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-3</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>A couple of things:</p>
+<ul>
+<li>You’re probably running into problems with resizing things because of the kernel parameter <code>bdev_allow_write_mounted=0</code> in the kernel command line. Try booting without that kernel parameter and see if things start working.</li>
+<li>Are you sure that <code>/dev/dm-0</code> is an LVM device? Kicksecure doesn’t support LVM by default, and “plain” LUKS volumes on top of partitions also show up as device-mapper devices, so you may be using the wrong tools (unless this is a distribution-morphed LVM install of Debian).</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/2</link>
+        <pubDate>Tue, 07 Apr 2026 00:19:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-2</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+      <item>
+        <title>Resizing disk for guest in KVM</title>
+        <dc:creator><![CDATA[remsa]]></dc:creator>
+        <description><![CDATA[
+            <p>I would like to increase the size of my KVM guest (Kicksecure) and for some to me obscure reason I am not able to. It would be easier and faster to do a fresh install (which I will likely do anyway later) but I like to understand the why.</p>
+<p>I’m new to it, here is what I have done so far.<br>
+Let’s begin with</p>
+<pre><code class="lang-auto">\[user \~\]% lsblk
+NAME                                          MAJ:MIN RM SIZE RO TYPE  MOUNTPOINTS
+vda                                           253:0    0  50G  0 disk
+├─vda1                                        253:1    0   4G  0 part  /boot
+└─vda2                                        253:2    0  46G  0 part
+└─luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9 254:0    0  46G  0 crypt /
+</code></pre>
+<pre><code class="lang-auto"> \[user \~\]% df -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+/dev/dm-0      ext4       16G  6,1G  8,8G  42% /
+devtmpfs       devtmpfs  4,0M     0  4,0M   0% /dev
+tmpfs          tmpfs     7,2G  6,3M  7,2G   1% /dev/shm
+tmpfs          tmpfs     2,9G  1,9M  2,9G   1% /run
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-cryptsetup@luks\\x2d1ed83f00\\x2d4659\\x2d4ef8\\x2d812a\\x2d3abd18f4d7d9.service
+tmpfs          tmpfs     5,0M     0  5,0M   0% /run/lock
+tmpfs          tmpfs     7,2G  188K  7,2G   1% /tmp
+/dev/vda1      ext4      3,9G   42M  3,7G   2% /boot
+shared         virtiofs  7,3T  4,5T  2,9T  62% /mnt/shared
+tmpfs          tmpfs     1,5G  140K  1,5G   1% /run/user/1000
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/getty@tty1.service
+tmpfs          tmpfs     1,0M     0  1,0M   0% /run/credentials/systemd-journald.service
+</code></pre>
+<p>As you can see I already succeeded at, I guess, one stage of the process (done with <code>qemu-img resize</code>) by resizing the virtual size  <code>/dev/vda</code> it was 20G now is 50G (done with <code>fdisk</code>). My first target was <code>/dev/dm-0</code> but for the reasons below my next possible choice went to <code>/dev/vda</code>.</p>
+<p>Fine. But that should be the VM’s Physical Volume, now I have to resize the Logical Volume, wrap the FS around the new size.<br>
+Since none of <code>sudo lvdisplay &amp; sudo vgdisplay</code> showed anything I could only try with <code>dm-0</code> which is what I see in <code>df -Th</code> and that shows still 16G.<br>
+`<br>
+I tried first with</p>
+<pre><code class="lang-auto">sudo resize2fs /dev/dm-0 
+resize2fs 1.47.2 (1-Jan-2025)
+open: Device or resource busy while opening /dev/dm-0
+zsh: exit 1     sudo resize2fs /dev/dm-0
+</code></pre>
+<p>Then I thought maybe I needed to</p>
+<pre><code class="lang-auto">[user ~]% fdisk /dev/dm-0 
+
+Welcome to fdisk (util-linux 2.41).
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Permission denied
+zsh: exit 1     fdisk /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo fdisk /dev/dm-0
+
+Welcome to fdisk (util-linux 2.41).                                                                                                                                                                               
+Changes will remain in memory only, until you decide to write them.                                                                                                                                               
+Be careful before using the write command.
+
+fdisk: cannot open /dev/dm-0: Device or resource busy
+zsh: exit 1     sudo fdisk /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo dmsetup info /dev/dm-0
+Name:              luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+State:             ACTIVE
+Read Ahead:        256
+Tables present:    LIVE
+Open count:        1
+Event number:      0
+Major, minor:      254, 0
+Number of targets: 1
+UUID: CRYPT-LUKS2-1ed83f0046594ef8812a3abd18f4d7d9-luks-1ed83f00-4659-4ef8-812a-3abd18f4d7d9
+
+</code></pre>
+<p>After more research</p>
+<pre><code class="lang-auto">[user ~]% sudo lvextend -L +100%FREE /dev/dm-0
+  Can't parse size argument.
+  Invalid argument for --size: +100%FREE
+  Error during parsing of command line.
+zsh: exit 3     sudo lvextend -L +100%FREE /dev/dm-0
+
+</code></pre>
+<pre><code class="lang-auto">sudo lvextend -L +30 /dev/dm-0
+  Volume group "dm-0" not found
+  Cannot process volume group dm-0
+zsh: exit 5     sudo lvextend -L +30 /dev/dm-0
+</code></pre>
+<p>Like I said <code>vgs</code> and <code>lvs</code> don’t show a thing.<br>
+And to top it all off</p>
+<pre><code class="lang-auto">[user ~]% sudo lsof /dev/dm-0
+lsof: WARNING: can't stat() fuse.portal file system /run/user/1000/doc
+      Output information may be incomplete.
+zsh: exit 1     sudo lsof /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo fuser -v /dev/dm-0
+zsh: exit 1     sudo fuser -v /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo unmount -f /dev/dm-0
+sudo: unmount: command not found
+zsh: exit 1     sudo unmount -f /dev/dm-0
+</code></pre>
+<pre><code class="lang-auto">[user ~]% sudo umount -l /dev/dm-0
+_zsh_highlight_main__precmd_hook:4: permission denied: /dev/null 
+</code></pre>
+<p>Any Idea what to do next?</p>
+          <p><a href="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657/1</link>
+        <pubDate>Mon, 06 Apr 2026 21:22:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1657-1</guid>
+        <source url="https://forums.kicksecure.com/t/resizing-disk-for-guest-in-kvm/1657.rss">Resizing disk for guest in KVM</source>
+      </item>
+  </channel>
+</rss>

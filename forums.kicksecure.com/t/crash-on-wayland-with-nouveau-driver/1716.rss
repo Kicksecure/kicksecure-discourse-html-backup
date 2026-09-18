@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Crash on Wayland with Nouveau driver</title>
+    <link>https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716</link>
+    <description>I’m having a problem with Kicksecure 18. Using Wayland with the Nouveau driver seems to cause my system to crash. My system logs show the following errors:
+
+```
+
+```
+
+```
+
+```
+
+```
+localhost kernel: nouveau 0000:01:00.0: gsp: mmu fault queued
+localhost kernel: nouveau 0000:01:00.0: gsp: rc engn:00000001 chid:16 type:31 scope:1 part:233
+localhost kernel: nouveau 0000:01:00.0: fifo:c00000:0002:0010:[labwc[2244]] errored - disabling channel
+localhost kernel: nouveau 0000:01:00.0: labwc[2244]: channel 16 killed
+```
+
+If I blacklist Nouveau and use Pixman instead, the system becomes very slow. Kicksecure 17 worked fine with this hardware configuration.
+
+Is it possible to run Kicksecure 18 on my desktop with this setup, or is there a known workaround for this issue? Additionally, is it possible to switch from Wayland to X11 to avoid this problem? I’m open to any suggestions.</description>
+    
+    <lastBuildDate>Sun, 03 May 2026 16:36:10 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Crash on Wayland with Nouveau driver</title>
+        <dc:creator><![CDATA[waxer30336]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you for your message. I have already followed your Pixman and NVIDIA instructions. I think my best option is to install Kicksecure within Debian.</p>
+          <p><a href="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/3</link>
+        <pubDate>Sun, 03 May 2026 16:36:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1716-3</guid>
+        <source url="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716.rss">Crash on Wayland with Nouveau driver</source>
+      </item>
+      <item>
+        <title>Crash on Wayland with Nouveau driver</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="waxer30336" data-post="1" data-topic="1716">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/ed8c4c/48.png" class="avatar"> waxer30336:</div>
+<blockquote>
+<p>If I blacklist Nouveau and use Pixman instead, the system becomes very slow. Kicksecure 17 worked fine with this hardware configuration.</p>
+</blockquote>
+</aside>
+<p>I assume you followed these instructions to use Pixman:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1777793412" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)" target="_blank" rel="noopener" title="12:18PM - 13 February 2026">Kicksecure – 13 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)" target="_blank" rel="noopener">Software Rendering (Pixman) - NVIDIA</a></h3>
+
+  <p>This chapter forces software rendering (Pixman) and disables Nouveau acceleration. This can improve stability on some NVIDIA systems at the cost of performance. Software rendering is not a separate driver. It simply disables hardware acceleration. It...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>If so, there’s not much that can be done. Falling back to Pixman software rendering <em>is</em> the primary workaround for this issue. The other one is to install the proprietary NVIDIA drivers:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Debian_Repository">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1777793412" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Debian_Repository" target="_blank" rel="noopener" title="12:18PM - 13 February 2026">Kicksecure – 13 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Debian_Repository" target="_blank" rel="noopener">Debian Repository - NVIDIA</a></h3>
+
+  <p>Install package(s) firmware-nvidia-gsp nvidia-smi nvidia-driver nvidia-kernel-dkms following these instructions: | NVIDIA - Troubleshooting and Driver Choice in Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Alternatively, if your system has both NVIDIA and Intel GPUs, you may be able to blacklist the Nouveau kernel module entirely to force the use of the iGPU, or you may be able to disable the NVIDIA GPU in your system’s BIOS.</p>
+<aside class="quote no-group" data-username="waxer30336" data-post="1" data-topic="1716">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/ed8c4c/48.png" class="avatar"> waxer30336:</div>
+<blockquote>
+<p>Additionally, is it possible to switch from Wayland to X11 to avoid this problem? I’m open to any suggestions.</p>
+</blockquote>
+</aside>
+<p>Not currently supported by the default desktop configuration. However, you may be able to install Debian 13 with X11, then distribution-morph to Kicksecure, installing the <code>kicksecure-baremetal-cli</code> package. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1777793412" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener" title="10:31AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/d/d1/Download-debian.jpg?version=0f5a9307bc5f0ca052752efec6830baf" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian" target="_blank" rel="noopener">Install Kicksecure inside Debian</a></h3>
+
+  <p>Kicksecure can be installed on top of an existing Debian installation.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/2</link>
+        <pubDate>Sun, 03 May 2026 14:24:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1716-2</guid>
+        <source url="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716.rss">Crash on Wayland with Nouveau driver</source>
+      </item>
+      <item>
+        <title>Crash on Wayland with Nouveau driver</title>
+        <dc:creator><![CDATA[waxer30336]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m having a problem with Kicksecure 18. Using Wayland with the Nouveau driver seems to cause my system to crash. My system logs show the following errors:</p>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">
+</code></pre>
+<pre><code class="lang-auto">localhost kernel: nouveau 0000:01:00.0: gsp: mmu fault queued
+localhost kernel: nouveau 0000:01:00.0: gsp: rc engn:00000001 chid:16 type:31 scope:1 part:233
+localhost kernel: nouveau 0000:01:00.0: fifo:c00000:0002:0010:[labwc[2244]] errored - disabling channel
+localhost kernel: nouveau 0000:01:00.0: labwc[2244]: channel 16 killed
+</code></pre>
+<p>If I blacklist Nouveau and use Pixman instead, the system becomes very slow. Kicksecure 17 worked fine with this hardware configuration.</p>
+<p>Is it possible to run Kicksecure 18 on my desktop with this setup, or is there a known workaround for this issue? Additionally, is it possible to switch from Wayland to X11 to avoid this problem? I’m open to any suggestions.</p>
+          <p><a href="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716/1</link>
+        <pubDate>Sun, 03 May 2026 10:26:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1716-1</guid>
+        <source url="https://forums.kicksecure.com/t/crash-on-wayland-with-nouveau-driver/1716.rss">Crash on Wayland with Nouveau driver</source>
+      </item>
+  </channel>
+</rss>

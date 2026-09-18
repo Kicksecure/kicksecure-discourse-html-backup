@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Request and Idea for including a tmpfs-setup package?</title>
+    <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277</link>
+    <description>This idea was inspired by this users post:
+
+&gt; https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057
+
+Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a `/etc/profile.d/` drop in to set the `XDG_CACHE_HOME=/tmp/.cache` variable for all users shell.
+
+## Idea for /etc/profile.d/xdg-cache.sh
+
+```
+#!/bin/sh
+
+## Set XDG_CACHE_HOME to a per-user cache directory.
+#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
+#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
+#
+## Detect whether /tmp is a mount point (i.e. a separate filesystem).
+#    On most modern distros this will be a tmpfs, but on some it may
+#    be a regular disk partition.
+if grep -q &quot;^tmpfs.*/tmp.*tmpfs&quot; /proc/mounts || mountpoint -q /tmp; then
+
+    # /tmp is a mount point - assume it is a tmpfs.
+    BASE_ROOT=&quot;/tmp/${USER}&quot;
+else
+    # /tmp is part of the root filesystem (disk based).
+    # Use the traditional default users /home based cache location instead.
+    BASE_ROOT=&quot;${HOME}&quot;
+fi
+
+## Build the final cache directory path.
+#    We always put the cache in a &quot;.cache&quot; sub-folder so that tools
+#    that follow the XDG spec find what they expect.
+CACHE_DIR=&quot;${BASE_ROOT}/.cache&quot;
+
+## Ensure the directory exists and is private to the user.
+#    /tmp is world-writable (drwxrwxrwt), so we must create a
+#    private subtree and lock it down with chmod 700.
+#
+# Create the parent directory (only needed when we are using /tmp)
+if [ &quot;${BASE_ROOT}&quot; != &quot;${HOME}&quot; ] &amp;&amp; [ ! -d &quot;${BASE_ROOT}&quot; ]; then
+    mkdir -p &quot;${BASE_ROOT}&quot;
+    chmod 700 &quot;${BASE_ROOT}&quot;          
+fi
+
+# Now create the .cache directory itself
+mkdir -p &quot;${CACHE_DIR}&quot;
+chmod 700 &quot;${CACHE_DIR}&quot;
+
+## Export the variable so the rest of the session sees it.
+export XDG_CACHE_HOME=&quot;${CACHE_DIR}&quot;
+```
+
+For the above To make it more bullet‑proof, you could tighten the /tmp detection for the `export XDG_CAHCE_HOME=&quot;/tmp/${USER}/.cache` creation
+
+Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.
+In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.
+Either the package should detect this and not interfere. otherwise a more robust way would be to ship `/etc/fstab` to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?
+
+## Package Structure Summary Idea
+
+```
+tmpfs-setup package/
+├── DEBIAN/
+│   ├── control
+│   ├── postinst
+|   └── prerm (depending on implementation)
+├── etc/
+│   ├── default/
+│   │   └── tmpfs-config
+│   └── profile.d/
+│       └── xdg-cache-home.sh
+└── usr/
+    └── share/doc/your-package/
+        └── README.Debian
+```
+
+Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?
+
+&gt; fedoraproject . org/wiki/Features/tmp-on-tmpfs
+&gt;
+&gt; &gt; Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.
+
+&gt; www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs
+&gt;
+&gt; &gt; From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</description>
+    
+    <lastBuildDate>Sun, 28 Dec 2025 19:13:54 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m currently trying to do something like this so I thought I would put it here as a reference note for anyone interested in looking into it:</p>
+<pre><code class="lang-auto">#!/usr/bin/env bash
+# Isolate apps in RAM with bwrap
+set -euo pipefail
+
+# Base namespace isolation
+exec bwrap \
+  --unshare-all \
+  --die-with-parent \
+  --proc /proc \
+  --dev /dev \
+  \
+# Read-only system tree
+  --ro-bind /usr /usr \
+  --ro-bind /lib /lib \
+  --ro-bind /lib64 /lib64 \
+  --ro-bind /etc /etc \
+  \
+# Fonts (optional)
+  --ro-bind-try /usr/share/fonts /usr/share/fonts \
+  \
+# Essential RAM filesystems (No HOME subdir overlays)
+  --tmpfs /tmp \
+  --tmpfs /var/tmp \
+  --tmpfs /run \
+  --tmpfs /home/user \
+  \
+# Home directory
+  --bind "$HOME" /home/user \
+  --setenv HOME /home/user \
+  --setenv XDG_CACHE_HOME /home/user/.cache \
+  --setenv XDG_CONFIG_HOME /home/user/.config \
+  --setenv XDG_DATA_HOME /home/user/.local/share \
+  --setenv XDG_STATE_HOME /home/user/.local/state \
+  \
+# Network + Tor (Tor control socket no env vars needed to avoid tor over tor)
+  --share-net \
+  --ro-bind-try /etc/ssl/certs /etc/ssl/certs \
+  --bind-try /var/run/tor/control /var/run/tor/control \
+  \
+# Wayland Display
+  $( [ -n "${WAYLAND_DISPLAY:-}" ] &amp;&amp; \
+     echo "--bind /run/user/$UID /run/user/$UID \
+           --setenv WAYLAND_DISPLAY $WAYLAND_DISPLAY \
+           --setenv XDG_RUNTIME_DIR /run/user/$UID" ) \
+  \
+# X11
+  #$( [ -n "${DISPLAY:-}" ] &amp;&amp; \
+  #   echo "--ro-bind /tmp/.X11-unix /tmp/.X11-unix \
+  #         --setenv DISPLAY $DISPLAY" ) \
+  #\
+# Audio (pulse audio)
+  $( [ -S "${XDG_RUNTIME_DIR:-}/pulse/native" ] &amp;&amp; \
+     echo "--bind $XDG_RUNTIME_DIR/pulse $XDG_RUNTIME_DIR/pulse" ) \
+  \
+# D-Bus
+  $( [ -S "${XDG_RUNTIME_DIR:-}/bus" ] &amp;&amp; \
+     echo "--bind $XDG_RUNTIME_DIR/bus $XDG_RUNTIME_DIR/bus" ) \
+  \
+# GPU + Shared Memory
+  $( [ -d /dev/dri ] &amp;&amp; echo "--dev-bind /dev/dri /dev/dri 0 666" ) \
+  --dev-bind /dev/shm /dev/shm \
+  \
+# Hand over execution to the program passed
+  -- "$@"
+</code></pre>
+<p>The display handoff is what I’m having issues with since I think apps that dont fully support wayland use xwayland?</p>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/5</link>
+        <pubDate>Sun, 28 Dec 2025 19:13:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-5</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>Um…last I checked bwrap has <code>bwrap --tmpfs</code> but requires more arguments or flags to do this correctly. This could be a good starting point if you where to make a bwrap wrapper for this.</p>
+<pre data-code-wrap="sh"><code class="lang-sh">bwrap \
+  --unshare-all \
+  --die-with-parent \
+  --proc /proc \
+  --dev /dev \
+  --tmpfs /tmp \
+  --tmpfs /run \
+  --tmpfs /home \
+  --tmpfs /root \
+  --tmpfs /var/tmp \
+  --tmpfs /var/cache \
+  --tmpfs /var/lib \
+  --setenv HOME /home/user \
+  --setenv XDG_CACHE_HOME /home/user/.cache \
+  --setenv XDG_CONFIG_HOME /home/user/.config \
+</code></pre>
+<p>The problem I see among others would be creating logic to detect the needed runtime dependencies to have exposed to bwrap. <code>--ro-bind /usr /usr</code> might help with automatic with having to know which libs are required. The other issue I could think of is if the application needs internet access and access to ca-certificates and ssl. Thoughts on using bwrap for a wrapper for launching apps in RAM?</p>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/4</link>
+        <pubDate>Fri, 07 Nov 2025 15:13:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-4</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[NTH9R6]]></dc:creator>
+        <description><![CDATA[
+            <p>Is there some type of wrapper that could be added so you could launch ./applications in some kind overlayroot in tmp based RAM?<br>
+This seems like a good work around between wanting “Live Mode” vs mounting all .cache in TMPFS.</p>
+<p>Use case = user wants to start a app in RAM but doesn’t want all their RAM resources being used for “Live Mode”.</p>
+<p>Two Examples would be generating a bitcoin wallet with Electrum in RAM so that nothing is saved. The other would be generating GPG keys so one could export their private keys without saving them to the system.</p>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/3</link>
+        <pubDate>Thu, 06 Nov 2025 17:41:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-3</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="0x506c61746f" data-post="1" data-topic="1277">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/0/c4cdca/48.png" class="avatar"> 0x506c61746f:</div>
+<blockquote>
+<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
+</blockquote>
+</aside>
+<p>Exactly. It’s a feature “in the middle” between persistent mode and live mode.</p>
+<p>We cannot maintain that. There are way too many features and too little (none) automated testing.</p>
+<p>Note:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1757323824" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy" target="_blank" rel="noopener" title="01:34PM - 07 August 2025">Kicksecure – 7 Aug 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/First_Time_Source_Code_Contributor_Policy" target="_blank" rel="noopener">First-Time Source Code Contributor Policy</a></h3>
+
+  <p>Guidelines and expectations for first-time contributors to ensure a smooth and respectful development experience.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/2</link>
+        <pubDate>Mon, 08 Sep 2025 16:05:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-2</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
+      <item>
+        <title>Request and Idea for including a tmpfs-setup package?</title>
+        <dc:creator><![CDATA[0x506c61746f]]></dc:creator>
+        <description><![CDATA[
+            <p>This idea was inspired by this users post:</p>
+<blockquote>
+<p><a href="https://forums.kicksecure.com/t/questions-regarding-use-of-tmpfs-formatting-and-conflicts/1057" class="inline-onebox">Questions regarding use of tmpfs formatting and conflicts</a></p>
+</blockquote>
+<p>Summery of idea in a nutshell is basically to make the package set /tmp mount point to tmpfs and add a <code>/etc/profile.d/</code> drop in to set the <code>XDG_CACHE_HOME=/tmp/.cache</code> variable for all users shell.</p>
+<h2><a name="p-3384-idea-for-etcprofiledxdg-cachesh-1" class="anchor" href="https://forums.kicksecure.com#p-3384-idea-for-etcprofiledxdg-cachesh-1" aria-label="Heading link"></a>Idea for /etc/profile.d/xdg-cache.sh</h2>
+<pre><code class="lang-auto">#!/bin/sh
+
+## Set XDG_CACHE_HOME to a per-user cache directory.
+#   Prefer a private sub-directory under /tmp when /tmp is a tmpfs.
+#   Fall back to ${HOME}/.cache if /tmp is not a tmpfs.
+#
+## Detect whether /tmp is a mount point (i.e. a separate filesystem).
+#    On most modern distros this will be a tmpfs, but on some it may
+#    be a regular disk partition.
+if grep -q "^tmpfs.*/tmp.*tmpfs" /proc/mounts || mountpoint -q /tmp; then
+
+    # /tmp is a mount point - assume it is a tmpfs.
+    BASE_ROOT="/tmp/${USER}"
+else
+    # /tmp is part of the root filesystem (disk based).
+    # Use the traditional default users /home based cache location instead.
+    BASE_ROOT="${HOME}"
+fi
+
+## Build the final cache directory path.
+#    We always put the cache in a ".cache" sub-folder so that tools
+#    that follow the XDG spec find what they expect.
+CACHE_DIR="${BASE_ROOT}/.cache"
+
+## Ensure the directory exists and is private to the user.
+#    /tmp is world-writable (drwxrwxrwt), so we must create a
+#    private subtree and lock it down with chmod 700.
+#
+# Create the parent directory (only needed when we are using /tmp)
+if [ "${BASE_ROOT}" != "${HOME}" ] &amp;&amp; [ ! -d "${BASE_ROOT}" ]; then
+    mkdir -p "${BASE_ROOT}"
+    chmod 700 "${BASE_ROOT}"          
+fi
+
+# Now create the .cache directory itself
+mkdir -p "${CACHE_DIR}"
+chmod 700 "${CACHE_DIR}"
+
+## Export the variable so the rest of the session sees it.
+export XDG_CACHE_HOME="${CACHE_DIR}"
+</code></pre>
+<p>For the above To make it more bullet‑proof, you could tighten the /tmp detection for the <code>export XDG_CAHCE_HOME="/tmp/${USER}/.cache</code> creation</p>
+<p>Systemd can generate a tmpfs mount for /tmp via the tmp.mount unit, but that unit is optional and can be disabled.<br>
+In live environments, the initramfs (often via dracut in Kicksecure case) typically mounts tmpfs at /tmp automatically.<br>
+Either the package should detect this and not interfere. otherwise a more robust way would be to ship <code>/etc/fstab</code> to be mounted to tmpfs by enabling and masking the builtin systemd unit, completely bypassing the need to fiddle with /etc/fstab. This is via enabling systemd’s tmp.mount unless it interferes with grub-live?</p>
+<h2><a name="p-3384-package-structure-summary-idea-2" class="anchor" href="https://forums.kicksecure.com#p-3384-package-structure-summary-idea-2" aria-label="Heading link"></a>Package Structure Summary Idea</h2>
+<pre><code class="lang-auto">tmpfs-setup package/
+├── DEBIAN/
+│   ├── control
+│   ├── postinst
+|   └── prerm (depending on implementation)
+├── etc/
+│   ├── default/
+│   │   └── tmpfs-config
+│   └── profile.d/
+│       └── xdg-cache-home.sh
+└── usr/
+    └── share/doc/your-package/
+        └── README.Debian
+</code></pre>
+<p>Would this be a good idea to implement or do you think its a waste of time since grub-live “Live Mode” already exists and it could complicate its implementation or conflict with it with complexity?</p>
+<blockquote>
+<p>fedoraproject . org/wiki/Features/tmp-on-tmpfs</p>
+<blockquote>
+<p>Solaris has been doing this since 1994. (Much like other Unixes, too.) Debian’s next release defaults to tmpfs on /tmp, too. ArchLinux defaults to this as well. Ubuntu has plans for their 12.10 release.</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>www . debian. org/releases/trixie/release-notes/issues.en.html#the-temporary-files-directory-tmp-is-now-stored-in-a-tmpfs</p>
+<blockquote>
+<p>From trixie, the default is for the /tmp/ directory to be stored in memory using a tmpfs(5) filesystem. This should make applications using temporary files faster, but if you put large files there, you may run out of memory.</p>
+</blockquote>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277/1</link>
+        <pubDate>Sun, 07 Sep 2025 19:00:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1277-1</guid>
+        <source url="https://forums.kicksecure.com/t/request-and-idea-for-including-a-tmpfs-setup-package/1277.rss">Request and Idea for including a tmpfs-setup package?</source>
+      </item>
+  </channel>
+</rss>

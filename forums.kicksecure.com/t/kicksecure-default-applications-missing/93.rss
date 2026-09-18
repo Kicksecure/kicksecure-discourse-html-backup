@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure Default Applications Missing</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93</link>
+    <description>I want to install Kicksecure as a host OS and run Whonix inside KVM. I&#39;ve installed Kicksecure by distromorphing Debian, but none of the default applications (Thunderbird, Hexchat, etc.) install when I do. This seems to be the only problem I have. I followed the directions for distromorphing on the wiki, including onionizing the Debian and derivative repositories.
+
+I have tried a number of times with these options:
+
+-Installing Debian 11 Bullseye with XFCE and then installing kicksecure-cli
+-Installing Debian 11 Bullseye with XFCE and then installing kicksecure-xfce
+-Installing Debian 11 Bullseye with no GUI and then installing kicksecure-xfce
+
+I have also tried using apt-cache show kicksecure- to display the packages and install the package kicksecure-desktop-applications-recommended, but only the Electrum wallet installs.
+
+I am using osboot and the installation of Debian is encrypted. 
+
+Please let me know if you need any more information.</description>
+    
+    <lastBuildDate>Sun, 11 Jan 2026 07:14:59 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure Default Applications Missing</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>This issue looks should be no longer existing nowadays.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/4</link>
+        <pubDate>Sun, 11 Jan 2026 07:14:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-93-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93.rss">Kicksecure Default Applications Missing</source>
+      </item>
+      <item>
+        <title>Kicksecure Default Applications Missing</title>
+        <dc:creator><![CDATA[secretariat]]></dc:creator>
+        <description><![CDATA[
+            <p>This makes sense. I was unsure if I had missed a step, but I understand now. I will install the packages manually.</p>
+<p>Thank you for the fast reply and for developing Kicksecure.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/3</link>
+        <pubDate>Sat, 13 Aug 2022 11:07:36 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-93-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93.rss">Kicksecure Default Applications Missing</source>
+      </item>
+      <item>
+        <title>Kicksecure Default Applications Missing</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Short answer:</p>
+<p>This will stay non-ideal until there is an ISO. Meanwhile I recommend to just manually install whatever desired packages.</p>
+<hr>
+<p>Technical background:</p>
+<p><code>kicksecure-xfce</code> does not depend on <code>kicksecure-desktop-applications-recommended</code>. And it shouldn’t either to keep it compartmentalized.</p>
+<p><code>kicksecure-xfce-host</code> does depend on <code>kicksecure-desktop-applications-recommended</code>. But <code>kicksecure-xfce-host</code> isn’t tested for distro morphing and due to its dependency on <code>kicksecure-network-conf</code> and <code>kicksecure-network-conf-gui</code> are higher “understanding” of the packages is required to avoid breaking networking. This is only possible if networking defaults all all chosen by ISO installation.</p>
+<p><code>kicksecure-desktop-applications-recommended</code> doesn’t <code>Depends:</code> on many default applications at time of writing. See:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control#L210">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control#L210" target="_blank" rel="noopener">github.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control#L210" target="_blank" rel="noopener">Kicksecure/kicksecure-meta-packages/blob/master/debian/control#L210</a></h4>
+
+
+
+    <pre class="onebox">      <code class="lang-">
+        <ol class="start lines" start="200" style="counter-reset: li-counter 199 ;">
+            <li>lxqt-sudo, policykit-1, policykit-1-gnome,</li>
+            <li>p7zip-full, zip, unzip, xz-utils, unar, xarchiver,</li>
+            <li>thunar, thunar-archive-plugin, thunar-volman, gvfs,</li>
+            <li>${misc:Depends}</li>
+            <li>Description: Recommended applications for hardened Xfce desktop GUI</li>
+            <li>A metapackage, which installs minimal, yet complete enough</li>
+            <li>to contain the very basics, Xfce applications.</li>
+            <li>.</li>
+            <li>Safe to remove.</li>
+            <li>
+            </li>
+<li class="selected">Package: kicksecure-desktop-applications-recommended</li>
+            <li>Architecture: all</li>
+            <li>Depends: repository-dist-wizard,</li>
+            <li>setup-wizard-dist,</li>
+            <li>ristretto, tumbler,</li>
+            <li>keepassxc,</li>
+            <li>electrum | dummy-dependency-electrum,</li>
+            <li>monero-gui | dummy-dependency-monero-gui,</li>
+            <li>sdwdate-gui,</li>
+            <li>firefox-esr | dummy-dependency,</li>
+            <li>${misc:Depends}</li>
+        </ol>
+      </code>
+    </pre>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><code>hexchat</code> isn’t mentioned in <a href="https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control">https://github.com/Kicksecure/kicksecure-meta-packages/blob/master/debian/control</a>.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/2</link>
+        <pubDate>Fri, 12 Aug 2022 10:46:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-93-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93.rss">Kicksecure Default Applications Missing</source>
+      </item>
+      <item>
+        <title>Kicksecure Default Applications Missing</title>
+        <dc:creator><![CDATA[secretariat]]></dc:creator>
+        <description><![CDATA[
+            <p>I want to install Kicksecure as a host OS and run Whonix inside KVM. I’ve installed Kicksecure by distromorphing Debian, but none of the default applications (Thunderbird, Hexchat, etc.) install when I do. This seems to be the only problem I have. I followed the directions for distromorphing on the wiki, including onionizing the Debian and derivative repositories.</p>
+<p>I have tried a number of times with these options:</p>
+<p>-Installing Debian 11 Bullseye with XFCE and then installing kicksecure-cli<br>
+-Installing Debian 11 Bullseye with XFCE and then installing kicksecure-xfce<br>
+-Installing Debian 11 Bullseye with no GUI and then installing kicksecure-xfce</p>
+<p>I have also tried using apt-cache show kicksecure- to display the packages and install the package kicksecure-desktop-applications-recommended, but only the Electrum wallet installs.</p>
+<p>I am using osboot and the installation of Debian is encrypted.</p>
+<p>Please let me know if you need any more information.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93/1</link>
+        <pubDate>Wed, 10 Aug 2022 17:51:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-93-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-default-applications-missing/93.rss">Kicksecure Default Applications Missing</source>
+      </item>
+  </channel>
+</rss>

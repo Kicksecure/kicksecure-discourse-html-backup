@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>System Maintenance Panel crash with display scaling</title>
+    <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679</link>
+    <description>Fresh Kicksecure host installation (on bare metal, not VM). My monitor is high resolution so the panel and terminal look too tiny. So I scaled the display to 1.5x or 2x (using kanshi or the temporary settings dialog). Either causes the panel to crash the next time a dialog is displayed (e.g. “Reboot” button &gt; about to popup Yes/No dialog &gt; crash). This logs me off to greetd. If I type user: `sysmaint` and press Enter, I can get back to the panel, but I still cannot reboot. I had to use the terminal emulator or login in another VT to `sudo reboot`.
+
+The error message is somewhere along the lines of “wayland protocol error, width / height is not divisible by scale factor” or something. Sorry I don’t have the exact quote since it’s in a sysmaint session and it’s hard to copy text. But it can be obtained by manually running the `sysmaint-panel` program in a terminal emulator instead of upon session start. When it crashes this way, the error message can be observed (since the user is not kicked back to greetd).
+
+Looking at the code, I believe when the panel wants to show a popup dialog, it sets the dimensions to minimum possible (determined by contents?). Rounding it up to an even number or multiples of 6 may help with some common scale factors but feels like a hack to me. Either way, I don’t see an easy way to patch this myself so I’m back to squinting at the tiny fonts for now.</description>
+    
+    <lastBuildDate>Fri, 24 Apr 2026 19:29:58 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Ah, didn’t think about different scaling on different screens.</p>
+<p>I think it probably is worth pursuing, since there is a possible solution here. We’re still using PyQt5 for a lot of our software, which is outdated and really should be replaced with PyQt6 at some point. This feels like it’s likely a toolkit bug in Qt5, and so porting to Qt6 may very well fix the issue. We have a task for that, but it’s far down the task list since we have a bunch of other stuff we’re digging through.</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/7</link>
+        <pubDate>Fri, 24 Apr 2026 19:29:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-7</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>Mine is also Intel. I think it has more to do with dual monitor than GPU and that’s why I’ve been experimenting with VBox multiple emulated monitors. My current hypothesis is that if one monitor is scaled while another isn’t, it can mess with the dimension calculations. So I tried to set both monitors to the same scale at the same time using kanshi, and sure enough, the problem went away (at least for now, need more testing).</p>
+<p>Are we sure we want to spend more time on this? I fear this may be an edge case dependent on exact setup and at best we’ll probably find an upstream issue (like the Wayland library used by the panel).</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/6</link>
+        <pubDate>Fri, 24 Apr 2026 04:14:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-6</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>What graphics hardware does your system use? I tried with Intel graphics, but I also have an NVIDIA machine available I could try.</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/5</link>
+        <pubDate>Fri, 24 Apr 2026 04:09:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-5</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>Despite I running into it all the time on bare metal, I sadly cannot reproduce it on the VMs either. I spent a lot of time tuning the display settings, trying to disable auto-resizing, and even tried multiple monitors with different resolutions on VirtualBox. No luck.</p>
+<p>I did get the error message from my bare metal setup for those who are interested. But feel free to ignore this issue for now unless we find a way to reproduce. <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> Thanks for looking into it anyway.</p>
+<blockquote>
+<p>wl_surface <span class="hashtag-raw">#41:</span> error 2: Buffer size (271x132) is not divisible by scale (2)</p>
+<p>The Wayland connection experienced a fatal error: Protocol error</p>
+<p>zsh: exit 1     sysmaint-panel</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/4</link>
+        <pubDate>Fri, 24 Apr 2026 03:56:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-4</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Redid the above steps on baremetal, on an Intel Core i5-1135G7 laptop with only integrated graphics. Could not reproduce the crash.</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/3</link>
+        <pubDate>Thu, 23 Apr 2026 00:15:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-3</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Cannot reproduce in a VM here. What I did to try to reproduce the issue:</p>
+<ul>
+<li>Boot an existing Kicksecure 18 KVM virtual machine in sysmaint mode</li>
+<li>In the System Maintenance Panel, click “Configure Displays”</li>
+<li>Open wdisplays</li>
+<li>Set the display scaling factor to 1.5</li>
+<li>Apply changes</li>
+<li>In the System Maintenance Panel, click “Open Terminal”</li>
+<li>In the terminal, type <code>sysmaint-panel</code></li>
+<li>In the new sysmaint-panel window, click Reboot</li>
+</ul>
+<p>The “Reboot” window appears without problems.</p>
+<p>Will try to reproduce on baremetal in the (likely near) future.</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/2</link>
+        <pubDate>Wed, 22 Apr 2026 22:16:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-2</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+      <item>
+        <title>System Maintenance Panel crash with display scaling</title>
+        <dc:creator><![CDATA[eternity]]></dc:creator>
+        <description><![CDATA[
+            <p>Fresh Kicksecure host installation (on bare metal, not VM). My monitor is high resolution so the panel and terminal look too tiny. So I scaled the display to 1.5x or 2x (using kanshi or the temporary settings dialog). Either causes the panel to crash the next time a dialog is displayed (e.g. “Reboot” button &gt; about to popup Yes/No dialog &gt; crash). This logs me off to greetd. If I type user: <code>sysmaint</code> and press Enter, I can get back to the panel, but I still cannot reboot. I had to use the terminal emulator or login in another VT to <code>sudo reboot</code>.</p>
+<p>The error message is somewhere along the lines of “wayland protocol error, width / height is not divisible by scale factor” or something. Sorry I don’t have the exact quote since it’s in a sysmaint session and it’s hard to copy text. But it can be obtained by manually running the <code>sysmaint-panel</code> program in a terminal emulator instead of upon session start. When it crashes this way, the error message can be observed (since the user is not kicked back to greetd).</p>
+<p>Looking at the code, I believe when the panel wants to show a popup dialog, it sets the dimensions to minimum possible (determined by contents?). Rounding it up to an even number or multiples of 6 may help with some common scale factors but feels like a hack to me. Either way, I don’t see an easy way to patch this myself so I’m back to squinting at the tiny fonts for now.</p>
+          <p><a href="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679/1</link>
+        <pubDate>Wed, 22 Apr 2026 04:08:26 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1679-1</guid>
+        <source url="https://forums.kicksecure.com/t/system-maintenance-panel-crash-with-display-scaling/1679.rss">System Maintenance Panel crash with display scaling</source>
+      </item>
+  </channel>
+</rss>

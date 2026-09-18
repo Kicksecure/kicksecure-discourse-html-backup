@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Brave opens images even when not set as default app</title>
+    <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662</link>
+    <description>The issue emerged when attempting to view photos stored on an SD card from my new camera I bought. After installing Brave, double clicking images in the file manager (pcmanfm-qt) would inexplicably open them in the Brave web browser. Despite confirming that Brave wasn’t set as the default application, this behavior persisted.
+
+Upon further investigation, it was discovered that there was no mimeapps handling configuration for default applications. To resolve this, it’s advisable to set ImageViewer (Loupe) as the default handler for image types this change effectively corrected the problem. A key best practice is my honest opinion is ensuring web browsers are restricted to only opening websites and .html files exclusively, rather than local images. This setup avoids unnecessary conflicts with dedicated image viewers.
+
+*This exact config fixed it for me.*
+
+`/etc/xdg/mimeapps.list`
+
+```
+[Default Applications]
+# Open Images with Gnome ImageViewer (loupe) 
+image/png=org.gnome.Loupe.desktop
+image/jpeg=org.gnome.Loupe.desktop
+image/jpg=org.gnome.Loupe.desktop
+image/gif=org.gnome.Loupe.desktop
+image/bmp=org.gnome.Loupe.desktop
+image/tiff=org.gnome.Loupe.desktop
+image/webp=org.gnome.Loupe.desktop
+image/*=org.gnome.Loupe.desktop
+```
+
+Notably, .svg files were excluded from this configuration since they’re typically handled by image editors or serve as application icons, requiring a different treatment than standard image formats like JPEG or PNG. By establishing clear defaults through mimeapps.list and ensuring each file type has a designated application, users can have secure defaults while still being able to change the default apps in the local user config since that preseeds over the global config. The global config just makes sure a good default is at the starting point like most of the drop in files already shipped.
+
+---
+
+**P.S.** - On the discussion establishing default mime types, we might want to take a look at what the PDF viewer is if any is included in the default software with the LXQT environment. It is common for people to hide malware, trackers, and unicode in `.pdf`’s. So it would be a good idea to isolate it to one that specially blocks access to the internet and network stack (e.g., through firewall rules or process isolation AppArmor etc.). This is the next thing I’m looking at but I briefly wanted to touch on that.</description>
+    
+    <lastBuildDate>Fri, 17 Apr 2026 05:33:10 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>It’s worth noting that “more CVEs” does not necessarily equal “less secure”, but sometimes indicates “more people are looking at the code and spotting bugs”. Chromium probably has a higher number of CVEs than Firefox (I haven’t verified this), but it may still be more secure than Firefox and is just under higher scrutiny. Similarly, few or zero CVEs may simply mean that no one has tried to compromise something, not that it’s completely secure.</p>
+<p>(On the flip side, software under higher scrutiny may come with a higher risk of in-the-wild vulnerabilities being found for it, since responsible security researchers aren’t the only ones looking for vulns in Chromium. Using a different browser that isn’t as highly researched is security by obscurity, which is generally frowned upon for good reasons, but if you aren’t relying solely or primarily on security by obscurity, it can be useful.)</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/6</link>
+        <pubDate>Fri, 17 Apr 2026 05:33:10 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-6</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>From my research it I’m not quite sure I get more leaning towards Chrome but again both have JIT. I think Chrome’s V8 has been exploited more then Firefox’s SpiderMonkey or IonMonkey JIT compiler but that may or may not be relevant here?</p>
+<p>Yeah I almost wonder if mimetypes <code>/etc/xdg/mimeapps.list</code> could be used to launch script/wrapper to open a browser with no networking or <code>--js-flags=--jitless</code> but probably not.</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/5</link>
+        <pubDate>Fri, 17 Apr 2026 05:20:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-5</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="desi_fubu" data-post="3" data-topic="1662">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Ok, which browser has better sandboxing in this context? Is Chromium or Firefox based about the same?</p>
+</blockquote>
+</aside>
+<p>That’s somewhat of a complicated topic, it depends on the browser of course, but also on how the browser is built and what technology you run it under (for instance, Flatpak interferes somewhat with Chromium’s sandboxing). <a href="https://www.kicksecure.com/wiki/Browser">Kicksecure’s Browser wiki page</a> has some information, but not specifically about sandboxing at the moment. Whonix uses Tor Browser directly from Tor upstream, which should be decent assuming Tor hasn’t unintentionally misconfigured the browser. If you aren’t using Tor, then I’d probably recommend Firefox from Mozilla’s upstream repo (you can install it with the Browser Choice utility in Kicksecure). It’s unlikely to be misconfigured since it comes directly from Mozilla. (Chromium’s sandboxing is theoretically possibly stronger than Firefox’s from what I’ve heard, but the Chromium package in Debian sometimes goes out of date, and the Chromium Flatpak has weakened sandboxing like mentioned above.)</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/4</link>
+        <pubDate>Mon, 13 Apr 2026 21:26:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-4</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>I disagree here; SVG is an XML-based file format that can even include JavaScript, it has plenty that can go wrong loading and parsing it.</p>
+</blockquote>
+<p>Wow I never even knew this about SVG and JavaScript, thanks for the lesson I can add that stuff to I learned today. Is MIME sniffing even a relevant concern or risk in user mode if your not running a server?</p>
+<p>I think it would be good to include a default mimes list config at the very least for image types to open in loupe. Then see if there is any others that even warrant it without limiting user choice or being to restrictive or wasting time.</p>
+<blockquote>
+<p>Web browsers should be used to view PDFs, because they do the PDF rendering in a sandbox and are therefore likely to be safer.</p>
+</blockquote>
+<p>Ok, which browser has better sandboxing in this context? Is Chromium or Firefox based about the same?</p>
+<p>At the end of the day probably best practice to not even open PDF’s unless disconnected from the internet (offline) or unless you trust them.</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/3</link>
+        <pubDate>Mon, 13 Apr 2026 03:20:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-3</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I like this idea, but…</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="1" data-topic="1662">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Notably, .svg files were excluded from this configuration since they’re typically handled by image editors or serve as application icons, requiring a different treatment than standard image formats like JPEG or PNG.</p>
+</blockquote>
+</aside>
+<p>I disagree here; SVG is an XML-based file format that can even include JavaScript, it has plenty that can go wrong loading and parsing it. Loupe as an image viewer is nice because it uses the Glycin image loaders, which do the image processing in a sandbox for security reasons. People who want to edit an SVG can always right-click it, then open with Inkscape or similar.</p>
+<aside class="quote no-group" data-username="desi_fubu" data-post="1" data-topic="1662">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p><strong>P.S.</strong> - On the discussion establishing default mime types, we might want to take a look at what the PDF viewer is if any is included in the default software with the LXQT environment.</p>
+</blockquote>
+</aside>
+<p>Kicksecure and Whonix intentionally do not include a PDF viewer, because existing standalone PDF viewers are generally pretty bad from a security standpoint. Web browsers should be used to view PDFs, because they do the PDF rendering in a sandbox and are therefore likely to be safer.</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/2</link>
+        <pubDate>Sun, 12 Apr 2026 01:33:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-2</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+      <item>
+        <title>Brave opens images even when not set as default app</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <p>The issue emerged when attempting to view photos stored on an SD card from my new camera I bought. After installing Brave, double clicking images in the file manager (pcmanfm-qt) would inexplicably open them in the Brave web browser. Despite confirming that Brave wasn’t set as the default application, this behavior persisted.</p>
+<p>Upon further investigation, it was discovered that there was no mimeapps handling configuration for default applications. To resolve this, it’s advisable to set ImageViewer (Loupe) as the default handler for image types this change effectively corrected the problem. A key best practice is my honest opinion is ensuring web browsers are restricted to only opening websites and .html files exclusively, rather than local images. This setup avoids unnecessary conflicts with dedicated image viewers.</p>
+<p><em>This exact config fixed it for me.</em></p>
+<p><code>/etc/xdg/mimeapps.list</code></p>
+<pre><code class="lang-auto">[Default Applications]
+# Open Images with Gnome ImageViewer (loupe) 
+image/png=org.gnome.Loupe.desktop
+image/jpeg=org.gnome.Loupe.desktop
+image/jpg=org.gnome.Loupe.desktop
+image/gif=org.gnome.Loupe.desktop
+image/bmp=org.gnome.Loupe.desktop
+image/tiff=org.gnome.Loupe.desktop
+image/webp=org.gnome.Loupe.desktop
+image/*=org.gnome.Loupe.desktop
+</code></pre>
+<p>Notably, .svg files were excluded from this configuration since they’re typically handled by image editors or serve as application icons, requiring a different treatment than standard image formats like JPEG or PNG. By establishing clear defaults through mimeapps.list and ensuring each file type has a designated application, users can have secure defaults while still being able to change the default apps in the local user config since that preseeds over the global config. The global config just makes sure a good default is at the starting point like most of the drop in files already shipped.</p>
+<hr>
+<p><strong>P.S.</strong> - On the discussion establishing default mime types, we might want to take a look at what the PDF viewer is if any is included in the default software with the LXQT environment. It is common for people to hide malware, trackers, and unicode in <code>.pdf</code>’s. So it would be a good idea to isolate it to one that specially blocks access to the internet and network stack (e.g., through firewall rules or process isolation AppArmor etc.). This is the next thing I’m looking at but I briefly wanted to touch on that.</p>
+          <p><a href="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662/1</link>
+        <pubDate>Sat, 11 Apr 2026 16:12:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1662-1</guid>
+        <source url="https://forums.kicksecure.com/t/brave-opens-images-even-when-not-set-as-default-app/1662.rss">Brave opens images even when not set as default app</source>
+      </item>
+  </channel>
+</rss>
