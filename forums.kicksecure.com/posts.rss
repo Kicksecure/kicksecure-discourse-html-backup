@@ -7,6 +7,263 @@
       <item>
         <title>New to this, trying to install Tor and VPN</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Sonic" data-post="7" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>Not sure if I want persistent anything going on at any point in time.</p>
+</blockquote>
+</aside>
+<p>It’s kind of unavoidable even if you use an ISO / live image, unless you burn it to a DVD. If the underlying media is writable, malware that gains enough access <em>will</em> be able to write to it even if the filesystem supposedly forbids that. If your use case really requires a totally read-only baremetal environment, then you will need to learn how to use derivative-maker (and cope with its occasional bugs as it is mostly a developer-internal tool and sometimes ends up in a state where it works for us and breaks for others).</p>
+<aside class="quote no-group" data-username="Sonic" data-post="7" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>Example, you open some text files were temporary files are saved somewhere, you open a bitcoin wallet and some debug/log file is kept somewhere showcasing for instance, wallet filenames, you do anything else that may reveal valuable information in some form.</p>
+</blockquote>
+</aside>
+<p>The way in which grub-live mode is implemented tries to avoid all of this as much as possible. The files on disk end up acting as a backing store for an ephemeral environment. In-RAM filesystems are overlayed over the top of everything that reasonably can be overlayed, and an indicator in the system tray warns you if something has been left non-overlayed that you likely care about. If you’re interested in the source code, see:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/grub-live/blob/master/usr/libexec/grub-live/live-hardener">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/grub-live/blob/master/usr/libexec/grub-live/live-hardener" target="_blank" rel="noopener">github.com/Kicksecure/grub-live</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/grub-live/blob/master/usr/libexec/grub-live/live-hardener" target="_blank" rel="noopener">usr/libexec/grub-live/live-hardener</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/grub-live/blob/master/usr/libexec/grub-live/live-hardener" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-">#!/bin/bash
+
+## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+
+# shellcheck source=../../../../helper-scripts/usr/libexec/helper-scripts/check_runtime.bsh
+source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/check_runtime.bsh
+
+if was_executed "${BASH_SOURCE[0]}"; then
+  set -o errexit
+  set -o nounset
+  set -o errtrace
+  set -o pipefail
+  shopt -s inherit_errexit
+  shopt -s shift_verbose
+  export LC_ALL=C
+fi
+
+source "${HELPER_SCRIPTS_PATH:-}"/usr/libexec/helper-scripts/wc-test.sh
+
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/grub-live/blob/master/usr/libexec/grub-live/live-hardener" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/lib/python3/dist-packages/livecheck/livecheck.py">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/lib/python3/dist-packages/livecheck/livecheck.py" target="_blank" rel="noopener">github.com/Kicksecure/desktop-config-dist</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/lib/python3/dist-packages/livecheck/livecheck.py" target="_blank" rel="noopener">usr/lib/python3/dist-packages/livecheck/livecheck.py</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/lib/python3/dist-packages/livecheck/livecheck.py" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-py">#!/usr/bin/python3 -su
+
+# Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+# See the file COPYING for copying conditions.
+
+# pylint: disable=too-many-lines
+
+"""
+livecheck.py - Monitors the system and reports whether it is persistent,
+live, or semi-persistent.
+"""
+
+import signal
+import sys
+import select
+import subprocess
+import re
+import functools
+import time
+
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/desktop-config-dist/blob/master/usr/lib/python3/dist-packages/livecheck/livecheck.py" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>A malicious process with root rights could still write to the disk by mounting the read-only root filesystem read-write, but that’s a risk even when using a live ISO.</p>
+<aside class="quote no-group" data-username="Sonic" data-post="7" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>If I cannot use veracrypt in this state (im still not sure why?) then I guess I cannot use this OS.</p>
+</blockquote>
+</aside>
+<p>Come to think of it, the ISO has an “unrestricted admin mode” boot entry. If you use that, you will get a normal desktop where you can use <code>sudo</code> and install VeraCrypt. You’ll still have the headache of having to reinstall everything on every boot, and you still won’t get security updates until a new ISO comes out or you build your own, but that will let you get around the issues with user-sysmaint-split. (user-sysmaint-split causes issues with VeraCrypt because VeraCrypt needs root access to operate, and user-sysmaint-split prevents applications from getting root access even if they have your password if you are booted into a standard desktop.)</p>
+<aside class="quote no-group" data-username="Sonic" data-post="7" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>Tails works like this, and they roll out updates just fine</p>
+</blockquote>
+</aside>
+<p>That’s because Tails works in a fundamentally different way from Kicksecure when it comes to how updates are rolled out. Updates are provided in the form of new OS images which you flash, and new images are rolled out frequently. Kicksecure on the other hand provides updates in the form of apt packages (some from Debian, some from ourselves) which are installed using standard package management tools. New ISOs are released infrequently, meaning the latest available ISO may be rather out of date and in need of updating before it is safe.</p>
+<aside class="quote no-group" data-username="Sonic" data-post="7" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>I doubt it’s an huge issue</p>
+</blockquote>
+</aside>
+<p>Depends on your threat model. If you are only viewing trusted files, working with trusted data, visiting trusted websites, and are only connecting to the Internet through a trusted network (no malicious devices on the LAN), then you’re likely fine. But if any of those don’t hold true, and there’s a vulnerability in some of the software on an old Kicksecure ISO, malware could theoretically infect the live system and steal your data regardless of whether it’s written to the disk. That isn’t much better than having it stick around on disk.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_8</link>
+        <pubDate>Wed, 23 Sep 2026 02:47:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5594</guid>
+      </item>
+      <item>
+        <title>New to this, trying to install Tor and VPN</title>
+        <dc:creator><![CDATA[@Sonic]]></dc:creator>
+        <description><![CDATA[ <p>Not sure if I want persistent anything going on at any point in time. Example, you open some text files were temporary files are saved somewhere, you open a bitcoin wallet and some debug/log file is kept somewhere showcasing for instance, wallet filenames, you do anything else that may reveal valuable information in some form. There could also be some bug that writes data in the wrong moment. If you use it in read-only mode at all times, there is no way this happens. I simply do not want persistence at all, at any point. If I cannot use veracrypt in this state (im still not sure why?) then I guess I cannot use this OS. Reason im interested in Veracrypt is, well I have been using it since Truecrypt days and I don’t feel like moving my documents to a new format, or having to learn something else and screw up in the process. The documents I move are rather small, I don’t need some huge 100GB container, it’s mostly documents basicaly.</p>
+<p>Tails works like this, and they roll out updates just fine, I doubt it’s an huge issue, compared to not being aware that you saved the wrong data somewhere that leaks information, so I would rather stay 100% Live.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_7</link>
+        <pubDate>Wed, 23 Sep 2026 02:27:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5593</guid>
+      </item>
+      <item>
+        <title>New to this, trying to install Tor and VPN</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="Sonic" data-post="5" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>What I found confusing is, how does it save you selected this setting on a new boot given that you are using a read-only live USB/DVD?</p>
+</blockquote>
+</aside>
+<blockquote>
+<p>given that you are using a read-only live USB/DVD?</p>
+</blockquote>
+<p>That isn’t the intended way to use Kicksecure from a portable drive for daily use. The documented way to make a portable Kicksecure installation is to boot the system from the live ISO, then insert a second USB key and install the OS to that USB key like you would install to an internal drive. You can then boot in persistent mode when you need to make changes (i.e. install software updates, which are critical for security and must not be skipped), and you can boot in live mode when you need the system to be amnesic. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/USB_Installation">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1790062214" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/USB_Installation" target="_blank" rel="noopener" title="07:33AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/0/03/Download-usb.jpg?version=fd433a55102b14d723f69090c7e6be4f" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/USB_Installation" target="_blank" rel="noopener">Installation of Kicksecure on a USB</a></h3>
+
+  <p>Yes, Kicksecure can be installed on a USB. Here's how.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>It is technically possible to use Kicksecure directly from a live ISO, but then:</p>
+<ul>
+<li>You’ll need to reinstall all your software on every boot</li>
+<li>Removing user-sysmaint-split is not an option</li>
+<li>You won’t get some (or depending on how you use it, any) software updates, leaving your system insecure</li>
+<li>You won’t get any theoretical increase in security if using a USB key as the underlying storage media is writable and ISO filesystems can be written to with some difficulty</li>
+</ul>
+<p>In other words, you get a lot of downsides (including security holes) for no good reason other than to make one specific attack harder (not impossible, just harder). You can work around these issues by <a href="https://www.kicksecure.com/wiki/Dev/Build_Documentation/images">building your own ISOs</a> periodically with derivative-maker, but this is non-trivial and for expert users only. It’s much easier and safer to do a persistent installation and keep it up-to-date. If you don’t do any of your work when in persistent mode, you likely won’t run into issues.</p>
+<aside class="quote no-group" data-username="Sonic" data-post="5" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
+<blockquote>
+<p>Tails comes with their own Veracrypt version, probably to be able to ship it with it and get around something that wouldn’t allow for it.</p>
+</blockquote>
+</aside>
+<p>From a quick look, it looks like it’s a read-only thing, which I guess is what you’re looking for. Do the archives you work with <em>have</em> to be in VeraCrypt format? If you can swap to PGP-encrypted .tar.gz archives, you can decrypt and unzip them in live mode and have their contents vanish on reboot.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_6</link>
+        <pubDate>Wed, 23 Sep 2026 01:20:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5592</guid>
+      </item>
+      <item>
+        <title>New to this, trying to install Tor and VPN</title>
+        <dc:creator><![CDATA[@Sonic]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>The option to boot with is a few entries below the one highlighted. When you boot it, you will be prompted if you really want to remove user-sysmaint-split. After confirmation, the system will automatically reboot and the “SYSMAINT Session” boot modes will be gone. I mentioned “once” to make it clear that you would not need to boot into this boot mode every time</p>
+</blockquote>
+</aside>
+<p>What I found confusing is, how does it save you selected this setting on a new boot given that you are using a read-only live USB/DVD?</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>After that procedure is done, you can install Veracrypt normally from <code>PERSISTENT Mode | USER Session</code>.</p>
+</blockquote>
+</aside>
+<p>How does it work in a persistent way if it’s a live USB/DVD? I still don’t get this part.</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>I’m not aware of a good volume-based encryption app that works with Kicksecure out of the box. There is some work being done to find one, and a possibility that we could create one in the future. See:</p>
+</blockquote>
+</aside>
+<p>Tails comes with their own Veracrypt version, probably to be able to ship it with it and get around something that wouldn’t allow for it. Perhaps you could use Veracrypt as a base. It has great features and it’s an established software. As far as LUKS, I already use it for FDE for the regular Debian installs. In this case im looking for an amnesic setup were nothing is saved, this is why im not sure how any persistent thing and reboots that save settings work within this context. But anyway, im going to try that mode and see what happens.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_5</link>
+        <pubDate>Wed, 23 Sep 2026 01:09:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5591</guid>
+      </item>
+      <item>
+        <title>New to this, trying to install Tor and VPN</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="Sonic" data-post="3" data-topic="1849">
 <div class="title">
 <div class="quote-controls"></div>
@@ -2006,82 +2263,6 @@ or the appimage path, and see what error dumps out</p>
         <link>https://forums.kicksecure.com/t/browser-choice/1025?page=2#post_29</link>
         <pubDate>Sun, 30 Aug 2026 22:48:37 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5540</guid>
-      </item>
-      <item>
-        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Hmm, sounds like you’re burning a filesystem image to the disk, but not an ISO filesystem image. ISO is a filesystem, not just a filename convention, so your “.iso” file isn’t an ISO file at all <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
-<p>But yes, the ability to create encrypted container images would be something I would want this tool to have. If such an image can be burned to a disc and just work, awesome.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_7</link>
-        <pubDate>Sun, 30 Aug 2026 22:44:25 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5539</guid>
-      </item>
-      <item>
-        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
-        <dc:creator><![CDATA[@desi_fubu]]></dc:creator>
-        <description><![CDATA[ <p><strong>Yes and maybe no?</strong>…</p>
-<p>I would begin by generating an .iso file using fallocate (though I later switched to /dev/urandom in an attempt to increase entropy). The process then proceeds as follows after generating a file with a .iso extension:</p>
-<pre><code>- Encrypt the file using cryptsetup
-- Open the LUKS container
-- Create a filesystem with mkfs.ext4
-- Mount the container
-- Adjust permissions with chown
-- Transfer files into it (waiting for the process to complete)
-- Close the LUKS container
-</code></pre>
-<p><strong>Burning via Brasero</strong></p>
-<p>I have successfully used two methods:</p>
-<pre><code>- *Burn the container as a file* via a data CD option.
-- *Select "Burn Disk Image"* and write the ISO directly to the disc.
-</code></pre>
-<p>With the first option, the disc does not appear as a mounted volume until you manually open the file. With the second option, inserting the CD/DVD causes the entire disc to be recognized as an encrypted volume.</p>
-<p>This was tested on Kicksecure 17. I have not revisited the process in version 18. Now I also hope &amp; question if disk burning software like Brasero can operate with enuff permissions due to sysmaint change?</p>
-<p>I’ll revist this later this week when I get some time.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_6</link>
-        <pubDate>Sun, 30 Aug 2026 22:40:31 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5538</guid>
-      </item>
-      <item>
-        <title>How to open a text file in Persistent Mode</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="shaylabeige" data-post="1" data-topic="1843">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/ba9def/48.png" class="avatar"> shaylabeige:</div>
-<blockquote>
-<p>However since fresh install when i use df -h i dont see my usb stick.</p>
-</blockquote>
-</aside>
-<p>You haven’t mounted it yet. The disk is there (you’ll see it if you run <code>lsblk</code>), but its files aren’t showing up yet. Open the file manager, and click on the disk in the left-hand sidebar. This will mount it to a removable media location, and then you will be able to access its contents.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-open-a-text-file-in-persistent-mode/1843#post_2</link>
-        <pubDate>Sun, 30 Aug 2026 14:34:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5537</guid>
-      </item>
-      <item>
-        <title>How to open a text file in Persistent Mode</title>
-        <dc:creator><![CDATA[@shaylabeige]]></dc:creator>
-        <description><![CDATA[ <p>Ok so in <a href="https://www.kicksecure.com/wiki/Persistent_Mode" rel="noopener nofollow ugc">Persistent Mode</a> i used to use the commands df -h to locate my usb stick<br>
-ls -la to see my file and cat or xdg-open to open the file.<br>
-From then on i copy paste the installation instructions for various software i want installed.</p>
-<p>However since fresh install when i use df -h i dont see my usb stick. This is what i get regardless of whether the usb is plugged or not. I use 2 diferent usb sticks to test and the usbguard-notifier says disk 2.0 allowed with each. There is only a reject button i can press on it</p>
-<p>Filesystem      Size  Used Avail Use% Mounted on<br>
-/dev/dm-0        342G   14G   321G  15% /<br>
-devtmpfs        4.0M     0  4.0M   0% /dev<br>
-tmpfs           1.2G  8.3M  1.2G   1% /dev/shm<br>
-efivarfs        154K  90K  60K   61% /sys/firmware/efi/efivars<br>
-tmpfs           491M  1.6M  489M   1% /run<br>
-tmpfs           1.0M     0  1.0M   0% /run/credentials/systemd-cryptsetup@lusk…service<br>
-tmpfs           5.0M     0  5.0M   0% /run/lock<br>
-tmpfs           1.0M     0  1.0M   0% /run/credentials/systemd-journald.service<br>
-tmpfs           1.0M     0  1.0M   0% /run/credentials/systemd-networkd.service<br>
-tmpfs           1.2G  4.0K  1.2G   1% /tmp<br>
-/dev/sda2    3.9G  43M  3.7G   2% /boot<br>
-tmpfs           246M  112K  245M   1% /run/user/1001<br>
-tmpfs           1.0M     0  1.0M   0% /run/credentials/getty@tty1.service</p>
-<p>What am i missing? Alternatively could you please send me the commands to open my file if i put it in the downloads folder from normal mode. I have real issues navigating the directories in kicksecure persistent mode.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-open-a-text-file-in-persistent-mode/1843#post_1</link>
-        <pubDate>Sun, 30 Aug 2026 13:25:01 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5536</guid>
       </item>
   </channel>
 </rss>
