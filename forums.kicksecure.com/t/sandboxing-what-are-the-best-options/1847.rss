@@ -17,9 +17,217 @@ For other applications like GIMP and the file manager, Flatpak seems to be the o
 
 I am trying to avoid malware/attackers getting access to certain files in my home folder, or becoming root. I know that no sandboxing can compare with VM isolation, but for me it’s important to prevent that the VMs do no keep getting infected as well. And running every suspicions file and webpage in a new VM would disrupt my workflow too much.</description>
     
-    <lastBuildDate>Wed, 16 Sep 2026 00:20:23 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Sep 2026 17:45:53 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Sandboxing - what are the best options?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="ks44" data-post="3" data-topic="1847">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/9f8e36/48.png" class="avatar"> ks44:</div>
+<blockquote>
+<p>However using Firejail in Kicksecure seems to disable User Namespaces in the Firefox sandbox. How can this be fixed?</p>
+</blockquote>
+</aside>
+<p>This is a known issue with Firejail. See:</p>
+<aside class="onebox githubissue" data-onebox-src="https://github.com/netblue30/firejail/issues/6675">
+  <header class="source">
+
+      <a href="https://github.com/netblue30/firejail/issues/6675" target="_blank" rel="noopener">github.com/netblue30/firejail</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/netblue30/firejail/issues/6675" target="_blank" rel="noopener">Firefox warning message about user namespace after upgrade to AppArmor 4</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2025-03-04" data-time="17:34:35" data-timezone="UTC">05:34PM - 04 Mar 25 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/vinc17fr" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/8422499?v=4" class="onebox-avatar-inline" width="20" height="20">
+          vinc17fr
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">### Description
+
+Since the upgrade to AppArmor 4 on Debian/unstable, Firefox dis<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden">plays the following warning message: "Some of Firefox's security features may offer less protection on your current operating system."
+
+And there is a link to https://support.mozilla.org/en-US/kb/install-firefox-linux#w_security-features-warning
+
+In particular:
+&gt; The sandbox in Firefox makes use of unprivileged user namespaces when creating new processes for enforcing more security. This can be considered a security risk, therefore some Linux distributions have started to restrict its usage and only allow it to work where there is an AppArmor profile.
+
+So the Firefox AppArmor profile has `userns` to allow user namespaces.
+
+The issue is that with Firejail, the AppArmor profile is `firejail-default`, not the Firefox one, thus it does not have `userns`.
+
+### Steps to Reproduce
+
+Run `firejail /usr/bin/firefox` and continue until a Firefox browser window is open.
+
+### Expected behavior
+
+The Firefox window should not show a warning message.
+
+### Actual behavior
+
+The following warning message is shown above the main area: "Some of Firefox's security features may offer less protection on your current operating system."
+
+### Behavior without a profile
+
+_What changed calling `LC_ALL=C firejail --noprofile /path/to/program` in a
+terminal?_
+
+There is no warning message. But I suppose that this is because the `firefox` profile uses AppArmor (which is probably wanted), according to the contents of the `firefox-common.profile` file:
+```
+apparmor
+# Fixme!
+apparmor-replace
+```
+while this is not the case without a profile.
+
+### Additional context
+
+My Debian bug report: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1098869
+
+This may be similar to #6368 for Chromium.
+
+### Environment
+
+- Name/version/arch of the Linux kernel (`uname -srm`): `Linux 6.11.10-amd64 x86_64`
+- Name/version of the Linux distribution (e.g. "Ubuntu 20.04" or "Arch Linux"): Debian/unstable
+- Name/version of the relevant program(s)/package(s) (e.g. "firefox 134.0-1,
+  mesa 1:24.3.3-2"): Firefox 135.0.1
+- Version of Firejail (`firejail --version`): 0.9.72
+
+### Checklist
+
+
+
+- [x] The issues is caused by firejail (i.e. running the program by path (e.g. `/usr/bin/vlc`) "fixes" it).
+- [x] I can reproduce the issue without custom modifications (e.g. globals.local).
+- [x] The program has a profile. (If not, request one in `https://github.com/netblue30/firejail/issues/1139`)
+- [x] The profile (and redirect profile if exists) hasn't already been fixed [upstream](https://github.com/netblue30/firejail/tree/master/etc).
+- [x] I have performed a short search for similar issues (to avoid opening a duplicate).
+  - [x] I'm aware of `browser-allow-drm yes`/`browser-disable-u2f no` in `firejail.config` to allow DRM/U2F in browsers.
+
+### Log
+
+&lt;details&gt;
+&lt;summary&gt;Output of &lt;code&gt;LC_ALL=C firejail /path/to/program&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;
+
+```
+Reading profile /etc/firejail/firefox.profile
+Reading profile /home/vlefevre/.config/firejail/firefox.local
+Reading profile /etc/firejail/whitelist-usr-share-common.inc
+Reading profile /etc/firejail/firefox-common.profile
+Reading profile /home/vlefevre/.config/firejail/firefox-common.local
+Reading profile /etc/firejail/disable-common.inc
+Reading profile /etc/firejail/disable-devel.inc
+Reading profile /etc/firejail/disable-exec.inc
+Reading profile /etc/firejail/disable-interpreters.inc
+Reading profile /etc/firejail/disable-proc.inc
+Reading profile /etc/firejail/disable-programs.inc
+Reading profile /etc/firejail/whitelist-common.inc
+Reading profile /etc/firejail/whitelist-run-common.inc
+Reading profile /etc/firejail/whitelist-runuser-common.inc
+Reading profile /etc/firejail/whitelist-var-common.inc
+Warning: networking feature is disabled in Firejail configuration file
+Seccomp list in: !chroot, check list: @default-keep, prelist: unknown,
+Parent pid 142128, child pid 142132
+Warning: An abstract unix socket for session D-BUS might still be available. Use --net or remove unix from --protocol set.
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Seccomp list in: !chroot, check list: @default-keep, prelist: unknown,
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: NVIDIA card detected, nogroups command ignored
+Warning: Replacing profile instead of stacking it. It is a legacy behavior that can result in relaxation of the protection. It is here as a temporary measure to unbreak the software that has been broken by switching to the stacking behavior.
+Child process initialized in 460.94 ms
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+```
+
+&lt;/p&gt;
+&lt;/details&gt;
+
+&lt;details&gt;
+&lt;summary&gt;Output of &lt;code&gt;LC_ALL=C firejail --debug /path/to/program&lt;/code&gt;&lt;/summary&gt;
+&lt;p&gt;
+
+I can see in particular:
+```
+noroot user namespace installed
+```
+and
+```
+AppArmor enabled
+```
+I can provide the full output if needed.
+
+&lt;/p&gt;
+&lt;/details&gt;</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/4</link>
+        <pubDate>Thu, 24 Sep 2026 17:45:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1847-4</guid>
+        <source url="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss">Sandboxing - what are the best options?</source>
+      </item>
+      <item>
+        <title>Sandboxing - what are the best options?</title>
+        <dc:creator><![CDATA[ks44]]></dc:creator>
+        <description><![CDATA[
+            <p>Thank you.</p>
+<p>I decided against both creating an apparmor profile and using systemd-nspawn as it is too complex.</p>
+<p>Sandboxing of browsers is really a sad story in Linux at the moment, cant wait until the Kicksecure sandbox is ready.</p>
+<p>So I decided to give Firejail another chance, using the SUID mitigations described on the Firejail website. However using Firejail in Kicksecure seems to disable User Namespaces in the Firefox sandbox. How can this be fixed?</p>
+<p>I tried “sudo permission-hardener disable /usr/bin/firejail” but it told me that Firejail was never hardened, so the SUID hardener does not seem to be the cause.</p>
+<p>Unsandboxed Firefox has a fully working internal sandbox.</p>
+          <p><a href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/3</link>
+        <pubDate>Thu, 24 Sep 2026 15:18:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1847-3</guid>
+        <source url="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss">Sandboxing - what are the best options?</source>
+      </item>
       <item>
         <title>Sandboxing - what are the best options?</title>
         <dc:creator><![CDATA[arraybolt3]]></dc:creator>
