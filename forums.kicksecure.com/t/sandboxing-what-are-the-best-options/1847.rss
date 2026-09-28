@@ -17,9 +17,79 @@ For other applications like GIMP and the file manager, Flatpak seems to be the o
 
 I am trying to avoid malware/attackers getting access to certain files in my home folder, or becoming root. I know that no sandboxing can compare with VM isolation, but for me it’s important to prevent that the VMs do no keep getting infected as well. And running every suspicions file and webpage in a new VM would disrupt my workflow too much.</description>
     
-    <lastBuildDate>Fri, 25 Sep 2026 21:16:05 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 27 Sep 2026 16:00:39 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Sandboxing - what are the best options?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="desi_fubu" data-post="6" data-topic="1847">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Be careful with GIMP since you can run code inside GIMP’s <em>Script Fu</em>, its usefull for running a bunch of commands to modify an image and add cool effects but is an attack vector.</p>
+</blockquote>
+</aside>
+<p>I mean, it’s no more of an attack vector than any scripting language to my awareness. You can’t embed a script into a GIMP image, so I don’t think there’s much risk here unless one is installing untrusted GIMP plugins. Of course, malware could install malicious GIMP plugins, but malware could edit <code>~/.bashrc</code> too, and that would be a much more useful target since it runs automatically so frequently.</p>
+          <p><a href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/8</link>
+        <pubDate>Sun, 27 Sep 2026 16:00:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1847-8</guid>
+        <source url="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss">Sandboxing - what are the best options?</source>
+      </item>
+      <item>
+        <title>Sandboxing - what are the best options?</title>
+        <dc:creator><![CDATA[ks44]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="desi_fubu" data-post="6" data-topic="1847">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>you can run code inside GIMP’s <em>Script Fu</em>, its usefull for running a bunch of commands to modify an image and add cool effects but is an attack vector</p>
+</blockquote>
+</aside>
+<p>Was not aware of that.<br>
+<code>sudo apt remove gimp-python</code> did not work (no such package), but perhaps adding this to gimp.local (Firejail profile) could do the job?<br>
+<code>ignore private-etc @x11,gimp,python*</code><br>
+<code>private-etc @x11,gimp</code></p>
+<p>Would be useful with a list of applications for different purposes that are the most secure and have the smallest attack surface.</p>
+          <p><a href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/7</link>
+        <pubDate>Sun, 27 Sep 2026 09:08:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1847-7</guid>
+        <source url="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss">Sandboxing - what are the best options?</source>
+      </item>
+      <item>
+        <title>Sandboxing - what are the best options?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="ks44" data-post="1" data-topic="1847">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/9f8e36/48.png" class="avatar"> ks44:</div>
+<blockquote>
+<p>For other applications like GIMP</p>
+</blockquote>
+</aside>
+<p>Be careful with GIMP since you can run code inside GIMP’s <em>Script Fu</em>, its usefull for running a bunch of commands to modify an image and add cool effects but is an attack vector. <br>
+I believe you can remove its support with <code>sudo apt remove gimp-python</code></p>
+<p>Also need to disable GIMP’s access to the internet with the <a href="https://www.gimp.org/man/gimprc.html" rel="noopener nofollow ugc"><code>/etc/gimp/2.0/gimprc</code></a> <strong>Firejails <code>--net=none</code> is better</strong></p>
+<pre><code class="lang-auto"># Disable online features partial defense
+(user-manual-online no)
+(check-updates no)
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847/6</link>
+        <pubDate>Sun, 27 Sep 2026 02:35:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1847-6</guid>
+        <source url="https://forums.kicksecure.com/t/sandboxing-what-are-the-best-options/1847.rss">Sandboxing - what are the best options?</source>
+      </item>
       <item>
         <title>Sandboxing - what are the best options?</title>
         <dc:creator><![CDATA[ks44]]></dc:creator>
