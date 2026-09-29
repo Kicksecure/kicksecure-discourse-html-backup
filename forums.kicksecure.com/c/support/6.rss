@@ -5,26 +5,8 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Sun, 27 Sep 2026 19:37:11 +0000</lastBuildDate>
+      <lastBuildDate>Sun, 27 Sep 2026 13:45:47 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
-        <item>
-          <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
-          <dc:creator><![CDATA[zzgg]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>KVM/virt-manager with no gpu passthrough and WLR_RENDERER already displaying pixman.</p>
-<p>an excerpt from the sudo journalctl -u greet.dservice output below.</p>
-            <p><small>8 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855</link>
-          <pubDate>Sun, 27 Sep 2026 19:37:11 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1855</guid>
-          <source url="https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855.rss">Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</source>
-        </item>
         <item>
           <title>What does these kicksecure packages do?</title>
           <dc:creator><![CDATA[ks44]]></dc:creator>
@@ -889,6 +871,87 @@ gpg: Signature notation: salt@notations.sequoia-pgp.org=[ not human readable (32
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1791</guid>
           <source url="https://forums.kicksecure.com/t/updating-error/1791.rss">Updating error</source>
+        </item>
+        <item>
+          <title>Issue, update not working</title>
+          <dc:creator><![CDATA[Lacekim]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>kick secure I ran system check. It printed out a page of lines. within that it has a box with root - locked - disabled<br>
+user - Absent - enabled<br>
+sysmaint - Absent - enabled</p>
+<p>then further down it says warning system check can not check for system update</p>
+<p>That output means you currently have these accounts/tokens in this state:</p>
+<ul>
+<li>
+<p>root: locked/disabled</p>
+</li>
+<li>
+<p>sysmaint: Absent/enabled (not actually present, but the “enabled” flag is showing as enabled—so it’s likelya config state mismatch or just how the checker reports it)</p>
+</li>
+<li>
+<p>user: Absent/enabled (same note)</p>
+</li>
+</ul>
+<p>And the checker can’t verify OS/package updates (“cannot check for system update”).</p>
+<p>To get you unstuck, do these quick checks:</p>
+<ol>
+<li>
+<p>Confirm what accounts exist right now</p>
+<ul>
+<li>
+<p>Run: <code>getent passwd | egrep '^(root|user|sysmaint):'</code></p>
+</li>
+<li>
+<p>Run: `getent shadow | egrep ‘^(root|user|sysmaint):’</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Check whether “user” is actually missing</p>
+<ul>
+<li>
+<p>Run: <code>id user</code></p>
+</li>
+<li>
+<p>Run: <code>id sysmaint</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Look for update-check failure cause</p>
+<ul>
+<li>
+<p>If this is Linux: run <code>cat /etc/os-release</code> and check if your system has working repos/clock:</p>
+<ul>
+<li>
+<p><code>date</code></p>
+</li>
+<li>
+<p><code>ls /etc/apt/sources.list.d 2&gt;/dev/null || true</code></p>
+</li>
+<li>
+<p>For Debian/Ubuntu: <code>apt update</code> (or <code>apt-get update</code>)</p>
+</li>
+<li>
+<p>For RHEL/CentOS/Fedora: <code>dnf check-update</code> or <code>yum check-update</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>If you paste (1) the OS distro (output of <code>/etc/os-release</code>) and (2) the exact command you ran for “system check” plus the first ~30 lines of its output (redact hostnames if needed), I can tell you whether the “Absent/enabled” lines are benign reporting or indicate a broken account/state—and what exact fix to apply.</p>
+            <p><small>8 posts - 3 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/issue-update-not-working/1790</link>
+          <pubDate>Fri, 03 Jul 2026 06:37:12 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1790</guid>
+          <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
         </item>
   </channel>
 </rss>
