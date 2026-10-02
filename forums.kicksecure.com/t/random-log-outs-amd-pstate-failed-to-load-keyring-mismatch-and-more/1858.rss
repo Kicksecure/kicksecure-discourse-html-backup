@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+    <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858</link>
+    <description>I installed Kicksecure on my desktop yesterday, and since then I have spent several hours attempting to debug it, with limited success.
+
+*I am at my wits end.*
+
+After my initial install, I was experiencing many of these problems (random logouts, amd_pstate failed to load, kanshi config not applied automatically) and then the terminal suddenly stopped working. When I tried to open Qterminal or use anything in the System Maintenance Panel that would normally launch the Qterminal, nothing happened.
+
+I could not find any way to fix this or install another terminal emulator, so I reinstalled the system from scratch. My terminal is back, but there are several other problems.
+
+I considered creating a separate post for each of these, but it seems likely that at least some of these issues are connected. I&#39;m using the latest version of Kicksecure, based on Debian 13.6.
+
+# Overview of Problems:
+
+1. Logged out of computer at random intervals
+2. Kanshi config is not automatically applied upon startup
+3. amd_pstate failed to load
+4. sudo apt update: Error due to keyring mismatch
+5. systemd critical journal messages - nouveau, channel 16 killed
+
+# **1. Logged out of computer at random intervals**
+
+At seemingly random intervals, I am logged out of the computer and end up on the black log in screen where it asks me to enter my username. When I log back in, all of my applications are closed and anything I didn&#39;t save is gone. This has happened while I am actively using my computer, and it has happened twice while writing this post. This could be coincidental, but it only seems to happen when I have adjusted the scale of my display.
+
+# **2. Kanshi config is not automatically applied upon startup**
+
+When I restart Kanshi the settings in my config file are applied, but I have to do that manually every single time I boot my computer. I tried to get around this by creating the file /etc/rc.local with the following contents and giving it execute permissions. This script is supposed to run on start up, but my display config settings are only applied if I execute the script manually.
+
+```
+#!/bin/sh
+
+systemctl --user restart kanshi
+
+exit 0
+```
+
+# **3. amd_pstate failed to load**
+
+Every time I boot my computer, before I enter the passphrase to decrypt my drive, it outputs:
+
+```
+[    5.447055] amd_pstate: failed to enable driver mode(3)
+```
+
+When I run lsmod it does not list amd_pstate. When I run modprobe, it outputs:
+
+```
+[user ~]% sudo modprobe amd_pstate
+modprobe: FATAL: Module amd_pstate not found in directory /lib/modules/6.12.111+deb13-amd64
+zsh: exit 1     sudo modprobe amd_pstate
+```
+
+I have already tried updating my BIOS, enabling CPPC in my BIOS settings, and adding the amd_pstate=active rameter to /etc/default/grub with the following line before running &#39;sudo update-grub&#39; and rebooting my device.
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT=&quot;quiet amd_pstate=active&quot;
+```
+
+Do I even need amd_pstate, or can I just ignore this error for the rest of time?
+
+# **4. sudo apt update: Error due to keyring mismatch**
+
+This is the newest error, and it prevents me from using sudo apt update. It started after I tried to install Mullvad VPN, following the instructions on their website. Here are the commands I entered:
+
+```
+sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo &quot;deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main&quot; | sudo tee /etc/apt/sources.list.d/mullvad.list
+sudo apt update
+```
+
+When I run &#39;sudo apt update&#39;, it outputs
+
+```
+[user ~]% sudo apt update
+Error: Conflicting values set for option Signed-By regarding source https://repository.mullvad.net/deb/stable/ stable: /usr/share/keyrings/mullvad-keyring.asc != /etc/apt/keyrings/mullvad-keyring.asc
+Error: The list of sources could not be read.
+zsh: exit 100   sudo apt update
+```
+
+I tried deleting /usr/share/keyrings/mullvad-keyring.asc and /etc/apt/keyrings/mullvad-keyring.asc and rerunning the above commands, but it did not solve the problem.
+
+# **5. systemd critical journal messages - nouveau, channel 16 killed**
+
+When I run System Check, I get the following output
+
+```
+ERROR: systemd critical journal messages check result (current boot): Possible system issue detected. Some unusual entries were found in the kernel log. 
+
+There is no need to panic. This is not a serious security issue. However, it may affect other system checks. These messages might indicate hardware or software problems. 
+
+Detected messages: 
+Sep 30 14:14:34 localhost kernel: nouveau 0000:2b:00.0: labwc[2314]: channel 16 killed!
+Sep 30 15:12:18 localhost kernel: nouveau 0000:2b:00.0: labwc[9098]: channel 16 killed!
+Sep 30 16:00:58 localhost kernel: nouveau 0000:2b:00.0: labwc[16315]: channel 16 killed!
+
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: 
+systemcheck_skip_functions+=&quot; check_journal &quot; 
+INFO: Kicksecure is a research project. 
+INFO: user-sysmaint-split: Absent 
+INFO: user-sysmaint-split session detection result: USER Session. 
+INFO: Full Disk Encryption (FDE): Enabled 
+INFO: GRUB Bootloader Password: Absent 
+INFO: Kicksecure Login Security Check (Colors) :
++----------+--------------------------------------+
+| Users    | Password               GUI Autologin |
++----------+--------------------------------------+
+| root     | Locked (Present)       Disabled      |
+| user     | Absent                 Enabled       |
+| sysmaint | Absent                 Disabled      |
++----------+--------------------------------------+
+You can adjust these settings using &quot;Manage Passwords&quot; and &quot;Manage GUI Autologin&quot; in the System Maintenance Panel. 
+INFO: Secure Boot: Enabled 
+INFO: tirdad - TCP ISN CPU Information Leak Protection: Enabled 
+INFO: Kicksecure APT Repository: Enabled. When the Kicksecure team releases TRIXIE updates, they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade) along with updated packages from the Debian team. Please read Trust to understand the risk. If you want to change this, use: 
+Start Menu -&gt; System -&gt; Derivative Repository 
+WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100) 
+Please manually check: 
+(Open a terminal, Start Menu -&gt; System -&gt; Terminal.) 
+upgrade-nonroot
+```
+
+Should I be concerned?</description>
+    
+    <lastBuildDate>Thu, 01 Oct 2026 23:08:05 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol>
+<li>Logged out of computer at random intervals<br>
+…</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+</blockquote>
+</aside>
+<p>These are almost certainly related. Some solutions are documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1790839813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener" title="03:14PM - 19 September 2026">Kicksecure – 19 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener">Sudden logout - NVIDIA</a></h3>
+
+  <p>Because Nouveau runs by default in Kicksecure (the Debian default), issues may occur at any time. A recent example is a sudden black login screen caused by Nouveau GSP crashing and terminating labwc, which is used in lxqt-wayland [12]. | NVIDIA -...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="2">
+<li>Kanshi config is not automatically applied upon startup</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you place your configuration file at <code>~/.config/kanshi/config</code>? That file must exist and not be empty for Kanshi to turn on at login. It might be turning on too early though, at least in theory. You can place the <code>systemctl --user restart kanshi</code> command in <code>~/.config/labwc/autostart</code> to get it to run when the graphical session starts.</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="3">
+<li>amd_pstate failed to load</li>
+</ol>
+</blockquote>
+</aside>
+<p>If the system is otherwise functional, you can probably ignore this. The missing module is to be expected, because amd_pstate is built into the core kernel binary in Debian (and by extension in Kicksecure, since we use Debian’s kernel).</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="4">
+<li>sudo apt update: Error due to keyring mismatch</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you install Mullvad Browser using browser-choice, and then try to follow the instructions to install Mullvad VPN? That could cause a conflict, since browser-choice enables Mullvad’s repository, and following the VPN instructions thereafter will attempt to add the repository a second time. Since you’ve deleted both files that might hold the Mullvad repo keys, the easiest solution is probably to:</p>
+<ol>
+<li>Delete <code>/etc/apt/sources.list.d/mullvad.list</code> and <code>/etc/apt/sources.list.d/mullvad.sources</code></li>
+<li>Uninstall Mullvad Browser: <code>sudo apt purge mullvad-browser</code></li>
+<li>Open browser-choice and reinstall Mullvad Browser</li>
+<li>Run <code>sudo apt install mullvad-vpn</code> to install the VPN from the same repo the browser came from</li>
+</ol>
+          <p><a href="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858/2</link>
+        <pubDate>Thu, 01 Oct 2026 23:08:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1858-2</guid>
+        <source url="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858.rss">Random log outs, amd_pstate failed to load, keyring mismatch, and more!</source>
+      </item>
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[sublime.dust]]></dc:creator>
+        <description><![CDATA[
+            <p>I installed Kicksecure on my desktop yesterday, and since then I have spent several hours attempting to debug it, with limited success.</p>
+<p><em>I am at my wits end.</em></p>
+<p>After my initial install, I was experiencing many of these problems (random logouts, amd_pstate failed to load, kanshi config not applied automatically) and then the terminal suddenly stopped working. When I tried to open Qterminal or use anything in the System Maintenance Panel that would normally launch the Qterminal, nothing happened.</p>
+<p>I could not find any way to fix this or install another terminal emulator, so I reinstalled the system from scratch. My terminal is back, but there are several other problems.</p>
+<p>I considered creating a separate post for each of these, but it seems likely that at least some of these issues are connected. I’m using the latest version of Kicksecure, based on Debian 13.6.</p>
+<h1><a name="p-5641-overview-of-problems-1" class="anchor" href="https://forums.kicksecure.com#p-5641-overview-of-problems-1" aria-label="Heading link"></a>Overview of Problems:</h1>
+<ol>
+<li>Logged out of computer at random intervals</li>
+<li>Kanshi config is not automatically applied upon startup</li>
+<li>amd_pstate failed to load</li>
+<li>sudo apt update: Error due to keyring mismatch</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+<h1><a name="p-5641-h-1-logged-out-of-computer-at-random-intervals-2" class="anchor" href="https://forums.kicksecure.com#p-5641-h-1-logged-out-of-computer-at-random-intervals-2" aria-label="Heading link"></a><strong>1. Logged out of computer at random intervals</strong></h1>
+<p>At seemingly random intervals, I am logged out of the computer and end up on the black log in screen where it asks me to enter my username. When I log back in, all of my applications are closed and anything I didn’t save is gone. This has happened while I am actively using my computer, and it has happened twice while writing this post. This could be coincidental, but it only seems to happen when I have adjusted the scale of my display.</p>
+<h1><a name="p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" class="anchor" href="https://forums.kicksecure.com#p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" aria-label="Heading link"></a><strong>2. Kanshi config is not automatically applied upon startup</strong></h1>
+<p>When I restart Kanshi the settings in my config file are applied, but I have to do that manually every single time I boot my computer. I tried to get around this by creating the file /etc/rc.local with the following contents and giving it execute permissions. This script is supposed to run on start up, but my display config settings are only applied if I execute the script manually.</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+systemctl --user restart kanshi
+
+exit 0
+</code></pre>
+<h1><a name="p-5641-h-3-amd_pstate-failed-to-load-4" class="anchor" href="https://forums.kicksecure.com#p-5641-h-3-amd_pstate-failed-to-load-4" aria-label="Heading link"></a><strong>3. amd_pstate failed to load</strong></h1>
+<p>Every time I boot my computer, before I enter the passphrase to decrypt my drive, it outputs:</p>
+<pre><code class="lang-auto">[    5.447055] amd_pstate: failed to enable driver mode(3)
+</code></pre>
+<p>When I run lsmod it does not list amd_pstate. When I run modprobe, it outputs:</p>
+<pre><code class="lang-auto">[user ~]% sudo modprobe amd_pstate
+modprobe: FATAL: Module amd_pstate not found in directory /lib/modules/6.12.111+deb13-amd64
+zsh: exit 1     sudo modprobe amd_pstate
+</code></pre>
+<p>I have already tried updating my BIOS, enabling CPPC in my BIOS settings, and adding the amd_pstate=active rameter to /etc/default/grub with the following line before running ‘sudo update-grub’ and rebooting my device.</p>
+<pre><code class="lang-auto">GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_pstate=active"
+</code></pre>
+<p>Do I even need amd_pstate, or can I just ignore this error for the rest of time?</p>
+<h1><a name="p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" class="anchor" href="https://forums.kicksecure.com#p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" aria-label="Heading link"></a><strong>4. sudo apt update: Error due to keyring mismatch</strong></h1>
+<p>This is the newest error, and it prevents me from using sudo apt update. It started after I tried to install Mullvad VPN, following the instructions on their website. Here are the commands I entered:</p>
+<pre><code class="lang-auto">sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+sudo apt update
+</code></pre>
+<p>When I run ‘sudo apt update’, it outputs</p>
+<pre><code class="lang-auto">[user ~]% sudo apt update
+Error: Conflicting values set for option Signed-By regarding source https://repository.mullvad.net/deb/stable/ stable: /usr/share/keyrings/mullvad-keyring.asc != /etc/apt/keyrings/mullvad-keyring.asc
+Error: The list of sources could not be read.
+zsh: exit 100   sudo apt update
+</code></pre>
+<p>I tried deleting /usr/share/keyrings/mullvad-keyring.asc and /etc/apt/keyrings/mullvad-keyring.asc and rerunning the above commands, but it did not solve the problem.</p>
+<h1><a name="p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" class="anchor" href="https://forums.kicksecure.com#p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" aria-label="Heading link"></a><strong>5. systemd critical journal messages - nouveau, channel 16 killed</strong></h1>
+<p>When I run System Check, I get the following output</p>
+<pre><code class="lang-auto">ERROR: systemd critical journal messages check result (current boot): Possible system issue detected. Some unusual entries were found in the kernel log. 
+
+There is no need to panic. This is not a serious security issue. However, it may affect other system checks. These messages might indicate hardware or software problems. 
+
+Detected messages: 
+Sep 30 14:14:34 localhost kernel: nouveau 0000:2b:00.0: labwc[2314]: channel 16 killed!
+Sep 30 15:12:18 localhost kernel: nouveau 0000:2b:00.0: labwc[9098]: channel 16 killed!
+Sep 30 16:00:58 localhost kernel: nouveau 0000:2b:00.0: labwc[16315]: channel 16 killed!
+
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: 
+systemcheck_skip_functions+=" check_journal " 
+INFO: Kicksecure is a research project. 
+INFO: user-sysmaint-split: Absent 
+INFO: user-sysmaint-split session detection result: USER Session. 
+INFO: Full Disk Encryption (FDE): Enabled 
+INFO: GRUB Bootloader Password: Absent 
+INFO: Kicksecure Login Security Check (Colors) :
++----------+--------------------------------------+
+| Users    | Password               GUI Autologin |
++----------+--------------------------------------+
+| root     | Locked (Present)       Disabled      |
+| user     | Absent                 Enabled       |
+| sysmaint | Absent                 Disabled      |
++----------+--------------------------------------+
+You can adjust these settings using "Manage Passwords" and "Manage GUI Autologin" in the System Maintenance Panel. 
+INFO: Secure Boot: Enabled 
+INFO: tirdad - TCP ISN CPU Information Leak Protection: Enabled 
+INFO: Kicksecure APT Repository: Enabled. When the Kicksecure team releases TRIXIE updates, they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade) along with updated packages from the Debian team. Please read Trust to understand the risk. If you want to change this, use: 
+Start Menu -&gt; System -&gt; Derivative Repository 
+WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100) 
+Please manually check: 
+(Open a terminal, Start Menu -&gt; System -&gt; Terminal.) 
+upgrade-nonroot
+</code></pre>
+<p>Should I be concerned?</p>
+          <p><a href="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858/1</link>
+        <pubDate>Thu, 01 Oct 2026 06:33:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1858-1</guid>
+        <source url="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858.rss">Random log outs, amd_pstate failed to load, keyring mismatch, and more!</source>
+      </item>
+  </channel>
+</rss>
