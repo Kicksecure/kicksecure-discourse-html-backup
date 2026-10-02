@@ -5,6 +5,250 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol>
+<li>Logged out of computer at random intervals<br>
+…</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+</blockquote>
+</aside>
+<p>These are almost certainly related. Some solutions are documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1790839813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener" title="03:14PM - 19 September 2026">Kicksecure – 19 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener">Sudden logout - NVIDIA</a></h3>
+
+  <p>Because Nouveau runs by default in Kicksecure (the Debian default), issues may occur at any time. A recent example is a sudden black login screen caused by Nouveau GSP crashing and terminating labwc, which is used in lxqt-wayland [12]. | NVIDIA -...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="2">
+<li>Kanshi config is not automatically applied upon startup</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you place your configuration file at <code>~/.config/kanshi/config</code>? That file must exist and not be empty for Kanshi to turn on at login. It might be turning on too early though, at least in theory. You can place the <code>systemctl --user restart kanshi</code> command in <code>~/.config/labwc/autostart</code> to get it to run when the graphical session starts.</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="3">
+<li>amd_pstate failed to load</li>
+</ol>
+</blockquote>
+</aside>
+<p>If the system is otherwise functional, you can probably ignore this. The missing module is to be expected, because amd_pstate is built into the core kernel binary in Debian (and by extension in Kicksecure, since we use Debian’s kernel).</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="4">
+<li>sudo apt update: Error due to keyring mismatch</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you install Mullvad Browser using browser-choice, and then try to follow the instructions to install Mullvad VPN? That could cause a conflict, since browser-choice enables Mullvad’s repository, and following the VPN instructions thereafter will attempt to add the repository a second time. Since you’ve deleted both files that might hold the Mullvad repo keys, the easiest solution is probably to:</p>
+<ol>
+<li>Delete <code>/etc/apt/sources.list.d/mullvad.list</code> and <code>/etc/apt/sources.list.d/mullvad.sources</code></li>
+<li>Uninstall Mullvad Browser: <code>sudo apt purge mullvad-browser</code></li>
+<li>Open browser-choice and reinstall Mullvad Browser</li>
+<li>Run <code>sudo apt install mullvad-vpn</code> to install the VPN from the same repo the browser came from</li>
+</ol> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858#post_2</link>
+        <pubDate>Thu, 01 Oct 2026 23:08:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5646</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Might be a Mullvad Browser bug. If you boot into sysmaint mode and run <code>sudo journalctl | grep 'segfault'</code>, do you see crashes attributed to <code>lxqt-panel</code>? If so, can you share the output lines here?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_2</link>
+        <pubDate>Thu, 01 Oct 2026 22:52:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5645</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@kiyoc34009]]></dc:creator>
+        <description><![CDATA[ <p>Recently a bug has appeared when I am using mullvad browser. It causes my panel to crash/disappear and I get a popup saying panel has crashed too many times, auto restart has been disabled until next login.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_1</link>
+        <pubDate>Thu, 01 Oct 2026 06:41:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5643</guid>
+      </item>
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[@sublime.dust]]></dc:creator>
+        <description><![CDATA[ <p>I installed Kicksecure on my desktop yesterday, and since then I have spent several hours attempting to debug it, with limited success.</p>
+<p><em>I am at my wits end.</em></p>
+<p>After my initial install, I was experiencing many of these problems (random logouts, amd_pstate failed to load, kanshi config not applied automatically) and then the terminal suddenly stopped working. When I tried to open Qterminal or use anything in the System Maintenance Panel that would normally launch the Qterminal, nothing happened.</p>
+<p>I could not find any way to fix this or install another terminal emulator, so I reinstalled the system from scratch. My terminal is back, but there are several other problems.</p>
+<p>I considered creating a separate post for each of these, but it seems likely that at least some of these issues are connected. I’m using the latest version of Kicksecure, based on Debian 13.6.</p>
+<h1><a name="p-5641-overview-of-problems-1" class="anchor" href="https://forums.kicksecure.com#p-5641-overview-of-problems-1" aria-label="Heading link"></a>Overview of Problems:</h1>
+<ol>
+<li>Logged out of computer at random intervals</li>
+<li>Kanshi config is not automatically applied upon startup</li>
+<li>amd_pstate failed to load</li>
+<li>sudo apt update: Error due to keyring mismatch</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+<h1><a name="p-5641-h-1-logged-out-of-computer-at-random-intervals-2" class="anchor" href="https://forums.kicksecure.com#p-5641-h-1-logged-out-of-computer-at-random-intervals-2" aria-label="Heading link"></a><strong>1. Logged out of computer at random intervals</strong></h1>
+<p>At seemingly random intervals, I am logged out of the computer and end up on the black log in screen where it asks me to enter my username. When I log back in, all of my applications are closed and anything I didn’t save is gone. This has happened while I am actively using my computer, and it has happened twice while writing this post. This could be coincidental, but it only seems to happen when I have adjusted the scale of my display.</p>
+<h1><a name="p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" class="anchor" href="https://forums.kicksecure.com#p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" aria-label="Heading link"></a><strong>2. Kanshi config is not automatically applied upon startup</strong></h1>
+<p>When I restart Kanshi the settings in my config file are applied, but I have to do that manually every single time I boot my computer. I tried to get around this by creating the file /etc/rc.local with the following contents and giving it execute permissions. This script is supposed to run on start up, but my display config settings are only applied if I execute the script manually.</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+systemctl --user restart kanshi
+
+exit 0
+</code></pre>
+<h1><a name="p-5641-h-3-amd_pstate-failed-to-load-4" class="anchor" href="https://forums.kicksecure.com#p-5641-h-3-amd_pstate-failed-to-load-4" aria-label="Heading link"></a><strong>3. amd_pstate failed to load</strong></h1>
+<p>Every time I boot my computer, before I enter the passphrase to decrypt my drive, it outputs:</p>
+<pre><code class="lang-auto">[    5.447055] amd_pstate: failed to enable driver mode(3)
+</code></pre>
+<p>When I run lsmod it does not list amd_pstate. When I run modprobe, it outputs:</p>
+<pre><code class="lang-auto">[user ~]% sudo modprobe amd_pstate
+modprobe: FATAL: Module amd_pstate not found in directory /lib/modules/6.12.111+deb13-amd64
+zsh: exit 1     sudo modprobe amd_pstate
+</code></pre>
+<p>I have already tried updating my BIOS, enabling CPPC in my BIOS settings, and adding the amd_pstate=active rameter to /etc/default/grub with the following line before running ‘sudo update-grub’ and rebooting my device.</p>
+<pre><code class="lang-auto">GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_pstate=active"
+</code></pre>
+<p>Do I even need amd_pstate, or can I just ignore this error for the rest of time?</p>
+<h1><a name="p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" class="anchor" href="https://forums.kicksecure.com#p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" aria-label="Heading link"></a><strong>4. sudo apt update: Error due to keyring mismatch</strong></h1>
+<p>This is the newest error, and it prevents me from using sudo apt update. It started after I tried to install Mullvad VPN, following the instructions on their website. Here are the commands I entered:</p>
+<pre><code class="lang-auto">sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+sudo apt update
+</code></pre>
+<p>When I run ‘sudo apt update’, it outputs</p>
+<pre><code class="lang-auto">[user ~]% sudo apt update
+Error: Conflicting values set for option Signed-By regarding source https://repository.mullvad.net/deb/stable/ stable: /usr/share/keyrings/mullvad-keyring.asc != /etc/apt/keyrings/mullvad-keyring.asc
+Error: The list of sources could not be read.
+zsh: exit 100   sudo apt update
+</code></pre>
+<p>I tried deleting /usr/share/keyrings/mullvad-keyring.asc and /etc/apt/keyrings/mullvad-keyring.asc and rerunning the above commands, but it did not solve the problem.</p>
+<h1><a name="p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" class="anchor" href="https://forums.kicksecure.com#p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" aria-label="Heading link"></a><strong>5. systemd critical journal messages - nouveau, channel 16 killed</strong></h1>
+<p>When I run System Check, I get the following output</p>
+<pre><code class="lang-auto">ERROR: systemd critical journal messages check result (current boot): Possible system issue detected. Some unusual entries were found in the kernel log. 
+
+There is no need to panic. This is not a serious security issue. However, it may affect other system checks. These messages might indicate hardware or software problems. 
+
+Detected messages: 
+Sep 30 14:14:34 localhost kernel: nouveau 0000:2b:00.0: labwc[2314]: channel 16 killed!
+Sep 30 15:12:18 localhost kernel: nouveau 0000:2b:00.0: labwc[9098]: channel 16 killed!
+Sep 30 16:00:58 localhost kernel: nouveau 0000:2b:00.0: labwc[16315]: channel 16 killed!
+
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: 
+systemcheck_skip_functions+=" check_journal " 
+INFO: Kicksecure is a research project. 
+INFO: user-sysmaint-split: Absent 
+INFO: user-sysmaint-split session detection result: USER Session. 
+INFO: Full Disk Encryption (FDE): Enabled 
+INFO: GRUB Bootloader Password: Absent 
+INFO: Kicksecure Login Security Check (Colors) :
++----------+--------------------------------------+
+| Users    | Password               GUI Autologin |
++----------+--------------------------------------+
+| root     | Locked (Present)       Disabled      |
+| user     | Absent                 Enabled       |
+| sysmaint | Absent                 Disabled      |
++----------+--------------------------------------+
+You can adjust these settings using "Manage Passwords" and "Manage GUI Autologin" in the System Maintenance Panel. 
+INFO: Secure Boot: Enabled 
+INFO: tirdad - TCP ISN CPU Information Leak Protection: Enabled 
+INFO: Kicksecure APT Repository: Enabled. When the Kicksecure team releases TRIXIE updates, they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade) along with updated packages from the Debian team. Please read Trust to understand the risk. If you want to change this, use: 
+Start Menu -&gt; System -&gt; Derivative Repository 
+WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100) 
+Please manually check: 
+(Open a terminal, Start Menu -&gt; System -&gt; Terminal.) 
+upgrade-nonroot
+</code></pre>
+<p>Should I be concerned?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858#post_1</link>
+        <pubDate>Thu, 01 Oct 2026 06:33:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5641</guid>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <p>Yeah weird behavior, cc <a class="mention" href="https://forums.kicksecure.com/u/patrick">@Patrick</a></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_17</link>
+        <pubDate>Thu, 01 Oct 2026 02:28:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5640</guid>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Link seems broken on my end.</p>
+<p>Edit: Turns out at the moment the link only works for me when I’m logged in.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_16</link>
+        <pubDate>Thu, 01 Oct 2026 02:04:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5639</guid>
+      </item>
+      <item>
+        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
+        <dc:creator><![CDATA[@nurmagoz]]></dc:creator>
+        <description><![CDATA[ <aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/KVM#Encrypted_Storage_Directory">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1790753414" class="site-icon" alt="" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/KVM#Encrypted_Storage_Directory" target="_blank" rel="noopener" title="01:16AM - 01 October 2026">Whonix – 1 Oct 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.whonix.org/w/images/0/0f/Kvm-new-logo.png?version=60934fd6e6a249d039291ddd586d1200" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.whonix.org/wiki/KVM#Encrypted_Storage_Directory" target="_blank" rel="noopener">Encrypted Storage Directory - Whonix for KVM</a></h3>
+
+  <p>It is possible to encrypt the directory where the Whonix virtual machine images are stored. | Using Whonix with KVM (Kernel-based Virtual Machine)</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Probably a solution.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_15</link>
+        <pubDate>Thu, 01 Oct 2026 01:31:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5638</guid>
+      </item>
+      <item>
         <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Mullvad VPN’s desktop app appears to be an Electron app, i.e. it is Chromium-based. So that might explain the issue, and would point to a bug in either KVM or Chromium or both.</p>
@@ -1198,300 +1442,6 @@ import time
         <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_6</link>
         <pubDate>Wed, 23 Sep 2026 01:20:59 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5592</guid>
-      </item>
-      <item>
-        <title>New to this, trying to install Tor and VPN</title>
-        <dc:creator><![CDATA[@Sonic]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>The option to boot with is a few entries below the one highlighted. When you boot it, you will be prompted if you really want to remove user-sysmaint-split. After confirmation, the system will automatically reboot and the “SYSMAINT Session” boot modes will be gone. I mentioned “once” to make it clear that you would not need to boot into this boot mode every time</p>
-</blockquote>
-</aside>
-<p>What I found confusing is, how does it save you selected this setting on a new boot given that you are using a read-only live USB/DVD?</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>After that procedure is done, you can install Veracrypt normally from <code>PERSISTENT Mode | USER Session</code>.</p>
-</blockquote>
-</aside>
-<p>How does it work in a persistent way if it’s a live USB/DVD? I still don’t get this part.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="4" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>I’m not aware of a good volume-based encryption app that works with Kicksecure out of the box. There is some work being done to find one, and a possibility that we could create one in the future. See:</p>
-</blockquote>
-</aside>
-<p>Tails comes with their own Veracrypt version, probably to be able to ship it with it and get around something that wouldn’t allow for it. Perhaps you could use Veracrypt as a base. It has great features and it’s an established software. As far as LUKS, I already use it for FDE for the regular Debian installs. In this case im looking for an amnesic setup were nothing is saved, this is why im not sure how any persistent thing and reboots that save settings work within this context. But anyway, im going to try that mode and see what happens.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_5</link>
-        <pubDate>Wed, 23 Sep 2026 01:09:42 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5591</guid>
-      </item>
-      <item>
-        <title>New to this, trying to install Tor and VPN</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Sonic" data-post="3" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<p>Not sure what you meant “boot once”, since it’s a live session. Im assuming you just mean that i just boot with that option that shows in the menu here:</p>
-<p><a href="https://www.kicksecure.com/w/images/thumb/0/0e/Boot-into-Sysmaint-session-1.svg/1920px-Boot-into-Sysmaint-session-1.svg.png"><img src="https://www.kicksecure.com/w/images/thumb/0/0e/Boot-into-Sysmaint-session-1.svg/1920px-Boot-into-Sysmaint-session-1.svg.png" alt="" width="690" height="474" role="presentation"></a></p>
-<p>And then I just install Veracrypt normally.</p>
-</blockquote>
-</aside>
-<p>The option to boot with is a few entries below the one highlighted. When you boot it, you will be prompted if you really want to remove user-sysmaint-split. After confirmation, the system will automatically reboot and the “SYSMAINT Session” boot modes will be gone. I mentioned “once” to make it clear that you would not need to boot into this boot mode every time.</p>
-<p>After that procedure is done, you can install Veracrypt normally from <code>PERSISTENT Mode | USER Session</code>.</p>
-<aside class="quote no-group" data-username="Sonic" data-post="3" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<p>So how do people manage encrypted data with that option enabled? Veracrypt sees like the best way I’ve tried.</p>
-</blockquote>
-</aside>
-<p>Full disk encryption with LUKS is the most common option and is fully supported. For files that have to be moved around, they can be archived with LXQt Archiver and encrypted using OpenPGP. (KGpg, a <a href="https://www.kicksecure.com/wiki/Software#KGpg">recommended application</a> that is not preinstalled on Kicksecure, can be used to do this. Click File &gt; Open Editor in KGpg to get to the part of the UI allowing file encryption and decryption.)</p>
-<p>I’m not aware of a good volume-based encryption app that works with Kicksecure out of the box. There is some work being done to find one, and a possibility that we could create one in the future. See:</p>
-<aside class="quote quote-modified" data-post="1" data-topic="1832">
-  <div class="title">
-    <div class="quote-controls"></div>
-    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar">
-    <div class="quote-title__text-content">
-      <a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832">Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category --style-square "><span class="badge-category__name">Development</span></span></a>
-    </div>
-  </div>
-  <blockquote>
-    Over on the Whonix forums, I was discussing how to workaround limitations of user-sysmaint-split with a user, and discovered that they are using a paid proprietary application for file encryption: 
-
-
-I replied, explaining that they could use LUKS instead and could set it up with a number of tools built into the OS, but in the process realized that adding a new encrypted volume to an existing system or VM (which may or may not have full disk encryption enabled on it) is a pain: 
-
-First you have t…
-  </blockquote>
-</aside>
-
-<aside class="quote no-group" data-username="Sonic" data-post="3" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<p>So after I install Mullvad software, I can run Firefox and it will be under Mullvad selected IP?</p>
-</blockquote>
-</aside>
-<p>I don’t use Mullvad VPN, so I don’t know. Can likely be confirmed by experimentation, or you could ask Mullvad’s support. (The only reason I know that the installation process should be the same as on Debian is because Kicksecure is based on Debian and anything possible on Debian should be possible on Kicksecure.)</p>
-<aside class="quote no-group" data-username="Sonic" data-post="3" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<p>Also, I’ve read here that if you install Mullvad Browser it automatically installs Mullvad VPN, do you recommend Mullvad Browser over regular Firefox? Never tried it.</p>
-</blockquote>
-</aside>
-<p>I don’t know if Mullvad VPN comes with Mullvad Browser. I remember saying something to that effect once but IIRC that was a misunderstanding and I was corrected on that. It might come with it, it might not.</p>
-<p>Kicksecure doesn’t recommend any particular default browser, since they all have flaws that prevent them from being a default choice. This is why browser-choice is provided, so users can pick whatever option they deem least bad from a pool of common, fully open-source browsers. Personally, I use Google Chrome since my threat model is able to tolerate its privacy intrusions and open-core nature, but I would never recommend it to anyone who’s trying to stay anonymous for obvious reasons.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_4</link>
-        <pubDate>Tue, 22 Sep 2026 21:16:07 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5590</guid>
-      </item>
-      <item>
-        <title>New to this, trying to install Tor and VPN</title>
-        <dc:creator><![CDATA[@Sonic]]></dc:creator>
-        <description><![CDATA[ <p>Not sure what you meant “boot once”, since it’s a live session. Im assuming you just mean that i just boot with that option that shows in the menu here:</p>
-<p>                    <a href="https://www.kicksecure.com/w/images/thumb/0/0e/Boot-into-Sysmaint-session-1.svg/1920px-Boot-into-Sysmaint-session-1.svg.png" target="_blank" rel="noopener nofollow ugc" class="onebox">
-            <img src="https://www.kicksecure.com/w/images/thumb/0/0e/Boot-into-Sysmaint-session-1.svg/1920px-Boot-into-Sysmaint-session-1.svg.png" width="690" height="474">
-          </a>
-
-</p>
-<p>And then I just install Veracrypt normally.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Also incompatible with the user-sysmaint-split security feature. See:</p>
-</blockquote>
-</aside>
-<p>So how do people manage encrypted data with that option enabled? Veracrypt sees like the best way I’ve tried.</p>
-<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
-<blockquote>
-<p>Can be done using <a href="https://www.kicksecure.com/wiki/Browser-choice" rel="noopener nofollow ugc">browser-choice</a> within <code>PERSISTENT Mode | USER Session</code>. The browser will be available in live sessions thereafter.</p>
-</blockquote>
-</aside>
-<p>So after I install Mullvad software, I can run Firefox and it will be under Mullvad selected IP?</p>
-<p>Also, I’ve read here that if you install Mullvad Browser it automatically installs Mullvad VPN, do you recommend Mullvad Browser over regular Firefox? Never tried it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_3</link>
-        <pubDate>Tue, 22 Sep 2026 20:59:09 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5589</guid>
-      </item>
-      <item>
-        <title>New to this, trying to install Tor and VPN</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Answering slightly out of order since some of your later choices impact earlier ones:</p>
-<aside class="quote no-group" data-username="Sonic" data-post="1" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<ol start="3">
-<li>Install Veracrypt</li>
-</ol>
-</blockquote>
-</aside>
-<p>Veracrypt cannot function with <a href="https://www.kicksecure.com/wiki/Sysmaint">user-sysmaint-split</a> installed. You will need to boot the system using the <code>REMOVE user-sysmaint-split</code> boot option once and follow the on-screen instructions. This will remove the feature and allow Veracrypt to work.</p>
-<aside class="quote no-group" data-username="Sonic" data-post="1" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<ol>
-<li>Download Tor Browser</li>
-</ol>
-</blockquote>
-</aside>
-<p>Can be done using <a href="https://www.kicksecure.com/wiki/Browser-choice">browser-choice</a> within <code>PERSISTENT Mode | USER Session</code>. The browser will be available in live sessions thereafter.</p>
-<aside class="quote no-group" data-username="Sonic" data-post="1" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<ol start="2">
-<li>Using Tor Browser, download Mullvad VPN software</li>
-</ol>
-</blockquote>
-</aside>
-<p>Same process as for Debian applies. Usually you would need to boot into <code>PERSISTENT Mode | SYSMAINT Session</code> to install software, but after removing user-sysmaint-split this will no longer be the case.</p>
-<aside class="quote no-group" data-username="Sonic" data-post="1" data-topic="1849">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/c37758/48.png" class="avatar"> Sonic:</div>
-<blockquote>
-<p>Ideally, Kicksecure should come with Veracrypt preinstalled, so I don’t need to install it everytime I boot Live to use it.</p>
-</blockquote>
-</aside>
-<p>Not possible due to licensing difficulties and absence from Debian’s repositories. See:</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=814352">
-  <header class="source">
-      <img src="https://bugs.debian.org/favicon.png" class="site-icon" alt="" width="" height="">
-
-      <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=814352" target="_blank" rel="noopener">bugs.debian.org</a>
-  </header>
-
-  <article class="onebox-body">
-    
-
-<h3><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=814352" target="_blank" rel="noopener">#814352 - ITP: veracrypt -- Cross-platform on-the-fly encryption - Debian Bug...</a></h3>
-
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>Also incompatible with the user-sysmaint-split security feature. See:</p>
-<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/whonix-user-isolation-user-sysmaint-split-breaks-veracrypt-workflow/21629">
-  <header class="source">
-      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
-
-      <a href="https://forums.whonix.org/t/whonix-user-isolation-user-sysmaint-split-breaks-veracrypt-workflow/21629" target="_blank" rel="noopener" title="09:28AM - 21 May 2025">Whonix Forum – 21 May 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
-
-<div class="title-wrapper">
-  <h3><a href="https://forums.whonix.org/t/whonix-user-isolation-user-sysmaint-split-breaks-veracrypt-workflow/21629" target="_blank" rel="noopener">Whonix user isolation (user-sysmaint-split) breaks VeraCrypt workflow</a></h3>
-  <div class="topic-category">
-      <span class="badge-wrapper bullet">
-        <span class="badge-category-bg" style="background-color: #8C6238;"></span>
-        <span class="badge-category clear-badge">
-          <span class="category-name">Support</span>
-        </span>
-      </span>
-  </div>
-</div>
-
-  <p>Hi,  I’ve been using VeraCrypt for a while on a Whonix app qube.  With the latest template version (Q4.2), I haven’t been able to open my encrypted drive because it asks for admin rights, which were removed. How can I make it work with the newly...</p>
-
-  <p>
-    <span class="label1">Reading time: 7 mins 🕑</span>
-      <span class="label2">Likes: 48 ❤</span>
-  </p>
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_2</link>
-        <pubDate>Tue, 22 Sep 2026 20:37:38 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5588</guid>
-      </item>
-      <item>
-        <title>New to this, trying to install Tor and VPN</title>
-        <dc:creator><![CDATA[@Sonic]]></dc:creator>
-        <description><![CDATA[ <p>Hi, I am new to Kicksecure. I was looking for a Tails alternative, to use with the same “amnesic” concept, in Live mode. From what I’ve read, Kicksecure also wipes ram at the end.</p>
-<p>The thing is, I don’t really need Tor for everything, and it appears it’s annoying trying to install a VPN with Tails.</p>
-<p>What I want to do is this:</p>
-<ol>
-<li>
-<p>Download Tor Browser</p>
-</li>
-<li>
-<p>Using Tor Browser, download Mullvad VPN software</p>
-</li>
-<li>
-<p>Install Veracrypt</p>
-</li>
-</ol>
-<p>Could someone explain the workflow for this? Is it the same as regular Debian? I was able to install Tor Browser in Debian, but I never installed Mullvad VPN. I did also install Veracrypt successfully. Ideally, Kicksecure should come with Veracrypt preinstalled, so I don’t need to install it everytime I boot Live to use it.</p>
-<p>Let me know any tips and things to do when you boot if there’s anything worth changing that comes by default set in a certain way. Thanks.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/new-to-this-trying-to-install-tor-and-vpn/1849#post_1</link>
-        <pubDate>Tue, 22 Sep 2026 19:54:31 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5586</guid>
-      </item>
-      <item>
-        <title>Add or create a utility for setting up encrypted drives/volumes/disk images/whatnot</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Right, I get the read-only advantages of optical media, when I said my knowledge was shaky I meant I didn’t know if you could burn an image other than an legitimate ISO 9660 filesystem image to a disc and have it work.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832#post_11</link>
-        <pubDate>Sun, 20 Sep 2026 01:19:43 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5585</guid>
-      </item>
-      <item>
-        <title>Use Btrfs as the default journaling file system</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <aside class="quote no-group" data-username="Tengu" data-post="20" data-topic="626">
-<div class="title">
-<div class="quote-controls"></div>
-<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/d26b3c/48.png" class="avatar"> Tengu:</div>
-<blockquote>
-<p>My question is there talk of shiping Timeshift as included software or a better variant (is there one)?</p>
-</blockquote>
-</aside>
-<p>Not internally to my awareness.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/use-btrfs-as-the-default-journaling-file-system/626?page=2#post_21</link>
-        <pubDate>Sun, 20 Sep 2026 01:13:53 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5584</guid>
       </item>
   </channel>
 </rss>

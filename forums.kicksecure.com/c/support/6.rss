@@ -5,8 +5,128 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Sun, 27 Sep 2026 13:45:47 +0000</lastBuildDate>
+      <lastBuildDate>Thu, 01 Oct 2026 06:41:16 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Mullvad Causing Panel Crash</title>
+          <dc:creator><![CDATA[kiyoc34009]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Recently a bug has appeared when I am using mullvad browser. It causes my panel to crash/disappear and I get a popup saying panel has crashed too many times, auto restart has been disabled until next login.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860</link>
+          <pubDate>Thu, 01 Oct 2026 06:41:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1860</guid>
+          <source url="https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860.rss">Mullvad Causing Panel Crash</source>
+        </item>
+        <item>
+          <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+          <dc:creator><![CDATA[sublime.dust]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I installed Kicksecure on my desktop yesterday, and since then I have spent several hours attempting to debug it, with limited success.</p>
+<p><em>I am at my wits end.</em></p>
+<p>After my initial install, I was experiencing many of these problems (random logouts, amd_pstate failed to load, kanshi config not applied automatically) and then the terminal suddenly stopped working. When I tried to open Qterminal or use anything in the System Maintenance Panel that would normally launch the Qterminal, nothing happened.</p>
+<p>I could not find any way to fix this or install another terminal emulator, so I reinstalled the system from scratch. My terminal is back, but there are several other problems.</p>
+<p>I considered creating a separate post for each of these, but it seems likely that at least some of these issues are connected. I’m using the latest version of Kicksecure, based on Debian 13.6.</p>
+<h1><a name="p-5641-overview-of-problems-1" class="anchor" href="https://forums.kicksecure.com#p-5641-overview-of-problems-1" aria-label="Heading link"></a>Overview of Problems:</h1>
+<ol>
+<li>Logged out of computer at random intervals</li>
+<li>Kanshi config is not automatically applied upon startup</li>
+<li>amd_pstate failed to load</li>
+<li>sudo apt update: Error due to keyring mismatch</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+<h1><a name="p-5641-h-1-logged-out-of-computer-at-random-intervals-2" class="anchor" href="https://forums.kicksecure.com#p-5641-h-1-logged-out-of-computer-at-random-intervals-2" aria-label="Heading link"></a><strong>1. Logged out of computer at random intervals</strong></h1>
+<p>At seemingly random intervals, I am logged out of the computer and end up on the black log in screen where it asks me to enter my username. When I log back in, all of my applications are closed and anything I didn’t save is gone. This has happened while I am actively using my computer, and it has happened twice while writing this post. This could be coincidental, but it only seems to happen when I have adjusted the scale of my display.</p>
+<h1><a name="p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" class="anchor" href="https://forums.kicksecure.com#p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" aria-label="Heading link"></a><strong>2. Kanshi config is not automatically applied upon startup</strong></h1>
+<p>When I restart Kanshi the settings in my config file are applied, but I have to do that manually every single time I boot my computer. I tried to get around this by creating the file /etc/rc.local with the following contents and giving it execute permissions. This script is supposed to run on start up, but my display config settings are only applied if I execute the script manually.</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+systemctl --user restart kanshi
+
+exit 0
+</code></pre>
+<h1><a name="p-5641-h-3-amd_pstate-failed-to-load-4" class="anchor" href="https://forums.kicksecure.com#p-5641-h-3-amd_pstate-failed-to-load-4" aria-label="Heading link"></a><strong>3. amd_pstate failed to load</strong></h1>
+<p>Every time I boot my computer, before I enter the passphrase to decrypt my drive, it outputs:</p>
+<pre><code class="lang-auto">[    5.447055] amd_pstate: failed to enable driver mode(3)
+</code></pre>
+<p>When I run lsmod it does not list amd_pstate. When I run modprobe, it outputs:</p>
+<pre><code class="lang-auto">[user ~]% sudo modprobe amd_pstate
+modprobe: FATAL: Module amd_pstate not found in directory /lib/modules/6.12.111+deb13-amd64
+zsh: exit 1     sudo modprobe amd_pstate
+</code></pre>
+<p>I have already tried updating my BIOS, enabling CPPC in my BIOS settings, and adding the amd_pstate=active rameter to /etc/default/grub with the following line before running ‘sudo update-grub’ and rebooting my device.</p>
+<pre><code class="lang-auto">GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_pstate=active"
+</code></pre>
+<p>Do I even need amd_pstate, or can I just ignore this error for the rest of time?</p>
+<h1><a name="p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" class="anchor" href="https://forums.kicksecure.com#p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" aria-label="Heading link"></a><strong>4. sudo apt update: Error due to keyring mismatch</strong></h1>
+<p>This is the newest error, and it prevents me from using sudo apt update. It started after I tried to install Mullvad VPN, following the instructions on their website. Here are the commands I entered:</p>
+<pre><code class="lang-auto">sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+sudo apt update
+</code></pre>
+<p>When I run ‘sudo apt update’, it outputs</p>
+<pre><code class="lang-auto">[user ~]% sudo apt update
+Error: Conflicting values set for option Signed-By regarding source https://repository.mullvad.net/deb/stable/ stable: /usr/share/keyrings/mullvad-keyring.asc != /etc/apt/keyrings/mullvad-keyring.asc
+Error: The list of sources could not be read.
+zsh: exit 100   sudo apt update
+</code></pre>
+<p>I tried deleting /usr/share/keyrings/mullvad-keyring.asc and /etc/apt/keyrings/mullvad-keyring.asc and rerunning the above commands, but it did not solve the problem.</p>
+<h1><a name="p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" class="anchor" href="https://forums.kicksecure.com#p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" aria-label="Heading link"></a><strong>5. systemd critical journal messages - nouveau, channel 16 killed</strong></h1>
+<p>When I run System Check, I get the following output</p>
+<pre><code class="lang-auto">ERROR: systemd critical journal messages check result (current boot): Possible system issue detected. Some unusual entries were found in the kernel log. 
+
+There is no need to panic. This is not a serious security issue. However, it may affect other system checks. These messages might indicate hardware or software problems. 
+
+Detected messages: 
+Sep 30 14:14:34 localhost kernel: nouveau 0000:2b:00.0: labwc[2314]: channel 16 killed!
+Sep 30 15:12:18 localhost kernel: nouveau 0000:2b:00.0: labwc[9098]: channel 16 killed!
+Sep 30 16:00:58 localhost kernel: nouveau 0000:2b:00.0: labwc[16315]: channel 16 killed!
+
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: 
+systemcheck_skip_functions+=" check_journal " 
+INFO: Kicksecure is a research project. 
+INFO: user-sysmaint-split: Absent 
+INFO: user-sysmaint-split session detection result: USER Session. 
+INFO: Full Disk Encryption (FDE): Enabled 
+INFO: GRUB Bootloader Password: Absent 
+INFO: Kicksecure Login Security Check (Colors) :
++----------+--------------------------------------+
+| Users    | Password               GUI Autologin |
++----------+--------------------------------------+
+| root     | Locked (Present)       Disabled      |
+| user     | Absent                 Enabled       |
+| sysmaint | Absent                 Disabled      |
++----------+--------------------------------------+
+You can adjust these settings using "Manage Passwords" and "Manage GUI Autologin" in the System Maintenance Panel. 
+INFO: Secure Boot: Enabled 
+INFO: tirdad - TCP ISN CPU Information Leak Protection: Enabled 
+INFO: Kicksecure APT Repository: Enabled. When the Kicksecure team releases TRIXIE updates, they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade) along with updated packages from the Debian team. Please read Trust to understand the risk. If you want to change this, use: 
+Start Menu -&gt; System -&gt; Derivative Repository 
+WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100) 
+Please manually check: 
+(Open a terminal, Start Menu -&gt; System -&gt; Terminal.) 
+upgrade-nonroot
+</code></pre>
+<p>Should I be concerned?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858</link>
+          <pubDate>Thu, 01 Oct 2026 06:33:47 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1858</guid>
+          <source url="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858.rss">Random log outs, amd_pstate failed to load, keyring mismatch, and more!</source>
+        </item>
         <item>
           <title>What does these kicksecure packages do?</title>
           <dc:creator><![CDATA[ks44]]></dc:creator>
@@ -853,105 +973,6 @@ gpg: Signature notation: salt@notations.sequoia-pgp.org=[ not human readable (32
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1798</guid>
           <source url="https://forums.kicksecure.com/t/issue-installing-ks-on-novacustom-laptop/1798.rss">Issue installing KS on NovaCustom laptop</source>
-        </item>
-        <item>
-          <title>Updating error</title>
-          <dc:creator><![CDATA[tamiworldwide]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Hello</p>
-<p>I tried to update my kicksecure templates including whonix 18 and I get error of something like: release file for https… blablabla/trixie-fasttrack/InRelease is expired (invalid since 8h … blablabla) Updates for this repository will not be applied</p>
-            <p><small>7 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/updating-error/1791">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/updating-error/1791</link>
-          <pubDate>Fri, 03 Jul 2026 13:17:34 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1791</guid>
-          <source url="https://forums.kicksecure.com/t/updating-error/1791.rss">Updating error</source>
-        </item>
-        <item>
-          <title>Issue, update not working</title>
-          <dc:creator><![CDATA[Lacekim]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>kick secure I ran system check. It printed out a page of lines. within that it has a box with root - locked - disabled<br>
-user - Absent - enabled<br>
-sysmaint - Absent - enabled</p>
-<p>then further down it says warning system check can not check for system update</p>
-<p>That output means you currently have these accounts/tokens in this state:</p>
-<ul>
-<li>
-<p>root: locked/disabled</p>
-</li>
-<li>
-<p>sysmaint: Absent/enabled (not actually present, but the “enabled” flag is showing as enabled—so it’s likelya config state mismatch or just how the checker reports it)</p>
-</li>
-<li>
-<p>user: Absent/enabled (same note)</p>
-</li>
-</ul>
-<p>And the checker can’t verify OS/package updates (“cannot check for system update”).</p>
-<p>To get you unstuck, do these quick checks:</p>
-<ol>
-<li>
-<p>Confirm what accounts exist right now</p>
-<ul>
-<li>
-<p>Run: <code>getent passwd | egrep '^(root|user|sysmaint):'</code></p>
-</li>
-<li>
-<p>Run: `getent shadow | egrep ‘^(root|user|sysmaint):’</p>
-</li>
-</ul>
-</li>
-<li>
-<p>Check whether “user” is actually missing</p>
-<ul>
-<li>
-<p>Run: <code>id user</code></p>
-</li>
-<li>
-<p>Run: <code>id sysmaint</code></p>
-</li>
-</ul>
-</li>
-<li>
-<p>Look for update-check failure cause</p>
-<ul>
-<li>
-<p>If this is Linux: run <code>cat /etc/os-release</code> and check if your system has working repos/clock:</p>
-<ul>
-<li>
-<p><code>date</code></p>
-</li>
-<li>
-<p><code>ls /etc/apt/sources.list.d 2&gt;/dev/null || true</code></p>
-</li>
-<li>
-<p>For Debian/Ubuntu: <code>apt update</code> (or <code>apt-get update</code>)</p>
-</li>
-<li>
-<p>For RHEL/CentOS/Fedora: <code>dnf check-update</code> or <code>yum check-update</code></p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-<p>If you paste (1) the OS distro (output of <code>/etc/os-release</code>) and (2) the exact command you ran for “system check” plus the first ~30 lines of its output (redact hostnames if needed), I can tell you whether the “Absent/enabled” lines are benign reporting or indicate a broken account/state—and what exact fix to apply.</p>
-            <p><small>8 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/issue-update-not-working/1790</link>
-          <pubDate>Fri, 03 Jul 2026 06:37:12 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1790</guid>
-          <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
         </item>
   </channel>
 </rss>

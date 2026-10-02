@@ -5,8 +5,128 @@
     <link>https://forums.kicksecure.com/latest</link>
     <description>Latest topics</description>
     
-      <lastBuildDate>Sun, 27 Sep 2026 19:37:11 +0000</lastBuildDate>
+      <lastBuildDate>Thu, 01 Oct 2026 06:41:16 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/latest.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Mullvad Causing Panel Crash</title>
+          <dc:creator><![CDATA[kiyoc34009]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>Recently a bug has appeared when I am using mullvad browser. It causes my panel to crash/disappear and I get a popup saying panel has crashed too many times, auto restart has been disabled until next login.</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860</link>
+          <pubDate>Thu, 01 Oct 2026 06:41:16 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1860</guid>
+          <source url="https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860.rss">Mullvad Causing Panel Crash</source>
+        </item>
+        <item>
+          <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+          <dc:creator><![CDATA[sublime.dust]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p>I installed Kicksecure on my desktop yesterday, and since then I have spent several hours attempting to debug it, with limited success.</p>
+<p><em>I am at my wits end.</em></p>
+<p>After my initial install, I was experiencing many of these problems (random logouts, amd_pstate failed to load, kanshi config not applied automatically) and then the terminal suddenly stopped working. When I tried to open Qterminal or use anything in the System Maintenance Panel that would normally launch the Qterminal, nothing happened.</p>
+<p>I could not find any way to fix this or install another terminal emulator, so I reinstalled the system from scratch. My terminal is back, but there are several other problems.</p>
+<p>I considered creating a separate post for each of these, but it seems likely that at least some of these issues are connected. I’m using the latest version of Kicksecure, based on Debian 13.6.</p>
+<h1><a name="p-5641-overview-of-problems-1" class="anchor" href="https://forums.kicksecure.com#p-5641-overview-of-problems-1" aria-label="Heading link"></a>Overview of Problems:</h1>
+<ol>
+<li>Logged out of computer at random intervals</li>
+<li>Kanshi config is not automatically applied upon startup</li>
+<li>amd_pstate failed to load</li>
+<li>sudo apt update: Error due to keyring mismatch</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+<h1><a name="p-5641-h-1-logged-out-of-computer-at-random-intervals-2" class="anchor" href="https://forums.kicksecure.com#p-5641-h-1-logged-out-of-computer-at-random-intervals-2" aria-label="Heading link"></a><strong>1. Logged out of computer at random intervals</strong></h1>
+<p>At seemingly random intervals, I am logged out of the computer and end up on the black log in screen where it asks me to enter my username. When I log back in, all of my applications are closed and anything I didn’t save is gone. This has happened while I am actively using my computer, and it has happened twice while writing this post. This could be coincidental, but it only seems to happen when I have adjusted the scale of my display.</p>
+<h1><a name="p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" class="anchor" href="https://forums.kicksecure.com#p-5641-h-2-kanshi-config-is-not-automatically-applied-upon-startup-3" aria-label="Heading link"></a><strong>2. Kanshi config is not automatically applied upon startup</strong></h1>
+<p>When I restart Kanshi the settings in my config file are applied, but I have to do that manually every single time I boot my computer. I tried to get around this by creating the file /etc/rc.local with the following contents and giving it execute permissions. This script is supposed to run on start up, but my display config settings are only applied if I execute the script manually.</p>
+<pre><code class="lang-auto">#!/bin/sh
+
+systemctl --user restart kanshi
+
+exit 0
+</code></pre>
+<h1><a name="p-5641-h-3-amd_pstate-failed-to-load-4" class="anchor" href="https://forums.kicksecure.com#p-5641-h-3-amd_pstate-failed-to-load-4" aria-label="Heading link"></a><strong>3. amd_pstate failed to load</strong></h1>
+<p>Every time I boot my computer, before I enter the passphrase to decrypt my drive, it outputs:</p>
+<pre><code class="lang-auto">[    5.447055] amd_pstate: failed to enable driver mode(3)
+</code></pre>
+<p>When I run lsmod it does not list amd_pstate. When I run modprobe, it outputs:</p>
+<pre><code class="lang-auto">[user ~]% sudo modprobe amd_pstate
+modprobe: FATAL: Module amd_pstate not found in directory /lib/modules/6.12.111+deb13-amd64
+zsh: exit 1     sudo modprobe amd_pstate
+</code></pre>
+<p>I have already tried updating my BIOS, enabling CPPC in my BIOS settings, and adding the amd_pstate=active rameter to /etc/default/grub with the following line before running ‘sudo update-grub’ and rebooting my device.</p>
+<pre><code class="lang-auto">GRUB_CMDLINE_LINUX_DEFAULT="quiet amd_pstate=active"
+</code></pre>
+<p>Do I even need amd_pstate, or can I just ignore this error for the rest of time?</p>
+<h1><a name="p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" class="anchor" href="https://forums.kicksecure.com#p-5641-h-4-sudo-apt-update-error-due-to-keyring-mismatch-5" aria-label="Heading link"></a><strong>4. sudo apt update: Error due to keyring mismatch</strong></h1>
+<p>This is the newest error, and it prevents me from using sudo apt update. It started after I tried to install Mullvad VPN, following the instructions on their website. Here are the commands I entered:</p>
+<pre><code class="lang-auto">sudo apt install curl
+sudo curl -fsSLo /usr/share/keyrings/mullvad-keyring.asc https://repository.mullvad.net/deb/mullvad-keyring.asc
+echo "deb [signed-by=/usr/share/keyrings/mullvad-keyring.asc arch=$( dpkg --print-architecture )] https://repository.mullvad.net/deb/stable stable main" | sudo tee /etc/apt/sources.list.d/mullvad.list
+sudo apt update
+</code></pre>
+<p>When I run ‘sudo apt update’, it outputs</p>
+<pre><code class="lang-auto">[user ~]% sudo apt update
+Error: Conflicting values set for option Signed-By regarding source https://repository.mullvad.net/deb/stable/ stable: /usr/share/keyrings/mullvad-keyring.asc != /etc/apt/keyrings/mullvad-keyring.asc
+Error: The list of sources could not be read.
+zsh: exit 100   sudo apt update
+</code></pre>
+<p>I tried deleting /usr/share/keyrings/mullvad-keyring.asc and /etc/apt/keyrings/mullvad-keyring.asc and rerunning the above commands, but it did not solve the problem.</p>
+<h1><a name="p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" class="anchor" href="https://forums.kicksecure.com#p-5641-h-5-systemd-critical-journal-messages-nouveau-channel-16-killed-6" aria-label="Heading link"></a><strong>5. systemd critical journal messages - nouveau, channel 16 killed</strong></h1>
+<p>When I run System Check, I get the following output</p>
+<pre><code class="lang-auto">ERROR: systemd critical journal messages check result (current boot): Possible system issue detected. Some unusual entries were found in the kernel log. 
+
+There is no need to panic. This is not a serious security issue. However, it may affect other system checks. These messages might indicate hardware or software problems. 
+
+Detected messages: 
+Sep 30 14:14:34 localhost kernel: nouveau 0000:2b:00.0: labwc[2314]: channel 16 killed!
+Sep 30 15:12:18 localhost kernel: nouveau 0000:2b:00.0: labwc[9098]: channel 16 killed!
+Sep 30 16:00:58 localhost kernel: nouveau 0000:2b:00.0: labwc[16315]: channel 16 killed!
+
+If you know what you are doing, feel free to disable this check. Create a file /etc/systemcheck.d/50_user.conf and add: 
+systemcheck_skip_functions+=" check_journal " 
+INFO: Kicksecure is a research project. 
+INFO: user-sysmaint-split: Absent 
+INFO: user-sysmaint-split session detection result: USER Session. 
+INFO: Full Disk Encryption (FDE): Enabled 
+INFO: GRUB Bootloader Password: Absent 
+INFO: Kicksecure Login Security Check (Colors) :
++----------+--------------------------------------+
+| Users    | Password               GUI Autologin |
++----------+--------------------------------------+
+| root     | Locked (Present)       Disabled      |
+| user     | Absent                 Enabled       |
+| sysmaint | Absent                 Disabled      |
++----------+--------------------------------------+
+You can adjust these settings using "Manage Passwords" and "Manage GUI Autologin" in the System Maintenance Panel. 
+INFO: Secure Boot: Enabled 
+INFO: tirdad - TCP ISN CPU Information Leak Protection: Enabled 
+INFO: Kicksecure APT Repository: Enabled. When the Kicksecure team releases TRIXIE updates, they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade) along with updated packages from the Debian team. Please read Trust to understand the risk. If you want to change this, use: 
+Start Menu -&gt; System -&gt; Derivative Repository 
+WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100) 
+Please manually check: 
+(Open a terminal, Start Menu -&gt; System -&gt; Terminal.) 
+upgrade-nonroot
+</code></pre>
+<p>Should I be concerned?</p>
+            <p><small>2 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858</link>
+          <pubDate>Thu, 01 Oct 2026 06:33:47 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1858</guid>
+          <source url="https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858.rss">Random log outs, amd_pstate failed to load, keyring mismatch, and more!</source>
+        </item>
         <item>
           <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
           <dc:creator><![CDATA[zzgg]]></dc:creator>
@@ -14,7 +134,7 @@
           <description><![CDATA[
             <p>KVM/virt-manager with no gpu passthrough and WLR_RENDERER already displaying pixman.</p>
 <p>an excerpt from the sudo journalctl -u greet.dservice output below.</p>
-            <p><small>11 posts - 3 participants</small></p>
+            <p><small>16 posts - 3 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855</link>
@@ -604,7 +724,7 @@ Bus 001 Device 002: ID 2c97:5000 Ledger Nano S+
 <p>Requiring users to juggle seven command-line utilities and two critical configuration files to set up a new encrypted disk seems like a lot. The steps for setting up encryption on a USB drive are similarly complicated, but you get to omit the crypttab and fstab stuff since you don’t want that automounted on boot.</p>
 <p>There are tools that can do a lot of this already (KDE Partition manager for instance can handle drive setup, though I don’t know if it can handle addition to crypttab and fstab or not), but they are also, to my awareness, painful to use.</p>
 <p>Given that users are resorting to proprietary software for this use case, potentially because they can’t figure out how to use the existing battle-tested open-source tools for this, it seems like we would be well served by adding some utility that can do some of this. If there’s an existing utility for this, that would be awesome, otherwise I don’t think it would be <em>that</em> hard to write one (famous last words). We had a utility that could do part of this in the past with zuluCrypt, but that ended up getting removed from Kicksecure due to an escalation-of-privilege vuln in a package patch and has been removed from Debian entirely for the same reason IIRC.</p>
-            <p><small>14 posts - 4 participants</small></p>
+            <p><small>17 posts - 5 participants</small></p>
             <p><a href="https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832">Read full topic</a></p>
           ]]></description>
           <link>https://forums.kicksecure.com/t/add-or-create-a-utility-for-setting-up-encrypted-drives-volumes-disk-images-whatnot/1832</link>
@@ -1060,40 +1180,6 @@ or in Terminal with debugging: systemcheck -v</p>
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1806</guid>
           <source url="https://forums.kicksecure.com/t/cant-install-tor-browser/1806.rss">Cant install Tor browser</source>
-        </item>
-        <item>
-          <title>Load kickscure from grub?</title>
-          <dc:creator><![CDATA[GillanH4]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>kicksecure was working for a while on my nvme drive that is in a separate enclosure connected via usb c to my laptop. but this time it didnt automatically boot from the connected drive, and i had to press f12 for the boot menu, and the only option other than my windows OS native to my laptop, was the grub menu. Is there a way to boot from grub? or a way to ensure kicksecure boots correctly? without reinstalling kicksecure preferably.</p>
-            <p><small>3 posts - 2 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/load-kickscure-from-grub/1803">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/load-kickscure-from-grub/1803</link>
-          <pubDate>Mon, 20 Jul 2026 18:05:24 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1803</guid>
-          <source url="https://forums.kicksecure.com/t/load-kickscure-from-grub/1803.rss">Load kickscure from grub?</source>
-        </item>
-        <item>
-          <title>Windows key to search through apps or bring up the main menu</title>
-          <dc:creator><![CDATA[rop]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>Is there a way to have the Super-L / windows key bring up the app menu / search? Thankyou! I created a folder ~/.config/labwc and a file rc.xml but can’t seem to have anything I put into it work.</p>
-            <p><small>3 posts - 3 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802</link>
-          <pubDate>Mon, 20 Jul 2026 13:34:23 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1802</guid>
-          <source url="https://forums.kicksecure.com/t/windows-key-to-search-through-apps-or-bring-up-the-main-menu/1802.rss">Windows key to search through apps or bring up the main menu</source>
         </item>
   </channel>
 </rss>
