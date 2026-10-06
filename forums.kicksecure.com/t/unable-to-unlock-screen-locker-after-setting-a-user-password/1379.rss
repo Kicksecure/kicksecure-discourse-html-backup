@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Unable to unlock screen-locker after setting a user password</title>
+    <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379</link>
+    <description>I installed the kicksecure 18 iso on an old laptop and wanted to lock the screen when the lid closes.
+
+At first I received this warning message:
+
+```plaintext
+Refusing to lock screen, because current account &#39;user&#39; has no password set.
+If the screen was locked, it would automatically unlock the moment any user input was received. Please set a password to enable screen locking.
+```
+
+So I creating a password &amp; disabled auto-login for “user” in sysmaint.
+Now I can now lock the screen as “user”, but no matter what I type into sway lock I’m told the password in wrong.
+
+I tried changing the “user” password to a single numerical digit in case it’s some sort of keyboard layout issue, but that didn’t work either.
+
+Then I tried removing the “user“ password, re-enabled auto-login and manually ran the sway lock command from `/usr/bin/lock-screen` in qterminal:
+
+```bash
+swaylock --color 000000 --image /usr/share/kicksecure/lock-screen-background.png --scaling fit
+```
+
+That brings up sway lock, but no matter what I type it still won’t unlock (contrary to the prior warning message)</description>
+    
+    <lastBuildDate>Wed, 03 Dec 2025 01:07:20 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Confirmed, this is definitely a PAM hardening bug. It turns out that Swaylock runs PAM modules as an unprivileged user, which the <code>block-unsafe-logins</code> mechanism is not designed to handle.</p>
+<p>This should be semi-easy to fix thankfully.</p>
+<p>Edit: Fix, not yet merged into Kicksecure’s code:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">github.com/ArrayBolt3/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">Fix block-unsafe-logins when running as non-root, add swaylock to list of safe auth services</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2025-12-03" data-time="01:06:30" data-timezone="UTC">01:06AM - 03 Dec 25 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener nofollow ugc">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 13 additions and 3 deletions">
+        <a href="https://github.com/ArrayBolt3/security-misc/commit/0534a34ed7246793db384518cfbecb3adfcb7f3e" target="_blank" rel="noopener nofollow ugc">
+          <span class="added">+13</span>
+          <span class="removed">-3</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/6</link>
+        <pubDate>Wed, 03 Dec 2025 00:49:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-6</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks, this is very helpful. I’ll reproduce on my end and see if I can fix the problem. (I wonder if our PAM hardening accidentally broke the screen locker.)</p>
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/5</link>
+        <pubDate>Wed, 03 Dec 2025 00:21:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-5</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[RebornRider]]></dc:creator>
+        <description><![CDATA[
+            <p>I was able to recreate this issue in virtualbox:</p>
+<ol>
+<li>Import the <code>Kicksecure-LXQt-18.0.7.6.Intel_AMD64.ova</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png" data-download-href="https://forums.kicksecure.com/uploads/default/831970db23362424cee0e2270cd81b97afb9c605" title="Step_1"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/831970db23362424cee0e2270cd81b97afb9c605_2_603x500.png" alt="Step_1" data-base62-sha1="iHL3qTQK5HtxPkO7UOl54kCDFdj" width="603" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/831970db23362424cee0e2270cd81b97afb9c605_2_603x500.png, https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png 1.5x, https://forums.kicksecure.com/uploads/default/original/1X/831970db23362424cee0e2270cd81b97afb9c605.png 2x" data-dominant-color="393739"></a></div></li>
+</ol>
+</li>
+<li>Boot into sysmaint</li>
+<li>Create a <code>user</code> password
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7.png" data-download-href="https://forums.kicksecure.com/uploads/default/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7" title="Step_2"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_690x425.png" alt="Step_2" data-base62-sha1="kIcIBqUv8UmIcGANcLomeIZMPTV" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/912ab36c7a7a76e27a8cc5aa130e0809aadebaa7_2_1380x850.png 2x" data-dominant-color="4C2122"></a></div></li>
+</ol>
+</li>
+<li>disable autologin for <code>user</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7.png" data-download-href="https://forums.kicksecure.com/uploads/default/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7" title="Step_3"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_690x425.png" alt="Step_3" data-base62-sha1="wp5xaKARnAN94RwrXJPV32RbF" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/000f1ff0c99e040f1542eb9303aec4ea04dd4ce7_2_1380x850.png 2x" data-dominant-color="4D2324"></a></div></li>
+</ol>
+</li>
+<li>shutdown and restart the VM</li>
+<li>use the new password to login into <code>user</code>
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/14f1520076305604a5f0b76531f1b1633339b477.png" data-download-href="https://forums.kicksecure.com/uploads/default/14f1520076305604a5f0b76531f1b1633339b477" title="Step_4"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_690x425.png" alt="Step_4" data-base62-sha1="2ZgzHpqOeLE8JouEHCYMca00CO3" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/14f1520076305604a5f0b76531f1b1633339b477_2_1380x850.png 2x" data-dominant-color="030303"></a></div></li>
+</ol>
+</li>
+<li>lock the screen
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/dc370644b2352045793fd3532ab75e4351fc5d23.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/dc370644b2352045793fd3532ab75e4351fc5d23" title="Step_5"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_690x425.jpeg" alt="Step_5" data-base62-sha1="vq6VQ7Wwf4x8DGtWxacD7N4LacH" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_690x425.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_1035x637.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/dc370644b2352045793fd3532ab75e4351fc5d23_2_1380x850.jpeg 2x" data-dominant-color="8086B3"></a></div></li>
+</ol>
+</li>
+<li>type in the new password and hit enter (this will fail)
+<ol>
+<li><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554.png" data-download-href="https://forums.kicksecure.com/uploads/default/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554" title="Step_6"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_690x425.png" alt="Step_6" data-base62-sha1="78cPHy4Ntim9HpqVynobkyNkIRu" width="690" height="425" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_690x425.png, https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_1035x637.png 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/31fcb6db5cbe80e02190b94ff1c4dd9ba3d53554_2_1380x850.png 2x" data-dominant-color="050506"></a></div></li>
+</ol>
+</li>
+</ol>
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/4</link>
+        <pubDate>Tue, 02 Dec 2025 21:31:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-4</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[RebornRider]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m using the British <code>gb</code> layout.</p>
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/3</link>
+        <pubDate>Tue, 02 Dec 2025 18:56:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-3</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>What keyboard layout are you using? Locking works fine for me with the <code>us</code> layout.</p>
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/2</link>
+        <pubDate>Tue, 02 Dec 2025 18:37:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-2</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+      <item>
+        <title>Unable to unlock screen-locker after setting a user password</title>
+        <dc:creator><![CDATA[RebornRider]]></dc:creator>
+        <description><![CDATA[
+            <p>I installed the kicksecure 18 iso on an old laptop and wanted to lock the screen when the lid closes.</p>
+<p>At first I received this warning message:</p>
+<pre data-code-wrap="plaintext"><code class="lang-plaintext">Refusing to lock screen, because current account 'user' has no password set.
+If the screen was locked, it would automatically unlock the moment any user input was received. Please set a password to enable screen locking.
+</code></pre>
+<p>So I creating a password &amp; disabled auto-login for “user” in sysmaint.<br>
+Now I can now lock the screen as “user”, but no matter what I type into sway lock I’m told the password in wrong.</p>
+<p>I tried changing the “user” password to a single numerical digit in case it’s some sort of keyboard layout issue, but that didn’t work either.</p>
+<p>Then I tried removing the “user“ password, re-enabled auto-login and manually ran the sway lock command from <code>/usr/bin/lock-screen</code> in qterminal:</p>
+<pre data-code-wrap="bash"><code class="lang-bash">swaylock --color 000000 --image /usr/share/kicksecure/lock-screen-background.png --scaling fit
+</code></pre>
+<p>That brings up sway lock, but no matter what I type it still won’t unlock (contrary to the prior warning message)</p>
+          <p><a href="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379/1</link>
+        <pubDate>Tue, 02 Dec 2025 17:00:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1379-1</guid>
+        <source url="https://forums.kicksecure.com/t/unable-to-unlock-screen-locker-after-setting-a-user-password/1379.rss">Unable to unlock screen-locker after setting a user password</source>
+      </item>
+  </channel>
+</rss>
