@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Change timezone. timedatectl reverts to default after a restart/shutdown template</title>
+    <link>https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516</link>
+    <description>I’m trying to change timezone using these commands in kicksecure-18 template or root (qvm-run -u root kicksecure-18 qterminal): 
+
+`sudo dpkg-reconfigure tzdata`
+
+`dpkg-reconfigure tzdata`
+
+`timedatectl set-timezone Etc/UTC`
+
+Then `timedatectl status` shows new timezone, but then timezone reverts to default after a restart/shutdown template. @arraybolt3 help please</description>
+    
+    <lastBuildDate>Fri, 23 Jan 2026 08:23:12 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Change timezone. timedatectl reverts to default after a restart/shutdown template</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks!</p>
+          <p><a href="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/3</link>
+        <pubDate>Fri, 23 Jan 2026 08:23:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1516-3</guid>
+        <source url="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516.rss">Change timezone. timedatectl reverts to default after a restart/shutdown template</source>
+      </item>
+      <item>
+        <title>Change timezone. timedatectl reverts to default after a restart/shutdown template</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Qubes OS syncs the time and timezone of all VMs to the same as dom0. The easiest way to change the timezone to UTC would be to set the timezone in dom0 to UTC.</p>
+<p>If you really want to set the timezone for just this one VM, the best options is probably to add a command to set the timezone to <code>/rw/config/rc.local</code>. See:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forum.qubes-os.org/t/can-a-specific-app-vm-date-and-time-be-adjusted/30966">
+  <header class="source">
+      <img src="https://forum.qubes-os.org/uploads/db3820/optimized/2X/5/55de5eaf64516902429c411f66491cc9db06c464_2_32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forum.qubes-os.org/t/can-a-specific-app-vm-date-and-time-be-adjusted/30966" target="_blank" rel="noopener" title="08:33PM - 22 December 2024">Qubes OS Forum – 22 Dec 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:472/471;"><img src="https://forum.qubes-os.org/uploads/db3820/original/1X/10549f9dff8a289d117f083e9f5155231c452db2.png" class="thumbnail" width="472" height="471"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forum.qubes-os.org/t/can-a-specific-app-vm-date-and-time-be-adjusted/30966" target="_blank" rel="noopener">Can a specific app vm date and time be adjusted</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #F7941D;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">User Support</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>is it possible for a specific app vm i created date and time be different from my system time and date.  reason being, i have created a mullvad vpn network cube that i use to browse with a specific appvpn, whoever when i go to whoer.net it shows...</p>
+
+  <p>
+    <span class="label1">Reading time: 1 mins 🕑</span>
+      <span class="label2">Likes: 4 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>If for some reason setting the timezone afresh on every VM boot is undesirable, there’s another (probably undocumented) solution; create a file at <code>/etc/qubes/protected-files.d/user.conf</code> with the following contents :</p>
+<pre><code class="lang-auto">/etc/timezone
+</code></pre>
+<p>That will suppress the functionality that syncs dom0’s timezone to individual qubes. That will make your <code>timedatectl</code> settings stick. (This is the mechanism Whonix uses internally to make sure its timezone stays set to UTC, so it’s <em>probably</em> not going anywhere unless <code>/etc/protected-files.d</code> gets replaced with some other mechanism in the future.)</p>
+          <p><a href="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/2</link>
+        <pubDate>Fri, 23 Jan 2026 01:20:42 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1516-2</guid>
+        <source url="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516.rss">Change timezone. timedatectl reverts to default after a restart/shutdown template</source>
+      </item>
+      <item>
+        <title>Change timezone. timedatectl reverts to default after a restart/shutdown template</title>
+        <dc:creator><![CDATA[sam]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m trying to change timezone using these commands in kicksecure-18 template or root (qvm-run -u root kicksecure-18 qterminal):</p>
+<p><code>sudo dpkg-reconfigure tzdata</code></p>
+<p><code>dpkg-reconfigure tzdata</code></p>
+<p><code>timedatectl set-timezone Etc/UTC</code></p>
+<p>Then <code>timedatectl status</code> shows new timezone, but then timezone reverts to default after a restart/shutdown template. <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> help please</p>
+          <p><a href="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516/1</link>
+        <pubDate>Thu, 22 Jan 2026 19:01:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1516-1</guid>
+        <source url="https://forums.kicksecure.com/t/change-timezone-timedatectl-reverts-to-default-after-a-restart-shutdown-template/1516.rss">Change timezone. timedatectl reverts to default after a restart/shutdown template</source>
+      </item>
+  </channel>
+</rss>

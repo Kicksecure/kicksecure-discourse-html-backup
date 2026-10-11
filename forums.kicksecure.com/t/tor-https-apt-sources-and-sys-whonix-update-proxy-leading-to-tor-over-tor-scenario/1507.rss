@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</title>
+    <link>https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507</link>
+    <description>I use sys-whonix as the update proxy for all templates in Qubes. In the Kicksecure 18 template, the APT source files under /etc/apt/sources.list.d/ are configured with tor+https by default.
+
+Does this create a Tor over Tor scenario?</description>
+    
+    <lastBuildDate>Tue, 13 Jan 2026 10:52:40 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Related background knowledge: <a href="https://www.kicksecure.com/wiki/About#torified_updates">Kicksecure torified updates</a></p>
+<aside class="quote no-group" data-username="qubes_update" data-post="3" data-topic="1507">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/q/ec9cab/48.png" class="avatar"> qubes_update:</div>
+<blockquote>
+<p>Is there a reason for using <code>tor+https</code> instead of just <code>https</code>for the default APT sources in the Qubes template?</p>
+</blockquote>
+</aside>
+<p>It’s just a “technical convenience”.</p>
+<ul>
+<li>Non-Qubes-Kicksecure uses the same <code>/etc/apt/sources.list.d/debian.sources</code> file.</li>
+<li>Useful if <code>apt update</code> is run in App Qube (for example for testing), Standalone VM. Having the Template use <code>https</code> but App Qubes / Standalone VMs use <code>tor+https</code> would be technically complex, hence avoided.</li>
+</ul>
+<aside class="quote no-group" data-username="qubes_update" data-post="3" data-topic="1507">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/q/ec9cab/48.png" class="avatar"> qubes_update:</div>
+<blockquote>
+<p>Is it specifically to allow automatic qube updates (“Check for qube updates” in Qubes Global Config) to route over Tor?</p>
+</blockquote>
+</aside>
+<p>No.</p>
+<hr>
+<p>Although Whonix is a different project, there is a similar situation for Qubes-Whonix templates, see: <a href="https://www.whonix.org/wiki/Stream_Isolation#Qubes_UpdatesProxy_Stream_Isolation">Qubes UpdatesProxy Stream Isolation</a></p>
+          <p><a href="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/4</link>
+        <pubDate>Tue, 13 Jan 2026 10:52:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1507-4</guid>
+        <source url="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507.rss">Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</source>
+      </item>
+      <item>
+        <title>Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</title>
+        <dc:creator><![CDATA[qubes_update]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks! That’s what I was looking for.</p>
+<p>Is there a reason for using <code>tor+https</code> instead of just <code>https</code>for the default APT sources in the Qubes template? Is it specifically to allow automatic qube updates (“Check for qube updates” in Qubes Global Config) to route over Tor?</p>
+          <p><a href="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/3</link>
+        <pubDate>Tue, 13 Jan 2026 09:30:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1507-3</guid>
+        <source url="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507.rss">Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</source>
+      </item>
+      <item>
+        <title>Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>No. Qubes Templates are non-networked by default. Tor doesn’t run inside Qubes Templates.</p>
+<hr>
+<p>Technical information:</p>
+<pre><code>sudo systemctl status tor
+</code></pre>
+<pre><code class="lang-auto">○ tor.service - Anonymizing overlay network for TCP (multi-instance-master)
+     Loaded: loaded (/usr/lib/systemd/system/tor.service; enabled; preset: enabled)
+    Drop-In: /usr/lib/systemd/system/tor.service.d
+             └─30_qubes.conf
+     Active: inactive (dead)
+  Condition: start condition unmet
+             └─ ConditionPathExists=!/var/run/qubes/this-is-templatevm was not met
+</code></pre>
+<p>Similar for.</p>
+<pre><code>sudo systemctl status tor@default
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/2</link>
+        <pubDate>Tue, 13 Jan 2026 08:03:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1507-2</guid>
+        <source url="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507.rss">Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</source>
+      </item>
+      <item>
+        <title>Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</title>
+        <dc:creator><![CDATA[qubes_update]]></dc:creator>
+        <description><![CDATA[
+            <p>I use sys-whonix as the update proxy for all templates in Qubes. In the Kicksecure 18 template, the APT source files under /etc/apt/sources.list.d/ are configured with tor+https by default.</p>
+<p>Does this create a Tor over Tor scenario?</p>
+          <p><a href="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507/1</link>
+        <pubDate>Tue, 13 Jan 2026 06:34:01 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1507-1</guid>
+        <source url="https://forums.kicksecure.com/t/tor-https-apt-sources-and-sys-whonix-update-proxy-leading-to-tor-over-tor-scenario/1507.rss">Tor+https APT sources and sys-whonix update proxy leading to Tor over Tor scenario?</source>
+      </item>
+  </channel>
+</rss>
