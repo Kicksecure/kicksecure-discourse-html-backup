@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Issue, update not working</title>
+    <link>https://forums.kicksecure.com/t/issue-update-not-working/1790</link>
+    <description>kick secure I ran system check. It printed out a page of lines. within that it has a box with root - locked - disabled
+user - Absent - enabled
+sysmaint - Absent - enabled
+
+then further down it says warning system check can not check for system update
+
+That output means you currently have these accounts/tokens in this state:
+
+* root: locked/disabled
+
+* sysmaint: Absent/enabled (not actually present, but the “enabled” flag is showing as enabled—so it’s likelya config state mismatch or just how the checker reports it)
+
+* user: Absent/enabled (same note)
+
+And the checker can’t verify OS/package updates (“cannot check for system update”).
+
+To get you unstuck, do these quick checks:
+
+1. Confirm what accounts exist right now
+
+   * Run: `getent passwd | egrep &#39;^(root|user|sysmaint):&#39;`
+
+   * Run: \`getent shadow | egrep &#39;^(root|user|sysmaint):&#39;
+
+2. Check whether “user” is actually missing
+
+   * Run: `id user`
+
+   * Run: `id sysmaint`
+
+3. Look for update-check failure cause
+
+   * If this is Linux: run `cat /etc/os-release` and check if your system has working repos/clock:
+
+     * `date`
+
+     * `ls /etc/apt/sources.list.d 2&gt;/dev/null || true`
+
+     * For Debian/Ubuntu: `apt update` (or `apt-get update`)
+
+     * For RHEL/CentOS/Fedora: `dnf check-update` or `yum check-update`
+
+If you paste (1) the OS distro (output of `/etc/os-release`) and (2) the exact command you ran for “system check” plus the first \~30 lines of its output (redact hostnames if needed), I can tell you whether the “Absent/enabled” lines are benign reporting or indicate a broken account/state—and what exact fix to apply.</description>
+    
+    <lastBuildDate>Sun, 05 Jul 2026 05:18:51 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Haha, no thanks. I work with Kicksecure under contract. If you want to though, you can always donate to Kicksecure:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1783150213" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="06:03PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(Even if I was an unpaid volunteer, I wouldn’t accept tips, since I don’t want to see the forums become a marketplace of sorts and would rather see donations go to the project.)</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/8</link>
+        <pubDate>Sun, 05 Jul 2026 05:18:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-8</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>  Could I give you some xmr?</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/7</link>
+        <pubDate>Sun, 05 Jul 2026 03:06:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-7</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>The issue linked above is persistent, it’s not something a reinstall will fix. There are instructions for how to disable the broken repo or work around the repo being broken here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Update#fasttrack_repository_issues">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1783150213" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Update#fasttrack_repository_issues" target="_blank" rel="noopener" title="09:26AM - 19 May 2026">Kicksecure – 19 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/452;"><img src="https://www.kicksecure.com/w/images/3/34/Operatingsystemupdated234234.jpg?version=15d12c80ea4b806b2a9d1ea499740678" class="thumbnail" alt="" width="640" height="452"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Update#fasttrack_repository_issues" target="_blank" rel="noopener">fasttrack repository issues - Operating System Software and Updates</a></h3>
+
+  <p>If an issue occurs, such as... | This page contains details on updating the Kicksecure operating system, including frozen packages. Most software in Kicksecure is maintained in a frozen state to ensure stability, so updates primarily focus on...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Eventually the Debian Fast Track maintainers will (likely) fix the issue with their repo and the problem will be automatically resolved at that time.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/6</link>
+        <pubDate>Sun, 05 Jul 2026 02:17:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-6</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>Think it’s a little more of an issue, not caused by the kick secure team.</p>
+<p>I have uninstalled this OS a total of 3 times and nothing but nightmares have came. I believe it has to do with Tor. Why am I saying that? because Tor is how this OS works threw. After I reloaded the OS it wouldn’t allow me to install the tor browser and it would keep giving me error 100 when I would try to update. I tried installing brave browser though, and that worked. Yes, Tor was working the first time I installed it</p>
+<p>Im very interested in this project still, people like <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> have made the time I have invested into it worth it with help.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/5</link>
+        <pubDate>Sat, 04 Jul 2026 02:11:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-5</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>TY I found that out the hard way <img src="https://forums.kicksecure.com/images/emoji/twitter/rofl.png?v=15" title=":rofl:" class="emoji" alt=":rofl:" loading="lazy" width="20" height="20">. I tried everything and then ended up with a fresh install with it just to come up again. So sorry about bringing that up if someone else did.</p>
+<p>Ty <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a>  for your insight, all your insights. Im just trying to get a full understanding of this</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/4</link>
+        <pubDate>Fri, 03 Jul 2026 23:05:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-4</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>The software update issue is known, one of the repos we enable by default is currently broken. See:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/e-release-file-for-tor-https-fasttrack-debian-net-debian-fasttrack-dists-trixie-fasttrack-inrelease-is-expired-invalid-since-13h-3min-9s-updates-for-this-repository-will-not-be-applied/23376">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/e-release-file-for-tor-https-fasttrack-debian-net-debian-fasttrack-dists-trixie-fasttrack-inrelease-is-expired-invalid-since-13h-3min-9s-updates-for-this-repository-will-not-be-applied/23376" target="_blank" rel="noopener" title="05:35PM - 03 July 2026">Whonix Forum – 3 Jul 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/255;"><img src="https://forums.whonix.org/uploads/default/original/2X/5/5ac973ff4302e69269667e09e67d850c0b628c7a.jpeg" class="thumbnail" width="690" height="255"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/e-release-file-for-tor-https-fasttrack-debian-net-debian-fasttrack-dists-trixie-fasttrack-inrelease-is-expired-invalid-since-13h-3min-9s-updates-for-this-repository-will-not-be-applied/23376" target="_blank" rel="noopener">E: Release file for...</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #63a0ff;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Qubes-Whonix</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>When running systemcheck on whonix-workstation-18 Template, I get this warning:  WARNING: Debian Package Update Check Result: Could not check for software updates! (apt-get code: 100)  Please manually check inside this TemplateVM...</p>
+
+  <p>
+    <span class="label1">Reading time: 1 mins 🕑</span>
+      <span class="label2">Likes: 3 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/3</link>
+        <pubDate>Fri, 03 Jul 2026 21:56:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-3</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Each message has a link to documentation. Please read it.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/2</link>
+        <pubDate>Fri, 03 Jul 2026 10:30:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-2</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+      <item>
+        <title>Issue, update not working</title>
+        <dc:creator><![CDATA[Lacekim]]></dc:creator>
+        <description><![CDATA[
+            <p>kick secure I ran system check. It printed out a page of lines. within that it has a box with root - locked - disabled<br>
+user - Absent - enabled<br>
+sysmaint - Absent - enabled</p>
+<p>then further down it says warning system check can not check for system update</p>
+<p>That output means you currently have these accounts/tokens in this state:</p>
+<ul>
+<li>
+<p>root: locked/disabled</p>
+</li>
+<li>
+<p>sysmaint: Absent/enabled (not actually present, but the “enabled” flag is showing as enabled—so it’s likelya config state mismatch or just how the checker reports it)</p>
+</li>
+<li>
+<p>user: Absent/enabled (same note)</p>
+</li>
+</ul>
+<p>And the checker can’t verify OS/package updates (“cannot check for system update”).</p>
+<p>To get you unstuck, do these quick checks:</p>
+<ol>
+<li>
+<p>Confirm what accounts exist right now</p>
+<ul>
+<li>
+<p>Run: <code>getent passwd | egrep '^(root|user|sysmaint):'</code></p>
+</li>
+<li>
+<p>Run: `getent shadow | egrep ‘^(root|user|sysmaint):’</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Check whether “user” is actually missing</p>
+<ul>
+<li>
+<p>Run: <code>id user</code></p>
+</li>
+<li>
+<p>Run: <code>id sysmaint</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>Look for update-check failure cause</p>
+<ul>
+<li>
+<p>If this is Linux: run <code>cat /etc/os-release</code> and check if your system has working repos/clock:</p>
+<ul>
+<li>
+<p><code>date</code></p>
+</li>
+<li>
+<p><code>ls /etc/apt/sources.list.d 2&gt;/dev/null || true</code></p>
+</li>
+<li>
+<p>For Debian/Ubuntu: <code>apt update</code> (or <code>apt-get update</code>)</p>
+</li>
+<li>
+<p>For RHEL/CentOS/Fedora: <code>dnf check-update</code> or <code>yum check-update</code></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>If you paste (1) the OS distro (output of <code>/etc/os-release</code>) and (2) the exact command you ran for “system check” plus the first ~30 lines of its output (redact hostnames if needed), I can tell you whether the “Absent/enabled” lines are benign reporting or indicate a broken account/state—and what exact fix to apply.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-update-not-working/1790/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-update-not-working/1790/1</link>
+        <pubDate>Fri, 03 Jul 2026 06:37:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1790-1</guid>
+        <source url="https://forums.kicksecure.com/t/issue-update-not-working/1790.rss">Issue, update not working</source>
+      </item>
+  </channel>
+</rss>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Issue with Kicksecure 17 without sys-whonix</title>
+    <link>https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327</link>
+    <description>I have Qubes OS 4.2 and the distribution morphing (based on minimal Debian 12)
+
+I would like to use Kicksecure 17 with a appVPN in Net Qube instead of Sys-whonix.
+
+I ran
+
+**sudo systemctl disable tor**
+
+, but I still get this error message:
+
+**Denied whonix.NewStatus + status from AppKicksecure17 to sys-whonix**
+
+However, thanks to my Net Qube appVPN, I do have internet access.
+
+How can I resolve the error message, and is using Kicksecure this way still secure?</description>
+    
+    <lastBuildDate>Tue, 28 Oct 2025 00:52:16 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Issue with Kicksecure 17 without sys-whonix</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Computer1" data-post="1" data-topic="1327">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/53a042/48.png" class="avatar"> Computer1:</div>
+<blockquote>
+<p>sudo systemctl disable tor</p>
+</blockquote>
+</aside>
+<p>You most likely do not want to do that for a few reasons:</p>
+<ul>
+<li>Tor is not used for anonymity in Kicksecure. Most of your network connections will go over clearnet (or, in your case, a VPN), not over Tor. The exception is OS updates and time synchronization.
+<ul>
+<li>OS updates go through Tor in order to prevent a targeted attack by a software update server against a Kicksecure user. The server cannot serve compromised updates just to one individual because of the use of Tor, because it can’t know who is downloading the updates. Either a server would have to distribute compromised updates to everyone (or at least everyone who uses Tor), or to no one, there’s no way to target just you if you download updates over Tor. Thus disabling Tor in Kicksecure reduces security.</li>
+<li>Time synchronization is done over Tor, because it can be done in a manner far more secure than updating time over NTP. A malicious NTP server could easily provide you an incorrect time, which would trick your system into accepting expired and potentially compromised TLS certificates, among other things.</li>
+</ul>
+</li>
+<li>You need to also disable <code>tor@default.service</code> if you want to really disable Tor.</li>
+</ul>
+<aside class="quote no-group" data-username="Computer1" data-post="1" data-topic="1327">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/53a042/48.png" class="avatar"> Computer1:</div>
+<blockquote>
+<p>, but I still get this error message:</p>
+<p><strong>Denied whonix.NewStatus + status from AppKicksecure17 to sys-whonix</strong></p>
+</blockquote>
+</aside>
+<p>This is sdwdate-gui, which is intended to show the current state of sdwdate in the system tray by communicating info about the sdwdate to sys-whonix (which then displays that info in the sdwdate tray icon). The best way to get this error to go away is to add some policy lines to a file in dom0, such as <code>/etc/qubes/policy.d/30-user.conf</code>, to allow your Kicksecure AppVM to talk to <code>sys-whonix</code> only for the purpose of showing info via sdwdate-gui. The lines should look something like:</p>
+<pre><code class="lang-auto">whonix.SdwdateStatus +         @tag:anon-gateway ks                allow  autostart=no notify=no
+whonix.NewStatus     *         ks                @tag:anon-gateway allow  autostart=no
+whonix.GatewayCommand +restart @tag:anon-gateway ks                allow  autostart=no
+whonix.GatewayCommand +stop    @tag:anon-gateway ks                allow  autostart=no
+whonix.GatewayCommand +showlog @tag:anon-gateway ks                allow  autostart=no
+</code></pre>
+<p>(This is based on <a href="https://github.com/QubesOS/qubes-core-admin-addon-whonix/blob/release4.2/qubes-rpc-policy/80-whonix.policy." rel="noopener nofollow ugc">https://github.com/QubesOS/qubes-core-admin-addon-whonix/blob/release4.2/qubes-rpc-policy/80-whonix.policy.</a>)</p>
+<aside class="quote no-group" data-username="Computer1" data-post="1" data-topic="1327">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/c/53a042/48.png" class="avatar"> Computer1:</div>
+<blockquote>
+<p>How can I resolve the error message, and is using Kicksecure this way still secure?</p>
+</blockquote>
+</aside>
+<p>It would be best to leave Tor enabled and configure sdwdate-gui to be able to talk to sys-whonix as described above. Your “normal” Internet traffic should still go through the VPN, and even the torified traffic may end up going through the VPN depending on how it is configured. Disabling Tor has some security risks, whether those are acceptable for your usecase or not depends on your threat model.</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327/2</link>
+        <pubDate>Tue, 28 Oct 2025 00:40:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1327-2</guid>
+        <source url="https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327.rss">Issue with Kicksecure 17 without sys-whonix</source>
+      </item>
+      <item>
+        <title>Issue with Kicksecure 17 without sys-whonix</title>
+        <dc:creator><![CDATA[Computer1]]></dc:creator>
+        <description><![CDATA[
+            <p>I have Qubes OS 4.2 and the distribution morphing (based on minimal Debian 12)</p>
+<p>I would like to use Kicksecure 17 with a appVPN in Net Qube instead of Sys-whonix.</p>
+<p>I ran</p>
+<p><strong>sudo systemctl disable tor</strong></p>
+<p>, but I still get this error message:</p>
+<p><strong>Denied whonix.NewStatus + status from AppKicksecure17 to sys-whonix</strong></p>
+<p>However, thanks to my Net Qube appVPN, I do have internet access.</p>
+<p>How can I resolve the error message, and is using Kicksecure this way still secure?</p>
+          <p><a href="https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327/1</link>
+        <pubDate>Mon, 27 Oct 2025 21:33:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1327-1</guid>
+        <source url="https://forums.kicksecure.com/t/issue-with-kicksecure-17-without-sys-whonix/1327.rss">Issue with Kicksecure 17 without sys-whonix</source>
+      </item>
+  </channel>
+</rss>

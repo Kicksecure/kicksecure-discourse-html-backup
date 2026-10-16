@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Derivative-maker build script running as user versus root versus sudo design</title>
+    <link>https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76</link>
+    <description>* The build script needs to have root because many actions such as mounting a raw image require root.
+* At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times.
+* Therefore currently, the build script is expected to be run under user (&quot;`user`&quot;) and with sudo.
+* Whenever an action should be performed as user instead of root, it uses `$SUDO_TO_USER` which results in:
+  * `sudo --non-interactive -u user`
+  * Why not run all under root? Because some build dependency tools (such as `dpkg-buildpackage`, `lintian`?) would complain about this.
+
+This is problematic because:
+
+* it raises the question when to use `sudo --non-interactive -u user` with `--preserve-env` and when not,
+* environment variables should or must passed or better (must) not,
+* home folder root versus user.
+
+For a cleaner implementation, the build script should probably run as user without `sudo` and then internally use `sudo --non-interactive` (to root) when required. To prevent the build stalling and asking the the sudo password every few minutes, build documentation would recommend to
+
+* either set up passwordless sudo or,
+* use a longer sudo password timeout
+  * Probably sudo configuration file option `timestamp_timeout`, unfortunately unavailable as an environment variable.
+
+Then after the build script started, it would use `sudo` to test if it is available and to cache password entry (using sudo&#39;s built-in `timestamp_timeout` feature).</description>
+    
+    <lastBuildDate>Sun, 10 Jul 2022 10:53:22 +0000</lastBuildDate>
+    <category>Development</category>
+    <atom:link href="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Derivative-maker build script running as user versus root versus sudo design</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <ul>
+<li>The build script needs to have root because many actions such as mounting a raw image require root.</li>
+<li>At the same time, the build script should be non-interactive, i.e. not require the user to enter a sudo password in the middle of the build, let alone several times.</li>
+<li>Therefore currently, the build script is expected to be run under user ("<code>user</code>") and with sudo.</li>
+<li>Whenever an action should be performed as user instead of root, it uses <code>$SUDO_TO_USER</code> which results in:
+<ul>
+<li><code>sudo --non-interactive -u user</code></li>
+<li>Why not run all under root? Because some build dependency tools (such as <code>dpkg-buildpackage</code>, <code>lintian</code>?) would complain about this.</li>
+</ul>
+</li>
+</ul>
+<p>This is problematic because:</p>
+<ul>
+<li>it raises the question when to use <code>sudo --non-interactive -u user</code> with <code>--preserve-env</code> and when not,</li>
+<li>environment variables should or must passed or better (must) not,</li>
+<li>home folder root versus user.</li>
+</ul>
+<p>For a cleaner implementation, the build script should probably run as user without <code>sudo</code> and then internally use <code>sudo --non-interactive</code> (to root) when required. To prevent the build stalling and asking the the sudo password every few minutes, build documentation would recommend to</p>
+<ul>
+<li>either set up passwordless sudo or,</li>
+<li>use a longer sudo password timeout
+<ul>
+<li>Probably sudo configuration file option <code>timestamp_timeout</code>, unfortunately unavailable as an environment variable.</li>
+</ul>
+</li>
+</ul>
+<p>Then after the build script started, it would use <code>sudo</code> to test if it is available and to cache password entry (using sudo’s built-in <code>timestamp_timeout</code> feature).</p>
+          <p><a href="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76/1</link>
+        <pubDate>Sun, 10 Jul 2022 10:53:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-76-1</guid>
+        <source url="https://forums.kicksecure.com/t/derivative-maker-build-script-running-as-user-versus-root-versus-sudo-design/76.rss">Derivative-maker build script running as user versus root versus sudo design</source>
+      </item>
+  </channel>
+</rss>
