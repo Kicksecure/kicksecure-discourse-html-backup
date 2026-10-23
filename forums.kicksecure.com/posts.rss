@@ -7,6 +7,87 @@
       <item>
         <title>Kicksecure KVM VM broken</title>
         <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p>Well yeah It’s too complicated for sure! I will just start with a new VM!</p>
+<p>Thank you very much for youre help sir!:))</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_8</link>
+        <pubDate>Wed, 21 Oct 2026 05:46:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5682</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>That didn’t quite work; there were intentionally two separate commands above, one of them with a newline in the middle, but you’ve typed them all as one line. When done right, the screen should look like:</p>
+<pre><code class="lang-auto">[root ~]# cat /proc/"$(pgrep sysmaint-panel)"/environ | tr '\0' '\n' &gt; desktop-env
+[root ~]#
+[root ~]# grep '[[:space:]]' desktop-env &amp;&amp; echo 'bad env' \
+then&gt; || XDG_RUNTIME_DIR=/run/user/"$(id -u)" env -i $(cat desktop-env) qterminal
+</code></pre>
+<p>If this is too complex though. starting over with a new VM may be the best option. I had to do that many times when I was first learning Linux <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_7</link>
+        <pubDate>Wed, 21 Oct 2026 05:31:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5681</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/8701a990768d1455f866908cf693505e486cd668.png" data-download-href="https://forums.kicksecure.com/uploads/default/8701a990768d1455f866908cf693505e486cd668" title="2026-10-20_21-54"><img src="https://forums.kicksecure.com/uploads/default/original/1X/8701a990768d1455f866908cf693505e486cd668.png" alt="2026-10-20_21-54" data-base62-sha1="jgk1fgO6yYhFKBEOB4lFb4LJQGA" width="690" height="128" data-dominant-color="060606"></a></div><p></p>
+<p>I think I got it right, I dont understand anything tbh, I’m quite new to linux, I’m considering to just leaving this mess and continue with new vm</p>
+<p>Can you understand what could be the error that is now stated In the picture?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_6</link>
+        <pubDate>Wed, 21 Oct 2026 05:08:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5680</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="whistleblow" data-post="4" data-topic="1867">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/5daacb/48.png" class="avatar"> whistleblow:</div>
+<blockquote>
+<p>Doesn’t seem like that, I boot the vm In sysmaint mode then I click on the “send key” button in virt manager then Ctrl +Alt+F2 Is that the right way?</p>
+</blockquote>
+</aside>
+<p>Yeah, that’s the info I was looking for.</p>
+<p>In the TTY, try running (as user <code>sysmaint</code>):</p>
+<pre><code class="lang-auto">cat /proc/"$(pgrep sysmaint-panel)"/environ | tr '\0' '\n' &gt; desktop-env
+
+grep '[[:space:]]' desktop-env &amp;&amp; echo 'bad env' \
+  || XDG_RUNTIME_DIR=/run/user/"$(id -u)" env -i $(cat desktop-env) qterminal
+</code></pre>
+<p>(Be careful when typing this, all the characters are important, including the quote marks left out around the <code>$(cat desktop-env)</code> part.)</p>
+<p>This will extract the environment of your graphical session from the running sysmaint-panel process, verify that it can be safely injected into qterminal in a trivial way, then will launch qterminal with that same environment so that it shows up on your graphical session configured (mostly) the same way it would be if you had launched it normally. If qterminal is working normally, this <em>should</em> result in it launching in the graphical session. More likely though you’ll get an error message that hints at what’s wrong.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_5</link>
+        <pubDate>Wed, 21 Oct 2026 04:11:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5679</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1867">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>s</p>
+</blockquote>
+</aside>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/44ed797aac676694110903cf7d026e373bf9e628.png" data-download-href="https://forums.kicksecure.com/uploads/default/44ed797aac676694110903cf7d026e373bf9e628" title="2026-10-20_20-54"><img src="https://forums.kicksecure.com/uploads/default/original/1X/44ed797aac676694110903cf7d026e373bf9e628.png" alt="2026-10-20_20-54" data-base62-sha1="9PLfNwR831bCg9nLAatuvoGTzNm" width="690" height="339" data-dominant-color="040404"></a></div>Doesn’t seem like that, I boot the vm In sysmaint mode then I click on the “send key” button in virt manager then Ctrl +Alt+F2 Is that the right way?<p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_4</link>
+        <pubDate>Wed, 21 Oct 2026 04:02:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5678</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>If you boot into sysmaint mode, switch to a TTY, and run <code>journalctl | grep segfault</code>, do you see qterminal crashing? If so, try running <code>cd ~/.cache &amp;&amp; rm -rf fontconfig</code> and see if that fixes the issue. There was a bug in Chromium recently that caused it to corrupt the fontconfig cache and cause Qt applications to crash.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_2</link>
+        <pubDate>Tue, 20 Oct 2026 23:38:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5676</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
         <description><![CDATA[ <p>Hello, I have a Kicksecure VM that I’ve had for several months, then I don’t know what happened but suddenly I can’t open the terminal,open the sdwdate log, or keyboard layout, It’s just these specific ones that nothing happens when I try to open them, I have of course tried to create a new VM and it works without problems so something has happened in this particular VM</p>
 <p>Is it possible to fix this in any way or should I just delete It and continue with the new one?</p> ]]></description>
         <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_1</link>
@@ -765,81 +846,6 @@ upgrade-nonroot
         <link>https://forums.kicksecure.com/t/qterminal-issues/1852#post_5</link>
         <pubDate>Sun, 27 Sep 2026 21:08:50 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5625</guid>
-      </item>
-      <item>
-        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
-        <dc:creator><![CDATA[@zzgg]]></dc:creator>
-        <description><![CDATA[ <ol>
-<li>Host OS details below:<br>
-PRETTY_NAME=“Debian GNU/Linux 13 (trixie)”<br>
-NAME=“Debian GNU/Linux”<br>
-VERSION_ID=“13”<br>
-VERSION=“13 (trixie)”<br>
-VERSION_CODENAME=trixie<br>
-DEBIAN_VERSION_FULL=13.6<br>
-IMAGE_ID=live</li>
-<li>Simplex is the only one I can think of</li>
-<li>No this has been an issue since setting up the VM</li>
-<li>3d acceleration was checked. After unchecking and rebooting the VM I can still reproduce the login screen error.</li>
-</ol> ]]></description>
-        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_6</link>
-        <pubDate>Sun, 27 Sep 2026 20:54:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5624</guid>
-      </item>
-      <item>
-        <title>Qterminal Issues</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>Brave Browser is based on Chromium, and the bug was introduced in Chromium, so yes, it is very likely the issue.</p>
-<p>Keep in mind that every time you open Brave, it will (likely) re-create the bad fontconfig cache, and you’ll need to remove it again. If you find this too annoying, you can create empty <code>/home/user/.cache/fontconfig</code> and <code>/home/user/.fontconfig</code> directories, then use <code>sudo chattr +i</code> on both of them to prevent Brave (or anything else) from writing to them. (You’ll have to do this from sysmaint mode unless you removed user-sysmaint-split.) This will break the fontconfig cache, but in my experience this doesn’t result in any real issues. There might be a loss in performance when starting apps, but if there is, I haven’t noticed it.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/qterminal-issues/1852#post_4</link>
-        <pubDate>Sun, 27 Sep 2026 20:36:13 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5623</guid>
-      </item>
-      <item>
-        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>libgallium is part of the graphics stack, specifically part of Mesa3D. Some questions:</p>
-<ul>
-<li>What host OS are you using?</li>
-<li>Are you running any third-party applications that create “widgets” or similar things on the screen?</li>
-<li>Did this only start happening after a software update?</li>
-<li>Do you have the 3d acceleration checkbox in virt-manager checked? (It shouldn’t be checked, it’s possible this could happen if you checked it.)</li>
-</ul> ]]></description>
-        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_5</link>
-        <pubDate>Sun, 27 Sep 2026 20:35:45 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5622</guid>
-      </item>
-      <item>
-        <title>Qterminal Issues</title>
-        <dc:creator><![CDATA[@Trublesum]]></dc:creator>
-        <description><![CDATA[ <p>Hi,</p>
-<p>I don’t use Chrome or Chromium but I use Brave Browser along Mullvad browser, I’m guessing this would still be an issue right?</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/qterminal-issues/1852#post_3</link>
-        <pubDate>Sun, 27 Sep 2026 20:13:02 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5620</guid>
-      </item>
-      <item>
-        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
-        <dc:creator><![CDATA[@zzgg]]></dc:creator>
-        <description><![CDATA[ <pre><code class="lang-auto">\[  759.390635\] labwc\[2569\]: segfault at 580000000000 ip 0000779773b2080c sp 00007ffed8ea9630 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,7797730e1000+173b000\] likely on CPU 14 (core 28, socket 0)
-\[  844.386934\] labwc\[6474\]: segfault at 654800000000 ip 000071bf8052080c sp 00007ffeb61cb890 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,71bf7fae1000+173b000\] likely on CPU 10 (core 20, socket 0)
-\[ 1078.382682\] labwc\[7214\]: segfault at 5d8800000000 ip 0000725e8e72080c sp 00007ffe0d999a40 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,725e8dce1000+173b000\] likely on CPU 14 (core 28, socket 0)
-\[16857.514611\] labwc\[8046\]: segfault at 598000000000 ip 00007acf2b32080c sp 00007ffe92187d50 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,7acf2a8e1000+173b000\] likely on CPU 0 (core 0, socket 0)
-\[17518.289612\] labwc\[12934\]: segfault at 64e800000000 ip 00007aa30632080c sp 00007ffc83840630 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,7aa3053e1000+173b000\] likely on CPU 14 (core 24, socket 0)
-\[17542.675820\] labwc\[13667\]: segfault at 5fe000000000 ip 00007552ff52080c sp 00007ffc3f67a7a0 error 4 in libgallium-25.0.7-2+deb13u1.so\[b2080c,7552feae1000+173b000\] likely on CPU 14 (core 28, socket 0)
-\[17571.167019\] labwc\[14656\]: segfault at 5a5800000000 ip 00007bb8f5b2080c sp
-</code></pre> ]]></description>
-        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_4</link>
-        <pubDate>Sun, 27 Sep 2026 19:57:58 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5619</guid>
-      </item>
-      <item>
-        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
-        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
-        <description><![CDATA[ <p>What you’re describing sounds like the desktop is crashing. If you run <code>sudo dmesg | grep segfault</code>, do you see any output? If so, please share as much of the output of <code>sudo dmesg</code> here as you’re comfortable with sharing.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_3</link>
-        <pubDate>Sun, 27 Sep 2026 19:44:33 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5618</guid>
       </item>
   </channel>
 </rss>
