@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure as Server OS?</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354</link>
+    <description>Does Kicksecure include hardening for servers or just for Desktop? Thanks</description>
+    
+    <lastBuildDate>Wed, 30 Oct 2024 08:02:53 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>Could we make D-I install only the <code>kicksecure-cli(-host)</code> meta package?</p>
+</blockquote>
+<p>We can add the kicksecure source list as a <code>late_command</code> or <code>early_command</code> in preseed config. Something like this:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+in-target sh -c 'echo "deb [signed-by=/usr/share/keyrings/derivative.asc] https://deb.kicksecure.com bookworm main contrib non-free" | sudo tee /etc/apt/sources.list.d/derivative.list';
+</code></pre>
+<p>And then install the package after update:</p>
+<pre><code class="lang-auto">d-i preseed/late_command string \ 
+    in-target apt-get update; \
+    in-target apt-get install -y --no-install-recommends kicksecure-cli-host 
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/14">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/14</link>
+        <pubDate>Wed, 30 Oct 2024 08:02:53 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-14</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>related:</p>
+<aside class="quote quote-modified" data-post="1" data-topic="649">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar">
+    <div class="quote-title__text-content">
+      <a href="https://forums.kicksecure.com/t/debian-installer-d-i/649">Debian Installer (`D-I`)</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/development/7"><span data-category-id="7" style="--category-badge-color: #25AAE2; --category-badge-text-color: #FFF;" data-drop-close="true" class="badge-category --style-square " title="Development of Kicksecure software and source code. Development Discussion Policy and First-Time Source Code Contributor Policy apply."><span class="badge-category__name">Development</span></span></a>
+    </div>
+  </div>
+  <blockquote>
+    Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!). 
+references: 
+
+
+
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+<a href="https://wiki.debian.org/DebianInstaller">https://wiki.debian.org/DebianInstaller</a>
+<a href="https://wiki.debian.org/DebianInstaller/FAQ">https://wiki.debian.org/DebianInstaller/FAQ</a>
+<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>
+
+What this is not? This is not calamares. 
+
+
+
+D-I is somewhat a “by-product” of switching to build the ISO using Debian live-build (which was done to fix some boot…
+  </blockquote>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/13</link>
+        <pubDate>Wed, 30 Oct 2024 06:57:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-13</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> in the next release of Kicksecure 17.2.3.9 and above, it will be possible to use D-I (<a href="https://en.wikipedia.org/wiki/Debian-Installer" class="inline-onebox">Debian-Installer - Wikipedia</a>, the “console looking” Debian installer) (not calamares!).</p>
+<p>Would that help?</p>
+<p>It supports preseed (<a href="https://en.wikipedia.org/wiki/Preseed" class="inline-onebox">Preseed - Wikipedia</a>) (<a href="https://wiki.debian.org/DebianInstaller/Preseed" class="inline-onebox">DebianInstaller/Preseed - Debian Wiki</a>) and whatnot. These are features inherited from D-I.</p>
+<p>Could we make D-I install only the <code>kicksecure-cli(-host)</code> meta package? Or would we require a separate headless ISO? Or an option in calamares?</p>
+<aside class="quote no-group" data-username="mmap" data-post="6" data-topic="354" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
+<blockquote>
+<p>And are there any plans to migrate from debian to a more secure distro such as Alpine or Arch?</p>
+</blockquote>
+</aside>
+<p>1 question = 1 forum thread please. This is a much different question than Kicksecure for server.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/12</link>
+        <pubDate>Tue, 29 Oct 2024 20:32:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-12</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="mmap" data-post="9" data-topic="354" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
+<blockquote>
+<p>And <span class="mention">@roddhjav</span> pointed out a lot of valid things regarding your review. Most of the things are fixed. Mentioning a 15 year old research paper on package managers is pointless. The UX should be irrelevant or atleast be an afterthought. Most of the people who use whonix and kicksecure are advanced users.</p>
+</blockquote>
+</aside>
+<p>post comments to the same topic of arch, and i pointed out many points not just those who you mentioned.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/11</link>
+        <pubDate>Tue, 29 Oct 2024 17:57:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-11</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>first one failed to be installed on qubes</p>
+</blockquote>
+<p>What do you mean by that? I can install it just fine. Alpine is hardly ever used for desktop anyway.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/10</link>
+        <pubDate>Tue, 29 Oct 2024 08:03:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-10</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <p>And <span class="mention">@roddhjav</span> pointed out a lot of valid things regarding your review. Most of the things are fixed. Mentioning a 15 year old research paper on package managers is pointless. The UX should be irrelevant or atleast be an afterthought. Most of the people who use whonix and kicksecure are advanced users.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/9</link>
+        <pubDate>Tue, 29 Oct 2024 08:00:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-9</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <p>Alpine is no way similar to arch. It has a different init system, uses musl instead of libc just to mention a few significant differences.</p>
+<blockquote>
+<p>its smaller/simpler but doesnt mean more secure</p>
+</blockquote>
+<p>It does imply that they heavily focus on minimalism which does show their commitment to keeping things secure. It’s just one factor.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/8</link>
+        <pubDate>Tue, 29 Oct 2024 07:55:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-8</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[nurmagoz]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="mmap" data-post="5" data-topic="354">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
+<blockquote>
+<p>is installing kicksecure on an existing debian efficient?</p>
+</blockquote>
+</aside>
+<p>Thats what morphing is for.</p>
+<aside class="quote no-group" data-username="mmap" data-post="5" data-topic="354">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
+<blockquote>
+<p>What about all the bloat that comes with debian?</p>
+</blockquote>
+</aside>
+<p>Use CD version, which is very minimal or netinstall and install only what you want.</p>
+<aside class="quote no-group" data-username="mmap" data-post="6" data-topic="354" data-full="true">
+<div class="title">
+<div class="quote-controls"></div>
+<img loading="lazy" alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/m/ce7236/48.png" class="avatar"> mmap:</div>
+<blockquote>
+<p>And are there any plans to migrate from debian to a more secure distro such as Alpine or Arch?</p>
+</blockquote>
+</aside>
+<p>I reviewed Arch you find it here:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forums.whonix.org/t/arch-linux-distro-preview/13387">
+  <header class="source">
+      <img src="https://forums.whonix.org/uploads/default/optimized/2X/3/37fe81e592143b0c01c9656c44069b4bfdd3990e_2_32x32.ico" class="site-icon" width="32" height="32">
+
+      <a href="https://forums.whonix.org/t/arch-linux-distro-preview/13387" target="_blank" rel="noopener" title="08:46PM - 23 February 2022">Whonix Forum – 23 Feb 22</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/127;"><img src="https://forums.whonix.org/uploads/default/original/2X/2/2e676a538144a2d47c0557a27854dcaceec3b5c4.png" class="thumbnail" width="690" height="127"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forums.whonix.org/t/arch-linux-distro-preview/13387" target="_blank" rel="noopener">Arch Linux Distro Preview</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #25AAE2;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">Development</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I have been playing with Arch and some their variants (like arcolinux) since like a year, And here is what i have seen:  What arch solve: Continues upgrades to the packages which solve debian issues:   Solve outdated packages which effect new...</p>
+
+  <p>
+    <span class="label1">Reading time: 4 mins 🕑</span>
+      <span class="label2">Likes: 9 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Alpine is just similar to arch, not user friendly installation, its smaller/simpler but doesnt mean more secure (something need to be deeply investigated)… so yeah i might give it another try in the future (first one failed to be installed on qubes).</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/7</link>
+        <pubDate>Mon, 28 Oct 2024 21:51:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-7</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <p>And are there any plans to migrate from debian to a more secure distro such as Alpine or Arch?</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/6</link>
+        <pubDate>Mon, 28 Oct 2024 14:56:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-6</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <p>I had one more question tho, is installing kicksecure on an existing debian efficient? What about all the bloat that comes with debian?</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/5</link>
+        <pubDate>Mon, 28 Oct 2024 14:54:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-5</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[mmap]]></dc:creator>
+        <description><![CDATA[
+            <p>The ISO includes the XFCE environment and the installer seems to be only possible for when you boot using XFCE. Is there no headless installation? Without the use of a bloated DE?</p>
+<p>Edit: found the “distro-morphing” method. Sorry for the ping.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/4</link>
+        <pubDate>Mon, 28 Oct 2024 14:50:09 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-4</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>2 posts were split to a new topic: <a href="https://forums.kicksecure.com/t/hardened-malloc-breaks-php-and-lighttpd/368">Hardened Malloc breaks PHP and lighttpd</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/3</link>
+        <pubDate>Fri, 09 Feb 2024 11:00:22 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Also for servers.</p>
+<p><a href="https://www.kicksecure.com/#security">Kicksecure - Secure by Default Operating System chapter security in Kicksecure wiki</a></p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/2</link>
+        <pubDate>Tue, 02 Jan 2024 06:27:41 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+      <item>
+        <title>Kicksecure as Server OS?</title>
+        <dc:creator><![CDATA[Ge8y63]]></dc:creator>
+        <description><![CDATA[
+            <p>Does Kicksecure include hardening for servers or just for Desktop? Thanks</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-as-server-os/354/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-as-server-os/354/1</link>
+        <pubDate>Mon, 01 Jan 2024 17:34:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-354-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-as-server-os/354.rss">Kicksecure as Server OS?</source>
+      </item>
+  </channel>
+</rss>
