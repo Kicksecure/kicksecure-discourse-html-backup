@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Systemcheck with custom hostname?</title>
+    <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609</link>
+    <description>say I have a template named “y” and an appvm based on that template named “x”…
+I added “hostnamectl set-hostname host” for the rc.local for both of them but it causes issues when I run the systemcheck as “user” on “x”…
+
+```
+systemcheck
+[INFO] [systemcheck] x | machine | y TemplateBased AppVM | Mon Feb 16 16:43:57 UTC 2026
+[ERROR] [systemcheck] Check &#39;leaprun check-sudo&#39; result: System misconfiguration detected. No need to panic. This is not a severe issue. However, other tests may be affected due to this.
+ 
+The following command:
+leaprun check-sudo ; echo $?
+was expected to produce no output with an exit code of zero. The opposite of that happened, indicating an unexpected result.
+ 
+exit_code: 0
+ 
+privilege_escalation_tool_output:
+sudo: unable to resolve host host: Temporary failure in name resolution
+[ERROR] [systemcheck] Check &#39;sudo&#39; result: System misconfiguration detected. No need to panic. This is not a severe issue. However, other tests may be affected due to this.
+ 
+The following command:
+sudo --non-interactive -- /usr/bin/test -x /usr/bin/test ; echo $?
+was expected to produce no output with an exit code of zero. The opposite of that happened, indicating an unexpected result.
+ 
+exit_code: 0
+ 
+privilege_escalation_tool_output:
+sudo: unable to resolve host host: Temporary failure in name resolution
+[ERROR] [systemcheck] check network interfaces Result: No external network interface found.
+ 
+Recommendation:
+https://www.kicksecure.com/wiki/Troubleshooting
+ 
+Debugging information:
+Command
+ip -o addr show scope global
+did not show any output
+ 
+If this error happens only during upgrading or is transient this error can be safely ignored.
+ 
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=&quot; check_network_interfaces &quot;
+INFO: Skipping check_qubes_network_interface, because systemcheck_skip_functions includes it.
+INFO: Skipping check_tor_bootstrap, because systemcheck_skip_functions includes it.
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Absent
+https://www.kicksecure.com/wiki/sysmaint
+[INFO] [systemcheck] user-sysmaint-split session detection result: USER Session.
+[INFO] [systemcheck] Kicksecure Login Security Check (Colors)
+:
++-------+--------------------------------------+
+| Users | Password               GUI Autologin |
++-------+--------------------------------------+
+| root  | Restricted (Absent)    Disabled      |
+| user  | Absent                 Enabled       |
++-------+--------------------------------------+
+ 
+You can adjust these settings using &quot;Manage Passwords&quot; and &quot;Manage GUI Autologin&quot;
+in the System Maintenance Panel.
+See also:
+https://www.kicksecure.com/wiki/Login
+https://www.kicksecure.com/wiki/Systemcheck#Physical_Security_Check
+[INFO] [systemcheck] Kicksecure APT Repository: Enabled.
+When the Kicksecure team releases TRIXIE updates,
+they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)
+along with updated packages from the Debian team. Please read https://www.kicksecure.com/wiki/Trust to understand the risk. 
+If you want to change this, use:
+    sudo repository-dist
+[INFO] [systemcheck] Qubes UpdatesProxy Reachability Test: Trying to reach local Qubes UpdatesProxy... PROXY_SERVER: http://127.0.0.1:8082/
+[INFO] [systemcheck] Qubes UpdatesProxy Reachability Result: Ok, UpdatesProxy was not reachable.
+This is expected because not running in Template.
+[INFO] [systemcheck] Qubes UpdatesProxy Connectivity Test: Skipped, because not using --leak-tests (--show-ip), ok.
+[INFO] [systemcheck] Debian Package Update Check Result: Skipped. (Because no external network interface detected.)
+[INFO] [systemcheck] Please donate!
+   See: https://www.kicksecure.com/wiki/Donate
+```
+
+I added the “systemcheck_skip_functions” and I tried to change the /etc/host but these didnt do much…
+so I have like two questions from this:
+1) how do I handle all of the above… I dont wanna reveal my hostname to some apps I install etc… yet I wanna have kicksecure with its systemcheck… what do I do???
+2) how the hell this working…
+`[INFO] [systemcheck] x | machine | y TemplateBased AppVM | Mon Feb 16 16:43:57 UTC 2026`
+
+how does it knows the template’s name???
+does this mean even if I change the hostname to host apps I install will still be able to know the name of my template and appvm ???</description>
+    
+    <lastBuildDate>Sun, 22 Feb 2026 16:22:00 +0000</lastBuildDate>
+    <category>Qubes</category>
+    <atom:link href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group quote-modified" data-username="Patrick" data-post="2" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<aside class="quote no-group" data-username="sapphire993" data-post="1" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/2bfe46/48.png" class="avatar"> sapphire993:</div>
+<blockquote>
+<p>how does it knows the template’s name???</p>
+</blockquote>
+</aside>
+<p>Qubes feature. Not my design.</p>
+<pre><code class="lang-auto">qubesdb-read /qubes-base-template
+</code></pre>
+</blockquote>
+</aside>
+<p>Correction:</p>
+<p>In 2015, at the time of writing around a decade ago, was discussed here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://groups.google.com/g/qubes-devel/c/BhSrzDdB5To/m/RfWLdoxACgAJ">
+  <header class="source">
+      <img src="https://www.gstatic.com/images/branding/product/1x/groups_32dp.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://groups.google.com/g/qubes-devel/c/BhSrzDdB5To/m/RfWLdoxACgAJ" target="_blank" rel="noopener">groups.google.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://groups.google.com/g/qubes-devel/c/BhSrzDdB5To/m/RfWLdoxACgAJ" target="_blank" rel="noopener">Terminology: AppVM vs TemplateBasedVM - was: qubesdb-read...</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/11</link>
+        <pubDate>Sun, 22 Feb 2026 16:22:00 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-11</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[FranklyFlawless]]></dc:creator>
+        <description><![CDATA[
+            <p>Related:</p>
+<aside class="onebox discoursetopic" data-onebox-src="https://forum.qubes-os.org/t/anon-timezone-doesnt-work-for-me/39539">
+  <header class="source">
+      <img src="https://forum.qubes-os.org/uploads/db3820/optimized/2X/5/55de5eaf64516902429c411f66491cc9db06c464_2_32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forum.qubes-os.org/t/anon-timezone-doesnt-work-for-me/39539" target="_blank" rel="noopener nofollow ugc" title="12:48PM - 19 February 2026">Qubes OS Forum – 19 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:472/471;"><img src="https://forum.qubes-os.org/uploads/db3820/original/1X/10549f9dff8a289d117f083e9f5155231c452db2.png" class="thumbnail" width="472" height="471"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forum.qubes-os.org/t/anon-timezone-doesnt-work-for-me/39539" target="_blank" rel="noopener nofollow ugc">Anon-timezone doesnt work for me</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #F7941D;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">User Support</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>I set anon-timezone for a custom service in my appvm settings… restarted it… checked the timezone and it shows my real timezone… what do I need to do to make it work??? it checked obviously</p>
+
+  <p>
+    <span class="label1">Reading time: 2 mins 🕑</span>
+      <span class="label2">Likes: 15 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/10</link>
+        <pubDate>Fri, 20 Feb 2026 19:21:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-10</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox discoursetopic" data-onebox-src="https://forum.qubes-os.org/t/stop-leaking-template-name-in-appvm/39537">
+  <header class="source">
+      <img src="https://forum.qubes-os.org/uploads/db3820/optimized/2X/5/55de5eaf64516902429c411f66491cc9db06c464_2_32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://forum.qubes-os.org/t/stop-leaking-template-name-in-appvm/39537" target="_blank" rel="noopener" title="12:28PM - 19 February 2026">Qubes OS Forum – 19 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:472/471;"><img src="https://forum.qubes-os.org/uploads/db3820/original/1X/10549f9dff8a289d117f083e9f5155231c452db2.png" class="thumbnail" width="472" height="471"></div>
+
+<div class="title-wrapper">
+  <h3><a href="https://forum.qubes-os.org/t/stop-leaking-template-name-in-appvm/39537" target="_blank" rel="noopener">Stop leaking template name in appvm!</a></h3>
+  <div class="topic-category">
+      <span class="badge-wrapper bullet">
+        <span class="badge-category-bg" style="background-color: #F7941D;"></span>
+        <span class="badge-category clear-badge">
+          <span class="category-name">User Support</span>
+        </span>
+      </span>
+  </div>
+</div>
+
+  <p>Im honestly kinda shocked… why the heck are you allowing any app to sniff template name in a regular appvm??? It’s really pissing me off because this kinda data is critical… and it’s by design??? wtf…  so… if you go into any appvm and AS REGULAR...</p>
+
+  <p>
+    <span class="label1">Reading time: 3 mins 🕑</span>
+      <span class="label2">Likes: 39 ❤</span>
+  </p>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/9</link>
+        <pubDate>Fri, 20 Feb 2026 18:20:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-9</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="onebox githubissue" data-onebox-src="https://github.com/QubesOS/qubes-issues/issues/10704">
+  <header class="source">
+
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10704" target="_blank" rel="noopener">github.com/QubesOS/qubes-issues</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Issue" data-github-private-repo="false">
+	  <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/QubesOS/qubes-issues/issues/10704" target="_blank" rel="noopener">Add controls for qubesdb data</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        opened <span class="discourse-local-date" data-format="ll" data-date="2026-02-19" data-time="20:30:05" data-timezone="UTC">08:30PM - 19 Feb 26 UTC</span>
+      </div>
+
+
+      <div class="user">
+        <a href="https://github.com/RandyTheOtter" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/177127055?v=4" class="onebox-avatar-inline" width="20" height="20">
+          RandyTheOtter
+        </a>
+      </div>
+    </div>
+
+    <div class="labels">
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          C: core
+        </span>
+        <span style="display:inline-block;margin-top:2px;background-color: #B8B8B8;padding: 2px;border-radius: 4px;color: #fff;margin-left: 3px;">
+          P: default
+        </span>
+    </div>
+  </div>
+</div>
+
+  <div class="github-row">
+    <p class="github-body-container">[How to file a helpful issue](https://www.qubes-os.org/doc/issue-tracking/)
+
+###<span class="show-more-container"><a href="" rel="noopener" class="show-more">…</a></span><span class="excerpt hidden"> The problem you're addressing (if any)
+
+Information accessible through qubesdb is sensitive for certain use cases, but currently there is no good way to control it:
+
+https://github.com/QubesOS/qubes-issues/issues/8381
+https://forum.qubes-os.org/t/stop-leaking-template-name-in-appvm/39537
+
+### The solution you'd like
+
+Ability to configure what qubes have access to what data. RPC policy comes to mind but this of course is up to the developer.
+
+Even something as simple as a toggle that prevents dom0 from sharing any qubesdb data is valuable.
+
+### The value to a user and who that user might be
+
+Users can prohibit untrusted domains from accessing sensitive data. Mostly useful for improved privacy, to avoid fingerprinting. This also makes it marginally harder for an attacker to collect system information.
+
+### Completion criteria checklist
+
+(This section is for developer use only. Please do not modify it.)</span></p>
+  </div>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/8</link>
+        <pubDate>Fri, 20 Feb 2026 18:09:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-8</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>A solution similar to:</p>
+<ul>
+<li><a href="https://forums.whonix.org/t/dom0-timezone-leak-whonix-17-qubes-r4-2/22889" class="inline-onebox">Dom0 timezone leak - Whonix 17, Qubes R4.2 - Qubes-Whonix - Whonix Forum</a></li>
+<li><a href="https://github.com/QubesOS/qubes-issues/issues/8381" class="inline-onebox">Stop leaking dom0 timezone to Qubes-Whonix · Issue #8381 · QubesOS/qubes-issues · GitHub</a></li>
+</ul>
+<p>And/or less perfect, arguably incomplete, but good defense in depth:</p>
+<p>An blocking early boot systemd unit that’s starting a script using <code>qubesdb-rm</code>.</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/7</link>
+        <pubDate>Thu, 19 Feb 2026 10:00:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-7</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[sapphire993]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="5" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>1 question = 1 forum thread please.</p>
+</blockquote>
+</aside>
+<p>yeah sorry… Im kinda new to all of these</p>
+<aside class="quote no-group" data-username="Patrick" data-post="5" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>systemcheck hardening, Prevent Running APT</p>
+</blockquote>
+</aside>
+<p>thanks… this helped</p>
+<aside class="quote no-group" data-username="Patrick" data-post="5" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p><a href="https://www.kicksecure.com/wiki/Backlogged" class="inline-onebox" rel="noopener nofollow ugc">Backlogged</a></p>
+</blockquote>
+</aside>
+<p>nah bro I didnt mean it like that… I didnt mean to ask you to develop something but to like suggest me anything… like what you do for example? I mean it’s leaking some real important data to potentially malicious app… because I name my templates uniquely etc you know?</p>
+<p>just if you have any suggestions you know? or advice etc</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/6</link>
+        <pubDate>Wed, 18 Feb 2026 16:02:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-6</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>1 question = 1 forum thread please.</p>
+<p>Whonix: Off-topic in this forum.</p>
+<aside class="quote no-group" data-username="sapphire993" data-post="4" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/2bfe46/48.png" class="avatar"> sapphire993:</div>
+<blockquote>
+<p>what do I need to add in the systemcheck_skip_functions so it won’t check for updates please?</p>
+</blockquote>
+</aside>
+<p><a href="https://www.kicksecure.com/wiki/Systemcheck_Hardening#Prevent_Running_APT">systemcheck hardening, Prevent Running APT</a></p>
+<aside class="quote no-group" data-username="sapphire993" data-post="4" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/2bfe46/48.png" class="avatar"> sapphire993:</div>
+<blockquote>
+<p>are there any options in your opinion to do something about it??? like right now… what can I do?</p>
+</blockquote>
+</aside>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Backlogged">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1771317014" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Backlogged" target="_blank" rel="noopener" title="07:49PM - 17 February 2026">Kicksecure – 17 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Backlogged" target="_blank" rel="noopener">Backlogged</a></h3>
+
+  <p>This issue or request is valid, but cannot be worked on right now due to limited developer time and a large backlog. Options: Apply Self Support First Policy / Become a Contributor / Purchase Support.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/5</link>
+        <pubDate>Tue, 17 Feb 2026 20:03:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-5</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[sapphire993]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>you must also update /etc/hosts.</p>
+</blockquote>
+</aside>
+<p>got it… so the best way is to run a script to modify the hosts in the rc.locals right?</p>
+<p>also reegarding the systemcheck… what do I need to add in the  systemcheck_skip_functions so it won’t check for updates please?</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Qubes feature. Not my design.</p>
+</blockquote>
+</aside>
+<p>I’m so frigging frustrated and angry at the same time right now…<br>
+are there any options in your opinion to do something about it??? like right now… what can I do?<br>
+I checked how it’s done in the whonix and tried to do the same with the hostname and the hosts file… anything else I should do?</p>
+<p>like I read the <a href="https://www.kicksecure.com/wiki/System_identity_camouflage#Technical_Challenges" class="inline-onebox" rel="noopener nofollow ugc">System Identity Camouflage and Virtual Machine Cloaking</a> and I get it… but I don’t wanna reveal my templates names… how the heck is this even a thing…<br>
+please please please tell me you have any kind of a solution to this one</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/4</link>
+        <pubDate>Tue, 17 Feb 2026 11:11:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-4</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Might also be of interest:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/System_identity_camouflage">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1771230614" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/System_identity_camouflage" target="_blank" rel="noopener" title="08:17PM - 13 April 2025">Kicksecure – 13 Apr 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/8/82/System-identity-camoflage231.png?version=54bd98d72ddded34032648a9ea354f1a" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/System_identity_camouflage" target="_blank" rel="noopener">System Identity Camouflage and Virtual Machine Cloaking</a></h3>
+
+  <p>Feature Request: The ability of an operating system (like Kicksecure, Debian, Qubes, or a generic Linux distribution) to hide its true identity or characteristics from local tracking software or applications.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/VM_Fingerprinting">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1771230614" class="site-icon" alt="" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/VM_Fingerprinting" target="_blank" rel="noopener" title="07:20AM - 06 September 2024">Whonix – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/459;"><img src="https://www.whonix.org/w/images/b/b5/Vmfingerprint123123.jpg?version=c02d08354530d2935a44e69fc6131314" class="thumbnail" alt="" width="690" height="460"></div>
+
+<h3><a href="https://www.whonix.org/wiki/VM_Fingerprinting" target="_blank" rel="noopener">VM Fingerprinting</a></h3>
+
+  <p>Linking two or more locally compromised Virtual Machines (VMs) to the same pseudonym.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/3</link>
+        <pubDate>Mon, 16 Feb 2026 22:50:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-3</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>It’s not a systemcheck issue. Systemcheck is only the messenger notifying a system configuration issue. As it reports:</p>
+<blockquote>
+<p>sudo --non-interactive – /usr/bin/test -x /usr/bin/test ; echo $?<br>
+was expected to produce no output with an exit code of zero. The opposite of that happened, indicating an unexpected result.</p>
+</blockquote>
+<p>So instead of no output, the hostname issue has been output. This can be confusing, cause follow-up issues, hence reported.</p>
+<p>The issue is:</p>
+<ul>
+<li>hostname configuration: /etc/hosts vs /etc/hostname. If you change the hostname, you must also update /etc/hosts.</li>
+<li>sudo issue: sudo performing hostname lookups by default I consider this very strange behavior and a bug but upstream sudo won’t agree. See also: <a href="https://superuser.com/questions/429790/sudo-command-trying-to-search-for-hostname">https://superuser.com/questions/429790/sudo-command-trying-to-search-for-hostname</a></li>
+</ul>
+<hr>
+<aside class="quote no-group" data-username="sapphire993" data-post="1" data-topic="1609">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/2bfe46/48.png" class="avatar"> sapphire993:</div>
+<blockquote>
+<p>how does it knows the template’s name???</p>
+</blockquote>
+</aside>
+<p>Qubes feature. Not my design.</p>
+<pre><code>qubesdb-read /qubes-base-template
+</code></pre>
+<p>Also see:</p>
+<pre><code>qubesdb-multiread /
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/2</link>
+        <pubDate>Mon, 16 Feb 2026 22:48:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-2</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+      <item>
+        <title>Systemcheck with custom hostname?</title>
+        <dc:creator><![CDATA[sapphire993]]></dc:creator>
+        <description><![CDATA[
+            <p>say I have a template named “y” and an appvm based on that template named “x”…<br>
+I added “hostnamectl set-hostname host” for the rc.local for both of them but it causes issues when I run the systemcheck as “user” on “x”…</p>
+<pre><code class="lang-auto">systemcheck
+[INFO] [systemcheck] x | machine | y TemplateBased AppVM | Mon Feb 16 16:43:57 UTC 2026
+[ERROR] [systemcheck] Check 'leaprun check-sudo' result: System misconfiguration detected. No need to panic. This is not a severe issue. However, other tests may be affected due to this.
+ 
+The following command:
+leaprun check-sudo ; echo $?
+was expected to produce no output with an exit code of zero. The opposite of that happened, indicating an unexpected result.
+ 
+exit_code: 0
+ 
+privilege_escalation_tool_output:
+sudo: unable to resolve host host: Temporary failure in name resolution
+[ERROR] [systemcheck] Check 'sudo' result: System misconfiguration detected. No need to panic. This is not a severe issue. However, other tests may be affected due to this.
+ 
+The following command:
+sudo --non-interactive -- /usr/bin/test -x /usr/bin/test ; echo $?
+was expected to produce no output with an exit code of zero. The opposite of that happened, indicating an unexpected result.
+ 
+exit_code: 0
+ 
+privilege_escalation_tool_output:
+sudo: unable to resolve host host: Temporary failure in name resolution
+[ERROR] [systemcheck] check network interfaces Result: No external network interface found.
+ 
+Recommendation:
+https://www.kicksecure.com/wiki/Troubleshooting
+ 
+Debugging information:
+Command
+ip -o addr show scope global
+did not show any output
+ 
+If this error happens only during upgrading or is transient this error can be safely ignored.
+ 
+If you know what you are doing, feel free to disable this check.
+Create a file /etc/systemcheck.d/50_user.conf and add:
+systemcheck_skip_functions+=" check_network_interfaces "
+INFO: Skipping check_qubes_network_interface, because systemcheck_skip_functions includes it.
+INFO: Skipping check_tor_bootstrap, because systemcheck_skip_functions includes it.
+[INFO] [systemcheck] user-sysmaint-split-check installation check result: Absent
+https://www.kicksecure.com/wiki/sysmaint
+[INFO] [systemcheck] user-sysmaint-split session detection result: USER Session.
+[INFO] [systemcheck] Kicksecure Login Security Check (Colors)
+:
++-------+--------------------------------------+
+| Users | Password               GUI Autologin |
++-------+--------------------------------------+
+| root  | Restricted (Absent)    Disabled      |
+| user  | Absent                 Enabled       |
++-------+--------------------------------------+
+ 
+You can adjust these settings using "Manage Passwords" and "Manage GUI Autologin"
+in the System Maintenance Panel.
+See also:
+https://www.kicksecure.com/wiki/Login
+https://www.kicksecure.com/wiki/Systemcheck#Physical_Security_Check
+[INFO] [systemcheck] Kicksecure APT Repository: Enabled.
+When the Kicksecure team releases TRIXIE updates,
+they will be AUTOMATICALLY installed (when you run apt-get dist-upgrade)
+along with updated packages from the Debian team. Please read https://www.kicksecure.com/wiki/Trust to understand the risk. 
+If you want to change this, use:
+    sudo repository-dist
+[INFO] [systemcheck] Qubes UpdatesProxy Reachability Test: Trying to reach local Qubes UpdatesProxy... PROXY_SERVER: http://127.0.0.1:8082/
+[INFO] [systemcheck] Qubes UpdatesProxy Reachability Result: Ok, UpdatesProxy was not reachable.
+This is expected because not running in Template.
+[INFO] [systemcheck] Qubes UpdatesProxy Connectivity Test: Skipped, because not using --leak-tests (--show-ip), ok.
+[INFO] [systemcheck] Debian Package Update Check Result: Skipped. (Because no external network interface detected.)
+[INFO] [systemcheck] Please donate!
+   See: https://www.kicksecure.com/wiki/Donate
+</code></pre>
+<p>I added the “systemcheck_skip_functions” and I tried to change the /etc/host but these didnt do much…<br>
+so I have like two questions from this:</p>
+<ol>
+<li>how do I handle all of the above… I dont wanna reveal my hostname to some apps I install etc… yet I wanna have kicksecure with its systemcheck… what do I do???</li>
+<li>how the hell this working…<br>
+<code>[INFO] [systemcheck] x | machine | y TemplateBased AppVM | Mon Feb 16 16:43:57 UTC 2026</code></li>
+</ol>
+<p>how does it knows the template’s name???<br>
+does this mean even if I change the hostname to host apps I install will still be able to know the name of my template and appvm ???</p>
+          <p><a href="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609/1</link>
+        <pubDate>Mon, 16 Feb 2026 17:44:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1609-1</guid>
+        <source url="https://forums.kicksecure.com/t/systemcheck-with-custom-hostname/1609.rss">Systemcheck with custom hostname?</source>
+      </item>
+  </channel>
+</rss>
