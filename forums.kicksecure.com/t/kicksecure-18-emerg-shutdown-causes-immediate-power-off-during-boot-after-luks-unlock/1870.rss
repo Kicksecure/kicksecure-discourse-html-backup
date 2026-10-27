@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870</link>
+    <description>\# Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock
+
+## Environment
+
+* OS: Kicksecure 18, bare metal, LXQt
+* Kernel: \`6.12.113+deb13-amd64\`
+* Package: \`security-misc-shared 3:54.2-1\`
+* Storage: Internal NVMe SSD
+* Root filesystem: ext4 on LUKS encryption
+* Initramfs: dracut
+* Hardware: Lenovo laptop, AMD platform
+
+## Problem
+
+After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.
+
+The issue is reproducible whenever \`emerg-shutdown.service\` is enabled.
+
+Booting with the following temporary kernel parameters allows the system to start normally:
+
+\`\`\`text
+systemd.mask=emerg-shutdown.service rd.systemd.mask=emerg-shutdown.service
+\`\`\`
+
+No shutdown reason or kernel panic is visible in the journal.
+
+## Steps to reproduce
+
+1. Enable \`emerg-shutdown.service\`.
+2. Reboot normally.
+3. Enter the LUKS passphrase.
+4. The system proceeds into normal systemd initialization.
+5. \`emerg-shutdown.service\` starts.
+6. The computer abruptly powers off.
+
+## Troubleshooting performed
+
+\*\*1. Recovery mode\*\*
+
+Booting into single-user recovery mode and then running \`exit\` allowed the system to continue booting successfully.
+
+Booting directly into \`multi-user.target\` did not resolve the problem.
+
+\*\*2. Disabling emerg-shutdown\*\*
+
+Masking \`emerg-shutdown.service\` during boot prevents the unexpected power-off.
+
+\*\*4. Testing without boot-device monitoring\*\*
+
+Created a temporary systemd override replacing \`ExecStart\` with:
+
+\`\`\`ini
+\[Service\]
+Type=simple
+ExecStart=
+ExecStart=/usr/bin/emerg-shutdown --keys=KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END
+\`\`\`
+
+the system again powered off during boot.
+
+This suggests that monitoring the NVMe device is not required to reproduce the issue. However, the binary still initializes and processes Netlink events even when \`--devices\` is omitted.
+
+\*\*5. NVMe and USBGuard\*\*
+
+The root-device detection helper correctly resolves the encrypted root filesystem to its underlying NVMe partition.
+
+Available kernel logs show normal NVMe detection and filesystem mounting, without obvious device disconnection or I/O errors.
+
+USBGuard logs show permitted devices and no obvious blocking event associated with the issue.
+
+## Relevant logs
+
+From an unsuccessful boot:
+
+\`\`\`text
+systemd\[1\]: Starting emerg-shutdown.service - Emergency shutdown when boot media is removed...
+emerg-shutdown: path: /
+emerg-shutdown: is block device: no
+emerg-shutdown: path: /dev/mapper/\[REDACTED_LUKS_DEVICE\]
+emerg-shutdown: is block device: yes
+emerg-shutdown: real_dev_path: /dev/dm-0
+emerg-shutdown: path: /dev/dm-0
+emerg-shutdown: is block device: yes
+emerg-shutdown: dm slaves_dir: /sys/class/block/dm-0/slaves
+emerg-shutdown: path: /dev/nvme0n1p5
+emerg-shutdown: is block device: yes
+systemd\[1\]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.
+\`\`\`
+
+In a separate failed boot with the keyboard-only override:
+
+\`\`\`text
+systemd\[1\]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.
+\`\`\`
+
+The system then powered off unexpectedly. No clear reason was recorded.
+
+The journal excerpts are selected from different failed boots. Identifying values and timestamps have been removed.
+
+## Expected behavior
+
+\`emerg-shutdown\` should remain enabled and permit normal system boot unless the configured emergency key combination is pressed or a monitored boot device is actually removed.
+
+## Questions
+
+1. Is this a known issue with \`security-misc-shared 3:54.2-1\`?
+2. Is there a recommended fix that preserves the emergency keyboard shortcut rather than disabling the service entirely?
+
+I would prefer to keep the emergency shutdown functionality enabled.
+
+Thank you.</description>
+    
+    <lastBuildDate>Tue, 27 Oct 2026 00:32:58 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Cannot reproduce on an 11th-gen Intel Core i5 Clevo laptop. I installed Kicksecure 18.2.4.2 from the latest ISO, with LUKS, booted it into sysmaint mode, fully updated it, then booted it into user mode. It’s working without issues. The emerg shutdown panic key combo also works, so emerg-shutdown is functional.</p>
+<p>I’ll add a debugging mode to emerg-shutdown so we can figure out what’s causing this.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/3</link>
+        <pubDate>Tue, 27 Oct 2026 00:32:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1870-3</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870.rss">Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</source>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>There haven’t been any changes to emerg-shutdown recently that could reasonably cause this, and this issue wasn’t known previously. (Worthy of note, I recently installed Kicksecure baremetal but without encryption on a physical device, and did not encounter any issues.) Will attempt to reproduce and debug. If that fails, I have an idea, but need to discuss it internally first.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/2</link>
+        <pubDate>Mon, 26 Oct 2026 23:54:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1870-2</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870.rss">Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</source>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[SpecialBook]]></dc:creator>
+        <description><![CDATA[
+            <p># Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</p>
+<h2><a name="p-5690-environment-1" class="anchor" href="https://forums.kicksecure.com#p-5690-environment-1" aria-label="Heading link"></a>Environment</h2>
+<ul>
+<li>OS: Kicksecure 18, bare metal, LXQt</li>
+<li>Kernel: `6.12.113+deb13-amd64`</li>
+<li>Package: `security-misc-shared 3:54.2-1`</li>
+<li>Storage: Internal NVMe SSD</li>
+<li>Root filesystem: ext4 on LUKS encryption</li>
+<li>Initramfs: dracut</li>
+<li>Hardware: Lenovo laptop, AMD platform</li>
+</ul>
+<h2><a name="p-5690-problem-2" class="anchor" href="https://forums.kicksecure.com#p-5690-problem-2" aria-label="Heading link"></a>Problem</h2>
+<p>After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.</p>
+<p>The issue is reproducible whenever `emerg-shutdown.service` is enabled.</p>
+<p>Booting with the following temporary kernel parameters allows the system to start normally:</p>
+<p>```text<br>
+systemd.mask=emerg-shutdown.service rd.systemd.mask=emerg-shutdown.service<br>
+```</p>
+<p>No shutdown reason or kernel panic is visible in the journal.</p>
+<h2><a name="p-5690-steps-to-reproduce-3" class="anchor" href="https://forums.kicksecure.com#p-5690-steps-to-reproduce-3" aria-label="Heading link"></a>Steps to reproduce</h2>
+<ol>
+<li>Enable `emerg-shutdown.service`.</li>
+<li>Reboot normally.</li>
+<li>Enter the LUKS passphrase.</li>
+<li>The system proceeds into normal systemd initialization.</li>
+<li>`emerg-shutdown.service` starts.</li>
+<li>The computer abruptly powers off.</li>
+</ol>
+<h2><a name="p-5690-troubleshooting-performed-4" class="anchor" href="https://forums.kicksecure.com#p-5690-troubleshooting-performed-4" aria-label="Heading link"></a>Troubleshooting performed</h2>
+<p>**1. Recovery mode**</p>
+<p>Booting into single-user recovery mode and then running `exit` allowed the system to continue booting successfully.</p>
+<p>Booting directly into `multi-user.target` did not resolve the problem.</p>
+<p>**2. Disabling emerg-shutdown**</p>
+<p>Masking `emerg-shutdown.service` during boot prevents the unexpected power-off.</p>
+<p>**4. Testing without boot-device monitoring**</p>
+<p>Created a temporary systemd override replacing `ExecStart` with:</p>
+<p>```ini<br>
+[Service]<br>
+Type=simple<br>
+ExecStart=<br>
+ExecStart=/usr/bin/emerg-shutdown --keys=KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END<br>
+```</p>
+<p>the system again powered off during boot.</p>
+<p>This suggests that monitoring the NVMe device is not required to reproduce the issue. However, the binary still initializes and processes Netlink events even when `–devices` is omitted.</p>
+<p>**5. NVMe and USBGuard**</p>
+<p>The root-device detection helper correctly resolves the encrypted root filesystem to its underlying NVMe partition.</p>
+<p>Available kernel logs show normal NVMe detection and filesystem mounting, without obvious device disconnection or I/O errors.</p>
+<p>USBGuard logs show permitted devices and no obvious blocking event associated with the issue.</p>
+<h2><a name="p-5690-relevant-logs-5" class="anchor" href="https://forums.kicksecure.com#p-5690-relevant-logs-5" aria-label="Heading link"></a>Relevant logs</h2>
+<p>From an unsuccessful boot:</p>
+<p>```text<br>
+systemd[1]: Starting emerg-shutdown.service - Emergency shutdown when boot media is removed…<br>
+emerg-shutdown: path: /<br>
+emerg-shutdown: is block device: no<br>
+emerg-shutdown: path: /dev/mapper/[REDACTED_LUKS_DEVICE]<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: real_dev_path: /dev/dm-0<br>
+emerg-shutdown: path: /dev/dm-0<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: dm slaves_dir: /sys/class/block/dm-0/slaves<br>
+emerg-shutdown: path: /dev/nvme0n1p5<br>
+emerg-shutdown: is block device: yes<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>In a separate failed boot with the keyboard-only override:</p>
+<p>```text<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>The system then powered off unexpectedly. No clear reason was recorded.</p>
+<p>The journal excerpts are selected from different failed boots. Identifying values and timestamps have been removed.</p>
+<h2><a name="p-5690-expected-behavior-6" class="anchor" href="https://forums.kicksecure.com#p-5690-expected-behavior-6" aria-label="Heading link"></a>Expected behavior</h2>
+<p>`emerg-shutdown` should remain enabled and permit normal system boot unless the configured emergency key combination is pressed or a monitored boot device is actually removed.</p>
+<h2><a name="p-5690-questions-7" class="anchor" href="https://forums.kicksecure.com#p-5690-questions-7" aria-label="Heading link"></a>Questions</h2>
+<ol>
+<li>Is this a known issue with `security-misc-shared 3:54.2-1`?</li>
+<li>Is there a recommended fix that preserves the emergency keyboard shortcut rather than disabling the service entirely?</li>
+</ol>
+<p>I would prefer to keep the emergency shutdown functionality enabled.</p>
+<p>Thank you.</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870/1</link>
+        <pubDate>Mon, 26 Oct 2026 18:27:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1870-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870.rss">Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</source>
+      </item>
+  </channel>
+</rss>
