@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="utf-8">
+    <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock - Support - Kicksecure Forums</title>
+    <meta name="description" content="# Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock 
+Environment
+
+OS: Kicksecure 18, bare metal, LXQt
+Kernel: `6.12.113+deb13-amd64`
+Package: `security-misc-shared 3:54.2-1`
+Storage: …">
+    <meta name="generator" content="Discourse 2026.7.4 - https://github.com/discourse/discourse version b20f7267b131e4f3c90d84ff3474138eef416eab">
+<link rel="icon" type="image/png" href="../../uploads/default/optimized/1X/0db9935a1fdd7302cae516aaa752af0de307d388_2_32x32.png">
+<link rel="apple-touch-icon" type="image/png" href="../../uploads/default/optimized/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67_2_180x180.png">
+<meta name="theme-color" media="all" content="#fff">
+
+<meta name="color-scheme" content="light">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+<link rel="canonical" href="1870.html" />
+
+<meta name="discourse-track-view-session-id" content="zttysWaFN491MspwVv81eQ7CzEmNseFl"><meta name="discourse-beacon-pageview-enabled" content="true"><meta name="discourse-engagement-tracking-enabled" content="true">
+<link rel="search" type="application/opensearchdescription+xml" href="../../opensearch.xml" title="Kicksecure Forums Search">
+
+    
+    <link href="../../stylesheets/color_definitions_light-default_-1_3_43903227b89fd86a4cb877fcfb029c63456bc064.css_%3b%20filename_%3dUTF-8%27%27color_definitions_light-default_-1_3_43903227b89fd86a4cb?__ws=forums.kicksecure.com" media="all" rel="stylesheet" class="light-scheme"/>
+
+<link href="../../stylesheets/common_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27common_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common"  />
+
+
+
+  <link href="../../stylesheets/checklist_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27checklist_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="checklist"  />
+  <link href="../../stylesheets/discourse-details_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-details_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-details"  />
+  <link href="../../stylesheets/discourse-lazy-videos_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-lazy-videos_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-lazy-videos"  />
+  <link href="../../stylesheets/discourse-local-dates_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-local-dates_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-local-dates"  />
+  <link href="../../stylesheets/discourse-narrative-bot_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-narrative-bot_7455702a5182fb47edcf457d68df429a205eb40d61cf?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-narrative-bot"  />
+  <link href="../../stylesheets/discourse-presence_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-presence_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-presence"  />
+  <link href="../../stylesheets/discourse-reactions_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-reactions_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-reactions"  />
+  <link href="../../stylesheets/discourse-solved_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-solved_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-solved"  />
+  <link href="../../stylesheets/discourse-templates_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-templates_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-templates"  />
+  <link href="../../stylesheets/discourse-topic-voting_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-topic-voting_7455702a5182fb47edcf457d68df429a205eb40d61cf.cs?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="discourse-topic-voting"  />
+  <link href="../../stylesheets/docker_manager_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27docker_manager_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="docker_manager"  />
+  <link href="../../stylesheets/footnote_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27footnote_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="footnote"  />
+  <link href="../../stylesheets/poll_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27poll_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="poll"  />
+  <link href="../../stylesheets/discourse-reactions_mobile_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-reactions_mobile_7455702a5182fb47edcf457d68df429a205eb40?__ws=forums.kicksecure.com" media="(width < 40rem)" rel="stylesheet" data-target="discourse-reactions_mobile"  />
+  <link href="../../stylesheets/discourse-reactions_desktop_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27discourse-reactions_desktop_7455702a5182fb47edcf457d68df429a205eb?__ws=forums.kicksecure.com" media="(width >= 40rem)" rel="stylesheet" data-target="discourse-reactions_desktop"  />
+  <link href="../../stylesheets/poll_desktop_7455702a5182fb47edcf457d68df429a205eb40d.css_%3b%20filename_%3dUTF-8%27%27poll_desktop_7455702a5182fb47edcf457d68df429a205eb40d61cf.css?__ws=forums.kicksecure.com" media="(width >= 40rem)" rel="stylesheet" data-target="poll_desktop"  />
+
+  <link href="../../stylesheets/common_theme_3_68fc84673d2d0b2d9f168f7ec11feee81270c5fa.css_%3b%20filename_%3dUTF-8%27%27common_theme_3_68fc84673d2d0b2d9f168f7ec11feee81270c5fa61cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="3" data-theme-name="graceful"/>
+<link href="../../stylesheets/common_theme_2_29e99dcf750487b00236e49f5ec9b6ab0b43b3c4.css_%3b%20filename_%3dUTF-8%27%27common_theme_2_29e99dcf750487b00236e49f5ec9b6ab0b43b3c461cf.css?__ws=forums.kicksecure.com" media="all" rel="stylesheet" data-target="common_theme" data-theme-id="2" data-theme-name="header"/>
+  <link href="../../stylesheets/mobile_theme_3_5fac72ceac398fc1ad3b16aaedf56d5564df01a7.css_%3b%20filename_%3dUTF-8%27%27mobile_theme_3_5fac72ceac398fc1ad3b16aaedf56d5564df01a761cf.css?__ws=forums.kicksecure.com" media="(width < 40rem)" rel="stylesheet" data-target="mobile_theme" data-theme-id="3" data-theme-name="graceful"/>
+  <link href="../../stylesheets/desktop_theme_3_6646c09f26352fd949da0a35886040eeb294f9b3.css_%3b%20filename_%3dUTF-8%27%27desktop_theme_3_6646c09f26352fd949da0a35886040eeb294f9b361cf.css?__ws=forums.kicksecure.com" media="(width >= 40rem)" rel="stylesheet" data-target="desktop_theme" data-theme-id="3" data-theme-name="graceful"/>
+
+    <!--
+START custom CSS / JS
+
+Configured here:
+https://forums.kicksecure.com/admin/customize/themes/2/common/head_tag/edit
+-->
+
+<!-- START End of Year Banner -->
+
+
+<!-- Not needed currently because banner inactive
+<link rel="stylesheet" href="/mw-autogen/src-copy/CodeSelect.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/PayViaPaypal.css">
+<link rel="stylesheet" href="/mw-autogen/src-copy/Sitenotice_EndOfYear.css">
+-->
+
+<!-- Not needed currently because banner inactive
+<script type="text/javascript" defer src="/mw-autogen/src-copy/CodeSelect.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/PayViaPaypal.js"></script>
+<script type="text/javascript" defer src="/mw-autogen/src-copy/Sitenotice_EndOfYear.js"></script>
+-->
+
+<style type="text/css">
+  #donate-end-of-year div,
+  #donate-end-of-year span,
+  #donate-end-of-year a {
+    box-sizing: border-box;
+  }
+  
+  #end-of-year-banner-wrapper {
+      margin: 0 10px 25px;
+  }
+
+  #donate-end-of-year i {
+    width: 20px;
+    height: 20px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(2);
+    display: inline-block;
+  }
+
+  #donate-end-of-year i.dismiss {
+    background-image: url('../../w/images/0/0b/End-of-year-times.png');
+  }
+
+  #donate-end-of-year .slideshow > .content img {
+    float: left;
+    margin-right: 20px;
+  }
+
+  #donate-end-of-year .slideshow .flow i {
+    cursor: pointer;
+    filter: brightness(1);
+    height: 17px;
+    width: 17px;
+    vertical-align: middle;
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-play {
+    background-image: url('../../w/images/3/32/End-of-year-pause.png');
+  }
+
+  #donate-end-of-year .slideshow .flow i.is-pause {
+    background-image: url('../../w/images/c/c8/End-of-year-play.png');
+  }
+
+</style>
+
+<script defer="" src="../../theme-javascripts/6bb970c15b81e0b2379f3512812ba45e05a9b972.js_%3b%20filename_%3dUTF-8%27%276bb970c15b81e0b2379f3512812ba45e05a9b97261cf.js?__ws=forums.kicksecure.com" data-theme-id="2" nonce="NUheJt4uUDtjYIuiWryedsvkK"></script>
+
+<!-- END End of Year Banner -->
+
+<!--
+END custom CSS / JS
+-->
+
+    
+        <link rel="alternate nofollow" type="application/rss+xml" title="RSS feed of &#39;Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock&#39;" href="1870.rss" />
+    <meta property="og:site_name" content="Kicksecure Forums" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:image" content="https://forums.kicksecure.com/uploads/default/original/1X/cbdfe4b0c05c97069961301225ed1ccd6e766f67.png" />
+<meta property="og:url" content="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870" />
+<meta name="twitter:url" content="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870" />
+<meta property="og:title" content="Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock" />
+<meta name="twitter:title" content="Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock" />
+<meta property="og:description" content="# Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock  Environment  OS: Kicksecure 18, bare metal, LXQt Kernel: `6.12.113+deb13-amd64` Package: `security-misc-shared 3:54.2-1` Storage: Internal NVMe SSD Root filesystem: ext4 on LUKS encryption Initramfs: dracut Hardware: Lenovo laptop, AMD platform  Problem After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.  The issue is reproducible whene..." />
+<meta name="twitter:description" content="# Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock  Environment  OS: Kicksecure 18, bare metal, LXQt Kernel: `6.12.113+deb13-amd64` Package: `security-misc-shared 3:54.2-1` Storage: Internal NVMe SSD Root filesystem: ext4 on LUKS encryption Initramfs: dracut Hardware: Lenovo laptop, AMD platform  Problem After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.  The issue is reproducible whene..." />
+<meta property="og:article:section" content="Support" />
+<meta property="og:article:section:color" content="0088CC" />
+<meta property="article:published_time" content="2026-10-26T18:27:47+00:00" />
+<meta property="og:ignore_canonical" content="true" />
+
+
+    
+  </head>
+  <body class="crawler ">
+    <div class="background-container"></div>
+
+<div class="header-brand-nav">
+    <a class="home" href="../../../external.html?link=https://www.kicksecure.com/">Kicksecure Wiki</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Download">Download</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Documentation">Docs</a>
+    <a href="../../c/news/5.html">News</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Support">Support</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Forum_Best_Practices">Tips</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Reporting_Bugs#Issue_Tracker">Issues</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Contribute">Contribute</a>
+    <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Donate">DONATE</a>
+</div>
+    <header>
+  <a href="../../index.html">Kicksecure Forums</a>
+</header>
+
+    <div id="main-outlet" class="wrap" role="main">
+        <div id="topic-title">
+    <h1>
+      <a href="1870.html">Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</a>
+    </h1>
+
+      <div class="topic-category" itemscope itemtype="http://schema.org/BreadcrumbList">
+          <span itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="../../c/support/6.html" class="badge-wrapper bullet" itemprop="item">
+              <span class='badge-category-bg' style='background-color: #0088CC'></span>
+              <span class='badge-category clear-badge'>
+                <span class='category-name' itemprop='name'>Support</span>
+              </span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </span>
+      </div>
+
+  </div>
+
+  
+
+    <div itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/DiscussionForumPosting">
+      <meta itemprop='headline' content='Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock'>
+      <link itemprop='url' href='1870.html'>
+      <meta itemprop='datePublished' content='2026-10-26T18:27:47Z'>
+      <meta itemprop='keywords' content=''>
+          <meta itemprop='articleSection' content='Support'>
+        <div itemprop='publisher' itemscope itemtype="../../../external.html?link=http://schema.org/Organization">
+          <meta itemprop='name' content='Kicksecure - a secure by default operating system'>
+            <div itemprop='logo' itemscope itemtype="../../../external.html?link=http://schema.org/ImageObject">
+              <meta itemprop='url' content='../../uploads/default/original/1X/b25d14d50e56313c399bc031caf564b64756e72b.png'>
+            </div>
+        </div>
+
+
+
+          <div id='post_1'  class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/Person">
+                <a rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/SpecialBook'><span itemprop="name">SpecialBook</span></a>
+                  <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/u/SpecialBook'>
+                
+              </span>
+
+                <link itemprop="mainEntityOfPage" href="1870.html">
+
+
+              <span class="crawler-post-infos">
+                  <time  datetime='2026-10-26T18:27:47Z' class='post-time'>
+                    October 26, 2026,  6:27pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-10-26T18:33:42Z'>
+              <span itemprop="position">1</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p># Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</p>
+<h2><a name="p-5690-environment-1" class="anchor" href="#p-5690-environment-1" aria-label="Heading link"></a>Environment</h2>
+<ul>
+<li>OS: Kicksecure 18, bare metal, LXQt</li>
+<li>Kernel: `6.12.113+deb13-amd64`</li>
+<li>Package: `security-misc-shared 3:54.2-1`</li>
+<li>Storage: Internal NVMe SSD</li>
+<li>Root filesystem: ext4 on LUKS encryption</li>
+<li>Initramfs: dracut</li>
+<li>Hardware: Lenovo laptop, AMD platform</li>
+</ul>
+<h2><a name="p-5690-problem-2" class="anchor" href="#p-5690-problem-2" aria-label="Heading link"></a>Problem</h2>
+<p>After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.</p>
+<p>The issue is reproducible whenever `emerg-shutdown.service` is enabled.</p>
+<p>Booting with the following temporary kernel parameters allows the system to start normally:</p>
+<p>```text<br>
+systemd.mask=emerg-shutdown.service rd.systemd.mask=emerg-shutdown.service<br>
+```</p>
+<p>No shutdown reason or kernel panic is visible in the journal.</p>
+<h2><a name="p-5690-steps-to-reproduce-3" class="anchor" href="#p-5690-steps-to-reproduce-3" aria-label="Heading link"></a>Steps to reproduce</h2>
+<ol>
+<li>Enable `emerg-shutdown.service`.</li>
+<li>Reboot normally.</li>
+<li>Enter the LUKS passphrase.</li>
+<li>The system proceeds into normal systemd initialization.</li>
+<li>`emerg-shutdown.service` starts.</li>
+<li>The computer abruptly powers off.</li>
+</ol>
+<h2><a name="p-5690-troubleshooting-performed-4" class="anchor" href="#p-5690-troubleshooting-performed-4" aria-label="Heading link"></a>Troubleshooting performed</h2>
+<p>**1. Recovery mode**</p>
+<p>Booting into single-user recovery mode and then running `exit` allowed the system to continue booting successfully.</p>
+<p>Booting directly into `multi-user.target` did not resolve the problem.</p>
+<p>**2. Disabling emerg-shutdown**</p>
+<p>Masking `emerg-shutdown.service` during boot prevents the unexpected power-off.</p>
+<p>**4. Testing without boot-device monitoring**</p>
+<p>Created a temporary systemd override replacing `ExecStart` with:</p>
+<p>```ini<br>
+[Service]<br>
+Type=simple<br>
+ExecStart=<br>
+ExecStart=/usr/bin/emerg-shutdown --keys=KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END<br>
+```</p>
+<p>the system again powered off during boot.</p>
+<p>This suggests that monitoring the NVMe device is not required to reproduce the issue. However, the binary still initializes and processes Netlink events even when `–devices` is omitted.</p>
+<p>**5. NVMe and USBGuard**</p>
+<p>The root-device detection helper correctly resolves the encrypted root filesystem to its underlying NVMe partition.</p>
+<p>Available kernel logs show normal NVMe detection and filesystem mounting, without obvious device disconnection or I/O errors.</p>
+<p>USBGuard logs show permitted devices and no obvious blocking event associated with the issue.</p>
+<h2><a name="p-5690-relevant-logs-5" class="anchor" href="#p-5690-relevant-logs-5" aria-label="Heading link"></a>Relevant logs</h2>
+<p>From an unsuccessful boot:</p>
+<p>```text<br>
+systemd[1]: Starting emerg-shutdown.service - Emergency shutdown when boot media is removed…<br>
+emerg-shutdown: path: /<br>
+emerg-shutdown: is block device: no<br>
+emerg-shutdown: path: /dev/mapper/[REDACTED_LUKS_DEVICE]<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: real_dev_path: /dev/dm-0<br>
+emerg-shutdown: path: /dev/dm-0<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: dm slaves_dir: /sys/class/block/dm-0/slaves<br>
+emerg-shutdown: path: /dev/nvme0n1p5<br>
+emerg-shutdown: is block device: yes<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>In a separate failed boot with the keyboard-only override:</p>
+<p>```text<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>The system then powered off unexpectedly. No clear reason was recorded.</p>
+<p>The journal excerpts are selected from different failed boots. Identifying values and timestamps have been removed.</p>
+<h2><a name="p-5690-expected-behavior-6" class="anchor" href="#p-5690-expected-behavior-6" aria-label="Heading link"></a>Expected behavior</h2>
+<p>`emerg-shutdown` should remain enabled and permit normal system boot unless the configured emergency key combination is pressed or a monitored boot device is actually removed.</p>
+<h2><a name="p-5690-questions-7" class="anchor" href="#p-5690-questions-7" aria-label="Heading link"></a>Questions</h2>
+<ol>
+<li>Is this a known issue with `security-misc-shared 3:54.2-1`?</li>
+<li>Is there a recommended fix that preserves the emergency keyboard shortcut rather than disabling the service entirely?</li>
+</ol>
+<p>I would prefer to keep the emergency shutdown functionality enabled.</p>
+<p>Thank you.</p>
+            </div>
+
+              <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                  <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+                  <meta itemprop="userInteractionCount" content="0" />
+                <span class='post-likes'></span>
+              </div>
+
+
+            
+
+
+          </div>
+          <div id='post_2' itemprop="comment" itemscope="itemscope" itemtype="http://schema.org/Comment" class='topic-body crawler-post'>
+            <div class='crawler-post-meta'>
+              <span class="creator" itemprop="author" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/Person">
+                <a rel='nofollow' href='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'><span itemprop="name">arraybolt3</span></a>
+                  <meta itemprop='url' content='../../../external.html?link=https://forums.kicksecure.com/u/arraybolt3'>
+                
+              </span>
+
+
+
+              <span class="crawler-post-infos">
+                  <time itemprop="datePublished" datetime='2026-10-26T23:54:19Z' class='post-time'>
+                    October 26, 2026, 11:54pm
+                  </time>
+                  <meta itemprop='dateModified' content='2026-10-26T23:54:19Z'>
+              <span itemprop="position">2</span>
+              </span>
+            </div>
+            <div class='post' itemprop="text">
+              <p>There haven’t been any changes to emerg-shutdown recently that could reasonably cause this, and this issue wasn’t known previously. (Worthy of note, I recently installed Kicksecure baremetal but without encryption on a physical device, and did not encounter any issues.) Will attempt to reproduce and debug. If that fails, I have an idea, but need to discuss it internally first.</p>
+            </div>
+
+              <div itemprop="interactionStatistic" itemscope="itemscope" itemtype="../../../external.html?link=http://schema.org/InteractionCounter">
+                  <meta itemprop="interactionType" content="../../../external.html?link=http://schema.org/LikeAction"/>
+                  <meta itemprop="userInteractionCount" content="0" />
+                <span class='post-likes'></span>
+              </div>
+
+
+            
+
+
+          </div>
+
+    </div>
+
+
+    
+
+
+
+
+    </div>
+    <footer class="container wrap">
+  <nav class='crawler-nav'>
+    <ul>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../index.html' itemprop="url">Home </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../categories.html' itemprop="url">Categories </a>
+        </span>
+      </li>
+      <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+        <span itemprop='name'>
+          <a href='../../guidelines.html' itemprop="url">Guidelines </a>
+        </span>
+      </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service' itemprop="url">Terms of Service </a>
+          </span>
+        </li>
+        <li itemscope itemtype='../../../external.html?link=http://schema.org/SiteNavigationElement'>
+          <span itemprop='name'>
+            <a href='../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy' itemprop="url">Privacy Policy </a>
+          </span>
+        </li>
+    </ul>
+  </nav>
+  <p class='powered-by-link'>Powered by <a href="../../../external.html?link=https://www.discourse.org/">Discourse</a>, best viewed with JavaScript enabled</p>
+</footer>
+
+    <div class="footer-brand-nav">
+    <div class="legal">
+        By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+        <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+    </div>
+</div>
+
+    <noscript>
+    <div class="footer-brand-nav">
+        <div class="legal">
+            By using this website, you acknowledge you have read, understood, and agree to be bound by these these agreements:
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Terms_of_Service" title="Terms of Service">Terms of Service</a>, and
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Privacy_Policy" title="Privacy Policy">Privacy Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Cookie_Policy" title="Cookie Policy">Cookie Policy</a>,
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/E-Sign_Consent" title="E-Sign Consent">E-Sign Consent</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/DMCA">DMCA</a>
+            <a href="../../../external.html?link=https://www.kicksecure.com/wiki/Imprint">Imprint</a>
+        </div>
+    </div>
+
+    <style type="text/css">
+        /* Here is room for styles for when Javascript is deactivated */
+    </style>
+</noscript>
+  </body>
+  
+</html>
