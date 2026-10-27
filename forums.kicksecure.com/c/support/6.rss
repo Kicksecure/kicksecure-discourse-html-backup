@@ -5,8 +5,103 @@
     <link>https://forums.kicksecure.com/c/support/6</link>
     <description>Topics in the &#39;Support&#39; category User &lt;a href=&quot;https://www.kicksecure.com/wiki/Support&quot;&gt;support&lt;/a&gt; for the Kicksecure operating system.</description>
     
-      <lastBuildDate>Wed, 14 Oct 2026 19:23:11 +0000</lastBuildDate>
+      <lastBuildDate>Mon, 26 Oct 2026 18:27:47 +0000</lastBuildDate>
       <atom:link href="https://forums.kicksecure.com/c/support/6.rss" rel="self" type="application/rss+xml" />
+        <item>
+          <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+          <dc:creator><![CDATA[SpecialBook]]></dc:creator>
+          <category>Support</category>
+          <description><![CDATA[
+            <p># Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</p>
+<h2><a name="p-5690-environment-1" class="anchor" href="https://forums.kicksecure.com#p-5690-environment-1" aria-label="Heading link"></a>Environment</h2>
+<ul>
+<li>OS: Kicksecure 18, bare metal, LXQt</li>
+<li>Kernel: `6.12.113+deb13-amd64`</li>
+<li>Package: `security-misc-shared 3:54.2-1`</li>
+<li>Storage: Internal NVMe SSD</li>
+<li>Root filesystem: ext4 on LUKS encryption</li>
+<li>Initramfs: dracut</li>
+<li>Hardware: Lenovo laptop, AMD platform</li>
+</ul>
+<h2><a name="p-5690-problem-2" class="anchor" href="https://forums.kicksecure.com#p-5690-problem-2" aria-label="Heading link"></a>Problem</h2>
+<p>After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.</p>
+<p>The issue is reproducible whenever `emerg-shutdown.service` is enabled.</p>
+<p>Booting with the following temporary kernel parameters allows the system to start normally:</p>
+<p>```text<br>
+systemd.mask=emerg-shutdown.service rd.systemd.mask=emerg-shutdown.service<br>
+```</p>
+<p>No shutdown reason or kernel panic is visible in the journal.</p>
+<h2><a name="p-5690-steps-to-reproduce-3" class="anchor" href="https://forums.kicksecure.com#p-5690-steps-to-reproduce-3" aria-label="Heading link"></a>Steps to reproduce</h2>
+<ol>
+<li>Enable `emerg-shutdown.service`.</li>
+<li>Reboot normally.</li>
+<li>Enter the LUKS passphrase.</li>
+<li>The system proceeds into normal systemd initialization.</li>
+<li>`emerg-shutdown.service` starts.</li>
+<li>The computer abruptly powers off.</li>
+</ol>
+<h2><a name="p-5690-troubleshooting-performed-4" class="anchor" href="https://forums.kicksecure.com#p-5690-troubleshooting-performed-4" aria-label="Heading link"></a>Troubleshooting performed</h2>
+<p>**1. Recovery mode**</p>
+<p>Booting into single-user recovery mode and then running `exit` allowed the system to continue booting successfully.</p>
+<p>Booting directly into `multi-user.target` did not resolve the problem.</p>
+<p>**2. Disabling emerg-shutdown**</p>
+<p>Masking `emerg-shutdown.service` during boot prevents the unexpected power-off.</p>
+<p>**4. Testing without boot-device monitoring**</p>
+<p>Created a temporary systemd override replacing `ExecStart` with:</p>
+<p>```ini<br>
+[Service]<br>
+Type=simple<br>
+ExecStart=<br>
+ExecStart=/usr/bin/emerg-shutdown --keys=KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END<br>
+```</p>
+<p>the system again powered off during boot.</p>
+<p>This suggests that monitoring the NVMe device is not required to reproduce the issue. However, the binary still initializes and processes Netlink events even when `–devices` is omitted.</p>
+<p>**5. NVMe and USBGuard**</p>
+<p>The root-device detection helper correctly resolves the encrypted root filesystem to its underlying NVMe partition.</p>
+<p>Available kernel logs show normal NVMe detection and filesystem mounting, without obvious device disconnection or I/O errors.</p>
+<p>USBGuard logs show permitted devices and no obvious blocking event associated with the issue.</p>
+<h2><a name="p-5690-relevant-logs-5" class="anchor" href="https://forums.kicksecure.com#p-5690-relevant-logs-5" aria-label="Heading link"></a>Relevant logs</h2>
+<p>From an unsuccessful boot:</p>
+<p>```text<br>
+systemd[1]: Starting emerg-shutdown.service - Emergency shutdown when boot media is removed…<br>
+emerg-shutdown: path: /<br>
+emerg-shutdown: is block device: no<br>
+emerg-shutdown: path: /dev/mapper/[REDACTED_LUKS_DEVICE]<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: real_dev_path: /dev/dm-0<br>
+emerg-shutdown: path: /dev/dm-0<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: dm slaves_dir: /sys/class/block/dm-0/slaves<br>
+emerg-shutdown: path: /dev/nvme0n1p5<br>
+emerg-shutdown: is block device: yes<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>In a separate failed boot with the keyboard-only override:</p>
+<p>```text<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>The system then powered off unexpectedly. No clear reason was recorded.</p>
+<p>The journal excerpts are selected from different failed boots. Identifying values and timestamps have been removed.</p>
+<h2><a name="p-5690-expected-behavior-6" class="anchor" href="https://forums.kicksecure.com#p-5690-expected-behavior-6" aria-label="Heading link"></a>Expected behavior</h2>
+<p>`emerg-shutdown` should remain enabled and permit normal system boot unless the configured emergency key combination is pressed or a monitored boot device is actually removed.</p>
+<h2><a name="p-5690-questions-7" class="anchor" href="https://forums.kicksecure.com#p-5690-questions-7" aria-label="Heading link"></a>Questions</h2>
+<ol>
+<li>Is this a known issue with `security-misc-shared 3:54.2-1`?</li>
+<li>Is there a recommended fix that preserves the emergency keyboard shortcut rather than disabling the service entirely?</li>
+</ol>
+<p>I would prefer to keep the emergency shutdown functionality enabled.</p>
+<p>Thank you.</p>
+            <p><small>3 posts - 2 participants</small></p>
+            <p><a href="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870">Read full topic</a></p>
+          ]]></description>
+          <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870</link>
+          <pubDate>Mon, 26 Oct 2026 18:27:47 +0000</pubDate>
+          <discourse:topicPinned>No</discourse:topicPinned>
+          <discourse:topicClosed>No</discourse:topicClosed>
+          <discourse:topicArchived>No</discourse:topicArchived>
+          <guid isPermaLink="false">forums.kicksecure.com-topic-1870</guid>
+          <source url="https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870.rss">Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</source>
+        </item>
         <item>
           <title>Kicksecure broken</title>
           <dc:creator><![CDATA[italicize-immerse27]]></dc:creator>
@@ -949,31 +1044,6 @@ gpg: Signature notation: salt@notations.sequoia-pgp.org=[ not human readable (32
           <discourse:topicArchived>No</discourse:topicArchived>
           <guid isPermaLink="false">forums.kicksecure.com-topic-1801</guid>
           <source url="https://forums.kicksecure.com/t/strange-line-when-verifying-software-not-human-readable-32-bytes/1801.rss">Strange line when verifying software: not human readable (32 bytes</source>
-        </item>
-        <item>
-          <title>Systemcheck python3-pip is not secure</title>
-          <dc:creator><![CDATA[spartack]]></dc:creator>
-          <category>Support</category>
-          <description><![CDATA[
-            <p>I get this message from systemcheck, what should I do?</p>
-<blockquote>
-<p>WARNING: Kicksecure Unwanted Packages Test Result: 1 unwanted package(s) installed. It is recommended that you remove them from this machine.</p>
-<ol>
-<li>Open a terminal. (Start Menu → System → Terminal)</li>
-<li>Purge.</li>
-</ol>
-<p>sudo apt-get purge python3-pip</p>
-</blockquote>
-            <p><small>15 posts - 4 participants</small></p>
-            <p><a href="https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799">Read full topic</a></p>
-          ]]></description>
-          <link>https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799</link>
-          <pubDate>Sat, 18 Jul 2026 18:56:16 +0000</pubDate>
-          <discourse:topicPinned>No</discourse:topicPinned>
-          <discourse:topicClosed>No</discourse:topicClosed>
-          <discourse:topicArchived>No</discourse:topicArchived>
-          <guid isPermaLink="false">forums.kicksecure.com-topic-1799</guid>
-          <source url="https://forums.kicksecure.com/t/systemcheck-python3-pip-is-not-secure/1799.rss">Systemcheck python3-pip is not secure</source>
         </item>
   </channel>
 </rss>
