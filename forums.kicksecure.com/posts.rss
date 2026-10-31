@@ -1,0 +1,1166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:discourse="http://www.discourse.org/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure Forums - Latest posts</title>
+    <link>https://forums.kicksecure.com</link>
+    <description>Latest posts</description>
+      <item>
+        <title>How to verify running Kicksecure version?</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>This page may be helpful:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Point_Release">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793349013" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener" title="07:24AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:332/500;"><img src="https://www.kicksecure.com/w/images/7/73/Pointrelease213123.jpg?version=b20065b9417eb9cb83a80ae275b46dbc" class="thumbnail" alt="" width="332" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Point_Release" target="_blank" rel="noopener">Point Release</a></h3>
+
+  <p>What is a Point Release?</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p>Installing any version of Kicksecure 18 and fully updating it leads to a system which is (<a href="https://www.kicksecure.com/wiki/Operating_System_Software_and_Updates#Update_vs_Image_Re-Installation" title="Operating System Software and Updates">mostly</a>) identical to installing a Kicksecure point release.</p>
+<p>If the Kicksecure installation is <a href="https://www.kicksecure.com/wiki/Update" title="Update">updated</a>, no further action is required.</p>
+</blockquote> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-verify-running-kicksecure-version/1872#post_2</link>
+        <pubDate>Fri, 30 Oct 2026 23:02:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5701</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="spartack" data-post="7" data-topic="1488">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/232_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>If a service stuck the shutdown, how is the process to terminate it?</p>
+</blockquote>
+</aside>
+<p>systemd tries to make sure everything it tracks is killed before issuing a reboot syscall. If a process is stuck in a kernel thread and won’t respond to even SIGKILL, it will simply hang forever waiting for it to respond. emerg-shutdown on the other hand just issues a reboot syscall when it decides the system should be shut down, triggering the kernel to cut power to the device regardless of what may or may not be hung.</p>
+<aside class="quote no-group" data-username="spartack" data-post="7" data-topic="1488">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/232_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<p>As I understand for the configuration file, systemd timeout will try to terminate the process before the emerg-shutdown timeout arrive, right?</p>
+</blockquote>
+</aside>
+<p>Yes. Reducing the DefaultTimeoutStopSec will make systemd resort to force-killing everything during shutdown sooner than it would otherwise. If it manages to do that and get to issuing a reboot syscall before emerg-shutdown gets there, the kernel settings will wipe the RAM of killed processes during shutdown.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_8</link>
+        <pubDate>Fri, 30 Oct 2026 21:38:30 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5700</guid>
+      </item>
+      <item>
+        <title>How to verify running Kicksecure version?</title>
+        <dc:creator><![CDATA[@user4023]]></dc:creator>
+        <description><![CDATA[ <p>Hi Guys, relatively new to this . .</p>
+<p>I did an inplace upgrade from 18.2.1.9 to 18.2.4.2.</p>
+<p>Would like to verify 18.2.4.2 is the actual running version. Failed to find a way.</p>
+<p>Any help would be greatly appriciated.</p>
+<p>Cheers,</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-verify-running-kicksecure-version/1872#post_1</link>
+        <pubDate>Fri, 30 Oct 2026 07:07:11 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5699</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@spartack]]></dc:creator>
+        <description><![CDATA[ <p>If a service stuck the shutdown, how is the process to terminate it?</p>
+<p>As I understand for the configuration file, systemd timeout will try to terminate the process before the emerg-shutdown timeout arrive, right? That would run a normal (non forced) shutdown that would completely clean the RAM.</p>
+<p>I don’t know exactly the seconds RAM decay take after powering off, but if you force a reboot it will clear the RAM automatically. We dodge the risk of a RAM dump after a power off.</p>
+<pre data-code-wrap="bash"><code class="lang-bash">## Enabling ensure-shutdown.service will cause shutdown to always
+## take at least as long as systemd's DefaultTimeoutStopSec (which by default
+## is 90 seconds). If you are going to enable ensure-shutdown.service, it is
+## highly recommended to set DefaultTimeoutStopSec to a much smaller value,
+## such as 5 seconds. The maximum shutdown time set here should be at least 10
+## seconds *longer* than DefaultTimeoutStopSec, to give normal shutdown a
+## chance to actually succeed before forcibly shutting down the system.
+ENSURE_SHUTDOWN_TIMEOUT=30
+</code></pre> ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_7</link>
+        <pubDate>Thu, 29 Oct 2026 20:49:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5698</guid>
+      </item>
+      <item>
+        <title>Installing Waydroid</title>
+        <dc:creator><![CDATA[@Jules]]></dc:creator>
+        <description><![CDATA[ <p>A brief update - I determined that binder_linux is not compiled in the kernel but is available to load as a module with sudo modprobe binder_linux.  However I still have the same problems.  I think the binderfs is not mounting.</p>
+<p>I have had further chats with the bot and it seems binderfs is not available in the kernel and so waydroid cannot work.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-waydroid/1871#post_4</link>
+        <pubDate>Wed, 28 Oct 2026 15:10:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5697</guid>
+      </item>
+      <item>
+        <title>Installing Waydroid</title>
+        <dc:creator><![CDATA[@Jules]]></dc:creator>
+        <description><![CDATA[ <p>I installed from the debian backports repository, which has the latest version 1.6.3 - that is the route recommended by the waydroid site - their command sudo apt install waydroid -y.  When I clicked on the icon the box came up to initialise it and install lineage and I got the message that binder node “vnd binder” could not be found.  With chatbot’s help i tried to mount binderfs but then got the message unknown filesystem type “binder”.</p>
+<p>This was my second attempt.  The first time I initialised it on the command line and got a bit further that time but when i tried to start it on the command line I got a message "service manager /dev/anbox-binder has died.</p>
+<p>I wondered if this binder_linux has been disabled as a security measure?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-waydroid/1871#post_3</link>
+        <pubDate>Wed, 28 Oct 2026 13:36:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5696</guid>
+      </item>
+      <item>
+        <title>Installing Waydroid</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>How did you install Waydroid? There are some instructions here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Waydroid">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793089813" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Waydroid" target="_blank" rel="noopener" title="07:33AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/401;"><img src="https://www.kicksecure.com/w/images/9/9c/Waydroid.png?version=7c698bc3929036e1e4b3440215192b79" class="thumbnail" alt="" width="690" height="401"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Waydroid" target="_blank" rel="noopener">Use Waydroid with Kicksecure ™</a></h3>
+
+  <p>How-To: Use Waydroid with Kicksecure.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>The “binder” driver is something I would expect the Waydroid package to automatically install.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-waydroid/1871#post_2</link>
+        <pubDate>Tue, 27 Oct 2026 23:37:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5695</guid>
+      </item>
+      <item>
+        <title>Installing Waydroid</title>
+        <dc:creator><![CDATA[@Jules]]></dc:creator>
+        <description><![CDATA[ <p>I am trying to install waydroid but there seems to be a kernel issue.  I get a message that binder node vnd binder is not found.  I have tried to mount it manually but get the message unknown file system type “binder”.<br>
+I would be grateful for any advice on how to deal with this issue, or at least to know whether or not it is possible to install waydroid.  I realise it probably reduces security, but I am using a separate usb stick just for this and just want to get Signal and Whats app up and running.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/installing-waydroid/1871#post_1</link>
+        <pubDate>Tue, 27 Oct 2026 16:50:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5694</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Pending review and merge:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/security-misc/commit/cbd71894c8d7901b95e2adde5311913d83d75cba">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/cbd71894c8d7901b95e2adde5311913d83d75cba" target="_blank" rel="noopener">github.com/ArrayBolt3/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/security-misc/commit/cbd71894c8d7901b95e2adde5311913d83d75cba" target="_blank" rel="noopener">Add debug mode feature to emerg-shutdown</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-10-27" data-time="02:46:07" data-timezone="UTC">02:46AM - 27 Oct 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 4 files with 207 additions and 6 deletions">
+        <a href="https://github.com/ArrayBolt3/security-misc/commit/cbd71894c8d7901b95e2adde5311913d83d75cba" target="_blank" rel="noopener">
+          <span class="added">+207</span>
+          <span class="removed">-6</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>This will not fix the issue, but it will help us figure out why it’s happening. Will follow up with use instructions once this is in a released version of security-misc.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870#post_4</link>
+        <pubDate>Tue, 27 Oct 2026 03:00:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5693</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Cannot reproduce on an 11th-gen Intel Core i5 Clevo laptop. I installed Kicksecure 18.2.4.2 from the latest ISO, with LUKS, booted it into sysmaint mode, fully updated it, then booted it into user mode. It’s working without issues. The emerg shutdown panic key combo also works, so emerg-shutdown is functional.</p>
+<p>I’ll add a debugging mode to emerg-shutdown so we can figure out what’s causing this.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870#post_3</link>
+        <pubDate>Tue, 27 Oct 2026 00:32:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5692</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>There haven’t been any changes to emerg-shutdown recently that could reasonably cause this, and this issue wasn’t known previously. (Worthy of note, I recently installed Kicksecure baremetal but without encryption on a physical device, and did not encounter any issues.) Will attempt to reproduce and debug. If that fails, I have an idea, but need to discuss it internally first.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870#post_2</link>
+        <pubDate>Mon, 26 Oct 2026 23:54:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5691</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</title>
+        <dc:creator><![CDATA[@SpecialBook]]></dc:creator>
+        <description><![CDATA[ <p># Kicksecure 18: emerg-shutdown causes immediate power-off during boot after LUKS unlock</p>
+<h2><a name="p-5690-environment-1" class="anchor" href="https://forums.kicksecure.com#p-5690-environment-1" aria-label="Heading link"></a>Environment</h2>
+<ul>
+<li>OS: Kicksecure 18, bare metal, LXQt</li>
+<li>Kernel: `6.12.113+deb13-amd64`</li>
+<li>Package: `security-misc-shared 3:54.2-1`</li>
+<li>Storage: Internal NVMe SSD</li>
+<li>Root filesystem: ext4 on LUKS encryption</li>
+<li>Initramfs: dracut</li>
+<li>Hardware: Lenovo laptop, AMD platform</li>
+</ul>
+<h2><a name="p-5690-problem-2" class="anchor" href="https://forums.kicksecure.com#p-5690-problem-2" aria-label="Heading link"></a>Problem</h2>
+<p>After entering the LUKS passphrase during a normal boot, the computer abruptly powers off before reaching the login screen.</p>
+<p>The issue is reproducible whenever `emerg-shutdown.service` is enabled.</p>
+<p>Booting with the following temporary kernel parameters allows the system to start normally:</p>
+<p>```text<br>
+systemd.mask=emerg-shutdown.service rd.systemd.mask=emerg-shutdown.service<br>
+```</p>
+<p>No shutdown reason or kernel panic is visible in the journal.</p>
+<h2><a name="p-5690-steps-to-reproduce-3" class="anchor" href="https://forums.kicksecure.com#p-5690-steps-to-reproduce-3" aria-label="Heading link"></a>Steps to reproduce</h2>
+<ol>
+<li>Enable `emerg-shutdown.service`.</li>
+<li>Reboot normally.</li>
+<li>Enter the LUKS passphrase.</li>
+<li>The system proceeds into normal systemd initialization.</li>
+<li>`emerg-shutdown.service` starts.</li>
+<li>The computer abruptly powers off.</li>
+</ol>
+<h2><a name="p-5690-troubleshooting-performed-4" class="anchor" href="https://forums.kicksecure.com#p-5690-troubleshooting-performed-4" aria-label="Heading link"></a>Troubleshooting performed</h2>
+<p>**1. Recovery mode**</p>
+<p>Booting into single-user recovery mode and then running `exit` allowed the system to continue booting successfully.</p>
+<p>Booting directly into `multi-user.target` did not resolve the problem.</p>
+<p>**2. Disabling emerg-shutdown**</p>
+<p>Masking `emerg-shutdown.service` during boot prevents the unexpected power-off.</p>
+<p>**4. Testing without boot-device monitoring**</p>
+<p>Created a temporary systemd override replacing `ExecStart` with:</p>
+<p>```ini<br>
+[Service]<br>
+Type=simple<br>
+ExecStart=<br>
+ExecStart=/usr/bin/emerg-shutdown --keys=KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END<br>
+```</p>
+<p>the system again powered off during boot.</p>
+<p>This suggests that monitoring the NVMe device is not required to reproduce the issue. However, the binary still initializes and processes Netlink events even when `–devices` is omitted.</p>
+<p>**5. NVMe and USBGuard**</p>
+<p>The root-device detection helper correctly resolves the encrypted root filesystem to its underlying NVMe partition.</p>
+<p>Available kernel logs show normal NVMe detection and filesystem mounting, without obvious device disconnection or I/O errors.</p>
+<p>USBGuard logs show permitted devices and no obvious blocking event associated with the issue.</p>
+<h2><a name="p-5690-relevant-logs-5" class="anchor" href="https://forums.kicksecure.com#p-5690-relevant-logs-5" aria-label="Heading link"></a>Relevant logs</h2>
+<p>From an unsuccessful boot:</p>
+<p>```text<br>
+systemd[1]: Starting emerg-shutdown.service - Emergency shutdown when boot media is removed…<br>
+emerg-shutdown: path: /<br>
+emerg-shutdown: is block device: no<br>
+emerg-shutdown: path: /dev/mapper/[REDACTED_LUKS_DEVICE]<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: real_dev_path: /dev/dm-0<br>
+emerg-shutdown: path: /dev/dm-0<br>
+emerg-shutdown: is block device: yes<br>
+emerg-shutdown: dm slaves_dir: /sys/class/block/dm-0/slaves<br>
+emerg-shutdown: path: /dev/nvme0n1p5<br>
+emerg-shutdown: is block device: yes<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>In a separate failed boot with the keyboard-only override:</p>
+<p>```text<br>
+systemd[1]: Started emerg-shutdown.service - Emergency shutdown when boot media is removed.<br>
+```</p>
+<p>The system then powered off unexpectedly. No clear reason was recorded.</p>
+<p>The journal excerpts are selected from different failed boots. Identifying values and timestamps have been removed.</p>
+<h2><a name="p-5690-expected-behavior-6" class="anchor" href="https://forums.kicksecure.com#p-5690-expected-behavior-6" aria-label="Heading link"></a>Expected behavior</h2>
+<p>`emerg-shutdown` should remain enabled and permit normal system boot unless the configured emergency key combination is pressed or a monitored boot device is actually removed.</p>
+<h2><a name="p-5690-questions-7" class="anchor" href="https://forums.kicksecure.com#p-5690-questions-7" aria-label="Heading link"></a>Questions</h2>
+<ol>
+<li>Is this a known issue with `security-misc-shared 3:54.2-1`?</li>
+<li>Is there a recommended fix that preserves the emergency keyboard shortcut rather than disabling the service entirely?</li>
+</ol>
+<p>I would prefer to keep the emergency shutdown functionality enabled.</p>
+<p>Thank you.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-emerg-shutdown-causes-immediate-power-off-during-boot-after-luks-unlock/1870#post_1</link>
+        <pubDate>Mon, 26 Oct 2026 18:27:47 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5690</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>ram-wipe itself doesn’t really “run” anymore nowadays, instead kernel configuration is used so that RAM is wiped automatically on an as-possible basis. A normal shutdown probably will indeed result in more RAM contents being wiped, but this is mainly useful when the attacker isn’t physically close nearby while the system is fully powered on. If there is a significant chance of an attacker reaching the system before it is fully powered off, there is potentially quite a bit more recoverable data than if they reach the system after it is fully powered off but before RAM decay has fully taken effect (depending on what software, if any, decides to hang during shutdown).</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_6</link>
+        <pubDate>Mon, 26 Oct 2026 15:14:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5689</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@spartack]]></dc:creator>
+        <description><![CDATA[ <p>I will keep them disabled so.</p>
+<p>Another question regarding emergency shutdown and RAM.</p>
+<p>If emergency shutdown doesn’t run ram-wipe to be able to power the device off as faster as possible. <strong>Won’t be better to reboot rather than shutting down?</strong> With a clean reboot, though forced, the ram will be wiped naturally and the disk will be encrypted.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_5</link>
+        <pubDate>Mon, 26 Oct 2026 12:45:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5688</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="spartack" data-post="3" data-topic="1488">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/232_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<ul>
+<li>emerg-shutdown.service</li>
+</ul>
+</blockquote>
+</aside>
+<p>This is the autostart service for the “immediately shutdown on boot drive removal or panic key press” code.</p>
+<aside class="quote no-group" data-username="spartack" data-post="3" data-topic="1488">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/spartack/48/232_2.png" class="avatar"> spartack:</div>
+<blockquote>
+<ul>
+<li><code>ensure-shutdown.service</code></li>
+<li><code>ensure-shutdown-trigger.service</code></li>
+</ul>
+</blockquote>
+</aside>
+<p>These are part of an optional feature that can be used to prevent a shutdown hang. It uses emerg-shutdown under the hood. The feature is implemented in a non-ideal way currently (it will actually increase shutdown time by default), so it’s disabled by default and will probably eventually be removed in favor of a better implementation. If you want to enable it anyway though, see:</p>
+<aside class="onebox githubblob" data-onebox-src="https://github.com/Kicksecure/security-misc/blob/master/etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared">
+  <header class="source">
+
+      <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared" target="_blank" rel="noopener">github.com/Kicksecure/security-misc</a>
+  </header>
+
+  <article class="onebox-body">
+    <h4><a href="https://github.com/Kicksecure/security-misc/blob/master/etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared" target="_blank" rel="noopener">etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared</a></h4>
+
+<div class="git-blob-info">
+  <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared" rel="noopener"><code>master</code></a>
+</div>
+
+
+      <pre><code class="lang-conf%23security-misc-shared">## Copyright (C) 2025 - 2025 ENCRYPTED SUPPORT LLC &lt;adrelanos@whonix.org&gt;
+## See the file COPYING for copying conditions.
+
+## Please use "/etc/security-misc/emerg-shutdown/50_user.conf" or
+## "/usr/local/etc/security-misc/emerg-shutdown/50_user.conf"
+## for your custom configuration, which will override the defaults found here.
+## When Kicksecure is updated, this file may be overwritten.
+
+## Set the key combo for forcing immediate shutdown. See the "Keys and
+## buttons" section of "/usr/include/linux/input-event-codes.h" for possibly
+## supported values. Not all keys are supported.
+##
+## All specified keys must be depressed at the same time to trigger a
+## shutdown. Use a comma (",") to separate keys. If you want to alias certain
+## keys to each other from emerg-shutdown's standpoint, use a pipe
+## character("|").
+##
+## The default key sequence triggers a shutdown when Ctrl+Alt+Delete is
+## pressed, allowing the use of either the left or right Ctrl and Alt keys.
+EMERG_SHUTDOWN_KEYS="KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END"
+</code></pre>
+
+
+
+  This file has been truncated. <a href="https://github.com/Kicksecure/security-misc/blob/master/etc/security-misc/emerg-shutdown/30_security_misc.conf%23security-misc-shared" target="_blank" rel="noopener">show original</a>
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_4</link>
+        <pubDate>Sun, 25 Oct 2026 00:52:45 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5687</guid>
+      </item>
+      <item>
+        <title>Emerg-shutdown not showing any messages at shutdown? (18.0.8.7 Feedback)</title>
+        <dc:creator><![CDATA[@spartack]]></dc:creator>
+        <description><![CDATA[ <p>What are these service for? I haven’t find much information in the documentation:</p>
+<ul>
+<li><code>emerg-shutdown.service</code></li>
+<li><code>ensure-shutdown.service</code></li>
+<li><code>ensure-shutdown-trigger.service</code></li>
+</ul>
+<p>I have both of ensure disabled and I don’t know if they should be enabled…</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_3</link>
+        <pubDate>Sat, 24 Oct 2026 21:06:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5686</guid>
+      </item>
+      <item>
+        <title>Use ClockVM instead of sdwdate</title>
+        <dc:creator><![CDATA[@moviepuff]]></dc:creator>
+        <description><![CDATA[ <p>I’ve figured it out, to use ClockVM instead of sdwdate you have to do the following:</p>
+<p>Disable <a href="https://www.kicksecure.com/wiki/Sdwdate#Disable_Autostart" rel="noopener nofollow ugc">sdwdate</a> and <a href="https://www.kicksecure.com/wiki/Sdwdate-gui#Disable_Autostart" rel="noopener nofollow ugc">sdwdate-gui</a> (I guess you could also use dummy-dependency but I disabled them instead).</p>
+<p>Delete <code>/etc/sdwdate.d/qubes-sync-time-disabled-by-sdwdate.marker</code> file, I put <code>rm -f /etc/sdwdate.d/qubes-sync-time-disabled-by-sdwdate.marker</code> in <code>/rw/config/rc.local</code> in the AppVM so it would get deleted at every AppVM startup in case any updates would recreate the file (you have to do this in every AppVM which is based on the Kicksecure template where you have disabled sdwdate and sdwdate-gui.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/use-clockvm-instead-of-sdwdate/1864#post_3</link>
+        <pubDate>Sat, 24 Oct 2026 17:16:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5685</guid>
+      </item>
+      <item>
+        <title>Kicksecure 18.2.4.2 - Point Release!</title>
+        <dc:creator><![CDATA[@Patrick]]></dc:creator>
+        <description><![CDATA[ <h1><a name="p-5684-download-1" class="anchor" href="https://forums.kicksecure.com#p-5684-download-1" aria-label="Heading link"></a>Download</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1792827014" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="05:55PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/6/63/Download-kicksecure.jpg?version=9adcc5bcba92e65719a7341228d32e1c" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
+
+  <p>FREE download of Kicksecure. Kicksecure can be installed on a physical machine as the host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
+<hr>
+<h1><a name="p-5684-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-5684-upgrade-2" aria-label="Heading link"></a>Upgrade</h1>
+<p>Alternatively, an in-place release upgrade is possible using the <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1792827014" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="06:03PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1792827014" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="10:30AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" alt="" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="p-5684-security-vulnerability-fixes-3" class="anchor" href="https://forums.kicksecure.com#p-5684-security-vulnerability-fixes-3" aria-label="Heading link"></a>Security Vulnerability Fixes</h1>
+<ul>
+<li>Fixed a local privilege escalation vulnerability in a script in the legacy-dist package. (Thanks to Uladzislau Hryharovich for responsibly disclosing this security vulnerability!)
+<ul>
+<li>(The fixed legacy-dist package was already available in the stable repository before this release announcement.)</li>
+<li>A full write-up by the reporter will be linked here once published.</li>
+</ul>
+</li>
+</ul>
+<h1><a name="p-5684-major-changes-4" class="anchor" href="https://forums.kicksecure.com#p-5684-major-changes-4" aria-label="Heading link"></a>Major Changes</h1>
+<ul>
+<li>Ported the ISO build process from live-build (run through derivative-maker) to native derivative-maker (without live-build).</li>
+<li>Progress towards reproducible builds.
+<ul>
+<li>Packages built by Kicksecure are already reproducible. Independent reproduction of packages and comparison of official builds with reproduced builds are welcome so that potential issues can be identified and resolved.</li>
+<li>Non-Qubes-Whonix: the next release might be reproducible.</li>
+<li>(Qubes-Whonix: reproducibility depends on Qubes, not Qubes-Whonix.)</li>
+</ul>
+</li>
+<li>Internal code review and fixes.</li>
+<li><a href="https://forums.whonix.org/t/continuous-integration-ci-whonix-testing-automated-test-suite/15839/107">Major progress on automated testing.</a></li>
+<li>derivative-maker: opt-in, disabled-by-default SMBIOS reader that allows kernel parameters to be configured at the virtualizer level.</li>
+</ul>
+<h1><a name="p-5684-notable-changes-5" class="anchor" href="https://forums.kicksecure.com#p-5684-notable-changes-5" aria-label="Heading link"></a>Notable Changes</h1>
+<ul>
+<li>desktop-config-dist:
+<ul>
+<li>Removed the QTerminal drop-down keybinding.</li>
+<li>Ported livecheck to Qt6; added D-Bus activation to launch new instances from the Start Menu.</li>
+<li>Restricted livecheck to one running instance at a time; the Start Menu entry now raises the existing livecheck window.</li>
+<li>Hidden the gparted Start Menu entry in user sessions by default (non-functional due to user-sysmaint-split).</li>
+</ul>
+</li>
+<li>developer-meta-files (build and maintenance tooling):
+<ul>
+<li>dm-review-branch: review changes on a git branch before merging.</li>
+<li>dm-reproducible-compare-artifacts: compare two builds artifact-by-artifact to verify that they are identical.</li>
+<li>dm-nbd-cleanup: clean up leftover block devices after a build.</li>
+<li>bash-style-guide: project coding style guide for shell scripts.</li>
+<li>dm-reproducible-buildinfo: record the exact build inputs needed to reproduce a build.</li>
+<li>dm-reproducible-fetch: fetch build sources deterministically so everyone starts with the same inputs.</li>
+<li>dm-reproducible-verify: rebuild and verify that the result matches the official release bit-for-bit.</li>
+<li>dm-normalize-fat-partition: remove nondeterministic FAT filesystem metadata to make images reproducible.</li>
+<li>dm-debconf-normalize-owners: normalize debconf database ownership for reproducible packaging.</li>
+<li>dm-update-frozen-snapshot: update the pinned package repository snapshot used by the build.</li>
+<li>dm-github-org-security-report: collect open security alerts across the GitHub organization.</li>
+<li>dm-github-org-policy: apply a standard security policy across the GitHub organization’s repositories.</li>
+</ul>
+</li>
+<li>dist-system-metadata:
+<ul>
+<li>New dist-system-metadata package.<br>
+System metadata has been split out of tb-updater so that frequently changing<br>
+data (pinned Tor Browser versions and the Tor Project signing key) can<br>
+migrate between suites independently of the larger code packages.
+<ul>
+<li>usr/share/dist-system-metadata/tb-updater/{tbb_hardcoded_version_stable,<br>
+tbb_hardcoded_version_alpha,tbb-team.asc}</li>
+<li>Minimal dependencies allow it to migrate to the stable repository quickly.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>helper-scripts:
+<ul>
+<li>dpkg-reconfigure-noninteractive: reconfigure a package without interactive prompts.</li>
+<li>Fixed qubes-dom0-update over sys-whonix.<br>
+<a href="https://forums.whonix.org/t/cant-update-dom0-over-sys-whonix-in-qubesos/23624" class="inline-onebox">Can't update dom0 over sys-whonix in QubesOS - Qubes-Whonix - Whonix Forum</a></li>
+<li>check-ref-commits: check git commit references for validity.</li>
+<li>lockfile.sh: simple file-locking helper to prevent concurrent runs (to be renamed to lockfile.bsh).</li>
+<li>detect-software-rendering: detect whether the GPU is using software (CPU) rendering.</li>
+<li>vbox-ova-reproducible-normalize: normalize a VirtualBox .ova for reproducible builds.</li>
+</ul>
+</li>
+<li>GRUB:
+<ul>
+<li>Theme: pin the theme variant instead of detecting the build host’s firmware, improving reproducibility.</li>
+<li>Improved support for /boot (symlinks, FAT32), with further improvements planned for the next version.</li>
+</ul>
+</li>
+<li>live-config-dist:
+<ul>
+<li>argument-squashfs-pack: build an optional compressed (squashfs) filesystem for a live system to be installed by the Calamares installer. (Development tool)</li>
+<li>persistence-setup: set up persistent storage for live systems. (Development tool)</li>
+<li>mok-enroll-opt-in: enable opt-in Secure Boot key (MOK) enrollment via the MOK_ENROLL=1 environment variable. (Development tool)</li>
+</ul>
+</li>
+<li>security-misc:
+<ul>
+<li>SSH client and server configuration: restricted key exchange to post-quantum algorithms.</li>
+</ul>
+</li>
+<li>usability-misc:
+<ul>
+<li>console-setup: run only when a framebuffer is available (skip on serial/headless systems).<br>
+On a headless or serial-only boot (no GPU and therefore no /dev/fb0), setupcon’s setfont<br>
+cannot work and repeatedly logs ‘setfont: ERROR ioctl(KDFONTOP): Invalid argument’<br>
+in the journal. The console-setup.service drop-in is now gated by<br>
+ConditionPathExists=/dev/fb0, allowing it to be skipped cleanly in these environments.<br>
+Normal graphical boots have /dev/fb0 and remain unaffected.</li>
+</ul>
+</li>
+<li>vm-config-dist:
+<ul>
+<li>Improved detection of whether software rendering is enabled.</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5684-full-difference-of-all-changes-6" class="anchor" href="https://forums.kicksecure.com#p-5684-full-difference-of-all-changes-6" aria-label="Heading link"></a>Full difference of all changes</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only">
+  <header class="source">
+      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only" target="_blank" rel="noopener">GitHub</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/10797c117db3ef9317f41ffbf273f05d845895cdd3b25a8fde9f631c3649faa7/Kicksecure/derivative-maker" class="thumbnail" alt="" width="690" height="345"></div>
+
+<h3><a href="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only" target="_blank" rel="noopener">Comparing 18.2.1.9-developers-only...18.2.4.1-developers-only ·...</a></h3>
+
+  <p>Build tool for Kicksecure and Whonix derivative images - Comparing 18.2.1.9-developers-only...18.2.4.1-developers-only · Kicksecure/derivative-maker</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-2-4-2-point-release/1869#post_1</link>
+        <pubDate>Sat, 24 Oct 2026 16:46:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5684</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p>Well yeah It’s too complicated for sure! I will just start with a new VM!</p>
+<p>Thank you very much for youre help sir!:))</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_8</link>
+        <pubDate>Wed, 21 Oct 2026 05:46:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5682</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>That didn’t quite work; there were intentionally two separate commands above, one of them with a newline in the middle, but you’ve typed them all as one line. When done right, the screen should look like:</p>
+<pre><code class="lang-auto">[root ~]# cat /proc/"$(pgrep sysmaint-panel)"/environ | tr '\0' '\n' &gt; desktop-env
+[root ~]#
+[root ~]# grep '[[:space:]]' desktop-env &amp;&amp; echo 'bad env' \
+then&gt; || XDG_RUNTIME_DIR=/run/user/"$(id -u)" env -i $(cat desktop-env) qterminal
+</code></pre>
+<p>If this is too complex though. starting over with a new VM may be the best option. I had to do that many times when I was first learning Linux <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_7</link>
+        <pubDate>Wed, 21 Oct 2026 05:31:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5681</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/8701a990768d1455f866908cf693505e486cd668.png" data-download-href="https://forums.kicksecure.com/uploads/default/8701a990768d1455f866908cf693505e486cd668" title="2026-10-20_21-54"><img src="https://forums.kicksecure.com/uploads/default/original/1X/8701a990768d1455f866908cf693505e486cd668.png" alt="2026-10-20_21-54" data-base62-sha1="jgk1fgO6yYhFKBEOB4lFb4LJQGA" width="690" height="128" data-dominant-color="060606"></a></div><p></p>
+<p>I think I got it right, I dont understand anything tbh, I’m quite new to linux, I’m considering to just leaving this mess and continue with new vm</p>
+<p>Can you understand what could be the error that is now stated In the picture?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_6</link>
+        <pubDate>Wed, 21 Oct 2026 05:08:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5680</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="whistleblow" data-post="4" data-topic="1867">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/w/5daacb/48.png" class="avatar"> whistleblow:</div>
+<blockquote>
+<p>Doesn’t seem like that, I boot the vm In sysmaint mode then I click on the “send key” button in virt manager then Ctrl +Alt+F2 Is that the right way?</p>
+</blockquote>
+</aside>
+<p>Yeah, that’s the info I was looking for.</p>
+<p>In the TTY, try running (as user <code>sysmaint</code>):</p>
+<pre><code class="lang-auto">cat /proc/"$(pgrep sysmaint-panel)"/environ | tr '\0' '\n' &gt; desktop-env
+
+grep '[[:space:]]' desktop-env &amp;&amp; echo 'bad env' \
+  || XDG_RUNTIME_DIR=/run/user/"$(id -u)" env -i $(cat desktop-env) qterminal
+</code></pre>
+<p>(Be careful when typing this, all the characters are important, including the quote marks left out around the <code>$(cat desktop-env)</code> part.)</p>
+<p>This will extract the environment of your graphical session from the running sysmaint-panel process, verify that it can be safely injected into qterminal in a trivial way, then will launch qterminal with that same environment so that it shows up on your graphical session configured (mostly) the same way it would be if you had launched it normally. If qterminal is working normally, this <em>should</em> result in it launching in the graphical session. More likely though you’ll get an error message that hints at what’s wrong.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_5</link>
+        <pubDate>Wed, 21 Oct 2026 04:11:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5679</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1867">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>s</p>
+</blockquote>
+</aside>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/44ed797aac676694110903cf7d026e373bf9e628.png" data-download-href="https://forums.kicksecure.com/uploads/default/44ed797aac676694110903cf7d026e373bf9e628" title="2026-10-20_20-54"><img src="https://forums.kicksecure.com/uploads/default/original/1X/44ed797aac676694110903cf7d026e373bf9e628.png" alt="2026-10-20_20-54" data-base62-sha1="9PLfNwR831bCg9nLAatuvoGTzNm" width="690" height="339" data-dominant-color="040404"></a></div>Doesn’t seem like that, I boot the vm In sysmaint mode then I click on the “send key” button in virt manager then Ctrl +Alt+F2 Is that the right way?<p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_4</link>
+        <pubDate>Wed, 21 Oct 2026 04:02:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5678</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>If you boot into sysmaint mode, switch to a TTY, and run <code>journalctl | grep segfault</code>, do you see qterminal crashing? If so, try running <code>cd ~/.cache &amp;&amp; rm -rf fontconfig</code> and see if that fixes the issue. There was a bug in Chromium recently that caused it to corrupt the fontconfig cache and cause Qt applications to crash.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_2</link>
+        <pubDate>Tue, 20 Oct 2026 23:38:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5676</guid>
+      </item>
+      <item>
+        <title>Kicksecure KVM VM broken</title>
+        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
+        <description><![CDATA[ <p>Hello, I have a Kicksecure VM that I’ve had for several months, then I don’t know what happened but suddenly I can’t open the terminal,open the sdwdate log, or keyboard layout, It’s just these specific ones that nothing happens when I try to open them, I have of course tried to create a new VM and it works without problems so something has happened in this particular VM</p>
+<p>Is it possible to fix this in any way or should I just delete It and continue with the new one?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_1</link>
+        <pubDate>Tue, 20 Oct 2026 20:21:57 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5675</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken</title>
+        <dc:creator><![CDATA[@italicize-immerse27]]></dc:creator>
+        <description><![CDATA[ <p>ok,<br>
+Kicksecure 18 in newest version, after all updates.<br>
+My laptop is ASUS Rog strix g16 with AMD CPU and AMD iGPU and Nvidia dGPU + 2x Nvme.<br>
+After updating to linux kernel .113 it fixed problems with keyboard, but problem nr 2 still mantains.<br>
+After inputting password and clicking enter few seconds after my pc turns off, i set llog level to 7, but nothing worrying there before shutdown. I’m not sure but journalctl also don’t show anything too bad but i probably do’nt understand, tried with modprobe.blacklist=hid_asus, didn’t helped</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken/1865#post_5</link>
+        <pubDate>Mon, 19 Oct 2026 09:28:18 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5674</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Until we know what’s wrong, it’s impossible to know how to fix it. The info you gave sounds like the same issue <em>might</em> be happening in Tails too, although it’s a bit unclear.</p>
+<p>Could you please follow the exact steps given in my previous comment, and report in detail what the results were from following each step? More detail about how to provide a useful bug report is here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Reporting_Bugs#Reporting_Guidelines">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1792222213" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Reporting_Guidelines" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:522/500;"><img src="https://www.kicksecure.com/w/images/9/97/Ladybug-156624-640.png?version=6c2f2610a55cf7b88937f16dad3daa87" class="thumbnail" alt="" width="522" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Reporting_Guidelines" target="_blank" rel="noopener">Reporting Guidelines - Bug Reports, Software Development, and Feature Requests</a></h3>
+
+  <p>Before developers invest time in addressing concerns, reporters should make a reasonable effort to demonstrate that it is a genuine issue. | How to Report (Security) Bugs in the Kicksecure Operating System. The software development cycle, patches,...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(Sorry to be this particular about details, the problem is that computers are rather finicky and a seemingly very slight difference in behavior can indicate radically different underlying causes. For instance, if this behavior only occurs on security-focused operating systems like Kicksecure and Tails, perhaps a kernel setting or other configuration setting is triggering the issue, whereas if the issue happens on vanilla Debian as well, that potentially points to a kernel bug.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken/1865#post_4</link>
+        <pubDate>Sun, 18 Oct 2026 00:32:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5672</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken</title>
+        <dc:creator><![CDATA[@italicize-immerse27]]></dc:creator>
+        <description><![CDATA[ <p>I tried many reinstalls so i don’t think it is configuration thing,<br>
+I also updated my Tails now and now i also can’t write anything in Tails password or other places on window there, so maybe it is something connected to keyboard drivers, but i’m not sure, how can this be fixed?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken/1865#post_3</link>
+        <pubDate>Sat, 17 Oct 2026 08:51:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5671</guid>
+      </item>
+      <item>
+        <title>Use ClockVM instead of sdwdate</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t think this is supported and don’t immediately know how to do this (or if one can). At the very least you would probably want to remove <code>sdwdate</code> and <code>sdwdate-gui</code> using <code>dummy-dependency</code>, but there might be more steps involved. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Debian_Packages#dummy-dependency">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1791963013" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Debian_Packages#dummy-dependency" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:614/500;"><img src="https://www.kicksecure.com/w/images/a/aa/Box-158523640.png?version=4622f187d3eec6059bd842d42be6d941" class="thumbnail" alt="" width="614" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Debian_Packages#dummy-dependency" target="_blank" rel="noopener">dummy-dependency - Debian Packages</a></h3>
+
+  <p>dummy-dependency [10] ( helper-scripts | /man/dummy-dependency.8.ronn | raw ) can be used to install a dummy dependency package in place of a real dependency package. This allows: | Which Kicksecure Debian packages are safe to remove? What is a meta...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+ ]]></description>
+        <link>https://forums.kicksecure.com/t/use-clockvm-instead-of-sdwdate/1864#post_2</link>
+        <pubDate>Wed, 14 Oct 2026 23:31:46 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5670</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>The only thing in Kicksecure that I can immediately think of that could cause this is a hardening setting change, but there haven’t been any notable hardening setting changes recently.</p>
+<p>It isn’t guaranteed that this is a Kicksecure bug, as it is theoretically possible that the hardware is failing. Some debugging steps to take are:</p>
+<ul>
+<li>Download the Kicksecure ISO and boot from it. See if the system is usable in ISO live mode.</li>
+<li>If the system is functional that way, install Kicksecure on a second drive and fully update it. See if the system is usable (perhaps you changed a configuration setting that broke something).</li>
+<li>If the system is <em>not</em> functional after that, download and install a Debian live ISO, and install it to a second drive, enabling disk encryption in the process. Then fully update it. See if the system is usable. This will tell us if the issue is somehow specific to Kicksecure or not.</li>
+</ul> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken/1865#post_2</link>
+        <pubDate>Wed, 14 Oct 2026 23:24:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5669</guid>
+      </item>
+      <item>
+        <title>Kicksecure broken</title>
+        <dc:creator><![CDATA[@italicize-immerse27]]></dc:creator>
+        <description><![CDATA[ <p>Since one of the latest updates/few days/weeks i have these problems:</p>
+<ol>
+<li>
+<p>When i update to the newest packages and newest linuks kernel (just default updates), when i power on my laptop, on page where i should input my luks password, keyboard seems not interacting with luks password, i input it and *** doesn’t show, like it was before. i can’t log in to kicksecure, something is broken, tried to input and enter but no it doesn’t work.</p>
+</li>
+<li>
+<p>When i reinstall or downgrade to older linuks kernel, i can input my password, but just after i input it and click enter my pc immediately turns off (most of the times), just shuts down, no errors before.<br>
+I tried few things to find problems, some workarounds with drivers, but nothing helped.</p>
+</li>
+</ol>
+<p>btw i have asus laptop with amd cpu and amd igpu and nvidia dgpu. installed on nvme.<br>
+It worked perfectly before, now something broke in kicksecure, what can be a problem and solution?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-broken/1865#post_1</link>
+        <pubDate>Wed, 14 Oct 2026 19:23:12 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5668</guid>
+      </item>
+      <item>
+        <title>Use ClockVM instead of sdwdate</title>
+        <dc:creator><![CDATA[@moviepuff]]></dc:creator>
+        <description><![CDATA[ <p>As I understand (correct me if I’m wrong) Kicksecure doesn’t use ClockVM to synchronize time since it has sdwdate. How can I synchronize time in the same way non-Kicksecure qubes synchronize their time (.i.e., use ClockVM for Kicksecure qubes instead of sdwdate)?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/use-clockvm-instead-of-sdwdate/1864#post_1</link>
+        <pubDate>Wed, 14 Oct 2026 09:59:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5667</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I don’t think that’s the same bug. That bug was caused by inappropriate fontconfig cache symlinks being created by Chromium, and I don’t see any symlinks in <code>~/.cache/fontconfig</code> on my end after running Mullvad Browser.</p>
+<p>I tried to reproduce again by browsing with Mullvad for a little over five minutes and still didn’t manage to make it happen. It’s possible the issue only occurs when graphics acceleration is enabled. Could you try forcing software rendering by following the instructions here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1791444613" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)" target="_blank" rel="noopener" title="03:14PM - 19 September 2026">Kicksecure – 19 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)" target="_blank" rel="noopener">Software Rendering (Pixman) - NVIDIA</a></h3>
+
+  <p>This chapter forces software rendering (Pixman) and disables Nouveau acceleration. This can improve stability on some NVIDIA systems at the cost of performance. Software rendering is not a separate driver. It simply disables hardware acceleration. It...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(Note that these instructions are in with the NVIDIA documentation since that’s when they are usually needed, but they can mostly be used even if you aren’t using NVIDIA graphics. You can omit the Nouveau-related steps if you aren’t using NVIDIA hardware.)</p>
+<p>This is most likely a Mullvad Browser bug, so I would suggest discussing on their forums if they have forums. I probably won’t spend much more time debugging this since it doesn’t appear to be a Kicksecure bug.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_8</link>
+        <pubDate>Fri, 09 Oct 2026 02:11:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5665</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@kiyoc34009]]></dc:creator>
+        <description><![CDATA[ <p>I am not on a VM. It happens consistently after using the browser for about five minutes. Began about two weeks ago. I have the same bug on system detailed in thread you solved earlier about Qterminal/Brave. Could that be causing this?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_7</link>
+        <pubDate>Fri, 09 Oct 2026 01:58:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5664</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Hmm, that crash looks unrelated. I installed Mullvad Browser on a freshly instaleld, fully updated Kicksecure VirtualBox VM, and cannot immediately reproduce the crash. Does it happen frequently or rarely?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_6</link>
+        <pubDate>Thu, 08 Oct 2026 23:18:03 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5663</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Kicksecure can be run directly on physical hardware, and can be used as a host for Kicksecure VMs. Vanilla Debian 13 should also work. If you’re already using Kicksecure  or Debian on the host, the OS likely isn’t an issue, although an application installed on the host might be the problem in which case a reinstall may fix things.</p>
+<p>Trying a different computer would be useful. Since other hardware seems to be working, it’s hard to suggest which component to replace, so I would try using an entirely different computer if you have one available already. (You could also try removing half the RAM from the system to see if the issue is in the removed half of the RAM modules, then try swapping the removed and remaining RAM sticks if the issue persists.)</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855?page=2#post_25</link>
+        <pubDate>Thu, 08 Oct 2026 22:56:15 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5662</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@zzgg]]></dc:creator>
+        <description><![CDATA[ <p>Hi, please could you recommend a replacement OS on the host machine. Also, if the replacement OS somehow has the same issue, would you recommend swapping hardware components as cost isn’t an issue.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855?page=2#post_24</link>
+        <pubDate>Thu, 08 Oct 2026 19:42:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5661</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@kiyoc34009]]></dc:creator>
+        <description><![CDATA[ <p>localhost kernel: UITgreadWorker[5582]: segfault at 20 ip 0000722d0ede44eb sp 0000722ce7ffe880 error 4 in libQt6Core.so.6.8.2[1e44eb,72dp0eccd000+346000] likely on CPU 1 (core 1, socket 0)</p>
+<p>The panel has crashed due to browser multiple times not just once as displayed in this log. I am not able to remember if I was experiencing a panel crash on the time this was logged.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_5</link>
+        <pubDate>Thu, 08 Oct 2026 19:20:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5660</guid>
+      </item>
+      <item>
+        <title>Help Understanding the Project&#39;s Direction and Target Audience</title>
+        <dc:creator><![CDATA[@JustPassinThru]]></dc:creator>
+        <description><![CDATA[ <p>Without going too deeply into my setup, I have run my basic setup thru all of the AI models and get nothing but acknowledgement of how sound Kicksecure KVM as a baremetal host and running siloed VMs. I think Gemini called it a poor man’s Qubes without the hardware headaches. So to the devs…kudos to you</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/help-understanding-the-projects-direction-and-target-audience/1784#post_16</link>
+        <pubDate>Wed, 07 Oct 2026 17:31:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5659</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>That library is used by lxqt-panel. Can you share the output line?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_4</link>
+        <pubDate>Tue, 06 Oct 2026 23:11:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5658</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>I’m running out of ideas at this point. You might try running Prime95 on the host to stress-test the CPU, but be aware that it is source-available software, not freedom software. You might also try running a different host OS in case the issue is a bug in QEMU.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855?page=2#post_23</link>
+        <pubDate>Tue, 06 Oct 2026 23:10:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5657</guid>
+      </item>
+      <item>
+        <title>Mullvad Causing Panel Crash</title>
+        <dc:creator><![CDATA[@kiyoc34009]]></dc:creator>
+        <description><![CDATA[ <p>No, only one in libQt6Core.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/mullvad-causing-panel-crash/1860#post_3</link>
+        <pubDate>Tue, 06 Oct 2026 22:07:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5656</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@zzgg]]></dc:creator>
+        <description><![CDATA[ <p>Hi, just letting you know I ran this and received no errors.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855?page=2#post_22</link>
+        <pubDate>Mon, 05 Oct 2026 15:05:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5654</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>If you run <code>sudo journalctl | grep 'I/O error'</code> on the host, do you see any errors displayed?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_21</link>
+        <pubDate>Mon, 05 Oct 2026 01:24:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5653</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@zzgg]]></dc:creator>
+        <description><![CDATA[ <p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705" title="IMG_8475"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705_2_375x500.jpeg" alt="IMG_8475" data-base62-sha1="1GlyhaSA2nRJXdr9RMSJFUFBBhH" width="375" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705_2_375x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705_2_562x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/0bcba4512a12a8e2ae5e7a59a51cc42ee245f705_2_750x1000.jpeg 2x" data-dominant-color="373963"></a></div><p></p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_20</link>
+        <pubDate>Sun, 04 Oct 2026 17:00:48 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5652</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>That’s bizarre. The host’s network setup should not be affecting the VM’s graphics stack.</p>
+<p>Can you run memtest86+ on the host and make sure your RAM is functioning properly?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_18</link>
+        <pubDate>Sun, 04 Oct 2026 00:41:39 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5650</guid>
+      </item>
+      <item>
+        <title>Random black screen with white ‘login’ prompt repeatedly appearing whilst using VM</title>
+        <dc:creator><![CDATA[@zzgg]]></dc:creator>
+        <description><![CDATA[ <p>I’ve tried this but it does not seem to affect crash frequency.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-black-screen-with-white-login-prompt-repeatedly-appearing-whilst-using-vm/1855#post_17</link>
+        <pubDate>Sat, 03 Oct 2026 21:51:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5649</guid>
+      </item>
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group" data-username="sublime.dust" data-post="3" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<p>It said to ensure that there are no nvidia drivers installed. When I checked for nvidia packages, I found that firmware-nvidia-graphics was installed.</p>
+</blockquote>
+</aside>
+<p>Slight misunderstanding: the page says to ensure the <em>proprietary</em> NVIDIA driver is not installed. There are two NVIDIA drivers: Nouveau, an open-source driver that comes with Kicksecure, and the otherwise-unnamed proprietary NVIDIA driver. You want to keep Nouveau present, and ensure that no proprietary NVIDIA driver package (like <code>nvidia-driver</code> or <code>cuda-driver</code>) is installed.</p>
+<p><code>firmware-nvidia-graphics</code> is not actually a driver. Drivers consist of code that runs as part of the OS itself, while firmware typically runs on a processor built into the hardware it makes work. In this case, <code>firmware-nvidia-graphics</code> contains code that runs <em>on</em> the NVIDIA GPU itself, outside of the operating system. Both Nouveau and the proprietary NVIDIA driver require firmware, so it makes sense that removing it caused a black screen. It should remain installed.</p>
+<p>If you haven’t installed the proprietary NVIDIA driver, you can ignore step 1 of the software rendering steps and just do the remaining steps.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858#post_4</link>
+        <pubDate>Fri, 02 Oct 2026 02:19:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5648</guid>
+      </item>
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[@sublime.dust]]></dc:creator>
+        <description><![CDATA[ <p>Thank you so much for the help!! It is greatly appreciated. With the exception of the random crashes, I was able to solve all of the problems I mentioned (or at least continue to ignore them with peace of mind).</p>
+<p>I tried following the instructions to force software rendering (Pixman) on this page <a href="https://www.kicksecure.com/wiki/Nvidia#Software_Rendering_(Pixman)" class="inline-onebox" rel="noopener nofollow ugc">NVIDIA</a></p>
+<p>It said to ensure that there are no nvidia drivers installed. When I checked for nvidia packages, I found that firmware-nvidia-graphics was installed.</p>
+<pre><code class="lang-auto">[user ~]% apt list --installed | grep nvidia                
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+firmware-nvidia-graphics/stable,now 20250410-2 all [installed]
+</code></pre>
+<p>When I run ‘sudo apt-get purge firmware-nvidia-graphics’ and reboot the machine, it just takes me to a plain black screen. I had to use a TTY session to reinstall it.  I confirmed that nouveau is in fact installed on my device with ‘lsmod | grep nouveau’. Is something misconfigured, or is my hardware not compatible with nouveau?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858#post_3</link>
+        <pubDate>Fri, 02 Oct 2026 02:12:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5647</guid>
+      </item>
+      <item>
+        <title>Random log outs, amd_pstate failed to load, keyring mismatch, and more!</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <aside class="quote no-group quote-modified" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol>
+<li>Logged out of computer at random intervals<br>
+…</li>
+<li>systemd critical journal messages - nouveau, channel 16 killed</li>
+</ol>
+</blockquote>
+</aside>
+<p>These are almost certainly related. Some solutions are documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1790839813" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener" title="03:14PM - 19 September 2026">Kicksecure – 19 Sep 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/5/51/Kicksecure-image-twitter-post.jpg?version=30a0ad75271a4836786771c345c960b8" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Nvidia#Sudden_logout" target="_blank" rel="noopener">Sudden logout - NVIDIA</a></h3>
+
+  <p>Because Nouveau runs by default in Kicksecure (the Debian default), issues may occur at any time. A recent example is a sudden black login screen caused by Nouveau GSP crashing and terminating labwc, which is used in lxqt-wayland [12]. | NVIDIA -...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="2">
+<li>Kanshi config is not automatically applied upon startup</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you place your configuration file at <code>~/.config/kanshi/config</code>? That file must exist and not be empty for Kanshi to turn on at login. It might be turning on too early though, at least in theory. You can place the <code>systemctl --user restart kanshi</code> command in <code>~/.config/labwc/autostart</code> to get it to run when the graphical session starts.</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="3">
+<li>amd_pstate failed to load</li>
+</ol>
+</blockquote>
+</aside>
+<p>If the system is otherwise functional, you can probably ignore this. The missing module is to be expected, because amd_pstate is built into the core kernel binary in Debian (and by extension in Kicksecure, since we use Debian’s kernel).</p>
+<aside class="quote no-group" data-username="sublime.dust" data-post="1" data-topic="1858">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/48db29/48.png" class="avatar"> sublime.dust:</div>
+<blockquote>
+<ol start="4">
+<li>sudo apt update: Error due to keyring mismatch</li>
+</ol>
+</blockquote>
+</aside>
+<p>Did you install Mullvad Browser using browser-choice, and then try to follow the instructions to install Mullvad VPN? That could cause a conflict, since browser-choice enables Mullvad’s repository, and following the VPN instructions thereafter will attempt to add the repository a second time. Since you’ve deleted both files that might hold the Mullvad repo keys, the easiest solution is probably to:</p>
+<ol>
+<li>Delete <code>/etc/apt/sources.list.d/mullvad.list</code> and <code>/etc/apt/sources.list.d/mullvad.sources</code></li>
+<li>Uninstall Mullvad Browser: <code>sudo apt purge mullvad-browser</code></li>
+<li>Open browser-choice and reinstall Mullvad Browser</li>
+<li>Run <code>sudo apt install mullvad-vpn</code> to install the VPN from the same repo the browser came from</li>
+</ol> ]]></description>
+        <link>https://forums.kicksecure.com/t/random-log-outs-amd-pstate-failed-to-load-keyring-mismatch-and-more/1858#post_2</link>
+        <pubDate>Thu, 01 Oct 2026 23:08:05 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5646</guid>
+      </item>
+  </channel>
+</rss>
