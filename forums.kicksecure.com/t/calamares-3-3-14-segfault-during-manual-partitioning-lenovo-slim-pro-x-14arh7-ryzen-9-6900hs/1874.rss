@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+    <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874</link>
+    <description>AI helped a bit in identifying this. Am i only supposed to do full disk erasure? thx!
+
+**Environment**
+
+* ISO: Kicksecure-LXQt-18.2.4.2.Intel_AMD64.iso (OpenPGP-verified)
+* Boot method: Ventoy USB, GRUB → &quot;LIVE Mode | SYSMAINT Session&quot; → Install System
+* Hardware: Lenovo Slim Pro X 14ARH7, AMD Ryzen 9 6900HS (Rembrandt), Samsung PM9A1 1TB NVMe + Nividia igpu
+* Target disk already contains another Linux install (Ubuntu) with existing ESP; installing into unallocated free space
+
+**Steps to reproduce**
+
+1. Launch installer from live session
+2. Manual partitioning on `/dev/nvme0n1`
+3. Create new partitions in existing free space (\~96GB): ext4 `/boot` (5GB), LUKS2 root (80GB), fat32 ESP (10GB), plus a small swap; existing ESP assigned to `/boot/efi` (not reformatted)
+4. Begin install
+
+**Result (100% reproducible, 3/3 attempts)**
+
+`Starting job &quot;Create new 80000MiB partition on /dev/nvme0n1&quot; (5 / 33) /usr/bin/install-host-calamares-wrapper: line 31: Segmentation fault (core dumped) calamares -D8 ## ERROR detected! ## BASH_COMMAND: sudo --non-interactive --preserve-env install-host-calamares-wrapper ## Please report this bug! `
+
+The crash occurs at the first partition-creation job, before any partition modifications complete. No error popup from the GUI — only the terminal wrapper output. After the crash the live desktop also exhibits intermittent UI stalls.
+
+**Additional info**
+
+* `session.log` and the complete install-host output available on request
+* Calamares reports: version 3.3.14, Qt 6.8.2, backend plugin &quot;pmsfdiskbackendplugin&quot;</description>
+    
+    <lastBuildDate>Fri, 06 Nov 2026 00:37:40 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[
+            <p>Thx for the quick response. Yeah, the ai probably summarized somewhat off. i created about an the root, a new efi, and the boot like in the instructions on installing. I’ll try the wihtout the ventoy and let you know!</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/3</link>
+        <pubDate>Fri, 06 Nov 2026 00:37:40 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-3</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="kicksecure.jr6xp" data-post="1" data-topic="1874">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/9e8a1a/48.png" class="avatar"> kicksecure.jr6xp:</div>
+<blockquote>
+<ul>
+<li>Boot method: Ventoy USB</li>
+</ul>
+</blockquote>
+</aside>
+<p>This might be a problem. Try using one of the USB drive preparation methods documented here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/ISO#2_Write_the_ISO_to_USB">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793867417" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/ISO#2_Write_the_ISO_to_USB" target="_blank" rel="noopener" title="06:06PM - 15 May 2026">Kicksecure – 15 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kicksecure.com/wiki/ISO#2_Write_the_ISO_to_USB" target="_blank" rel="noopener">2 Write the ISO to USB - Kicksecure Live ISO (via USB) and Installation</a></h3>
+
+  <p>Kicksecure Installation Guide. This guide will help you download the ISO image, create your bootable media, and install Kicksecure on your computer.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>After doing that, try to install again and see if you get better results.</p>
+<aside class="quote no-group quote-modified" data-username="kicksecure.jr6xp" data-post="1" data-topic="1874">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/9e8a1a/48.png" class="avatar"> kicksecure.jr6xp:</div>
+<blockquote>
+<p>Starting job “Create new 80000MiB partition on /dev/nvme0n1” (5 / 33) /usr/bin/install-host-calamares-wrapper: line 31: Segmentation fault (core dumped) calamares -D8 ## ERROR detected! ## BASH_COMMAND: sudo --non-interactive --preserve-env install-host-calamares-wrapper ## Please report this bug!</p>
+</blockquote>
+</aside>
+<p>There’s a chance you’re running into <a href="https://github.com/Kicksecure/security-misc/pull/218#issuecomment-2351143021">this bug</a>, which only affects some hardware. If using an alternate flashing method doesn’t work, use the technique documented here to remove the <code>gather_data_sampling=force</code> kernel parameter while booting the live ISO:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793867417" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" alt="" width="690" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change" target="_blank" rel="noopener">Temporary Kernel Boot Parameter Change - grub bootloader Configuration Changes</a></h3>
+
+  <p>Kernel Boot Parameter Changes</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="kicksecure.jr6xp" data-post="1" data-topic="1874">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/k/9e8a1a/48.png" class="avatar"> kicksecure.jr6xp:</div>
+<blockquote>
+<ol start="3">
+<li>Create new partitions in existing free space (~96GB): ext4 <code>/boot</code> (5GB), LUKS2 root (80GB), fat32 ESP (10GB), plus a small swap; existing ESP assigned to <code>/boot/efi</code> (not reformatted)</li>
+</ol>
+</blockquote>
+</aside>
+<p>This is a bit self-contradictory; your partition sizes sum up to about 96 GB but you say you’re both creating an EFI system partition and that you’re reusing an old one. Which is it?</p>
+<p>(Also, 10 GB is <em>massive</em> for an EFI system partition… Kicksecure’s is 300 MB by default and even that’s mostly unused.)</p>
+<p>Given your partition sizes, it looks like you’re using manual partitioning. If neither of the above fixes work, please list step by step exactly which buttons you click and in what order to create the manual partitioning layout you’re using, as this will probably be necessary to reproduce the issue, and we might notice something you’re clicking that’s incorrect. Screenshots would also be useful. Manual partitioning is rather fiddly and easy to get wrong.</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/2</link>
+        <pubDate>Fri, 06 Nov 2026 00:23:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-2</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[
+            <p>AI helped a bit in identifying this. Am i only supposed to do full disk erasure? thx!</p>
+<p><strong>Environment</strong></p>
+<ul>
+<li>ISO: Kicksecure-LXQt-18.2.4.2.Intel_AMD64.iso (OpenPGP-verified)</li>
+<li>Boot method: Ventoy USB, GRUB → “LIVE Mode | SYSMAINT Session” → Install System</li>
+<li>Hardware: Lenovo Slim Pro X 14ARH7, AMD Ryzen 9 6900HS (Rembrandt), Samsung PM9A1 1TB NVMe + Nividia igpu</li>
+<li>Target disk already contains another Linux install (Ubuntu) with existing ESP; installing into unallocated free space</li>
+</ul>
+<p><strong>Steps to reproduce</strong></p>
+<ol>
+<li>Launch installer from live session</li>
+<li>Manual partitioning on <code>/dev/nvme0n1</code></li>
+<li>Create new partitions in existing free space (~96GB): ext4 <code>/boot</code> (5GB), LUKS2 root (80GB), fat32 ESP (10GB), plus a small swap; existing ESP assigned to <code>/boot/efi</code> (not reformatted)</li>
+<li>Begin install</li>
+</ol>
+<p><strong>Result (100% reproducible, 3/3 attempts)</strong></p>
+<p><code>Starting job "Create new 80000MiB partition on /dev/nvme0n1" (5 / 33) /usr/bin/install-host-calamares-wrapper: line 31: Segmentation fault (core dumped) calamares -D8 ## ERROR detected! ## BASH_COMMAND: sudo --non-interactive --preserve-env install-host-calamares-wrapper ## Please report this bug! </code></p>
+<p>The crash occurs at the first partition-creation job, before any partition modifications complete. No error popup from the GUI — only the terminal wrapper output. After the crash the live desktop also exhibits intermittent UI stalls.</p>
+<p><strong>Additional info</strong></p>
+<ul>
+<li><code>session.log</code> and the complete install-host output available on request</li>
+<li>Calamares reports: version 3.3.14, Qt 6.8.2, backend plugin “pmsfdiskbackendplugin”</li>
+</ul>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/1</link>
+        <pubDate>Thu, 05 Nov 2026 23:01:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-1</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+  </channel>
+</rss>
