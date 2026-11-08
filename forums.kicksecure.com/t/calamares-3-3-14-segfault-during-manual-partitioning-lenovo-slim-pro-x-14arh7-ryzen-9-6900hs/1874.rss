@@ -30,9 +30,120 @@ The crash occurs at the first partition-creation job, before any partition modif
 * `session.log` and the complete install-host output available on request
 * Calamares reports: version 3.3.14, Qt 6.8.2, backend plugin &quot;pmsfdiskbackendplugin&quot;</description>
     
-    <lastBuildDate>Fri, 06 Nov 2026 00:37:40 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 08 Nov 2026 00:02:32 +0000</lastBuildDate>
     <category>Support</category>
     <atom:link href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Some of the screens are missing which makes it a bit hard to tell what’s happening, but:</p>
+<ol>
+<li>Are you sure your system is actually a UEFI system? You probably already know this, but there are two major firmware types used by most PCs, BIOS (older) and UEFI (newer).</li>
+<li>If your previous OS install didn’t have an EFI system partition, you’re using a BIOS system, and should NOT create a UEFI partition at all. If your system <em>does</em> have an EFI partition, do NOT create a new one, instead tell Calamares to reuse the existing one without reformatting it.</li>
+</ol>
+<p>That might resolve the problem.</p>
+<p>If the issue really is that you can’t create new LUKS partitions alongside existing ones, then you may have to use the erase disk option. I somewhat doubt this is the issue though. Will try to reproduce.</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/8</link>
+        <pubDate>Sun, 08 Nov 2026 00:02:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-8</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> used ai to do some troubleshooting.</p>
+<p>could this be the issue and some solutions?? or s omething else?</p>
+<p><strong>The Calamares LUKS/partition-creation segfault — known, widespread, with workarounds</strong></p>
+<p>This class of bug isn’t limited to Kicksecure; it appears across distros that ship Calamares with the sfdisk backend, especially in <strong>manual partitioning + LUKS</strong> scenarios:</p>
+<p><strong>Upstream bug trackers:</strong></p>
+<ul>
+<li><strong>Codeberg Calamares <span class="hashtag-raw">#2426</span> — “Segmentation fault while creating LUKS partitions”</strong> (the exact crash: installer dies at partition-creation job) → <a href="https://codeberg.org/Calamares/calamares/issues/2426" class="inline-onebox" rel="noopener nofollow ugc">#2426 - Segmentation fault while creating LUKS partitions - Calamares/calamares - Codeberg.org</a></li>
+<li><strong>Codeberg Calamares <span class="hashtag-raw">#2454</span> — “Replace Partition” splits partitions incorrectly with separate /boot</strong> (Calamares forces a new /boot + LUKS split even when one exists; workaround: delete existing /boot and LUKS first) → <a href="https://codeberg.org/Calamares/calamares/issues/2454" class="inline-onebox" rel="noopener nofollow ugc">#2454 - "Replace Partion" Issues with Separate /boot - Calamares/calamares - Codeberg.org</a></li>
+</ul>
+<p><strong>Reports on other distros (same backend, same symptom):</strong></p>
+<ul>
+<li>Manjaro: installer stops/crashes making a LUKS partition — <a href="https://forum.manjaro.org/t/manjaro-installer-stops-after-trying-to-make-a-luks-partition/113827" class="inline-onebox" rel="noopener nofollow ugc">Manjaro Installer Stops After Trying to Make a LUKS Partition - Support - Manjaro Linux Forum</a></li>
+<li>Manjaro: Calamares crashes entering custom partitioning — <a href="https://forum.manjaro.org/t/calamares-crashes-upon-entering-the-custom-disk-partitioning-section/174322" class="inline-onebox" rel="noopener nofollow ugc">Calamares crashes upon entering the custom disk partitioning section - Support - Manjaro Linux Forum</a></li>
+<li>Manjaro: encryption partition bugs (formatting an existing LUKS/ext4 partition never offers the encrypt option) — <a href="https://forum.manjaro.org/t/problem-with-calamares-and-partition-encryption/140510" class="inline-onebox" rel="noopener nofollow ugc">Problem with calamares and partition encryption - Support - Manjaro Linux Forum</a></li>
+<li>Nitrux: “fails to create new partitions” — <a href="https://github.com/Nitrux/nitrux-bug-tracker/issues/55" class="inline-onebox" rel="noopener nofollow ugc">Calamares fails to create new partitions when selecting 'Replace partition' · Issue #55 · Nitrux/nitrux-bug-tracker · GitHub</a></li>
+</ul>
+<p><strong>Workarounds people actually use successfully:</strong></p>
+<ol>
+<li><strong>Pre-create all partitions outside Calamares</strong> (parted/cryptsetup/mkfs from a live session or GParted), then in Calamares only assign mount points to existing partitions — the buggy create-partition job never runs. This is the most-cited reliable workaround across the threads above.</li>
+<li><strong>Delete the pre-existing LUKS//boot partitions first</strong>, then use guided modes (“Replace a partition” / “Erase disk”) — guided paths bypass manual-mode bugs (per Codeberg <span class="hashtag-raw">#2454</span> and the Manjaro threads).</li>
+<li><strong>Skip Calamares entirely</strong> — some users install the underlying distro via its non-Calamares installer (e.g., Debian’s debian-installer) or by-hand Arch-style, then use <strong>Kicksecure’s official Debian-morph path</strong> ( <a href="http://kicksecure.com/wiki/Debian" class="inline-onebox" rel="noopener nofollow ugc">Install Kicksecure inside Debian</a> ) to transform it into Kicksecure.</li>
+<li><strong>Fresh-disk installs don’t hit it</strong> — the crash class is overwhelmingly “manual partitions + existing LUKS/dual-boot disk”; Erase Disk on an empty drive generally works.</li>
+</ol>
+<p><strong>Root cause area (for devs):</strong> the KPMCore <code>pmsfdiskbackendplugin</code> partition-creation path, and Calamares’s LUKS handling limitations (it also has documented weaknesses reusing existing LUKS partitions and separate /boot configurations, per the Calamares LUKS deployment wiki: <a href="https://github.com/calamares/calamares/wiki/Deploy-LUKS" class="inline-onebox" rel="noopener nofollow ugc">Deploy LUKS · calamares/calamares Wiki · GitHub</a>).</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/7</link>
+        <pubDate>Fri, 06 Nov 2026 23:52:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-7</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> Yes, i’ve uploaded 4 pics.</p>
+<p>My process:</p>
+<ol>
+<li>create boot /boot with no flag at about 5000mb</li>
+<li>create efi at /boot/efi with boot flag at about 1000mb</li>
+<li>create root at / with root flag abtou 50-70 gb.</li>
+</ol>
+<p>is t his sufficient??</p>
+<div class="d-image-grid">
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a23aa911d664a1a0c77f86af8b403a61c0ced9dc.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/a23aa911d664a1a0c77f86af8b403a61c0ced9dc" title="2026-11-06-16-25-00-301"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a23aa911d664a1a0c77f86af8b403a61c0ced9dc_2_375x500.jpeg" alt="2026-11-06-16-25-00-301" data-base62-sha1="n991PMKIE0P7DUtDFgqAWHu8hwo" width="375" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a23aa911d664a1a0c77f86af8b403a61c0ced9dc_2_375x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/a23aa911d664a1a0c77f86af8b403a61c0ced9dc_2_562x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/a23aa911d664a1a0c77f86af8b403a61c0ced9dc_2_750x1000.jpeg 2x" data-dominant-color="9F9E96"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26" title="2026-11-06-16-24-30-394"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26_2_375x500.jpeg" alt="2026-11-06-16-24-30-394" data-base62-sha1="wCILePFeeSdk3INwu99LJayJ87s" width="375" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26_2_375x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26_2_562x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/e4a61d4f724e0a90c003707c5e5a93c4abb7eb26_2_750x1000.jpeg 2x" data-dominant-color="A6AAA9"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/a76a286ce2b5a491041eadae9481783fa3a343eb.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/a76a286ce2b5a491041eadae9481783fa3a343eb" title="2026-11-06-16-23-36-840"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/a76a286ce2b5a491041eadae9481783fa3a343eb_2_375x500.jpeg" alt="2026-11-06-16-23-36-840" data-base62-sha1="nT1b9jeawuFH5UVCs65rt2mAXtV" width="375" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/a76a286ce2b5a491041eadae9481783fa3a343eb_2_375x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/a76a286ce2b5a491041eadae9481783fa3a343eb_2_562x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/a76a286ce2b5a491041eadae9481783fa3a343eb_2_750x1000.jpeg 2x" data-dominant-color="A2A4A3"></a></div><p></p>
+<p></p><div class="lightbox-wrapper"><a class="lightbox" href="https://forums.kicksecure.com/uploads/default/original/1X/3459f7e777d90a91c1e7621e70da7f184d54ae90.jpeg" data-download-href="https://forums.kicksecure.com/uploads/default/3459f7e777d90a91c1e7621e70da7f184d54ae90" title="2026-11-06-16-22-51-884"><img src="https://forums.kicksecure.com/uploads/default/optimized/1X/3459f7e777d90a91c1e7621e70da7f184d54ae90_2_375x500.jpeg" alt="2026-11-06-16-22-51-884" data-base62-sha1="7t7Ag2NIND2tlrwUuj7pyxpCwZa" width="375" height="500" srcset="https://forums.kicksecure.com/uploads/default/optimized/1X/3459f7e777d90a91c1e7621e70da7f184d54ae90_2_375x500.jpeg, https://forums.kicksecure.com/uploads/default/optimized/1X/3459f7e777d90a91c1e7621e70da7f184d54ae90_2_562x750.jpeg 1.5x, https://forums.kicksecure.com/uploads/default/optimized/1X/3459f7e777d90a91c1e7621e70da7f184d54ae90_2_750x1000.jpeg 2x" data-dominant-color="A4A6A6"></a></div><p></p>
+</div>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/6</link>
+        <pubDate>Fri, 06 Nov 2026 22:58:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-6</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>The GPUs are pretty unlikely to be a problem, and I doubt a full erase is necessary (though if you don’t care about losing your existing install, it might be worth a try)…</p>
+<aside class="quote no-group" data-username="arraybolt3" data-post="2" data-topic="1874">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/arraybolt3/48/88_2.png" class="avatar"> arraybolt3:</div>
+<blockquote>
+<p>Given your partition sizes, it looks like you’re using manual partitioning. If neither of the above fixes work, please list step by step exactly which buttons you click and in what order to create the manual partitioning layout you’re using, as this will probably be necessary to reproduce the issue, and we might notice something you’re clicking that’s incorrect. Screenshots would also be useful.</p>
+</blockquote>
+</aside>
+<p>If this is an option for you, it would be helpful to have this data.</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/5</link>
+        <pubDate>Fri, 06 Nov 2026 21:45:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-5</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[
+            <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> I installed on a new USB, and I i got rid of gather_data_sampling=force and that didn’t do anything. I do have 2 gpu’s - AMD and Nvidia in my laptop. Could that be the reason? Or maybe i just have to do a full system erasure? Thx for the help!</p>
+          <p><a href="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874/4</link>
+        <pubDate>Fri, 06 Nov 2026 21:37:37 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1874-4</guid>
+        <source url="https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874.rss">Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</source>
+      </item>
       <item>
         <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
         <dc:creator><![CDATA[kicksecure.jr6xp]]></dc:creator>
