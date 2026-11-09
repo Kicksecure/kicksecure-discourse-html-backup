@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>How to change rolling direction of trackpad?</title>
+    <link>https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736</link>
+    <description>The system throws the ball back at me and tells me to do it myself in something called compositor, which is not found neither in applications nor in any file search I did. What is compositor? Or kanshi, behind which some other settings are hidden?</description>
+    
+    <lastBuildDate>Thu, 28 May 2026 04:57:21 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>How to change rolling direction of trackpad?</title>
+        <dc:creator><![CDATA[ahoy]]></dc:creator>
+        <description><![CDATA[
+            <p>It worked. Magic. Wonderful to to see things rolling to right direction, at least in this window…after the<code>reconfiguration</code>on the bigger one starts the rolling direction on screen might seem less of a problem. Much obliged also for the detailed explanation and links you provided <img src="https://forums.kicksecure.com/images/emoji/twitter/slight_smile.png?v=15" title=":slight_smile:" class="emoji" alt=":slight_smile:" loading="lazy" width="20" height="20"></p>
+          <p><a href="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/3</link>
+        <pubDate>Thu, 28 May 2026 04:57:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1736-3</guid>
+        <source url="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736.rss">How to change rolling direction of trackpad?</source>
+      </item>
+      <item>
+        <title>How to change rolling direction of trackpad?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="ahoy" data-post="1" data-topic="1736">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/50afbb/48.png" class="avatar"> ahoy:</div>
+<blockquote>
+<p>The system throws the ball back at me and tells me to do it myself in something called compositor, which is not found neither in applications nor in any file search I did.</p>
+</blockquote>
+</aside>
+<p>Open a terminal, and run <code>mkdir ~/.config/labwc</code>. Then run <code>featherpad ~/.config/labwc/rc.xml</code>, and in the text editor window, place the following text:</p>
+<pre><code class="lang-auto">&lt;?xml version="1.0"?&gt;
+&lt;labwc_config&gt;
+  &lt;libinput&gt;
+    &lt;device category="default"&gt;
+      &lt;naturalScroll&gt;yes&lt;/naturalScroll&gt;
+    &lt;/device&gt;
+  &lt;/libinput&gt;
+&lt;/labwc_config&gt;
+</code></pre>
+<p>Save the file, then close the FeatherPad window. Back in the terminal, run <code>labwc --reconfigure</code>. Your scrolling direction should now be reversed. More info about configuring labwc can be found here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://labwc.github.io/labwc-config.5.html">
+  <header class="source">
+      <img src="https://labwc.github.io/img/labwc.png" class="site-icon" alt="" width="200" height="200">
+
+      <a href="https://labwc.github.io/labwc-config.5.html" target="_blank" rel="noopener">labwc.github.io</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:199/61;"><img src="https://labwc.github.io/img/labwc3-with-text.png" class="thumbnail" alt="" width="199" height="61"></div>
+
+<h3><a href="https://labwc.github.io/labwc-config.5.html" target="_blank" rel="noopener">labwc</a></h3>
+
+  <p>An Openbox inspired wlroots-based stacking Wayland compositor.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="quote no-group" data-username="ahoy" data-post="1" data-topic="1736">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/50afbb/48.png" class="avatar"> ahoy:</div>
+<blockquote>
+<p>What is compositor?</p>
+</blockquote>
+</aside>
+<p>You have a bunch of graphical applications you run (web browsers, file managers, text editors, etc.). Each of those applications have to display their user interface at the same time as other applications. Only one application can draw pixels on the screen at once though, so you have a “master” application that handles all of the real pixel drawing, then all of the applications you interact with directly talk to that “master” application and provide it the pixels those applications want drawn. That “master” application is a “Wayland compositor”, or simply a “compositor”. There are lots of Wayland compositors out there; the one Kicksecure includes is called “labwc”. There are some other jobs the compositor does, like displaying the title bar and borders for many apps, and forwarding your keyboard and mouse actions to the appropriate apps.</p>
+<p>If you research it online, you may find “Wayland” being contrasted with a thing called X11. X11 is basically an older implementation of the same concept (one master program that allows multiple other programs to draw pixels at the same time).</p>
+<aside class="quote no-group" data-username="ahoy" data-post="1" data-topic="1736">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/50afbb/48.png" class="avatar"> ahoy:</div>
+<blockquote>
+<p>Or kanshi, behind which some other settings are hidden?</p>
+</blockquote>
+</aside>
+<p>Kanshi is for configuring displays (i.e. setting their resolution and telling the system where each display is in relation to the others in a multiple-monitor scenario). See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Desktop#Persistent_configuration_(kanshi)">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1779867013" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Desktop#Persistent_configuration_(kanshi)" target="_blank" rel="noopener" title="06:06PM - 15 May 2026">Kicksecure – 15 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/9/91/Desktop-tips.png?version=e84f1c332466d62808e0eeae57eebd50" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/Desktop#Persistent_configuration_(kanshi)" target="_blank" rel="noopener">Persistent configuration (kanshi) - Platform-specific Desktop Tips</a></h3>
+
+  <p>kanshi is a background process that adjusts your monitor configuration as displays are plugged in and unplugged. Monitor setups are configured in one or more profiles. Kanshi will automatically detect the correct profile to apply depending on what...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/2</link>
+        <pubDate>Thu, 28 May 2026 04:16:25 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1736-2</guid>
+        <source url="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736.rss">How to change rolling direction of trackpad?</source>
+      </item>
+      <item>
+        <title>How to change rolling direction of trackpad?</title>
+        <dc:creator><![CDATA[ahoy]]></dc:creator>
+        <description><![CDATA[
+            <p>The system throws the ball back at me and tells me to do it myself in something called compositor, which is not found neither in applications nor in any file search I did. What is compositor? Or kanshi, behind which some other settings are hidden?</p>
+          <p><a href="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736/1</link>
+        <pubDate>Thu, 28 May 2026 03:56:55 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1736-1</guid>
+        <source url="https://forums.kicksecure.com/t/how-to-change-rolling-direction-of-trackpad/1736.rss">How to change rolling direction of trackpad?</source>
+      </item>
+  </channel>
+</rss>
