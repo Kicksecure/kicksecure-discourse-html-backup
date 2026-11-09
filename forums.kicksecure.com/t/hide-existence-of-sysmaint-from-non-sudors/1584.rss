@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Hide existence of sysmaint from non-sudors?</title>
+    <link>https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584</link>
+    <description>Directly hiding a specific home directory like /home/sysmaint from `ls /home` is challenging because /home is typically world executable (mode 711 or 755), allowing directory listing even if individual homes are private. Non-root users can still see directory names via ls /home. Complete hiding requires mount bind tricks, separate filesystems, or containers. No simple chmod.
+
+Present view access mode of `/home/sysmaint` from non-privileged viewpoint: \\
+
+```
+[user ~]% chmod-calc /home/sysmaint                                       
+Permissions for: &#39;/home/sysmaint&#39;
+Type: Directory
+Owner: sysmaint
+Group: sysmaint
+Octal Permissions: 750
+File Size: 4096 bytes
+Link Count: 11
+Hidden File: No
+ACLs: none
+Extended Attributes: none
+Capabilities: None
+Immutable (chattr +i): No
+
+Symlink: No
+
+Parent Folder Symlink: No
+
+Category   Read   Write  Execute 
+Owner      Yes    Yes    Yes     
+Group      Yes    No     Yes     
+Public     No     No     No      
+
+Special Attributes:
+SUID: Not Set
+SGID: Not Set
+Sticky Bit: Not Set
+[user ~]% 
+```
+
+Can we use separate mount namespaces to effectively hide filesystem artifacts and process details associated with a sysmaint, while preserving the underlying permissions and capabilities. Cause currently by the design on linux in general and on Kicksecure with user-sysmaint-split.
+
+Example commands that get what I mean here when booted in *User* mode:
+
+```
+[user ~]% ls /home                 
+sysmaint  user
+[user ~]% 
+```
+
+```
+[user ~]% id sysmaint &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &quot;exists&quot; || echo &quot;not found&quot;
+
+exists
+[user ~]% 
+```
+
+```
+[user ~]% getent passwd sysmaint
+sysmaint:x:1001:1001::/home/sysmaint:/usr/bin/zsh
+[user ~]%
+```
+
+However find can see sysmaint existence:
+
+```
+[user ~]% find -user sysmaint 
+[user ~]% find /home -user sysmaint
+/home/sysmaint
+find: ‘/home/sysmaint’: Permission denied
+zsh: exit 1     find /home -user sysmaint
+[user ~]% 
+```
+
+Further case: In Qubes Kicksecure disposable VMs, `uptime -p` displays: \\
+
+```
+[user ~]% uptime -p
+up 0 hour, 0 minutes
+[user ~]% 
+```
+
+However in Kicksecure you get something like: \\
+
+```
+[user ~]% uptime -p
+up 1 hour, 34 minutes
+[user ~]% 
+```
+
+I know this related to isolation via virtualization but I was wondering if we could achieve something similar for non sudo users if eve possible without being security theater cosplay or pointless?
+
+Noted executing ps aux under user revealed no traces signaling sysmaint’s operation via active threads, by the way.
+
+Moreover, post login as standard/persistent user, then opting for logout (not a shutdown), the login screen display rejected “sysmaint” as user does not exist. Precisely how does sysmaint mask itself from regular users during login authentication from non sysmaint boot?</description>
+    
+    <lastBuildDate>Sun, 08 Feb 2026 06:28:00 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Hide existence of sysmaint from non-sudors?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>I don’t really understand how hiding the existence of the sysmaint account from other account is useful. Like you demonstrate, there are many different ways of telling that an account named <code>sysmaint</code> exists. A fundamental assumption made by most applications in the Linux ecosystem is that the existence of any user account on the system is public knowledge to any (non-sandboxed) application running on the system. Kicksecure does nothing to change this, but it does already do a number of things to make this knowledge rather difficult for an attacker to use. See:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1770453014" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation" target="_blank" rel="noopener" title="11:06AM - 06 February 2026">Kicksecure – 6 Feb 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/430;"><img src="https://www.kicksecure.com/w/images/0/0a/Useraccountisolatiom123123.jpg?version=e416cef5dc8640671de9593ca2bf4175" class="thumbnail" alt="" width="640" height="430"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Dev/Strong_Linux_User_Account_Isolation" target="_blank" rel="noopener">Strong Linux User Account Isolation</a></h3>
+
+  <p>Protect Linux User Accounts against Brute Force Attacks, Administrative ("Root") Account Locking, Console Lockdown, sudo password sniffing, X Windows System / Wayland Password Sniffing, /proc/pid/sched spy on keystrokes, Linux user account cracking,...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>The way user-sysmaint-split is designed, no processes should be running as account <code>sysmaint</code> when booted into a user session, and no processes should be running as a standard, non-<code>sysmaint</code> account in a sysmaint session unless the user manually runs them using <code>sudo -u user ...</code> or similar. This means there is no inter-process communication attack surface that could be used for a malicious process to elevate its privileges to <code>sysmaint</code>.</p>
+<p>Even if it was possible to hide the <code>sysmaint</code> home folder’s existence, scrub it from databases, and otherwise make it vanish from the system, malware would still be able to know that the account existed because the package <code>user-sysmaint-split</code> is installed. At that point we’d have to start messing with the internals of apt to hide what packages are and are not installed, and messing with a bunch of other places in the file system to hide files indicating that <code>user-sysmaint-split</code> was installed. This would not only be a profound amount of work, it would also potentially break parts of Kicksecure that check if user-sysmaint-split is installed and modify their behavior if so.</p>
+<p>tl;dr: I can’t see a use for this, and I think it’s impossible. The threat model I think you have in mind however can be dealt with, and there are already steps we’ve taken to defend against it.</p>
+          <p><a href="https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584/2</link>
+        <pubDate>Sun, 08 Feb 2026 06:20:28 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1584-2</guid>
+        <source url="https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584.rss">Hide existence of sysmaint from non-sudors?</source>
+      </item>
+      <item>
+        <title>Hide existence of sysmaint from non-sudors?</title>
+        <dc:creator><![CDATA[Tengu]]></dc:creator>
+        <description><![CDATA[
+            <p>Directly hiding a specific home directory like /home/sysmaint from <code>ls /home</code> is challenging because /home is typically world executable (mode 711 or 755), allowing directory listing even if individual homes are private. Non-root users can still see directory names via ls /home. Complete hiding requires mount bind tricks, separate filesystems, or containers. No simple chmod.</p>
+<p>Present view access mode of <code>/home/sysmaint</code> from non-privileged viewpoint: \</p>
+<pre><code class="lang-auto">[user ~]% chmod-calc /home/sysmaint                                       
+Permissions for: '/home/sysmaint'
+Type: Directory
+Owner: sysmaint
+Group: sysmaint
+Octal Permissions: 750
+File Size: 4096 bytes
+Link Count: 11
+Hidden File: No
+ACLs: none
+Extended Attributes: none
+Capabilities: None
+Immutable (chattr +i): No
+
+Symlink: No
+
+Parent Folder Symlink: No
+
+Category   Read   Write  Execute 
+Owner      Yes    Yes    Yes     
+Group      Yes    No     Yes     
+Public     No     No     No      
+
+Special Attributes:
+SUID: Not Set
+SGID: Not Set
+Sticky Bit: Not Set
+[user ~]% 
+</code></pre>
+<p>Can we use separate mount namespaces to effectively hide filesystem artifacts and process details associated with a sysmaint, while preserving the underlying permissions and capabilities. Cause currently by the design on linux in general and on Kicksecure with user-sysmaint-split.</p>
+<p>Example commands that get what I mean here when booted in <em>User</em> mode:</p>
+<pre><code class="lang-auto">[user ~]% ls /home                 
+sysmaint  user
+[user ~]% 
+</code></pre>
+<pre><code class="lang-auto">[user ~]% id sysmaint &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo "exists" || echo "not found"
+
+exists
+[user ~]% 
+</code></pre>
+<pre><code class="lang-auto">[user ~]% getent passwd sysmaint
+sysmaint:x:1001:1001::/home/sysmaint:/usr/bin/zsh
+[user ~]%
+</code></pre>
+<p>However find can see sysmaint existence:</p>
+<pre><code class="lang-auto">[user ~]% find -user sysmaint 
+[user ~]% find /home -user sysmaint
+/home/sysmaint
+find: ‘/home/sysmaint’: Permission denied
+zsh: exit 1     find /home -user sysmaint
+[user ~]% 
+</code></pre>
+<p>Further case: In Qubes Kicksecure disposable VMs, <code>uptime -p</code> displays: \</p>
+<pre><code class="lang-auto">[user ~]% uptime -p
+up 0 hour, 0 minutes
+[user ~]% 
+</code></pre>
+<p>However in Kicksecure you get something like: \</p>
+<pre><code class="lang-auto">[user ~]% uptime -p
+up 1 hour, 34 minutes
+[user ~]% 
+</code></pre>
+<p>I know this related to isolation via virtualization but I was wondering if we could achieve something similar for non sudo users if eve possible without being security theater cosplay or pointless?</p>
+<p>Noted executing ps aux under user revealed no traces signaling sysmaint’s operation via active threads, by the way.</p>
+<p>Moreover, post login as standard/persistent user, then opting for logout (not a shutdown), the login screen display rejected “sysmaint” as user does not exist. Precisely how does sysmaint mask itself from regular users during login authentication from non sysmaint boot?</p>
+          <p><a href="https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584/1</link>
+        <pubDate>Sun, 08 Feb 2026 05:44:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1584-1</guid>
+        <source url="https://forums.kicksecure.com/t/hide-existence-of-sysmaint-from-non-sudors/1584.rss">Hide existence of sysmaint from non-sudors?</source>
+      </item>
+  </channel>
+</rss>
