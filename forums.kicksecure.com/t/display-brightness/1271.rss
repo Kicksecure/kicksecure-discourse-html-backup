@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Display brightness</title>
+    <link>https://forums.kicksecure.com/t/display-brightness/1271</link>
+    <description>After fresh installation i can&#39;t adjust brightness slide in user session first boot mode
+
+Its adjustable only on second boot option system maintenance tasks.</description>
+    
+    <lastBuildDate>Sun, 30 Nov 2025 20:52:04 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/display-brightness/1271.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>Untested, but if xbacklight works by telling the X server to modify the brightness values itself, <em>and X is running as root</em>, it will likely work.</p>
+<p>The core reason things broke in this area in the first place is that modifying files under /sys/class/backlight requires root access. We previously had sudoers config in place that allowed Xfce utilities to modify the backlight files by running <code>sudo</code> without needing a password, but when we introduced user-sysmaint-split that broke. In Kicksecure 18, backlight-tool-dist uses privleap (a simpler, more restrictive privilege escalation framework) to do backlight changes, which is a lot safer than when we were doing it with sudo and still works. That tool isn’t available for Kicksecure 17 though.</p>
+<p>Any tool that requires direct root access to modify the backlight brightness will not work on Kicksecure 17. Tools that are able to circumvent this requirement (by, for instance, running a privileged systemd service that listens for backlight change requests from unprivileged processes) will likely work. (This is also why backlight tools work normally in sysmaint mode - the <code>sysmaint</code> account has access to tools like <code>sudo</code> and <code>pkexec</code>, and so backlight adjustment tools that rely on <code>sudo</code> and <code>pkexec</code> are able to function normally there.)</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/13">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/13</link>
+        <pubDate>Sun, 30 Nov 2025 20:52:04 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-13</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>Fine</p>
+<p>On Debian xbacklight  doesn’t work until this fix →</p>
+<p>If you get the “No outputs have backlight property” error, it is because xrandr/xbacklight does not choose the right directory in /sys/class/backlight. You can specify the directory by setting the Backlight option of the device section in xorg.conf. For instance, if the name of the directory is intel_backlight, the device section can be configured as follows:</p>
+<h2><a name="p-3719-etcx11xorgconf-1" class="anchor" href="https://forums.kicksecure.com#p-3719-etcx11xorgconf-1" aria-label="Heading link"></a>/etc/X11/xorg.conf</h2>
+<p>Section “Device”<br>
+Identifier  “Card0”<br>
+Driver      “intel”<br>
+Option      “Backlight”  “intel_backlight”<br>
+EndSectio</p>
+<p>Will Xbacklight work with Kicksecuere 17  so i can go back to it ?</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/12">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/12</link>
+        <pubDate>Sun, 30 Nov 2025 20:37:13 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-12</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Kicksecure 18 + Xfce backlight changing:</p>
+<ul>
+<li>Since <a href="https://forums.whonix.org/t/lxqt-wayland-support/18178" class="inline-onebox">LXQt - Wayland support - Development - Whonix Forum</a> was implemented…
+<ul>
+<li>For Xfce now applicable: <a href="https://www.kicksecure.com/wiki/Other_Desktop_Environments" class="inline-onebox">Other Desktop Environments</a></li>
+</ul>
+</li>
+<li>Using <code>backlight-tool-dist</code> on the command line might be possible.
+<ul>
+<li><a href="https://www.kicksecure.com/wiki/Untested">Untested</a>.</li>
+</ul>
+</li>
+</ul>
+<p>Try running:</p>
+<pre><code>backlight-tool-dist
+</code></pre>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/11">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/11</link>
+        <pubDate>Sat, 29 Nov 2025 06:31:34 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-11</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="6" data-topic="1271">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Fixed in Kicksecure 18</p>
+</blockquote>
+</aside>
+<p>Also possible on 18 xfce or only Lxqt ?</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/10</link>
+        <pubDate>Sat, 29 Nov 2025 01:41:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-10</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>There will be a new once available.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Stay_Tuned">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1764063024" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Stay_Tuned" target="_blank" rel="noopener" title="09:35PM - 28 May 2025">Kicksecure – 28 May 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:240/160;"><img src="https://www.kicksecure.com/w/images/0/04/Carriage-clock-797833640.jpg?version=15a18faccbb15e38b3c30d56354d7e11" class="thumbnail" alt="" width="240" height="160"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Stay_Tuned" target="_blank" rel="noopener">Follow Kicksecure Developments</a></h3>
+
+  <p>It is absolutely crucial to subscribe to and read the latest Kicksecure news category 'important-news' to stay in touch with ongoing developments. This way users benefit from notifications concerning important security advisories, potential upgrade...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/8</link>
+        <pubDate>Tue, 25 Nov 2025 19:46:31 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-8</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>Very pleased to hear that you’ve resolved the problem</p>
+<p>Only Kicksecure 17 are visible on download site</p>
+<p>What’s the link for Kicksecure 18 xfce ISO</p>
+<p>Appreciate it</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/7</link>
+        <pubDate>Tue, 25 Nov 2025 02:06:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-7</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Fixed in Kicksecure 18.</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/6</link>
+        <pubDate>Mon, 24 Nov 2025 21:03:56 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-6</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>I tried all fixes from google without any result.</p>
+<p>Hopefully the problem will be solved with the Kicksecure 18 , otherwise my Kicksecure  remains unusable.</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/5</link>
+        <pubDate>Sat, 22 Nov 2025 21:01:29 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-5</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[anon55240553]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="suse211213" data-post="2" data-topic="1271">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/s/35a633/48.png" class="avatar"> suse211213:</div>
+<blockquote>
+<p>Its always on max .</p>
+</blockquote>
+</aside>
+<p>me had same issuee dn’t no y it set to max ? shuld be set to 75 or 80</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/4</link>
+        <pubDate>Mon, 22 Sep 2025 05:30:49 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-4</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>We had a similar issue in the past.<br>
+(<a href="https://forums.whonix.org/t/xfce4-power-manager-xfpm-power-backlight-helper-pkexec-lxsudo-popup/8764" class="inline-onebox">xfce4-power-manager xfpm-power-backlight-helper pkexec lxsudo popup - Development - Whonix Forum</a>)</p>
+<p>Back then the solution was a sudoers exception. That won’t work nowadays due to <a href="https://www.kicksecure.com/wiki/Sysmaint">user-sysmaint-split</a>.</p>
+<p>This will be looked into before Kicksecure 18 (Debian trixie based) release.</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/3</link>
+        <pubDate>Fri, 05 Sep 2025 08:48:51 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-3</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>Its always on max . it should be adjustable</p>
+<p>Any fix?</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/2</link>
+        <pubDate>Wed, 03 Sep 2025 03:17:16 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-2</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+      <item>
+        <title>Display brightness</title>
+        <dc:creator><![CDATA[suse211213]]></dc:creator>
+        <description><![CDATA[
+            <p>After fresh installation i can’t adjust brightness slide in user session first boot mode</p>
+<p>Its adjustable only on second boot option system maintenance tasks.</p>
+          <p><a href="https://forums.kicksecure.com/t/display-brightness/1271/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/display-brightness/1271/1</link>
+        <pubDate>Sun, 31 Aug 2025 23:57:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1271-1</guid>
+        <source url="https://forums.kicksecure.com/t/display-brightness/1271.rss">Display brightness</source>
+      </item>
+  </channel>
+</rss>
