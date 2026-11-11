@@ -5,6 +5,107 @@
     <link>https://forums.kicksecure.com</link>
     <description>Latest posts</description>
       <item>
+        <title>Weird error on exit/logout when using Bash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Fix created, pending review and merge:</p>
+<aside class="onebox githubcommit" data-onebox-src="https://github.com/ArrayBolt3/helper-scripts/commit/8352d385753a8ff1e8dd24c0cdbbf38158277229">
+  <header class="source">
+
+      <a href="https://github.com/ArrayBolt3/helper-scripts/commit/8352d385753a8ff1e8dd24c0cdbbf38158277229" target="_blank" rel="noopener">github.com/ArrayBolt3/helper-scripts</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="github-row">
+  <div class="github-icon-container" title="Commit">
+    <svg width="60" height="60" class="github-icon" viewBox="0 0 14 16" aria-hidden="true"><path fill-rule="evenodd" d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z"></path></svg>
+  </div>
+
+  <div class="github-info-container">
+    <h4>
+      <a href="https://github.com/ArrayBolt3/helper-scripts/commit/8352d385753a8ff1e8dd24c0cdbbf38158277229" target="_blank" rel="noopener">end-of-options</a>
+    </h4>
+
+    <div class="github-info">
+      <div class="date">
+        committed <span class="discourse-local-date" data-format="ll" data-date="2026-11-09" data-time="04:49:45" data-timezone="UTC">04:49AM - 09 Nov 26 UTC</span>
+      </div>
+
+      <div class="user">
+        <a href="https://github.com/ArrayBolt3" target="_blank" rel="noopener">
+          <img alt="" src="https://avatars.githubusercontent.com/u/104878738?v=4" class="onebox-avatar-inline" width="20" height="20">
+          ArrayBolt3
+        </a>
+      </div>
+
+      <div class="lines" title="changed 1 files with 2 additions and 2 deletions">
+        <a href="https://github.com/ArrayBolt3/helper-scripts/commit/8352d385753a8ff1e8dd24c0cdbbf38158277229" target="_blank" rel="noopener">
+          <span class="added">+2</span>
+          <span class="removed">-2</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Note that this make take a while to make it into packages due to some other large changes that are in progress. In the mean time, the error is relatively benign and can be ignored. You could also apply the change manually if it looks safe to you and you’d like to help test it.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/weird-error-on-exit-logout-when-using-bash/1879#post_4</link>
+        <pubDate>Mon, 09 Nov 2026 04:51:19 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5744</guid>
+      </item>
+      <item>
+        <title>Weird error on exit/logout when using Bash</title>
+        <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
+        <description><![CDATA[ <p>Reproduced, debugged, found root cause. When you log in with bash, the name given to the shell is <code>-bash</code> (the trailing dash indicating that it’s a login shell). Some code called during the login process and potentially during the logout process as well runs <code>command -v &lt;name of calling executable&gt;</code> to determine the path to the running script. In this context, that runs <code>command -v -bash</code>. But because of the leading dash, bash attempts to parse <code>-bash</code> as a series of options (<code>-b</code>, <code>-a</code>, <code>-s</code>, <code>-h</code>), and because <code>command</code> doesn’t recognize a <code>-b</code> option, it gripes about it, and thus you see the error.</p>
+<p>I think the solution is to run <code>command -v -- &lt;name of calling executable&gt;</code> instead. The <code>--</code> will tell Bash that what follows should not be parsed as options.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/weird-error-on-exit-logout-when-using-bash/1879#post_3</link>
+        <pubDate>Mon, 09 Nov 2026 04:45:44 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5743</guid>
+      </item>
+      <item>
+        <title>Weird error on exit/logout when using Bash</title>
+        <dc:creator><![CDATA[@ksuser227]]></dc:creator>
+        <description><![CDATA[ <p>Changing my shell to Zsh does seem silence/hide the error. So, I’m looking for suggestions on how to resolve the logout/exit behavior when using Bash.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/weird-error-on-exit-logout-when-using-bash/1879#post_2</link>
+        <pubDate>Mon, 09 Nov 2026 02:36:33 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5742</guid>
+      </item>
+      <item>
+        <title>Weird error on exit/logout when using Bash</title>
+        <dc:creator><![CDATA[@ksuser227]]></dc:creator>
+        <description><![CDATA[ <p>I’m building a kicksecure server from a Debian 13 minimal install. The process goes fine and the system is generally functional.</p>
+<p>The issue that I’m running into occurs after installing <code>kicksecure-vm-server</code> onto the Debian 13 install.</p>
+<p>Whenever I logout or exit from SSH/terminal, there are error messages:</p>
+<pre><code class="lang-auto">$ exit
+logout
+-bash: command: -b: invalid option
+command: usage: command [-pVv] command [arg ...]
+</code></pre>
+<p>The <code>logout</code> is expected but I cannot figure where or why there is a bash error pertaining to a <code>-b</code> option. Can someone please provide me some insights or where to look next? Thank you!!</p>
+<p>Is this perhaps due to me using/preferring bash instead of zsh?</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/weird-error-on-exit-logout-when-using-bash/1879#post_1</link>
+        <pubDate>Mon, 09 Nov 2026 02:13:32 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5740</guid>
+      </item>
+      <item>
+        <title>Calamares 3.3.14 segfault during manual partitioning (Lenovo Slim Pro X 14ARH7 / Ryzen 9 6900HS)</title>
+        <dc:creator><![CDATA[@kicksecure.jr6xp]]></dc:creator>
+        <description><![CDATA[ <p><a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@arraybolt3</a> yes it was efi. i mounted my original efi on my boot/efi for kickseucre. then i changed the root to ext4 instead of luks2. that seemed to solve the issue. Thx! But I think i’ll just eraase my whole disk and install a clean version so i can have luks2.</p> ]]></description>
+        <link>https://forums.kicksecure.com/t/calamares-3-3-14-segfault-during-manual-partitioning-lenovo-slim-pro-x-14arh7-ryzen-9-6900hs/1874#post_9</link>
+        <pubDate>Mon, 09 Nov 2026 01:59:21 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-5739</guid>
+      </item>
+      <item>
         <title>Screen brightness does not change</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <p>Known issue, fix has already been created but hasn’t been merged since there are other things that need to be fixed before it can be merged.</p> ]]></description>
@@ -374,14 +475,6 @@ sudo dracut --regenerate-all --force</p>
         <guid isPermaLink="false">forums.kicksecure.com-post-5722</guid>
       </item>
       <item>
-        <title>Help Understanding the Project&#39;s Direction and Target Audience</title>
-        <dc:creator><![CDATA[@catharinewine25315]]></dc:creator>
-        <description><![CDATA[ <p>The RAM point is what keeps me on a hardened desktop rather than Qubes — the practical ceiling on VMs matters more than the architecture on paper. What appeals to me in this thread is the emphasis on a minimal package set: fewer moving parts means less to audit and less to break when removing things. I also like the idea of the poll, though self-selected answers will skew toward whichever setup is most comfortable to describe. Still, as a rough signal for ordering the TODO stack it beats guessing at who the users actually are.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/help-understanding-the-projects-direction-and-target-audience/1784#post_17</link>
-        <pubDate>Fri, 06 Nov 2026 19:37:37 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5719</guid>
-      </item>
-      <item>
         <title>How to verify running Kicksecure version?</title>
         <dc:creator><![CDATA[@arraybolt3]]></dc:creator>
         <description><![CDATA[ <aside class="quote no-group" data-username="catharinewine25315" data-post="7" data-topic="1872">
@@ -439,14 +532,6 @@ sudo dracut --regenerate-all --force</p>
         <link>https://forums.kicksecure.com/t/how-to-verify-running-kicksecure-version/1872#post_8</link>
         <pubDate>Fri, 06 Nov 2026 18:02:52 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5718</guid>
-      </item>
-      <item>
-        <title>How to verify running Kicksecure version?</title>
-        <dc:creator><![CDATA[@catharinewine25315]]></dc:creator>
-        <description><![CDATA[ <p>The point about embedding a point release number only telling you that one package is recent enough is fair, and I think it undercuts the original GUI request. Still, a minor version in /etc/kicksecure_version has some diagnostic value even if it can’t prove you’re fully updated: it tells you which snapshot you actually booted, which helps when filing a bug report or comparing two machines. Combining that with systemcheck seems reasonable—the version file for identification, systemcheck for update status. An EOL warning would arguably be the more useful thing to surface.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/how-to-verify-running-kicksecure-version/1872#post_7</link>
-        <pubDate>Fri, 06 Nov 2026 17:44:12 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5717</guid>
       </item>
       <item>
         <title>Kicksecure Qubes Template Development - Qubes Integration</title>
@@ -1293,258 +1378,6 @@ EMERG_SHUTDOWN_KEYS="KEY_LEFTCTRL|KEY_RIGHTCTRL,KEY_LEFTALT|KEY_RIGHTALT,KEY_END
         <link>https://forums.kicksecure.com/t/emerg-shutdown-not-showing-any-messages-at-shutdown-18-0-8-7-feedback/1488#post_3</link>
         <pubDate>Sat, 24 Oct 2026 21:06:58 +0000</pubDate>
         <guid isPermaLink="false">forums.kicksecure.com-post-5686</guid>
-      </item>
-      <item>
-        <title>Use ClockVM instead of sdwdate</title>
-        <dc:creator><![CDATA[@moviepuff]]></dc:creator>
-        <description><![CDATA[ <p>I’ve figured it out, to use ClockVM instead of sdwdate you have to do the following:</p>
-<p>Disable <a href="https://www.kicksecure.com/wiki/Sdwdate#Disable_Autostart" rel="noopener nofollow ugc">sdwdate</a> and <a href="https://www.kicksecure.com/wiki/Sdwdate-gui#Disable_Autostart" rel="noopener nofollow ugc">sdwdate-gui</a> (I guess you could also use dummy-dependency but I disabled them instead).</p>
-<p>Delete <code>/etc/sdwdate.d/qubes-sync-time-disabled-by-sdwdate.marker</code> file, I put <code>rm -f /etc/sdwdate.d/qubes-sync-time-disabled-by-sdwdate.marker</code> in <code>/rw/config/rc.local</code> in the AppVM so it would get deleted at every AppVM startup in case any updates would recreate the file (you have to do this in every AppVM which is based on the Kicksecure template where you have disabled sdwdate and sdwdate-gui.</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/use-clockvm-instead-of-sdwdate/1864#post_3</link>
-        <pubDate>Sat, 24 Oct 2026 17:16:59 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5685</guid>
-      </item>
-      <item>
-        <title>Kicksecure 18.2.4.2 - Point Release!</title>
-        <dc:creator><![CDATA[@Patrick]]></dc:creator>
-        <description><![CDATA[ <h1><a name="p-5684-download-1" class="anchor" href="https://forums.kicksecure.com#p-5684-download-1" aria-label="Heading link"></a>Download</h1>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793694613" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="05:55PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/6/63/Download-kicksecure.jpg?version=9adcc5bcba92e65719a7341228d32e1c" class="thumbnail" alt="" width="690" height="388"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
-
-  <p>FREE download of Kicksecure. Kicksecure can be installed on a physical machine as the host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
-<hr>
-<h1><a name="p-5684-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-5684-upgrade-2" aria-label="Heading link"></a>Upgrade</h1>
-<p>Alternatively, an in-place release upgrade is possible using the <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
-<hr>
-<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
-<hr>
-<p>Please Donate!</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793694613" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="06:03PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
-
-  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<p>Please Contribute!</p>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
-  <header class="source">
-      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1793694613" class="site-icon" alt="" width="40" height="40">
-
-      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="10:30AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" alt="" width="483" height="500"></div>
-
-<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
-
-  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
-
-<hr>
-<h1><a name="p-5684-security-vulnerability-fixes-3" class="anchor" href="https://forums.kicksecure.com#p-5684-security-vulnerability-fixes-3" aria-label="Heading link"></a>Security Vulnerability Fixes</h1>
-<ul>
-<li>Fixed a local privilege escalation vulnerability in a script in the legacy-dist package. (Thanks to Uladzislau Hryharovich for responsibly disclosing this security vulnerability!)
-<ul>
-<li>(The fixed legacy-dist package was already available in the stable repository before this release announcement.)</li>
-<li>A full write-up by the reporter will be linked here once published.
-<ul>
-<li>EDIT: <a href="https://www.linkedin.com/posts/uladzislau-hryharovich-6220a1338_cybersecurity-infosec-vulnerability-share-7520200499598344192-SKnw/" class="inline-onebox">#cybersecurity #infosec #vulnerability #vulnerabilityresearch #responsibledisclosure #linux | Uladzislau Hryharovich</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h1><a name="p-5684-major-changes-4" class="anchor" href="https://forums.kicksecure.com#p-5684-major-changes-4" aria-label="Heading link"></a>Major Changes</h1>
-<ul>
-<li>Ported the ISO build process from live-build (run through derivative-maker) to native derivative-maker (without live-build).</li>
-<li>Progress towards reproducible builds.
-<ul>
-<li>Packages built by Kicksecure are already reproducible. Independent reproduction of packages and comparison of official builds with reproduced builds are welcome so that potential issues can be identified and resolved.</li>
-<li>Non-Qubes-Whonix: the next release might be reproducible.</li>
-<li>(Qubes-Whonix: reproducibility depends on Qubes, not Qubes-Whonix.)</li>
-</ul>
-</li>
-<li>Internal code review and fixes.</li>
-<li><a href="https://forums.whonix.org/t/continuous-integration-ci-whonix-testing-automated-test-suite/15839/107">Major progress on automated testing.</a></li>
-<li>derivative-maker: opt-in, disabled-by-default SMBIOS reader that allows kernel parameters to be configured at the virtualizer level.</li>
-</ul>
-<h1><a name="p-5684-notable-changes-5" class="anchor" href="https://forums.kicksecure.com#p-5684-notable-changes-5" aria-label="Heading link"></a>Notable Changes</h1>
-<ul>
-<li>desktop-config-dist:
-<ul>
-<li>Removed the QTerminal drop-down keybinding.</li>
-<li>Ported livecheck to Qt6; added D-Bus activation to launch new instances from the Start Menu.</li>
-<li>Restricted livecheck to one running instance at a time; the Start Menu entry now raises the existing livecheck window.</li>
-<li>Hidden the gparted Start Menu entry in user sessions by default (non-functional due to user-sysmaint-split).</li>
-</ul>
-</li>
-<li>developer-meta-files (build and maintenance tooling):
-<ul>
-<li>dm-review-branch: review changes on a git branch before merging.</li>
-<li>dm-reproducible-compare-artifacts: compare two builds artifact-by-artifact to verify that they are identical.</li>
-<li>dm-nbd-cleanup: clean up leftover block devices after a build.</li>
-<li>bash-style-guide: project coding style guide for shell scripts.</li>
-<li>dm-reproducible-buildinfo: record the exact build inputs needed to reproduce a build.</li>
-<li>dm-reproducible-fetch: fetch build sources deterministically so everyone starts with the same inputs.</li>
-<li>dm-reproducible-verify: rebuild and verify that the result matches the official release bit-for-bit.</li>
-<li>dm-normalize-fat-partition: remove nondeterministic FAT filesystem metadata to make images reproducible.</li>
-<li>dm-debconf-normalize-owners: normalize debconf database ownership for reproducible packaging.</li>
-<li>dm-update-frozen-snapshot: update the pinned package repository snapshot used by the build.</li>
-<li>dm-github-org-security-report: collect open security alerts across the GitHub organization.</li>
-<li>dm-github-org-policy: apply a standard security policy across the GitHub organization’s repositories.</li>
-</ul>
-</li>
-<li>dist-system-metadata:
-<ul>
-<li>New dist-system-metadata package.<br>
-System metadata has been split out of tb-updater so that frequently changing<br>
-data (pinned Tor Browser versions and the Tor Project signing key) can<br>
-migrate between suites independently of the larger code packages.
-<ul>
-<li>usr/share/dist-system-metadata/tb-updater/{tbb_hardcoded_version_stable,<br>
-tbb_hardcoded_version_alpha,tbb-team.asc}</li>
-<li>Minimal dependencies allow it to migrate to the stable repository quickly.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>helper-scripts:
-<ul>
-<li>dpkg-reconfigure-noninteractive: reconfigure a package without interactive prompts.</li>
-<li>Fixed qubes-dom0-update over sys-whonix.<br>
-<a href="https://forums.whonix.org/t/cant-update-dom0-over-sys-whonix-in-qubesos/23624" class="inline-onebox">Can't update dom0 over sys-whonix in QubesOS - Qubes-Whonix - Whonix Forum</a></li>
-<li>check-ref-commits: check git commit references for validity.</li>
-<li>lockfile.sh: simple file-locking helper to prevent concurrent runs (to be renamed to lockfile.bsh).</li>
-<li>detect-software-rendering: detect whether the GPU is using software (CPU) rendering.</li>
-<li>vbox-ova-reproducible-normalize: normalize a VirtualBox .ova for reproducible builds.</li>
-</ul>
-</li>
-<li>GRUB:
-<ul>
-<li>Theme: pin the theme variant instead of detecting the build host’s firmware, improving reproducibility.</li>
-<li>Improved support for /boot (symlinks, FAT32), with further improvements planned for the next version.</li>
-</ul>
-</li>
-<li>live-config-dist:
-<ul>
-<li>argument-squashfs-pack: build an optional compressed (squashfs) filesystem for a live system to be installed by the Calamares installer. (Development tool)</li>
-<li>persistence-setup: set up persistent storage for live systems. (Development tool)</li>
-<li>mok-enroll-opt-in: enable opt-in Secure Boot key (MOK) enrollment via the MOK_ENROLL=1 environment variable. (Development tool)</li>
-</ul>
-</li>
-<li>security-misc:
-<ul>
-<li>SSH client and server configuration: restricted key exchange to post-quantum algorithms.</li>
-</ul>
-</li>
-<li>usability-misc:
-<ul>
-<li>console-setup: run only when a framebuffer is available (skip on serial/headless systems).<br>
-On a headless or serial-only boot (no GPU and therefore no /dev/fb0), setupcon’s setfont<br>
-cannot work and repeatedly logs ‘setfont: ERROR ioctl(KDFONTOP): Invalid argument’<br>
-in the journal. The console-setup.service drop-in is now gated by<br>
-ConditionPathExists=/dev/fb0, allowing it to be skipped cleanly in these environments.<br>
-Normal graphical boots have /dev/fb0 and remain unaffected.</li>
-</ul>
-</li>
-<li>vm-config-dist:
-<ul>
-<li>Improved detection of whether software rendering is enabled.</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h1><a name="p-5684-full-difference-of-all-changes-6" class="anchor" href="https://forums.kicksecure.com#p-5684-full-difference-of-all-changes-6" aria-label="Heading link"></a>Full difference of all changes</h1>
-<aside class="onebox allowlistedgeneric" data-onebox-src="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only">
-  <header class="source">
-      <img src="https://github.githubassets.com/favicons/favicon.svg" class="site-icon" alt="" width="32" height="32">
-
-      <a href="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only" target="_blank" rel="noopener">GitHub</a>
-  </header>
-
-  <article class="onebox-body">
-    <div class="aspect-image" style="--aspect-ratio:690/344;"><img src="https://opengraph.githubassets.com/10797c117db3ef9317f41ffbf273f05d845895cdd3b25a8fde9f631c3649faa7/Kicksecure/derivative-maker" class="thumbnail" alt="" width="690" height="345"></div>
-
-<h3><a href="https://github.com/Kicksecure/derivative-maker/compare/18.2.1.9-developers-only...18.2.4.1-developers-only" target="_blank" rel="noopener">Comparing 18.2.1.9-developers-only...18.2.4.1-developers-only ·...</a></h3>
-
-  <p>Build tool for Kicksecure and Whonix derivative images - Comparing 18.2.1.9-developers-only...18.2.4.1-developers-only · Kicksecure/derivative-maker</p>
-
-
-  </article>
-
-  <div class="onebox-metadata">
-    
-    
-  </div>
-
-  <div style="clear: both"></div>
-</aside>
- ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-18-2-4-2-point-release/1869#post_1</link>
-        <pubDate>Sat, 24 Oct 2026 16:46:27 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5684</guid>
-      </item>
-      <item>
-        <title>Kicksecure KVM VM broken</title>
-        <dc:creator><![CDATA[@whistleblow]]></dc:creator>
-        <description><![CDATA[ <p>Well yeah It’s too complicated for sure! I will just start with a new VM!</p>
-<p>Thank you very much for youre help sir!:))</p> ]]></description>
-        <link>https://forums.kicksecure.com/t/kicksecure-kvm-vm-broken/1867#post_8</link>
-        <pubDate>Wed, 21 Oct 2026 05:46:52 +0000</pubDate>
-        <guid isPermaLink="false">forums.kicksecure.com-post-5682</guid>
       </item>
   </channel>
 </rss>
