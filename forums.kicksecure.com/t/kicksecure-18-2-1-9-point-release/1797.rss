@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Kicksecure 18.2.1.9 - Point Release!</title>
+    <link>https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797</link>
+    <description>
+# Download
+
+https://www.kicksecure.com/wiki/Download
+
+([What is a point release?](https://www.kicksecure.com/wiki/Point_Release))
+
+----
+
+# Upgrade
+
+Alternatively, an in-place release upgrade is possible using the [Kicksecure repository](https://www.kicksecure.com/wiki/Project-APT-Repository).
+
+----
+
+This release would not have been possible without the numerous supporters of Kicksecure!
+
+----
+
+Please Donate!
+
+https://www.kicksecure.com/wiki/Donate
+
+----
+
+Please Contribute!
+
+https://www.kicksecure.com/wiki/Contribute
+
+----
+
+# Major Changes
+
+* General:
+  * Responsibly disclosed a number of security issues (CVEs) to upstream projects: https://www.kicksecure.com/wiki/Dev/research
+  * introduced https://www.kicksecure.com/wiki/Vulnerability_Disclosure_Policy
+  * Internal security review
+  * GitHub Dependabot configuration
+  * GitHub settings hardening
+  * https://forums.kicksecure.com/t/port-to-sequoia-pgp-sq-gnupg-gpg-replacement-openpgp/260
+  * use https://forums.kicksecure.com/t/sequoia-git-sq-git/1638
+  * mitigate https://forums.kicksecure.com/t/executable-mime-handler-risks/1794
+  * Improved input sanitization and Unicode handling.
+  * Add github native CI for builds (Thanks to @Mycobee!)
+* VirtualBox
+  * work in progress fixing clipboard sharing host to VM and VM to host -&gt; https://forums.whonix.org/t/how-to-enable-shared-clipboard-drag-and-drop-features-inside-virtualbox-with-whonix-lxqt-18-0-8-7/22588/99
+  * Replace virtualbox-guest-x11 and virtualbox-guest-utils with virtualbox-guest-additions-iso or a sufficiently new Oracle build of VirtualBox (Thanks to @ArrayBolt3!)
+  * new package uploaded to Kicksecure repository: virtualbox-guest-additions-iso (from Oracle)
+  * VirtualBox sound setting: AC97 -&gt; Intel HDA
+    * https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211/31
+* CodeQL, and fuzzing:
+  * helper-scripts (its python portion)
+  * msgcollector (dito)
+  * security-misc&#39;s file manager shim
+* anon-apt-sources-list:
+  * Disable Debian Fast Track repository by default (Thanks to @ArrayBolt3!)
+* apparmor-profile-torbrowser:
+  * maintenance fixes
+* bindp:
+  * Add more compiler hardening flags (Thanks to @ArrayBolt3!)
+* bootclockrandomization:
+  * Make startup on QubesOS require a NetVM (Thanks to @ArrayBolt3!)
+* browser-choice:
+  * Fix logic bug that prevented use in unrestricted admin mode (Thanks to @ArrayBolt3!)
+* debug-misc:
+  * sysctl: add cd-rom/dvd debugging settings (Thanks to @raja!)
+* desktop-config-dist:
+  * Document rationale for GDK_BACKEND and QT_QPA_PLATFORM variables in 15_desktop-config-dist.sh (Thanks to @ArrayBolt3!)
+  * Set labwc icon theme properly, use a non-Python logo for livecheck (Thanks to @ArrayBolt3!)
+  * Adjust default terminal size to work better on small screens (Thanks to @ArrayBolt3!)
+* dist-base-files:
+  * Add account &#39;user&#39; to group &#39;privleap&#39; during initial installation (Thanks to @ArrayBolt3!)
+* kicksecure-base-files:
+  * Fix the default archiver application (Thanks to @ArrayBolt3!)
+* kicksecure-meta-packages:
+  * Stop including qps on LXQt systems by default (Thanks to @ArrayBolt3!)
+  * Add dummy packages for more Secure Boot-related packages (Thanks to @ArrayBolt3!)
+  * Remove dummy-dependency-fwupd-signed metapackage, because fwupd-signed is a virtual package (Thanks to @ArrayBolt3!)
+  * Add dependency on mokutil, add additional dummy packages, split firmware-nonfreedom into arch-specific and arch-independent metapackages (Thanks to @ArrayBolt3!)
+  * fix: gpg-from-sq vs uwt
+* legacy-dist:
+  * Use debug-kicksecure-enabled helper in fixes script (Thanks to @ArrayBolt3!)
+  * Enable set -x when debug-kicksecure qvm-service is enabled (Thanks to @ArrayBolt3!)
+  * Fix default archiver setting for existing users, fix a broken shellcheck include (Thanks to @ArrayBolt3!)
+  * Mark qps for autoremoval (Thanks to @ArrayBolt3!)
+  * Avoid error if dummy-dependency is not installed at upgrade time (Thanks to @ArrayBolt3!)
+  * Comments, avoid error if xscreensaver is not installed at upgrade time (Thanks to @ArrayBolt3!)
+  * deprecate version 17
+  * Fix kloak failing to start after a Whonix-Workstation 17 release upgrade (Thanks to @ArrayBolt3!)
+  * Fix release upgrade bug caused by usability-misc&#39;s policy-rc.d disappearing mid-upgrade (Thanks to @ArrayBolt3!)
+* mediawiki-shell
+  * major improvements and hardening
+* KVM:
+  * Port to QEMU Session (Thanks to @HulaHoop!)
+* sdwdate:
+  * Add more compiler hardening flags (Thanks to @ArrayBolt3!)
+  * Fix sleep duration calculation (Thanks to @ArrayBolt3!)
+  * Replace os.system() with subprocess.run() for safer URL handling (adapted from Claude Code) (Thanks to @ArrayBolt3!)
+  * Make startup on QubesOS require a NetVM (Thanks to @ArrayBolt3!)
+* sdwdate-gui:
+  * Reliability improvements.
+  * Make startup on QubesOS require a NetVM (Thanks to @ArrayBolt3!)
+* security-misc:
+  * D-Bus shim for org.freedesktop.FileManager1: fm-shim-frontend (Thanks to @ArrayBolt3!)
+  * Prevent using systemd-journald to write text to other user&#39;s terminals (Thanks to @ArrayBolt3!)
+  * sysctl: add cd-rom/dvd hardening settings (Thanks to @raja!)
+  * Add reference on IOMMU vulnerabilities (Thanks to @raja!)
+  * Merge Meltdown mitigtions for ARM64 and X86_64 CPUs (Thanks to @raja!)
+  * Reorder panic settings (Thanks to @raja!)
+  * Add minor notices to panic on oopses and warnings (Thanks to @raja!)
+  * Update docs on `proc_mem.force_override` (Thanks to @raja!)
+  * Add KSPP partial compliance notice for `proc_mem.force_override=ptrace` (Thanks to @raja!)
+* serial-console-enable (opt-in package):
+  * grub: set GRUB_TERMINAL=serial unconditionally
+  * fix use of GRUB boot menu through serial console
+* sysmaint-panel:
+  * Use sysmaint-panel&#39;s start menu icon as a window icon as well (Thanks to @ArrayBolt3!)
+* systemcheck:
+  * improved log analysis in `systemcheck --verbose`
+  * Add CLI metapackages to check_packages.bsh (Thanks to @ArrayBolt3!)
+  * Add test for if /etc, /var, and /usr are ephemeral in AppVMs (Thanks to @ArrayBolt3!)
+  * fix: do not report missing tirdad kernel module on non-Intel/AMD64 as error because it is expected and not actionable by users https://forums.whonix.org/t/often-systemcheck-errors-notifications-whonix-18lxqt/22900 https://www.kicksecure.com/wiki/Tirdad#Architecture_Support
+  * Downgrade some network-related errors to warnings, don&#39;t exit prematurely if the qube has no NetVM (Thanks to @ArrayBolt3!)
+  * Check previous boot&#39;s logs for critical messages (Thanks to @ArrayBolt3!)
+* tb-updater:
+  * sandbox, resume and security improvements
+  * fixed ARM64 download link detection
+* tirdad:
+  * Fix tirdad on kernel 6.12.94+ (Thanks to @ArrayBolt3!)
+* tor-ctrl:
+  * Harden against command injection (Thanks to @ArrayBolt3!)
+* usability-misc:
+  * `/etc/profile.d/30_path.sh`: prepend `/usr/local/sbin` `/usr/sbin` and `/sbin` to `PATH` environment variable No longer using zsh for that. No longer modify PATH in `/etc/zsh/zshenv`. Why `/sbin`? See: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1041357 https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1041357#17 https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677 https://github.com/assisted-by-ai/usability-misc/pull/5
+  * remove `/usr/share/safe-rm/bin` from `PATH` environment variable by default https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677
+  * undo modprobe `options kvm enable_virt_at_load=0` https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683 https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730
+  * fix: `/etc/profile.d/30_path.sh`: prepend `/usr/local/sbin` `/usr/sbin` and `/sbin` to `PATH` environment variable
+* user-sysmaint-split:
+  * Add startup helper script and use labwc --startup. https://forums.kicksecure.com/t/system-maintenance-panel-not-showing-up/1603/17 (Thanks to eterniTTY!)
+  * sysmaint-boot-unrestricted-qubes: improve reliability of unrestricted admin mode boot
+  * `Wants=spice-vdagentd.socket`
+    * https://forums.whonix.org/t/whonix-18-nitpicks/23255
+  * Harden against command injection (Thanks to @ArrayBolt3!)
+  * Move the sysmaint locked password migration earlier to avoid spurious error messages caused by running autologinchange later (Thanks to @ArrayBolt3!)
+  * Add account &#39;sysmaint&#39; to group &#39;privleap&#39; during initial installation (Thanks to @ArrayBolt3!)
+* vm-config-dist:
+  * https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211
+  * fix: do not enable software rendering simply because `lvmpipe` is required. In case a known, hardcoded graphic card provider renderer string is detected, skip enabling software rendering. https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755
+  * Properly handle disabled displays in wlr-resize-watcher (Thanks to @ArrayBolt3!)
+  * Restart wlr-resize-watcher when logging out and back in (Thanks to @ArrayBolt3!)
+  * Restart wlr-resize-watcher if it crashes (Thanks to @ArrayBolt3!)
+* derivative-maker:
+  * improved cross-build support
+  * Apple `M#` Silicon (ARM64) build system improvements: VirtualBox operations were moved from the host into an `amd64` cowbuilder chroot, allowing ARM64 hosts such as Apple Silicon systems to produce VirtualBox images without requiring VirtualBox packages on the host.
+* developer-meta-files:
+  * github-org-clone: Bulk-clones repositories from an GitHub organization into a local directory.
+  * github-org-fork: Bulk-forks a GitHub organization.
+  * github-org-push: Bulk-push.
+  * dm-github-fork-sync:
+  * dm-github-org-policy: Applies and audits organization-wide GitHub security and governance policy.
+  * dm-github-personal-policy: Applies equivalent policy controls to personally owned repositories.
+  * dm-github-org-metadata-sync: Synchronizes repository descriptions, homepages, and topics from a central metadata file.
+  * dm-github-org-security-report: Produces a Markdown report on repository and organization security settings or gaps.
+  * dm-github-token-test: Checks whether a GitHub token is present, safely stored, and has the expected access.
+  * Reusable GitHub workflows:
+  * Scorecard (investigated, checkup using OpenSSF supply-chain security checker completed)
+  * Harden GitHub workflows
+  * unicode and control character resistant git review tools
+* Cleanup:
+  * deprecate ro-mode-init (initramfs-only) (ported to dracut)
+  * deprecate gpg-bash-lib (port to sq)
+
+----
+
+# Full difference of all changes
+
+[https://github.com/Kicksecure/derivative-maker/compare/18.1.4.2-developers-only...18.2.1.0-developers-only](https://github.com/Kicksecure/derivative-maker/compare/18.1.4.2-developers-only...18.2.1.0-developers-only)
+
+----
+
+(This forum post was previously a call for testers. No release critical bugs where found during the testing period. This forum post was therefore [transformed](https://forums.whonix.org/t/transform-whonix-testers-wanted-forum-news-post-into-whonix-release-forum-news-post-ok/11405) into a stable release announcement. See edit history.)</description>
+    
+    <lastBuildDate>Fri, 17 Jul 2026 08:29:06 +0000</lastBuildDate>
+    <category>News</category>
+    <atom:link href="https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Kicksecure 18.2.1.9 - Point Release!</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <h1><a name="p-5307-download-1" class="anchor" href="https://forums.kicksecure.com#p-5307-download-1" aria-label="Heading link"></a>Download</h1>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Download">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784273413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener" title="05:55PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/387;"><img src="https://www.kicksecure.com/w/images/6/63/Download-kicksecure.jpg?version=9adcc5bcba92e65719a7341228d32e1c" class="thumbnail" alt="" width="690" height="388"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Download" target="_blank" rel="noopener">Download Kicksecure (FREE)</a></h3>
+
+  <p>FREE download of Kicksecure. Kicksecure can be installed on a physical machine as the host operating system (OS), as a guest OS inside a virtual machine, or as a portable host OS on a USB data stick.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>(<a href="https://www.kicksecure.com/wiki/Point_Release">What is a point release?</a>)</p>
+<hr>
+<h1><a name="p-5307-upgrade-2" class="anchor" href="https://forums.kicksecure.com#p-5307-upgrade-2" aria-label="Heading link"></a>Upgrade</h1>
+<p>Alternatively, an in-place release upgrade is possible using the <a href="https://www.kicksecure.com/wiki/Project-APT-Repository">Kicksecure repository</a>.</p>
+<hr>
+<p>This release would not have been possible without the numerous supporters of Kicksecure!</p>
+<hr>
+<p>Please Donate!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Donate">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784273413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener" title="06:03PM - 25 December 2025">Kicksecure – 25 Dec 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/432;"><img src="https://www.kicksecure.com/w/images/8/83/Payment.jpg?version=82f3e45ee49a6c0df81431424ee3fc2f" class="thumbnail" alt="" width="640" height="432"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Donate" target="_blank" rel="noopener">Donating to Kicksecure</a></h3>
+
+  <p>PayPal, Bitcoin (BTC), Monero (XMR), Ethereum (ETH) or Token, Credit Card, Bank Wire, Others</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>Please Contribute!</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Contribute">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1784273413" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener" title="10:30AM - 29 April 2026">Kicksecure – 29 Apr 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:483/500;"><img src="https://www.kicksecure.com/w/images/0/07/Computer_n_screen.png?version=b6cc9963027950ad5fd1793106674efb" class="thumbnail" alt="" width="483" height="500"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Contribute" target="_blank" rel="noopener">Contribute to Kicksecure</a></h3>
+
+  <p>Spread, Follow, Develop, Testing, Donate. Contribute to Freedom Software / Open Source.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<h1><a name="p-5307-major-changes-3" class="anchor" href="https://forums.kicksecure.com#p-5307-major-changes-3" aria-label="Heading link"></a>Major Changes</h1>
+<ul>
+<li>General:
+<ul>
+<li>Responsibly disclosed a number of security issues (CVEs) to upstream projects: <a href="https://www.kicksecure.com/wiki/Dev/research" class="inline-onebox">Security Research by Kicksecure</a></li>
+<li>introduced <a href="https://www.kicksecure.com/wiki/Vulnerability_Disclosure_Policy" class="inline-onebox">Kicksecure Vulnerability Disclosure Policy</a></li>
+<li>Internal security review</li>
+<li>GitHub Dependabot configuration</li>
+<li>GitHub settings hardening</li>
+<li><a href="https://forums.kicksecure.com/t/port-to-sequoia-pgp-sq-gnupg-gpg-replacement-openpgp/260" class="inline-onebox">Port to Sequoia-PGP ("sq") (GnuPG ("gpg") replacement) - OpenPGP</a></li>
+<li>use <a href="https://forums.kicksecure.com/t/sequoia-git-sq-git/1638" class="inline-onebox">Sequoia git (`sq-git`)</a></li>
+<li>mitigate <a href="https://forums.kicksecure.com/t/executable-mime-handler-risks/1794" class="inline-onebox">Executable MIME handler risks</a></li>
+<li>Improved input sanitization and Unicode handling.</li>
+<li>Add github native CI for builds (Thanks to <span class="mention">@Mycobee</span>!)</li>
+</ul>
+</li>
+<li>VirtualBox
+<ul>
+<li>work in progress fixing clipboard sharing host to VM and VM to host → <a href="https://forums.whonix.org/t/how-to-enable-shared-clipboard-drag-and-drop-features-inside-virtualbox-with-whonix-lxqt-18-0-8-7/22588/99" class="inline-onebox">How to enable Shared Clipboard &amp; Drag-and-Drop features inside VirtualBox with Whonix-LXQt-18.0.8.7 ? - #99 by Patrick - VirtualBox - Whonix Forum</a></li>
+<li>Replace virtualbox-guest-x11 and virtualbox-guest-utils with virtualbox-guest-additions-iso or a sufficiently new Oracle build of VirtualBox (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>new package uploaded to Kicksecure repository: virtualbox-guest-additions-iso (from Oracle)</li>
+<li>VirtualBox sound setting: AC97 → Intel HDA
+<ul>
+<li><a href="https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211/31" class="inline-onebox">VirtualBox Intel HD Audio and PipeWire Incompatibility / Audio broken after increasing ram to 5 GB / No sound after latest updates - PipeWire Bug? - #31 by sxd - VirtualBox - Whonix Forum</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CodeQL, and fuzzing:
+<ul>
+<li>helper-scripts (its python portion)</li>
+<li>msgcollector (dito)</li>
+<li>security-misc’s file manager shim</li>
+</ul>
+</li>
+<li>anon-apt-sources-list:
+<ul>
+<li>Disable Debian Fast Track repository by default (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>apparmor-profile-torbrowser:
+<ul>
+<li>maintenance fixes</li>
+</ul>
+</li>
+<li>bindp:
+<ul>
+<li>Add more compiler hardening flags (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>bootclockrandomization:
+<ul>
+<li>Make startup on QubesOS require a NetVM (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>browser-choice:
+<ul>
+<li>Fix logic bug that prevented use in unrestricted admin mode (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>debug-misc:
+<ul>
+<li>sysctl: add cd-rom/dvd debugging settings (Thanks to <span class="mention">@raja</span>!)</li>
+</ul>
+</li>
+<li>desktop-config-dist:
+<ul>
+<li>Document rationale for GDK_BACKEND and QT_QPA_PLATFORM variables in 15_desktop-config-dist.sh (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Set labwc icon theme properly, use a non-Python logo for livecheck (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Adjust default terminal size to work better on small screens (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>dist-base-files:
+<ul>
+<li>Add account ‘user’ to group ‘privleap’ during initial installation (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>kicksecure-base-files:
+<ul>
+<li>Fix the default archiver application (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>kicksecure-meta-packages:
+<ul>
+<li>Stop including qps on LXQt systems by default (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Add dummy packages for more Secure Boot-related packages (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Remove dummy-dependency-fwupd-signed metapackage, because fwupd-signed is a virtual package (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Add dependency on mokutil, add additional dummy packages, split firmware-nonfreedom into arch-specific and arch-independent metapackages (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>fix: gpg-from-sq vs uwt</li>
+</ul>
+</li>
+<li>legacy-dist:
+<ul>
+<li>Use debug-kicksecure-enabled helper in fixes script (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Enable set -x when debug-kicksecure qvm-service is enabled (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Fix default archiver setting for existing users, fix a broken shellcheck include (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Mark qps for autoremoval (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Avoid error if dummy-dependency is not installed at upgrade time (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Comments, avoid error if xscreensaver is not installed at upgrade time (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>deprecate version 17</li>
+<li>Fix kloak failing to start after a Whonix-Workstation 17 release upgrade (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Fix release upgrade bug caused by usability-misc’s policy-rc.d disappearing mid-upgrade (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>mediawiki-shell
+<ul>
+<li>major improvements and hardening</li>
+</ul>
+</li>
+<li>KVM:
+<ul>
+<li>Port to QEMU Session (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/hulahoop">@HulaHoop</a>!)</li>
+</ul>
+</li>
+<li>sdwdate:
+<ul>
+<li>Add more compiler hardening flags (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Fix sleep duration calculation (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Replace os.system() with subprocess.run() for safer URL handling (adapted from Claude Code) (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Make startup on QubesOS require a NetVM (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>sdwdate-gui:
+<ul>
+<li>Reliability improvements.</li>
+<li>Make startup on QubesOS require a NetVM (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>security-misc:
+<ul>
+<li>D-Bus shim for org.freedesktop.FileManager1: fm-shim-frontend (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Prevent using systemd-journald to write text to other user’s terminals (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>sysctl: add cd-rom/dvd hardening settings (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Add reference on IOMMU vulnerabilities (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Merge Meltdown mitigtions for ARM64 and X86_64 CPUs (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Reorder panic settings (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Add minor notices to panic on oopses and warnings (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Update docs on <code>proc_mem.force_override</code> (Thanks to <span class="mention">@raja</span>!)</li>
+<li>Add KSPP partial compliance notice for <code>proc_mem.force_override=ptrace</code> (Thanks to <span class="mention">@raja</span>!)</li>
+</ul>
+</li>
+<li>serial-console-enable (opt-in package):
+<ul>
+<li>grub: set GRUB_TERMINAL=serial unconditionally</li>
+<li>fix use of GRUB boot menu through serial console</li>
+</ul>
+</li>
+<li>sysmaint-panel:
+<ul>
+<li>Use sysmaint-panel’s start menu icon as a window icon as well (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>systemcheck:
+<ul>
+<li>improved log analysis in <code>systemcheck --verbose</code></li>
+<li>Add CLI metapackages to check_packages.bsh (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Add test for if /etc, /var, and /usr are ephemeral in AppVMs (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>fix: do not report missing tirdad kernel module on non-Intel/AMD64 as error because it is expected and not actionable by users <a href="https://forums.whonix.org/t/often-systemcheck-errors-notifications-whonix-18lxqt/22900" class="inline-onebox">Often systemcheck errors notifications. whonix 18lxqt - Unsupported Platforms - Whonix Forum</a> <a href="https://www.kicksecure.com/wiki/Tirdad#Architecture_Support" class="inline-onebox">tirdad - TCP ISN CPU Information Leak Protection</a></li>
+<li>Downgrade some network-related errors to warnings, don’t exit prematurely if the qube has no NetVM (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Check previous boot’s logs for critical messages (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>tb-updater:
+<ul>
+<li>sandbox, resume and security improvements</li>
+<li>fixed ARM64 download link detection</li>
+</ul>
+</li>
+<li>tirdad:
+<ul>
+<li>Fix tirdad on kernel 6.12.94+ (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>tor-ctrl:
+<ul>
+<li>Harden against command injection (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>usability-misc:
+<ul>
+<li><code>/etc/profile.d/30_path.sh</code>: prepend <code>/usr/local/sbin</code> <code>/usr/sbin</code> and <code>/sbin</code> to <code>PATH</code> environment variable No longer using zsh for that. No longer modify PATH in <code>/etc/zsh/zshenv</code>. Why <code>/sbin</code>? See: <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1041357" class="inline-onebox">I Challenge Thee</a> <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1041357#17" class="inline-onebox">I Challenge Thee</a> <a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677" class="inline-onebox">PATH overwritten by /etc/zsh/zshrc</a> <a href="https://github.com/assisted-by-ai/usability-misc/pull/5" class="inline-onebox">zsh: consolidate PATH setup in zshenv by assisted-by-ai · Pull Request #5 · assisted-by-ai/usability-misc · GitHub</a></li>
+<li>remove <code>/usr/share/safe-rm/bin</code> from <code>PATH</code> environment variable by default <a href="https://forums.kicksecure.com/t/path-overwritten-by-etc-zsh-zshrc/1677" class="inline-onebox">PATH overwritten by /etc/zsh/zshrc</a></li>
+<li>undo modprobe <code>options kvm enable_virt_at_load=0</code> <a href="https://forums.kicksecure.com/t/recent-versions-of-virtualbox-7-1-18-7-2-8-can-cause-a-system-crash-during-package-upgrades-vms-may-fail-to-start/1683" class="inline-onebox">Recent versions of VirtualBox (7.1.18, 7.2.8) can cause a system crash during package upgrades, VMs may fail to start</a> <a href="https://forums.kicksecure.com/t/vboxdrv-service-fails-to-start/1730" class="inline-onebox">Vboxdrv.service fails to start</a></li>
+<li>fix: <code>/etc/profile.d/30_path.sh</code>: prepend <code>/usr/local/sbin</code> <code>/usr/sbin</code> and <code>/sbin</code> to <code>PATH</code> environment variable</li>
+</ul>
+</li>
+<li>user-sysmaint-split:
+<ul>
+<li>Add startup helper script and use labwc --startup. <a href="https://forums.kicksecure.com/t/system-maintenance-panel-not-showing-up/1603/17" class="inline-onebox">System Maintenance Panel not showing up - #17 by eternity</a> (Thanks to eterniTTY!)</li>
+<li>sysmaint-boot-unrestricted-qubes: improve reliability of unrestricted admin mode boot</li>
+<li><code>Wants=spice-vdagentd.socket</code>
+<ul>
+<li><a href="https://forums.whonix.org/t/whonix-18-nitpicks/23255" class="inline-onebox">Sysmaint and its removal broken - Development - Whonix Forum</a></li>
+</ul>
+</li>
+<li>Harden against command injection (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Move the sysmaint locked password migration earlier to avoid spurious error messages caused by running autologinchange later (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Add account ‘sysmaint’ to group ‘privleap’ during initial installation (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>vm-config-dist:
+<ul>
+<li><a href="https://forums.whonix.org/t/virtualbox-intel-hd-audio-and-pipewire-incompatibility-audio-broken-after-increasing-ram-to-5-gb-no-sound-after-latest-updates-pipewire-bug/18211" class="inline-onebox">VirtualBox Intel HD Audio and PipeWire Incompatibility / Audio broken after increasing ram to 5 GB / No sound after latest updates - PipeWire Bug? - VirtualBox - Whonix Forum</a></li>
+<li>fix: do not enable software rendering simply because <code>lvmpipe</code> is required. In case a known, hardcoded graphic card provider renderer string is detected, skip enabling software rendering. <a href="https://forums.kicksecure.com/t/kdenlive-monitor-issue-solved-by-ai-debian-13-kde-plasma-kicksecure-cli-hardened/1755" class="inline-onebox">Kdenlive monitor issue solved by AI - Debian 13 KDE Plasma _ Kicksecure.cli Hardened</a></li>
+<li>Properly handle disabled displays in wlr-resize-watcher (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Restart wlr-resize-watcher when logging out and back in (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+<li>Restart wlr-resize-watcher if it crashes (Thanks to <a class="mention" href="https://forums.kicksecure.com/u/arraybolt3">@ArrayBolt3</a>!)</li>
+</ul>
+</li>
+<li>derivative-maker:
+<ul>
+<li>improved cross-build support</li>
+<li>Apple <code>M#</code> Silicon (ARM64) build system improvements: VirtualBox operations were moved from the host into an <code>amd64</code> cowbuilder chroot, allowing ARM64 hosts such as Apple Silicon systems to produce VirtualBox images without requiring VirtualBox packages on the host.</li>
+</ul>
+</li>
+<li>developer-meta-files:
+<ul>
+<li>github-org-clone: Bulk-clones repositories from an GitHub organization into a local directory.</li>
+<li>github-org-fork: Bulk-forks a GitHub organization.</li>
+<li>github-org-push: Bulk-push.</li>
+<li>dm-github-fork-sync:</li>
+<li>dm-github-org-policy: Applies and audits organization-wide GitHub security and governance policy.</li>
+<li>dm-github-personal-policy: Applies equivalent policy controls to personally owned repositories.</li>
+<li>dm-github-org-metadata-sync: Synchronizes repository descriptions, homepages, and topics from a central metadata file.</li>
+<li>dm-github-org-security-report: Produces a Markdown report on repository and organization security settings or gaps.</li>
+<li>dm-github-token-test: Checks whether a GitHub token is present, safely stored, and has the expected access.</li>
+<li>Reusable GitHub workflows:</li>
+<li>Scorecard (investigated, checkup using OpenSSF supply-chain security checker completed)</li>
+<li>Harden GitHub workflows</li>
+<li>unicode and control character resistant git review tools</li>
+</ul>
+</li>
+<li>Cleanup:
+<ul>
+<li>deprecate ro-mode-init (initramfs-only) (ported to dracut)</li>
+<li>deprecate gpg-bash-lib (port to sq)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1><a name="p-5307-full-difference-of-all-changes-4" class="anchor" href="https://forums.kicksecure.com#p-5307-full-difference-of-all-changes-4" aria-label="Heading link"></a>Full difference of all changes</h1>
+<p><a href="https://github.com/Kicksecure/derivative-maker/compare/18.1.4.2-developers-only...18.2.1.0-developers-only">https://github.com/Kicksecure/derivative-maker/compare/18.1.4.2-developers-only…18.2.1.0-developers-only</a></p>
+<hr>
+<p>(This forum post was previously a call for testers. No release critical bugs where found during the testing period. This forum post was therefore <a href="https://forums.whonix.org/t/transform-whonix-testers-wanted-forum-news-post-into-whonix-release-forum-news-post-ok/11405">transformed</a> into a stable release announcement. See edit history.)</p>
+          <p><a href="https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797/1</link>
+        <pubDate>Fri, 17 Jul 2026 08:29:06 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1797-1</guid>
+        <source url="https://forums.kicksecure.com/t/kicksecure-18-2-1-9-point-release/1797.rss">Kicksecure 18.2.1.9 - Point Release!</source>
+      </item>
+  </channel>
+</rss>

@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Grub Live Machine-id Randomization Feature</title>
+    <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569</link>
+    <description>I want to propose adding a feature for machine-id randomization for Grub Live to be done by a Dracut hook?
+
+My Guess is /etc/ and /var/lib/dbus are not populated until pivot_root to the squashfs overlay. If yes then hook would have to run pre_pivot and empty the machine-id `: &gt; /etc/machine-id` then syslink the new generated machine-id `ln -sf /etc/machine-id /var/lib/dbus/machine-id`
+
+Since people aren’t going to be doing updates in Live Mode I don’t see any conflicts with the previous discussions mentioning anon-base-files breakage in Whonix?
+
+See my other thread here → https://forums.kicksecure.com/t/machine-id-doesnt-change-in-live-mode/1568
+
+---
+
+#### Notes
+
+Systemd documentation explicitly classifies it as confidential information that must not be exposed in untrusted environments, especially over networks, due to its potential for host tracking.
+
+&gt; https://www.freedesktop.org/software/systemd/man/latest/machine-id.html
+
+* Enhanced Session Anonymity and Anti-Tracking in Live Mode
+
+Each Live boot would generate a fresh, unique machine-id, breaking continuity for any tracking relying on it.
+
+Aligns with amnesic goals of RAM only mode, no persistent identifiers survive reboot.
+
+* Improved Anti-Forensics and Compromise Resistance
+
+Post compromise, attackers cannot link Live sessions to prior/persistent ones via machine-id in memory dumps, journalctl logs, or cached D-Bus data, as ID resets per boot. No indication of a cloned systems.
+
+&gt; Machine-id: `b08dfa6083e7567a1921a715000001fb` *(Persistent Modes)*
+&gt;
+&gt; Machine-id: `4f3cec3bc757ec94a18b5b885a6738a5` *(None Persistent Mode)*</description>
+    
+    <lastBuildDate>Sun, 08 Feb 2026 10:48:07 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Grub Live Machine-id Randomization Feature</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Whonix:</p>
+<ul>
+<li>See <a href="https://www.whonix.org/wiki/Protocol-Leak-Protection_and_Fingerprinting-Protection#Identifiers_Design_Goals">Identifiers Design Goals</a></li>
+<li>More related:</li>
+</ul>
+<blockquote>
+<p>For a related wiki page on identifiers, see: Protocol Leak Protection and Fingerprinting Protection‎.</p>
+<p>Discussions:</p>
+<ul>
+<li>This wiki chapter has been written in response to <a href="https://www.reddit.com/r/Whonix/comments/lrk2v0/some_linux_systems_including_whonix_have_a_unique/">Some Linux systems (including Whonix) have a unique identifier called machine-id that doesn’t change. Here is how to change it.</a></li>
+<li>Forum discussion: <a href="https://forums.whonix.org/t/anonymize-etc-machine-id/7721">Anonymize <code>/etc/machine-id</code></a></li>
+</ul>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/5</link>
+        <pubDate>Sun, 08 Feb 2026 10:48:07 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569-5</guid>
+        <source url="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss">Grub Live Machine-id Randomization Feature</source>
+      </item>
+      <item>
+        <title>Grub Live Machine-id Randomization Feature</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="anon92632958" data-post="3" data-topic="1569">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/a/cdc98d/48.png" class="avatar"> anon92632958:</div>
+<blockquote>
+<p>Given Dracut’s modular nature it wouldn’t be entirely not possible to implement would it? and would it be worth it if it was possible?</p>
+</blockquote>
+</aside>
+<p>Randomizing the machine ID in live mode would be theoretically easy. It’s just not something we really want to do since it would only chip one small piece out of a much larger problem that we aren’t equipped to tackle in its entirety.</p>
+          <p><a href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/4</link>
+        <pubDate>Sun, 08 Feb 2026 04:40:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569-4</guid>
+        <source url="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss">Grub Live Machine-id Randomization Feature</source>
+      </item>
+      <item>
+        <title>Grub Live Machine-id Randomization Feature</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p><code>hide-hardware-info.service</code></p>
+</blockquote>
+<p>Thanks was not aware of the existence of this experimental feature.<br>
+In the big picture is machine-id really small when it comes to “Local Non-Deterministic Artifacts”.<br>
+If so I could see randomizing it a small priority then.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1569">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Because this is really difficult.</p>
+</blockquote>
+</aside>
+<p>Given Dracut’s modular nature it wouldn’t be entirely not possible to implement would it? and would it be worth it if it was possible?</p>
+          <p><a href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/3</link>
+        <pubDate>Sun, 08 Feb 2026 02:56:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569-3</guid>
+        <source url="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss">Grub Live Machine-id Randomization Feature</source>
+      </item>
+      <item>
+        <title>Grub Live Machine-id Randomization Feature</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>Not planned.</p>
+<p>Because this is really difficult. Details here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/System_identity_camouflage">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1770114761" class="site-icon" alt="" width="40" height="40">
+
+      <a href="https://www.kicksecure.com/wiki/System_identity_camouflage" target="_blank" rel="noopener" title="08:17PM - 13 April 2025">Kicksecure – 13 Apr 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="500" height="500" src="https://www.kicksecure.com/w/images/8/82/System-identity-camoflage231.png?version=54bd98d72ddded34032648a9ea354f1a" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://www.kicksecure.com/wiki/System_identity_camouflage" target="_blank" rel="noopener">System Identity Camouflage and Virtual Machine Cloaking</a></h3>
+
+  <p>Feature Request: The ability of an operating system (like Kicksecure, Debian, Qubes, or a generic Linux distribution) to hide its true identity or characteristics from local tracking software or applications.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.whonix.org/wiki/VM_Fingerprinting">
+  <header class="source">
+      <img src="https://www.whonix.org/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1770107414" class="site-icon" alt="" width="500" height="500">
+
+      <a href="https://www.whonix.org/wiki/VM_Fingerprinting" target="_blank" rel="noopener" title="07:20AM - 06 September 2024">Whonix – 6 Sep 24</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/459;"><img src="https://www.whonix.org/w/images/b/b5/Vmfingerprint123123.jpg?version=c02d08354530d2935a44e69fc6131314" class="thumbnail" alt="" width="690" height="460"></div>
+
+<h3><a href="https://www.whonix.org/wiki/VM_Fingerprinting" target="_blank" rel="noopener">VM Fingerprinting</a></h3>
+
+  <p>Linking two or more locally compromised Virtual Machines (VMs) to the same pseudonym.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/2</link>
+        <pubDate>Tue, 03 Feb 2026 18:24:54 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569-2</guid>
+        <source url="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss">Grub Live Machine-id Randomization Feature</source>
+      </item>
+      <item>
+        <title>Grub Live Machine-id Randomization Feature</title>
+        <dc:creator><![CDATA[anon92632958]]></dc:creator>
+        <description><![CDATA[
+            <p>I want to propose adding a feature for machine-id randomization for Grub Live to be done by a Dracut hook?</p>
+<p>My Guess is /etc/ and /var/lib/dbus are not populated until pivot_root to the squashfs overlay. If yes then hook would have to run pre_pivot and empty the machine-id <code>: &gt; /etc/machine-id</code> then syslink the new generated machine-id <code>ln -sf /etc/machine-id /var/lib/dbus/machine-id</code></p>
+<p>Since people aren’t going to be doing updates in Live Mode I don’t see any conflicts with the previous discussions mentioning anon-base-files breakage in Whonix?</p>
+<p>See my other thread here → <a href="https://forums.kicksecure.com/t/machine-id-doesnt-change-in-live-mode/1568" class="inline-onebox">Machine-id doesn't change in Live Mode?</a></p>
+<hr>
+<h4><a name="p-4405-notes-1" class="anchor" href="https://forums.kicksecure.com#p-4405-notes-1" aria-label="Heading link"></a>Notes</h4>
+<p>Systemd documentation explicitly classifies it as confidential information that must not be exposed in untrusted environments, especially over networks, due to its potential for host tracking.</p>
+<blockquote>
+<p><a href="https://www.freedesktop.org/software/systemd/man/latest/machine-id.html" rel="noopener nofollow ugc">https://www.freedesktop.org/software/systemd/man/latest/machine-id.html</a></p>
+</blockquote>
+<ul>
+<li>Enhanced Session Anonymity and Anti-Tracking in Live Mode</li>
+</ul>
+<p>Each Live boot would generate a fresh, unique machine-id, breaking continuity for any tracking relying on it.</p>
+<p>Aligns with amnesic goals of RAM only mode, no persistent identifiers survive reboot.</p>
+<ul>
+<li>Improved Anti-Forensics and Compromise Resistance</li>
+</ul>
+<p>Post compromise, attackers cannot link Live sessions to prior/persistent ones via machine-id in memory dumps, journalctl logs, or cached D-Bus data, as ID resets per boot. No indication of a cloned systems.</p>
+<blockquote>
+<p>Machine-id: <code>b08dfa6083e7567a1921a715000001fb</code> <em>(Persistent Modes)</em></p>
+<p>Machine-id: <code>4f3cec3bc757ec94a18b5b885a6738a5</code> <em>(None Persistent Mode)</em></p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569/1</link>
+        <pubDate>Tue, 03 Feb 2026 17:24:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1569-1</guid>
+        <source url="https://forums.kicksecure.com/t/grub-live-machine-id-randomization-feature/1569.rss">Grub Live Machine-id Randomization Feature</source>
+      </item>
+  </channel>
+</rss>
