@@ -1,0 +1,510 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>No offline boot mode for generating wallets and private keys?</title>
+    <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774</link>
+    <description>Right then, before I get started, I ought to acknowledge that soft blocking isn’t quite as foolproof as proper air-gapping (removing wireless cards and the like). That might be straightforward enough on older hardware, mind you, but a fair few newer commercial laptops have their WiFi modules soldered directly onto the board. Just like RAM, I’m afraid so removing them is rather a blunder and not worth the bother for most users.
+
+Now then, when I was setting up a new BTC view only wallet, I couldn’t for the life of me find a sensible way to disable networking without first booting into sysmaint to switch it off, which is a bit of a nuisance, to say the least. I had to install `rfkill` to manage it, as it isn’t included by default.
+
+You can disable networking for Electrum when creating wallets from the command line with `electrum --offline` and `-w` to point where you’d like the wallet created, though I shan’t go into all that part. Electrum offline isn’t quite enough, you see, when the rest of the computer can still have a wag with the network stack.
+
+---
+
+---
+
+On **Windows 11/10**, safe mode quite deliberately doesn’t load network adapter drivers, the Wi-Fi stack, or networking services, which effectively software air-gaps the computer from any local network or internet connection.
+
+https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f
+
+**TailsOS**, for its part, offers an additional option for booting with all networking disabled:
+
+https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network
+
+**Qubes** has its Vault qubes, which disable networking entirely—rather perfect for generating wallets and GPG split or private keys.
+
+## 
+
+https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes
+
+---
+
+So my question is why on earth does Kicksecure not offer something similar for an easy workflow and a bit of adaptability for those of us mates on limited, non-legacy hardware?</description>
+    
+    <lastBuildDate>Thu, 13 Aug 2026 06:34:58 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="desi_fubu" data-post="9" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/d/da6949/48.png" class="avatar"> desi_fubu:</div>
+<blockquote>
+<p>Aside from VM’s and headless servers why would you want to have networking available in dracut initramfs stage?</p>
+</blockquote>
+</aside>
+<p>It’s off-topic in this topic.</p>
+<p>Dracut is not a hurdle to implement an offline boot mode. Dracut isn’t at fault. This is not a dracut issue.</p>
+<aside class="quote" data-post="8" data-topic="1774">
+  <div class="title">
+    <div class="quote-controls"></div>
+    <img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar">
+    <div class="quote-title__text-content">
+      <a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/8">No offline boot mode for generating wallets and private keys?</a> <a class="badge-category__wrapper " href="https://forums.kicksecure.com/c/support/6"><span data-category-id="6" style="--category-badge-color: #0088CC; --category-badge-text-color: #FFFFFF;" data-drop-close="true" class="badge-category --style-square "><span class="badge-category__name">Support</span></span></a>
+    </div>
+  </div>
+  <blockquote>
+    This feature cannot be implemented: The Linux kernel does not have an offline feature, which would be required for this to be implemented reliably.
+  </blockquote>
+</aside>
+
+<p>If you have curiosity questions about dracut → <a href="https://www.kicksecure.com/wiki/Please_Use_Search_Engines_And_See_Documentation_First" class="inline-onebox">Utilize Search Engines, Documentation and AI</a>.</p>
+<p>Should any more dracut questions remain, please open a new forum thread.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/10">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/10</link>
+        <pubDate>Thu, 13 Aug 2026 06:34:58 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-10</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[desi_fubu]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="4" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Having networking functional inside dracut can be useful for unrelated purposes but not relevant for this.</p>
+</blockquote>
+</aside>
+<p>Aside from VM’s and headless servers why would you want to have networking available in dracut initramfs stage?</p>
+<p>Will disabling it cause drivers and boot failures and is it even practical to disable for simple host KS installs (No VM images or server installs)?</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/9">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/9</link>
+        <pubDate>Wed, 12 Aug 2026 13:26:24 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-9</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <p>This feature cannot be implemented: The Linux kernel does not have an <code>offline</code> feature, which would be required for this to be implemented reliably.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/8">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/8</link>
+        <pubDate>Mon, 13 Jul 2026 09:31:52 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-8</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Uplink]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m not sure this is something that would be worth maintaining if such feature was implemented. Your point about new hardware being hard to traditionally airgap</p>
+<aside class="quote no-group" data-username="Takahashi" data-post="1" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f1d935/48.png" class="avatar"> Takahashi:</div>
+<blockquote>
+<p>a bit of adaptability for those of us mates on limited, non-legacy hardware?</p>
+</blockquote>
+</aside>
+<p>is valid since WiFi cards are more and more being soldered in on latest hardware.</p>
+<p>From what I understand Linux loads networking into two phases initramfs and then real root. After pivot to the real root, udev handles device discovery and hotplug. Then comes the userspace networking daemons like NetworkManager that are loaded.</p>
+<p>So even even if you disable networking in initramfs phase you would still have it after the pivot to real root. If Kicksecure was a “Live Only” distro like Tails, as you referenced, this would be easier.</p>
+<p>Since it is NOT, the users would be going from offline to online in both persistent/grub live states, and that another point of issue that would arise which raises the question of maintainability again.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/7">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/7</link>
+        <pubDate>Sun, 12 Jul 2026 18:46:35 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-7</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Uplink]]></dc:creator>
+        <description><![CDATA[
+            <p>Yes like Patrick stated,</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>the organizational structure, no directive can be issued to all network backends to prioritize implementation of an easy to enable radio silence feature.</p>
+</blockquote>
+</aside>
+<p>Windows Safe Mode provides a fundamentally different approach to driver management than anything on Linux. Unlike Windows, Linux loads kernel modules dynamically. Linux lacks a centralized registry for driver configuration.</p>
+<p>Linux kernel is distributed with drivers built directly into the kernel or as loadable kernel modules Unlike Windows, where drivers are external components that register with the kernel through standardized APIs, Linux drivers are integral parts of the kernel codebase. Windows has a centralized registry of the drivers.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/6">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/6</link>
+        <pubDate>Sun, 12 Jul 2026 18:43:27 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-6</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Kicksecure cannot enumerate all network backends, configure, test each if them. And even if it could, we may not be able to do that in perpetuity because it increases maintenance effort. (<a href="https://www.kicksecure.com/wiki/Dev/maintainability">Maintainability</a>)</p>
+<p>If a feature cannot be implemented reliably, it’s not implemented at all.</p>
+</blockquote>
+</aside>
+<p>There’s another way, which is we could blacklist all networking drivers. Rather than implementing it as a boot mode, we could add a button to the sysmaint panel that would either create or delete the file storing the blacklist.</p>
+<p>Of course, that requires enumerating all networking drivers, and while enumerating all networking drivers present in the Linux kernel version present in Debian Trixie is not that hard, enumerating all the third-party WiFi and even Ethernet drivers that exist could be a challenge… unless there was some way to query a driver and find out if it provided networking capabilities or not…</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/5">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/5</link>
+        <pubDate>Tue, 23 Jun 2026 00:32:17 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-5</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Takahashi" data-post="3" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f1d935/48.png" class="avatar"> Takahashi:</div>
+<blockquote>
+<p>GRUB 2 does have built-in submenu support, though I’m not entirely certain how far it has progressed regarding custom submenus. Might that be worth exploring or considering, so as to reduce the clutter? Is it utter rubbish?</p>
+</blockquote>
+</aside>
+<p>Rather difficult to use. Would require use to hard fork files in <code>/etc/grub.d</code> or make them more configurable upstream.</p>
+<aside class="quote no-group quote-modified" data-username="Takahashi" data-post="3" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f1d935/48.png" class="avatar"> Takahashi:</div>
+<blockquote>
+<blockquote>
+<p>Network backends are for example ifupdown, NetworkManager, systemd-networkd or netplan.</p>
+</blockquote>
+<p>Dracut’s networking module only requires network-manager, systemd-networkd, connman, and network-legacy, does it not?</p>
+</blockquote>
+</aside>
+<p>Unrelated to dracut.</p>
+<p>dracut as far as I know does not control NetworkManager. I’ve had systems with no connecvity in a virtual console (or during dracut) but during the “main” GUI system.</p>
+<p>Having networking functional inside dracut can be useful for unrelated purposes but not relevant for this.</p>
+<aside class="quote no-group" data-username="Patrick" data-post="2" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/user_avatar/forums.kicksecure.com/patrick/48/165_2.png" class="avatar"> Patrick:</div>
+<blockquote>
+<p>Kicksecure cannot enumerate all network backends, configure, test each if them. And even if it could, we may not be able to do that in perpetuity because it increases maintenance effort. (<a href="https://www.kicksecure.com/wiki/Dev/maintainability">Maintainability</a>)</p>
+</blockquote>
+</aside>
+<p>This is referring to systemd multi-user target (but also unrelated to systemd), or for lack for better term “main” / “final” / “fully booted” system.</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/4">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/4</link>
+        <pubDate>Sat, 20 Jun 2026 18:41:23 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-4</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Takahashi]]></dc:creator>
+        <description><![CDATA[
+            <blockquote>
+<p>Addionally, the Kicksecure boot menu is already huge. Adding yet more options would make it more complicated.</p>
+</blockquote>
+<p>GRUB 2 does have built-in submenu support, though I’m not entirely certain how far it has progressed regarding custom submenus. Might that be worth exploring or considering, so as to reduce the clutter? Is it utter rubbish?</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.gnu.org/software/grub/manual/grub/html_node/submenu.html">
+  <header class="source">
+
+      <a href="https://www.gnu.org/software/grub/manual/grub/html_node/submenu.html" target="_blank" rel="noopener nofollow ugc">gnu.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.gnu.org/software/grub/manual/grub/html_node/submenu.html" target="_blank" rel="noopener nofollow ugc">submenu (GNU GRUB Manual 2.14)</a></h3>
+
+  <p>submenu (GNU GRUB Manual 2.14)</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<blockquote>
+<p>Network backends are for example ifupdown, NetworkManager, systemd-networkd or netplan.</p>
+</blockquote>
+<p>Dracut’s networking module only requires network-manager, systemd-networkd, connman, and network-legacy, does it not?</p>
+<blockquote>
+<p>Network backends are implemented by “upstream”. Due to the organizational structure, no directive can be issued to all network backends to prioritize implementation of an easy to enable radio silence feature.</p>
+</blockquote>
+<p>Yeah mate I was having a look over yonder at dracut and how it initialises the network via github, and I was wondering whether simply omitting (dracut --force --omit) <a href="https://github.com/dracut-ng/dracut/blob/main/modules.d/40network/module-setup.sh" rel="noopener nofollow ugc">40network</a> (network) along with any modules that depend upon it would prove an efficient and plausible approach. The other notion I had was <code>rd.neednet=0</code> <code>ip=off</code>, though the network modules would still be present all the same.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.redhat.com/en/blog/network-confi-initrd">
+  <header class="source">
+      <img src="https://www.redhat.com/favicon.ico" class="site-icon" alt="" width="48" height="48">
+
+      <a href="https://www.redhat.com/en/blog/network-confi-initrd" target="_blank" rel="noopener nofollow ugc">redhat.com</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/413;"><img src="https://www.redhat.com/rhdc/managed-files/sysadmin/2020-11/Ramdisk.jpg" class="thumbnail" alt="" width="690" height="413"></div>
+
+<h3><a href="https://www.redhat.com/en/blog/network-confi-initrd" target="_blank" rel="noopener nofollow ugc">Looking forward to Linux network configuration in the initial ramdisk (initrd)</a></h3>
+
+  <p>An initrd (initial ramdisk) is a small filesystem loaded during the boot process on a Linux system. One of the tasks that the initrd might be responsible for...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://man.archlinux.org/man/extra/dracut/dracut.cmdline.7.en">
+  <header class="source">
+      <img src="https://man.archlinux.org/static/archlinux_common_style/favicon.ico" class="site-icon" alt="" width="16" height="16">
+
+      <a href="https://man.archlinux.org/man/extra/dracut/dracut.cmdline.7.en" target="_blank" rel="noopener nofollow ugc">man.archlinux.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://man.archlinux.org/man/extra/dracut/dracut.cmdline.7.en" target="_blank" rel="noopener nofollow ugc">dracut.cmdline(7) — Arch manual pages</a></h3>
+
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line">
+  <header class="source">
+      <img src="https://www.kernel.org/doc/html/latest/_static/logo.svg" class="site-icon" alt="" width="249" height="304">
+
+      <a href="https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line" target="_blank" rel="noopener nofollow ugc">kernel.org</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://www.kernel.org/doc/html/latest/admin-guide/nfs/nfsroot.html#kernel-command-line" target="_blank" rel="noopener nofollow ugc">Kernel command line - Mounting the root filesystem via NFS (nfsroot) — The Linux...</a></h3>
+
+  <p>Written 1996 by Gero Kuhlmann &lt;gero@gkminix.han.de&gt;</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/3">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/3</link>
+        <pubDate>Sat, 20 Jun 2026 05:24:08 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-3</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Patrick]]></dc:creator>
+        <description><![CDATA[
+            <aside class="quote no-group" data-username="Takahashi" data-post="1" data-topic="1774">
+<div class="title">
+<div class="quote-controls"></div>
+<img alt="" width="24" height="24" src="https://forums.kicksecure.com/letter_avatar_proxy/v4/letter/t/f1d935/48.png" class="avatar"> Takahashi:</div>
+<blockquote>
+<p>So my question is why on earth does Kicksecure not offer something similar for an easy workflow</p>
+</blockquote>
+</aside>
+<p>Qubes OS is a VM host. So that doesn’t directly compare.</p>
+<p>When using a Kicksecure VM, you can disable the VM network adapter in the virtualizer settings.</p>
+<p>Tails is a Live OS, doesn’t allow persistent package installation. Hence Tails comes with a guaranteed network interface backend selected by Tails developers at ISO build time.</p>
+<p>Network backends are for example ifupdown, NetworkManager, systemd-networkd or netplan.</p>
+<p>Kicksecure is a general-purpose operating system. Users can set up any network backend as they wish.</p>
+<p>An offline boot mode doesn’t exist due to technical challenges.</p>
+<p>Kicksecure cannot enumerate all network backends, configure, test each if them. And even if it could, we may not be able to do that in perpetuity because it increases maintenance effort. (<a href="https://www.kicksecure.com/wiki/Dev/maintainability" class="inline-onebox">Maintainability</a>)</p>
+<p>If a feature cannot be implemented reliably, it’s not implemented at all.</p>
+<p>Network backends are implemented by “upstream”. Due to the organizational structure, no directive can be issued to all network backends to prioritize implementation of an easy to enable radio silence feature. More about the organizational structure here:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Linux_User_Experience_versus_Commercial_Operating_Systems">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1781422213" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Linux_User_Experience_versus_Commercial_Operating_Systems" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:640/450;"><img src="https://www.kicksecure.com/w/images/9/97/Linuxexperience324.png?version=bdacc1e06efc4fad654552e98a729ecd" class="thumbnail" alt="" width="640" height="450"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Linux_User_Experience_versus_Commercial_Operating_Systems" target="_blank" rel="noopener">Linux User Experience versus Commercial Operating Systems</a></h3>
+
+  <p>Why Linux Distributions have bad Usability</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p>Addionally, the Kicksecure boot menu is already huge. Adding yet more options would make it more complicated.</p>
+<p>Currently the 4 “main” boot menu entries (ignoring recovery mode) are:</p>
+<ul>
+<li>Persistent User</li>
+<li>Persistent Sysmaint</li>
+<li>Live User</li>
+<li>Live Sysmaint</li>
+</ul>
+<p>With offline mode, the number of “main” boot menu entries would double to 8.</p>
+<ul>
+<li>Persistent Online User</li>
+<li>Persistent Online Sysmaint</li>
+<li>Persistent Offline User</li>
+<li>Persistent Offline Sysmaint</li>
+<li>Live Online User</li>
+<li>Live Online Sysmaint</li>
+<li>Live Offline User</li>
+<li>Live Offline Sysmaint</li>
+</ul>
+<p>Last but not least:<br>
+<a href="https://www.kicksecure.com/wiki/Reporting_Bugs#Community_Feedback">Community Feedback</a></p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/2</link>
+        <pubDate>Mon, 15 Jun 2026 03:14:59 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-2</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+      <item>
+        <title>No offline boot mode for generating wallets and private keys?</title>
+        <dc:creator><![CDATA[Takahashi]]></dc:creator>
+        <description><![CDATA[
+            <p>Right then, before I get started, I ought to acknowledge that soft blocking isn’t quite as foolproof as proper air-gapping (removing wireless cards and the like). That might be straightforward enough on older hardware, mind you, but a fair few newer commercial laptops have their WiFi modules soldered directly onto the board. Just like RAM, I’m afraid so removing them is rather a blunder and not worth the bother for most users.</p>
+<p>Now then, when I was setting up a new BTC view only wallet, I couldn’t for the life of me find a sensible way to disable networking without first booting into sysmaint to switch it off, which is a bit of a nuisance, to say the least. I had to install <code>rfkill</code> to manage it, as it isn’t included by default.</p>
+<p>You can disable networking for Electrum when creating wallets from the command line with <code>electrum --offline</code> and <code>-w</code> to point where you’d like the wallet created, though I shan’t go into all that part. Electrum offline isn’t quite enough, you see, when the rest of the computer can still have a wag with the network stack.</p>
+<hr>
+<hr>
+<p>On <strong>Windows 11/10</strong>, safe mode quite deliberately doesn’t load network adapter drivers, the Wi-Fi stack, or networking services, which effectively software air-gaps the computer from any local network or internet connection.</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f">
+  <header class="source">
+      <img src="https://support.microsoft.com/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f" target="_blank" rel="noopener nofollow ugc">support.microsoft.com</a>
+  </header>
+
+  <article class="onebox-body">
+    
+
+<h3><a href="https://support.microsoft.com/en-us/windows/windows-startup-settings-1af6ec8c-4d4a-4b23-adb7-e76eef0b847f" target="_blank" rel="noopener nofollow ugc">Windows Startup Settings - Microsoft Support</a></h3>
+
+  <p>Learn how to change Windows startup settings, including enabling Safe Mode.</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>TailsOS</strong>, for its part, offers an additional option for booting with all networking disabled:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network">
+  <header class="source">
+      <img src="https://gitlab.tails.boum.org/uploads/-/system/appearance/favicon/1/gitlab.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network" target="_blank" rel="noopener nofollow ugc">GitLab</a>
+  </header>
+
+  <article class="onebox-body">
+    <img width="64" height="64" src="https://gitlab.tails.boum.org/assets/twitter_card-570ddb06edf56a2312253c5872489847a0f385112ddbcd71ccfa1570febab5d2.jpg" class="thumbnail onebox-avatar" alt="">
+
+<h3><a href="https://gitlab.tails.boum.org/tails/tails/-/blob/stable/config/chroot_local-hooks/80-block-network" target="_blank" rel="noopener nofollow ugc">config/chroot_local-hooks/80-block-network · stable · tails / tails · GitLab</a></h3>
+
+  <p>Welcome to the Tails project GitLab instance!</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<p><strong>Qubes</strong> has its Vault qubes, which disable networking entirely—rather perfect for generating wallets and GPG split or private keys.</p>
+<h2><a name="p-5175-h-1" class="anchor" href="https://forums.kicksecure.com#p-5175-h-1" aria-label="Heading link"></a></h2>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes">
+  <header class="source">
+      <img src="https://richard-sebos.github.io/sebostechnology/assets/img/favicons/favicon-32x32.png" class="site-icon" alt="" width="32" height="32">
+
+      <a href="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes" target="_blank" rel="noopener nofollow ugc" title="04:00AM - 11 October 2025">Sebos Technology – 11 Oct 25</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/460;"><img src="https://richard-sebos.github.io/sebostechnology/assets/img/HV-Desktop.png" class="thumbnail" alt="" width="690" height="460"></div>
+
+<h3><a href="https://richard-sebos.github.io/sebostechnology/posts/HV-Desktop/#vault-qubes" target="_blank" rel="noopener nofollow ugc">Vault Qubes - QubesOS A Hypervisor as a Desktop</a></h3>
+
+  <p>Running a desktop environment inside a hypervisor isn’t new. Tech enthusiasts and home lab users have been doing it for years with tools like VMware Workstation and VirtualBox. These run on top of existing operating systems like Windows, Linux, or...</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+<hr>
+<p>So my question is why on earth does Kicksecure not offer something similar for an easy workflow and a bit of adaptability for those of us mates on limited, non-legacy hardware?</p>
+          <p><a href="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774/1</link>
+        <pubDate>Sun, 14 Jun 2026 19:18:38 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1774-1</guid>
+        <source url="https://forums.kicksecure.com/t/no-offline-boot-mode-for-generating-wallets-and-private-keys/1774.rss">No offline boot mode for generating wallets and private keys?</source>
+      </item>
+  </channel>
+</rss>
