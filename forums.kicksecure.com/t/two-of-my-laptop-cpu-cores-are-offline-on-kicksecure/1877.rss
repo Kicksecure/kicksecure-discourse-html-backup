@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Two of my laptop CPU cores are offline on Kicksecure</title>
+    <link>https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877</link>
+    <description>I&#39;m running Kicksecure on Lenovo T560 ever since the install two of the CPU cores have been offline.
+
+ 
+Is there a way to fix it so i can use all of my cpus. (no modifications have been done on laptop or kicksecure, both used as is, only virtualization enabled in bios)
+
+
+I tossed bunch of commands suggested by GPT here are the results:
+
+lscpu
+
+&gt;  
+&gt; Architecture:                x86_64
+&gt; CPU op-mode(s):            32-bit, 64-bit
+&gt; Address sizes:             39 bits physical, 48 bits virtual
+&gt; Byte Order:                Little Endian
+&gt; CPU(s):                      4
+&gt; On-line CPU(s) list:       0,1
+&gt; Off-line CPU(s) list:      2,3
+&gt; Vendor ID:                   GenuineIntel
+&gt; Model name:                Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
+&gt; CPU family:              6
+&gt; Model:                   78
+&gt; Thread(s) per core:      1
+&gt; Core(s) per socket:      2
+&gt; Socket(s):               1
+&gt; Stepping:                3
+&gt; CPU(s) scaling MHz:      91%
+&gt; CPU max MHz:             3000.0000
+&gt; CPU min MHz:             400.0000
+&gt; BogoMIPS:                4999.90
+&gt; Flags:                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss
+&gt; ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonsto
+&gt; p_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg cx16 xtpr pdcm pcid sse
+&gt; 4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault
+&gt; epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust sgx bmi1 smep bmi2
+&gt; erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts h
+&gt; wp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities
+&gt; Virtualization features:
+&gt; Virtualization:            VT-x
+&gt; Caches (sum of all):
+&gt; L1d:                       64 KiB (2 instances)
+&gt; L1i:                       64 KiB (2 instances)
+&gt; L2:                        512 KiB (2 instances)
+&gt; L3:                        3 MiB (1 instance)
+&gt; NUMA:
+&gt; NUMA node(s):              1
+&gt; NUMA node0 CPU(s):         0,1
+&gt; Vulnerabilities:
+&gt; Gather data sampling:      Mitigation; AVX disabled, no microcode
+&gt; Indirect target selection: Mitigation; Aligned branch/return thunks
+&gt; Itlb multihit:             KVM: Mitigation: VMX disabled
+&gt; L1tf:                      Mitigation; PTE Inversion; VMX cache flushes, SMT disabled
+&gt; Mds:                       Mitigation; Clear CPU buffers; SMT disabled
+&gt; Meltdown:                  Mitigation; PTI
+&gt; Mmio stale data:           Mitigation; Clear CPU buffers; SMT disabled
+&gt; Reg file data sampling:    Not affected
+&gt; Retbleed:                  Mitigation; IBRS
+&gt; Spec rstack overflow:      Not affected
+&gt; Spec store bypass:         Mitigation; Speculative Store Bypass disabled
+&gt; Spectre v1:                Mitigation; usercopy/swapgs barriers and \__user pointer sanitization
+&gt; Spectre v2:                Mitigation; IBRS; IBPB always-on; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected
+&gt; Srbds:                     Mitigation; Microcode
+&gt; Tsa:                       Not affected
+&gt; Tsx async abort:           Mitigation; TSX disabled
+&gt; Vmscape:                   Mitigation; IBPB before exit to userspace
+
+ cat /sys/devices/system/cpu/possible
+0-3
+ cat /sys/devices/system/cpu/present
+0-3
+cat /sys/devices/system/cpu/online
+0-1
+
+cat /proc/cmdline
+
+&gt;  
+&gt; BOOT_IMAGE=/vmlinuz-6.12.113+deb13-amd64 root=UUID=d8520f45-5b29-448f-9c2f-e37835d1fc9b ro mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on kpti=1 pti=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force kvm-intel.vmentry_l1d_flush=always mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt kvm.mitigate_smt_rsb=1 gather_data_sampling=force reg_file_data_sampling=on indirect_target_selection=force vmscape=force slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 cfi=kcfi ia32_emulation=0 efi_pstore.pstore_disable=1 erst_disable proc_mem.force_override=ptrace amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_cpu=off random.trust_bootloader=off extra_latent_entropy init_on_alloc=1 init_on_free=1 rd.luks.uuid=f521363f-f6ce-4094-a71c-09002fa89f04 loglevel=0 quiet rd.emergency=halt rd.shell=0
+
+nproc
+2
+cat /proc/self/status | grep -E &quot;Cpus_allowed|Cpus_allowed_list&quot;
+
+&gt;   
+&gt; Cpus_allowed:   f
+&gt; Cpus_allowed_list:      0-3
+
+ sudo dmidecode -t processor
+
+&gt; dmidecode 3.6
+&gt;
+&gt; Getting SMBIOS data from sysfs.
+&gt; SMBIOS 2.8 present.
+&gt;
+&gt; Handle 0x0007, DMI type 4, 48 bytes
+&gt; Processor Information
+&gt; Socket Designation: U3E1
+&gt; Type: Central Processor
+&gt; Family: Core i5
+&gt; Manufacturer: Intel(R) Corporation
+&gt; ID: (deleted by me for anonymity)
+&gt; Signature: Type 0, Family 6, Model 78, Stepping 3
+&gt; Flags:
+&gt; FPU (Floating-point unit on-chip)
+&gt; VME (Virtual mode extension)
+&gt; DE (Debugging extension)
+&gt; PSE (Page size extension)
+&gt; TSC (Time stamp counter)
+&gt; MSR (Model specific registers)
+&gt; PAE (Physical address extension)
+&gt; MCE (Machine check exception)
+&gt; CX8 (CMPXCHG8 instruction supported)
+&gt; APIC (On-chip APIC hardware supported)
+&gt; SEP (Fast system call)
+&gt; MTRR (Memory type range registers)
+&gt; PGE (Page global enable)
+&gt; MCA (Machine check architecture)
+&gt; CMOV (Conditional move instruction supported)
+&gt; PAT (Page attribute table)
+&gt; PSE-36 (36-bit page size extension)
+&gt; CLFSH (CLFLUSH instruction supported)
+&gt; DS (Debug store)
+&gt; ACPI (ACPI supported)
+&gt; MMX (MMX technology supported)
+&gt; FXSR (FXSAVE and FXSTOR instructions supported)
+&gt; SSE (Streaming SIMD extensions)
+&gt; SSE2 (Streaming SIMD extensions 2)
+&gt; SS (Self-snoop)
+&gt; HTT (Multi-threading)
+&gt; TM (Thermal monitor supported)
+&gt; PBE (Pending break enabled)
+&gt; Version: Intel(R) Core(TM) i5-6300U CPU @ 2.40GHz
+&gt; Voltage: 1.0 V
+&gt; External Clock: 100 MHz
+&gt; Max Speed: 8300 MHz
+&gt; Current Speed: 2400 MHz
+&gt; Status: Populated, Enabled
+&gt; Upgrade: Other
+&gt; L1 Cache Handle: 0x0004
+&gt; L2 Cache Handle: 0x0005
+&gt; L3 Cache Handle: 0x0006
+&gt; Serial Number: None
+&gt; Asset Tag: None
+&gt; Part Number: None
+&gt; Core Count: 2
+&gt; Core Enabled: 2
+&gt; Thread Count: 4
+&gt; Characteristics:
+&gt; 64-bit capable
+&gt; Multi-Core
+&gt; Hardware Thread
+&gt; Execute Protection
+&gt; Enhanced Virtualization
+&gt; Power/Performance Control
+&gt; 
+&gt; 
+&gt; 
+&gt; 
+&gt; Laptop model Lenovo T560 CPU: i5-6300U 2.4ghz Memory type: DDR3L-1600 Processor graphics: Intel HD Graphics 520</description>
+    
+    <lastBuildDate>Sun, 08 Nov 2026 16:40:50 +0000</lastBuildDate>
+    <category>Support</category>
+    <atom:link href="https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877.rss" rel="self" type="application/rss+xml" />
+      <item>
+        <title>Two of my laptop CPU cores are offline on Kicksecure</title>
+        <dc:creator><![CDATA[arraybolt3]]></dc:creator>
+        <description><![CDATA[
+            <p>You’re most likely running into a consequence of hyperthreading being disabled in Kicksecure. Hyperthreading allows a single CPU core to “pretend” to be multiple cores; this provides greater performance in some situations, but also opens the door for entire families of CPU vulnerabilities like <a href="https://en.wikipedia.org/wiki/Foreshadow">L1TF/Foreshadow</a>. It is therefore recommended that you leave hyperthreading disabled and ignore the offline CPU “cores”.</p>
+<p>If you want to enable hyperthreading anyway, you may be able to use the instructions here to add the <code>smt=-1</code> parameter to your kernel command line:</p>
+<aside class="onebox allowlistedgeneric" data-onebox-src="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change">
+  <header class="source">
+      <img src="https://www.kicksecure.com/favicon.svg?hsversion-headscript-replacement-by-server=1&amp;hsversion_from_server_replacement_unixtime=1794126614" class="site-icon" alt="" width="151" height="151">
+
+      <a href="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change" target="_blank" rel="noopener" title="07:25AM - 13 May 2026">Kicksecure – 13 May 26</a>
+  </header>
+
+  <article class="onebox-body">
+    <div class="aspect-image" style="--aspect-ratio:690/430;"><img src="https://www.kicksecure.com/w/images/7/7e/Live-mode-promo.jpg?version=74f76110a32f37836677f4609a5c6551" class="thumbnail" alt="" width="690" height="431"></div>
+
+<h3><a href="https://www.kicksecure.com/wiki/Grub#Temporary_Kernel_Boot_Parameter_Change" target="_blank" rel="noopener">Temporary Kernel Boot Parameter Change - grub bootloader Configuration Changes</a></h3>
+
+  <p>Kernel Boot Parameter Changes</p>
+
+
+  </article>
+
+  <div class="onebox-metadata">
+    
+    
+  </div>
+
+  <div style="clear: both"></div>
+</aside>
+
+          <p><a href="https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877/2">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877/2</link>
+        <pubDate>Sun, 08 Nov 2026 16:40:50 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1877-2</guid>
+        <source url="https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877.rss">Two of my laptop CPU cores are offline on Kicksecure</source>
+      </item>
+      <item>
+        <title>Two of my laptop CPU cores are offline on Kicksecure</title>
+        <dc:creator><![CDATA[shaylabeige]]></dc:creator>
+        <description><![CDATA[
+            <p>I’m running Kicksecure on Lenovo T560 ever since the install two of the CPU cores have been offline.</p>
+<p>Is there a way to fix it so i can use all of my cpus. (no modifications have been done on laptop or kicksecure, both used as is, only virtualization enabled in bios)</p>
+<p>I tossed bunch of commands suggested by GPT here are the results:</p>
+<p>lscpu</p>
+<blockquote>
+<p>Architecture:                x86_64<br>
+CPU op-mode(s):            32-bit, 64-bit<br>
+Address sizes:             39 bits physical, 48 bits virtual<br>
+Byte Order:                Little Endian<br>
+CPU(s):                      4<br>
+On-line CPU(s) list:       0,1<br>
+Off-line CPU(s) list:      2,3<br>
+Vendor ID:                   GenuineIntel<br>
+Model name:                Intel(R) Core™ i5-6300U CPU @ 2.40GHz<br>
+CPU family:              6<br>
+Model:                   78<br>
+Thread(s) per core:      1<br>
+Core(s) per socket:      2<br>
+Socket(s):               1<br>
+Stepping:                3<br>
+CPU(s) scaling MHz:      91%<br>
+CPU max MHz:             3000.0000<br>
+CPU min MHz:             400.0000<br>
+BogoMIPS:                4999.90<br>
+Flags:                   fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss<br>
+ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonsto<br>
+p_tsc cpuid aperfmperf pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg cx16 xtpr pdcm pcid sse<br>
+4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault<br>
+epb pti ssbd ibrs ibpb stibp tpr_shadow flexpriority ept vpid ept_ad fsgsbase tsc_adjust sgx bmi1 smep bmi2<br>
+erms invpcid mpx rdseed adx smap clflushopt intel_pt xsaveopt xsavec xgetbv1 xsaves dtherm ida arat pln pts h<br>
+wp hwp_notify hwp_act_window hwp_epp vnmi md_clear flush_l1d arch_capabilities<br>
+Virtualization features:<br>
+Virtualization:            VT-x<br>
+Caches (sum of all):<br>
+L1d:                       64 KiB (2 instances)<br>
+L1i:                       64 KiB (2 instances)<br>
+L2:                        512 KiB (2 instances)<br>
+L3:                        3 MiB (1 instance)<br>
+NUMA:<br>
+NUMA node(s):              1<br>
+NUMA node0 CPU(s):         0,1<br>
+Vulnerabilities:<br>
+Gather data sampling:      Mitigation; AVX disabled, no microcode<br>
+Indirect target selection: Mitigation; Aligned branch/return thunks<br>
+Itlb multihit:             KVM: Mitigation: VMX disabled<br>
+L1tf:                      Mitigation; PTE Inversion; VMX cache flushes, SMT disabled<br>
+Mds:                       Mitigation; Clear CPU buffers; SMT disabled<br>
+Meltdown:                  Mitigation; PTI<br>
+Mmio stale data:           Mitigation; Clear CPU buffers; SMT disabled<br>
+Reg file data sampling:    Not affected<br>
+Retbleed:                  Mitigation; IBRS<br>
+Spec rstack overflow:      Not affected<br>
+Spec store bypass:         Mitigation; Speculative Store Bypass disabled<br>
+Spectre v1:                Mitigation; usercopy/swapgs barriers and __user pointer sanitization<br>
+Spectre v2:                Mitigation; IBRS; IBPB always-on; STIBP disabled; RSB filling; PBRSB-eIBRS Not affected; BHI Not affected<br>
+Srbds:                     Mitigation; Microcode<br>
+Tsa:                       Not affected<br>
+Tsx async abort:           Mitigation; TSX disabled<br>
+Vmscape:                   Mitigation; IBPB before exit to userspace</p>
+</blockquote>
+<p>cat /sys/devices/system/cpu/possible<br>
+0-3<br>
+cat /sys/devices/system/cpu/present<br>
+0-3<br>
+cat /sys/devices/system/cpu/online<br>
+0-1</p>
+<p>cat /proc/cmdline</p>
+<blockquote>
+<p>BOOT_IMAGE=/vmlinuz-6.12.113+deb13-amd64 root=UUID=d8520f45-5b29-448f-9c2f-e37835d1fc9b ro mitigations=auto,nosmt nosmt=force spectre_v2=on spectre_bhi=on kpti=1 pti=on spec_store_bypass_disable=on ssbd=force-on l1tf=full,force kvm-intel.vmentry_l1d_flush=always mds=full,nosmt tsx=off tsx_async_abort=full,nosmt kvm.nx_huge_pages=force l1d_flush=on mmio_stale_data=full,nosmt retbleed=auto,nosmt kvm.mitigate_smt_rsb=1 gather_data_sampling=force reg_file_data_sampling=on indirect_target_selection=force vmscape=force slab_nomerge slab_debug=FZ init_on_alloc=1 init_on_free=1 page_alloc.shuffle=1 randomize_kstack_offset=on vsyscall=none debugfs=off kfence.sample_interval=100 vdso32=0 cfi=kcfi ia32_emulation=0 efi_pstore.pstore_disable=1 erst_disable proc_mem.force_override=ptrace amd_iommu=force_isolation intel_iommu=on iommu=force iommu.passthrough=0 iommu.strict=1 efi=disable_early_pci_dma random.trust_cpu=off random.trust_bootloader=off extra_latent_entropy init_on_alloc=1 init_on_free=1 rd.luks.uuid=f521363f-f6ce-4094-a71c-09002fa89f04 loglevel=0 quiet rd.emergency=halt rd.shell=0</p>
+</blockquote>
+<p>nproc<br>
+2<br>
+cat /proc/self/status | grep -E “Cpus_allowed|Cpus_allowed_list”</p>
+<blockquote>
+<p>Cpus_allowed:   f<br>
+Cpus_allowed_list:      0-3</p>
+</blockquote>
+<p>sudo dmidecode -t processor</p>
+<blockquote>
+<p>dmidecode 3.6</p>
+<p>Getting SMBIOS data from sysfs.<br>
+SMBIOS 2.8 present.</p>
+<p>Handle 0x0007, DMI type 4, 48 bytes<br>
+Processor Information<br>
+Socket Designation: U3E1<br>
+Type: Central Processor<br>
+Family: Core i5<br>
+Manufacturer: Intel(R) Corporation<br>
+ID: (deleted by me for anonymity)<br>
+Signature: Type 0, Family 6, Model 78, Stepping 3<br>
+Flags:<br>
+FPU (Floating-point unit on-chip)<br>
+VME (Virtual mode extension)<br>
+DE (Debugging extension)<br>
+PSE (Page size extension)<br>
+TSC (Time stamp counter)<br>
+MSR (Model specific registers)<br>
+PAE (Physical address extension)<br>
+MCE (Machine check exception)<br>
+CX8 (CMPXCHG8 instruction supported)<br>
+APIC (On-chip APIC hardware supported)<br>
+SEP (Fast system call)<br>
+MTRR (Memory type range registers)<br>
+PGE (Page global enable)<br>
+MCA (Machine check architecture)<br>
+CMOV (Conditional move instruction supported)<br>
+PAT (Page attribute table)<br>
+PSE-36 (36-bit page size extension)<br>
+CLFSH (CLFLUSH instruction supported)<br>
+DS (Debug store)<br>
+ACPI (ACPI supported)<br>
+MMX (MMX technology supported)<br>
+FXSR (FXSAVE and FXSTOR instructions supported)<br>
+SSE (Streaming SIMD extensions)<br>
+SSE2 (Streaming SIMD extensions 2)<br>
+SS (Self-snoop)<br>
+HTT (Multi-threading)<br>
+TM (Thermal monitor supported)<br>
+PBE (Pending break enabled)<br>
+Version: Intel(R) Core™ i5-6300U CPU @ 2.40GHz<br>
+Voltage: 1.0 V<br>
+External Clock: 100 MHz<br>
+Max Speed: 8300 MHz<br>
+Current Speed: 2400 MHz<br>
+Status: Populated, Enabled<br>
+Upgrade: Other<br>
+L1 Cache Handle: 0x0004<br>
+L2 Cache Handle: 0x0005<br>
+L3 Cache Handle: 0x0006<br>
+Serial Number: None<br>
+Asset Tag: None<br>
+Part Number: None<br>
+Core Count: 2<br>
+Core Enabled: 2<br>
+Thread Count: 4<br>
+Characteristics:<br>
+64-bit capable<br>
+Multi-Core<br>
+Hardware Thread<br>
+Execute Protection<br>
+Enhanced Virtualization<br>
+Power/Performance Control</p>
+<p>Laptop model Lenovo T560 CPU: i5-6300U 2.4ghz Memory type: DDR3L-1600 Processor graphics: Intel HD Graphics 520</p>
+</blockquote>
+          <p><a href="https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877/1">Read full topic</a></p>
+        ]]></description>
+        <link>https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877/1</link>
+        <pubDate>Sun, 08 Nov 2026 08:03:43 +0000</pubDate>
+        <guid isPermaLink="false">forums.kicksecure.com-post-1877-1</guid>
+        <source url="https://forums.kicksecure.com/t/two-of-my-laptop-cpu-cores-are-offline-on-kicksecure/1877.rss">Two of my laptop CPU cores are offline on Kicksecure</source>
+      </item>
+  </channel>
+</rss>
